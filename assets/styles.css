@@ -2958,6 +2958,282 @@ kbd {
   line-height: 1.65;
 }
 
+/* ==================== Citation Reference Links & Side Preview Drawer ==================== */
+.stem-ref-link {
+  display: inline;
+  padding: 0.02rem 0.28rem;
+  margin-inline: 0.06rem;
+  border: 0;
+  border-bottom: 1.5px dashed var(--accent, #2744a8);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--accent, #2744a8) 8%, transparent);
+  color: var(--accent, #2744a8);
+  font: inherit;
+  font-weight: 600;
+  line-height: 1.45;
+  cursor: pointer;
+  vertical-align: baseline;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.stem-ref-link:hover {
+  background: color-mix(in srgb, var(--accent, #2744a8) 17%, transparent);
+  border-bottom-style: solid;
+}
+
+.stem-ref-link:focus-visible {
+  outline: 2px solid var(--accent, #2744a8);
+  outline-offset: 2px;
+}
+
+.stem-ref-chip {
+  font-size: 0.8rem;
+  padding: 0.08rem 0.38rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent, #2744a8) 32%, transparent);
+}
+
+/* Return-to-Bookmark Banner (after optional "去原分区定位") */
+.stem-return-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem 1rem;
+  padding: 0.72rem 1rem;
+  margin-bottom: 0.9rem;
+  border-radius: var(--radius-md);
+  background: var(--indigo-soft, #eef2ff);
+  border: 1px solid var(--indigo-border, #c7d2fe);
+  color: var(--ink-primary);
+  font-size: 0.86rem;
+}
+
+.stem-return-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stem-card.is-jump-highlight {
+  animation: stem-jump-flash 2.1s ease-out;
+}
+
+@keyframes stem-jump-flash {
+  0% {
+    box-shadow: 0 0 0 4px rgba(39, 68, 168, 0.34);
+    border-color: var(--accent, #2744a8);
+  }
+  70% {
+    box-shadow: 0 0 0 4px rgba(39, 68, 168, 0.16);
+    border-color: var(--accent, #2744a8);
+  }
+  100% {
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+/* Native <dialog> Side Preview Drawer (modern-web-guidance compliant) */
+dialog.stem-ref-drawer {
+  position: fixed;
+  inset: 0 0 0 auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-left: 1px solid var(--border-subtle);
+  border-radius: 16px 0 0 16px;
+  inline-size: min(680px, 92vw);
+  max-inline-size: 100vw;
+  block-size: 100dvh;
+  max-block-size: 100dvh;
+  background: var(--bg-canvas, #f4f6fb);
+  color: var(--ink-primary);
+  box-shadow: -12px 0 38px rgba(15, 23, 42, 0.22);
+  overflow: hidden;
+  opacity: 0;
+  transition-property: opacity, transform, display, overlay;
+  transition-duration: 0.24s;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  transition-behavior: allow-discrete;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  dialog.stem-ref-drawer {
+    transform: translateX(36px);
+  }
+}
+
+dialog.stem-ref-drawer:modal {
+  overscroll-behavior: contain;
+}
+
+dialog.stem-ref-drawer::backdrop {
+  overflow: hidden;
+  overscroll-behavior: contain;
+  background-color: rgba(15, 23, 42, 0);
+  backdrop-filter: blur(2px);
+  transition-property: background-color, display, overlay;
+  transition-duration: 0.24s;
+  transition-timing-function: ease-out;
+  transition-behavior: allow-discrete;
+}
+
+dialog.stem-ref-drawer[open]:where(:not([data-closing])) {
+  display: flex;
+  flex-direction: column;
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  dialog.stem-ref-drawer[open]:where(:not([data-closing])) {
+    transform: translateX(0);
+  }
+}
+
+dialog.stem-ref-drawer[open]:where(:not([data-closing]))::backdrop {
+  background-color: rgba(15, 23, 42, 0.42);
+}
+
+@starting-style {
+  dialog.stem-ref-drawer[open]:where(:not([data-closing])) {
+    opacity: 0;
+  }
+  dialog.stem-ref-drawer[open]:where(:not([data-closing]))::backdrop {
+    background-color: rgba(15, 23, 42, 0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @starting-style {
+    dialog.stem-ref-drawer[open]:where(:not([data-closing])) {
+      transform: translateX(36px);
+    }
+  }
+}
+
+.stem-ref-drawer-shell {
+  display: flex;
+  flex-direction: column;
+  inline-size: 100%;
+  block-size: 100%;
+  min-block-size: 0;
+}
+
+.stem-ref-drawer-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem 0.9rem;
+  padding: 0.9rem 1.15rem;
+  background: #ffffff;
+  border-bottom: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+}
+
+.stem-ref-drawer-head-left {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-inline-size: 0;
+  flex: 1 1 220px;
+}
+
+.stem-ref-drawer-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 0.14rem;
+  min-inline-size: 0;
+}
+
+.stem-ref-drawer-kicker {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--accent, #2744a8);
+}
+
+.stem-ref-drawer-title {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  color: var(--ink-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stem-ref-drawer-head-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-shrink: 0;
+}
+
+.stem-ref-locate-btn,
+.stem-ref-back-btn {
+  font-size: 0.8rem;
+  padding: 0.36rem 0.68rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.stem-ref-drawer-body {
+  flex: 1 1 auto;
+  min-block-size: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  padding: 1rem 1.15rem 1.6rem;
+}
+
+.stem-card-in-drawer {
+  margin: 0;
+  box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 768px) {
+  dialog.stem-ref-drawer {
+    inset: auto 0 0 0;
+    inline-size: 100vw;
+    block-size: auto;
+    max-block-size: 86dvh;
+    border-left: 0;
+    border-top: 1px solid var(--border-subtle);
+    border-radius: 18px 18px 0 0;
+    box-shadow: 0 -10px 32px rgba(15, 23, 42, 0.24);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    dialog.stem-ref-drawer {
+      transform: translateY(36px);
+    }
+    dialog.stem-ref-drawer[open]:where(:not([data-closing])) {
+      transform: translateY(0);
+    }
+    @starting-style {
+      dialog.stem-ref-drawer[open]:where(:not([data-closing])) {
+        transform: translateY(36px);
+      }
+    }
+  }
+
+  .stem-ref-drawer-header {
+    padding: 0.78rem 0.9rem;
+  }
+
+  .stem-ref-drawer-body {
+    padding: 0.78rem 0.8rem 1.3rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  dialog.stem-ref-drawer,
+  dialog.stem-ref-drawer::backdrop {
+    transition-duration: 0.08s;
+  }
+}
+
 /* Coarse Pointer Touch Target Enhancement (WCAG 2.5.8) */
 @media (pointer: coarse) {
   .icon-btn,

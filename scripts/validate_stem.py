@@ -23,6 +23,9 @@ SUBJECTS = ["control", "math1"]
 VALID_KINDS = {"formula", "conclusion", "example", "exercise", "summary"}
 VALID_WEIGHTS = {"core", "extended"}
 VALID_STAGES = {"foundation", "intensive", "both"}
+DOUBLE_BS_CMD_RE = re.compile(
+    r"(?<!\\)\\\\(boldsymbol|mathrm|mathcal|mathbf|cdot|frac|sqrt|infty|alpha|beta|gamma|omega|zeta|sigma|theta|Delta|Sigma|sum|int|lim|det|left|right|text|dot|ddot|bar|tilde|hat|vec|quad|qquad|le|ge|ne|approx|to|Rightarrow|Leftrightarrow|implies|partial|nabla|times|pm|mp|cos|sin|tan|ln|log|exp|max|min|arg|arctan|arcsin|arccos)\b"
+)
 
 
 def check_latex_delimiters(text: str, ctx: str, errors: list[str]) -> None:
@@ -108,6 +111,9 @@ def validate_subject(subj: str) -> tuple[int, int, list[str]]:
                     for ch_code, ch_name in [("\x0c", "\\f (e.g. \\frac)"), ("\x08", "\\b (e.g. \\beta/\\boldsymbol)"), ("\x09", "\\t (e.g. \\tau/\\text)"), ("\x0d", "\\r (e.g. \\right)")]:
                         if ch_code in val:
                             errors.append(f"{ctx}.{field_path}: unescaped JSON control char {ch_name}")
+                    m_dbs = DOUBLE_BS_CMD_RE.search(val)
+                    if m_dbs:
+                        errors.append(f"{ctx}.{field_path}: accidental double-backslash LaTeX command '{m_dbs.group(0)}' (causes KaTeX newline + literal command name)")
                 elif isinstance(val, list):
                     for i, elem in enumerate(val):
                         scan_bad_chars(elem, f"{field_path}[{i}]")

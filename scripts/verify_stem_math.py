@@ -1215,6 +1215,310 @@ def run_all_checks() -> list[tuple[str, bool, str]]:
     check("ch01_ex_a1_10_classify_7eqs",
           (not eq1_lin) and (not eq4_lin) and (not eq6_lin) and eq5_lin and eq7_lin and (not eq7_ti))
 
+    # ==================== Ch02 Full 5-Partition Upgrade Checks ====================
+    # Main Ex 2-2 (P.21-22): Multi-loop RLC (node equations 2-18 & 2-19)
+    R1m, R2m, R3m, Lm, Cm = sp.symbols("R1m R2m R3m Lm Cm", positive=True)
+    vbm, vom, em = sp.symbols("vbm vom em")
+    sol_m22 = sp.solve([
+        (1 / R1m + Cm * s_c + 1 / R2m) * vbm - (1 / R2m) * vom - em / R1m,
+        -(1 / R2m) * vbm + (1 / R2m + 1 / R3m + 1 / (Lm * s_c)) * vom - em / (Lm * s_c),
+    ], [vbm, vom])
+    tf_m22 = sp.simplify(sol_m22[vom] / em)
+    exp_m22 = (R3m * (Lm + R1m * R2m * Cm) * s_c + R3m * (R1m + R2m)) / (
+        R1m * (R2m + R3m) * Lm * Cm * s_c**2
+        + (Lm * (R2m + R3m) + R1m * R2m * R3m * Cm + R1m * Lm) * s_c
+        + R3m * (R1m + R2m)
+    )
+    check("ch02_main_ex2_2_multiloop_rlc", sp.simplify(tf_m22 - exp_m22) == 0)
+
+    # Main Ex 2-6 (P.28-29): Armature-controlled DC motor
+    Ra, La, Jm, ke, km = sp.symbols("Ra La Jm ke km", positive=True)
+    ua_s, ml_s, wm_s, ia_s = sp.symbols("ua_s ml_s wm_s ia_s")
+    sol_m26 = sp.solve([
+        (La * s_c + Ra) * ia_s + ke * wm_s - ua_s,
+        Jm * s_c * wm_s - (km * ia_s - ml_s),
+    ], [wm_s, ia_s])
+    Tm_m26 = Ra * Jm / (ke * km)
+    Ta_m26 = La / Ra
+    w_exp_m26 = ((1 / ke) * ua_s - (Tm_m26 / Jm) * (Ta_m26 * s_c + 1) * ml_s) / (Ta_m26 * Tm_m26 * s_c**2 + Tm_m26 * s_c + 1)
+    check("ch02_main_ex2_6_dcmotor", sp.simplify(sol_m26[wm_s] - w_exp_m26) == 0)
+
+    # Main Ex 2-7 (P.29-31) & Ex 2-13 (P.37-38): 2-tank non-interacting vs interacting
+    A1t, A2t, A3t = sp.symbols("A1t A2t A3t", positive=True)
+    T1t, T2t, T3t = A1t * R1m, A2t * R2m, A3t * R3m
+    A_m27 = sp.Matrix([[-1 / T1t, 0], [1 / (R1m * A2t), -1 / T2t]])
+    B_m27 = sp.Matrix([[1 / A1t, 0], [0, -1 / A2t]])
+    C_m27 = sp.Matrix([[0, 1]])
+    G_m27 = sp.simplify(C_m27 * (s_c * sp.eye(2) - A_m27).inv() * B_m27)
+    A_m213 = sp.Matrix([[-1 / T1t, 1 / T1t], [1 / (A2t * R1m), -1 / (A2t * R1m) - 1 / T2t]])
+    B_m213 = sp.Matrix([[1 / A1t], [0]])
+    G_m213 = sp.simplify(sp.Matrix([[0, 1]]) * (s_c * sp.eye(2) - A_m213).inv() * B_m213)
+    check("ch02_main_ex2_7_13_tanks",
+          sp.simplify(G_m27[0, 0] - R2m / (T1t * T2t * s_c**2 + (T1t + T2t) * s_c + 1)) == 0
+          and sp.simplify(G_m27[0, 1] - (-R2m * (T1t * s_c + 1) / (T1t * T2t * s_c**2 + (T1t + T2t) * s_c + 1))) == 0
+          and sp.simplify(G_m213[0, 0] - R2m / (T1t * T2t * s_c**2 + (T1t + T2t + A1t * R2m) * s_c + 1)) == 0)
+
+    # Main Ex 2-9 & 2-15 & P.76 transform T = diag(1, C)
+    A_m29 = sp.Matrix([[0, 1 / Cm], [-1 / Lm, -R1m / Lm]])
+    b_m29 = sp.Matrix([0, 1 / Lm])
+    T_m29 = sp.diag(1, Cm)
+    A_m215 = sp.Matrix([[0, 1], [-1 / (Lm * Cm), -R1m / Lm]])
+    b_m215 = sp.Matrix([0, 1 / (Lm * Cm)])
+    check("ch02_main_ex2_9_15_transform",
+          sp.simplify(T_m29.inv() * A_m29 * T_m29 - A_m215) == sp.zeros(2, 2)
+          and sp.simplify(T_m29.inv() * b_m29 - b_m215) == sp.zeros(2, 1))
+
+    # Main Ex 2-10 & Ex 2-11 (P.34-36): 3rd-order & 4th-order non-independent storage RLC
+    L1m, L2m, L3m, C1m, C2m = sp.symbols("L1m L2m L3m C1m C2m", positive=True)
+    A_m210 = sp.Matrix([[-R1m / L1m, 0, -1 / L1m], [0, -R2m / L2m, 1 / L2m], [1 / Cm, -1 / Cm, 0]])
+    b_m210 = sp.Matrix([1 / L1m, 0, 0])
+    # Verify Ex 2-10 loop equation consistency
+    G_m210_ss = sp.simplify((sp.Matrix([[0, 1, 0]]) * (s_c * sp.eye(3) - A_m210).inv() * b_m210)[0])
+    Z_par_m210 = 1 / (Cm * s_c + 1 / (L2m * s_c + R2m))
+    G_m210_circ = sp.simplify((Z_par_m210 / (R1m + L1m * s_c + Z_par_m210)) / (L2m * s_c + R2m))
+    # Ex 2-11: 4th order after eliminating L3*i3 = L2*x4 + L1*x3
+    dx1, dx2, dx3, dx4, i3m, um = sp.symbols("dx1 dx2 dx3 dx4 i3m um")
+    sol_m211 = sp.solve([
+        x1 - L1m * dx3,
+        x2 - (L2m * dx4 + x1),
+        L3m * i3m - (L2m * x4 + L1m * x3),
+        x4 - (C1m * dx1 + x3),
+        um - (i3m + C2m * dx2 + x4),
+    ], [dx1, dx2, dx3, dx4, i3m])
+    A_m211 = sp.Matrix([
+        [0, 0, -1 / C1m, 1 / C1m],
+        [0, 0, -L1m / (L3m * C2m), -(L2m + L3m) / (L3m * C2m)],
+        [1 / L1m, 0, 0, 0],
+        [-1 / L2m, 1 / L2m, 0, 0],
+    ])
+    b_m211 = sp.Matrix([0, 1 / C2m, 0, 0])
+    check("ch02_main_ex2_10_11_circuits",
+          sp.simplify(G_m210_ss - G_m210_circ) == 0
+          and sp.simplify(sp.Matrix([sol_m211[dx1], sol_m211[dx2], sol_m211[dx3], sol_m211[dx4]])
+                          - (A_m211 * sp.Matrix([x1, x2, x3, x4]) + b_m211 * um)) == sp.zeros(4, 1))
+
+    # Main Ex 2-12 & Ex 2-18 (P.36-37, 44): 3 non-interacting tanks (+ sign errata P.36-37)
+    A_m212 = sp.Matrix([[-1 / T1t, 0, 0], [1 / (A2t * R1m), -1 / T2t, 0], [0, 1 / (A3t * R2m), -1 / T3t]])
+    B_m212 = sp.Matrix([[1 / A1t, 0], [0, 0], [0, -1 / A3t]])
+    G_m212 = sp.simplify(sp.Matrix([[0, 0, 1]]) * (s_c * sp.eye(3) - A_m212).inv() * B_m212)
+    check("ch02_main_ex2_12_18_3tanks",
+          sp.simplify(G_m212[0, 0] - R3m / ((T1t * s_c + 1) * (T2t * s_c + 1) * (T3t * s_c + 1))) == 0)
+
+    # Main Ex 2-22 (P.50-51): RTD with protective well
+    Tin_m, Ta_m, Tr_m = sp.symbols("Tin_m Ta_m Tr_m")
+    sol_m222 = sp.solve([
+        C1m * s_c * Ta_m - (Tin_m - Ta_m) / R1m + (Ta_m - Tr_m) / R2m,
+        C2m * s_c * Tr_m - (Ta_m - Tr_m) / R2m,
+    ], [Ta_m, Tr_m])
+    check("ch02_main_ex2_22_rtd_well",
+          sp.simplify(sol_m222[Tr_m] / Tin_m - 1 / (R1m * C1m * R2m * C2m * s_c**2 + (R1m * C1m + R2m * C2m + R1m * C2m) * s_c + 1)) == 0)
+
+    # Main Ex 2-28, 2-29, 2-35 (P.61-63, 70)
+    sol_m228 = sp.solve([
+        n1 - (R_s - Y_s + H1 * n3),
+        n2 - (G1 * n1 - H2 * Y_s),
+        n3 - G2 * n2,
+        Y_s - G3 * n3,
+    ], [n1, n2, n3, Y_s])
+    sol_m229 = sp.solve([
+        n1 - (G1 * (R_s - H1 * Y_s - n1) - Y_s),
+        Y_s - G2 * n1,
+    ], [n1, Y_s])
+    check("ch02_main_ex2_28_29_35_blocks",
+          sp.simplify(sol_m228[Y_s] / R_s - G1 * G2 * G3 / (1 + G2 * G3 * H2 - G1 * G2 * H1 + G1 * G2 * G3)) == 0
+          and sp.simplify(sol_m229[Y_s] / R_s - G1 * G2 / (1 + G1 + G2 + G1 * G2 * H1)) == 0)
+
+    # Main Ex 2-31 (P.65-66): 2x2 MIMO closed-loop TF matrix
+    G_m231 = sp.Matrix([[1 / (s_c + 1), -1 / s_c], [2, 1 / (s_c + 2)]])
+    M_m231 = sp.simplify((sp.eye(2) + G_m231).inv() * G_m231)
+    M_m231_exp = sp.Matrix([
+        [(3 * s_c**2 + 9 * s_c + 4) / (s_c * (s_c + 1) * (s_c + 2)), -1 / s_c],
+        [2, (3 * s_c + 2) / (s_c * (s_c + 1))],
+    ]) * (s_c * (s_c + 1) / (s_c**2 + 5 * s_c + 2))
+    check("ch02_main_ex2_31_mimo_cl", sp.simplify(M_m231 - M_m231_exp) == sp.zeros(2, 2))
+
+    # Main Ex 2-32/2-33/2-34 (P.67-69)
+    a12, a23, a32, a34, a35, a42, a44, a45, a52 = sp.symbols("a12 a23 a32 a34 a35 a42 a44 a45 a52")
+    x1v, x2v, x3v, x4v, x5v = sp.symbols("x1v x2v x3v x4v x5v")
+    sol_m233 = sp.solve([
+        x2v - (a12 * x1v + a32 * x3v + a42 * x4v + a52 * x5v),
+        x3v - a23 * x2v,
+        x4v - (a34 * x3v + a44 * x4v),
+        x5v - (a35 * x3v + a45 * x4v),
+    ], [x2v, x3v, x4v, x5v])
+    M_m233_exp = (a12 * a23 * a34 * a45 + a12 * a23 * a35 * (1 - a44)) / (
+        1 - (a23 * a32 + a23 * a34 * a42 + a44 + a23 * a34 * a45 * a52 + a23 * a35 * a52)
+        + a23 * a32 * a44 + a44 * a23 * a35 * a52
+    )
+    sol_m234 = sp.solve([
+        n1 - G1 * (R_s + H1 * n2),
+        n2 - G2 * (n1 - H1 * n2 - H2 * n3),
+        n3 - G3 * n2,
+        Y_s - (n3 + G4 * R_s),
+    ], [n1, n2, n3, Y_s])
+    check("ch02_main_ex2_33_34_sfg",
+          sp.simplify(sol_m233[x5v] / x1v - M_m233_exp) == 0
+          and sp.simplify(sol_m234[Y_s] / R_s - (G4 + G1 * G2 * G3 / (1 + G2 * H1 + G2 * G3 * H2 - G1 * G2 * H1))) == 0)
+
+    # Main Ex 2-37, 2-38, 2-40, 2-41, 2-42 (P.73-82)
+    A_m237 = sp.Matrix([[0, 1, 0], [0, 0, 1], [0, -8, -9]])
+    G_m237 = sp.simplify((sp.Matrix([[1, 0, 0]]) * (s_c * sp.eye(3) - A_m237).inv() * sp.Matrix([1, -5, 41]))[0])
+    G_m238 = sp.simplify((sp.Matrix([[4, 4, 1]]) * (s_c * sp.eye(3) - A_m237).inv() * sp.Matrix([0, 0, 1]))[0])
+    G_m240 = (3 * s_c**5 + 6 * s_c**4 - 10 * s_c**3 + 6 * s_c + 2) / (2 * s_c**5 + 4 * s_c**4 - 8 * s_c**3 + 2 * s_c + 2)
+    Ac_m240 = sp.Matrix([[0, 1, 0, 0, 0], [0, 0, 1, 0, 0], [0, 0, 0, 1, 0], [0, 0, 0, 0, 1], [-1, -1, 0, 4, -2]])
+    cc_m240 = sp.Matrix([[-sp.Rational(1, 2), sp.Rational(3, 2), 0, 1, 0]])
+    bc_m240 = sp.Matrix([0, 0, 0, 0, 1])
+    G_m240_c = sp.simplify((cc_m240 * (s_c * sp.eye(5) - Ac_m240).inv() * bc_m240)[0] + sp.Rational(3, 2))
+    G_m241 = (s_c**3 + 8 * s_c**2 + 17 * s_c + 8) / (s_c**3 + 6 * s_c**2 + 11 * s_c + 6)
+    G_m241_d = sp.simplify((sp.Matrix([[-1, 2, 1]]) * (s_c * sp.eye(3) - sp.diag(-1, -2, -3)).inv() * sp.Matrix([1, 1, 1]))[0] + 1)
+    To_m, Tm_m, Ko_m, Km_m, Kc_m = sp.symbols("To_m Tm_m Ko_m Km_m Kc_m", positive=True)
+    A_m242 = sp.Matrix([[-1 / To_m, -Ko_m * Kc_m / To_m], [Km_m / Tm_m, -1 / Tm_m]])
+    B_m242 = sp.Matrix([[Ko_m * Kc_m / To_m, Ko_m / To_m], [0, 0]])
+    G_m242 = sp.simplify(sp.Matrix([[1, 0]]) * (s_c * sp.eye(2) - A_m242).inv() * B_m242)
+    check("ch02_main_ex2_37_to_42_ss",
+          sp.simplify(G_m237 - (s_c**2 + 4 * s_c + 4) / (s_c**3 + 9 * s_c**2 + 8 * s_c)) == 0
+          and sp.simplify(G_m238 - G_m237) == 0
+          and sp.simplify(G_m240_c - G_m240) == 0
+          and sp.simplify(G_m241_d - G_m241) == 0
+          and sp.simplify(G_m242[0, 0] - (Kc_m * Ko_m * (Tm_m * s_c + 1)) / ((To_m * s_c + 1) * (Tm_m * s_c + 1) + Kc_m * Ko_m * Km_m)) == 0)
+
+    # Guide Ex 2-4 (P.29-30) & Guide Ex 2-15 (P.43 errata)
+    K1g, K2g, K3g, Kmg, Ktg, ig = sp.symbols("K1g K2g K3g Kmg Ktg ig", positive=True)
+    G_g24_ol = (1 / ig) * K1g * K2g * K3g * Kmg * (tau * s_c + 1) / (Tm_m * s_c + 1)
+    Phi_g24 = sp.simplify(G_g24_ol / (1 + G_g24_ol * Ktg))
+    R1g, R2g, Y1g, Y2g, mg1, mg2, mg3, mg4 = sp.symbols("R1g R2g Y1g Y2g mg1 mg2 mg3 mg4")
+    sol_g215 = sp.solve([
+        mg1 - (R1g - H1 * Y1g),
+        mg2 - (G1 * mg1 + G3 * mg3),
+        Y1g - G2 * mg2,
+        mg3 - (R2g + H2 * Y2g),
+        mg4 - (G5 * mg3 + G4 * mg2),
+        Y2g - G6 * mg4,
+    ], [mg1, mg2, mg3, mg4, Y1g, Y2g])
+    Delta_g215 = 1 + G1 * G2 * H1 - G5 * G6 * H2 - G3 * G4 * G6 * H2 - G1 * G2 * H1 * G5 * G6 * H2
+    check("ch02_guide_ex2_4_15",
+          sp.simplify(Phi_g24 - (K1g * K2g * K3g * Kmg * (tau * s_c + 1)) / (ig * (Tm_m * s_c + 1) + K1g * K2g * K3g * Kmg * Ktg * (tau * s_c + 1))) == 0
+          and sp.simplify(sol_g215[Y1g].subs(R2g, 0) / R1g - G1 * G2 * (1 - G5 * G6 * H2) / Delta_g215) == 0
+          and sp.simplify(sol_g215[Y2g].subs(R2g, 0) / R1g - G1 * G4 * G6 / Delta_g215) == 0
+          and sp.simplify(sol_g215[Y2g].subs(R1g, 0) / R2g - (G5 * G6 * (1 + G1 * G2 * H1) + G3 * G4 * G6) / Delta_g215) == 0)
+
+    # Exercises A2-1 ~ A2-6 (Circuits)
+    R_sum25 = R2m + R3m
+    Rp25 = R1m / R_sum25
+    A_a25 = sp.Matrix([[0, 1 / Cm], [-1 / Lm, -R1m / ((1 + Rp25) * Lm)]])
+    b_a25 = sp.Matrix([0, 1 / ((1 + Rp25) * Lm)])
+    G1_a25 = sp.simplify((sp.Matrix([[1, 0]]) * (s_c * sp.eye(2) - A_a25).inv() * b_a25)[0])
+    A_a26 = sp.Matrix([[-1 / (R1m * C1m), 0, -1 / C1m], [0, 0, 1 / C2m], [1 / Lm, -1 / Lm, -R2m / Lm]])
+    b_a26 = sp.Matrix([1 / (R1m * C1m), 0, 0])
+    i1a, i2a = sp.symbols("i1a i2a")
+    sol_a26 = sp.solve([
+        (R1m + 1 / (C1m * s_c)) * i1a - (1 / (C1m * s_c)) * i2a - em,
+        -(1 / (C1m * s_c)) * i1a + (R2m + Lm * s_c + 1 / (C1m * s_c) + 1 / (C2m * s_c)) * i2a,
+    ], [i1a, i2a])
+    check("ch02_ex_a2_1_to_6_circuits",
+          sp.simplify((R2m + 1 / (C2m * s_c)) / (R1m + R2m + 1 / (C1m * s_c) + 1 / (C2m * s_c))
+                      - C1m * (C2m * R2m * s_c + 1) / (C1m * C2m * (R1m + R2m) * s_c + C1m + C2m)) == 0
+          and sp.simplify(G1_a25 - R_sum25 / ((Lm * Cm * s_c**2 + 1) * (R1m + R_sum25) + s_c * Cm * R_sum25 * R1m)) == 0
+          and sp.simplify((sp.Matrix([[0, 1, 0]]) * (s_c * sp.eye(3) - A_a26).inv() * b_a26)[0]
+                          - (1 / (C2m * s_c)) * sol_a26[i2a] / em) == 0)
+
+    # Exercises A2-7 ~ A2-12 (Mechanical / 3-tank / Analogous)
+    f1m, f2m, k1m, k2m, k3m, Bm = sp.symbols("f1m f2m k1m k2m k3m Bm", positive=True)
+    Xi_a, Xo_a, Xa_a, Xc_a = sp.symbols("Xi_a Xo_a Xa_a Xc_a")
+    sol_a27b = sp.solve([k1m * (Xi_a - Xa_a) - k2m * Xo_a, f1m * s_c * (Xa_a - Xo_a) - k2m * Xo_a], [Xa_a, Xo_a])
+    h1a, h2a, h3a, Qia = sp.symbols("h1a h2a h3a Qia")
+    sol_a29 = sp.solve([
+        A1t * s_c * h1a - (Qia - (h1a - h2a) / R1m),
+        A2t * s_c * h2a - ((h1a - h2a) / R1m - h2a / R2m),
+        A3t * s_c * h3a - (h2a / R2m - h3a / R3m),
+    ], [h1a, h2a, h3a])
+    a0_29 = A1t * R1m * A2t * R2m * A3t * R3m
+    a1_29 = A1t * R1m * A2t * R2m + A1t * R1m * A3t * R3m + A2t * R2m * A3t * R3m + A1t * R2m * A3t * R3m
+    a2_29 = A1t * R1m + A2t * R2m + A3t * R3m + A1t * R2m
+    ka10, kb10 = k1m + k2m, k2m + k3m
+    A_a210 = sp.Matrix([[0, 1, 0, 0], [-ka10, 0, k2m, 0], [0, 0, 0, 1], [k2m, 0, -kb10, -Bm]])
+    tf_a210_ss = sp.simplify((sp.Matrix([[0, 0, 1, 0]]) * (s_c * sp.eye(4) - A_a210).inv() * sp.Matrix([0, 1, 0, 0]))[0])
+    sol_a212 = sp.solve([(f2m * s_c + k2m) * (Xi_a - Xo_a) - f1m * s_c * (Xo_a - Xc_a), f1m * s_c * (Xo_a - Xc_a) - k1m * Xc_a], [Xo_a, Xc_a])
+    check("ch02_ex_a2_7_to_12_mech_fluid",
+          sp.simplify(sol_a27b[Xo_a] / Xi_a - k1m * f1m * s_c / (f1m * (k1m + k2m) * s_c + k1m * k2m)) == 0
+          and sp.simplify(sol_a29[h3a] / Qia - R3m / (a0_29 * s_c**3 + a1_29 * s_c**2 + a2_29 * s_c + 1)) == 0
+          and sp.simplify(tf_a210_ss - k2m / (s_c**4 + Bm * s_c**3 + (ka10 + kb10) * s_c**2 + Bm * ka10 * s_c + (ka10 * kb10 - k2m**2))) == 0
+          and sp.simplify(sol_a212[Xo_a] / Xi_a - ((f1m / k1m) * s_c + 1) * ((f2m / k2m) * s_c + 1) / (((f1m / k1m) * s_c + 1) * ((f2m / k2m) * s_c + 1) + (f1m / k2m) * s_c)) == 0)
+
+    # Exercises A2-13 ~ A2-22 (Block diagrams & op-amps)
+    G_a214 = 20 / (6 * s_c + 10)
+    H_a214 = 10 / (20 * s_c + 5)
+    C0m = sp.Symbol("C0m", positive=True)
+    sol_a216 = sp.solve([n1 - (R_s - H2 * (H1 * Y_s - G4 * R_s)), Y_s - G1 * (G2 + G3) * n1], [n1, Y_s])
+    sol_a217 = sp.solve([n1 - (R_s - Y_s - H1 * n3), n2 - (G1 * n1 - H2 * Y_s), n3 - G2 * n2, Y_s - (G3 * n3 + G4 * n2)], [n1, n2, n3, Y_s])
+    sol_a218 = sp.solve([Y_s - (G1 * R_s + G2 * n1), n1 - G3 * (Y_s - G4 * R_s)], [Y_s, n1])
+    sol_a219 = sp.solve([E_s - (R_s - Y_s), n1 - G1 * (-E_s + n2), n2 - G2 * (E_s - n1), Y_s - (n1 + n2)], [E_s, n1, n2, Y_s])
+    D1a, D2a, D3a = sp.symbols("D1a D2a D3a")
+    sol_a220 = sp.solve([n1 - (R_s - H1 * (Y_s + D3a)), n2 - (G1 * n1 + D1a - D2a - H2 * Y_s), Y_s - G2 * n2], [n1, n2, Y_s])
+    sol_a221 = sp.solve([n1 - (R_s - (H2 * n3 - H1 * Y_s)), n2 - (G1 * n1 - H3 * n3), n3 - G3 * (G2 * n2 - H4 * Y_s), Y_s - G4 * n3], [n1, n2, n3, Y_s])
+    Na = sp.Symbol("Na")
+    sol_a222a = sp.solve([n1 - (R_s - Y_s - H1 * n2), n2 - G2 * (G1 * n1 + G3 * Na), Y_s - (n2 - Na)], [n1, n2, Y_s])
+    sol_a222b = sp.solve([n1 - (R_s - Y_s), n2 - (G2 * (n1 + G1 * R_s) + G3 * n1 + Na), Y_s - G4 * n2], [n1, n2, Y_s])
+    check("ch02_ex_a2_13_to_22_blocks",
+          sp.simplify(10 * G_a214 / (1 + G_a214 * H_a214) - (400 * s_c + 100) / (12 * s_c**2 + 23 * s_c + 25)) == 0
+          and sp.simplify(-(1 / (1 / R1m + 1 / (R2m + 1 / (C2m * s_c)))) / R0 - (-R1m / R0 * (R2m * C2m * s_c + 1) / ((R1m + R2m) * C2m * s_c + 1))) == 0
+          and sp.simplify(sol_a216[Y_s] / R_s - G1 * (G2 + G3) * (1 + G4 * H2) / (1 + G1 * (G2 + G3) * H1 * H2)) == 0
+          and sp.simplify(sol_a217[Y_s] / R_s - (G1 * G2 * G3 + G1 * G4) / (1 + G1 * G2 * H1 + G2 * G3 * H2 + G4 * H2 + G1 * G2 * G3 + G1 * G4)) == 0
+          and sp.simplify(sol_a218[Y_s] / R_s - (G1 - G2 * G3 * G4) / (1 - G2 * G3)) == 0
+          and sp.simplify(sol_a219[Y_s] / R_s - (2 * G1 * G2 + G2 - G1) / (1 + G2 - G1 + 3 * G1 * G2)) == 0
+          and sp.simplify(sol_a220[Y_s] - (G1 * G2 * R_s + G2 * (D1a - D2a) - G1 * G2 * H1 * D3a) / (1 + G2 * H2 + G1 * G2 * H1)) == 0
+          and sp.simplify(sol_a221[Y_s] / R_s - G1 * G2 * G3 * G4 / (1 + G2 * G3 * H3 + G1 * G2 * G3 * H2 + G3 * G4 * H4 - G1 * G2 * G3 * G4 * H1)) == 0
+          and sp.simplify(sol_a222a[Y_s].subs(R_s, 0) / Na - (G2 * G3 - 1 - G1 * G2 * H1) / (1 + G1 * G2 + G1 * G2 * H1)) == 0
+          and sp.simplify(sol_a222b[Y_s].subs(Na, 0) / R_s - (G4 * (G2 + G3) + G1 * G2 * G4) / (1 + G4 * (G2 + G3))) == 0)
+
+    # Exercises A2-23 & A2-24 (a, b, c, d) SFG Mason
+    G7m, G8m, H5m = sp.symbols("G7m G8m H5m")
+    xx2, xx3, xx4, xx5, xx6, xx7, xx8 = sp.symbols("xx2 xx3 xx4 xx5 xx6 xx7 xx8")
+    sol_a223 = sp.solve([xx2 - (R_s - H1 * xx4 - xx5), xx3 - G1 * xx2, xx4 - G2 * xx3, xx5 - (G3 * xx4 + G5 * xx3 - H2 * xx6), xx6 - G4 * xx5, Y_s - (xx6 + G6 * xx2)], [xx2, xx3, xx4, xx5, xx6, Y_s])
+    sol_a224a = sp.solve([xx2 - R_s, xx3 - (G1 * xx2 - H2 * xx5), xx4 - (G2 * xx3 - H1 * xx5 - H3 * xx6), xx5 - G3 * xx4, xx6 - G4 * xx5, xx7 - (G5 * xx6 + G6 * xx2)], [xx2, xx3, xx4, xx5, xx6, xx7])
+    sol_a224b = sp.solve([xx2 - (R_s - H5m * xx8), xx3 - (G1 * xx2 - H1 * xx4 - H4 * xx7), xx4 - (G2 * xx3 + G7m * xx2), xx5 - (G3 * xx4 - H2 * xx6), xx6 - G4 * xx5, xx7 - (G5 * xx6 + G8m * xx3 - H3 * xx8), xx8 - G6 * xx7], [xx2, xx3, xx4, xx5, xx6, xx7, xx8])
+    sol_a224c = sp.solve([xx2 - R_s, xx3 - (5 * xx2 - xx4), xx4 - (10 * xx3 - 2 * xx5), xx6 - (10 * xx2 - sp.Rational(1, 2) * xx6), xx5 - (xx4 + 2 * xx6)], [xx2, xx3, xx4, xx5, xx6])
+    av, bv, cv, dv, ev, fv, gv, hv = sp.symbols("av bv cv dv ev fv gv hv")
+    sol_a224d = sp.solve([xx2 - (R_s + fv * xx3), xx3 - (av * xx2 + gv * xx4), xx4 - (bv * xx3 + hv * xx5), xx5 - (cv * xx4 + ev * xx2), xx6 - dv * xx5], [xx2, xx3, xx4, xx5, xx6])
+    num224b, _ = sp.fraction(sp.cancel(sol_a224b[xx8] / R_s))
+    check("ch02_ex_a2_23_24_sfg_mason",
+          sp.simplify(sol_a223[Y_s] / R_s - (G6 * (1 + G4 * H2) + G1 * G2 * G3 * G4 + G1 * G4 * G5) / (1 + G1 * G2 * H1 + G1 * G2 * G3 + G4 * H2 + G1 * G5 + G1 * G2 * G4 * H1 * H2)) == 0
+          and sp.simplify(sol_a224a[xx7] / R_s - (G6 + G1 * G2 * G3 * G4 * G5 / (1 + G3 * H1 + G2 * G3 * H2 + G3 * G4 * H3))) == 0
+          and sp.simplify(num224b - (G3 * G4 * G5 * G6 * (G1 * G2 + G7m) + G8m * G6 * (G1 - G7m * H1) * (1 + G4 * H2))) == 0
+          and sol_a224c[xx5] / R_s == sp.Rational(590, 39)
+          and sp.simplify(sol_a224d[xx6] / R_s - (av * bv * cv * dv + ev * dv * (1 - bv * gv)) / (1 - av * fv - bv * gv - cv * hv - ev * hv * gv * fv + av * fv * cv * hv)) == 0)
+
+    # Exercises A2-25 ~ A2-33 + Self-test B2-23 & B2-25
+    A_a227 = sp.Matrix([[0, 1, 0], [0, 0, 1], [0, -12, -7]])
+    A_a228 = sp.Matrix([[0, 1], [-6, 5]])
+    A_a229 = sp.diag(2, 4, 5)
+    A_a230 = sp.Matrix([[-2, 10, 0], [0, -1, 10], [-8, 0, 0]])
+    Go_a231 = sp.Matrix([[1 / (2 * s_c + 1), 0], [-1, 1 / (s_c + 1)]])
+    Gc_a231 = sp.Matrix([[(2 * s_c + 1) / s_c, 0], [(2 * s_c**2 + 3 * s_c + 1) / s_c, (s_c + 1) / (5 * s_c)]])
+    M_a231 = sp.simplify((sp.eye(2) + Go_a231 * Gc_a231).inv() * (Go_a231 * Gc_a231))
+    # B2-23: k(t) = e^{-0.5t} - e^{-t} -> Phi(s) = 1/(s+0.5) - 1/(s+1) = 0.5/((s+0.5)(s+1)) -> G(s) = Phi/(1-Phi) = 0.5/(s^2+1.5s) = 1/(s(2s+3))
+    Phi_b223 = sp.simplify(1 / (s_c + sp.Rational(1, 2)) - 1 / (s_c + 1))
+    G_b223 = sp.simplify(Phi_b223 / (1 - Phi_b223))
+    # B2-25: Tractor M1, Trailer M2, coupling (K || B1), trailer friction B2, input f_i on M1
+    B1m, B2m, Km_s = sp.symbols("B1m B2m Km_s", positive=True)
+    Y1m, Y2m, Fim = sp.symbols("Y1m Y2m Fim")
+    sol_b225 = sp.solve([
+        M1 * s_c**2 * Y1m + (B1m * s_c + Km_s) * (Y1m - Y2m) - Fim,
+        M2 * s_c**2 * Y2m + B2m * s_c * Y2m - (B1m * s_c + Km_s) * (Y1m - Y2m),
+    ], [Y1m, Y2m])
+    den_b225 = s_c * (M1 * M2 * s_c**3 + (M1 * (B1m + B2m) + M2 * B1m) * s_c**2 + ((M1 + M2) * Km_s + B1m * B2m) * s_c + B2m * Km_s)
+    dF_a233 = float((sp.Rational(1265, 100) * sp.Rational(11, 10) * sp.Rational(1, 4)**sp.Rational(1, 10)).evalf())
+    check("ch02_ex_a2_25_to_33_and_b2",
+          sp.simplify((sp.Matrix([[sp.Rational(1, 6), sp.Rational(-2, 3), sp.Rational(3, 2)]]) * (s_c * sp.eye(3) - sp.diag(0, -3, -4)).inv() * sp.Matrix([1, 1, 1]))[0] - (s_c**2 + 3 * s_c + 2) / (s_c * (s_c**2 + 7 * s_c + 12))) == 0
+          and sp.simplify((sp.Matrix([[1, 0]]) * (s_c * sp.eye(2) - A_a228).inv() * sp.Matrix([1, 1]))[0] - (s_c - 4) / (s_c**2 - 5 * s_c + 6)) == 0
+          and sp.simplify((sp.Matrix([[sp.Rational(7, 2), sp.Rational(-57, 2), 27]]) * (s_c * sp.eye(3) - A_a229).inv() * sp.Matrix([1, 1, 1]))[0] - (2 * s_c**2 + 6 * s_c + 1) / (s_c**3 - 11 * s_c**2 + 38 * s_c - 40)) == 0
+          and sp.simplify((sp.Matrix([[1, 0, 0]]) * (s_c * sp.eye(3) - A_a230).inv() * sp.Matrix([0, 0, 4]))[0] - 400 / (s_c**3 + 3 * s_c**2 + 2 * s_c + 800)) == 0
+          and sp.simplify(M_a231 - sp.diag(1 / (s_c + 1), 1 / (5 * s_c + 1))) == sp.zeros(2, 2)
+          and abs(dF_a233 - 12.1137) < 0.001
+          and sp.simplify(G_b223 - 1 / (s_c * (2 * s_c + 3))) == 0
+          and sp.simplify(sol_b225[Y1m] / Fim - (M2 * s_c**2 + (B1m + B2m) * s_c + Km_s) / den_b225) == 0
+          and sp.simplify(sol_b225[Y2m] / Fim - (B1m * s_c + Km_s) / den_b225) == 0)
+
     return results
 
 
