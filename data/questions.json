@@ -1,0 +1,1428 @@
+{
+  "schemaVersion": "2.0",
+  "description": "考研英语一同源外刊例句精编题库（覆盖全部 7 大可刷题模块；全部摘自 The Guardian / The Conversation / Aeon 真实公开文章，仅引用单句并附完整出处与原文链接）",
+  "questions": [
+    {
+      "id": "q-nuance-arise-01",
+      "vocabId": "nuance::arise / arouse / rise / raise",
+      "module": "nuance",
+      "questionType": "cloze",
+      "examFocus": "完形近义辨析 · 及物与不及物",
+      "instruction": "四个动词词形词义均相近，结合句中不及物语境与“心身疾病产生”的搭配，选出最恰当的一项：",
+      "prompt": "What this could point to is that psychosomatic illnesses ______ not because of what a patient is doing with their emotions, but because of what they have not been able to do with them.",
+      "blankAnswer": "arise",
+      "options": [
+        {
+          "text": "arise",
+          "explain": "正确。arise 为不及物动词，意为“（问题/疾病/分歧）产生、出现”，后面不接宾语，完美匹配 psychosomatic illnesses 作主语。"
+        },
+        {
+          "text": "arouse",
+          "explain": "错误。arouse 为及物动词，意为“唤起、激发（情感/怀疑）”，后面必须接宾语（或用被动）。"
+        },
+        {
+          "text": "raise",
+          "explain": "错误。raise 为及物动词，意为“提高、筹集、提出”，不能作不及物谓语。"
+        },
+        {
+          "text": "rise",
+          "explain": "错误。rise 虽为不及物动词，但指物理高度、价格或数量“上升/上涨”，不用于抽象表示“疾病产生源于……”。"
+        }
+      ],
+      "answer": 0,
+      "source": {
+        "sentence": "What this could point to is that psychosomatic illnesses arise not because of what a patient is doing with their emotions, but because of what they have not been able to do with them.",
+        "publication": "The Guardian",
+        "title": "How can we explain psychosomatic illnesses?",
+        "date": "2026-11-22",
+        "url": "https://www.theguardian.com/science/2026/nov/22/how-can-we-explain-psychosomatic-illnesses"
+      },
+      "syntax": {
+        "backbone": "[What this could point to] (主语从句) + is (系) + [that psychosomatic illnesses arise not because of ... but because of ...] (表语从句)",
+        "segments": [
+          { "text": "What this could point to", "role": "clause", "label": "主语从句 S" },
+          { "text": "is", "role": "verb", "label": "系动词 V" },
+          { "text": "that psychosomatic illnesses", "role": "subject", "label": "表语从句主语" },
+          { "text": "arise", "role": "verb", "label": "表语从句谓语" },
+          { "text": "not because of what a patient is doing with their emotions,", "role": "adverbial", "label": "原因状语1（not...）" },
+          { "text": "but because of what they have not been able to do with them.", "role": "adverbial", "label": "并列转折原因状语2（but...）" }
+        ]
+      },
+      "translation": {
+        "literal": "这可能指向的是，心身疾病的产生不是因为病人正在对他们的情绪做什么，而是因为他们未能对情绪做什么。",
+        "polished": "这或许表明，心身疾病之所以产生，并非源于患者对自身情绪采取了何种处理方式，而是源于他们未能妥善消化这些情绪。",
+        "keyPoint": "全句嵌套三个名词性从句（what 主语从句 + that 表语从句 + 两个 what 介词宾语从句）；not because of A, but because of B 译为“并非源于……而是源于……”。"
+      }
+    },
+    {
+      "id": "q-nuance-treat-02",
+      "vocabId": "nuance::cure / treat / heal / remedy",
+      "module": "nuance",
+      "questionType": "cloze",
+      "examFocus": "完形近义辨析 · 医疗对象差异",
+      "instruction": "四个词均含“治/修补”之意，结合“药物帮助预防和治疗癌症”的医学表达，选出最准确的一项：",
+      "prompt": "A series of studies indicated that GLP-1 medications could help prevent and ______ cancer, with one finding that those who took the drugs were 30% less likely to develop breast cancer.",
+      "blankAnswer": "treat",
+      "options": [
+        {
+          "text": "heal",
+          "explain": "错误。heal 侧重外伤、伤口或情感裂痕“（自然）愈合”，医学上通常不说 heal cancer。"
+        },
+        {
+          "text": "treat",
+          "explain": "正确。treat 侧重“治疗（疾病/病人）”的医学干预过程，不夸大为彻底根治，最符合外刊严谨科研表述。"
+        },
+        {
+          "text": "remedy",
+          "explain": "错误。remedy 侧重“补救、纠正（制度缺陷/社会弊端/错误局势）”，一般不直接搭配 cancer。"
+        },
+        {
+          "text": "mend",
+          "explain": "错误。mend 多指修补破损衣物、器物或缓和人际关系（mend fences），不用于癌症治疗。"
+        }
+      ],
+      "answer": 1,
+      "source": {
+        "sentence": "A series of studies indicated that GLP-1 medications could help prevent and treat cancer, with one finding that those who took the drugs were 30% less likely to develop breast cancer.",
+        "publication": "The Guardian",
+        "title": "Monday briefing: Are we any closer to a cure for cancer?",
+        "date": "2026-06-08",
+        "url": "https://www.theguardian.com/world/2026/jun/08/monday-briefing-are-we-any-closer-to-a-cure-for-cancer"
+      },
+      "syntax": {
+        "backbone": "A series of studies (主) + indicated (谓) + [that 宾语从句] + [with one finding ... 伴随状语]",
+        "segments": [
+          { "text": "A series of studies", "role": "subject", "label": "主语 S" },
+          { "text": "indicated", "role": "verb", "label": "谓语 V" },
+          { "text": "that GLP-1 medications could help prevent and treat cancer,", "role": "clause", "label": "宾语从句 O" },
+          { "text": "with one finding", "role": "adverbial", "label": "with 独立伴随结构" },
+          { "text": "that those who took the drugs were 30% less likely to develop breast cancer.", "role": "clause", "label": "宾语从句（含 who 定语从句）" }
+        ]
+      },
+      "translation": {
+        "literal": "一系列研究表明，GLP-1 药物可能有助于预防和治疗癌症，其中一项研究发现，服用这些药物的人患乳腺癌的可能性低 30%。",
+        "polished": "一系列研究表明，GLP-1 类药物或许有助于预防和治疗癌症；其中一项研究发现，服用该类药物的人群罹患乳腺癌的风险降低了 30%。",
+        "keyPoint": "one 指代 one study；develop + 疾病 译为“患上/罹患（某病）”；30% less likely to... 译为“患病风险低 30%”。"
+      }
+    },
+    {
+      "id": "q-nuance-distinguish-03",
+      "vocabId": "nuance::distinguish / discriminate / differentiate / identify",
+      "module": "nuance",
+      "questionType": "cloze",
+      "examFocus": "完形近义辨析 · 固定结构搭配",
+      "instruction": "结合后面的介词 from 构成“把 A 与 B 区分开”的语境，选出最准确的一项：",
+      "prompt": "One algorithm was more than 90% accurate at ______ the US from Scottish spirits, though the performance would be likely to drop against tipples it had not been trained on.",
+      "blankAnswer": "distinguishing",
+      "options": [
+        {
+          "text": "distinguishing",
+          "explain": "正确。distinguish A from B 是最经典的“把 A 与 B 区分开”搭配，精准呼应后文 from Scottish spirits。"
+        },
+        {
+          "text": "discriminating",
+          "explain": "错误。discriminate 表“区分”时常接 between A and B（discriminate between），接 against 则表“歧视”，极少直接用 discriminate A from B。"
+        },
+        {
+          "text": "identifying",
+          "explain": "错误。identify 意为“识别确认（单一身份或原因）”，不构成 identify A from B 结构。"
+        },
+        {
+          "text": "clarifying",
+          "explain": "错误。clarify 意为“澄清说明（概念/误解）”，与算法分辨酒类香气无关。"
+        }
+      ],
+      "answer": 0,
+      "source": {
+        "sentence": "One algorithm was more than 90% accurate at distinguishing the US from Scottish spirits, though the performance would be likely to drop against tipples it had not been trained on.",
+        "publication": "The Guardian",
+        "title": "AI learns to distinguish between aromas of US and Scottish whiskies",
+        "date": "2024-12-19",
+        "url": "https://www.theguardian.com/technology/2024/dec/19/ai-learns-to-distinguish-between-aromas-of-us-and-scottish-whiskies"
+      },
+      "syntax": {
+        "backbone": "One algorithm (主) + was (系) + more than 90% accurate (表) + [though 让步状语从句]",
+        "segments": [
+          { "text": "One algorithm", "role": "subject", "label": "主语 S" },
+          { "text": "was", "role": "verb", "label": "系动词 V" },
+          { "text": "more than 90% accurate", "role": "complement", "label": "表语 C" },
+          { "text": "at distinguishing the US from Scottish spirits,", "role": "adverbial", "label": "方面状语（动名词短语）" },
+          { "text": "though the performance would be likely to drop", "role": "clause", "label": "让步状语从句" },
+          { "text": "against tipples it had not been trained on.", "role": "adverbial", "label": "对象状语（含省略 that 的定语从句）" }
+        ]
+      },
+      "translation": {
+        "literal": "一种算法在区分美国烈酒和苏格兰烈酒方面的准确率超过 90%，尽管在面对它未经训练的酒类时表现可能会下降。",
+        "polished": "其中一款算法在区分美国烈酒与苏格兰烈酒时准确率超过 90%，但面对此前未经训练的酒品时，其表现可能会有所下滑。",
+        "keyPoint": "spirits 此处为熟词生义“烈酒”；tipples 指“酒类饮品”；it had not been trained on 为定语从句修饰 tipples。"
+      }
+    },
+    {
+      "id": "q-nuance-implement-04",
+      "vocabId": "nuance::implement / enforce / execute / fulfill",
+      "module": "nuance",
+      "questionType": "cloze",
+      "examFocus": "完形近义辨析 · 政策实施搭配",
+      "instruction": "四个词均含“执行/落实”之意，选出最适合搭配政府预算“贯彻实施校园手机禁令”的一项：",
+      "prompt": "The budget bill, which the government will submit next week, allocates 95m kronor (£7.52m) for 2026 and 100m kronor the following year to ______ the phone ban.",
+      "blankAnswer": "implement",
+      "options": [
+        {
+          "text": "fulfill",
+          "explain": "错误。fulfill 侧重“履行（诺言/职责）”或“满足（条件/期待）”，不搭配 policy/ban 表示落地推行。"
+        },
+        {
+          "text": "implement",
+          "explain": "正确。implement 专指“贯彻实施（政策/改革/计划/禁令）”，是外刊政经类最核心的动词搭配。"
+        },
+        {
+          "text": "execute",
+          "explain": "错误。execute 侧重“执行（具体命令/军事行动/死刑/程序代码）”，语气偏指令操作而非公共政策落地。"
+        },
+        {
+          "text": "comply",
+          "explain": "错误。comply 为不及物动词，意为“遵从（规则）”，且须加介词 with。"
+        }
+      ],
+      "answer": 1,
+      "source": {
+        "sentence": "The budget bill, which the government will submit next week, allocates 95m kronor (£7.52m) for 2026 and 100m kronor the following year to implement the phone ban.",
+        "publication": "The Guardian",
+        "title": "Sweden to implement nationwide mobile phone ban in schools",
+        "date": "2025-09-16",
+        "url": "https://www.theguardian.com/world/2025/sep/16/sweden-nationwide-mobile-phone-ban-schools"
+      },
+      "syntax": {
+        "backbone": "The budget bill (主) + allocates (谓) + 95m kronor ... and 100m kronor ... (宾) + [to implement 目的状语]",
+        "segments": [
+          { "text": "The budget bill,", "role": "subject", "label": "主语 S" },
+          { "text": "which the government will submit next week,", "role": "clause", "label": "非限制性定语从句" },
+          { "text": "allocates", "role": "verb", "label": "谓语 V" },
+          { "text": "95m kronor (£7.52m) for 2026 and 100m kronor the following year", "role": "object", "label": "并列宾语 O" },
+          { "text": "to implement the phone ban.", "role": "adverbial", "label": "目的状语（不定式）" }
+        ]
+      },
+      "translation": {
+        "literal": "这份政府将于下周提交的预算案，为 2026 年划拨 9500 万克朗（752 万英镑）并在次年划拨 1 亿克朗，以实施这项手机禁令。",
+        "polished": "政府将于下周提交的这份预算案拟在 2026 年划拨 9500 万克朗（约合 752 万英镑），并在次年再拨款 1 亿克朗，用于推行这项校园手机禁令。",
+        "keyPoint": "bill 为熟词生义“法案/议案”；allocate 意为“划拨（预算/资金）”；非限制性定语从句较短，译作前置定语更利落。"
+      }
+    },
+    {
+      "id": "q-nuance-evaluate-05",
+      "vocabId": "nuance::evaluate / assess / estimate / appraise",
+      "module": "nuance",
+      "questionType": "cloze",
+      "examFocus": "完形近义辨析 · 评估对象区分",
+      "instruction": "四个词都带“估/评”之意，结合宾语“董事会潜在候选人”选出最恰当的一项：",
+      "prompt": "Goldman Sachs is removing race, gender and other diversity-related considerations when ______ prospective candidates for its executive board after pressure from an activist shareholder group to remove the criteria.",
+      "blankAnswer": "evaluating",
+      "options": [
+        {
+          "text": "estimating",
+          "explain": "错误。estimate 侧重对数量、成本、时间等数值进行“粗略估算”，不能用于评价候选人。"
+        },
+        {
+          "text": "appraising",
+          "explain": "错误。appraise 多用于专家对房产、艺术品等资产进行“估价鉴定”（虽偶尔用于绩效考评，但在招聘筛选候选人时不如 evaluate 自然常见）。"
+        },
+        {
+          "text": "evaluating",
+          "explain": "正确。evaluate 意为“综合评价、评判（候选人/方案/绩效的优劣与资格）”，与 prospective candidates 和 criteria 严丝合缝。"
+        },
+        {
+          "text": "calculating",
+          "explain": "错误。calculate 意为“数学计算”或生义“打算”，不能搭配 candidates。"
+        }
+      ],
+      "answer": 2,
+      "source": {
+        "sentence": "Goldman Sachs is removing race, gender and other diversity-related considerations when evaluating prospective candidates for its executive board after pressure from an activist shareholder group to remove the criteria.",
+        "publication": "The Guardian",
+        "title": "Goldman Sachs to drop race, gender and LGBTQ+ criteria from board evaluations",
+        "date": "2026-02-17",
+        "url": "https://www.theguardian.com/business/2026/feb/17/goldman-sachs-board-diversity-candidates-nlpc"
+      },
+      "syntax": {
+        "backbone": "Goldman Sachs (主) + is removing (谓) + considerations (宾) + [when evaluating ... 时间状语] + [after pressure ... 原因/时间状语]",
+        "segments": [
+          { "text": "Goldman Sachs", "role": "subject", "label": "主语 S" },
+          { "text": "is removing", "role": "verb", "label": "谓语 V" },
+          { "text": "race, gender and other diversity-related considerations", "role": "object", "label": "宾语 O" },
+          { "text": "when evaluating prospective candidates for its executive board", "role": "adverbial", "label": "省略主语的时间状语" },
+          { "text": "after pressure from an activist shareholder group", "role": "adverbial", "label": "时间/原因状语" },
+          { "text": "to remove the criteria.", "role": "attributive", "label": "不定式定语（修饰 pressure）" }
+        ]
+      },
+      "translation": {
+        "literal": "在遭到一个激进股东团体要求取消相关标准的施压后，高盛在评估其执行董事会潜在候选人时，正在移除种族、性别和其他与多元化相关的考量。",
+        "polished": "在一个维权股东团体施压要求取消相关标准后，高盛正准备在评估执行董事会潜在人选时，剔除种族、性别及其他多元化考量因素。",
+        "keyPoint": "顺带串联 3 个考研核心词：prospective（潜在的，区别于 perspective）、board（董事会，熟词生义）、criteria（criterion 的复数，评判准则）。"
+      }
+    },
+    {
+      "id": "q-nuance-ease-06",
+      "vocabId": "nuance::alleviate / relieve / ease / soothe",
+      "module": "nuance",
+      "questionType": "cloze",
+      "examFocus": "完形近义辨析 · 缓解搭配",
+      "instruction": "结合宾语“选民的经济压力”与双破折号插入结构，选出最地道的一项：",
+      "prompt": "The economy itself – driven almost exclusively by a frenzied artificial intelligence investment boom – is unlikely to help Democrats achieve their goal of ______ voters' economic strains.",
+      "blankAnswer": "easing",
+      "options": [
+        {
+          "text": "soothing",
+          "explain": "错误。soothe 侧重“安抚哭闹情绪、舒缓局部疼痛（如喉痛/肌肤）”，不常与宏观经济压力 economic strains 搭配。"
+        },
+        {
+          "text": "easing",
+          "explain": "正确。ease strains/pressures/tensions 是外刊经济报道最高频搭配，意为“缓和、减轻（压力/紧张局势）”。"
+        },
+        {
+          "text": "curing",
+          "explain": "错误。cure 意为“治愈疾病”，修饰 economic strains 搭配不当。"
+        },
+        {
+          "text": "subduing",
+          "explain": "错误。subdue 意为“制服、压制（叛乱/对手情绪）”，不符合帮选民缓解经济负担的语境。"
+        }
+      ],
+      "answer": 1,
+      "source": {
+        "sentence": "The economy itself – driven almost exclusively by a frenzied artificial intelligence investment boom – is unlikely to help Democrats achieve their goal of easing voters' economic strains.",
+        "publication": "The Guardian",
+        "title": "Trump may have lost but don’t bet Democrats can fix the economy",
+        "date": "2026-11-07",
+        "url": "https://www.theguardian.com/business/2026/nov/07/democrats-economy-affordability-crisis"
+      },
+      "syntax": {
+        "backbone": "The economy itself (主) + is (系) + unlikely to help Democrats achieve their goal (表)",
+        "segments": [
+          { "text": "The economy itself", "role": "subject", "label": "主语 S" },
+          { "text": "– driven almost exclusively by a frenzied artificial intelligence investment boom –", "role": "parenthetical", "label": "双破折号过去分词插入定语" },
+          { "text": "is", "role": "verb", "label": "系动词 V" },
+          { "text": "unlikely to help Democrats achieve their goal", "role": "complement", "label": "表语 C" },
+          { "text": "of easing voters' economic strains.", "role": "attributive", "label": "介词后置定语（解释 goal）" }
+        ]
+      },
+      "translation": {
+        "literal": "经济本身——几乎完全由狂热的人工智能投资热潮驱动——不太可能帮助民主党实现缓解选民经济压力的目标。",
+        "polished": "经济本身几乎完全靠狂热的人工智能投资潮拉动，因此不太可能助推民主党实现缓解选民生活成本压力的目标。",
+        "keyPoint": "双破折号构成典型英一主谓隔离结构；frenzied 意为“狂热的”；strains 指“（经济或心理）压力、重负”。"
+      }
+    },
+    {
+      "id": "q-nuance-abandon-07",
+      "vocabId": "nuance::abandon / desert / discard / quit",
+      "module": "nuance",
+      "questionType": "cloze",
+      "examFocus": "完形近义辨析 · 放弃对象区分",
+      "instruction": "四个词均含“放弃/丢弃”之意，结合“两国放弃联合战机项目”的正式新闻语境，选出最准确的一项：",
+      "prompt": "France and Germany have concluded that the companies involved in building a joint fighter jet will not be able to reach an agreement and have ______ the project, officials in Berlin have said in a blow to Europe's common defence efforts.",
+      "blankAnswer": "abandoned",
+      "options": [
+        {
+          "text": "deserted",
+          "explain": "错误。desert 带有强烈的“违背义务而擅离职守/抛弃家人或阵地”贬义，不用于政府决定中止合作项目。"
+        },
+        {
+          "text": "discarded",
+          "explain": "错误。discard 多指像丢废品一样“扔掉无用物件或过时想法”，不如 abandon 契合大型工程/计划。"
+        },
+        {
+          "text": "abandoned",
+          "explain": "正确。abandon a project/plan/policy 专指“因困难或条件不成熟而正式放弃某项计划/工程”，是标准书面搭配。"
+        },
+        {
+          "text": "quitted",
+          "explain": "错误。quit 多指个人“辞职、退学或戒掉恶习”（且现代美式过去分词多用 quit），不搭配国家级联合项目。"
+        }
+      ],
+      "answer": 2,
+      "source": {
+        "sentence": "France and Germany have concluded that the companies involved in building a joint fighter jet will not be able to reach an agreement and have abandoned the project, officials in Berlin have said in a blow to Europe's common defence efforts.",
+        "publication": "The Guardian",
+        "title": "France and Germany abandon joint project to build European fighter jet",
+        "date": "2026-06-08",
+        "url": "https://www.theguardian.com/world/2026/jun/08/france-and-germany-abandon-joint-project-to-build-european-fighter-jet"
+      },
+      "syntax": {
+        "backbone": "France and Germany (主) + have concluded [that 从句] (谓1+宾1) + and + have abandoned (谓2) + the project (宾2)",
+        "segments": [
+          { "text": "France and Germany", "role": "subject", "label": "主语 S" },
+          { "text": "have concluded", "role": "verb", "label": "并列谓语 V1" },
+          { "text": "that the companies involved in building a joint fighter jet will not be able to reach an agreement", "role": "clause", "label": "宾语从句 O1（含过去分词定语）" },
+          { "text": "and", "role": "conjunction", "label": "并列连词" },
+          { "text": "have abandoned", "role": "verb", "label": "并列谓语 V2" },
+          { "text": "the project,", "role": "object", "label": "宾语 O2" },
+          { "text": "officials in Berlin have said", "role": "parenthetical", "label": "引语归属主句" },
+          { "text": "in a blow to Europe's common defence efforts.", "role": "adverbial", "label": "结果评价状语" }
+        ]
+      },
+      "translation": {
+        "literal": "柏林官员表示，法国和德国已得出结论，参与建造联合战斗机的公司将无法达成协议，并已放弃该项目，这对欧洲共同防务努力造成打击。",
+        "polished": "柏林方面官员表示，法德两国已认定参与联合战机研发的企业无法达成一致，遂决定放弃该项目——这无疑给欧洲共同防务构想带来沉重打击。",
+        "keyPoint": "in a blow to... 意为“给……带来沉重打击”；conclude 此处意为“断定、得出结论”；引语归属主句译至句首更合中文习惯。"
+      }
+    },
+    {
+      "id": "q-nuance-allocate-08",
+      "vocabId": "nuance::allocate / assign / distribute / allot",
+      "module": "nuance",
+      "questionType": "cloze",
+      "examFocus": "完形近义辨析 · 资源划拨搭配",
+      "instruction": "四个词均含“分配”之意，结合“将政府议程时间划拨给某法案”的语境，选出最准确的一项：",
+      "prompt": "That would require Starmer to ______ some government time to the bill, or supporters to win another slot in the private members' bill ballot to table the bill again.",
+      "blankAnswer": "allocate",
+      "options": [
+        {
+          "text": "allocate",
+          "explain": "正确。allocate A to B 专指“统筹划拨（预算/资金/稀缺时间/资源）给某项目或用途”，是政经外刊最精准搭配。"
+        },
+        {
+          "text": "distribute",
+          "explain": "错误。distribute 侧重将物资、传单或财富“分发、散布”给多个分散个体，不搭配给单一法案拨出议会时间。"
+        },
+        {
+          "text": "assign",
+          "explain": "错误。assign 多指“分派（具体工作任务、职位或作业）”给某人。"
+        },
+        {
+          "text": "disperse",
+          "explain": "错误。disperse 意为“驱散（人群）、消散（云雾）”，并非统筹分配资源。"
+        }
+      ],
+      "answer": 0,
+      "source": {
+        "sentence": "That would require Starmer to allocate some government time to the bill, or supporters to win another slot in the private members' bill ballot to table the bill again.",
+        "publication": "The Guardian",
+        "title": "Starmer unlikely to allocate more time for assisted dying bill, ministers believe",
+        "date": "2026-03-18",
+        "url": "https://www.theguardian.com/society/2026/mar/18/starmer-unlikely-to-allocate-more-time-for-assisted-dying-bill-ministers-believe"
+      },
+      "syntax": {
+        "backbone": "That (主) + would require (谓) + [Starmer to allocate ...] or [supporters to win ...] (并列宾语+不定式宾补)",
+        "segments": [
+          { "text": "That", "role": "subject", "label": "主语 S" },
+          { "text": "would require", "role": "verb", "label": "谓语 V" },
+          { "text": "Starmer to allocate some government time to the bill,", "role": "object", "label": "宾语+宾补1" },
+          { "text": "or", "role": "conjunction", "label": "选择并列连词" },
+          { "text": "supporters to win another slot", "role": "object", "label": "宾语+宾补2" },
+          { "text": "in the private members' bill ballot", "role": "attributive", "label": "介词后置定语" },
+          { "text": "to table the bill again.", "role": "adverbial", "label": "目的状语" }
+        ]
+      },
+      "translation": {
+        "literal": "那将要求斯塔默为该法案划拨一些政府时间，或者支持者在议员个人法案抽签中赢得另一个名额以再次提交该法案。",
+        "polished": "这意味着要么需要斯塔默为该法案划拨部分政府议事时间，要么支持者得在后座议员法案抽签中再中一签，才能重新将该法案提上议程。",
+        "keyPoint": "顺带复习熟词生义 table（英式《卫报》中 table a bill 意为“正式提交议程讨论”，而在美式英语中相反指“搁置”）！"
+      }
+    },
+    {
+      "id": "q-collocation-consist-in-09",
+      "vocabId": "collocation::consist in / consist of",
+      "module": "collocation",
+      "questionType": "cloze",
+      "examFocus": "固定搭配 · 介词经典陷阱",
+      "instruction": "选出表示“在于、本质上是”的固定动词介词搭配（考研完形最高频介词陷阱之一）：",
+      "prompt": "In other words, mathematics ______ the ideas living in human brains, with new theorems serving as markers for our progress in understanding and sharing these ideas.",
+      "blankAnswer": "consists in",
+      "options": [
+        {
+          "text": "consists in",
+          "explain": "正确。consist in 意为“在于、本质上是（= lie in）”，说明数学的本质在于人类大脑中的思想，而非物理组成零件。"
+        },
+        {
+          "text": "consists of",
+          "explain": "错误。consist of 意为“由……组成（强调具体构成成分）”，此处强调哲学意义上的“本质在于”，而非罗列组成部分。"
+        },
+        {
+          "text": "results in",
+          "explain": "错误。result in 意为“导致（某种结果）”，前后并无因果方向。"
+        },
+        {
+          "text": "persists in",
+          "explain": "错误。persist in 意为“执意坚持做某事”，主语通常是人，且后常接动名词。"
+        }
+      ],
+      "answer": 0,
+      "source": {
+        "sentence": "In other words, mathematics consists in the ideas living in human brains, with new theorems serving as markers for our progress in understanding and sharing these ideas.",
+        "publication": "The Guardian",
+        "title": "Surprising AI breakthroughs raise soul-searching questions for mathematicians | Letter",
+        "date": "2026-08-27",
+        "url": "https://www.theguardian.com/science/2026/aug/27/surprising-ai-breakthroughs-raise-soul-searching-questions-for-mathematicians"
+      },
+      "syntax": {
+        "backbone": "mathematics (主) + consists in (谓) + the ideas (宾) + [with new theorems serving as markers ... 伴随状语]",
+        "segments": [
+          { "text": "In other words,", "role": "conjunction", "label": "换言之（衔接状语）" },
+          { "text": "mathematics", "role": "subject", "label": "主语 S" },
+          { "text": "consists in", "role": "verb", "label": "谓语 V" },
+          { "text": "the ideas", "role": "object", "label": "宾语 O" },
+          { "text": "living in human brains,", "role": "attributive", "label": "现在分词后置定语" },
+          { "text": "with new theorems serving as markers", "role": "adverbial", "label": "with 独立伴随状语" },
+          { "text": "for our progress in understanding and sharing these ideas.", "role": "attributive", "label": "介词后置定语（修饰 markers）" }
+        ]
+      },
+      "translation": {
+        "literal": "换句话说，数学存在于活在人类大脑中的思想里，新定理充当我们在理解和分享这些思想方面取得进步的标志。",
+        "polished": "换言之，数学的本质在于存在于人类头脑中的思想，而新定理不过是我们在理解与分享这些思想进程中的里程碑。",
+        "keyPoint": "务必死记 consist in（在于）vs consist of（由……组成）；with + n. + serving as... 伴随结构译为并列分句“而……充当/不过是……”。"
+      }
+    },
+    {
+      "id": "q-collocation-deprive-10",
+      "vocabId": "collocation::deprive sb of sth",
+      "module": "collocation",
+      "questionType": "cloze",
+      "examFocus": "固定搭配 · deprive sb of sth",
+      "instruction": "结合后文固定介词 of 与“令小企业和农户失去贷款来源”的语境，选出正确动词：",
+      "prompt": "The ICBA is warning that could drain $1.3tn (£980bn) of deposits from community banks, ultimately ______ small businesses and farmers of $850bn-worth of loans primarily funded by customers' savings.",
+      "blankAnswer": "depriving",
+      "options": [
+        {
+          "text": "deriving",
+          "explain": "错误。derive 意为“源于、获取”，搭配为 derive A from B（接 from 而非 of），是考研高频形近混淆陷阱。"
+        },
+        {
+          "text": "depriving",
+          "explain": "正确。deprive sb of sth 是考研完形铁律搭配，意为“剥夺某人某物”，固定接介词 of（绝不接 from）。"
+        },
+        {
+          "text": "deterring",
+          "explain": "错误。deter sb from doing 意为“威慑/阻止某人做……”，固定搭配介词 from，不接 of。"
+        },
+        {
+          "text": "exempting",
+          "explain": "错误。exempt sb from sth 意为“免除某人（税收/义务）”，接介词 from，且语境为负面损失而非豁免。"
+        }
+      ],
+      "answer": 1,
+      "source": {
+        "sentence": "The ICBA is warning that could drain $1.3tn (£980bn) of deposits from community banks, ultimately depriving small businesses and farmers of $850bn-worth of loans primarily funded by customers' savings.",
+        "publication": "The Guardian",
+        "title": "‘Crypto v community’: 4,000 local US lenders join forces to fight ‘stablecoins’ law",
+        "date": "2026-06-28",
+        "url": "https://www.theguardian.com/technology/2026/jun/28/crypto-v-community-local-lenders-fight-stablecoins-law"
+      },
+      "syntax": {
+        "backbone": "The ICBA (主) + is warning (谓) + [(that) that could drain $1.3tn of deposits ... (宾语从句)] + [depriving ... 结果状语]",
+        "segments": [
+          { "text": "The ICBA", "role": "subject", "label": "主语 S" },
+          { "text": "is warning", "role": "verb", "label": "谓语 V" },
+          { "text": "that could drain $1.3tn (£980bn) of deposits from community banks,", "role": "clause", "label": "省略引导词的宾语从句（that 为指示代词主语）" },
+          { "text": "ultimately depriving small businesses and farmers of $850bn-worth of loans", "role": "adverbial", "label": "现在分词结果状语" },
+          { "text": "primarily funded by customers' savings.", "role": "attributive", "label": "过去分词后置定语（修饰 loans）" }
+        ]
+      },
+      "translation": {
+        "literal": "美国独立社区银行协会警告称，此举可能从社区银行抽走 1.3 万亿美元（9800 亿英镑）存款，最终剥夺小企业和农民价值 8500 亿美元、主要由客户储蓄提供资金的贷款。",
+        "polished": "美国独立社区银行协会警告，此举可能令社区银行流失 1.3 万亿美元（约 9800 亿英镑）存款，最终导致小企业与农户失去 8500 亿美元原本主要依托储户存款发放的贷款。",
+        "keyPoint": "注意 warning that 里的 that 是指示代词作从句主语（引导词 that 已省略）；drain A from B 意为“从 B 抽走/耗尽 A”。"
+      }
+    },
+    {
+      "id": "q-collocation-devoid-of-11",
+      "vocabId": "collocation::be devoid of",
+      "module": "collocation",
+      "questionType": "cloze",
+      "examFocus": "固定搭配 · 书面强否定",
+      "instruction": "结合前文“长期充当城镇排污渠、裹挟各类污染物”的语境，选出意为“完全缺乏、毫无……”的固定搭配：",
+      "prompt": "That flow had long been used as the town flush toilet, carrying off all manner of pollutants, leaving the Goyt system almost ______ life.",
+      "blankAnswer": "devoid of",
+      "options": [
+        {
+          "text": "steeped in",
+          "explain": "错误。be steeped in 意为“沉浸于、充满（历史/文化）”，语义完全相反。"
+        },
+        {
+          "text": "immune to",
+          "explain": "错误。be immune to 意为“对……免疫、不受影响”，与河道毫无生机不符。"
+        },
+        {
+          "text": "devoid of",
+          "explain": "正确。be devoid of 是外刊高频书面强否定搭配，意为“完全缺乏、毫无……”，leaving ... almost devoid of life 即“几乎寸草不生/毫无生机”。"
+        },
+        {
+          "text": "conducive to",
+          "explain": "错误。be conducive to 意为“有助于、有利于”，与污染破坏生态完全相反。"
+        }
+      ],
+      "answer": 2,
+      "source": {
+        "sentence": "That flow had long been used as the town flush toilet, carrying off all manner of pollutants, leaving the Goyt system almost devoid of life.",
+        "publication": "The Guardian",
+        "title": "Country diary: Here for all to see – nature’s remarkable ability to rebound | Mark Cocker",
+        "date": "2026-01-02",
+        "url": "https://www.theguardian.com/environment/2026/jan/02/country-diary-here-for-all-to-see-natures-remarkable-ability-to-rebound"
+      },
+      "syntax": {
+        "backbone": "That flow (主) + had long been used (谓) + as the town flush toilet (状) + [双现在分词结果状语]",
+        "segments": [
+          { "text": "That flow", "role": "subject", "label": "主语 S" },
+          { "text": "had long been used", "role": "verb", "label": "过去完成被动谓语 V" },
+          { "text": "as the town flush toilet,", "role": "adverbial", "label": "方式/身份状语" },
+          { "text": "carrying off all manner of pollutants,", "role": "adverbial", "label": "现在分词伴随状语" },
+          { "text": "leaving the Goyt system almost devoid of life.", "role": "adverbial", "label": "现在分词结果状语（leave + O + adj.）" }
+        ]
+      },
+      "translation": {
+        "literal": "那条水流长期被当作城镇的冲水马桶，带走各种污染物，使戈伊特水系几乎毫无生命。",
+        "polished": "这条河道长期被当作整座城镇的排污渠，冲刷着形形色色的污染物，令戈伊特水系几乎沦为死水、生机全无。",
+        "keyPoint": "all manner of 意为“各式各样的”；连续两个现在分词短语分别表伴随和最终结果，中文按顺承分句处理非常流畅。"
+      }
+    },
+    {
+      "id": "q-collocation-bound-up-with-12",
+      "vocabId": "collocation::be bound up with",
+      "module": "collocation",
+      "questionType": "cloze",
+      "examFocus": "固定搭配 · 紧密相连",
+      "instruction": "结合“麻雀与人类长久相伴”的语境，选出表示“与……命运紧密相连”的固定搭配：",
+      "prompt": "But for now there is a glimmer of hope for this little bird, which has lived alongside us for so long and whose fate is so ______ ours.",
+      "blankAnswer": "bound up with",
+      "options": [
+        {
+          "text": "incompatible with",
+          "explain": "错误。be incompatible with 意为“与……不相容/冲突”，与 lived alongside us for so long 的相伴语义矛盾。"
+        },
+        {
+          "text": "bound up with",
+          "explain": "正确。be bound up with 意为“与……密不可分、息息相关”，外刊人文环保类极高频。"
+        },
+        {
+          "text": "oblivious to",
+          "explain": "错误。be oblivious to 意为“对……浑然不觉”，不用于形容“命运与我们……”。"
+        },
+        {
+          "text": "exempt from",
+          "explain": "错误。be exempt from 意为“免除、豁免于”，与语境不符。"
+        }
+      ],
+      "answer": 1,
+      "source": {
+        "sentence": "But for now there is a glimmer of hope for this little bird, which has lived alongside us for so long and whose fate is so bound up with ours.",
+        "publication": "The Guardian",
+        "title": "Signs of a house sparrow comeback in the UK after decades of decline",
+        "date": "2026-08-12",
+        "url": "https://www.theguardian.com/environment/2026/aug/12/signs-house-sparrow-comeback-uk"
+      },
+      "syntax": {
+        "backbone": "there is (存现主干) + a glimmer of hope (主) + [which ... and whose ... 并列非限制性定语从句]",
+        "segments": [
+          { "text": "But", "role": "conjunction", "label": "转折连词" },
+          { "text": "for now", "role": "adverbial", "label": "时间状语（眼下）" },
+          { "text": "there is", "role": "verb", "label": "存现句谓语" },
+          { "text": "a glimmer of hope", "role": "subject", "label": "主语 S（一线希望）" },
+          { "text": "for this little bird,", "role": "attributive", "label": "介词后置定语" },
+          { "text": "which has lived alongside us for so long", "role": "clause", "label": "非限制性定语从句 1" },
+          { "text": "and whose fate is so bound up with ours.", "role": "clause", "label": "并列非限制性定语从句 2" }
+        ]
+      },
+      "translation": {
+        "literal": "但眼下对这种小鸟而言有一线希望，它与我们并肩生活了如此之久，而且它的命运与我们的如此紧密相连。",
+        "polished": "但眼下，这种与人类相伴已久、且命运与我们息息相关的小生灵，终于迎来了一线生机。",
+        "keyPoint": "a glimmer of hope（一线希望）和 bound up with（息息相关）都可直接迁移到大作文环保/人与自然主题！"
+      }
+    },
+    {
+      "id": "q-collocation-deter-13",
+      "vocabId": "collocation::deter sb from",
+      "module": "collocation",
+      "questionType": "cloze",
+      "examFocus": "固定搭配 · 威慑劝退",
+      "instruction": "选出在旅游税争议语境中意为“吓退、使打消念头”的动词：",
+      "prompt": "While there is little detailed international research on the economic impact of tourist taxes, a study by Bangor University in Wales in 2024 found no evidence to suggest they ______ visitors.",
+      "blankAnswer": "deter",
+      "options": [
+        {
+          "text": "deter",
+          "explain": "正确。deter（常考 deter sb / deter sb from doing）意为“威慑、劝退、使游客望而却步”，完美呼应旅游业对旅游税赶走游客的担忧。"
+        },
+        {
+          "text": "deprive",
+          "explain": "错误。deprive 必须接双宾结构 deprive sb of sth（剥夺某人某物），不能直接说 deprive visitors。"
+        },
+        {
+          "text": "dispose",
+          "explain": "错误。dispose 表示“处理掉”时须接 of（dispose of），且对象不能是游客。"
+        },
+        {
+          "text": "prevail",
+          "explain": "错误。prevail 为不及物动词，表“战胜/占上风”时须接 over（prevail over）。"
+        }
+      ],
+      "answer": 0,
+      "source": {
+        "sentence": "While there is little detailed international research on the economic impact of tourist taxes, a study by Bangor University in Wales in 2024 found no evidence to suggest they deter visitors.",
+        "publication": "The Guardian",
+        "title": "The hospitality industry fears a tourist tax will deter visitors – the evidence says otherwise",
+        "date": "2026-09-10",
+        "url": "https://www.theguardian.com/business/2026/sep/10/the-hospitality-industry-fears-a-tourist-tax-will-drive-visitors-away-the-evidence-disagrees"
+      },
+      "syntax": {
+        "backbone": "[While 让步状语从句] + a study (主) + found (谓) + no evidence (宾) + [to suggest ... 不定式定语]",
+        "segments": [
+          { "text": "While there is little detailed international research on the economic impact of tourist taxes,", "role": "clause", "label": "让步状语从句（While = 尽管）" },
+          { "text": "a study", "role": "subject", "label": "主语 S" },
+          { "text": "by Bangor University in Wales in 2024", "role": "attributive", "label": "介词后置定语" },
+          { "text": "found", "role": "verb", "label": "谓语 V" },
+          { "text": "no evidence", "role": "object", "label": "宾语 O" },
+          { "text": "to suggest they deter visitors.", "role": "attributive", "label": "不定式后置定语（修饰 evidence，内嵌宾语从句）" }
+        ]
+      },
+      "translation": {
+        "literal": "尽管关于旅游税经济影响的详细国际研究很少，但威尔士班戈大学 2024 年的一项研究未发现证据表明它们会吓退游客。",
+        "polished": "尽管目前关于旅游税经济影响的详尽国际研究尚不多见，但威尔士班戈大学 2024 年的一项研究并未发现旅游税会劝退游客的证据。",
+        "keyPoint": "句首 While 引导让步状语从句（“尽管”）；they 指代前文的 tourist taxes；to suggest... 译作 evidence 的前置定语。"
+      }
+    },
+    {
+      "id": "q-collocation-incompatible-14",
+      "vocabId": "collocation::be incompatible with",
+      "module": "collocation",
+      "questionType": "cloze",
+      "examFocus": "固定搭配 · 冲突不相容",
+      "instruction": "结合监管机构负责人因利益回避辞职的语境，选出意为“与……不相容、存在冲突”的固定搭配：",
+      "prompt": "However, I feel that my current role as chief executive of CQC has become ______ the important conversations happening about care at LTH, including during the time I was chief executive there.",
+      "blankAnswer": "incompatible with",
+      "options": [
+        {
+          "text": "conducive to",
+          "explain": "错误。be conducive to 意为“有助于、有利于”，与辞职回避利益冲突的语义相反。"
+        },
+        {
+          "text": "analogous to",
+          "explain": "错误。be analogous to 意为“与……类似/可类比”，不能用于解释职位与调查存在冲突。"
+        },
+        {
+          "text": "integral to",
+          "explain": "错误。be integral to 意为“对……不可或缺”，如果不可或缺就不会因此辞职。"
+        },
+        {
+          "text": "incompatible with",
+          "explain": "正确。be incompatible with 意为“与……不相容、相抵触”，精准表达其现任监管职务与针对前任机构的调查存在冲突。"
+        }
+      ],
+      "answer": 3,
+      "source": {
+        "sentence": "However, I feel that my current role as chief executive of CQC has become incompatible with the important conversations happening about care at LTH, including during the time I was chief executive there.",
+        "publication": "The Guardian",
+        "title": "Care Quality Commission chief quits over maternity inquiry into NHS trust he led",
+        "date": "2025-10-23",
+        "url": "https://www.theguardian.com/society/2025/oct/23/chief-executive-of-care-quality-commission-steps-down-over-inquiry-into-nhs-trust"
+      },
+      "syntax": {
+        "backbone": "I (主) + feel (谓) + [that my current role has become incompatible with the important conversations (宾语从句)]",
+        "segments": [
+          { "text": "However,", "role": "conjunction", "label": "转折副词" },
+          { "text": "I", "role": "subject", "label": "主语 S" },
+          { "text": "feel", "role": "verb", "label": "谓语 V" },
+          { "text": "that my current role as chief executive of CQC", "role": "subject", "label": "宾语从句主语" },
+          { "text": "has become", "role": "verb", "label": "从句系动词" },
+          { "text": "incompatible with the important conversations", "role": "complement", "label": "从句表语（形容词短语）" },
+          { "text": "happening about care at LTH,", "role": "attributive", "label": "现在分词后置定语" },
+          { "text": "including during the time I was chief executive there.", "role": "adverbial", "label": "补充范围状语（含省略 when 的定语从句）" }
+        ]
+      },
+      "translation": {
+        "literal": "然而，我感到我目前作为护理质量委员会首席执行官的角色，已与正在进行的关于 LTH 护理服务的重要讨论不相容，包括我在那里担任首席执行官期间的情况。",
+        "polished": "然而，我认为自己目前担任护理质量委员会首席执行官一职，已与眼下围绕 LTH 医疗照护问题（包括我曾执掌该机构期间）展开的重要质询存在冲突。",
+        "keyPoint": "conversations 在公关与政经语境中常委婉指“讨论/质询/审查”；注意 incompatible 固定搭配介词 with。"
+      }
+    },
+    {
+      "id": "q-collocation-conducive-15",
+      "vocabId": "collocation::be conducive to",
+      "module": "collocation",
+      "questionType": "cloze",
+      "examFocus": "固定搭配 · 四个 + to 易混辨析",
+      "instruction": "四个选项全以介词 to 结尾，选出法律条款中“不利于公共利益（not ______ the public good）”最准确的一项：",
+      "prompt": "The rules include wide discretionary powers for the home secretary to exclude individuals on the basis that their presence is \"not ______ the public good because of their conduct, character, associations or other reasons\".",
+      "blankAnswer": "conducive to",
+      "options": [
+        {
+          "text": "oblivious to",
+          "explain": "错误。be oblivious to 意为“对……浑然不觉”，主语通常是人，不能说“某人的入境对公共利益浑然不觉”。"
+        },
+        {
+          "text": "conducive to",
+          "explain": "正确。be conducive to 意为“有助于、有利于”，not conducive to the public good 是英国移民法经典表述（“不利于公共利益”）。"
+        },
+        {
+          "text": "averse to",
+          "explain": "错误。be averse to 意为“厌恶、反对”，主语为人，不用于修饰 presence（入境停留）。"
+        },
+        {
+          "text": "tantamount to",
+          "explain": "错误。be tantamount to 意为“无异于、等同于”，与“不利于公共利益”逻辑不符。"
+        }
+      ],
+      "answer": 1,
+      "source": {
+        "sentence": "The rules include wide discretionary powers for the home secretary to exclude individuals on the basis that their presence is \"not conducive to the public good because of their conduct, character, associations or other reasons\".",
+        "publication": "The Guardian",
+        "title": "Leftwing US commentator calls decision to ban him from UK ‘Kafkaesque’",
+        "date": "2026-06-04",
+        "url": "https://www.theguardian.com/world/2026/jun/04/leftwing-us-commentator-cenk-uygur-ban-uk-kafkaesque"
+      },
+      "syntax": {
+        "backbone": "The rules (主) + include (谓) + wide discretionary powers (宾) + [for ... to exclude 不定式定语] + [on the basis that 同位语从句]",
+        "segments": [
+          { "text": "The rules", "role": "subject", "label": "主语 S" },
+          { "text": "include", "role": "verb", "label": "谓语 V" },
+          { "text": "wide discretionary powers", "role": "object", "label": "宾语 O（广泛自由裁量权）" },
+          { "text": "for the home secretary to exclude individuals", "role": "attributive", "label": "带逻辑主语的不定式定语" },
+          { "text": "on the basis", "role": "adverbial", "label": "依据状语" },
+          { "text": "that their presence is \"not conducive to the public good", "role": "clause", "label": "同位语从句（解释 basis）" },
+          { "text": "because of their conduct, character, associations or other reasons\".", "role": "adverbial", "label": "原因状语" }
+        ]
+      },
+      "translation": {
+        "literal": "这些规定赋予内政大臣广泛的自由裁量权，可以基于某人的存在“因其行为、品格、交往或其他原因而不利于公共利益”为由将其拒之门外。",
+        "polished": "相关规定赋予内政大臣广泛的自由裁量权：只要有理由认定某人因个人行为、品行、社会关系或其他原因，其入境“不利于公共利益”，即可禁止其入境。",
+        "keyPoint": "discretionary powers（自由裁量权）、on the basis that（基于……的理由）、the public good（公共利益，good 作名词表“福祉/利益”）。"
+      }
+    },
+    {
+      "id": "q-collocation-result-from-16",
+      "vocabId": "collocation::result in / result from",
+      "module": "collocation",
+      "questionType": "cloze",
+      "examFocus": "固定搭配 · 因果方向铁律",
+      "instruction": "判断“这种看似矛盾的观点”与“他关于自由的理念”之间的因果方向，选出正确搭配：",
+      "prompt": "This paradoxical view ______ his idea that we must use our freedom to become ourselves, a concept he develops in his philosophy of existentialism.",
+      "blankAnswer": "results from",
+      "options": [
+        {
+          "text": "results in",
+          "explain": "错误。result in 表示“前因 → 后果（导致）”，而句中“观点”是果，“理念”是因，方向正好相反！"
+        },
+        {
+          "text": "results from",
+          "explain": "正确。result from 表示“前果 → 后因（起因于、源于）”，同 stem from / arise from，精准匹配“这一悖论观点源自他的理念”。"
+        },
+        {
+          "text": "contributes to",
+          "explain": "错误。contribute to 也表示“导致、促成”（前因后果），与因果方向相反。"
+        },
+        {
+          "text": "consists of",
+          "explain": "错误。consist of 意为“由……组成”，通常接复数构成要素，不用于说明思想渊源。"
+        }
+      ],
+      "answer": 1,
+      "source": {
+        "sentence": "This paradoxical view results from his idea that we must use our freedom to become ourselves, a concept he develops in his philosophy of existentialism.",
+        "publication": "The Conversation",
+        "title": "Is it genuine love – or obsessive passion? Kierkegaard, the father of existentialism, had some thoughts",
+        "date": "2026-11-20",
+        "url": "https://theconversation.com/is-it-genuine-love-or-obsessive-passion-kierkegaard-the-father-of-existentialism-had-some-thoughts-291950"
+      },
+      "syntax": {
+        "backbone": "This paradoxical view (主) + results from (谓) + his idea (宾) + [that 同位语从句] + [a concept ... 独立同位语]",
+        "segments": [
+          { "text": "This paradoxical view", "role": "subject", "label": "主语 S" },
+          { "text": "results from", "role": "verb", "label": "谓语 V" },
+          { "text": "his idea", "role": "object", "label": "宾语 O" },
+          { "text": "that we must use our freedom to become ourselves,", "role": "clause", "label": "同位语从句（解释 idea）" },
+          { "text": "a concept he develops in his philosophy of existentialism.", "role": "attributive", "label": "独立同位语（含省略 that 的定语从句）" }
+        ]
+      },
+      "translation": {
+        "literal": "这种看似矛盾的观点源于他的这样一种理念，即我们必须运用自由去成为自己，这是他在存在主义哲学中发展起来的一个概念。",
+        "polished": "这一看似悖论的观点，源于他提出的核心理念——我们必须借由自由成就真正的自我；他在存在主义哲学中进一步阐发了这一概念。",
+        "keyPoint": "一箭双雕：巩固 result from（前果后因）与 result in（前因后果）的方向区分，同时练熟“同位语从句 + 独立同位语”的双重解释结构。"
+      }
+    },
+    {
+      "id": "q-idioms-put-off-17",
+      "vocabId": "idioms::put off",
+      "module": "idioms",
+      "questionType": "cloze",
+      "examFocus": "非字面词组 · 生义陷阱",
+      "instruction": "结合前后转折逻辑，选出最符合外刊语境的动词短语：",
+      "prompt": "Like many other anthropologists, Sprenger was initially ______ by the term's colonial origins and nebulous usage; yet, when animism started to gain traction in environmental anthropology, he reconsidered his stance.",
+      "blankAnswer": "put off",
+      "options": [
+        {
+          "text": "put off",
+          "explain": "正确。put off 在考研外刊中除“推迟”外，极常考“使反感、使打消念头/劝退”。后文 yet 引出“他重新考虑了立场”，说明最初因该术语带有殖民色彩而产生排斥。"
+        },
+        {
+          "text": "borne out",
+          "explain": "错误。bear out 意为“证实、支持（理论/假设）”，不能与人作主语构成“被……证实”来解释后文改变立场。"
+        },
+        {
+          "text": "taken in",
+          "explain": "错误。be taken in by 意为“被……欺骗/蒙蔽”，原文强调对术语来源反感而非受骗。"
+        },
+        {
+          "text": "ironed out",
+          "explain": "错误。iron out 意为“消除（分歧/小问题）”，宾语通常是 differences/problems，不能用于修饰人。"
+        }
+      ],
+      "answer": 0,
+      "source": {
+        "sentence": "Like many other anthropologists, Sprenger was initially put off by the term's colonial origins and nebulous usage; yet, when animism started to gain traction in environmental anthropology, he reconsidered his stance.",
+        "publication": "Aeon",
+        "title": "My grandmother was a seal",
+        "date": "2026-11-20",
+        "url": "https://aeon.co/essays/do-you-have-a-selkie-or-a-seal-in-the-family"
+      },
+      "syntax": {
+        "backbone": "分句1：Sprenger (主) + was put off (谓) ｜ 转折 yet ｜ 分句2：he (主) + reconsidered (谓) + his stance (宾)",
+        "segments": [
+          { "text": "Like many other anthropologists,", "role": "adverbial", "label": "类比状语" },
+          { "text": "Sprenger", "role": "subject", "label": "主语 S" },
+          { "text": "was initially put off", "role": "verb", "label": "被动谓语 V" },
+          { "text": "by the term's colonial origins and nebulous usage;", "role": "adverbial", "label": "原因/施动状语" },
+          { "text": "yet,", "role": "conjunction", "label": "转折连词" },
+          { "text": "when animism started to gain traction in environmental anthropology,", "role": "clause", "label": "时间状语从句" },
+          { "text": "he", "role": "subject", "label": "主语 S" },
+          { "text": "reconsidered", "role": "verb", "label": "谓语 V" },
+          { "text": "his stance.", "role": "object", "label": "宾语 O" }
+        ]
+      },
+      "translation": {
+        "literal": "像许多其他人类学家一样，斯普伦格最初被这个术语的殖民起源和模糊用法劝退了；然而，当万物有灵论开始在环境人类学中获得关注时，他重新考虑了自己的立场。",
+        "polished": "与许多人类学家一样，斯普伦格起初因该术语带有殖民渊源且用法含糊而心生排斥；但随着万物有灵论在环境人类学界逐渐受到重视，他重新审视了自己的立场。",
+        "keyPoint": "put off 切忌译为“推迟”；gain traction 意为“逐渐获得认可/流行起来”；nebulous 意为“模糊不清的”。"
+      }
+    },
+    {
+      "id": "q-idioms-hinge-on-18",
+      "vocabId": "idioms::hinge on",
+      "module": "idioms",
+      "questionType": "cloze",
+      "examFocus": "非字面词组 · 独立主格",
+      "instruction": "选出最符合句中“协议能否达成取决于某项要求”语境的短语：",
+      "prompt": "The newly announced measures largely centre on young people and students, with deals ______ an EU demand to reduce tuition fees for EU students at UK universities.",
+      "blankAnswer": "hinging on",
+      "options": [
+        {
+          "text": "ruling out",
+          "explain": "错误。rule out 意为“排除……的可能性”，与英欧重置协议以欧盟诉求为关键前提的语义相反。"
+        },
+        {
+          "text": "hinging on",
+          "explain": "正确。hinge on 原意为“靠合页支撑”，引申为“完全取决于、以……为关键前提”，此处在 with 复合结构中作现在分词补足语。"
+        },
+        {
+          "text": "glossing over",
+          "explain": "错误。gloss over 意为“掩饰、轻描淡写地带过”，不符合外交谈判条件依存语境。"
+        },
+        {
+          "text": "cutting back on",
+          "explain": "错误。cut back on 意为“削减（开支/消费）”，搭配对象不能是“协议削减一项要求”。"
+        }
+      ],
+      "answer": 1,
+      "source": {
+        "sentence": "The newly announced measures largely centre on young people and students, with deals hinging on an EU demand to reduce tuition fees for EU students at UK universities.",
+        "publication": "The Conversation UK",
+        "title": "What does the UK-EU ‘reset’ deal mean for immigration and tuition fees?",
+        "date": "2026-11-21",
+        "url": "https://theconversation.com/what-does-the-uk-eu-reset-deal-mean-for-immigration-and-tuition-fees-297086"
+      },
+      "syntax": {
+        "backbone": "The newly announced measures (主) + centre on (谓) + young people and students (宾) + [with 复合伴随状语]",
+        "segments": [
+          { "text": "The newly announced measures", "role": "subject", "label": "主语 S" },
+          { "text": "largely", "role": "adverbial", "label": "程度状语" },
+          { "text": "centre on", "role": "verb", "label": "谓语 V" },
+          { "text": "young people and students,", "role": "object", "label": "宾语 O" },
+          { "text": "with deals hinging on an EU demand", "role": "adverbial", "label": "with 独立伴随状语" },
+          { "text": "to reduce tuition fees for EU students at UK universities.", "role": "attributive", "label": "不定式后置定语（修饰 demand）" }
+        ]
+      },
+      "translation": {
+        "literal": "新公布的措施主要围绕年轻人和学生，伴随着协议取决于欧盟一项降低在英国大学就读的欧盟学生学费的要求。",
+        "polished": "新近公布的举措主要聚焦青年与学生群体，而相关协议能否达成，关键取决于欧盟提出的一项要求——降低欧盟学生在英国高校的学费。",
+        "keyPoint": "with + n. + doing 伴随结构在英一翻译中常拆分为独立分句并用“而……”衔接；to reduce... 作 demand 的同位性后置定语。"
+      }
+    },
+    {
+      "id": "q-polysemy-address-19",
+      "vocabId": "polysemy::address",
+      "module": "polysemy",
+      "questionType": "cloze",
+      "examFocus": "熟词生义 · 动词高频考点",
+      "instruction": "选出在气候峰会谈判语境中意为“着手处理、正面应对”的动词：",
+      "prompt": "This year, however, countries failed to reach consensus on a final deal, after negotiations broke down over whether to explicitly ______ fossil fuels.",
+      "blankAnswer": "address",
+      "options": [
+        {
+          "text": "address",
+          "explain": "正确。address 在考研外刊中作动词极高频考“着手处理、应对、在协议中明确谈及（难题/议题）”，非“地址”。"
+        },
+        {
+          "text": "afford",
+          "explain": "错误。afford 生义为“提供、给予”，不与 fossil fuels 构成“明确应对化石燃料问题”的搭配。"
+        },
+        {
+          "text": "arrest",
+          "explain": "错误。arrest 生义为“吸引（注意）/阻止（进程）”，但谈判分歧在于是否在最终文本中正面触及化石燃料议题。"
+        },
+        {
+          "text": "attend",
+          "explain": "错误。attend 表“处理/照料”时为不及物动词，须加介词 to（attend to）。"
+        }
+      ],
+      "answer": 0,
+      "source": {
+        "sentence": "This year, however, countries failed to reach consensus on a final deal, after negotiations broke down over whether to explicitly address fossil fuels.",
+        "publication": "The Conversation UK",
+        "title": "Cop31: Why the UN climate summit ended in victory for fossil fuel producing nations",
+        "date": "2026-11-23",
+        "url": "https://theconversation.com/cop31-why-the-un-climate-summit-ended-in-victory-for-fossil-fuel-producing-nations-296779"
+      },
+      "syntax": {
+        "backbone": "countries (主) + failed to reach (谓) + consensus (宾) + [after 时间/原因状语从句]",
+        "segments": [
+          { "text": "This year,", "role": "adverbial", "label": "时间状语" },
+          { "text": "however,", "role": "conjunction", "label": "转折副词" },
+          { "text": "countries", "role": "subject", "label": "主语 S" },
+          { "text": "failed to reach", "role": "verb", "label": "谓语 V" },
+          { "text": "consensus", "role": "object", "label": "宾语 O" },
+          { "text": "on a final deal,", "role": "attributive", "label": "介词后置定语" },
+          { "text": "after negotiations broke down over whether to explicitly address fossil fuels.", "role": "clause", "label": "时间状语从句（含 whether 不定式宾语）" }
+        ]
+      },
+      "translation": {
+        "literal": "然而，今年各国未能就最终协议达成共识，在谈判因是否明确处理化石燃料而破裂之后。",
+        "polished": "然而，由于各方就是否应在文本中明确应对化石燃料问题产生分歧并导致谈判破裂，今年各国未能就最终协议达成共识。",
+        "keyPoint": "break down 表“（谈判）破裂”；explicitly address 意为“明确应对/正面触及”；中文宜把 after 从句前置以符合因果顺序。"
+      }
+    },
+    {
+      "id": "q-polysemy-dismiss-20",
+      "vocabId": "polysemy::dismiss",
+      "module": "polysemy",
+      "questionType": "cloze",
+      "examFocus": "熟词生义 · 驳回否定",
+      "instruction": "选出意为“驳回、否定、不予采纳”的动词完成句子：",
+      "prompt": "She noted that treaties could be negotiated within 15 months and ______ the US's proposal of five years to sort out a mandate.",
+      "blankAnswer": "dismissed",
+      "options": [
+        {
+          "text": "delivered",
+          "explain": "错误。deliver 生义为“发表（演讲）/兑现（承诺）”，与前文主张 15 个月内达成条约、否定美方 5 年方案的逻辑相反。"
+        },
+        {
+          "text": "dismissed",
+          "explain": "正确。dismiss 在考研外刊中除“解雇”外，高频考查“驳回、否定、不予考虑（提案/担忧/观点）”。"
+        },
+        {
+          "text": "fostered",
+          "explain": "错误。foster 意为“培养、促进”，与语境中的反对态度冲突。"
+        },
+        {
+          "text": "seconded",
+          "explain": "错误。second 作动词意为“赞成、附议（提议）”，语义完全相反。"
+        }
+      ],
+      "answer": 1,
+      "source": {
+        "sentence": "She noted that treaties could be negotiated within 15 months and dismissed the US's proposal of five years to sort out a mandate.",
+        "publication": "The Guardian",
+        "title": "International UN talks on controlling use of autonomous weapons collapse",
+        "date": "2026-11-21",
+        "url": "https://www.theguardian.com/technology/2026/nov/21/international-talks-control-ai-autonomous-weapons-collapse"
+      },
+      "syntax": {
+        "backbone": "She (主) + noted [that 从句] (谓1+宾1) + and + dismissed (谓2) + the US's proposal (宾2)",
+        "segments": [
+          { "text": "She", "role": "subject", "label": "主语 S" },
+          { "text": "noted", "role": "verb", "label": "并列谓语 V1" },
+          { "text": "that treaties could be negotiated within 15 months", "role": "clause", "label": "宾语从句 O1" },
+          { "text": "and", "role": "conjunction", "label": "并列连词" },
+          { "text": "dismissed", "role": "verb", "label": "并列谓语 V2" },
+          { "text": "the US's proposal", "role": "object", "label": "宾语 O2" },
+          { "text": "of five years to sort out a mandate.", "role": "attributive", "label": "后置定语（修饰 proposal）" }
+        ]
+      },
+      "translation": {
+        "literal": "她指出条约可以在 15 个月内谈判完成，并且驳回了美国关于用五年时间理清授权的提议。",
+        "polished": "她指出，相关条约完全可以在 15 个月内谈成，并当即否决了美方提出的花费五年时间敲定谈判授权的方案。",
+        "keyPoint": "dismiss 切勿机械译为“解雇”；sort out 意为“理清、解决”；mandate 指“（谈判/官方）授权”。"
+      }
+    },
+    {
+      "id": "q-polysemy-render-21",
+      "vocabId": "polysemy::render",
+      "module": "polysemy",
+      "questionType": "cloze",
+      "examFocus": "熟词生义 · 致使结构",
+      "instruction": "选出能构成“使熟悉的街道变得陌生”这一“动词 + 宾语 + 形容词宾补”结构的动词：",
+      "prompt": "Inverted views of the city ______ familiar streets strange, while the soundtrack occasionally evokes religious chanting.",
+      "blankAnswer": "render",
+      "options": [
+        {
+          "text": "weather",
+          "explain": "错误。weather 作动词生义为“平安度过（危机/风暴）”，不能接形容词宾补 strange。"
+        },
+        {
+          "text": "yield",
+          "explain": "错误。yield 生义为“出产、产生（结果）/屈服”，不构成 yield + O + adj. 结构。"
+        },
+        {
+          "text": "render",
+          "explain": "正确。render 是考研英一超高频书面动词，核心生义为“使成为、致使”，常考结构 render + 宾语 + 形容词（如 render the law obsolete）。"
+        },
+        {
+          "text": "harbor",
+          "explain": "错误。harbor 生义为“心怀（想法/敌意）、窝藏”，不符合语境与句型。"
+        }
+      ],
+      "answer": 2,
+      "source": {
+        "sentence": "Inverted views of the city render familiar streets strange, while the soundtrack occasionally evokes religious chanting.",
+        "publication": "The Conversation UK",
+        "title": "Your Mother Your Mother Your Mother: the sacred and profane collide in this off-kilter hitman drama",
+        "date": "2026-11-20",
+        "url": "https://theconversation.com/your-mother-your-mother-your-mother-the-sacred-and-profane-collide-in-this-off-kilter-hitman-drama-297115"
+      },
+      "syntax": {
+        "backbone": "Inverted views (主) + render (谓) + familiar streets (宾) + strange (宾补) ｜ 对比 while + the soundtrack evokes chanting",
+        "segments": [
+          { "text": "Inverted views", "role": "subject", "label": "主语 S" },
+          { "text": "of the city", "role": "attributive", "label": "介词后置定语" },
+          { "text": "render", "role": "verb", "label": "谓语 V" },
+          { "text": "familiar streets", "role": "object", "label": "宾语 O" },
+          { "text": "strange,", "role": "complement", "label": "形容词宾语补足语 C" },
+          { "text": "while", "role": "conjunction", "label": "并列对比连词" },
+          { "text": "the soundtrack", "role": "subject", "label": "分句主语 S" },
+          { "text": "occasionally", "role": "adverbial", "label": "频率状语" },
+          { "text": "evokes", "role": "verb", "label": "分句谓语 V" },
+          { "text": "religious chanting.", "role": "object", "label": "分句宾语 O" }
+        ]
+      },
+      "translation": {
+        "literal": "颠倒的城市视角使熟悉的街道变得陌生，而配乐偶尔唤起宗教诵经的感觉。",
+        "polished": "颠倒的城市构图让原本熟悉的街道显得陌生疏离，而配乐则不时营造出宛如宗教吟诵般的氛围。",
+        "keyPoint": "render + O + adj. 译为“使……变得……”；while 此处表伴随对比（“而”）；evoke 意为“唤起、营造出”。"
+      }
+    },
+    {
+      "id": "q-confusing-simulate-22",
+      "vocabId": "confusing::simulate / stimulate",
+      "module": "confusing",
+      "questionType": "cloze",
+      "examFocus": "形近词辨析 · 主谓隔离长难句",
+      "instruction": "区分形近动词词义，选出符合“聊天机器人旨在模拟持续人际关系”语境的一项：",
+      "prompt": "The GUARD Act, introduced in the US Senate in October 2025 and advanced by the Senate Judiciary Committee in April 2026, would, among other things, prohibit minors from using AI companions – chatbots designed to ______ ongoing personal relationships.",
+      "blankAnswer": "simulate",
+      "options": [
+        {
+          "text": "stimulate",
+          "explain": "错误。stimulate 意为“刺激、激发（需求/增长）”，AI 伴侣并非去刺激现实人际关系，而是“模拟”人际关系。"
+        },
+        {
+          "text": "simulate",
+          "explain": "正确。simulate 意为“模拟、仿造、假装”，与前文 AI companions / chatbots 精准对应。"
+        },
+        {
+          "text": "accumulate",
+          "explain": "错误。accumulate 意为“积累、积聚”，与语境不符。"
+        },
+        {
+          "text": "speculate",
+          "explain": "错误。speculate 意为“推测、投机”，常接 about/on，不能直接接 relationships。"
+        }
+      ],
+      "answer": 1,
+      "source": {
+        "sentence": "The GUARD Act, introduced in the US Senate in October 2025 and advanced by the Senate Judiciary Committee in April 2026, would, among other things, prohibit minors from using AI companions – chatbots designed to simulate ongoing personal relationships.",
+        "publication": "Aeon",
+        "title": "At least it remembers",
+        "date": "2026-11-19",
+        "url": "https://aeon.co/essays/what-would-parenting-by-ai-look-like"
+      },
+      "syntax": {
+        "backbone": "The GUARD Act (主) + would prohibit (谓) + minors (宾) + from using AI companions (补/状)",
+        "segments": [
+          { "text": "The GUARD Act,", "role": "subject", "label": "主语 S" },
+          { "text": "introduced in the US Senate in October 2025 and advanced by the Senate Judiciary Committee in April 2026,", "role": "attributive", "label": "双过去分词非限制性定语" },
+          { "text": "would,", "role": "verb", "label": "情态助动词" },
+          { "text": "among other things,", "role": "parenthetical", "label": "插入语（除其他事项外）" },
+          { "text": "prohibit", "role": "verb", "label": "核心谓语 V" },
+          { "text": "minors", "role": "object", "label": "宾语 O" },
+          { "text": "from using AI companions", "role": "complement", "label": "固定搭配宾补（prohibit sb from doing）" },
+          { "text": "– chatbots designed to simulate ongoing personal relationships.", "role": "attributive", "label": "破折号同位语（解释 AI companions）" }
+        ]
+      },
+      "translation": {
+        "literal": "《GUARD 法案》——于 2025 年 10 月提交美国参议院并于 2026 年 4 月获参议院司法委员会推进——将（除其他条款外）禁止未成年人使用人工智能伴侣，即旨在模拟持续个人关系的聊天机器人。",
+        "polished": "《GUARD 法案》于 2025 年 10 月提交美国参议院，并在 2026 年 4 月获参议院司法委员会推进；该法案除其他规定外，拟禁止未成年人使用人工智能伴侣——即那些旨在模拟持续人际关系的聊天机器人。",
+        "keyPoint": "典型英一主谓超长隔离结构：先跳过逗号间过去分词短语与插入语 among other things，抓住主干 Act would prohibit minors from using...；Act 译为“法案”，minors 译为“未成年人”。"
+      }
+    },
+    {
+      "id": "q-confusing-imply-23",
+      "vocabId": "confusing::comply / imply / apply",
+      "module": "confusing",
+      "questionType": "cloze",
+      "examFocus": "形近词辨析 · 分号同位解释",
+      "instruction": "选出意为“暗含、意味着”的形近动词完成句子：",
+      "prompt": "Importantly, the words conversion and somatisation strongly ______ an active, even deliberate, process; that the patient with a psychosomatic illness is doing something that brings their symptoms about.",
+      "blankAnswer": "imply",
+      "options": [
+        {
+          "text": "comply",
+          "explain": "错误。comply 意为“遵从、遵守”，且为不及物动词，需搭配 with（comply with rules）。"
+        },
+        {
+          "text": "apply",
+          "explain": "错误。apply 意为“申请、应用、适用”，无法表达“术语暗含某种含义”。"
+        },
+        {
+          "text": "imply",
+          "explain": "正确。imply 意为“暗示、暗含、意味着”，也是考研阅读推断题题干最高频词。"
+        },
+        {
+          "text": "supply",
+          "explain": "错误。supply 意为“供应、提供”，与词汇隐含语义无关。"
+        }
+      ],
+      "answer": 2,
+      "source": {
+        "sentence": "Importantly, the words conversion and somatisation strongly imply an active, even deliberate, process; that the patient with a psychosomatic illness is doing something that brings their symptoms about.",
+        "publication": "The Guardian",
+        "title": "How can we explain psychosomatic illnesses?",
+        "date": "2026-11-22",
+        "url": "https://www.theguardian.com/science/2026/nov/22/how-can-we-explain-psychosomatic-illnesses"
+      },
+      "syntax": {
+        "backbone": "the words conversion and somatisation (主) + imply (谓) + a process (宾) ; [that 同位语从句解释 process]",
+        "segments": [
+          { "text": "Importantly,", "role": "adverbial", "label": "评注性副词状语" },
+          { "text": "the words conversion and somatisation", "role": "subject", "label": "主语 S" },
+          { "text": "strongly", "role": "adverbial", "label": "程度状语" },
+          { "text": "imply", "role": "verb", "label": "谓语 V" },
+          { "text": "an active, even deliberate, process;", "role": "object", "label": "宾语 O" },
+          { "text": "that the patient with a psychosomatic illness is doing something", "role": "clause", "label": "同位语从句（解释 process）" },
+          { "text": "that brings their symptoms about.", "role": "clause", "label": "定语从句（修饰 something）" }
+        ]
+      },
+      "translation": {
+        "literal": "重要的是，“转换”和“躯体化”这两个词强烈暗示着一个主动的、甚至刻意的过程；即患有心身疾病的病人正在做某种导致其症状出现的事情。",
+        "polished": "更重要的是，“转换”与“躯体化”这两个术语强烈暗含着一种主动、甚至有意为之的过程——仿佛心身疾病患者是在通过某种行为引发了自身症状。",
+        "keyPoint": "分号后的 that 从句进一步解释 process，翻译时可用破折号或“即……”自然引出；顺带巩固高频词组 bring about（引起、导致）。"
+      }
+    },
+    {
+      "id": "q-logic-rather-than-24",
+      "vocabId": "logic::rather than",
+      "module": "logic",
+      "questionType": "cloze",
+      "examFocus": "完形逻辑词 · 替代对比",
+      "instruction": "选出表示“前者而非后者”替代对比关系的逻辑短语：",
+      "prompt": "That's why robot engineers previously focused on creating task-based robots, able to perform a specific function, he adds, ______ trying to emulate everything a human hand can do.",
+      "blankAnswer": "rather than",
+      "options": [
+        {
+          "text": "other than",
+          "explain": "错误。other than 意为“除了（= except）”，考研完形极常将其与 rather than 放在一起做干扰。"
+        },
+        {
+          "text": "rather than",
+          "explain": "正确。rather than 意为“而不是（= instead of）”，连接前后两个平行的动名词短语 creating... 与 trying...，精准构成取舍对比。"
+        },
+        {
+          "text": "owing to",
+          "explain": "错误。owing to 意为“由于、因为”，表示原因，与句中“专注单一功能而非模拟全能人手”的取舍逻辑不符。"
+        },
+        {
+          "text": "insofar as",
+          "explain": "错误。insofar as 意为“在……范围内、就……而言”，且须引导完整从句，不能接动名词 trying。"
+        }
+      ],
+      "answer": 1,
+      "source": {
+        "sentence": "That's why robot engineers previously focused on creating task-based robots, able to perform a specific function, he adds, rather than trying to emulate everything a human hand can do.",
+        "publication": "The Guardian",
+        "title": "‘The doom of humanity’: will the quest to make robotic hands render us obsolete?",
+        "date": "2026-11-21",
+        "url": "https://www.theguardian.com/technology/2026/nov/21/robot-hands-future-of-humanity-ai"
+      },
+      "syntax": {
+        "backbone": "That (主) + is (系) + [why robot engineers focused on creating... rather than trying...] (表语从句)",
+        "segments": [
+          { "text": "That's", "role": "subject", "label": "主语 + 系动词" },
+          { "text": "why robot engineers previously focused on creating task-based robots,", "role": "clause", "label": "表语从句主体" },
+          { "text": "able to perform a specific function,", "role": "attributive", "label": "形容词短语后置定语（修饰 robots）" },
+          { "text": "he adds,", "role": "parenthetical", "label": "引语插入语" },
+          { "text": "rather than", "role": "conjunction", "label": "替代对比逻辑词" },
+          { "text": "trying to emulate everything a human hand can do.", "role": "object", "label": "并列对比宾语（含省略 that 的定语从句）" }
+        ]
+      },
+      "translation": {
+        "literal": "他补充道，这就是为什么机器人工程师过去专注于制造基于任务的、能够执行特定功能的机器人，而不是试图模仿人手能做的一切。",
+        "polished": "他补充道，正因如此，机器人工程师过去往往专注于研发执行单一特定任务的机器人，而非试图去复刻人手所能完成的一切动作。",
+        "keyPoint": "插入语 he adds 翻译时宜提至句首；able to perform... 形容词短语后置修饰 robots，译成前置定语更顺畅；emulate 意为“效仿、模拟”。"
+      }
+    },
+    {
+      "id": "q-logic-regardless-of-25",
+      "vocabId": "logic::regardless of / irrespective of",
+      "module": "logic",
+      "questionType": "cloze",
+      "examFocus": "完形逻辑词 · 无条件让步",
+      "instruction": "结合“甘冒诅咒、行窃绑架”与“必然酿成悲剧”的语义反差，选出恰当的逻辑介词短语：",
+      "prompt": "The selkie's allure is such that men will risk curses and commit theft and kidnapping to possess her, ______ the certain tragedy that forced marriage augurs.",
+      "blankAnswer": "regardless of",
+      "options": [
+        {
+          "text": "in line with",
+          "explain": "错误。in line with 意为“与……一致、符合”，与语境中的“不顾必然悲剧”相反。"
+        },
+        {
+          "text": "in light of",
+          "explain": "错误。in light of 意为“鉴于、考虑到”，如果“考虑到必然悲剧”理应放弃，而非执意占有。"
+        },
+        {
+          "text": "on account of",
+          "explain": "错误。on account of 意为“由于、因为”，与让步逻辑冲突。"
+        },
+        {
+          "text": "regardless of",
+          "explain": "正确。regardless of 意为“不管、不顾”，同 irrespective of，精准表达“全然不顾强迫婚姻所预示的必然悲剧”。"
+        }
+      ],
+      "answer": 3,
+      "source": {
+        "sentence": "The selkie's allure is such that men will risk curses and commit theft and kidnapping to possess her, regardless of the certain tragedy that forced marriage augurs.",
+        "publication": "Aeon",
+        "title": "My grandmother was a seal",
+        "date": "2026-11-20",
+        "url": "https://aeon.co/essays/do-you-have-a-selkie-or-a-seal-in-the-family"
+      },
+      "syntax": {
+        "backbone": "The selkie's allure (主) + is (系) + such (表) + [that 结果状语从句] + [regardless of 让步状语]",
+        "segments": [
+          { "text": "The selkie's allure", "role": "subject", "label": "主语 S" },
+          { "text": "is", "role": "verb", "label": "系动词 V" },
+          { "text": "such", "role": "complement", "label": "表语 C（如此之大）" },
+          { "text": "that men will risk curses and commit theft and kidnapping", "role": "clause", "label": "结果状语从句" },
+          { "text": "to possess her,", "role": "adverbial", "label": "目的状语" },
+          { "text": "regardless of", "role": "conjunction", "label": "无条件让步介词短语" },
+          { "text": "the certain tragedy", "role": "object", "label": "介词宾语" },
+          { "text": "that forced marriage augurs.", "role": "clause", "label": "定语从句（修饰 tragedy）" }
+        ]
+      },
+      "translation": {
+        "literal": "海豹女的魅力如此之大，以至于男人们会冒着遭受诅咒的风险、犯下盗窃和绑架罪来占有她，不管强迫婚姻所预示的必然悲剧。",
+        "polished": "海豹女的魅力是如此摄人心魄，以至于男人们为了占有她，宁可甘冒诅咒、行窃掳掠，也全然不顾强迫婚姻注定招致的悲剧。",
+        "keyPoint": "be such that... 是书面高频结果状语句型（“如此……以至于……”）；certain 作前置定语常译为“必然的”；augur 意为“预示”。"
+      }
+    },
+    {
+      "id": "q-paraphrase-posit-26",
+      "vocabId": "paraphrase::contend / maintain / assert / allege / posit",
+      "module": "paraphrase",
+      "questionType": "context",
+      "examFocus": "阅读同义替换 · 主张假设簇",
+      "instruction": "阅读外刊原句，选出与高亮动词 posits 语义最贴近的考研阅读同义替换表达：",
+      "highlight": "posits",
+      "prompt": "The selkie narrative is powerful because it considers the aftermath of things going wrong and posits a world in which violence doesn't mean an end to care.",
+      "options": [
+        {
+          "text": "puts forward / assumes as a premise",
+          "explain": "正确。posit 属于考研阅读“主张/假设簇”（contend / maintain / assert / posit），意为“假设、提出（某种构想或前提）”，常被改写为 put forward / propose / assume。"
+        },
+        {
+          "text": "undermines / gradually weakens",
+          "explain": "错误。undermine 属于“削弱破坏簇”，与前文 narrative is powerful 的正面论证冲突。"
+        },
+        {
+          "text": "rules out / explicitly rejects",
+          "explain": "错误。rule out 意为“排除”，语义完全相反。"
+        },
+        {
+          "text": "obscures / renders vague",
+          "explain": "错误。obscure 属于“模糊难懂簇”，不符合语境。"
+        }
+      ],
+      "answer": 0,
+      "source": {
+        "sentence": "The selkie narrative is powerful because it considers the aftermath of things going wrong and posits a world in which violence doesn't mean an end to care.",
+        "publication": "Aeon",
+        "title": "My grandmother was a seal",
+        "date": "2026-11-20",
+        "url": "https://aeon.co/essays/do-you-have-a-selkie-or-a-seal-in-the-family"
+      },
+      "syntax": {
+        "backbone": "The selkie narrative (主) + is (系) + powerful (表) + [because 原因状语从句：considers ... and posits a world]",
+        "segments": [
+          { "text": "The selkie narrative", "role": "subject", "label": "主语 S" },
+          { "text": "is", "role": "verb", "label": "系动词 V" },
+          { "text": "powerful", "role": "complement", "label": "表语 C" },
+          { "text": "because it considers the aftermath of things going wrong", "role": "clause", "label": "原因状语从句（谓语1）" },
+          { "text": "and posits a world", "role": "clause", "label": "原因状语从句（并列谓语2）" },
+          { "text": "in which violence doesn't mean an end to care.", "role": "clause", "label": "介词+which 定语从句（修饰 world）" }
+        ]
+      },
+      "translation": {
+        "literal": "海豹女叙事之所以有力量，是因为它思考了事情出错后的后果，并假设了一个暴力并不意味着关怀终结的世界。",
+        "polished": "海豹女传说之所以富有感染力，在于它直面事态失控后的余波，并构想出这样一个世界：即便遭遇暴力，关怀也并未就此终结。",
+        "keyPoint": "aftermath 意为“（不幸事件的）余波、后果”；in which 引导定语从句修饰 a world，中文拆成“这样一个世界：……”更自然。"
+      }
+    },
+    {
+      "id": "q-paraphrase-imperative-27",
+      "vocabId": "paraphrase::pivotal / paramount / indispensable / imperative",
+      "module": "paraphrase",
+      "questionType": "context",
+      "examFocus": "阅读同义替换 · 至关重要簇",
+      "instruction": "阅读外刊原句，选出与高亮词 imperative（此处由形容词转化为名词）在语境中最契合的同义替换：",
+      "highlight": "imperative",
+      "prompt": "They began to move away from the hobbyist drive to build the best thing possible, and towards a business imperative to build something that companies might want to buy in large quantities.",
+      "options": [
+        {
+          "text": "a fleeting and trivial fad",
+          "explain": "错误。fleeting 属于“短暂瞬逝簇”，与商业量产的刚性驱动力相反。"
+        },
+        {
+          "text": "an urgent, essential priority",
+          "explain": "正确。imperative 属于“至关重要/势在必行簇”（pivotal / paramount / indispensable / imperative）；作名词表示“当务之急、必须完成的刚性目标”。"
+        },
+        {
+          "text": "a cautious reservation",
+          "explain": "错误。cautious reservation 意为“谨慎保留”，不符合 towards 后的目标转向。"
+        },
+        {
+          "text": "a bitter regulatory friction",
+          "explain": "错误。friction 意为“摩擦冲突”，句中并未提及监管阻力。"
+        }
+      ],
+      "answer": 1,
+      "source": {
+        "sentence": "They began to move away from the hobbyist drive to build the best thing possible, and towards a business imperative to build something that companies might want to buy in large quantities.",
+        "publication": "The Guardian",
+        "title": "‘The doom of humanity’: will the quest to make robotic hands render us obsolete?",
+        "date": "2026-11-21",
+        "url": "https://www.theguardian.com/technology/2026/nov/21/robot-hands-future-of-humanity-ai"
+      },
+      "syntax": {
+        "backbone": "They (主) + began to move (谓) + [away from the hobbyist drive ... and towards a business imperative ...]",
+        "segments": [
+          { "text": "They", "role": "subject", "label": "主语 S" },
+          { "text": "began to move", "role": "verb", "label": "谓语 V" },
+          { "text": "away from the hobbyist drive", "role": "adverbial", "label": "方向状语1（脱离……）" },
+          { "text": "to build the best thing possible,", "role": "attributive", "label": "不定式定语（修饰 drive）" },
+          { "text": "and", "role": "conjunction", "label": "并列连词" },
+          { "text": "towards a business imperative", "role": "adverbial", "label": "方向状语2（转向……）" },
+          { "text": "to build something", "role": "attributive", "label": "不定式定语（修饰 imperative）" },
+          { "text": "that companies might want to buy in large quantities.", "role": "clause", "label": "定语从句（修饰 something）" }
+        ]
+      },
+      "translation": {
+        "literal": "他们开始远离打造尽可能最好的东西的业余爱好者驱动力，而转向一种商业刚需，即打造企业可能想大量购买的产品。",
+        "polished": "他们不再一味追求发烧友式的极致性能，而是转向一种迫切的商业刚需——研发出足以让企业大批量采购的产品。",
+        "keyPoint": "move away from A and towards B 构成平行对照结构；drive 作名词（熟词生义）指“动力、内驱力”；in large quantities 译为“大批量地”。"
+      }
+    }
+  ]
+}

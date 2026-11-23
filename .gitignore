@@ -1,0 +1,14 @@
+# Local secrets (NEVER commit API keys)
+.env
+.env.local
+
+# Raw scraped periodical cache (kept local, only single-sentence curated JSON is published)
+data/raw/
+tmp/
+
+# Python / OS / IDE
+__pycache__/
+*.py[cod]
+.venv/
+.DS_Store
+Thumbs.db

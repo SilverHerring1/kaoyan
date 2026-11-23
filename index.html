@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>考研英语一冲刺工作台 | 核心词库 · 纯记忆速背 · 外刊刷题与翻译</title>
+  <meta name="description" content="考研英语一冲刺一体化学习站：7大可刷题核心词模块（含完形近义辨析与固定搭配）、4大纯记忆速背模块（态度词/学术名词/作文主题词）、同源外刊单选、句子成分划分与英一翻译对照。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/styles.css">
+</head>
+<body>
+  <a href="#main-content" class="skip-link visually-hidden">跳到正文内容</a>
+
+  <!-- 顶部栏 -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand-block">
+        <div class="brand-title-row">
+          <svg class="icon-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+          </svg>
+          <h1>考研英语一冲刺工作台</h1>
+          <span class="header-badge">11 模块 · 刷题/速背分离</span>
+        </div>
+        <p class="brand-subtitle">可刷题（词组 · 熟词生义 · 形近 · 完形近义辨析 · 固定搭配 · 逻辑 · 同义替换）｜ 纯速背（态度正反 · 学术词 · 作文主题词）</p>
+      </div>
+
+      <div class="header-actions no-print">
+        <button id="openBackupBtn" type="button" class="btn btn-ghost">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+          </svg>
+          <span>备份/恢复</span>
+        </button>
+        <button id="printBtn" type="button" class="btn btn-solid">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+          </svg>
+          <span>导出 PDF</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 主视图切换 Tablist -->
+    <div class="tab-bar-wrap no-print">
+      <div class="container">
+        <div class="primary-tablist" role="tablist" aria-label="学习模式切换">
+          <button type="button" role="tab" id="tab-vocab" class="primary-tab" aria-selected="true" tabindex="0" data-panel="panel-vocab">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h10"/>
+            </svg>
+            <span>核心刷题词库</span>
+            <span class="tab-count" id="tabVocabCount">470</span>
+          </button>
+          <button type="button" role="tab" id="tab-memorize" class="primary-tab" aria-selected="false" tabindex="-1" data-panel="panel-memorize">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+            </svg>
+            <span>纯记忆速背区</span>
+            <span class="tab-count" id="tabMemorizeCount">155</span>
+          </button>
+          <button type="button" role="tab" id="tab-quiz" class="primary-tab" aria-selected="false" tabindex="-1" data-panel="panel-quiz">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span>外刊刷题 &amp; 长难句翻译</span>
+            <span class="tab-count" id="tabQuizCount">0</span>
+          </button>
+          <button type="button" role="tab" id="tab-mistakes" class="primary-tab" aria-selected="false" tabindex="-1" data-panel="panel-mistakes">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+            <span>错题本</span>
+            <span class="tab-count" id="tabMistakeCount">0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" class="container main-shell" tabindex="-1">
+    <div id="printSummary" class="print-only print-summary">导出范围：全部词条</div>
+
+    <!-- ==================== 视图 1：核心刷题词库（7 大可出题模块） ==================== -->
+    <div id="panel-vocab" role="tabpanel" aria-labelledby="tab-vocab">
+      <div class="panel-body">
+        <!-- 小品词空间隐喻速查 -->
+        <details id="particleGuide" class="card disclosure-card no-print">
+          <summary class="disclosure-summary">
+            <span class="disclosure-title">
+              <span class="badge-chip badge-sky">速查</span>
+              非字面词组解码：高频小品词（UP / OUT / OFF / DOWN / OVER / THROUGH / BACK）空间逻辑
+            </span>
+            <span class="disclosure-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="particle-grid">
+            <article class="particle-card">
+              <h2 class="particle-head tone-sky">UP · 向上 / 彻底完成 / 出现堆积</h2>
+              <p><span lang="en">use up</span>（用光）、<span lang="en">turn up</span>（出现）、<span lang="en">make up for</span>（弥补）、<span lang="en">live up to</span>（不辜负/达到高标准）。</p>
+            </article>
+            <article class="particle-card">
+              <h2 class="particle-head tone-indigo">OUT · 向外 / 耗尽 / 暴露产出 / 排除</h2>
+              <p><span lang="en">turn out</span>（结果证明为）、<span lang="en">rule out</span>（排除）、<span lang="en">phase out</span>（逐步淘汰）、<span lang="en">bear out</span>（证实）。</p>
+            </article>
+            <article class="particle-card">
+              <h2 class="particle-head tone-rose">OFF · 脱离 / 中断取消 / 清偿消退</h2>
+              <p><span lang="en">call off</span>（取消）、<span lang="en">put off</span>（推迟/劝退）、<span lang="en">pay off</span>（见效/还清）、<span lang="en">wear off</span>（消退）、<span lang="en">level off</span>（趋平）。</p>
+            </article>
+            <article class="particle-card">
+              <h2 class="particle-head tone-amber">DOWN · 压低 / 削减 / 崩塌 / 归结</h2>
+              <p><span lang="en">turn down</span>（拒绝/调低）、<span lang="en">break down</span>（分解/故障）、<span lang="en">boil down to</span>（归结为）。</p>
+            </article>
+            <article class="particle-card">
+              <h2 class="particle-head tone-emerald">OVER · 跨越 / 接管覆盖 / 掩饰翻转</h2>
+              <p><span lang="en">get over</span>（克服）、<span lang="en">take over</span>（接管）、<span lang="en">gloss over</span>（掩饰/轻描淡写）。</p>
+            </article>
+            <article class="particle-card">
+              <h2 class="particle-head tone-purple">THROUGH / BACK · 穿透完成 / 阻滞回退</h2>
+              <p><span lang="en">see through</span>（看穿/坚持到底）、<span lang="en">hold back</span>（阻碍/隐瞒）、<span lang="en">set back</span>（使受挫）、<span lang="en">cut back on</span>（削减）。</p>
+            </article>
+          </div>
+        </details>
+
+        <!-- 搜索与控制面板 -->
+        <section class="card control-panel no-print">
+          <search class="control-top-row">
+            <div class="search-field">
+              <label for="searchInput" class="visually-hidden">搜索词条、中文释义或考研考点</label>
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+              </svg>
+              <input id="searchInput" type="search" placeholder="搜索英文词条、中文词义、搭配或考点解析...">
+              <button id="clearSearchBtn" type="button" class="icon-btn clear-search-btn" hidden aria-label="清空搜索关键词">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
+
+            <div class="toolbar-controls">
+              <button id="selfTestBtn" type="button" class="pill-toggle" aria-pressed="false">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M3 3l18 18"/>
+                </svg>
+                <span id="selfTestLabel">遮罩自测：关</span>
+              </button>
+
+              <button id="starOnlyBtn" type="button" class="pill-toggle pill-amber" aria-pressed="false">
+                <span>重点</span>
+                <span class="count-badge" id="starCountBadge">0</span>
+              </button>
+
+              <button id="hideMasteredBtn" type="button" class="pill-toggle pill-emerald" aria-pressed="false">
+                <span id="hideMasteredLabel">隐藏已掌握</span>
+                <span class="count-badge" id="masteredCountBadge">0</span>
+              </button>
+
+              <button id="hasQuizOnlyBtn" type="button" class="pill-toggle pill-indigo" aria-pressed="false">
+                <span>仅看已配外刊题</span>
+                <span class="count-badge" id="hasQuizCountBadge">0</span>
+              </button>
+
+              <div class="select-wrap">
+                <label for="sortSelect" class="visually-hidden">词条排序方式</label>
+                <select id="sortSelect">
+                  <option value="default">默认模块顺序</option>
+                  <option value="alpha">A-Z 字母排序</option>
+                  <option value="starred">重点词置顶</option>
+                  <option value="shuffle">随机打乱顺序</option>
+                </select>
+              </div>
+
+              <button id="reshuffleBtn" type="button" class="btn btn-subtle" hidden>重新洗牌</button>
+              <button id="resetProgressBtn" type="button" class="btn btn-danger-ghost">重置词库标记</button>
+            </div>
+          </search>
+
+          <!-- 可刷题模块筛选胶囊 -->
+          <div id="moduleFilterBar" class="module-filter-bar" role="group" aria-label="按可刷题模块筛选"></div>
+
+          <!-- 进度条与模块提示 -->
+          <div class="stats-footer">
+            <div class="stats-left">
+              <span>当前显示 <strong id="countDisplay">0</strong> 条</span>
+              <span class="sep" aria-hidden="true">·</span>
+              <span>已掌握 <strong id="progressText">0% (0/470)</strong></span>
+              <span id="moduleTipText" class="module-tip"></span>
+            </div>
+            <div class="progress-track" role="progressbar" aria-label="核心词库掌握进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressTrack">
+              <div class="progress-fill" id="progressBar" style="--pct: 0%;"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 自测提示条 -->
+        <div id="selfTestBanner" class="selftest-banner no-print" hidden>
+          <span><strong>遮罩自测模式已开启</strong>：近义辨析/固定搭配/逻辑词/同义替换的子标签也已同步遮罩；点击单条“翻开核对”，标星或标掌握不会重置已翻开条目。</span>
+          <button id="revealAllBtn" type="button" class="btn btn-subtle">全部翻开 / 收起</button>
+        </div>
+
+        <!-- 词库列表 -->
+        <section class="card vocab-table-card">
+          <div class="vocab-header-row" aria-hidden="true">
+            <div>词条 &amp; 逐词发音</div>
+            <div>分类 / 音标</div>
+            <div>核心词义</div>
+            <div>考研考点与辨析解析</div>
+          </div>
+          <div id="vocabList" class="vocab-list"></div>
+          <div id="vocabEmpty" class="empty-state" hidden>
+            <p class="empty-title">没有找到匹配的词条</p>
+            <p class="empty-desc">可以清空搜索关键词，或关闭“重点 / 隐藏已掌握 / 仅看已配外刊题”筛选。</p>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- ==================== 视图 2：纯记忆速背区（态度正反词 · 学术名词 · 作文主题词） ==================== -->
+    <div id="panel-memorize" role="tabpanel" aria-labelledby="tab-memorize" hidden>
+      <div class="panel-body">
+        <section class="card control-panel no-print">
+          <div class="mem-intro-row">
+            <div>
+              <h2 class="section-heading">纯记忆速背区（不强行出单选，专攻高频速记与写作替换）</h2>
+              <p class="section-sub">集中收录<strong>态度核心/必错词</strong>（按极性分组）、<strong>英一抽象学术名词</strong>、以及<strong>英一 7 大高频作文主题词与考场例句</strong>。</p>
+            </div>
+            <div class="toolbar-controls">
+              <button id="memSelfTestBtn" type="button" class="pill-toggle" aria-pressed="false">
+                <span id="memSelfTestLabel">遮罩默背：关</span>
+              </button>
+              <button id="memStarOnlyBtn" type="button" class="pill-toggle pill-amber" aria-pressed="false">
+                <span>仅看重点</span>
+                <span class="count-badge" id="memStarBadge">0</span>
+              </button>
+              <button id="memHideMasteredBtn" type="button" class="pill-toggle pill-emerald" aria-pressed="false">
+                <span id="memHideMasteredLabel">隐藏已背会</span>
+                <span class="count-badge" id="memMasteredBadge">0</span>
+              </button>
+            </div>
+          </div>
+
+          <search class="control-top-row">
+            <div class="search-field">
+              <label for="memSearchInput" class="visually-hidden">搜索纯记忆速背词条或作文主题</label>
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+              </svg>
+              <input id="memSearchInput" type="search" placeholder="搜索态度词、学术名词、作文主题或句型...">
+            </div>
+
+            <div id="memModuleBar" class="module-filter-bar" role="group" aria-label="纯记忆模块切换"></div>
+          </search>
+
+          <!-- 子分组快速筛选条 -->
+          <div id="memGroupBar" class="subgroup-bar" role="group" aria-label="按主题或极性子分组筛选"></div>
+
+          <div class="stats-footer">
+            <div class="stats-left">
+              <span>当前显示 <strong id="memCountDisplay">0</strong> 条</span>
+              <span class="sep" aria-hidden="true">·</span>
+              <span>速背掌握 <strong id="memProgressText">0% (0/155)</strong></span>
+              <span id="memModuleTip" class="module-tip"></span>
+            </div>
+            <div class="progress-track" role="progressbar" aria-label="纯记忆区掌握进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="memProgressTrack">
+              <div class="progress-fill" id="memProgressBar" style="--pct: 0%;"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 态度题避坑特别提示（仅看态度模块时显示） -->
+        <div id="attitudeCaveatBanner" class="caveat-banner no-print" hidden>
+          <strong>考研阅读态度题避坑铁律：</strong>「必错词」仅在题干问<strong>作者本人态度</strong>时大概率排除；如果题干问的是<strong>文中某第三方群体/批评者的态度</strong>，像 <span lang="en">indifferent / biased / hostile / complacent</span> 等词依然有可能是正确选项，切勿机械秒杀！
+        </div>
+
+        <div id="memCardContainer" class="mem-groups-wrap"></div>
+      </div>
+    </div>
+
+    <!-- ==================== 视图 3：外刊刷题 & 长难句翻译 ==================== -->
+    <div id="panel-quiz" role="tabpanel" aria-labelledby="tab-quiz" hidden>
+      <div class="panel-body">
+        <section class="card quiz-control-bar no-print">
+          <div class="quiz-filters-row">
+            <div class="filter-group">
+              <label for="quizModuleSelect">模块</label>
+              <select id="quizModuleSelect">
+                <option value="all">全部可刷题模块</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label for="quizModeSelect">范围</label>
+              <select id="quizModeSelect">
+                <option value="all">全部题目</option>
+                <option value="unanswered">只做未答</option>
+                <option value="wrong">只做曾答错</option>
+              </select>
+            </div>
+            <button id="quizShuffleBtn" type="button" class="btn btn-subtle">随机打乱题序</button>
+            <button id="quizResetSessionBtn" type="button" class="btn btn-danger-ghost">清空本轮作答</button>
+          </div>
+
+          <div class="quiz-metrics">
+            <span>题库覆盖 <strong id="quizCoverageText">0 / 470</strong> 可刷题词条</span>
+            <span class="sep" aria-hidden="true">·</span>
+            <span>本组 <strong id="quizPositionText">0 / 0</strong></span>
+            <span class="sep" aria-hidden="true">·</span>
+            <span>已答正确率 <strong id="quizAccuracyText">--</strong></span>
+          </div>
+        </section>
+
+        <div id="quizStage"></div>
+      </div>
+    </div>
+
+    <!-- ==================== 视图 4：错题本 ==================== -->
+    <div id="panel-mistakes" role="tabpanel" aria-labelledby="tab-mistakes" hidden>
+      <div class="panel-body">
+        <section class="card mistakes-header-card">
+          <div>
+            <h2 class="section-heading">错题本与长难句复盘</h2>
+            <p class="section-sub">刷题时答错的题目会自动收录于此，支持直接重练、查看成分划分与参考译文。</p>
+          </div>
+          <div class="mistakes-actions">
+            <button id="practiceMistakesBtn" type="button" class="btn btn-primary">进入错题专项刷题</button>
+            <button id="clearMistakesBtn" type="button" class="btn btn-danger-ghost">清空错题本</button>
+          </div>
+        </section>
+        <div id="mistakesList" class="mistakes-list"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer no-print">
+    <div class="container footer-inner">
+      <p>开源自用学习项目 · 词库与速背支持本地持久化与 JSON 备份 · 外刊例句仅摘录单句并保留原文出处与链接</p>
+      <p class="footer-shortcuts">刷题快捷键：<kbd>1</kbd>–<kbd>4</kbd> 选答案 · <kbd>←</kbd> / <kbd>→</kbd> 切题 · <kbd>S</kbd> 切换主干/全成分</p>
+    </div>
+  </footer>
+
+  <!-- 进度备份与恢复弹窗 -->
+  <dialog id="backupDialog" class="modal-dialog" aria-labelledby="backupDialogTitle" closedby="any">
+    <form method="dialog" class="modal-card">
+      <div class="modal-header">
+        <h2 id="backupDialogTitle">学习进度备份与恢复</h2>
+        <button type="submit" value="close" class="icon-btn" aria-label="关闭对话框">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-desc">你的重点词、已掌握进度、刷题记录、译文草稿与错题本默认保存在当前浏览器 <code>localStorage</code>。更换设备时可用下方 JSON 文件一键迁移。</p>
+        <div class="backup-actions">
+          <button id="exportProgressBtn" type="button" class="btn btn-primary">导出进度 JSON 文件</button>
+          <label class="btn btn-subtle file-input-label">
+            <span>导入进度 JSON 恢复</span>
+            <input id="importProgressInput" type="file" accept="application/json,.json" class="visually-hidden">
+          </label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" value="close" class="btn btn-subtle">完成</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- 集中式 Toast 提示 -->
+  <div id="toast" class="toast no-print" role="status" aria-live="polite" aria-atomic="true" hidden></div>
+
+  <!-- 返回顶部 -->
+  <button id="backToTopBtn" type="button" class="back-to-top no-print" aria-label="返回页面顶部" hidden>
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+    </svg>
+  </button>
+
+  <script type="module" src="./assets/app.js"></script>
+</body>
+</html>
