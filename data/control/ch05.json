@@ -1,0 +1,329 @@
+{
+  "chapterId": "ch05",
+  "title": "第 5 章 根轨迹分析法",
+  "basicRequirements": {
+    "master": "根轨迹的概念、性质和常规根轨迹的绘制法则；参数根轨迹与零度根轨迹的绘制方法；基于根轨迹的控制系统分析与设计方法；基于根轨迹的系统性能分析。",
+    "understand": "开环传递函数的零点和极点对闭环系统性能指标的影响；根轨迹方法在控制系统分析与设计中的几何方法与意义；控制系统稳定性的代数分析方法与几何分析方法的区别和联系；常规根轨迹与广义根轨迹之间的区别与联系；基于根轨迹分析方法的系统补偿器设计。",
+    "familiar": "纯滞后系统根轨迹；根轨迹的计算机辅助生成等。"
+  },
+  "sourceMeta": "主教材：孙优贤《自动控制原理》(2011第1版) P.162-205 ｜ 辅导书：孙优贤《学习辅导》(2017第1版) P.102-127",
+  "items": [
+    {
+      "id": "ctrl-ch05-f-01",
+      "section": "5.2.1~5.2.2 根轨迹方程与幅相条件",
+      "kind": "formula",
+      "title": "常规（180°）根轨迹方程、幅值/相角条件及 K* 与开环增益 K 换算（含式 5-1'' 勘误）",
+      "examWeight": "core",
+      "prompt": "写出负反馈常规根轨迹方程（$K^*>0$）、幅值条件、相角条件以及根轨迹增益 $K^*$ 与时间常数型开环增益 $K$ 的换算关系：",
+      "formulaLatex": "$$\\begin{aligned} &G(s)H(s)=K^*\\frac{\\prod_{j=1}^{m}(s-z_j)}{\\prod_{i=1}^{n}(s-p_i)}=-1 \\\\ &\\text{幅值条件：} K^* = \\frac{\\prod_{i=1}^{n}|s-p_i|}{\\prod_{j=1}^{m}|s-z_j|},\\qquad \\text{相角条件：}\\sum_{j=1}^{m}\\angle(s-z_j)-\\sum_{i=1}^{n}\\angle(s-p_i)=(2k+1)\\pi \\\\ &\\text{增益换算：} K = \\frac{K^*\\prod_{j=1}^{m}(-z_j)}{\\prod_{i=1}^{n-v}(-p_i)}\\quad\\text{（仅计非零有限零极点，}v\\text{ 为积分环节数）} \\end{aligned}$$",
+      "symbols": [
+        { "sym": "相角条件", "desc": "确定 $s$ 平面某点是否在根轨迹上的**充要条件**（只要 $K^*$ 覆盖 $0\\to\\infty$，幅值条件总能满足）" },
+        { "sym": "幅值条件", "desc": "用于求取根轨迹上某特定闭环极点 $s_0$ 所对应的增益值 $K^*$（极点距乘积 $\\div$ 零点距乘积）" }
+      ],
+      "conditions": "常规 $180^\\circ$ 根轨迹要求负反馈且首 1 标准型根轨迹增益 $K^*>0$；若开环存在 $m$ 个零点、$n$ 个极点，$K^*$ 为首 1 形式最高次系数之比。",
+      "pitfalls": "【原书勘误】《学习辅导》P.103 式(5-1'') 将换算式误印为 $K=\\frac{K^*\\prod z_j}{\\prod p_i}$（漏掉负号或绝对值，对负实零极点易算错符号！），正确应为 $K=\\frac{K^*\\prod(-z_j)}{\\prod(-p_i)}$（对右半平面零极点更须严格带入 $-z_j$ 或 $-p_i$，如例 5-9 中 $K_p=-K$）！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.102-103",
+        "pdfPage": 111,
+        "itemRef": "式(5-1)~(5-4) & 图5-1",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.162-167"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch05-f-02",
+      "section": "5.2.2 常规根轨迹八大绘制法则",
+      "kind": "formula",
+      "title": "常规（180°）根轨迹八大绘制核心公式大全（含式 5-8 勘误）",
+      "examWeight": "core",
+      "prompt": "写出渐近线交点 $\\sigma_a$ 与倾角 $\\varphi_a$、分离/会合点方程、出射角 $\\theta_{p_i}$ 与入射角 $\\varphi_{z_i}$、虚轴交点及根之和公式：",
+      "formulaLatex": "$$\\begin{aligned} &\\text{渐近线（}n-m\\text{ 条）：}\\; \\sigma_a=\\frac{\\sum_{i=1}^{n}p_i-\\sum_{j=1}^{m}z_j}{n-m},\\quad \\varphi_a=\\frac{(2k+1)\\pi}{n-m}\\;(k=0,1,\\dots,n-m-1) \\\\ &\\text{分离/会合点 } d:\\; \\sum_{i=1}^{n}\\frac{1}{d-p_i}=\\sum_{j=1}^{m}\\frac{1}{d-z_j}\\;\\Longleftrightarrow\\; \\left.\\frac{\\mathrm{d}}{\\mathrm{d}s}\\left(\\frac{\\prod(s-p_i)}{\\prod(s-z_j)}\\right)\\right|_{s=d}=0,\\; \\text{分离角}\\frac{(2k+1)\\pi}{l} \\\\ &\\text{出射角：}\\; \\theta_{p_i}=(2k+1)\\pi + \\sum_{j=1}^{m}\\varphi_{z_j p_i} - \\sum_{\\substack{j=1\\\\j\\ne i}}^{n}\\theta_{p_j p_i},\\qquad \\text{入射角：}\\; \\varphi_{z_i}=(2k+1)\\pi - \\sum_{\\substack{j=1\\\\j\\ne i}}^{m}\\varphi_{z_j z_i} + \\sum_{j=1}^{n}\\theta_{p_j z_i} \\\\ &\\text{根之和（当 } n-m\\ge 2\\text{）：}\\; \\sum_{i=1}^{n}\\lambda_i = \\sum_{i=1}^{n}p_i = \\text{常数} \\end{aligned}$$",
+      "symbols": [
+        { "sym": "法则 1~3", "desc": "起于开环极点、终于开环零点（含无穷零点）；分支数 $l=\\max(n,m)$ 且关于实轴对称；实轴上右侧实数开环零极点总数**为奇数**的区间必为根轨迹" },
+        { "sym": "法则 7（虚轴交点）", "desc": "用**劳斯阵偶次辅助方程**，或直接令 $s=\\mathrm{j}\\omega$ 代入 $D(s)=0$ 令实部与虚部分别为零联立求解" }
+      ],
+      "conditions": "分离点方程解出的根可能不在根轨迹上，必须逐一代入实轴区间或相角条件筛选；**根之和法则严格要求 $n-m\\ge 2$**！",
+      "pitfalls": "① 【原书勘误】《学习辅导》P.104 式(5-8) 误给多项式加了绝对值符号 $|s-p_i|$（复平面模长不可解析求导），正确应为有理函数 $\\frac{\\prod(s-p_i)}{\\prod(s-z_j)}$ 求导！② 遇到 $r$ 重极点求起始角，直接用相角条件 $r\\theta_p = (2k+1)\\pi + \\sum\\varphi_z - \\sum\\theta_{p,\\text{other}}$ 最快（见例 5-3、5-5）。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.104-106",
+        "pdfPage": 113,
+        "itemRef": "表5-1 & 式(5-5)~(5-12)",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.167-179"
+      },
+      "verification": { "method": "sympy", "testId": "ch05_ex_guide51_rl", "verified": true }
+    },
+    {
+      "id": "ctrl-ch05-f-03",
+      "section": "5.2.3 广义根轨迹（参数根轨迹 & 零度根轨迹）",
+      "kind": "formula",
+      "title": "参数根轨迹等效开环传函、零度（0°）根轨迹 3 条改动法则与纯滞后 Pade 近似",
+      "examWeight": "core",
+      "prompt": "写出以任意非增益参数 $A$ 变化的参数根轨迹构造式、零度根轨迹（$K^*<0$ 或正反馈）相角条件及 3 条修正法则：",
+      "formulaLatex": "$$\\begin{aligned} &\\text{参数根轨迹：} 1+G(s)H(s)=0 \\xrightarrow{\\text{分离参数 }A} Q(s)+A\\,P(s)=0 \\implies 1+A\\frac{P(s)}{Q(s)}=0,\\; GH_e(s)=A\\frac{P(s)}{Q(s)} \\\\ &\\text{零度根轨迹（}G(s)H(s)=+1\\text{）：}\\; \\sum_{j=1}^{m}\\angle(s-z_j)-\\sum_{i=1}^{n}\\angle(s-p_i)=2k\\pi \\\\ &\\text{① 实轴区域：右侧实数零极点总数为偶数（含 0）}\\quad \\text{② 渐近线倾角：}\\varphi_a=\\frac{2k\\pi}{n-m} \\\\ &\\text{③ 出/入射角：将 }(2k+1)\\pi\\text{ 换为 }2k\\pi\\quad \\text{④ 纯滞后一阶 Pade 近似：}\\mathrm{e}^{-\\tau s}\\approx\\frac{1-\\frac{1}{2}\\tau s}{1+\\frac{1}{2}\\tau s} \\end{aligned}$$",
+      "symbols": [
+        { "sym": "何时画零度根轨迹", "desc": "① 正反馈控制系统（$1-GH=0$）；② 负反馈但整理成首 1 形式后出现负号（即含奇数个 $(1-Ts)$ 非最小相位因子，如例 5-4、5-12）" },
+        { "sym": "等效含义", "desc": "参数根轨迹的 $GH_e(s)$ 与原系统具有完全相同的**闭环极点（特征方程）**，但闭环零点一般不同！" }
+      ],
+      "conditions": "零度根轨迹中，法则 1（起终点）、2（分支对称）、4（渐近线交点 $\\sigma_a$）、5（分离点方程与分离角）、7（虚轴交点）、8（根之和）均与常规根轨迹**完全不变**，只改法则 3、4 的倾角与法则 6！",
+      "pitfalls": "① 画零度根轨迹实轴区域时，**0 是偶数**！最右侧实数零极点以右的 $(p_{\\max}, +\\infty)$ 必为零度根轨迹！② 【原书勘误】P.106 式(5-2') 同样误加了绝对值符号，实应为 $K^*\\frac{\\prod(s-z_j)}{\\prod(s-p_i)}=1$。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.106-107",
+        "pdfPage": 115,
+        "itemRef": "式(5-13)~(5-20)",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.180-188"
+      },
+      "verification": { "method": "sympy", "testId": "ch05_ex_guide54_zero_deg", "verified": true }
+    },
+    {
+      "id": "ctrl-ch05-c-01",
+      "section": "5.2.4~5.2.6 开环零极点对根轨迹形状的影响",
+      "kind": "conclusion",
+      "title": "附加开环零点 vs 附加开环极点对根轨迹及系统性能的定性规律（高频简答）",
+      "examWeight": "core",
+      "summary": "1. **增加开环左半平面零点（如串联 PD / 超前校正）**：\n   - 吸引根轨迹向**左半 $s$ 平面弯曲（左移）**，减小渐近线阶差 $n-m$，**改善系统相对稳定性、增大阻尼、加快动态响应**。\n2. **增加开环极点（如滞后环节或附加积分环节）**：\n   - 排斥根轨迹向**右半 $s$ 平面弯曲（右移）**，增大 $n-m$（渐近线更贴近虚轴甚至进入右半平面），**降低相对稳定性、减慢响应速度**。\n3. **闭环零极点对响应的影响（区别于开环！）**：\n   - 闭环实数**零点**靠近原点 $\\Rightarrow$ 减小阻尼、缩短 $T_p$、**增大超调 $\\sigma\\%$**；\n   - 闭环实数**非主导极点**靠近原点 $\\Rightarrow$ 增大阻尼、滞后 $T_p$、**减小超调 $\\sigma\\%$**。",
+      "conditions": "适用于最小相位开环零极点；右半平面开环零点（非最小相位）反而会把根轨迹拉入右半平面导致失稳（见例 5-9）。",
+      "pitfalls": "高频陷阱：一定分清题干问的是**增加开环零极点**（看对根轨迹/稳定性的影响）还是**增加闭环零极点**（看对时域响应 $\\sigma\\%, T_p$ 的影响）！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.108-109",
+        "pdfPage": 117,
+        "itemRef": "5.2.4 & 5.2.6 小结",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.188-196"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch05-c-02",
+      "section": "5.2.4 几何法巧判圆形根轨迹与偶极子降阶",
+      "kind": "conclusion",
+      "title": "两极点一零点（或两极点两零点）圆形根轨迹特征 & 闭环偶极子降阶稳态增益守恒",
+      "examWeight": "core",
+      "summary": "1. **圆形根轨迹结论（极高频！）**：\n   - **2 个开环极点 + 1 个开环实零点 $z$**（且 $z$ 不在两极点之间）：复平面根轨迹必是以**零点 $(z,0)$ 为圆心**、以 $R=\\sqrt{|z-p_1|\\cdot|z-p_2|}$ 为半径的**圆**（见例 5-4、5-6、5-12）！\n   - **2 个实极点 + 2 个实零点**（见例 5-7）：实轴分离/会合点 $d_1, d_2$ 构成圆的直径，圆心在 $\\frac{d_1+d_2}{2}$，半径 $R=\\frac{|d_2-d_1|}{2}$！\n2. **高阶闭环传函降阶铁律**（见例 5-13）：\n   - 忽略非主导极点（实部距虚轴 $>5$ 倍）或闭环偶极子（极点与零点距离很近，如例 5-11 的 $\\lambda_3=-2$ 与 $z=-2.1$）时，**必须保持简化前后闭环直流增益 $\\Phi(0)$ 不变**（用极点/零点常数值替换对应 $(s+p)$ 因子）！",
+      "conditions": "圆形根轨迹在求最大/最小阻尼比 $\\zeta$ 时有几何捷径：从原点向根轨迹圆作**切线**，切点即最小阻尼比闭环极点（见例 5-7 方法一）！",
+      "pitfalls": "忽略非主导闭环极点 $(s+5)$ 时直接划掉整个因子会导致直流增益放大 5 倍，正确做法是保留常数 $5$（即把 $(s+5)$ 近似为 $5$）！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.113, P.117, P.124, P.127",
+        "pdfPage": 122,
+        "itemRef": "例5-4, 例5-7, 例5-11 & 例5-13 式(5-40)"
+      },
+      "verification": { "method": "sympy", "testId": "ch05_ex_guide57_min_zeta", "verified": true }
+    },
+    {
+      "id": "ctrl-ch05-c-03",
+      "section": "5.2.4 同一根轨迹对应不同闭环零点",
+      "kind": "conclusion",
+      "title": "开环传函 $G(s)H(s)$ 相同 $\\Rightarrow$ 根轨迹相同，但闭环零点与阶跃响应可完全不同",
+      "examWeight": "core",
+      "summary": "因为闭环特征方程仅取决于开环乘积 $G(s)H(s)$，所以将某因子 $(s+a)$ 放在前向通道 $G(s)$ 分子还是反馈通道 $H(s)$ 分子，**根轨迹图完全相同**！\n但闭环传递函数 $\\Phi(s)=\\frac{G(s)}{1+G(s)H(s)}$ 的**闭环零点**由「$G(s)$ 的零点」与「$H(s)$ 的极点」共同组成：\n- 放在 $G(s)$ 分子 $\\to$ 引入闭环零点（如例 5-8 系统 A）；\n- 移到 $H(s)$ 分子 $\\to$ 消除闭环零点（如例 5-8 系统 B）；\n- 移到 $H(s)$ 分母 $\\to$ 引入闭环零点（如例 5-13 系统 B 的 $(s+7)$ 移入反馈分母，使闭环响应放大 7 倍！）。",
+      "conditions": "适用于一切含非单位反馈环节 $H(s)\\ne 1$ 的闭环系统。",
+      "pitfalls": "切记口诀：**闭环零点 = 前向零点 $\\cup$ 反馈极点**（不含被相消的公因子）！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.119-120 & P.126-127",
+        "pdfPage": 128,
+        "itemRef": "例5-8 (图5-13~5-14) & 例5-13 (图5-20~5-22)"
+      },
+      "verification": { "method": "sympy", "testId": "ch05_ex_guide512_513", "verified": true }
+    },
+    {
+      "id": "ctrl-ch05-e-01",
+      "section": "5.3 典型例题精选（常规根轨迹基础）",
+      "kind": "example",
+      "title": "例 5-1 & 例 5-2：三阶常规根轨迹绘制（分离点求解 & 复极点出射角）",
+      "examWeight": "core",
+      "problem": "绘制以下两个单位负反馈系统（$K>0$）的闭环根轨迹概略图：\n①【例 5-1】$G(s)=\\frac{K(s+1)}{s(s+2)(s+3)}$；\n②【例 5-2】$G(s)=\\frac{K(s+4)}{s(s^2+4s+29)}$。",
+      "figureSvg": "<svg role='img' viewBox='0 0 430 175' xmlns='http://www.w3.org/2000/svg'><title>例5-1（左）与例5-2（右）常规根轨迹概略示意图（仿图5-2 & 图5-3，修正例5-2出射角方向）</title><defs><marker id='a51' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='15' y1='88' x2='195' y2='88' stroke='#334155' stroke-width='1.3' marker-end='url(#a51)'/><line x1='172' y1='164' x2='172' y2='14' stroke='#334155' stroke-width='1.3' marker-end='url(#a51)'/><line x1='86' y1='18' x2='86' y2='158' stroke='#94a3b8' stroke-dasharray='4,3'/><line x1='43' y1='88' x2='86' y2='88' stroke='#2744a8' stroke-width='2.4'/><line x1='129' y1='88' x2='172' y2='88' stroke='#2744a8' stroke-width='2.4'/><path d='M66 88 C 66 56, 82 36, 85 18' fill='none' stroke='#2744a8' stroke-width='2.2'/><path d='M66 88 C 66 120, 82 140, 85 158' fill='none' stroke='#2744a8' stroke-width='2.2'/><text x='38' y='92' font-size='12' fill='#b4233c' font-weight='700'>×</text><text x='81' y='92' font-size='12' fill='#b4233c' font-weight='700'>×</text><text x='167' y='92' font-size='12' fill='#b4233c' font-weight='700'>×</text><circle cx='129' cy='88' r='4.2' fill='#fff' stroke='#0b6e4f' stroke-width='2'/><text x='34' y='105' font-size='10' fill='#334155'>-3</text><text x='52' y='78' font-size='9' fill='#2744a8'>-2.47</text><text x='87' y='105' font-size='10' fill='#334155'>-2</text><text x='123' y='105' font-size='10' fill='#0b6e4f'>-1</text><text x='176' y='102' font-size='10' fill='#334155'>0</text><text x='18' y='24' font-size='11' fill='#141824' font-weight='700'>例5-1</text><line x1='225' y1='88' x2='415' y2='88' stroke='#334155' stroke-width='1.3' marker-end='url(#a51)'/><line x1='380' y1='164' x2='380' y2='14' stroke='#334155' stroke-width='1.3' marker-end='url(#a51)'/><line x1='265' y1='88' x2='380' y2='88' stroke='#2744a8' stroke-width='2.4'/><path d='M322 44 C 345 25, 368 20, 376 14' fill='none' stroke='#2744a8' stroke-width='2.2'/><path d='M322 132 C 345 151, 368 156, 376 162' fill='none' stroke='#2744a8' stroke-width='2.2'/><text x='318' y='48' font-size='12' fill='#b4233c' font-weight='700'>×</text><text x='318' y='136' font-size='12' fill='#b4233c' font-weight='700'>×</text><text x='375' y='92' font-size='12' fill='#b4233c' font-weight='700'>×</text><circle cx='265' cy='88' r='4.2' fill='#fff' stroke='#0b6e4f' stroke-width='2'/><text x='258' y='105' font-size='10' fill='#0b6e4f'>-4</text><text x='310' y='34' font-size='9' fill='#b4233c'>-2+5j (φ=+46.4°)</text><text x='385' y='102' font-size='10' fill='#334155'>0</text><text x='228' y='24' font-size='11' fill='#141824' font-weight='700'>例5-2 (恒稳定)</text></svg>",
+      "steps": [
+        { "stepTitle": "1. 例 5-1：标准 6 步绘制与分离点筛选", "detail": "零点 $z_1=-1$，极点 $p=0,-2,-3$；实轴区间 $[-3,-2],\\;[-1,0]$；渐近线 $n-m=2$ 条，$\\sigma_a=\\frac{0-2-3-(-1)}{2}=-2,\\;\\varphi_a=\\pm 90^\\circ$。\n分离点：$\\frac{1}{d}+\\frac{1}{d+2}+\\frac{1}{d+3}=\\frac{1}{d+1} \\implies d^3+4d^2+5d+3=0$，唯一实根 $d\\approx -2.47\\in[-3,-2]$（另两共轭复根不在轨迹上舍去）。全轨迹在左半平面，对任意 $K>0$ 稳定。" },
+        { "stepTitle": "2. 例 5-2：复极点出射角精确计算与稳定性核验", "detail": "零点 $z_1=-4$，极点 $p_1=0,\\;p_{2,3}=-2\\pm 5\\mathrm{j}$；实轴区间 $[-4,0]$；渐近线 $\\sigma_a=\\frac{0-2-2-(-4)}{2}=0$（与虚轴重合），$\\varphi_a=\\pm 90^\\circ$。\n上复极点 $p_2=-2+5\\mathrm{j}$ 的出射角：$\\theta_{p2}=180^\\circ+\\arctan\\frac{5}{2}-90^\\circ-(180^\\circ-\\arctan\\frac{5}{2})=2\\arctan 2.5 - 90^\\circ \\approx +46.4^\\circ$（向右上方出发，随后从左侧渐近趋近虚轴）。\n【细节提示】由劳斯判据 $s^3+4s^2+(29+K)s+4K=0 \\implies s^1$ 行为 $\\frac{4(29+K)-4K}{4}=29>0$，故虽出射角朝右上，仍永远不穿过虚轴，对全部 $K>0$ 均稳定（原书图 5-3 草图将出射方向误画成朝左上，上图已按 $+46.4^\\circ$ 修正）！" }
+      ],
+      "finalAnswer": "① $\\sigma_a=-2,\\;d\\approx -2.47$，恒稳定；② $\\sigma_a=0,\\;\\theta_{p2}=+46.4^\\circ$，不穿虚轴恒稳定。",
+      "takeaway": "求复极点出射角最防错方法：在草图上以待求复极点为终点，画从其余每个零/极点指向它的向量，量角时注意第二象限角为 $180^\\circ-\\arctan(|\\Delta y/\\Delta x|)$！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.109-111",
+        "pdfPage": 118,
+        "itemRef": "例5-1 & 例5-2 (图5-2~5-3)"
+      },
+      "verification": { "method": "sympy", "testId": "ch05_ex_guide52_departure", "verified": true }
+    },
+    {
+      "id": "ctrl-ch05-e-02",
+      "section": "5.3 典型例题精选（四阶重极点 + 劳斯虚轴交点）",
+      "kind": "example",
+      "title": "例 5-3：尾 1 传函转首 1 根轨迹（含重极点出射角 & 劳斯临界增益）",
+      "examWeight": "core",
+      "problem": "已知开环传函 $G(s)H(s)=\\frac{K_0}{(1+0.5s)(1+0.2s)(1+0.125s)^2}\\;(K_0>0)$，绘制闭环根轨迹并确定闭环稳定的 $K_0$ 取值范围。",
+      "steps": [
+        { "stepTitle": "1. 必须先化首 1 零极点形式！", "detail": "$G(s)H(s)=\\frac{640 K_0}{(s+2)(s+5)(s+8)^2}=\\frac{K^*}{(s+2)(s+5)(s+8)^2}$，其中 **$K^*=640 K_0$**。极点 $p=-2,-5,-8,-8$，实轴区间 $[-5,-2]$。" },
+        { "stepTitle": "2. 渐近线、重极点出射角与分离点", "detail": "$\\sigma_a=\\frac{-2-5-8-8}{4}=-5.75,\\;\\varphi_a=\\pm 45^\\circ,\\pm 135^\\circ$。二重极点 $p_{3,4}=-8$ 处由相角条件 $-2\\theta_p=(2k+1)\\pi \\implies \\theta_p=\\pm 90^\\circ$。分离点 $\\frac{1}{d+2}+\\frac{1}{d+5}+\\frac{2}{d+8}=0$ 得 $d_2\\approx -3.08\\in[-5,-2]$（$d_1\\approx -6.17$ 不在轨迹上舍去）。" },
+        { "stepTitle": "3. 劳斯判据求虚轴交点与稳定范围", "detail": "特征方程 $s^4+23s^3+186s^2+608s+640+K^*=0$。劳斯 $s^2$ 行第一列为 $\\frac{186\\times 23-608}{23}=\\frac{3670}{23}\\approx 159.57$；令 $s^1$ 行为零得精确临界值 $K^*\\approx 3578.07$（原书 P.112 四舍五入写成 $3579$/$3578$），对应 $K_0=\\frac{K^*}{640}\\approx 5.59$，辅助方程解得交点 $s=\\pm\\mathrm{j}5.14$。" }
+      ],
+      "finalAnswer": "系统闭环稳定的开环增益范围为 $0 < K_0 < 5.59$（对应 $K^* < 3578.1$），虚轴交点 $\\pm\\mathrm{j}5.14$。",
+      "takeaway": "遇到 $(1+Ts)$ 尾 1 型开环传函画根轨迹，第一步必须提取所有 $T$ 化成首 1 型并写清 $K^*$ 与原 $K_0$ 的比例倍数，最后别忘了换算回 $K_0$！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.111-112",
+        "pdfPage": 120,
+        "itemRef": "例5-3 (图5-4, 式5-21~5-22)"
+      },
+      "verification": { "method": "sympy", "testId": "ch05_ex_guide53_routh_rl", "verified": true }
+    },
+    {
+      "id": "ctrl-ch05-e-03",
+      "section": "5.3 典型例题精选（零度根轨迹）",
+      "kind": "example",
+      "title": "例 5-4：含右半平面零点 $(1-s)$ 的零度（0°）圆形根轨迹（高频必考！）",
+      "examWeight": "core",
+      "problem": "单位负反馈开环传函 $G(s)=\\frac{K(1-s)}{s(s+3)}\\;(K>0)$。① 绘制闭环根轨迹；② 求产生纯虚根和实轴重根时的 $K$ 值；③ 求使系统闭环稳定的 $K$ 范围。",
+      "figureSvg": "<svg role='img' viewBox='0 0 340 165' xmlns='http://www.w3.org/2000/svg'><title>例5-4 零度圆形根轨迹概略图（圆心 z=1, 半径 R=2，仿图5-5）</title><defs><marker id='a55' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='20' y1='84' x2='320' y2='84' stroke='#334155' stroke-width='1.4' marker-end='url(#a55)'/><line x1='170' y1='158' x2='170' y2='14' stroke='#334155' stroke-width='1.4' marker-end='url(#a55)'/><line x1='65' y1='84' x2='170' y2='84' stroke='#2744a8' stroke-width='2.5'/><line x1='205' y1='84' x2='310' y2='84' stroke='#2744a8' stroke-width='2.5'/><circle cx='205' cy='84' r='70' fill='none' stroke='#2744a8' stroke-width='2.2'/><text x='61' y='88' font-size='12' fill='#b4233c' font-weight='700'>×</text><text x='165' y='88' font-size='12' fill='#b4233c' font-weight='700'>×</text><circle cx='205' cy='84' r='4.2' fill='#fff' stroke='#0b6e4f' stroke-width='2'/><circle cx='135' cy='84' r='3.5' fill='#9a5800'/><circle cx='275' cy='84' r='3.5' fill='#9a5800'/><circle cx='170' cy='23' r='3.5' fill='#b4233c'/><circle cx='170' cy='145' r='3.5' fill='#b4233c'/><text x='56' y='101' font-size='10' fill='#334155'>-3</text><text x='125' y='101' font-size='10' fill='#9a5800' font-weight='700'>-1(K=1)</text><text x='201' y='101' font-size='10' fill='#0b6e4f' font-weight='700'>+1</text><text x='270' y='101' font-size='10' fill='#9a5800' font-weight='700'>+3(K=9)</text><text x='176' y='25' font-size='10' fill='#b4233c' font-weight='700'>+j√3 (K=3)</text><text x='176' y='152' font-size='10' fill='#b4233c'>-j√3</text></svg>",
+      "steps": [
+        { "stepTitle": "1. 化首 1 型识别出零度根轨迹", "detail": "$G(s)=\\frac{-K(s-1)}{s(s+3)}$，分子最高次出现负号，等效 $K^*=-K<0$，必须按**零度根轨迹**规则绘制！零点 $z_1=+1$，极点 $p=0,-3$。\n实轴区域（右侧零极点数为偶数含 0）：$[-3,0]$ 与 $[1,+\\infty)$；渐近线 1 条，倾角 $0^\\circ$（沿正实轴）。" },
+        { "stepTitle": "2. 分离/会合点、圆形轨迹与虚轴交点", "detail": "分离/会合点：$\\frac{1}{d-1}=\\frac{1}{d}+\\frac{1}{d+3} \\implies d^2-2d-3=0 \\implies d_1=-1,\\;d_2=+3$（根轨迹是以 $z=1$ 为圆心、半径 $R=2$ 的圆！）。\n特征方程 $s^2+(3-K)s+K=0$，令 $s=\\mathrm{j}\\omega$ 得 $K=3,\\;\\omega=\\pm\\sqrt{3}$。" },
+        { "stepTitle": "3. 幅值条件求重根增益与稳定范围", "detail": "闭环重实根 $d_1=-1$ 时：$K_1=\\frac{|-1|\\cdot|-1+3|}{|-1-1|}=1$；重实根 $d_2=+3$ 时：$K_2=\\frac{3\\times 6}{2}=9$。左半平面轨迹对应稳定范围 $0<K<3$。" }
+      ],
+      "finalAnswer": "① 见零度圆形根轨迹图；② 纯虚根 $s=\\pm\\mathrm{j}\\sqrt{3}$ 对应 $K=3$；实轴重根 $-1$ 对应 $K=1$，重根 $+3$ 对应 $K=9$；③ 稳定范围 $0<K<3$。",
+      "takeaway": "看到因子 $(1-Ts)$（右半平面零点）瞬间亮红灯：化首 1 型后必带负号，必须用**零度根轨迹**！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.112-113",
+        "pdfPage": 121,
+        "itemRef": "例5-4 (图5-5)"
+      },
+      "verification": { "method": "sympy", "testId": "ch05_ex_guide54_zero_deg", "verified": true }
+    },
+    {
+      "id": "ctrl-ch05-e-04",
+      "section": "5.3 典型例题精选（根轨迹综合：阻尼比 + 根之和 + 稳态误差）",
+      "kind": "example",
+      "title": "例 5-5：三重开环极点根轨迹——求 ζ=0.5 的 K 与最小阶跃稳态误差",
+      "examWeight": "core",
+      "problem": "单位负反馈前向通道为比例 $K$ 串联一阶惯性 $\\frac{1}{0.5s+1}$ 再串联单位负反馈内环（开环 $\\frac{1}{s(0.25s+1)}$）。① 绘制 $K\\in(0,\\infty)$ 闭环根轨迹；② 求复数极点阻尼比 $\\zeta=0.5$ 时的 $K$ 及全部闭环极点；③ 求稳定前提下单位阶跃输入的最小稳态误差。",
+      "steps": [
+        { "stepTitle": "1. 化简开环传函并绘三重极点根轨迹", "detail": "消内环得 $\\frac{1}{0.25s^2+s+1}=\\frac{4}{(s+2)^2}$，串联 $\\frac{K}{0.5s+1}$ 得 $G(s)=\\frac{8K}{(s+2)^3}$！\n三重极点 $p_{1,2,3}=-2$，渐近线 $\\sigma_a=-2,\\;\\varphi_a=\\pm 60^\\circ, 180^\\circ$（渐近线即根轨迹本身！）。令 $s=\\mathrm{j}\\omega$ 代入 $(s+2)^3+8K=0$ 得虚轴交点 $\\omega=\\pm\\sqrt{12},\\;K=8$。" },
+        { "stepTitle": "2. $\\zeta=0.5$（$\\beta=60^\\circ$）射线求交点与根之和求第 3 极点", "detail": "过原点作与负实轴夹角 $60^\\circ$ 射线，与过 $(-2,0)$ 倾角 $60^\\circ$ 的根轨迹直线组成正三角形，立得复数极点 $\\lambda_{1,2}=-1\\pm\\mathrm{j}\\sqrt{3}$！\n因 $n-m=3\\ge 2$，由**根之和法则** $\\lambda_1+\\lambda_2+\\lambda_3=-6 \\implies \\lambda_3=-4$！代入幅值条件（注意根轨迹增益是 $8K$！）：$8K=|-4+2|^3=8 \\implies K=1$！" },
+        { "stepTitle": "3. 求稳定前提下的最小阶跃稳态误差", "detail": "系统为 0 型，$K_p=\\lim_{s\\to 0}\\frac{8K}{(s+2)^3}=K$。稳定范围 $0<K<8$，故 $e_{ss}=\\frac{1}{1+K}>\\frac{1}{1+8}=\\frac{1}{9}$。" }
+      ],
+      "finalAnswer": "② $K=1$，闭环极点为 $-1\\pm\\mathrm{j}\\sqrt{3},\\;-4$；③ 单位阶跃稳态误差下确界为 $e_{ss}>\\frac{1}{9}$。",
+      "takeaway": "本题把第 5 章两大神技用到了极致：① $n-m\\ge 2$ 时用「根之和」1 秒算出实轴第 3 极点；② 用实轴极点代幅值条件避免算复数模长；③ 千万注意根轨迹增益 $K^*=8K$ 而非 $K$！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.113-115",
+        "pdfPage": 122,
+        "itemRef": "例5-5 (图5-6~5-7, 式5-23~5-24)"
+      },
+      "verification": { "method": "sympy", "testId": "ch05_ex_guide55_zeta05", "verified": true }
+    },
+    {
+      "id": "ctrl-ch05-e-05",
+      "section": "5.3 典型例题精选（参数根轨迹）",
+      "kind": "example",
+      "title": "例 5-6：以速度反馈系数 $k_h$ 为参变量的参数根轨迹与临界阻尼设计",
+      "examWeight": "core",
+      "problem": "负反馈系统前向通道 $K/s^2$，反馈通道 $1+k_h s$（$K\\ge 0$）。① 为使闭环极点位于 $s=-1\\pm\\mathrm{j}\\sqrt{3}$，求 $K$ 和 $k_h$；② 固定 $K$ 为①所求值，绘制以 $k_h$ 为参变量的根轨迹，并求使阻尼比 $\\zeta=1$ 时的 $k_h$ 值。",
+      "steps": [
+        { "stepTitle": "1. 由期望极点反求 $K$ 与 $k_h$", "detail": "闭环特征方程 $s^2+K k_h s + K = 0$，对比期望极点方程 $(s+1)^2+3 = s^2+2s+4=0$ 立得 $K=4,\\;K k_h=2 \\implies k_h=0.5$（亦可由图 5-9 几何与幅值条件验得）。" },
+        { "stepTitle": "2. 构造以 $k_h$ 为参变量的等效开环传函并求 $\\zeta=1$", "detail": "将 $K=4$ 代入特征方程 $s^2+4+4k_h s=0 \\implies 1+\\frac{4k_h s}{s^2+4}=0$，等效开环传函 $G_{\\text{eq}}(s)=\\frac{4k_h s}{s^2+4}$！\n起点 $p_{1,2}=\\pm\\mathrm{j}2$，终点 $z_1=0$ 与 $-\\infty$，实轴轨迹 $(-\\infty, 0]$，圆心在原点、半径为 $2$ 的左半圆，会合点 $d=-2$。\n会合点即临界阻尼（$\\zeta=1$，实轴重根）处，代幅值条件：$4k_h=\\frac{|-2-\\mathrm{j}2|\\cdot|-2+\\mathrm{j}2|}{|-2|}=\\frac{8}{2}=4 \\implies k_h=1$！" }
+      ],
+      "finalAnswer": "① $K=4,\\;k_h=0.5$；② $G_{\\text{eq}}(s)=\\frac{4k_h s}{s^2+4}$，使 $\\zeta=1$ 的 $k_h=1$。",
+      "takeaway": "参数根轨迹固定套路：**展开闭环特征方程 → 不含参变量 $A$ 的项挪去当分母 $Q(s)$ → 含 $A$ 的项留作分子 $A P(s)$**，立得等效开环传函 $A\\frac{P(s)}{Q(s)}$！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.115-116",
+        "pdfPage": 124,
+        "itemRef": "例5-6 (图5-8~5-10, 式5-25)"
+      },
+      "verification": { "method": "sympy", "testId": "ch05_ex_guide56_param_kh", "verified": true }
+    },
+    {
+      "id": "ctrl-ch05-e-06",
+      "section": "5.3 典型例题精选（最小阻尼比极值）",
+      "kind": "example",
+      "title": "例 5-7：两极点两零点圆形根轨迹——求欠阻尼区间、最小阻尼比与稳态误差",
+      "examWeight": "core",
+      "problem": "单位负反馈开环传函 $G(s)=\\frac{K(s+2)(s+3)}{s(s+1)}\\;(K>0)$。① 绘制根轨迹；② 求系统呈欠阻尼的 $K$ 范围；③ 求最小阻尼比时的闭环极点；④ 求最小阻尼比状态下输入 $r(t)=1+\\frac{1}{2}t$ 的稳态误差。",
+      "steps": [
+        { "stepTitle": "1. 求分离/会合点得欠阻尼 $K$ 区间", "detail": "极点 $0,-1$，零点 $-2,-3$；实轴轨迹 $[-3,-2]$ 与 $[-1,0]$。分离/会合点 $\\frac{1}{d}+\\frac{1}{d+1}=\\frac{1}{d+2}+\\frac{1}{d+3} \\implies 2d^2+6d+3=0$，得 $d_1\\approx -0.634,\\;d_2\\approx -2.366$。\n代幅值条件得 $K_{d1}\\approx 0.0718,\\;K_{d2}\\approx 13.928$，故欠阻尼范围为 $0.0718<K<13.928$。" },
+        { "stepTitle": "2. 几何切线法 vs 解析求导法求最小阻尼比", "detail": "- **几何法**：轨迹圆心 $A=(-1.5,0)$，半径 $R=\\frac{2.366-0.634}{2}=0.866=\\frac{\\sqrt{3}}{2}$。过原点作切线 $OB$，由相似三角形得 $OC=1,\\;BC=\\frac{\\sqrt{2}}{2}\\approx 0.707$，故极点 $s_{1,2}=-1\\pm\\mathrm{j}0.707$！\n- **解析法**：特征方程 $s^2+\\frac{1+5K}{1+K}s+\\frac{6K}{1+K}=0 \\implies \\zeta(K)=\\frac{1+5K}{2\\sqrt{6K(1+K)}}$，令 $\\frac{\\mathrm{d}\\zeta}{\\mathrm{d}K}=0$ 解得 $K_{\\min}=\\frac{1}{3}$，此时 $\\zeta_{\\min}=\\sqrt{\\frac{2}{3}}\\approx 0.8165,\\;s_{1,2}=-1\\pm\\mathrm{j}\\frac{\\sqrt{2}}{2}$！" },
+        { "stepTitle": "3. 求最小阻尼比下的稳态误差", "detail": "1 型系统 $K_v=\\lim_{s\\to 0} sG(s)=6K$。代入 $K=\\frac{1}{3}$ 得 $K_v=2$，对 $r(t)=1+\\frac{1}{2}t$ 的稳态误差 $e_{ss}=0+\\frac{1/2}{2}=\\frac{1}{4}$。" }
+      ],
+      "finalAnswer": "② $0.0718<K<13.928$；③ $K=\\frac{1}{3}$ 时最小阻尼比极点为 $s_{1,2}=-1\\pm\\mathrm{j}\\frac{\\sqrt{2}}{2}$；④ $e_{ss}=\\frac{1}{4}$。",
+      "takeaway": "求圆形根轨迹上的最大/最小阻尼比极点，用「原点向圆作切线」与「解析 $\\mathrm{d}\\zeta/\\mathrm{d}K=0$」互为验证，稳拿满分！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.116-119",
+        "pdfPage": 125,
+        "itemRef": "例5-7 (图5-11~5-12, 式5-26~5-29)"
+      },
+      "verification": { "method": "sympy", "testId": "ch05_ex_guide57_min_zeta", "verified": true }
+    },
+    {
+      "id": "ctrl-ch05-e-07",
+      "section": "5.3 典型例题精选（条件稳定非最小相位系统）",
+      "kind": "example",
+      "title": "例 5-9 & 例 5-10：非最小相位条件稳定系统（含勘误）& 双参数稳定域",
+      "examWeight": "core",
+      "problem": "①【例 5-9】单位负反馈开环传函 $G(s)=\\frac{K(0.5s-1)^2}{(0.5s+1)(2s-1)}$，求闭环稳定的 $K$ 范围及单位阶跃最小稳态误差绝对值 $|e_{ss}|_{\\min}$；\n②【例 5-10】已知 $G(s)H(s)=\\frac{K(s+a)}{s(s^2+2s+2)}\\;(K>0)$，以 $a$ 为参变量求闭环稳定的 $a$ 范围（用 $K$ 表示）。",
+      "steps": [
+        { "stepTitle": "1. 例 5-9：化首 1 型、虚轴交点与阶跃稳态误差（含勘误）", "detail": "$G(s)=\\frac{0.25K(s-2)^2}{(s+2)(s-0.5)}=\\frac{K_1(s-2)^2}{(s+2)(s-0.5)}$（$K_1=0.25K$，正首系数故为**常规 $180^\\circ$ 根轨迹**！）。实轴轨迹 $[-2, 0.5]$，分离点 $d=-\\frac{2}{11}\\approx -0.182$。\n闭环特征方程 $(s+2)(s-0.5)+K_1(s-2)^2 = (1+K_1)s^2+(1.5-4K_1)s+(4K_1-1)=0$。\n【原书勘误】原书 P.120 展开前把 $(s-2)^2$ 误印成了 $(s+2)^2$，且虚部方程漏写正号（正确虚部为 $(1.5-4K_1)\\omega=0$）！\n由系数全正立得稳定条件：$4K_1-1>0$ 且 $1.5-4K_1>0 \\implies 0.25<K_1<0.375 \\implies \\mathbf{1<K<1.5}$（穿过原点对应 $K=1$，穿过虚轴 $\\pm\\mathrm{j}0.603$ 对应 $K=1.5$）。\n0 型系统 $K_p=G(0)=\\frac{K(-1)^2}{1\\times(-1)}=-K$，故 $|e_{ss}|=\\left|\\frac{1}{1-K}\\right|>\\left|\\frac{1}{1-1.5}\\right|=2$！" },
+        { "stepTitle": "2. 例 5-10：以 $a$ 为参变量的等效开环传函与稳定域", "detail": "特征方程 $s^3+2s^2+(2+K)s+Ka=0 \\implies [GH]_{\\text{eq}}=\\frac{Ka}{s(s^2+2s+2+K)}$（另两开环极点为 $s_{1,2}=-1\\pm\\mathbf{\\mathrm{j}}\\sqrt{1+K}$，原书 P.122 正文漏印虚数单位 $\\mathrm{j}$！）。\n由三阶劳斯速判 $2(2+K)>Ka$ 得稳定范围 $0<a<\\frac{4+2K}{K}$（虚轴交点 $\\omega=\\sqrt{2+K}$），可见 $K$ 越大，允许稳定的 $a$ 范围越小。" }
+      ],
+      "finalAnswer": "① $1<K<1.5$，$|e_{ss}|>2$；② $0<a<\\frac{4+2K}{K}$。",
+      "takeaway": "例 5-9 是极经典的「含右半平面开环极点 + 偶重右半平面零点」条件稳定题：不仅要注意 $G(0)=-K$ 带负号，还要注意 $(0.5s-1)^2$ 平方后最高次系数为**正**，所以仍然是 $180^\\circ$ 根轨迹！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.120-123",
+        "pdfPage": 129,
+        "itemRef": "例5-9 & 例5-10 (图5-15~5-16, 式5-30~5-33，已勘误)"
+      },
+      "verification": { "method": "sympy", "testId": "ch05_ex_guide59_cond_stable", "verified": true }
+    },
+    {
+      "id": "ctrl-ch05-e-08",
+      "section": "5.3 典型例题精选（根轨迹串联校正设计）",
+      "kind": "example",
+      "title": "例 5-11：根轨迹反求开环传函 + 串联 PD 零点校正与主导极点验证",
+      "examWeight": "core",
+      "problem": "已知单位负反馈三阶系统根轨迹起于原点 $0$ 与实轴二重极点 $-p$，且在 $\\pm\\mathrm{j}3$ 处穿过虚轴。① 求原系统开环传函；② 设计串联控制器 $K(s)$ 使闭环稳定、**闭环极点个数不变**且主导分支通过 $-2\\pm\\mathrm{j}4$；③ 判断 $-2\\pm\\mathrm{j}4$ 是否为主导极点。",
+      "steps": [
+        { "stepTitle": "1. 由虚轴交点 $\\pm\\mathrm{j}3$ 反求原开环传函", "detail": "设 $G(s)=\\frac{K}{s(s+p)^2}$，特征方程 $s^3+2ps^2+p^2 s+K=0$。代入 $s=\\mathrm{j}3$ 得虚部 $3(p^2-9)=0\\implies p=3$，实部 $-2p(9)+K=0\\implies K=54$，故 $G(s)=\\frac{K}{s(s+3)^2}$。" },
+        { "stepTitle": "2. 串联 PD 控制器 $K(s)=s+z$（不增加闭环极点阶数！）", "detail": "校正后开环传函 $G_c(s)=\\frac{K(s+z)}{s(s+3)^2}$。在期望极点 $s_d=-2+\\mathrm{j}4$ 处应用相角条件：\n$\\angle(s_d+z) - \\angle(s_d) - 2\\angle(s_d+3) = -180^\\circ$。\n其中 $\\angle(-2+4\\mathrm{j}) = 180^\\circ-\\arctan\\frac{4}{2}=116.57^\\circ$（原书 P.124 分母误印成 `3-1` 实为 `2`），$2\\angle(1+4\\mathrm{j})=2\\arctan 4=151.93^\\circ$，故 $\\angle(s_d+z)=88.50^\\circ \\implies z-2=\\frac{4}{\\tan 88.50^\\circ}\\approx 0.105 \\implies z\\approx 2.1$，得 $K(s)=s+2.1$。" },
+        { "stepTitle": "3. 用根之和求第 3 极点并判闭环偶极子", "detail": "校正后 $n-m=3-1=2\\ge 2$，由根之和 $\\lambda_1+\\lambda_2+\\lambda_3 = 0-3-3=-6 \\implies \\lambda_3 = -6-(-4)=-2$！\n因实极点 $\\lambda_3=-2$ 与闭环零点 $z=-2.1$ 紧挨构成**闭环偶极子**（留数极小），其影响几乎相互抵消，故 $-2\\pm\\mathrm{j}4$ 确为系统的**闭环主导极点**！" }
+      ],
+      "finalAnswer": "① $G(s)=\\frac{K}{s(s+3)^2}$；② $K(s)=s+2.1$；③ 第 3 极点 $\\lambda_3=-2$ 与零点 $-2.1$ 构成偶极子，故 $-2\\pm\\mathrm{j}4$ 是主导极点。",
+      "takeaway": "845 压轴综合题模板：看到“闭环极点个数不变” $\\to$ 选纯 PD 零点 $(s+z)$；算完 $z$ 后必用「根之和」查第 3 极点，看它是否落在远左或紧邻 $z$ 形成偶极子！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.123-124",
+        "pdfPage": 132,
+        "itemRef": "例5-11 (图5-17, 式5-34~5-36)"
+      },
+      "verification": { "method": "sympy", "testId": "ch05_ex_guide511_comp", "verified": true }
+    },
+    {
+      "id": "ctrl-ch05-e-09",
+      "section": "5.3 典型例题精选（主导极点降阶与反馈极点影响）",
+      "kind": "example",
+      "title": "例 5-12 & 例 5-13：零度根轨迹终值综合 & 主导极点降阶保直流增益",
+      "examWeight": "core",
+      "problem": "①【例 5-12】前向 $K\\cdot\\frac{1-s}{s(1+s/3)}$、反馈常数 $a$，在单位阶跃稳态输出 $c(\\infty)=2$ 条件下，求使系统稳定且呈欠阻尼的 $a$ 与 $K$ 范围；\n②【例 5-13】单位负反馈系统 A 开环 $G(s)=\\frac{K(s+5/3)}{s^2(s+7)}$，当一闭环极点为 $-5$ 时求其余极点并按主导极点求单位阶跃响应 $c(t)$；若将 $\\frac{1}{s+7}$ 移至反馈通道成为系统 B，分析响应变化。",
+      "steps": [
+        { "stepTitle": "1. 例 5-12：终值定理定 $a$，零度根轨迹定欠阻尼 $K$ 区间", "detail": "$\\Phi(s)=\\frac{-3K(s-1)}{s(s+3)-3Ka(s-1)}$，由 $c(\\infty)=\\Phi(0)=\\frac{1}{a}=2 \\implies a=\\frac{1}{2}$。开环传函 $GH=\\frac{-3Ka(s-1)}{s(s+3)}$ 与例 5-4 同形（只需 $3Ka\\leftrightarrow K_{\\text{例5-4}}$），稳定且欠阻尼要求 $1<3Ka<3 \\implies \\frac{1}{3}<Ka<1$，代入 $a=\\frac{1}{2}$ 得 $\\frac{2}{3}<K<2$！" },
+        { "stepTitle": "2. 例 5-13：主导极点降阶必须修正增益保 $\\Phi(0)=1$", "detail": "将 $s_1=-5$ 代入 $s^2(s+7)+K(s+5/3)=0$ 得 $K=15$，其余两极点为 $s_{2,3}=-1\\pm 2\\mathrm{j}$。\n因 $|-5|=5\\times|-1|$，忽略非主导极点 $(s+5)$ 但保留常数 $5$ 以保持 $\\Phi(0)=1$，且零点 $-5/3$ 距虚轴近不可忽略：\n$$\\Phi(s)=\\frac{15(s+5/3)}{(s+5)[(s+1)^2+2^2]}\\approx\\frac{3(s+5/3)}{(s+1)^2+2^2}$$\n反变换得 $c(t)\\approx 1+\\sqrt{2}\\mathrm{e}^{-t}\\sin(2t-45^\\circ)$。系统 B 把 $\\frac{1}{s+7}$ 移入反馈通道后根轨迹不变，但闭环传函多出远零点 $(s+7)$，低频段 $\\Phi_B(s)\\approx 7\\Phi_A(s)$，阶跃响应近似放大为系统 A 的 $7$ 倍！" }
+      ],
+      "finalAnswer": "① $a=\\frac{1}{2},\\;\\frac{2}{3}<K<2$；② 系统 A：$K=15,\\;s_{2,3}=-1\\pm 2\\mathrm{j},\\;c(t)\\approx 1+\\sqrt{2}\\mathrm{e}^{-t}\\sin(2t-45^\\circ)$；系统 B 根轨迹不变但阶跃响应近似放大 7 倍。",
+      "takeaway": "高阶闭环系统降阶两铁律：① 距虚轴近的闭环零点绝不能忽略；② 删去远极点 $(s+p)$ 时必须除以 $p$ 以确保稳态终值 $\\Phi(0)$ 不失真！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.124-127",
+        "pdfPage": 133,
+        "itemRef": "例5-12 & 例5-13 (图5-18~5-22, 式5-37~5-44)"
+      },
+      "verification": { "method": "sympy", "testId": "ch05_ex_guide512_513", "verified": true }
+    }
+  ]
+}

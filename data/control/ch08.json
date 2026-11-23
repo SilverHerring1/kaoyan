@@ -1,0 +1,679 @@
+{
+  "chapterId": "ch08",
+  "title": "第 8 章 线性定常系统的状态空间分析与综合",
+  "basicRequirements": {
+    "master": "线性定常系统状态能控性与能观性的概念及各种判据（Kalman 秩判据、对角/约当判据、PBH 秩判据）；对偶原理；能控标准型、能观标准型与卡尔曼结构规范分解；传递函数零极点对消与内/外稳定性的关系；状态反馈极点配置、能镇定性及全维/降维状态观测器设计与分离原理。",
+    "understand": "线性非奇异变换、状态反馈和输出反馈对系统能控/能观性的影响；采样周期 T 对离散化系统能控能观性的影响及离散状态转移步数分析。",
+    "familiar": "【拓展参考】线性二次型最优控制（LQR / 代数黎卡提方程）与内模控制（按 2027 考纲标为拓展了解）。"
+  },
+  "sourceMeta": "主教材：孙优贤《自动控制原理》(2011第1版) P.322-382 ｜ 辅导书：孙优贤《学习辅导》(2017第1版) P.190-215",
+  "items": [
+    {
+      "id": "ctrl-ch08-f-01",
+      "section": "8.2.1 状态能控性及其判据",
+      "kind": "formula",
+      "title": "线性定常系统状态能控性的 Kalman 秩判据、PBH 秩判据与格拉姆阵",
+      "examWeight": "core",
+      "prompt": "写出 $n$ 维连续（或离散）线性定常系统 $(\\boldsymbol{A},\\boldsymbol{B})$ 状态完全能控的 Kalman 秩判据、PBH 秩判据及格拉姆阵判据：",
+      "formulaLatex": "$$\\begin{aligned} &\\text{① Kalman 秩判据：}\\; \\operatorname{rank}\\boldsymbol{Q}_c = \\operatorname{rank}\\begin{bmatrix}\\boldsymbol{B} & \\boldsymbol{A}\\boldsymbol{B} & \\boldsymbol{A}^2\\boldsymbol{B} & \\cdots & \\boldsymbol{A}^{n-1}\\boldsymbol{B}\\end{bmatrix} = n \\\\ &\\text{② PBH 秩判据：}\\; \\forall \\lambda_i\\in\\sigma(\\boldsymbol{A}),\\quad \\operatorname{rank}\\begin{bmatrix}\\lambda_i\\boldsymbol{I}-\\boldsymbol{A} & \\boldsymbol{B}\\end{bmatrix} = n \\\\ &\\text{③ 能控格拉姆阵判据：}\\; \\boldsymbol{W}_c(0,t_1) = \\int_0^{t_1} \\mathrm{e}^{-\\boldsymbol{A}\\tau}\\boldsymbol{B}\\boldsymbol{B}^{\\mathrm{T}}\\mathrm{e}^{-\\boldsymbol{A}^{\\mathrm{T}}\\tau}\\,\\mathrm{d}\\tau\\;\\text{非奇异（正定）} \\\\ &\\text{④ 离散系统 }\\boldsymbol{x}(k+1)=\\boldsymbol{G}\\boldsymbol{x}(k)+\\boldsymbol{H}\\boldsymbol{u}(k):\\; \\operatorname{rank}\\begin{bmatrix}\\boldsymbol{H} & \\boldsymbol{G}\\boldsymbol{H} & \\cdots & \\boldsymbol{G}^{n-1}\\boldsymbol{H}\\end{bmatrix}=n \\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "$\\boldsymbol{Q}_c\\in\\mathbb{R}^{n\\times nr}$",
+          "desc": "能控性判别矩阵；单输入（$r=1$）时为 $n\\times n$ 方阵，直接判 $\\det\\boldsymbol{Q}_c\\ne 0$；多输入非方阵时可用 $\\operatorname{rank}\\boldsymbol{Q}_c=\\operatorname{rank}(\\boldsymbol{Q}_c\\boldsymbol{Q}_c^{\\mathrm{T}})$（见例 8-1）"
+        },
+        {
+          "sym": "输出能控性",
+          "desc": "系统输出完全能控 $\\iff \\operatorname{rank}\\begin{bmatrix}\\boldsymbol{C}\\boldsymbol{B} & \\boldsymbol{C}\\boldsymbol{A}\\boldsymbol{B} & \\cdots & \\boldsymbol{C}\\boldsymbol{A}^{n-1}\\boldsymbol{B} & \\boldsymbol{D}\\end{bmatrix}=m$（注意状态能控不一定输出能控，反之亦然）"
+        }
+      ],
+      "conditions": "适用于线性定常系统；PBH 判据只需对 $\\boldsymbol{A}$ 的全部**互异特征值 $\\lambda_i$** 逐一检验（非特征值处 $\\lambda\\boldsymbol{I}-\\boldsymbol{A}$ 自动满秩），且能**精确定位哪一个特征模态不能控**！",
+      "pitfalls": "高频失分点：离散系统存在**可达性**与**能控性（控至原点）**之分：当 $\\boldsymbol{G}$ 奇异时可能存在一步归零但不可达的状态；但若 $\\det\\boldsymbol{G}\\ne 0$（由连续系统离散化得到的 $\\boldsymbol{G}=\\mathrm{e}^{\\boldsymbol{A}T}$ 恒非奇异），两者完全等价，均看 $\\operatorname{rank}\\boldsymbol{Q}_c=n$！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.190-191",
+        "pdfPage": 199,
+        "itemRef": "8.2.1 式(8-1)~(8-6)",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.322-329"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch08_ex_guide81_83_ctrl_obs",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch08-f-02",
+      "section": "8.2.2~8.2.3 状态能观性判据与对偶原理",
+      "kind": "formula",
+      "title": "状态能观性 Kalman/PBH 秩判据与线性系统对偶原理",
+      "examWeight": "core",
+      "prompt": "写出 $n$ 维系统 $(\\boldsymbol{A},\\boldsymbol{C})$ 状态完全能观的 Kalman/PBH 判据，以及系统 $\\Sigma_1(\\boldsymbol{A},\\boldsymbol{B},\\boldsymbol{C})$ 与其对偶系统 $\\Sigma_2$ 的对应关系：",
+      "formulaLatex": "$$\\begin{aligned} &\\text{① Kalman 能观判据：}\\; \\operatorname{rank}\\boldsymbol{Q}_o = \\operatorname{rank}\\begin{bmatrix}\\boldsymbol{C} \\\\ \\boldsymbol{C}\\boldsymbol{A} \\\\ \\vdots \\\\ \\boldsymbol{C}\\boldsymbol{A}^{n-1}\\end{bmatrix} = n \\\\ &\\text{② PBH 能观判据：}\\; \\forall \\lambda_i\\in\\sigma(\\boldsymbol{A}),\\quad \\operatorname{rank}\\begin{bmatrix}\\lambda_i\\boldsymbol{I}-\\boldsymbol{A} \\\\ \\boldsymbol{C}\\end{bmatrix} = n \\\\ &\\text{③ 对偶系统：}\\; \\Sigma_1(\\boldsymbol{A},\\boldsymbol{B},\\boldsymbol{C}) \\xleftrightarrow{\\text{对偶}} \\Sigma_2(\\boldsymbol{A}^{\\mathrm{T}},\\boldsymbol{C}^{\\mathrm{T}},\\boldsymbol{B}^{\\mathrm{T}}) \\\\ &\\quad\\bullet\\; \\Sigma_1\\text{ 状态完全能控（能观）} \\iff \\Sigma_2\\text{ 状态完全能观（能控）} \\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "$\\boldsymbol{Q}_o\\in\\mathbb{R}^{nm\\times n}$",
+          "desc": "能观性判别矩阵；单输出（$m=1$）为 $n\\times n$ 方阵，判 $\\det\\boldsymbol{Q}_o\\ne 0$"
+        },
+        {
+          "sym": "观测器对偶设计",
+          "desc": "设计全维观测器使 $\\boldsymbol{A}-\\boldsymbol{H}\\boldsymbol{C}$ 配置期望极点 $\\iff$ 对对偶对 $(\\boldsymbol{A}^{\\mathrm{T}},\\boldsymbol{C}^{\\mathrm{T}})$ 设计状态反馈 $\\boldsymbol{K}=\\boldsymbol{H}^{\\mathrm{T}}$ 使 $\\boldsymbol{A}^{\\mathrm{T}}-\\boldsymbol{C}^{\\mathrm{T}}\\boldsymbol{K}$ 配置相同极点！"
+        }
+      ],
+      "conditions": "对偶原理要求实矩阵转置（复矩阵取共轭转置）；$(\\boldsymbol{A},\\boldsymbol{B},\\boldsymbol{C})$ 与 $(\\boldsymbol{A}^{\\mathrm{T}},\\boldsymbol{C}^{\\mathrm{T}},\\boldsymbol{B}^{\\mathrm{T}})$ 的传递函数矩阵互为转置 $\\boldsymbol{G}_2(s)=\\boldsymbol{G}_1^{\\mathrm{T}}(s)$，特征多项式完全相同。",
+      "pitfalls": "写对偶系统时极易漏转置或顺序搞反：记住口诀「**$\\boldsymbol{A}\\to\\boldsymbol{A}^{\\mathrm{T}}$，$\\boldsymbol{B}$ 与 $\\boldsymbol{C}$ 互换且加转置**」，同时极点配置 $(\\boldsymbol{A}-\\boldsymbol{B}\\boldsymbol{K})$ 与观测器 $(\\boldsymbol{A}-\\boldsymbol{H}\\boldsymbol{C})$ 也是完美对偶！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.191-192",
+        "pdfPage": 200,
+        "itemRef": "8.2.2~8.2.3 式(8-7)~(8-10)",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.329-336"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch08_ex_guide81_83_ctrl_obs",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch08-f-03",
+      "section": "8.2.1~8.2.4 对角型与约当标准型速判法则（含 P.193 勘误）",
+      "kind": "formula",
+      "title": "对角阵 / 约当阵能控能观一眼秒判法则（重特征值多约当块判据）",
+      "examWeight": "core",
+      "prompt": "当 $\\boldsymbol{A}$ 已化为对角阵或上约当标准型 $\\boldsymbol{J}$ 时，写出能控性与能观性的充要秒判法则：",
+      "formulaLatex": "$$\\begin{aligned} &\\text{① }\\boldsymbol{A}\\text{ 为互异特征值对角阵：} \\\\ &\\quad\\bullet\\; \\text{能控} \\iff \\boldsymbol{B}\\text{ 无全零行} \\qquad\\text{能观} \\iff \\boldsymbol{C}\\text{ 无全零列} \\\\ &\\text{② }\\boldsymbol{A}\\text{ 为不同约当块特征值互异的上约当阵：} \\\\ &\\quad\\bullet\\; \\text{能控} \\iff \\text{与每个约当块}\\mathbf{\\text{最后一行}}\\text{对应的 }\\boldsymbol{B}\\text{ 的行均不全为零} \\\\ &\\quad\\bullet\\; \\text{能观} \\iff \\text{与每个约当块}\\mathbf{\\text{第一列}}\\text{对应的 }\\boldsymbol{C}\\text{ 的列均不全为零} \\\\ &\\text{③ 若同一特征值 }\\lambda_i\\text{ 对应多个约当块（几何重数 }q>1\\text{）：} \\\\ &\\quad\\bullet\\; \\text{能控} \\iff \\text{对应于 }\\lambda_i\\text{ 各约当块}\\mathbf{\\text{最后一行}}\\text{的 }\\boldsymbol{B}\\text{ 行向量组}\\mathbf{\\text{线性无关}} \\\\ &\\quad\\bullet\\; \\text{能观} \\iff \\text{对应于 }\\lambda_i\\text{ 各约当块}\\mathbf{\\text{第一列}}\\text{的 }\\boldsymbol{C}\\text{ 列向量组}\\mathbf{\\text{线性无关}} \\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "单输入/单输出推论",
+          "desc": "单输入（$r=1$）系统若同一特征值出现 $\\ge 2$ 个约当块（如对角阵含重根），对应的标量行不可能线性无关 $\\implies$ **必不能控**！同理单输出（$m=1$）出现同特征值多约当块 $\\implies$ **必不能观**！"
+        }
+      ],
+      "conditions": "仅针对**上约当标准型**（超对角线为 $1$，即 $J_{k,k+1}=1$）！若题目给的是**下约当型**（次对角线为 $1$），则「最后一行/第一列」恰好反转！",
+      "pitfalls": "【辅导书 P.193 式(8-13) 印刷勘误】广义范德蒙约当变换阵 $\\boldsymbol{T}$ 的第 $m$ 列求导分母应为 **$\\frac{1}{(m-1)!}\\frac{\\partial^{m-1}}{\\partial\\lambda_1^{m-1}}$**，辅导书式(8-13) 末列误印成 `m! ∂λ_1^{m-1}`！另见例 8-2 ⑧ 勘误（$a_{41}$ 误印 `9` 应为 `0`）。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.191-193 & P.199-201",
+        "pdfPage": 200,
+        "itemRef": "式(8-11)~(8-13) & 例8-2 / 例8-4",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.326-333"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch08_ex_guide82_84_jordan_pbh",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch08-f-04",
+      "section": "8.2.4 能控标准型与能观标准型线性变换（含 P.193 勘误）",
+      "kind": "formula",
+      "title": "单输入/单输出系统化为能控标准型（$\\boldsymbol{T}_c$）与能观标准型（$\\boldsymbol{T}_o$）构造公式",
+      "examWeight": "core",
+      "prompt": "已知 SISO 系统特征多项式 $\\Delta(s)=|s\\boldsymbol{I}-\\boldsymbol{A}|=s^n+\\alpha_{n-1}s^{n-1}+\\cdots+\\alpha_1 s+\\alpha_0$，写出化为能控标准型与能观标准型的非奇异变换阵：",
+      "formulaLatex": "$$\\begin{aligned} &\\text{定义汉克尔（Hankel）对称矩阵：}\\; \\boldsymbol{L} = \\begin{bmatrix}\\alpha_1 & \\alpha_2 & \\cdots & \\alpha_{n-1} & 1 \\\\ \\alpha_2 & \\alpha_3 & \\cdots & 1 & 0 \\\\ \\vdots & \\vdots & \\cdots & \\vdots & \\vdots \\\\ \\alpha_{n-1} & 1 & \\cdots & 0 & 0 \\\\ 1 & 0 & \\cdots & 0 & 0\\end{bmatrix} \\\\ &\\text{① 化为能控标准型（}\\boldsymbol{x}=\\boldsymbol{T}_c\\bar{\\boldsymbol{x}}_c\\text{）：}\\; \\boldsymbol{T}_c = \\boldsymbol{Q}_c\\boldsymbol{L},\\quad \\bar{\\boldsymbol{A}}_c=\\begin{bmatrix}0&1&\\cdots&0\\\\\\vdots&\\vdots&\\ddots&\\vdots\\\\0&0&\\cdots&1\\\\-\\alpha_0&-\\alpha_1&\\cdots&-\\alpha_{n-1}\\end{bmatrix},\\;\\bar{\\boldsymbol{b}}_c=\\begin{bmatrix}0\\\\\\vdots\\\\0\\\\1\\end{bmatrix} \\\\ &\\text{② 化为能观标准型（}\\boldsymbol{x}=\\boldsymbol{T}_o\\bar{\\boldsymbol{x}}_o\\text{）：}\\; \\boldsymbol{T}_o^{-1} = \\boldsymbol{L}\\boldsymbol{Q}_o,\\quad \\bar{\\boldsymbol{A}}_o=\\bar{\\boldsymbol{A}}_c^{\\mathrm{T}},\\;\\bar{\\boldsymbol{c}}_o=\\begin{bmatrix}0 & \\cdots & 0 & 1\\end{bmatrix} \\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "变换后系数",
+          "desc": "能控标准型中 $\\bar{\\boldsymbol{c}}_c=\\boldsymbol{c}\\boldsymbol{T}_c=[\\beta_0,\\beta_1,\\dots,\\beta_{n-1}]$ 恰好是传递函数分子多项式系数；能观标准型中 $\\bar{\\boldsymbol{b}}_o=\\boldsymbol{T}_o^{-1}\\boldsymbol{b}=[\\beta_0,\\dots,\\beta_{n-1}]^{\\mathrm{T}}$（两者完全对偶！）"
+        },
+        {
+          "sym": "另一捷径",
+          "desc": "先算传递函数 $G(s)=\\boldsymbol{c}(s\\boldsymbol{I}-\\boldsymbol{A})^{-1}\\boldsymbol{b}$，若无零极点对消可直接由传函系数写出能控/能观标准型（但求极点配置回到原空间仍需 $\\boldsymbol{T}_c^{-1}$ 或 $\\boldsymbol{T}_o$！）"
+        }
+      ],
+      "conditions": "化能控标准型的前提是系统**完全能控**（$\\det\\boldsymbol{Q}_c\\ne 0$）；化能观标准型的前提是系统**完全能观**（$\\det\\boldsymbol{Q}_o\\ne 0$）。",
+      "pitfalls": "【辅导书 P.193 印刷勘误】P.193 (3)「能观标准型」正文将变换阵符号误印成了 `T_c`（正确应为 **$\\boldsymbol{T}_o$**），且注意**不要死背 P.193 式(8-18) 写乱的倒序乘积**——经 SymPy 对例 8-6 和例 8-15 实测验证，统一牢记对称黄金公式 **$\\boldsymbol{T}_c = \\boldsymbol{Q}_c \\boldsymbol{L}$** 与 **$\\boldsymbol{T}_o^{-1} = \\boldsymbol{L} \\boldsymbol{Q}_o$**（两者刚好互为转置对偶，且 $\\boldsymbol{L}$ 相同！），百分百不出错！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.193-194 & P.202",
+        "pdfPage": 202,
+        "itemRef": "式(8-14)~(8-18) & 例8-6",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.337-344"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch08_ex_guide86_canonical",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch08-f-05",
+      "section": "8.2.5 卡尔曼（Kalman）结构规范分解",
+      "kind": "formula",
+      "title": "卡尔曼四子系统规范分解结构与传递函数阵唯一性定理",
+      "examWeight": "core",
+      "prompt": "写出任意线性定常系统经卡尔曼规范分解后的 4 块分块矩阵形式，以及传递函数阵与子系统的关系：",
+      "formulaLatex": "$$\\begin{aligned} &\\begin{bmatrix}\\dot{\\boldsymbol{x}}_{co}\\\\\\dot{\\boldsymbol{x}}_{c\\bar{o}}\\\\\\dot{\\boldsymbol{x}}_{\\bar{c}o}\\\\\\dot{\\boldsymbol{x}}_{\\bar{c}\\bar{o}}\\end{bmatrix} = \\begin{bmatrix}\\boldsymbol{A}_{co} & \\boldsymbol{0} & \\boldsymbol{A}_{13} & \\boldsymbol{0} \\\\ \\boldsymbol{A}_{21} & \\boldsymbol{A}_{c\\bar{o}} & \\boldsymbol{A}_{23} & \\boldsymbol{A}_{24} \\\\ \\boldsymbol{0} & \\boldsymbol{0} & \\boldsymbol{A}_{\\bar{c}o} & \\boldsymbol{0} \\\\ \\boldsymbol{0} & \\boldsymbol{0} & \\boldsymbol{A}_{43} & \\boldsymbol{A}_{\\bar{c}\\bar{o}}\\end{bmatrix} \\begin{bmatrix}\\boldsymbol{x}_{co}\\\\\\boldsymbol{x}_{c\\bar{o}}\\\\\\boldsymbol{x}_{\\bar{c}o}\\\\\\boldsymbol{x}_{\\bar{c}\\bar{o}}\\end{bmatrix} + \\begin{bmatrix}\\boldsymbol{B}_{co}\\\\\\boldsymbol{B}_{c\\bar{o}}\\\\\\boldsymbol{0}\\\\\\boldsymbol{0}\\end{bmatrix}\\boldsymbol{u} \\\\ &\\boldsymbol{y} = \\begin{bmatrix}\\boldsymbol{C}_{co} & \\boldsymbol{0} & \\boldsymbol{C}_{\\bar{c}o} & \\boldsymbol{0}\\end{bmatrix}\\bar{\\boldsymbol{x}} + \\boldsymbol{D}\\boldsymbol{u} \\\\ &\\boldsymbol{G}(s) = \\boldsymbol{C}(s\\boldsymbol{I}-\\boldsymbol{A})^{-1}\\boldsymbol{B}+\\boldsymbol{D} \\equiv \\boldsymbol{C}_{co}(s\\boldsymbol{I}-\\boldsymbol{A}_{co})^{-1}\\boldsymbol{B}_{co}+\\boldsymbol{D} = \\boldsymbol{G}_{co}(s) \\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "四子系统",
+          "desc": "$co$（能控能观）、$c\\bar{o}$（能控不能观）、$\\bar{c}o$（不能控能观）、$\\bar{c}\\bar{o}$（不能控不能观）"
+        },
+        {
+          "sym": "分解实操步骤",
+          "desc": "不能一步到位时，按两步串联分解（见例 8-7）：① 先挑 $\\boldsymbol{Q}_c$ 的 $r_c$ 个线性无关列再补足满秩阵 $\\boldsymbol{T}_c$ 做能控性分解；② 再对能控子系统与不能控子系统分别做能观性分解！"
+        }
+      ],
+      "conditions": "任一线性定常系统均可通过非奇异线性变换 $\\boldsymbol{x}=\\boldsymbol{T}\\bar{\\boldsymbol{x}}$ 分解为上述四个互不交叠的子系统（其中某些子系统维数可能为 0）。",
+      "pitfalls": "记零块位置有绝招：**输入 $\\boldsymbol{u}$ 只能注入能控块**（故 $\\bar{c}$ 块对应的 $\\boldsymbol{B}$ 和受 $c$ 块耦合的 $\\boldsymbol{A}$ 块全为 $0$）；**输出 $\\boldsymbol{y}$ 只能看到能观块**（故 $\\bar{o}$ 块对应的 $\\boldsymbol{C}$ 和影响 $o$ 块的 $\\boldsymbol{A}$ 块全为 $0$）！且传递函数阵 $\\boldsymbol{G}(s)$ 永远只反映最小实现——**能控能观子系统 $co$**！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.194-195",
+        "pdfPage": 203,
+        "itemRef": "8.2.5 式(8-19)~(8-24)",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.344-350"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch08_ex_guide87_kalman",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch08-f-06",
+      "section": "8.2.7 状态反馈与极点任意配置",
+      "kind": "formula",
+      "title": "状态反馈极点任意配置充要条件与 $\\boldsymbol{K}$ 的两种求法",
+      "examWeight": "core",
+      "prompt": "对于单输入系统 $\\dot{\\boldsymbol{x}}=\\boldsymbol{A}\\boldsymbol{x}+\\boldsymbol{b}u$ 引入状态反馈 $u=v-\\boldsymbol{K}\\boldsymbol{x}$，写出闭环状态方程、极点任意配置充要条件及反馈增益阵 $\\boldsymbol{K}$ 计算公式：",
+      "formulaLatex": "$$\\begin{aligned} &\\text{闭环系统：}\\; \\dot{\\boldsymbol{x}} = (\\boldsymbol{A}-\\boldsymbol{b}\\boldsymbol{K})\\boldsymbol{x} + \\boldsymbol{b}v,\\qquad \\Delta_{\\mathrm{cl}}(s) = \\det\\big(s\\boldsymbol{I}-(\\boldsymbol{A}-\\boldsymbol{b}\\boldsymbol{K})\\big) \\\\ &\\text{极点任意配置充要条件：}\\; (\\boldsymbol{A},\\boldsymbol{b})\\text{ 状态完全能控（单输入时 }\\boldsymbol{K}\\text{ 唯一！）} \\\\ &\\text{① 直接法（低阶首选）：展开 }\\det(s\\boldsymbol{I}-\\boldsymbol{A}+\\boldsymbol{b}\\boldsymbol{K})\\equiv \\Delta^*(s)=\\prod_{i=1}^n (s-\\lambda_i^*)\\text{ 对比同幂系数} \\\\ &\\text{② 能控标准型法：}\\; \\boldsymbol{K} = \\bar{\\boldsymbol{K}}\\boldsymbol{T}_c^{-1} = \\begin{bmatrix}\\alpha_0^*-\\alpha_0 & \\alpha_1^*-\\alpha_1 & \\cdots & \\alpha_{n-1}^*-\\alpha_{n-1}\\end{bmatrix}\\boldsymbol{T}_c^{-1} \\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "$\\alpha_i,\\; \\alpha_i^*$",
+          "desc": "分别为原开环特征多项式 $\\Delta(s)$ 与期望闭环特征多项式 $\\Delta^*(s)$ 的系数（按升幂 $\\alpha_0,\\dots,\\alpha_{n-1}$ 排列！）"
+        },
+        {
+          "sym": "$\\boldsymbol{T}_c = \\boldsymbol{Q}_c\\boldsymbol{L}$",
+          "desc": "将原系统化为能控标准型的非奇异变换阵；若在标准型求得 $\\bar{\\boldsymbol{K}}$，务必右乘 $\\boldsymbol{T}_c^{-1}$ 变回原状态空间！"
+        }
+      ],
+      "conditions": "期望闭环极点集合必须关于实轴对称（复极点共轭成对）以保证反馈增益矩阵 $\\boldsymbol{K}$ 为实矩阵。",
+      "pitfalls": "三大扣分雷区：① 反馈符号注意是 **$u = v - \\boldsymbol{K}\\boldsymbol{x}$**（负反馈 $\\boldsymbol{A}-\\boldsymbol{b}\\boldsymbol{K}$），画状态变量图时不要把负号搞反；② $\\bar{\\boldsymbol{K}}=[\\alpha_0^*-\\alpha_0,\\dots]$ 是**期望减原开环**、按**常数项到高次项**排列；③ 用能控标准型法算完 $\\bar{\\boldsymbol{K}}$ 后千万别忘右乘 $\\boldsymbol{T}_c^{-1}$ 回到原坐标（见例 8-10）！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.196",
+        "pdfPage": 205,
+        "itemRef": "8.2.7 式(8-25)~(8-29)",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.353-360"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch08_ex_guide810_811_pole",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch08-f-07",
+      "section": "8.2.8~8.2.9 状态观测器设计与分离原理",
+      "kind": "formula",
+      "title": "全维状态观测器（$\\boldsymbol{H}$）、降维观测器与分离原理",
+      "examWeight": "core",
+      "prompt": "写出全维状态观测器方程、估计误差方程、观测器增益阵 $\\boldsymbol{H}$ 求法，以及带观测器状态反馈复合系统的分离原理：",
+      "formulaLatex": "$$\\begin{aligned} &\\text{全维观测器：}\\; \\dot{\\hat{\\boldsymbol{x}}} = (\\boldsymbol{A}-\\boldsymbol{H}\\boldsymbol{C})\\hat{\\boldsymbol{x}} + \\boldsymbol{B}\\boldsymbol{u} + \\boldsymbol{H}\\boldsymbol{y} \\\\ &\\text{估计误差 }\\tilde{\\boldsymbol{x}}=\\boldsymbol{x}-\\hat{\\boldsymbol{x}}:\\; \\dot{\\tilde{\\boldsymbol{x}}} = (\\boldsymbol{A}-\\boldsymbol{H}\\boldsymbol{C})\\tilde{\\boldsymbol{x}} \\implies \\text{极点任意配置} \\iff (\\boldsymbol{A},\\boldsymbol{C})\\text{ 完全能观} \\\\ &\\text{能观标准型法求 }\\boldsymbol{H}:\\; \\boldsymbol{H} = \\boldsymbol{T}_o \\begin{bmatrix}\\alpha_0^*-\\alpha_0 \\\\ \\alpha_1^*-\\alpha_1 \\\\ \\vdots \\\\ \\alpha_{n-1}^*-\\alpha_{n-1}\\end{bmatrix},\\quad \\boldsymbol{T}_o^{-1} = \\boldsymbol{L}\\boldsymbol{Q}_o \\\\ &\\text{分离原理（}u=v-\\boldsymbol{K}\\hat{\\boldsymbol{x}}\\text{ 复合系统）：}\\; \\begin{bmatrix}\\dot{\\boldsymbol{x}}\\\\\\dot{\\tilde{\\boldsymbol{x}}}\\end{bmatrix}=\\begin{bmatrix}\\boldsymbol{A}-\\boldsymbol{B}\\boldsymbol{K} & \\boldsymbol{B}\\boldsymbol{K} \\\\ \\boldsymbol{0} & \\boldsymbol{A}-\\boldsymbol{H}\\boldsymbol{C}\\end{bmatrix}\\begin{bmatrix}\\boldsymbol{x}\\\\\\tilde{\\boldsymbol{x}}\\end{bmatrix}+\\begin{bmatrix}\\boldsymbol{B}\\\\\\boldsymbol{0}\\end{bmatrix}v \\\\ &\\implies \\det(s\\boldsymbol{I}-\\boldsymbol{A}_{\\text{复}}) = \\det\\big(s\\boldsymbol{I}-(\\boldsymbol{A}-\\boldsymbol{B}\\boldsymbol{K})\\big)\\cdot\\det\\big(s\\boldsymbol{I}-(\\boldsymbol{A}-\\boldsymbol{H}\\boldsymbol{C})\\big) \\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "分离原理三推论",
+          "desc": "① 状态反馈 $\\boldsymbol{K}$ 与观测器 $\\boldsymbol{H}$ 可完全**独立设计**；② 复合闭环极点 = 状态反馈极点 $\\cup$ 观测器极点；③ 复合系统输入-输出传递函数与直接状态反馈**完全相同**（观测器极点被零极点对消，仅影响初始误差衰减）"
+        },
+        {
+          "sym": "降维观测器",
+          "desc": "当 $m$ 个独立输出可直接测出部分状态时，只需重构剩余 $n-m$ 维不可测状态（阶次降为 $n-m$），工程上观测器极点实部常取状态反馈主导极点的 **$2\\sim 5$ 倍**（更快收敛）"
+        }
+      ],
+      "conditions": "全维观测器极点任意配置充要条件为 $(\\boldsymbol{A},\\boldsymbol{C})$ 完全能观；带观测器的状态反馈复合系统极点任意配置充要条件为 $(\\boldsymbol{A},\\boldsymbol{B},\\boldsymbol{C})$ 既完全能控又完全能观。",
+      "pitfalls": "高频细节：用能观标准型法求观测器增益 $\\boldsymbol{H}$ 时，是**左乘 $\\boldsymbol{T}_o$**（不是 $\\boldsymbol{T}_o^{-1}$！）乘以列向量 $[\\alpha_0^*-\\alpha_0,\\dots]^{\\mathrm{T}}$！记住维度检验：$\\boldsymbol{H}$ 是 $n\\times 1$ 列向量，与状态反馈 $1\\times n$ 行向量 $\\boldsymbol{K}=\\bar{\\boldsymbol{K}}\\boldsymbol{T}_c^{-1}$ 完美对偶！",
+      "figureSvg": "<svg role='img' viewBox='0 0 430 148' xmlns='http://www.w3.org/2000/svg'><title>带状态观测器的状态反馈复合控制系统（分离原理框图，仿主教材第8章）</title><defs><marker id='a81' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='10' y1='42' x2='52' y2='42' stroke='#334155' stroke-width='1.4' marker-end='url(#a81)'/><text x='14' y='34' font-size='10.5' fill='#141824'>v</text><circle cx='58' cy='42' r='6' fill='#fff' stroke='#334155' stroke-width='1.4'/><line x1='64' y1='42' x2='156' y2='42' stroke='#334155' stroke-width='1.4' marker-end='url(#a81)'/><text x='98' y='34' font-size='10' fill='#141824'>u = v - Kx̂</text><rect x='158' y='24' width='126' height='36' rx='4' fill='#eff6ff' stroke='#2744a8' stroke-width='1.5'/><text x='172' y='46' font-size='10.5' fill='#1e3a8a' font-weight='700'>被控对象 (A, B, C)</text><line x1='284' y1='42' x2='408' y2='42' stroke='#334155' stroke-width='1.4' marker-end='url(#a81)'/><text x='392' y='34' font-size='10.5' fill='#141824'>y</text><rect x='158' y='92' width='126' height='38' rx='4' fill='#ecfdf5' stroke='#0b6e4f' stroke-width='1.5'/><text x='166' y='110' font-size='10' fill='#065f46' font-weight='700'>全维状态观测器</text><text x='174' y='124' font-size='9' fill='#065f46'>x̂̇=(A-HC)x̂+Bu+Hy</text><polyline points='116,42 116,104 156,104' fill='none' stroke='#334155' stroke-width='1.3' marker-end='url(#a81)'/><polyline points='344,42 344,111 286,111' fill='none' stroke='#334155' stroke-width='1.3' marker-end='url(#a81)'/><line x1='158' y1='120' x2='114' y2='120' stroke='#b4233c' stroke-width='1.4' marker-end='url(#a81)'/><text x='128' y='133' font-size='10' fill='#b4233c' font-weight='700'>x̂</text><rect x='76' y='107' width='36' height='26' rx='3' fill='#fef3c7' stroke='#9a5800' stroke-width='1.4'/><text x='89' y='124' font-size='11' fill='#78350f' font-weight='700'>K</text><polyline points='76,120 58,120 58,48' fill='none' stroke='#b4233c' stroke-width='1.4' marker-end='url(#a81)'/><text x='64' y='58' font-size='11' fill='#b4233c'>−</text></svg>",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.197",
+        "pdfPage": 206,
+        "itemRef": "8.2.8~8.2.9 式(8-30)~(8-35)",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.365-376"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch08_ex_guide816_separation",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch08-f-08",
+      "section": "8.2.10【拓展参考】线性二次型最优控制（LQR）",
+      "kind": "formula",
+      "title": "无限时间 LQR 最优控制律与代数黎卡提方程（ARE）",
+      "examWeight": "extended",
+      "prompt": "【2027 考纲拓展参考】写出无限时间二次型性能指标 $J(\\boldsymbol{u})$、最优状态反馈律 $\\boldsymbol{u}^*(t)$ 及代数黎卡提方程：",
+      "formulaLatex": "$$\\begin{aligned} &J(\\boldsymbol{u}) = \\frac{1}{2}\\int_{t_0}^{\\infty}\\big[\\boldsymbol{x}^{\\mathrm{T}}(t)\\boldsymbol{Q}\\boldsymbol{x}(t) + \\boldsymbol{u}^{\\mathrm{T}}(t)\\boldsymbol{R}\\boldsymbol{u}(t)\\big]\\mathrm{d}t \\qquad (\\boldsymbol{Q}\\ge 0,\\;\\boldsymbol{R}>0) \\\\ &\\text{唯一最优控制律：}\\; \\boldsymbol{u}^*(t) = -\\boldsymbol{R}^{-1}\\boldsymbol{B}^{\\mathrm{T}}\\boldsymbol{P}\\boldsymbol{x}(t) = -\\boldsymbol{K}\\boldsymbol{x}(t) \\\\ &\\text{代数黎卡提方程（ARE）：}\\; -\\boldsymbol{P}\\boldsymbol{A} - \\boldsymbol{A}^{\\mathrm{T}}\\boldsymbol{P} + \\boldsymbol{P}\\boldsymbol{B}\\boldsymbol{R}^{-1}\\boldsymbol{B}^{\\mathrm{T}}\\boldsymbol{P} - \\boldsymbol{Q} = \\boldsymbol{0} \\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "$\\boldsymbol{P} = \\boldsymbol{P}^{\\mathrm{T}} > 0$",
+          "desc": "代数黎卡提方程的唯一对称正定解；保证最优闭环系统 $\\dot{\\boldsymbol{x}}=(\\boldsymbol{A}-\\boldsymbol{B}\\boldsymbol{R}^{-1}\\boldsymbol{B}^{\\mathrm{T}}\\boldsymbol{P})\\boldsymbol{x}$ 渐近稳定"
+        }
+      ],
+      "conditions": "系统 $(\\boldsymbol{A},\\boldsymbol{B})$ 完全能控（或能镇定），$\\boldsymbol{Q}$ 对称半正定（且 $(\\boldsymbol{A},\\boldsymbol{Q}^{1/2})$ 能检测），$\\boldsymbol{R}$ 对称正定。按 2027 浙大 845 考纲，8.4 最优控制与 8.7 内模控制作拓展参考。",
+      "pitfalls": "求解 2 阶黎卡提方程时会出现多组实解，必须依据 **$\\boldsymbol{P}$ 对称正定**（主子式 $p_{11}>0,\\;p_{11}p_{22}-p_{12}^2>0$）舍去负定/不定伪解（见例 8-14）！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.198",
+        "pdfPage": 207,
+        "itemRef": "8.2.10 式(8-36)~(8-38)",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.360-365"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch08_ex_guide814_lqr",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch08-c-01",
+      "section": "8.2.4 & 8.2.7 变换与反馈对能控/能观性的影响规律",
+      "kind": "conclusion",
+      "title": "非奇异线性变换、状态反馈、输出反馈对能控性与能观性的改变总结（必背对比！）",
+      "examWeight": "core",
+      "conditions": "适用于定常线性系统及常阵反馈 $\\boldsymbol{K},\\boldsymbol{F}$；注意串/并联复合系统的能控能观性则**不一定保持**（见例 8-5）。",
+      "pitfalls": "超级经典简答/判断题考点：「状态反馈不改变系统的能控性，但可能改变能观性；输出反馈既不改变能控性，也不改变能观性（但输出反馈不能保证任意配置全部闭环极点！）」——务必一字不差背牢！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.195-196",
+        "pdfPage": 204,
+        "itemRef": "8.2.4 & 8.2.7 性质总结",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.350-356"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      },
+      "summary": "对比三种常见操作对系统能控性、能观性的保持或破坏结论：\n$$\\begin{aligned} &\\text{① 非奇异线性变换 }\\boldsymbol{x}=\\boldsymbol{T}\\bar{\\boldsymbol{x}}:\\quad \\text{能控性}\\mathbf{\\text{不变}}，\\text{能观性}\\mathbf{\\text{不变}} \\\\ &\\text{② 状态反馈 }\\boldsymbol{u}=\\boldsymbol{v}-\\boldsymbol{K}\\boldsymbol{x}:\\quad \\text{能控性}\\mathbf{\\text{不变}}，\\text{能观性}\\mathbf{\\text{可能改变（可破坏）}} \\\\ &\\text{③ 输出反馈 }\\boldsymbol{u}=\\boldsymbol{v}-\\boldsymbol{F}\\boldsymbol{y}:\\quad \\text{能控性}\\mathbf{\\text{不变}}，\\text{能观性}\\mathbf{\\text{不变}} \\end{aligned}$$\n- **为什么状态反馈会破坏能观性？**：状态反馈不改变传函的零点，却移动闭环极点——若把某个闭环极点刚好配置到传函零点上产生**零极点对消**，则该模态变得不能观！\n- **为什么输出反馈都不改变？**：因 $\\begin{bmatrix}\\lambda\\boldsymbol{I}-(\\boldsymbol{A}-\\boldsymbol{B}\\boldsymbol{F}\\boldsymbol{C}) & \\boldsymbol{B}\\end{bmatrix}$ 与 $\\begin{bmatrix}\\lambda\\boldsymbol{I}-\\boldsymbol{A} & \\boldsymbol{B}\\end{bmatrix}$ 仅差初等列变换，对偶地能观 PBH 阵仅差初等行变换，秩均严格不变！"
+    },
+    {
+      "id": "ctrl-ch08-c-02",
+      "section": "8.2.5~8.2.6 零极点对消与内稳定 vs 外稳定（BIBO）",
+      "kind": "conclusion",
+      "title": "传递函数零极点对消与能控/能观性、内稳定性（渐近稳定）与外稳定性（BIBO）关系",
+      "examWeight": "core",
+      "conditions": "「无零极点对消 $\\iff$ 既能控又能观」严格针对**单输入单输出（SISO）**系统（MIMO 需用史密斯-麦克米伦型阶数判别）。",
+      "pitfalls": "考场致命陷阱（例 8-8 真实案例！）：$G(s)=\\frac{s-1}{s+5}$ 表面看只有一个左半平面极点 $s=-5$（外稳定！），实则内部藏着一个被零极点对消掉的不稳定极点 $s=+1$，一旦有微小初态扰动内部状态立刻指数爆炸——**绝对不能用传递函数替代状态空间判别内稳定性**！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.195 & P.204-205",
+        "pdfPage": 204,
+        "itemRef": "8.2.5~8.2.6 & 例8-8",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.349-352"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch08_ex_guide88_cancel",
+        "verified": true
+      },
+      "summary": "总结 SISO 系统的零极点对消判据，以及内稳定（所有特征值 $\\operatorname{Re}\\lambda_i<0$）与外稳定（传函极点 $\\operatorname{Re}p_j<0$）的等价条件：\n$$\\begin{aligned} &\\text{① SISO 系统完全能控且完全能观} \\iff G(s)=\\boldsymbol{c}(s\\boldsymbol{I}-\\boldsymbol{A})^{-1}\\boldsymbol{b}+d\\text{ 无零极点对消（最小实现）} \\\\ &\\text{② 内稳定（渐近稳定）} \\implies \\text{外稳定（BIBO 稳定）} \\\\ &\\text{③ 外稳定} \\;\\not\\!\\!\\implies \\text{内稳定（当且仅当不能控或不能观模态位于左半平面，或系统完全能控能观时才等价！）} \\end{aligned}$$\n- **零极点对消诊断法**：$(s\\boldsymbol{I}-\\boldsymbol{A})^{-1}\\boldsymbol{b}$ 有对消 $\\implies$ 不能控；$\\boldsymbol{c}(s\\boldsymbol{I}-\\boldsymbol{A})^{-1}$ 有对消 $\\implies$ 不能观（参见例 8-8）"
+    },
+    {
+      "id": "ctrl-ch08-c-03",
+      "section": "8.2.7 能镇定性与能检测性",
+      "kind": "conclusion",
+      "title": "不完全能控系统的状态反馈镇定条件（能镇定性）与对偶能检测性",
+      "examWeight": "core",
+      "conditions": "依据能控性分解 $\\begin{bmatrix}\\boldsymbol{A}_c-\\boldsymbol{B}_c\\boldsymbol{K}_c & \\boldsymbol{A}_{12}-\\boldsymbol{B}_c\\boldsymbol{K}_{\\bar{c}}\\\\\\boldsymbol{0} & \\boldsymbol{A}_{\\bar{c}}\\end{bmatrix}$：状态反馈 $\\boldsymbol{K}=[\\boldsymbol{K}_c,\\boldsymbol{K}_{\\bar{c}}]$ 完全无法撼动 $\\boldsymbol{A}_{\\bar{c}}$ 的特征值。",
+      "pitfalls": "审题一定分清问的是「能否**任意配置极点**」还是「能否**通过状态反馈加以镇定**」！不完全能控时前者必答否，后者必须进一步求出不能控特征值看其是否全在左半平面（见例 8-13 ② vs ③）！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.196 & P.208-209",
+        "pdfPage": 205,
+        "itemRef": "8.2.7 & 例8-13",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.358-360"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch08_ex_guide813_stabilize",
+        "verified": true
+      },
+      "summary": "若系统不完全能控（$\\operatorname{rank}\\boldsymbol{Q}_c < n$），是否一定无法通过状态反馈使其稳定？写出能镇定与能检测的充要条件：\n$$\\begin{aligned} &\\text{① 系统能镇定（Stabilizable）} \\iff \\text{全部}\\mathbf{\\text{不能控模态}}\\text{（}\\boldsymbol{A}_{\\bar{c}}\\text{ 特征值）均严格稳定（}\\operatorname{Re}\\lambda_i<0\\text{）} \\\\ &\\text{② 系统能检测（Detectable）} \\iff \\text{全部}\\mathbf{\\text{不能观模态}}\\text{（}\\boldsymbol{A}_{\\bar{o}}\\text{ 特征值）均严格稳定（}\\operatorname{Re}\\lambda_i<0\\text{）} \\end{aligned}$$\n- **镇定 vs 极点配置**：极点**任意**配置要求「完全能控」；**镇定**（只要求闭环全部极点落在左半平面）条件更宽松，只要不能控的子系统本身稳定即可，且反馈阵 $\\boldsymbol{K}$ 含有自由参数（不唯一，见例 8-13 ③）！"
+    },
+    {
+      "id": "ctrl-ch08-c-04",
+      "section": "8.3 连续系统离散化对能控/能观性的影响",
+      "kind": "conclusion",
+      "title": "连续能控能观系统经采样周期 $T$ 离散化后保持能控能观的充要条件（病理采样周期）",
+      "examWeight": "core",
+      "conditions": "由例 8-17 严格证明：$|\\boldsymbol{Q}_c|=\\frac{2\\sin(\\omega T)(\\cos\\omega T - 1)}{\\omega^3}$、$|\\boldsymbol{Q}_o|=\\frac{\\sin\\omega T}{\\omega}$，两者零点均为 $T=\\frac{k\\pi}{\\omega}$。",
+      "pitfalls": "极易记成 $T=\\frac{2k\\pi}{\\omega}$ 而漏掉奇数倍 $\\frac{\\pi}{\\omega}$！因为 $\\lambda_1-\\lambda_2 = \\mathrm{j}\\omega - (-\\mathrm{j}\\omega) = 2\\mathrm{j}\\omega$，故 $2\\omega T = 2k\\pi \\implies \\mathbf{\\omega T = k\\pi}$！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.213-214",
+        "pdfPage": 222,
+        "itemRef": "例8-17"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch08_ex_guide817_818_disc_ss",
+        "verified": true
+      },
+      "summary": "连续完全能控能观系统离散化后是否一定保持能控能观？原不能控能观系统离散化后又如何？\n$$\\begin{aligned} &\\text{① 原连续系统能控能观，且任意共轭/虚部相异特征值满足：}\\; \\operatorname{Im}(\\lambda_i - \\lambda_j) \\ne \\frac{2k\\pi}{T}\\;(k=\\pm 1,\\pm 2,\\dots) \\implies \\text{离散化保持能控能观} \\\\ &\\text{② 典型特例（谐振子 }\\lambda_{1,2}=\\pm\\mathrm{j}\\omega\\text{）：}\\; \\omega T = k\\pi\\;\\left(T=\\frac{k\\pi}{\\omega}\\right)\\text{ 时离散系统}\\mathbf{\\text{丧失能控能观性！}} \\\\ &\\text{③ 原连续系统不能控或不能观} \\implies \\text{无论怎样选择采样周期 }T\\text{，离散化后}\\mathbf{\\text{一定仍不能控或不能观！}} \\end{aligned}$$\n- **物理直觉**：当 $T=k\\pi/\\omega$ 时，采样正好卡在正弦振荡的半周期整数倍处，采样点看不出相位变化（类似频闪观测静止），故同时丢失能控与能观性！"
+    },
+    {
+      "id": "ctrl-ch08-e-01",
+      "section": "8.3 典型例题 · 能控能观判据全家桶（含例 8-2 ⑧ 勘误）",
+      "kind": "example",
+      "title": "【例 8-1 ~ 例 8-4】Kalman 秩法、约当速判、PBH 判据与参数逆向求解",
+      "examWeight": "core",
+      "problem": "①（例 8-1）判断 $\\boldsymbol{A}=\\begin{bmatrix}1&3&2\\\\0&2&0\\\\0&1&3\\end{bmatrix},\\;\\boldsymbol{B}=\\begin{bmatrix}2&1\\\\1&1\\\\-1&-1\\end{bmatrix}$ 能控性；\n②（例 8-2 ⑨）用 PBH 判据判断 $\\boldsymbol{A}=\\begin{bmatrix}0&1&0&0\\\\0&0&-1&0\\\\0&0&0&1\\\\0&0&5&0\\end{bmatrix},\\;\\boldsymbol{B}=\\begin{bmatrix}0&1\\\\1&0\\\\0&1\\\\-2&0\\end{bmatrix}$ 能控性；\n③（例 8-3）求使 $\\boldsymbol{A}=\\begin{bmatrix}a&b\\\\c&d\\end{bmatrix},\\;\\boldsymbol{b}=\\begin{bmatrix}1\\\\1\\end{bmatrix},\\;\\boldsymbol{c}=[1\\;0]$ 完全能控且完全能观的参数条件。",
+      "steps": [
+        {
+          "stepTitle": "① 例 8-1",
+          "detail": "算 $\\boldsymbol{Q}_c=[\\boldsymbol{B},\\boldsymbol{A}\\boldsymbol{B},\\boldsymbol{A}^2\\boldsymbol{B}]=\\begin{bmatrix}2&1&3&2&5&4\\\\1&1&2&2&4&4\\\\-1&-1&-2&-2&-4&-4\\end{bmatrix}$，一眼看出第 3 行 $= -$第 2 行，故 $\\operatorname{rank}\\boldsymbol{Q}_c=2<3$，系统不完全能控！（也可用方阵法 $\\boldsymbol{Q}_c\\boldsymbol{Q}_c^{\\mathrm{T}}=\\begin{bmatrix}59&49&-49\\\\49&42&-42\\\\-49&-42&42\\end{bmatrix}$，秩为 2。）"
+        },
+        {
+          "stepTitle": "② 例 8-2 ⑨（PBH 判据示范）",
+          "detail": "算特征多项式 $|\\lambda\\boldsymbol{I}-\\boldsymbol{A}|=\\lambda^2(\\lambda^2-5)=0\\implies \\lambda_{1,2}=0,\\;\\lambda_{3,4}=\\pm\\sqrt{5}$。分别代入 $[\\lambda_i\\boldsymbol{I}-\\boldsymbol{A}\\;\\;\\boldsymbol{B}]$（$4\\times 6$ 矩阵），对 $\\lambda=0,\\sqrt{5},-\\sqrt{5}$ 检验均有 $\\operatorname{rank}=4$，故系统**完全能控**！\n【附例 8-2 ⑧ 原书勘误】辅导书 P.199 例 8-2 ⑧ 想考查「同一特征值 $\\lambda_1$ 对应两个约当块时单输入不能控」，但把左下角 $a_{41}$ 误印成了 `9`（正确应为 `0` 才是约当阵！）。"
+        },
+        {
+          "stepTitle": "【③ 例 8-3】直接算方阵行列式",
+          "detail": "$$\\boldsymbol{Q}_c = \\begin{bmatrix}1 & a+b \\\\ 1 & c+d\\end{bmatrix} \\implies |\\boldsymbol{Q}_c| = c+d-a-b \\ne 0$$\n$$\\boldsymbol{Q}_o = \\begin{bmatrix}1 & 0 \\\\ a & b\\end{bmatrix} \\implies |\\boldsymbol{Q}_o| = b \\ne 0$$\n故完全能控且能观的充要条件为 **$c+d-a-b\\ne 0$ 且 $b\\ne 0$**。"
+        }
+      ],
+      "takeaway": "选判据口诀：对角/约当阵直接**秒看行/列**；2~3 阶单输入/单输出直接算 **$|\\boldsymbol{Q}_c|,|\\boldsymbol{Q}_o|$**；4 阶以上多输入且 $\\boldsymbol{A}$ 稀疏直接上 **PBH 秩判据**，省去矩阵高次幂计算！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.198-201",
+        "pdfPage": 207,
+        "itemRef": "例8-1 ~ 例8-4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch08_ex_guide81_83_ctrl_obs",
+        "verified": true
+      },
+      "finalAnswer": "① $\\operatorname{rank}\\boldsymbol{Q}_c=2<3$（不能控）；② PBH 各特征值满秩 4（能控）；③ $c+d-a-b\\ne 0$ 且 $b\\ne 0$。"
+    },
+    {
+      "id": "ctrl-ch08-e-02",
+      "section": "8.3 典型例题 · 串联失控与不稳定零极点对消",
+      "kind": "example",
+      "title": "【例 8-5 & 例 8-8】串联系统失去能控性 & 零极点对消掩盖不稳定极点 $s=1$",
+      "examWeight": "core",
+      "problem": "①（例 8-5）$S_1:\\dot{\\boldsymbol{x}}_1=\\begin{bmatrix}0&1\\\\-3&-4\\end{bmatrix}\\boldsymbol{x}_1+\\begin{bmatrix}0\\\\1\\end{bmatrix}u_1,\\;y_1=[2\\;1]\\boldsymbol{x}_1$ 与 $S_2:\\dot x_3=-2x_3+u_2,\\;y_2=x_3$ 串联（$u_2=y_1$），分析 $S_1,S_2$ 与串联系统 $S$ 的能控能观性。\n②（例 8-8）二阶系统 $\\dot{\\boldsymbol{x}}=\\begin{bmatrix}-4&5\\\\1&0\\end{bmatrix}\\boldsymbol{x}+\\begin{bmatrix}-5\\\\1\\end{bmatrix}u,\\;y=[1\\;-1]\\boldsymbol{x}+u$，分析能控能观性与传递函数不完全性。",
+      "steps": [
+        {
+          "stepTitle": "① 例 8-5",
+          "detail": "易知 $S_1$（传函 $\\frac{s+2}{(s+1)(s+3)}$）与 $S_2$（传函 $\\frac{1}{s+2}$）各自均完全能控能观；但串联后：\n$$\\boldsymbol{A}=\\begin{bmatrix}0&1&0\\\\-3&-4&0\\\\2&1&-2\\end{bmatrix},\\;\\boldsymbol{b}=\\begin{bmatrix}0\\\\1\\\\0\\end{bmatrix},\\;\\boldsymbol{c}=\\begin{bmatrix}0&0&1\\end{bmatrix} \\implies \\boldsymbol{Q}_c=\\begin{bmatrix}0&1&-4\\\\1&-4&13\\\\0&1&-4\\end{bmatrix},\\;\\operatorname{rank}\\boldsymbol{Q}_c=2<3$$\n而 $\\operatorname{rank}\\boldsymbol{Q}_o=3$。原因：$S_1$ 的零点 $s=-2$ 抵消了 $S_2$ 的极点 $s=-2$，导致串联系统**失去能控性**（仍能观）！"
+        },
+        {
+          "stepTitle": "【② 例 8-8】计算判别阵",
+          "detail": "$|\\boldsymbol{Q}_c|=\\det\\begin{bmatrix}-5&25\\\\1&-5\\end{bmatrix}=0$，$|\\boldsymbol{Q}_o|=\\det\\begin{bmatrix}1&-1\\\\-5&5\\end{bmatrix}=0$，故既不能控也不能观！"
+        },
+        {
+          "stepTitle": "计算传递函数",
+          "detail": "$$G(s) = \\begin{bmatrix}1 & -1\\end{bmatrix}\\begin{bmatrix}s+4 & -5\\\\-1 & s\\end{bmatrix}^{-1}\\begin{bmatrix}-5\\\\1\\end{bmatrix} + 1 = \\frac{-6(s-1)}{(s+5)(s-1)} + 1 = \\frac{s-1}{s+5}$$\n同时观察 $(s\\boldsymbol{I}-\\boldsymbol{A})^{-1}\\boldsymbol{b}=\\frac{1}{(s+5)(s-1)}\\begin{bmatrix}-5(s-1)\\\\s-1\\end{bmatrix}$ 与 $\\boldsymbol{c}(s\\boldsymbol{I}-\\boldsymbol{A})^{-1}=\\frac{1}{(s+5)(s-1)}[s-1,\\;-(s-1)]$，**均把不稳定极点 $s=1$ 对消了**！因此外部看 $G(s)=\\frac{s-1}{s+5}$ 看似稳定，实则内部极点 $\\lambda_1=1>0$ 严重**内不稳定**！"
+        }
+      ],
+      "takeaway": "记住串联零极点对消规律：前级零点消后级极点 $\\implies$ **丧失能控性**；后级零点消前级极点 $\\implies$ **丧失能观性**！绝不可用零极点对消去「消除」右半平面不稳定极点！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.201 & P.204-205",
+        "pdfPage": 210,
+        "itemRef": "例8-5 & 例8-8 (图8-3~8-4)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch08_ex_guide88_cancel",
+        "verified": true
+      },
+      "finalAnswer": "① 串联系统不能控（$\\operatorname{rank}\\boldsymbol{Q}_c=2$）但能观；② 例 8-8 既不能控也不能观，$G(s)=\\frac{s-1}{s+5}$ 对消了不稳定极点 $s=1$。"
+    },
+    {
+      "id": "ctrl-ch08-e-03",
+      "section": "8.3 典型例题 · 化能控/能观标准型全流程",
+      "kind": "example",
+      "title": "【例 8-6】3 阶一般系统同时化为能控标准型与能观标准型",
+      "examWeight": "core",
+      "problem": "已知 $\\dot{\\boldsymbol{x}}=\\begin{bmatrix}0&2&-2\\\\1&1&-2\\\\2&-2&1\\end{bmatrix}\\boldsymbol{x}+\\begin{bmatrix}2\\\\1\\\\1\\end{bmatrix}u,\\;y=[1\\;1\\;1]\\boldsymbol{x}$，分别用非奇异变换将其化为：① 能控标准型；② 能观标准型。",
+      "steps": [
+        {
+          "stepTitle": "第一步",
+          "detail": "计算特征多项式及对称阵 $\\boldsymbol{L}$：\n$$\\Delta(s)=|s\\boldsymbol{I}-\\boldsymbol{A}|=s^3-2s^2-s+2 \\implies \\alpha_2=-2,\\;\\alpha_1=-1,\\;\\alpha_0=2,\\qquad \\boldsymbol{L}=\\begin{bmatrix}-1&-2&1\\\\-2&1&0\\\\1&0&0\\end{bmatrix}$$"
+        },
+        {
+          "stepTitle": "第二步（① 化能控标准型）",
+          "detail": "求 $\\boldsymbol{Q}_c=[\\boldsymbol{b},\\boldsymbol{A}\\boldsymbol{b},\\boldsymbol{A}^2\\boldsymbol{b}]=\\begin{bmatrix}2&0&-4\\\\1&1&-5\\\\1&3&1\\end{bmatrix}$（满秩 3），构造 $\\boldsymbol{T}_c=\\boldsymbol{Q}_c\\boldsymbol{L}=\\begin{bmatrix}-6&-4&2\\\\-8&-1&1\\\\-6&1&1\\end{bmatrix}$。\n经变换 $\\boldsymbol{x}=\\boldsymbol{T}_c\\bar{\\boldsymbol{x}}_c$ 得：\n$$\\bar{\\boldsymbol{A}}_c=\\boldsymbol{T}_c^{-1}\\boldsymbol{A}\\boldsymbol{T}_c=\\begin{bmatrix}0&1&0\\\\0&0&1\\\\-2&1&2\\end{bmatrix},\\quad \\bar{\\boldsymbol{b}}_c=\\begin{bmatrix}0\\\\0\\\\1\\end{bmatrix},\\quad \\bar{\\boldsymbol{c}}_c=\\boldsymbol{c}\\boldsymbol{T}_c=\\begin{bmatrix}-20 & -4 & 4\\end{bmatrix}$$"
+        },
+        {
+          "stepTitle": "第三步（② 化能观标准型）",
+          "detail": "求 $\\boldsymbol{Q}_o=\\begin{bmatrix}\\boldsymbol{c}\\\\\\boldsymbol{c}\\boldsymbol{A}\\\\\\boldsymbol{c}\\boldsymbol{A}^2\\end{bmatrix}=\\begin{bmatrix}1&1&1\\\\3&1&-3\\\\-5&13&-11\\end{bmatrix}$（满秩 3），构造 $\\boldsymbol{T}_o^{-1}=\\boldsymbol{L}\\boldsymbol{Q}_o=\\begin{bmatrix}-12&10&-6\\\\1&-1&-5\\\\1&1&1\\end{bmatrix}$。\n经变换得：\n$$\\bar{\\boldsymbol{A}}_o=\\begin{bmatrix}0&0&-2\\\\1&0&1\\\\0&1&2\\end{bmatrix},\\quad \\bar{\\boldsymbol{b}}_o=\\boldsymbol{T}_o^{-1}\\boldsymbol{b}=\\begin{bmatrix}-20\\\\-4\\\\4\\end{bmatrix},\\quad \\bar{\\boldsymbol{c}}_o=\\begin{bmatrix}0 & 0 & 1\\end{bmatrix}$$"
+        },
+        {
+          "stepTitle": "第四步（对偶自检！）",
+          "detail": "核对 $\\bar{\\boldsymbol{c}}_c=[-20,-4,4]$ 与 $\\bar{\\boldsymbol{b}}_o=[-20,-4,4]^{\\mathrm{T}}$ 完全互为转置！可见只要算对 $\\bar{\\boldsymbol{c}}_c=\\boldsymbol{c}\\boldsymbol{T}_c$（连求逆都省了），立刻就能同时校对能观标准型的 $\\bar{\\boldsymbol{b}}_o$！"
+        }
+      ],
+      "takeaway": "利用 $\\boldsymbol{T}_c=\\boldsymbol{Q}_c\\boldsymbol{L}$ 与 $\\boldsymbol{T}_o^{-1}=\\boldsymbol{L}\\boldsymbol{Q}_o$ 这组完美对偶式，再加上「$\\bar{\\boldsymbol{c}}_c=\\bar{\\boldsymbol{b}}_o^{\\mathrm{T}}$」交叉检验，3 阶矩阵变换也能零差错满分拿下！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.201-202",
+        "pdfPage": 210,
+        "itemRef": "例8-6"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch08_ex_guide86_canonical",
+        "verified": true
+      },
+      "finalAnswer": "能控标准型 $\\bar{\\boldsymbol{c}}_c=[-20,-4,4]$；能观标准型 $\\bar{\\boldsymbol{b}}_o=[-20,-4,4]^{\\mathrm{T}}$（$\\bar{\\boldsymbol{A}}_o=\\bar{\\boldsymbol{A}}_c^{\\mathrm{T}}$）。"
+    },
+    {
+      "id": "ctrl-ch08-e-04",
+      "section": "8.3 典型例题 · 卡尔曼规范分解（一般阵 + 8 阶约当阵）",
+      "kind": "example",
+      "title": "【例 8-7 & 例 8-9】两步卡尔曼规范分解 & 8 阶约当系统秒求最小传递矩阵",
+      "examWeight": "core",
+      "problem": "①（例 8-7）将 $\\boldsymbol{A}=\\begin{bmatrix}0&0&-1\\\\1&0&-3\\\\0&1&-3\\end{bmatrix},\\;\\boldsymbol{b}=\\begin{bmatrix}1\\\\1\\\\0\\end{bmatrix},\\;\\boldsymbol{c}=[0\\;1\\;-2]$ 按能控性与能观性做卡尔曼规范分解。\n②（例 8-9）对辅导书 P.205 的 8 阶双输入双输出约当系统做卡尔曼分解并求其传递函数矩阵 $\\boldsymbol{G}(s)$。",
+      "steps": [
+        {
+          "stepTitle": "① 例 8-7 第一步：能控性分解",
+          "detail": "算 $\\boldsymbol{Q}_c=\\begin{bmatrix}1&0&-1\\\\1&1&-3\\\\0&1&-2\\end{bmatrix}$，前两列线性无关（$\\operatorname{rank}=2$），补第三列 $[0,0,1]^{\\mathrm{T}}$ 得 $\\boldsymbol{T}_c=\\begin{bmatrix}1&0&0\\\\1&1&0\\\\0&1&1\\end{bmatrix}$，变换得：\n$$\\bar{\\boldsymbol{A}}=\\begin{bmatrix}0&-1&-1\\\\1&-2&-2\\\\0&0&-1\\end{bmatrix},\\quad \\bar{\\boldsymbol{b}}=\\begin{bmatrix}1\\\\0\\\\0\\end{bmatrix},\\quad \\bar{\\boldsymbol{c}}=\\begin{bmatrix}1 & -1 & -2\\end{bmatrix}$$\n不能控子系统 $\\dot x_{\\bar{c}}=-x_{\\bar{c}},\\;y_{\\bar{c}}=-2x_{\\bar{c}}$ 已能观（记为 $\\bar{c}o$）。"
+        },
+        {
+          "stepTitle": "① 例 8-7 第二步：对 2 维能控子系统做能观性分解",
+          "detail": "能控子系统 $\\boldsymbol{A}_c=\\begin{bmatrix}0&-1\\\\1&-2\\end{bmatrix},\\;\\boldsymbol{c}_c=[1\\;-1]$，算 $\\boldsymbol{Q}_{o1}=\\begin{bmatrix}1&-1\\\\-1&1\\end{bmatrix}$（秩 1），取 $\\boldsymbol{T}_1^{-1}=\\begin{bmatrix}1&-1\\\\0&1\\end{bmatrix}$，拼成总阵 $\\boldsymbol{T}_{\\text{总}}=\\boldsymbol{T}_c\\operatorname{diag}(\\boldsymbol{T}_1,1)$ 得最终卡尔曼分解：\n$$\\begin{bmatrix}\\dot x_{co}\\\\\\dot x_{c\\bar{o}}\\\\\\dot x_{\\bar{c}o}\\end{bmatrix}=\\begin{bmatrix}-1&0&1\\\\1&-1&-2\\\\0&0&-1\\end{bmatrix}\\begin{bmatrix}x_{co}\\\\x_{c\\bar{o}}\\\\x_{\\bar{c}o}\\end{bmatrix}+\\begin{bmatrix}1\\\\0\\\\0\\end{bmatrix}u,\\qquad y=\\begin{bmatrix}1 & 0 & -2\\end{bmatrix}\\tilde{\\boldsymbol{x}}$$"
+        },
+        {
+          "stepTitle": "② 例 8-9（8 阶约当阵秒杀技巧）",
+          "detail": "8 阶系统含四个互异特征值约当块（$\\lambda=-3,-4,-1,-5$ 各 2 阶），直接套约当速判法则逐块检查 $\\boldsymbol{B}$ 末行与 $\\boldsymbol{C}$ 首列，立刻分类：\n- 能控能观（$co$）：$x_1,x_2,x_7$（3 维！）\n- 能控不能观（$c\\bar{o}$）：$x_3,x_5$；不能控能观（$\\bar{c}o$）：$x_4,x_8$；不能控不能观（$\\bar{c}\\bar{o}$）：$x_6$。\n因此无需对 8 阶矩阵求逆，只需对 3 维 $co$ 子系统算 $\\boldsymbol{G}(s)=\\boldsymbol{C}_{co}(s\\boldsymbol{I}-\\boldsymbol{A}_{co})^{-1}\\boldsymbol{B}_{co}$：\n$$\\boldsymbol{G}(s)=\\frac{1}{(s+3)^2(s+5)}\\begin{bmatrix}50s^2+361s+663 & 43s^2+353s+714 \\\\ 69s^2+431s+682 & 24s^2+171s+311\\end{bmatrix}$$"
+        }
+      ],
+      "takeaway": "高阶约当阵求传函题是 845 压轴大题的「降维打击」送分招：先按约当块剔除不能控/不能观状态，只剩 $co$ 子系统再算 $(s\\boldsymbol{I}-\\boldsymbol{A}_{co})^{-1}$，计算量直降 90%！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.202-205",
+        "pdfPage": 211,
+        "itemRef": "例8-7 & 例8-9"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch08_ex_guide89_8th_kalman",
+        "verified": true
+      },
+      "finalAnswer": "例 8-7 卡尔曼分解为 1 维 $co$ + 1 维 $c\\bar{o}$ + 1 维 $\\bar{c}o$；例 8-9 降阶为 3 维 $co$ 子系统求出精确 $2\\times 2$ 传递函数阵。"
+    },
+    {
+      "id": "ctrl-ch08-e-05",
+      "section": "8.3 典型例题 · 状态反馈极点配置（含例 8-12 勘误）",
+      "kind": "example",
+      "title": "【例 8-10 & 例 8-12】极点配置双解法 & 时域指标反推期望极点设计",
+      "examWeight": "core",
+      "problem": "①（例 8-10）已知 $\\boldsymbol{A}=\\begin{bmatrix}0&0&0\\\\1&-6&0\\\\0&1&-12\\end{bmatrix},\\;\\boldsymbol{b}=\\begin{bmatrix}1\\\\0\\\\0\\end{bmatrix}$，求使闭环极点配置到 $-2,\\;-1\\pm\\mathrm{j}$ 的状态反馈增益阵 $\\boldsymbol{K}$。\n②（例 8-12）已知三阶无零极点对消对象 $\\Delta(s)=s(s+6)(s+12)$，要求闭环 $\\sigma\\le 5\\%,\\;T_p\\le 0.5\\,\\text{s},\\;\\omega_b\\le 10$，取远极点 $s_3=-100$，求能控标准型下的状态反馈阵 $\\boldsymbol{K}$。",
+      "steps": [
+        {
+          "stepTitle": "① 例 8-10",
+          "detail": "检验 $\\operatorname{rank}\\boldsymbol{Q}_c=3$（完全能控）。期望特征多项式：\n$$\\Delta^*(s)=(s+2)(s^2+2s+2)=s^3+4s^2+6s+4$$\n**法一（直接法）**：设 $\\boldsymbol{K}=[k_1\\;k_2\\;k_3]$，算 $\\det(s\\boldsymbol{I}-\\boldsymbol{A}+\\boldsymbol{b}\\boldsymbol{K})=s^3+(18+k_1)s^2+(72+18k_1+k_2)s+(72k_1+12k_2+k_3)$，对比系数立刻解得：\n$$k_1 = -14,\\quad k_2 = 186,\\quad k_3 = -1220 \\implies \\boldsymbol{K} = \\begin{bmatrix}-14 & 186 & -1220\\end{bmatrix}$$"
+        },
+        {
+          "stepTitle": "**法二（能控标准型法）**",
+          "detail": "原开环 $\\Delta(s)=s^3+18s^2+72s$，算 $\\boldsymbol{T}_c=\\boldsymbol{Q}_c\\boldsymbol{L}=\\begin{bmatrix}72&18&1\\\\12&1&0\\\\1&0&0\\end{bmatrix}$、$\\boldsymbol{T}_c^{-1}=\\begin{bmatrix}0&0&1\\\\0&1&-12\\\\1&-18&144\\end{bmatrix}$，代入：\n$$\\boldsymbol{K}=[4-0,\\;6-72,\\;4-18]\\boldsymbol{T}_c^{-1}=[4,-66,-14]\\boldsymbol{T}_c^{-1}=\\begin{bmatrix}-14 & 186 & -1220\\end{bmatrix}$$\n两法结果一字不差（单输入下相同坐标系的 $\\boldsymbol{K}$ 唯一！）。"
+        },
+        {
+          "stepTitle": "【② 例 8-12（含原书 P.207 传函分子勘误）】注",
+          "detail": "辅导书 P.207 题干将传函分子误印成了 `s`（写成 $\\frac{s}{s(s+6)(s+12)}$ 会有零极点对消，而题解明确说「无零极点对消」并取 3 阶分母 $s(s+6)(s+12)$，故原题分子应为常数如 `1` 或 `5`！）。\n由时域指标反推主导二阶极点：\n$$\\begin{cases}\\mathrm{e}^{-\\pi\\zeta/\\sqrt{1-\\zeta^2}}=0.05 \\implies \\zeta\\approx 0.6901 \\\\ T_p=\\dfrac{\\pi}{\\omega_0\\sqrt{1-\\zeta^2}}=0.5 \\implies \\omega_0\\approx 8.6819\\end{cases}$$\n校核带宽 $\\omega_b=\\omega_0\\sqrt{1-2\\zeta^2+\\sqrt{2-4\\zeta^2+4\\zeta^4}}\\approx 8.89\\le 10$ 合格！取期望极点 $-5.9914\\pm 6.2832\\mathrm{j}$ 与远极点 $-100$，得 $\\Delta^*(s)=s^3+112s^2+1274s+7538$，减去开环 $\\Delta(s)=s^3+18s^2+72s$ 即得能控标准型下 $\\boldsymbol{K}=[7538,\\;1202,\\;94]$。"
+        }
+      ],
+      "takeaway": "2~3 阶直接给矩阵 $(\\boldsymbol{A},\\boldsymbol{b})$ 的极点配置题，**直接法展开 3×3 行列式比先化能控标准型再求逆更快更不易算错**；若只给传递函数，直接采用能控标准型实现即可一步读出 $\\boldsymbol{K}$！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.206-208",
+        "pdfPage": 215,
+        "itemRef": "例8-10 ~ 例8-12 (图8-5)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch08_ex_guide810_811_pole",
+        "verified": true
+      },
+      "finalAnswer": "① $\\boldsymbol{K}=[-14,\\;186,\\;-1220]$；② 主导极点 $-5.991\\pm 6.283\\mathrm{j}$，能控标准型下 $\\boldsymbol{K}=[7538,\\;1202,\\;94]$。"
+    },
+    {
+      "id": "ctrl-ch08-e-06",
+      "section": "8.3 典型例题 · 能镇定性与自由参数反馈设计",
+      "kind": "example",
+      "title": "【例 8-13】三类系统的状态反馈镇定判别与不完全能控镇定设计",
+      "examWeight": "core",
+      "problem": "判断下列三系统能否通过状态反馈加以镇定；若能，求出镇定反馈阵 $\\boldsymbol{K}$：\n① 能控标准型 $\\Delta(s)=s^3+4s^2+s-6$；② $\\boldsymbol{A}=\\operatorname{diag}(-1,-2,3),\\;\\boldsymbol{b}=[1,1,0]^{\\mathrm{T}}$；③ $\\boldsymbol{A}=\\begin{bmatrix}0&1&0\\\\0&0&1\\\\6&7&0\\end{bmatrix},\\;\\boldsymbol{b}=\\begin{bmatrix}0\\\\1\\\\1\\end{bmatrix}$。",
+      "steps": [
+        {
+          "stepTitle": "①",
+          "detail": "完全能控（开环极点 $1,-2,-3$），一定能镇定！取稳定期望极点 $-1,-2,-3$（$\\Delta^*=s^3+6s^2+11s+6$），直接得 $\\boldsymbol{K}=[6-(-6),\\;11-1,\\;6-4]=[12,\\;10,\\;2]$。"
+        },
+        {
+          "stepTitle": "②",
+          "detail": "对角阵互异特征值，$b_3=0$ 对应的不能控极点为 $\\lambda_3=+3>0$（在右半平面！），状态反馈无法移动不能控极点，故系统**不能镇定**！"
+        },
+        {
+          "stepTitle": "③",
+          "detail": "检验 $\\operatorname{rank}\\boldsymbol{Q}_c=2<3$（不完全能控）。求能控性传递函数 $(s\\boldsymbol{I}-\\boldsymbol{A})^{-1}\\boldsymbol{b}=\\frac{1}{(s+1)(s+2)(s-3)}\\begin{bmatrix}s+1\\\\s(s+1)\\\\(s+6)(s+1)\\end{bmatrix}$，可见被消去的不能控极点为 **$\\lambda=-1<0$（稳定！）**，不稳定极点 $s=3$ 落在能控子系统内，故系统**可以镇定**！"
+        },
+        {
+          "stepTitle": "步骤 4",
+          "detail": "对 ③ 将闭环极点配置到 $-1$（不可动）、$-2,-3$（$\\Delta^*=s^3+6s^2+11s+6$），设 $\\boldsymbol{K}=[k_1,k_2,k_3]$ 展开 $\\det(s\\boldsymbol{I}-\\boldsymbol{A}+\\boldsymbol{b}\\boldsymbol{K})=s^3+(k_2+k_3)s^2+(k_1+k_2+7k_3-7)s+(k_1+6k_3-6)$，对比系数得：\n$$\\begin{cases}k_2+k_3=6 \\\\ k_1+k_2+7k_3-7=11 \\\\ k_1+6k_3-6=6\\end{cases} \\implies \\boldsymbol{K} = \\begin{bmatrix}12-6k_3 & 6-k_3 & k_3\\end{bmatrix}\\;\\text{（}k_3\\in\\mathbb{R}\\text{ 任意！）}$$\n取 $k_3=0$ 即得最简镇定阵 $\\boldsymbol{K}=[12,\\;6,\\;0]$（SymPy 验算表明无论 $k_3$ 取何实数，闭环特征多项式恒为 $(s+1)(s+2)(s+3)$，且与能控分解法得到的 $[k_3',\\;4+k_3'/6,\\;2-k_3'/6]$ 完全等价！）。"
+        }
+      ],
+      "takeaway": "不完全能控但能镇定系统的期望特征多项式 $\\Delta^*(s)$，**必须把原系统的不能控极点保留在里面**，否则方程组无解！且解出的 $\\boldsymbol{K}$ 天然带有 $n-r_c$ 个自由参数。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.208-209",
+        "pdfPage": 217,
+        "itemRef": "例8-13"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch08_ex_guide813_stabilize",
+        "verified": true
+      },
+      "finalAnswer": "① 能镇定，$\\boldsymbol{K}=[12,10,2]$；② 不能镇定（不能控极点 $+3>0$）；③ 能镇定（不能控极点 $-1<0$），通解 $\\boldsymbol{K}=[12-6k_3,\\;6-k_3,\\;k_3]$。"
+    },
+    {
+      "id": "ctrl-ch08-e-07",
+      "section": "8.3【拓展参考】典型例题 · LQR 最优控制",
+      "kind": "example",
+      "title": "【例 8-14】双积分系统无限时间二次型最优控制（黎卡提方程求解）",
+      "examWeight": "extended",
+      "problem": "对双积分系统 $\\dot x_1=x_2,\\;\\dot x_2=u$，求使性能指标 $J(u)=\\frac{1}{2}\\int_0^\\infty (x_1^2+2bx_1 x_2+ax_2^2+u^2)\\mathrm{d}t$（$a-b^2>0$）极小的最优控制律 $u^*(t)$。",
+      "steps": [
+        {
+          "stepTitle": "第一步",
+          "detail": "写出标准矩阵 $\\boldsymbol{A}=\\begin{bmatrix}0&1\\\\0&0\\end{bmatrix},\\;\\boldsymbol{B}=\\begin{bmatrix}0\\\\1\\end{bmatrix},\\;\\boldsymbol{Q}=\\begin{bmatrix}1&b\\\\b&a\\end{bmatrix},\\;R=1$。因 $a-b^2>0$ 故 $\\boldsymbol{Q}>0$，且 $(\\boldsymbol{A},\\boldsymbol{B})$ 完全能控，代数黎卡提方程存在唯一对称正定解 $\\boldsymbol{P}=\\begin{bmatrix}p_{11}&p_{12}\\\\p_{12}&p_{22}\\end{bmatrix}$。"
+        },
+        {
+          "stepTitle": "第二步",
+          "detail": "代入 $-\\boldsymbol{P}\\boldsymbol{A}-\\boldsymbol{A}^{\\mathrm{T}}\\boldsymbol{P}+\\boldsymbol{P}\\boldsymbol{B}R^{-1}\\boldsymbol{B}^{\\mathrm{T}}\\boldsymbol{P}-\\boldsymbol{Q}=\\boldsymbol{0}$ 得三个标量方程：\n$$\\begin{cases}p_{12}^2 - 1 = 0 \\\\ -p_{11} + p_{12}p_{22} - b = 0 \\\\ -2p_{12} + p_{22}^2 - a = 0\\end{cases}$$"
+        },
+        {
+          "stepTitle": "第三步",
+          "detail": "由 $\\boldsymbol{P}>0$（要求 $p_{22}>0$ 且闭环稳定要求 $p_{12}>0$），唯一选定：\n$$p_{12} = 1,\\qquad p_{22} = \\sqrt{a+2},\\qquad p_{11} = \\sqrt{a+2} - b$$\n（验算正定性：$p_{11}p_{22}-p_{12}^2 = a+1-b\\sqrt{a+2} > b^2+1-b\\sqrt{b^2+2} > 0$ 恒成立！）"
+        },
+        {
+          "stepTitle": "第四步",
+          "detail": "代回最优状态反馈律得：\n$$u^*(t) = -R^{-1}\\boldsymbol{B}^{\\mathrm{T}}\\boldsymbol{P}\\boldsymbol{x}(t) = -x_1(t) - \\sqrt{a+2}\\,x_2(t)$$"
+        }
+      ],
+      "takeaway": "交叉项系数 $b$ 出现在 $\\boldsymbol{P}$ 的 $p_{11}$ 中，却在最优控制律 $u^*(t)$ 里神奇地消掉了——这说明用矩阵代数硬算比直觉更可靠！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.210",
+        "pdfPage": 219,
+        "itemRef": "例8-14"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch08_ex_guide814_lqr",
+        "verified": true
+      },
+      "finalAnswer": "$\\boldsymbol{P}=\\begin{bmatrix}\\sqrt{a+2}-b & 1\\\\1 & \\sqrt{a+2}\\end{bmatrix}$，$u^*(t)=-x_1(t)-\\sqrt{a+2}\\,x_2(t)$。"
+    },
+    {
+      "id": "ctrl-ch08-e-08",
+      "section": "8.3 典型例题 · 全维状态观测器与分离原理综合",
+      "kind": "example",
+      "title": "【例 8-15 & 例 8-16】全维观测器双解法 & 带观测器的状态反馈复合设计",
+      "examWeight": "core",
+      "problem": "①（例 8-15）已知 $\\boldsymbol{A}=\\begin{bmatrix}1&3\\\\0&-1\\end{bmatrix},\\;\\boldsymbol{b}=\\begin{bmatrix}0\\\\1\\end{bmatrix},\\;\\boldsymbol{c}=[1\\;1]$，设计极点在 $-2,-2$ 的全维状态观测器。\n②（例 8-16）已知 $\\boldsymbol{A}=\\begin{bmatrix}0&0\\\\1&-6\\end{bmatrix},\\;\\boldsymbol{b}=\\begin{bmatrix}1\\\\0\\end{bmatrix},\\;\\boldsymbol{c}=[0\\;1]$，状态不可直测，分别设计极点均在 $-10,-10$ 的状态反馈阵 $\\boldsymbol{K}$ 与全维观测器 $\\boldsymbol{H}$。",
+      "figureSvg": "<svg role='img' viewBox='0 0 430 132' xmlns='http://www.w3.org/2000/svg'><title>例8-16带状态观测器的状态反馈状态变量图（仿辅导书图8-8）</title><defs><marker id='a82' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='10' y1='26' x2='52' y2='26' stroke='#334155' stroke-width='1.3' marker-end='url(#a82)'/><text x='12' y='20' font-size='9.5' fill='#141824'>v</text><circle cx='58' cy='26' r='5' fill='#fff' stroke='#334155' stroke-width='1.3'/><line x1='63' y1='26' x2='152' y2='26' stroke='#334155' stroke-width='1.3' marker-end='url(#a82)'/><text x='98' y='20' font-size='9.5' fill='#141824'>u</text><rect x='154' y='15' width='30' height='22' rx='3' fill='#eff6ff' stroke='#2744a8' stroke-width='1.3'/><text x='161' y='30' font-size='9.5' fill='#1e3a8a'>1/s</text><line x1='184' y1='26' x2='244' y2='26' stroke='#334155' stroke-width='1.3' marker-end='url(#a82)'/><text x='204' y='20' font-size='9' fill='#1e3a8a'>x₁</text><circle cx='250' cy='26' r='5' fill='#fff' stroke='#334155' stroke-width='1.3'/><line x1='255' y1='26' x2='284' y2='26' stroke='#334155' stroke-width='1.3' marker-end='url(#a82)'/><rect x='286' y='15' width='30' height='22' rx='3' fill='#eff6ff' stroke='#2744a8' stroke-width='1.3'/><text x='293' y='30' font-size='9.5' fill='#1e3a8a'>1/s</text><line x1='316' y1='26' x2='408' y2='26' stroke='#334155' stroke-width='1.3' marker-end='url(#a82)'/><text x='352' y='20' font-size='9' fill='#1e3a8a'>x₂ = y</text><rect x='272' y='44' width='28' height='16' rx='2' fill='#f8fafc' stroke='#64748b' stroke-width='1'/><text x='280' y='56' font-size='8.5' fill='#334155'>-6</text><polyline points='336,26 336,52 300,52' fill='none' stroke='#64748b' stroke-width='1.1'/><polyline points='272,52 250,52 250,31' fill='none' stroke='#64748b' stroke-width='1.1' marker-end='url(#a82)'/><rect x='110' y='66' width='256' height='58' rx='5' fill='#ecfdf5' stroke='#0b6e4f' stroke-width='1.2' stroke-dasharray='4 3'/><text x='118' y='80' font-size='9' fill='#065f46' font-weight='700'>全维观测器：H=[100, 14]ᵀ → 极点 (-10, -10)</text><text x='118' y='96' font-size='9' fill='#065f46'>x̂̇₁ = u + 100(y - x̂₂),   x̂̇₂ = x̂₁ - 6x̂₂ + 14(y - x̂₂)</text><text x='118' y='113' font-size='9' fill='#9a5800' font-weight='700'>状态反馈：K=[14, 16] → u = v - 14x̂₁ - 16x̂₂</text><polyline points='110,108 58,108 58,31' fill='none' stroke='#b4233c' stroke-width='1.3' marker-end='url(#a82)'/><text x='64' y='42' font-size='10' fill='#b4233c'>−</text><polyline points='384,26 384,88 366,88' fill='none' stroke='#0b6e4f' stroke-width='1.3' marker-end='url(#a82)'/></svg>",
+      "steps": [
+        {
+          "stepTitle": "【① 例 8-15】验能观",
+          "detail": "$\\boldsymbol{Q}_o=\\begin{bmatrix}1&1\\\\1&2\\end{bmatrix}$（满秩 2）。期望多项式 $\\Delta^*(s)=(s+2)^2=s^2+4s+4$。\n- **直接法**：$|s\\boldsymbol{I}-(\\boldsymbol{A}-\\boldsymbol{H}\\boldsymbol{c})|=s^2+(h_1+h_2)s+(h_1+2h_2-1)=s^2+4s+4 \\implies h_1=3,\\;h_2=1$。\n- **能观标准型法**：原 $\\Delta(s)=s^2-1$，$\\boldsymbol{L}=\\begin{bmatrix}0&1\\\\1&0\\end{bmatrix}$，$\\boldsymbol{T}_o^{-1}=\\boldsymbol{L}\\boldsymbol{Q}_o=\\begin{bmatrix}1&2\\\\1&1\\end{bmatrix}\\Rightarrow\\boldsymbol{T}_o=\\begin{bmatrix}-1&2\\\\1&-1\\end{bmatrix}$，故 $\\boldsymbol{H}=\\boldsymbol{T}_o\\begin{bmatrix}4-(-1)\\\\4-0\\end{bmatrix}=\\begin{bmatrix}3\\\\1\\end{bmatrix}$！观测器为 $\\dot{\\hat{\\boldsymbol{x}}}=\\begin{bmatrix}-2&0\\\\-1&-2\\end{bmatrix}\\hat{\\boldsymbol{x}}+\\begin{bmatrix}0\\\\1\\end{bmatrix}u+\\begin{bmatrix}3\\\\1\\end{bmatrix}y$。"
+        },
+        {
+          "stepTitle": "② 例 8-16（分离原理综合）",
+          "detail": "系统完全能控且完全能观（$\\operatorname{rank}\\boldsymbol{Q}_c=\\operatorname{rank}\\boldsymbol{Q}_o=2$），期望多项式均为 $(s+10)^2=s^2+20s+100$：\n1. **状态反馈**：$|s\\boldsymbol{I}-(\\boldsymbol{A}-\\boldsymbol{b}\\boldsymbol{K})|=s^2+(6+k_1)s+(k_2+6k_1)=s^2+20s+100 \\implies \\boldsymbol{K}=[14,\\;16]$；\n2. **状态观测器**：$|s\\boldsymbol{I}-(\\boldsymbol{A}-\\boldsymbol{H}\\boldsymbol{c})|=s^2+(h_2+6)s+h_1=s^2+20s+100 \\implies \\boldsymbol{H}=\\begin{bmatrix}100\\\\14\\end{bmatrix}$；\n3. **复合闭环验算**：由分离原理，4 阶复合闭环特征多项式严格等于 $(s+10)^2(s+10)^2=(s+10)^4$（工程上通常把观测器极点实部选为状态反馈极点的 $2\\sim 5$ 倍，如 $-20\\sim -50$）。"
+        }
+      ],
+      "takeaway": "分离原理复合设计题是 845 压轴常客：第一步先写「检验能控、能观 + 引用分离原理可独立设计」，然后 $\\boldsymbol{K}$ 和 $\\boldsymbol{H}$ 各自 3 行搞定，最后写出完整的观测器方程与控制律 $u=v-\\boldsymbol{K}\\hat{\\boldsymbol{x}}$！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.210-213",
+        "pdfPage": 219,
+        "itemRef": "例8-15 & 例8-16 (图8-6~8-8)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch08_ex_guide816_separation",
+        "verified": true
+      },
+      "finalAnswer": "① $\\boldsymbol{H}=[3,\\;1]^{\\mathrm{T}}$；② $\\boldsymbol{K}=[14,\\;16]$，$\\boldsymbol{H}=[100,\\;14]^{\\mathrm{T}}$，复合闭环 4 极点全在 $-10$。"
+    },
+    {
+      "id": "ctrl-ch08-e-09",
+      "section": "8.3 典型例题 · 离散化能控性与离散归零控制序列",
+      "kind": "example",
+      "title": "【例 8-17 & 例 8-18】谐振子采样周期病理点 $T=\\frac{k\\pi}{\\omega}$ & 离散 3 步状态归零序列",
+      "examWeight": "core",
+      "problem": "①（例 8-17）无阻尼谐振子 $\\boldsymbol{A}=\\begin{bmatrix}0&1\\\\-\\omega^2&0\\end{bmatrix},\\;\\boldsymbol{b}=\\begin{bmatrix}0\\\\1\\end{bmatrix},\\;\\boldsymbol{c}=[1\\;0]$（$\\omega>0$），分析采样周期 $T$ 对离散化后能控能观性的影响。\n②（例 8-18）离散系统 $\\boldsymbol{x}(k+1)=\\begin{bmatrix}-1&1&1\\\\1&0&-2\\\\1&0&1\\end{bmatrix}\\boldsymbol{x}(k)+\\begin{bmatrix}0\\\\0\\\\1\\end{bmatrix}u(k)$，初态 $\\boldsymbol{x}(0)=[1,1,1]^{\\mathrm{T}}$，问至少需几步可将初态转移到原点并求控制序列。",
+      "steps": [
+        {
+          "stepTitle": "① 例 8-17",
+          "detail": "原连续系统 $\\operatorname{rank}\\boldsymbol{Q}_c=\\operatorname{rank}\\boldsymbol{Q}_o=2$（完全能控能观）。离散化得：\n$$\\boldsymbol{G}(T)=\\mathrm{e}^{\\boldsymbol{A}T}=\\begin{bmatrix}\\cos\\omega T & \\dfrac{\\sin\\omega T}{\\omega} \\\\[6pt] -\\omega\\sin\\omega T & \\cos\\omega T\\end{bmatrix},\\qquad \\boldsymbol{H}(T)=\\int_0^T \\mathrm{e}^{\\boldsymbol{A}t}\\boldsymbol{b}\\,\\mathrm{d}t=\\begin{bmatrix}\\dfrac{1-\\cos\\omega T}{\\omega^2} \\\\[6pt] \\dfrac{\\sin\\omega T}{\\omega}\\end{bmatrix}$$\n计算离散能控、能观矩阵行列式：\n$$|\\boldsymbol{Q}_c| = \\frac{2\\sin\\omega T\\,(\\cos\\omega T - 1)}{\\omega^3},\\qquad |\\boldsymbol{Q}_o| = \\frac{\\sin\\omega T}{\\omega}$$\n当 **$T = \\frac{k\\pi}{\\omega}\\;(k=1,2,\\dots)$** 时 $|\\boldsymbol{Q}_c|=|\\boldsymbol{Q}_o|=0$，离散化后**同时丧失能控与能观性**；当 $T\\ne\\frac{k\\pi}{\\omega}$ 时保持完全能控能观！"
+        },
+        {
+          "stepTitle": "② 例 8-18",
+          "detail": "先算 $\\boldsymbol{Q}_c=[\\boldsymbol{H},\\boldsymbol{G}\\boldsymbol{H},\\boldsymbol{G}^2\\boldsymbol{H}]=\\begin{bmatrix}0&1&-2\\\\0&-2&-1\\\\1&1&2\\end{bmatrix}$（满秩 3，故至多 3 步必能归零）。依次检验 1 步（$\\boldsymbol{H}u(0)=-\\boldsymbol{G}\\boldsymbol{x}(0)$ 无解）与 2 步（$[\\boldsymbol{G}\\boldsymbol{H},\\boldsymbol{H}][u(0),u(1)]^{\\mathrm{T}}=-\\boldsymbol{G}^2\\boldsymbol{x}(0)$ 无解），故**至少需要 3 步**！"
+        },
+        {
+          "stepTitle": "步骤 3",
+          "detail": "用公式法直接解 3 步控制序列（注意矩阵列顺序 $[\\boldsymbol{G}^2\\boldsymbol{H},\\;\\boldsymbol{G}\\boldsymbol{H},\\;\\boldsymbol{H}]$ 与 $[u(0),u(1),u(2)]^{\\mathrm{T}}$ 对应！）：\n$$\\begin{bmatrix}u(0)\\\\u(1)\\\\u(2)\\end{bmatrix} = \\begin{bmatrix}\\boldsymbol{G}^2\\boldsymbol{H} & \\boldsymbol{G}\\boldsymbol{H} & \\boldsymbol{H}\\end{bmatrix}^{-1}\\big(-\\boldsymbol{G}^3\\boldsymbol{x}(0)\\big) = \\begin{bmatrix}-1.2 \\\\ -2.4 \\\\ 1.8\\end{bmatrix}$$"
+        }
+      ],
+      "takeaway": "求离散状态归零序列的公式 $[u(0),\\dots,u(n-1)]^{\\mathrm{T}}=[\\boldsymbol{G}^{n-1}\\boldsymbol{H},\\dots,\\boldsymbol{H}]^{-1}(-\\boldsymbol{G}^n\\boldsymbol{x}(0))$ 极易把 $u(0)$ 和 $u(n-1)$ 顺序写颠倒——牢记 $u(0)$ 乘的总是最高次幂 $\\boldsymbol{G}^{n-1}\\boldsymbol{H}$！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.213-215",
+        "pdfPage": 222,
+        "itemRef": "例8-17 & 例8-18"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch08_ex_guide817_818_disc_ss",
+        "verified": true
+      },
+      "finalAnswer": "① $T=\\frac{k\\pi}{\\omega}\\;(k\\in\\mathbb{N}^*)$ 时丧失能控能观，否则保持；② 至少需 3 步，$[u(0),u(1),u(2)]^{\\mathrm{T}}=[-1.2,\\;-2.4,\\;1.8]^{\\mathrm{T}}$。"
+    }
+  ]
+}

@@ -97,10 +97,23 @@ def validate_subject(subj: str) -> tuple[int, int, list[str]]:
                     errors.append(f"{ctx}: missing {req}")
             check_latex_delimiters(item.get("title", ""), f"{ctx}.title", errors)
 
-            # Check for accidental backtick-dollar mixing in any string field
+            # Check for accidental backtick-dollar mixing or unescaped LaTeX control chars (\f, \b, \t, \r)
+            def scan_bad_chars(val, field_path):
+                if isinstance(val, str):
+                    if "`$" in val or "$`" in val:
+                        errors.append(f"{ctx}.{field_path}: suspicious backtick adjacent to '$' math delimiter")
+                    for ch_code, ch_name in [("\x0c", "\\f (e.g. \\frac)"), ("\x08", "\\b (e.g. \\beta/\\boldsymbol)"), ("\x09", "\\t (e.g. \\tau/\\text)"), ("\x0d", "\\r (e.g. \\right)")]:
+                        if ch_code in val:
+                            errors.append(f"{ctx}.{field_path}: unescaped JSON control char {ch_name}")
+                elif isinstance(val, list):
+                    for i, elem in enumerate(val):
+                        scan_bad_chars(elem, f"{field_path}[{i}]")
+                elif isinstance(val, dict):
+                    for dk, dv in val.items():
+                        scan_bad_chars(dv, f"{field_path}.{dk}")
+
             for k, v in item.items():
-                if isinstance(v, str) and ("`$" in v or "$`" in v):
-                    errors.append(f"{ctx}.{k}: suspicious backtick adjacent to '$' math delimiter")
+                scan_bad_chars(v, k)
 
             # Strict citation enforcement
             src = item.get("source", {})

@@ -1,0 +1,578 @@
+{
+  "chapterId": "ch02",
+  "title": "第 2 章 连续时间控制系统的数学模型",
+  "basicRequirements": {
+    "master": "两种建立系统数学模型的方法（机理分析法与实验辨识法）；三种数学模型表现形式（微分方程、状态方程与传递函数）各自的建模方法及相互转换；数学模型的图示形式（方块图、信号流图、状态变量图等）；方块图化简方法；梅逊增益公式；典型对象的数学模型。",
+    "understand": "输入输出模型与状态空间模型的区别；状态变量的最小独立性；非线性环节线性化的方法与局限。",
+    "familiar": "分布参数系统数学模型；纯滞后特性与非线性特性；相似系统的概念；常见测量、控制与执行机构环节的数学模型。"
+  },
+  "sourceMeta": "主教材：孙优贤《自动控制原理》(2011第1版) P.19-82 ｜ 辅导书：孙优贤《学习辅导》(2017第1版) P.12-49",
+  "items": [
+    {
+      "id": "ctrl-ch02-f-01",
+      "section": "2.2.1 动态系统的微分方程模型",
+      "kind": "formula",
+      "title": "微分方程标准形式与 4 大物理系统基本机理定律（含式 2-8 勘误）",
+      "examWeight": "core",
+      "prompt": "写出线性定常微分方程标准形式，以及电路（R/L/C）、机械（平移/旋转）、液位、传热 4 类系统的基本元件定律：",
+      "formulaLatex": "$$\\begin{aligned} &a_n\\frac{\\mathrm{d}^n y}{\\mathrm{d}t^n}+\\cdots+a_1\\frac{\\mathrm{d}y}{\\mathrm{d}t}+a_0 y = b_m\\frac{\\mathrm{d}^m u}{\\mathrm{d}t^m}+\\cdots+b_1\\frac{\\mathrm{d}u}{\\mathrm{d}t}+b_0 u \\quad (n\\ge m) \\\\ &\\text{电路：} v_R=Ri,\\quad v_L=L\\frac{\\mathrm{d}i}{\\mathrm{d}t},\\quad v_C=\\frac{1}{C}\\int_0^t i\\,\\mathrm{d}\\tau + \\frac{Q_0}{C} \\\\ &\\text{机械：} F_m=m\\frac{\\mathrm{d}^2 y}{\\mathrm{d}t^2},\\; F_k=k(y_c-y_d),\\; F_b=b\\frac{\\mathrm{d}(y_e-y_f)}{\\mathrm{d}t},\\; T_J=J\\frac{\\mathrm{d}^2\\theta}{\\mathrm{d}t^2} \\\\ &\\text{液位/传热：} A\\frac{\\mathrm{d}h}{\\mathrm{d}t}=Q_{\\text{in}}-Q_o\\;(Q_o=\\alpha f\\sqrt{h}\\approx\\frac{h}{R}),\\quad Mc\\frac{\\mathrm{d}T}{\\mathrm{d}t}=\\alpha A(T_i-T) \\end{aligned}$$",
+      "symbols": [
+        { "sym": "$n \\ge m$", "desc": "实际物理系统输出阶次不低于输入阶次（物理可实现性）" },
+        { "sym": "虚短/虚断", "desc": "理想运放核心规律：同相与反相输入端电位相等（$u_+\\approx u_-$），流入输入端电流为零（$i_+\\approx i_-\\approx 0$）" }
+      ],
+      "conditions": "列写标准微分方程时，输出量及其各阶导数放等号左边、输入量放等号右边，均按降阶排列，且方程两端量纲必须一致。",
+      "pitfalls": "【原书勘误】《学习辅导》P.13 式(2-8) 机械旋转力矩末项误印为 $m\\frac{\\mathrm{d}^2\\theta}{\\mathrm{d}t^2}$，正确应为转动惯量 $J\\frac{\\mathrm{d}^2\\theta}{\\mathrm{d}t^2}$！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.12-14",
+        "pdfPage": 21,
+        "itemRef": "式(2-1)~(2-14)",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.19-30"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch02-f-02",
+      "section": "2.2.2 非线性系统线性化方法",
+      "kind": "formula",
+      "title": "基于平衡点泰勒级数展开的非线性环节线性化（单变量 & 多变量）",
+      "examWeight": "core",
+      "prompt": "写出单变量 $y=f(x)$ 与二元非线性函数 $z=f(x_1,x_2)$ 在平衡工作点 $(x_0, y_0)$ 处的切线线性化增量公式：",
+      "formulaLatex": "$$\\begin{aligned} &\\tilde{y} = f(x_0) + f'(x_0)(x-x_0) \\implies \\Delta y \\approx \\left.\\frac{\\mathrm{d}f}{\\mathrm{d}x}\\right|_{x=x_0}\\Delta x \\\\ &\\Delta z \\approx \\left.\\frac{\\partial f}{\\partial x_1}\\right|_0 \\Delta x_1 + \\left.\\frac{\\partial f}{\\partial x_2}\\right|_0 \\Delta x_2 \\\\ &\\text{例（储槽流出量 } Q_{\\text{out}}=\\alpha f\\sqrt{h}\\text{）：}\\; \\Delta Q_{\\text{out}} = \\underbrace{\\frac{1}{2}\\alpha f_0\\sqrt{\\frac{1}{h_0}}}_{1/R}\\Delta h + \\underbrace{\\alpha\\sqrt{h_0}}_{k}\\Delta f \\end{aligned}$$",
+      "symbols": [
+        { "sym": "$(x_0, y_0)$", "desc": "静态平衡工作点（满足稳态导数为零、稳态输入输出相抵消）" },
+        { "sym": "$\\Delta x = x - x_0$", "desc": "相对平衡点的微小偏移增量（省略 $\\Delta$ 时必须牢记变量表示的是增量！）" }
+      ],
+      "conditions": "仅在**平衡工作点的小邻域内**、且非线性函数在工作点处**连续可微（存在一阶偏导）**时有效；对继电、死区、间隙等本质不连续非线性无法泰勒线性化。",
+      "pitfalls": "① 线性化后稳态常数项 $Q_{\\text{in}0}=Q_{\\text{out}0}$ 自动抵消，最终得到的是**增量微分方程**！② 【原书勘误】主教材 P.46 式(2-132) 正确推出 $A\\frac{\\mathrm{d}(\\Delta h)}{\\mathrm{d}t}+\\frac{1}{R}\\Delta h=\\Delta Q_{\\text{in}}-k\\Delta f$，但 P.47 末行式(2-132') 误把 $-kf$ 印成了 $+kf$（开大出口阀 $f$ 会使液位下降，必为负号）！",
+      "figureSvg": "<svg role='img' viewBox='0 0 310 175' xmlns='http://www.w3.org/2000/svg'><title>非线性特性在平衡点处的切线线性化示意图（仿图2-1）</title><defs><marker id='a21' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='36' y1='148' x2='285' y2='148' stroke='#334155' stroke-width='1.5' marker-end='url(#a21)'/><line x1='36' y1='154' x2='36' y2='14' stroke='#334155' stroke-width='1.5' marker-end='url(#a21)'/><path d='M36 148 Q 105 70, 268 38' fill='none' stroke='#2744a8' stroke-width='2.3'/><line x1='52' y1='132' x2='245' y2='32' stroke='#b4233c' stroke-width='1.8' stroke-dasharray='5,3'/><circle cx='145' cy='84' r='4' fill='#b4233c'/><line x1='145' y1='84' x2='145' y2='148' stroke='#64748b' stroke-dasharray='3,3'/><line x1='36' y1='84' x2='145' y2='84' stroke='#64748b' stroke-dasharray='3,3'/><rect x='118' y='62' width='54' height='86' fill='#eaf0ff' opacity='0.4'/><text x='280' y='162' font-size='11' fill='#141824' font-style='italic'>x</text><text x='20' y='24' font-size='11' fill='#141824' font-style='italic'>y</text><text x='139' y='163' font-size='11' fill='#141824'>x₀</text><text x='16' y='88' font-size='11' fill='#141824'>y₀</text><text x='124' y='142' font-size='10' fill='#2744a8'>±Δx</text><text x='190' y='28' font-size='11' fill='#b4233c' font-weight='600'>切线斜率 f′(x₀)</text><text x='215' y='60' font-size='11' fill='#2744a8'>y = f(x)</text></svg>",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.14",
+        "pdfPage": 23,
+        "itemRef": "式(2-15)~(2-16) & 图2-1",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.45-47 式(2-124)~(2-140)"
+      },
+      "verification": { "method": "sympy", "testId": "ch02_ex_guide28_tank_linearize", "verified": true }
+    },
+    {
+      "id": "ctrl-ch02-f-03",
+      "section": "2.2.4 动态系统的状态空间模型",
+      "kind": "formula",
+      "title": "线性定常系统状态空间表达式标准型与矢量结构图",
+      "examWeight": "core",
+      "prompt": "写出线性定常多变量（或单变量）系统的状态方程、输出方程标准矩阵形式及各矩阵维数：",
+      "formulaLatex": "$$\\begin{cases} \\dot{\\boldsymbol{x}}(t) = \\boldsymbol{A}\\boldsymbol{x}(t) + \\boldsymbol{B}\\boldsymbol{u}(t) \\quad &\\text{（状态方程，一阶微分方程组）} \\\\ \\boldsymbol{y}(t) = \\boldsymbol{C}\\boldsymbol{x}(t) + \\boldsymbol{D}\\boldsymbol{u}(t) \\quad &\\text{（输出方程，代数方程）} \\end{cases}$$",
+      "symbols": [
+        { "sym": "$\\boldsymbol{x} \\in \\mathbb{R}^n$", "desc": "状态向量（能完全刻画系统运动状态的**最少独立变量**组，$n$ 等于系统阶次）" },
+        { "sym": "$\\boldsymbol{A}_{n\\times n},\\; \\boldsymbol{B}_{n\\times r}$", "desc": "系统矩阵 $\\boldsymbol{A}$ 与输入（控制）矩阵 $\\boldsymbol{B}$（$r$ 为输入个数）" },
+        { "sym": "$\\boldsymbol{C}_{m\\times n},\\; \\boldsymbol{D}_{m\\times r}$", "desc": "输出矩阵 $\\boldsymbol{C}$ 与直接前馈矩阵 $\\boldsymbol{D}$（严格真分式系统通常 $\\boldsymbol{D}=\\boldsymbol{0}$）" }
+      ],
+      "conditions": "对单输入单输出（SISO）系统，$\\boldsymbol{b}$ 为 $n\\times 1$ 列向量、$\\boldsymbol{c}$ 为 $1\\times n$ 行向量、$d$ 为标量；机理建模通常优先选取系统内**独立储能元件**（如电容电压、电感电流、质量块位移与速度）作为状态变量。",
+      "pitfalls": "状态变量不一定必须是物理可测变量（相变量、对角变量均为纯数学量），同一物理系统的状态空间表达**不唯一**；但最小独立状态变量个数 $n$ 唯一。",
+      "figureSvg": "<svg role='img' viewBox='0 0 430 155' xmlns='http://www.w3.org/2000/svg'><title>线性定常系统状态空间矢量结构图（拉氏变换形式，仿主教材图2-20）</title><defs><marker id='a220' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='12' y1='82' x2='58' y2='82' stroke='#334155' stroke-width='1.6' marker-end='url(#a220)'/><rect x='60' y='65' width='46' height='34' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='83' y='86' text-anchor='middle' font-size='13' font-weight='700' fill='#141824'>B</text><line x1='106' y1='82' x2='138' y2='82' stroke='#334155' stroke-width='1.6' marker-end='url(#a220)'/><circle cx='148' cy='82' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='156' y1='82' x2='196' y2='82' stroke='#334155' stroke-width='1.6' marker-end='url(#a220)'/><rect x='198' y='63' width='50' height='38' rx='6' fill='#e7f6f0' stroke='#0b6e4f' stroke-width='1.5'/><text x='223' y='87' text-anchor='middle' font-size='13' font-weight='700' fill='#0b6e4f'>I / s</text><line x1='248' y1='82' x2='290' y2='82' stroke='#334155' stroke-width='1.6' marker-end='url(#a220)'/><rect x='292' y='65' width='46' height='34' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='315' y='86' text-anchor='middle' font-size='13' font-weight='700' fill='#141824'>C</text><line x1='338' y1='82' x2='366' y2='82' stroke='#334155' stroke-width='1.6' marker-end='url(#a220)'/><circle cx='376' cy='82' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='384' y1='82' x2='420' y2='82' stroke='#334155' stroke-width='1.6' marker-end='url(#a220)'/><polyline points='268,82 268,132 246,132' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a220)'/><rect x='198' y='117' width='46' height='30' rx='6' fill='#fef5e5' stroke='#9a5800' stroke-width='1.5'/><text x='221' y='136' text-anchor='middle' font-size='13' font-weight='700' fill='#9a5800'>A</text><polyline points='198,132 148,132 148,92' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a220)'/><polyline points='34,82 34,26 198,26' fill='none' stroke='#6b21a8' stroke-width='1.4' marker-end='url(#a220)'/><rect x='200' y='11' width='46' height='30' rx='6' fill='#f3e8ff' stroke='#6b21a8' stroke-width='1.4'/><text x='223' y='30' text-anchor='middle' font-size='13' font-weight='700' fill='#6b21a8'>D</text><polyline points='246,26 376,26 376,72' fill='none' stroke='#6b21a8' stroke-width='1.4' marker-end='url(#a220)'/><text x='12' y='72' font-size='11' fill='#141824'>U(s)</text><text x='161' y='73' font-size='10' fill='#0b6e4f'>sX(s)</text><text x='255' y='73' font-size='10' fill='#0b6e4f'>X(s)</text><text x='392' y='72' font-size='11' fill='#141824'>Y(s)</text><text x='155' y='98' font-size='11' fill='#9a5800'>+</text><text x='382' y='72' font-size='11' fill='#6b21a8'>+</text></svg>",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.15",
+        "pdfPage": 24,
+        "itemRef": "式(2-17)~(2-19)",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.31-41 & 图2-19~2-20"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch02-f-04",
+      "section": "2.2.5 传递函数与纯滞后环节",
+      "kind": "formula",
+      "title": "传递函数多项式型、零极点型、传递函数矩阵与纯滞后环节",
+      "examWeight": "core",
+      "prompt": "写出零初始条件下单变量传递函数（多项式型与零极点型）、多变量传递函数矩阵及纯滞后环节传递函数：",
+      "formulaLatex": "$$\\begin{aligned} &G(s)=\\frac{Y(s)}{U(s)}=\\frac{b_m s^m+b_{m-1}s^{m-1}+\\cdots+b_1 s+b_0}{a_n s^n+a_{n-1}s^{n-1}+\\cdots+a_1 s+a_0}=K^*\\frac{\\prod_{k=1}^{m}(s-z_k)}{\\prod_{j=1}^{n}(s-p_j)}\\quad (n\\ge m) \\\\ &\\text{多变量：}\\boldsymbol{Y}(s)=\\boldsymbol{G}(s)\\boldsymbol{U}(s),\\qquad \\text{纯滞后：} q_f(t)=q_{\\text{in}}(t-\\tau) \\xleftrightarrow{\\mathcal{L}} G_\\tau(s)=\\mathrm{e}^{-\\tau s} \\end{aligned}$$",
+      "symbols": [
+        { "sym": "$K^* = b_m / a_n$", "desc": "传递系数（根轨迹增益，首 1 标准型常数因子；注意与尾 1 型开环增益 $K_m$ 区分！）" },
+        { "sym": "$z_k,\\; p_j$", "desc": "分子根为零点（复平面用 $\\circ$ 标），分母根为极点（用 $\\times$ 标）" },
+        { "sym": "$\\tau$", "desc": "纯滞后时间（如传输带 $\\tau=l/v$）；一阶加纯滞后为 $\\frac{K\\mathrm{e}^{-\\tau s}}{Ts+1}$" }
+      ],
+      "conditions": "严格限定于**零初始条件**下的**线性定常（LTI）系统**。",
+      "pitfalls": "传递函数 $G(s)$ 的拉氏反变换就是系统的**单位脉冲响应 $g(t)$**，即 $g(t)=\\mathcal{L}^{-1}[G(s)]$；而纯滞后因子 $\\mathrm{e}^{-\\tau s}$ 是超越函数（非有理分式），会使闭环特征方程产生无穷多特征根！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.16",
+        "pdfPage": 25,
+        "itemRef": "式(2-20)~(2-22)",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.42 式(2-114) & P.54 式(2-163)"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch02-f-05",
+      "section": "2.2.6 系统方块图与等效变换",
+      "kind": "formula",
+      "title": "单回路反馈传递函数公式与方块图 10 条等效变换规则",
+      "examWeight": "core",
+      "prompt": "写出单回路负反馈系统的开环、闭环、误差传递函数，以及相加点/分支点前后移动核心口诀：",
+      "formulaLatex": "$$\\begin{aligned} &\\text{开环传函：} G_k(s)=G(s)H(s),\\qquad \\text{闭环传函：} \\Phi(s)=\\frac{Y(s)}{R(s)}=\\frac{G(s)}{1+G(s)H(s)} \\\\ &\\text{误差传函：} \\Phi_e(s)=\\frac{E(s)}{R(s)}=\\frac{1}{1+G(s)H(s)},\\qquad \\text{正反馈分母为 } 1-G(s)H(s) \\\\ &\\text{① 相加点前移（跨过 } G\\text{）：引入支路乘 } \\frac{1}{G}\\quad\\text{② 相加点后移（跨过 } G\\text{）：引入支路乘 } G \\\\ &\\text{③ 分支点前移（跨过 } G\\text{）：引出支路乘 } G\\quad\\text{④ 分支点后移（跨过 } G\\text{）：引出支路乘 } \\frac{1}{G} \\end{aligned}$$",
+      "symbols": [
+        { "sym": "串联 / 并联", "desc": "串联 $G_1 G_2$；并联 $G_1 \\pm G_2$" },
+        { "sym": "非单位反馈化单位反馈", "desc": "$\\frac{G_1}{1+G_1 G_2} = \\frac{1}{G_2}\\cdot\\frac{G_1 G_2}{1+G_1 G_2}$（表 2-1 规则 9）" }
+      ],
+      "conditions": "方块图任何等效变换的唯一铁律：**变换前后对应输入到输出的总信号关系严格保持不变**。",
+      "pitfalls": "两大必记红线：① 相邻相加点可互换、相邻分支点可互换，但**相加点与分支点绝不能直接互换位置**！② 线路负号可越过函数方块移动，但**不能越过相加点和分支点**；③ 考场记忆口诀：「**相加点前除后乘，分支点前乘后除**」（一切以“沿箭头方向让路径总乘积不变”为准，2 秒即可自推绝不背反）！",
+      "figureSvg": "<svg role='img' viewBox='0 0 380 120' xmlns='http://www.w3.org/2000/svg'><title>基本单回路负反馈控制系统方块图（仿图2-2）</title><defs><marker id='a22' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='16' y1='42' x2='68' y2='42' stroke='#334155' stroke-width='1.5' marker-end='url(#a22)'/><circle cx='78' cy='42' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='86' y1='42' x2='152' y2='42' stroke='#334155' stroke-width='1.5' marker-end='url(#a22)'/><rect x='154' y='24' width='76' height='36' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='192' y='46' text-anchor='middle' font-size='13' fill='#141824' font-weight='600'>G(s)</text><line x1='230' y1='42' x2='358' y2='42' stroke='#334155' stroke-width='1.5' marker-end='url(#a22)'/><polyline points='308,42 308,96 232,96' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a22)'/><rect x='154' y='80' width='76' height='32' rx='6' fill='#fef5e5' stroke='#9a5800' stroke-width='1.5'/><text x='192' y='100' text-anchor='middle' font-size='13' fill='#9a5800' font-weight='600'>H(s)</text><polyline points='154,96 78,96 78,52' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a22)'/><text x='20' y='32' font-size='11' fill='#141824'>R(s)</text><text x='102' y='32' font-size='11' fill='#141824'>E(s)</text><text x='324' y='32' font-size='11' fill='#141824'>Y(s)</text><text x='92' y='86' font-size='11' fill='#9a5800'>Z(s)</text><text x='64' y='34' font-size='12' fill='#141824'>+</text><text x='65' y='62' font-size='13' fill='#b4233c'>−</text></svg>",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.16-17",
+        "pdfPage": 25,
+        "itemRef": "图2-2, 式(2-23) & 表2-1",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.55-65"
+      },
+      "verification": { "method": "sympy", "testId": "ch02_ex_guide210_block", "verified": true }
+    },
+    {
+      "id": "ctrl-ch02-f-06",
+      "section": "2.2.7 信号流图与梅逊公式",
+      "kind": "formula",
+      "title": "梅逊（Mason）增益公式（845 必考送分/拉分大杀器）",
+      "examWeight": "core",
+      "prompt": "写出信号流图从源点（输入节点）到阱点（输出节点）的总传递增益梅逊公式及特征式 $\\Delta$ 展开式：",
+      "formulaLatex": "$$\\begin{aligned} &M = \\frac{1}{\\Delta}\\sum_{k=1}^{N} P_k\\Delta_k \\\\ &\\Delta = 1 - \\sum_i L_i + \\sum_{i,j} L_i L_j - \\sum_{l,m,n} L_l L_m L_n + \\cdots \\end{aligned}$$",
+      "symbols": [
+        { "sym": "$P_k$", "desc": "第 $k$ 条**前向通路**增益（自源点到阱点经过任意节点不多于一次）" },
+        { "sym": "$L_i$", "desc": "第 $i$ 个单独**回路**增益（起点即终点且经过其他节点不多于一次）" },
+        { "sym": "$\\sum L_i L_j$", "desc": "所有可能的**两两互不接触**（无公共节点）回路增益乘积之和；三两互不接触前加负号" },
+        { "sym": "$\\Delta_k$", "desc": "第 $k$ 条前向通路余子式：在 $\\Delta$ 中删去所有与 $P_k$ 接触的回路后剩余部分（全接触则 $\\Delta_k=1$）" }
+      ],
+      "conditions": "梅逊公式**只能用于源点（只有输出支路）到阱点（只有输入支路）之间**求总增益！若需对混合节点求增益，必须先串接一条增益为 $1$ 的出支路将其拉成阱点。",
+      "pitfalls": "两大丢分雷区：① 漏掉**两两互不接触回路**（尤其在分母 $\\Delta$ 和余子式 $\\Delta_k$ 中）；② 方块图转信号流图时，反馈号 `−` 必须带进支路增益中，若同一处有两个比较点叠在一起，注意先拆成独立节点再连线！",
+      "figureSvg": "<svg role='img' viewBox='0 0 420 120' xmlns='http://www.w3.org/2000/svg'><title>信号流图基本要素（源点、混合节点、阱点、前向通路与反馈回路，仿图2-3）</title><defs><marker id='a23' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='38' y1='64' x2='110' y2='64' stroke='#2744a8' stroke-width='1.8' marker-end='url(#a23)'/><line x1='122' y1='64' x2='202' y2='64' stroke='#2744a8' stroke-width='1.8' marker-end='url(#a23)'/><line x1='214' y1='64' x2='290' y2='64' stroke='#2744a8' stroke-width='1.8' marker-end='url(#a23)'/><line x1='302' y1='64' x2='376' y2='64' stroke='#2744a8' stroke-width='1.8' marker-end='url(#a23)'/><line x1='208' y1='20' x2='208' y2='54' stroke='#0b6e4f' stroke-width='1.6' marker-end='url(#a23)'/><path d='M206 70 Q 162 112, 118 70' fill='none' stroke='#b4233c' stroke-width='1.6' marker-end='url(#a23)'/><circle cx='32' cy='64' r='5' fill='#fff' stroke='#2744a8' stroke-width='1.8'/><circle cx='116' cy='64' r='5' fill='#fff' stroke='#334155' stroke-width='1.8'/><circle cx='208' cy='64' r='5' fill='#fff' stroke='#334155' stroke-width='1.8'/><circle cx='296' cy='64' r='5' fill='#fff' stroke='#334155' stroke-width='1.8'/><circle cx='382' cy='64' r='5' fill='#fff' stroke='#0b6e4f' stroke-width='1.8'/><circle cx='208' cy='15' r='5' fill='#fff' stroke='#0b6e4f' stroke-width='1.8'/><text x='18' y='88' font-size='10' fill='#2744a8' font-weight='600'>源点 x₁</text><text x='108' y='52' font-size='10' fill='#334155'>x₂</text><text x='218' y='55' font-size='10' fill='#334155'>x₃</text><text x='290' y='52' font-size='10' fill='#334155'>x₄</text><text x='362' y='88' font-size='10' fill='#0b6e4f' font-weight='600'>阱点 x₅</text><text x='218' y='20' font-size='10' fill='#0b6e4f'>输入源点 x₆</text><text x='72' y='56' font-size='11' fill='#2744a8'>a</text><text x='158' y='56' font-size='11' fill='#2744a8'>b</text><text x='250' y='56' font-size='11' fill='#2744a8'>1</text><text x='338' y='56' font-size='11' fill='#2744a8'>2</text><text x='194' y='39' font-size='11' fill='#0b6e4f'>d</text><text x='158' y='105' font-size='11' fill='#b4233c'>回路支路 c</text></svg>",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.18-19",
+        "pdfPage": 27,
+        "itemRef": "图2-3, 表2-2 & 式(2-24)~(2-25)",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.66-70"
+      },
+      "verification": { "method": "sympy", "testId": "ch02_ex_guide211_mason", "verified": true }
+    },
+    {
+      "id": "ctrl-ch02-f-07",
+      "section": "2.2.8 由微分方程导出状态空间模型",
+      "kind": "formula",
+      "title": "高阶微分方程转状态方程（无输入导数相变量法 & 含输入导数 β 递推法）",
+      "examWeight": "core",
+      "prompt": "对首 1 微分方程 $y^{(n)}+a_{n-1}y^{(n-1)}+\\cdots+a_0 y = b_m u^{(m)}+\\cdots+b_0 u$，写出无输入导数及含输入导数（$\\beta_k$ 法）的状态空间矩阵：",
+      "formulaLatex": "$$\\begin{aligned} &\\text{① 无输入导数 } (m=0):\\; x_1=y,\\; x_2=\\dot{y},\\dots, x_n=y^{(n-1)} \\\\ &\\quad \\dot{\\boldsymbol{x}} = \\begin{bmatrix}0 & 1 & \\cdots & 0\\\\ \\vdots & \\vdots & \\ddots & \\vdots\\\\ 0 & 0 & \\cdots & 1\\\\ -a_0 & -a_1 & \\cdots & -a_{n-1}\\end{bmatrix}\\boldsymbol{x} + \\begin{bmatrix}0\\\\ \\vdots\\\\ 0\\\\ b_0\\end{bmatrix}u,\\quad y=\\begin{bmatrix}1 & 0 & \\cdots & 0\\end{bmatrix}\\boldsymbol{x} \\\\ &\\text{② 含输入导数 } (m\\le n,\\;\\text{不足位 } b_k=0): \\\\ &\\quad \\beta_0=b_n,\\quad \\beta_1=b_{n-1}-a_{n-1}\\beta_0,\\quad \\beta_k=b_{n-k}-\\sum_{j=0}^{k-1}a_{n-k+j}\\beta_j \\; (k=1,\\dots,n) \\\\ &\\quad \\boldsymbol{b}=[\\beta_1,\\beta_2,\\dots,\\beta_n]^{\\mathrm{T}},\\quad \\boldsymbol{c}=[1,0,\\dots,0],\\quad d=\\beta_0 \\end{aligned}$$",
+      "symbols": [
+        { "sym": "$a_n = 1$", "desc": "使用前必须先将微分方程最高阶导数系数 $a_n$ 归一化为 $1$！" },
+        { "sym": "$\\beta_0 = b_n$", "desc": "若 $m<n$ 则 $\\beta_0=0$（即 $d=0$）；例 2-20② 中 $m=1, n=4 \\Rightarrow \\beta_0=\\beta_1=\\beta_2=0, \\beta_3=8, \\beta_4=-40$" }
+      ],
+      "conditions": "适用于单输入单输出（SISO）线性定常微分方程；当 $m>0$ 时切不可直接令 $x_1=y, x_2=\\dot y$（会冒出 $\\dot u$ 项），必须用 $\\beta$ 递推法或先化传函再取能控/能观标准型。",
+      "pitfalls": "【原书勘误】《学习辅导》P.20 式(2-27) 输入向量末元素把 $b_0$ 简印成了 $b$，实际应对应式(2-26)右端常数系数 $b_0$。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.19-20",
+        "pdfPage": 28,
+        "itemRef": "式(2-26)~(2-32)",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.70-73"
+      },
+      "verification": { "method": "sympy", "testId": "ch02_ex_guide220_four_ss", "verified": true }
+    },
+    {
+      "id": "ctrl-ch02-f-08",
+      "section": "2.2.8 传递函数的三大最小实现标准型",
+      "kind": "formula",
+      "title": "能控标准型、能观标准型（对偶关系）与正则（对角）标准型",
+      "examWeight": "core",
+      "prompt": "已知首 1 传递函数 $G(s)=\\frac{b_n s^n+b_{n-1}s^{n-1}+\\cdots+b_0}{s^n+a_{n-1}s^{n-1}+\\cdots+a_0}$，写出能控标准型、能观标准型对偶公式及单极点正则对角实现：",
+      "formulaLatex": "$$\\begin{aligned} &\\text{① 能控标准型：}\\; \\boldsymbol{A}_c=\\begin{bmatrix}0 & 1 & \\cdots & 0\\\\ \\vdots & \\vdots & \\ddots & \\vdots\\\\ 0 & 0 & \\cdots & 1\\\\ -a_0 & -a_1 & \\cdots & -a_{n-1}\\end{bmatrix},\\; \\boldsymbol{b}_c=\\begin{bmatrix}0\\\\ \\vdots\\\\ 0\\\\ 1\\end{bmatrix},\\; \\boldsymbol{c}_c=\\begin{bmatrix}b_0-a_0 b_n & \\cdots & b_{n-1}-a_{n-1}b_n\\end{bmatrix},\\; d=b_n \\\\ &\\text{② 能观标准型（对偶关系）：}\\; \\boldsymbol{A}_o=\\boldsymbol{A}_c^{\\mathrm{T}},\\quad \\boldsymbol{b}_o=\\boldsymbol{c}_c^{\\mathrm{T}},\\quad \\boldsymbol{c}_o=\\boldsymbol{b}_c^{\\mathrm{T}},\\quad d=b_n \\\\ &\\text{③ 正则（对角）型（互异单极点 } G(s)=b_n+\\sum_{i=1}^{n}\\frac{c_i}{s-\\lambda_i}\\text{）：} \\\\ &\\quad \\boldsymbol{A}=\\mathrm{diag}(\\lambda_1,\\lambda_2,\\dots,\\lambda_n),\\quad \\boldsymbol{b}=[1,1,\\dots,1]^{\\mathrm{T}},\\quad \\boldsymbol{c}=[c_1,c_2,\\dots,c_n],\\quad d=b_n \\end{aligned}$$",
+      "symbols": [
+        { "sym": "$b_n = 0$", "desc": "严格真分式（$n>m$）时直接简化为 $\\boldsymbol{c}_c=[b_0, b_1, \\dots, b_{n-1}],\\; d=0$" },
+        { "sym": "对偶关系", "desc": "只背熟能控标准型，用 $\\boldsymbol{A}_o=\\boldsymbol{A}_c^{\\mathrm{T}},\\; \\boldsymbol{b}_o=\\boldsymbol{c}_c^{\\mathrm{T}},\\; \\boldsymbol{c}_o=\\boldsymbol{b}_c^{\\mathrm{T}}$ 秒得能观标准型！" }
+      ],
+      "conditions": "分子分母无公因子（不可约）时，上述三种 $n$ 维实现均为**最小实现**；正则型对角阵仅适用于**无重极点**情况，若有重极点则 $\\boldsymbol{A}$ 为含对应约当（Jordan）块的块对角阵。",
+      "pitfalls": "超级易错点：能控型 $\\boldsymbol{c}_c$ 是按**升幂**排列 $[b_0, b_1, \\dots, b_{n-1}]$，且 $\\boldsymbol{A}_c$ 最后一行是**负的升幂** $[-a_0, -a_1, \\dots, -a_{n-1}]$；千万别把 $b_0$ 和 $b_{n-1}$ 写倒序！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.21-22",
+        "pdfPage": 30,
+        "itemRef": "式(2-33)~(2-37)",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.77-81"
+      },
+      "verification": { "method": "sympy", "testId": "ch02_ex_guide219_realizations", "verified": true }
+    },
+    {
+      "id": "ctrl-ch02-f-09",
+      "section": "2.2.8 状态空间转传递函数（矩阵）",
+      "kind": "formula",
+      "title": "由状态空间表达式求传递函数（矩阵）公式",
+      "examWeight": "core",
+      "prompt": "已知 $\\dot{\\boldsymbol{x}}=\\boldsymbol{A}\\boldsymbol{x}+\\boldsymbol{B}\\boldsymbol{u},\\;\\boldsymbol{y}=\\boldsymbol{C}\\boldsymbol{x}+\\boldsymbol{D}\\boldsymbol{u}$，写出零初始条件下的传递函数（矩阵）计算式：",
+      "formulaLatex": "$$\\boldsymbol{G}(s) = \\boldsymbol{C}(s\\boldsymbol{I}-\\boldsymbol{A})^{-1}\\boldsymbol{B} + \\boldsymbol{D} = \\frac{\\boldsymbol{C}\\,\\mathrm{adj}(s\\boldsymbol{I}-\\boldsymbol{A})\\boldsymbol{B} + |s\\boldsymbol{I}-\\boldsymbol{A}|\\boldsymbol{D}}{|s\\boldsymbol{I}-\\boldsymbol{A}|}$$",
+      "symbols": [
+        { "sym": "$|s\\boldsymbol{I}-\\boldsymbol{A}|$", "desc": "系统矩阵 $\\boldsymbol{A}$ 的特征多项式（其根即系统特征值）" },
+        { "sym": "$\\mathrm{adj}(s\\boldsymbol{I}-\\boldsymbol{A})$", "desc": "$(s\\boldsymbol{I}-\\boldsymbol{A})$ 的伴随矩阵（代数余子式矩阵的转置！）" }
+      ],
+      "conditions": "在零初始条件下成立；若 $G(s)$ 分子与分母存在零极点对消，则传函阶次低于状态空间维数 $n$（说明系统非最小实现，存在不能控或不能观模态，详见第 8 章）。",
+      "pitfalls": "求伴随矩阵 $\\mathrm{adj}(s\\boldsymbol{I}-\\boldsymbol{A})$ 最容易犯两个低级错误：① 忘记**转置**；② 忘记代数余子式的符号 $(-1)^{i+j}$！考场算完后可代一个具体数（如 $s=0$ 或 $s=1$）用 $(s\\boldsymbol{I}-\\boldsymbol{A})\\cdot\\mathrm{adj}=|s\\boldsymbol{I}-\\boldsymbol{A}|\\boldsymbol{I}$ 迅速验算。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.22",
+        "pdfPage": 31,
+        "itemRef": "式(2-38)~(2-40)",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.73-75 式(2-195)"
+      },
+      "verification": { "method": "sympy", "testId": "ch02_ex_main239_mimo_invariance", "verified": true }
+    },
+    {
+      "id": "ctrl-ch02-f-10",
+      "section": "2.2.9 状态线性变换与不变性",
+      "kind": "formula",
+      "title": "非奇异状态线性变换及特征值/传递函数不变性（含 P.22 重大勘误）",
+      "examWeight": "core",
+      "prompt": "作非奇异线性变换 $\\boldsymbol{x}=\\boldsymbol{T}\\bar{\\boldsymbol{x}}$（即 $\\bar{\\boldsymbol{x}}=\\boldsymbol{T}^{-1}\\boldsymbol{x}$），写出变换后的新状态空间矩阵与三大不变量：",
+      "formulaLatex": "$$\\begin{aligned} &\\bar{\\boldsymbol{A}} = \\boldsymbol{T}^{-1}\\boldsymbol{A}\\boldsymbol{T},\\qquad \\bar{\\boldsymbol{B}} = \\boldsymbol{T}^{-1}\\boldsymbol{B},\\qquad \\bar{\\boldsymbol{C}} = \\boldsymbol{C}\\boldsymbol{T},\\qquad \\bar{\\boldsymbol{D}} = \\boldsymbol{D} \\\\ &\\text{不变量：}\\; |s\\boldsymbol{I}-\\bar{\\boldsymbol{A}}|=|s\\boldsymbol{I}-\\boldsymbol{A}|,\\quad \\lambda(\\bar{\\boldsymbol{A}})=\\lambda(\\boldsymbol{A}),\\quad \\bar{\\boldsymbol{C}}(s\\boldsymbol{I}-\\bar{\\boldsymbol{A}})^{-1}\\bar{\\boldsymbol{B}}+\\bar{\\boldsymbol{D}}=\\boldsymbol{G}(s) \\end{aligned}$$",
+      "symbols": [
+        { "sym": "$\\boldsymbol{T}$", "desc": "任意 $n\\times n$ 非奇异（可逆）常数变换矩阵，$|\\boldsymbol{T}|\\ne 0$" },
+        { "sym": "特征向量变化", "desc": "若 $\\boldsymbol{A}\\boldsymbol{v}=\\lambda\\boldsymbol{v}$，则 $\\bar{\\boldsymbol{A}}(\\boldsymbol{T}^{-1}\\boldsymbol{v})=\\lambda(\\boldsymbol{T}^{-1}\\boldsymbol{v})$，即新特征向量变为 $\\bar{\\boldsymbol{v}}=\\boldsymbol{T}^{-1}\\boldsymbol{v}$！" }
+      ],
+      "conditions": "变换矩阵 $\\boldsymbol{T}$ 必须为非奇异定常矩阵；变换前后两状态空间模型称为**代数等价**。",
+      "pitfalls": "【原书重大勘误】《学习辅导》P.22 第 2.2.9 节误写为「经过状态变换后，系统的特征方程、**特征向量**、传递函数都不会发生改变」！严格应为**特征方程、特征值、传递函数**不变（对照《自动控制原理》主教材 P.76 标题与证明），而**特征向量会按 $\\bar{\\boldsymbol{v}}=\\boldsymbol{T}^{-1}\\boldsymbol{v}$ 改变**！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.75-76",
+        "pdfPage": 84,
+        "itemRef": "式(2-197)~(2-204)",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.22 2.2.9（已勘误）"
+      },
+      "verification": { "method": "sympy", "testId": "ch02_ex_main239_mimo_invariance", "verified": true }
+    },
+    {
+      "id": "ctrl-ch02-c-01",
+      "section": "2.2.5 传递函数性质与局限",
+      "kind": "conclusion",
+      "title": "传递函数的 4 大核心性质与局限性（简答/判断常考）",
+      "examWeight": "core",
+      "summary": "1. **固有外部描述**：$G(s)$ 只取决于系统自身结构与参数，与输入信号具体形式无关；但不反映系统内部变量变化信息（不能揭示内部不稳却被零极点对消的模态）。\n2. **零初始条件的两层含义**：① 输入在 $t\\ge 0$ 才施加（$t=0^-$ 时输入及其各阶导数为零）；② 施加前系统处于静态平衡（$t=0^-$ 时输出及其各阶导数为零）。\n3. **物理可实现性与实系数**：分母阶次 $n\\ge$ 分子阶次 $m$，且所有多项式系数均为实数（故复极/零点必共轭成对出现）。\n4. **单值对应脉冲响应**：$g(t)=\\mathcal{L}^{-1}[G(s)]$，二者包含完全相同的外部动态信息。",
+      "conditions": "仅适用于线性定常系统；非零初始条件需改用完整拉氏变换或状态空间模型求解。",
+      "pitfalls": "切忌把“传递函数与输入无关”误解成“系统响应 $Y(s)$ 与输入无关”——$G(s)$ 与输入无关，但输出 $Y(s)=G(s)U(s)$ 显然依赖输入。",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.54",
+        "pdfPage": 63,
+        "itemRef": "2.5.2 传递函数的性质 ①~④",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.16"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch02-c-02",
+      "section": "2.2.3 相似系统与典型一阶对象",
+      "kind": "conclusion",
+      "title": "相似系统概念与 5 大物理一阶惯性对象统一模型（例 2-1 精华）",
+      "examWeight": "core",
+      "summary": "若不同物理系统的微分方程具有相同数学形式，称为**相似系统**。例 2-1 中 5 种完全不同的物理过程均可统一为一阶惯性模型 $T\\dot{y}+y=Kx\\;\\Leftrightarrow\\;G(s)=\\frac{K}{Ts+1}$：\n- **RC 电路**：$T=RC,\\; K=1$；\n- **弹簧-阻尼器**：$T=\\frac{b}{k},\\; K=1$；\n- **线性化液体储槽**：$T=RA,\\; K=R$；\n- **水银温度计**：$T=\\frac{Mc}{\\alpha F},\\; K=1$；\n- **恒流量溶液制备槽**：$T=\\frac{V}{q},\\; K=\\frac{1}{q}$。",
+      "conditions": "上述 5 类对象均在忽略次要分布参数且液位阻力已线性化前提下成立。",
+      "pitfalls": "注意分辨各物理量对应关系（相似量）：电路中电阻 $R$ 类比机械阻尼 $b$ 与液阻 $R$，电容 $C$ 类比储槽截面积 $A$ 与热容 $Mc$。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.14-15 & P.23-26",
+        "pdfPage": 23,
+        "itemRef": "2.2.3 & 例2-1 式(2-41)~(2-46')",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.26-27"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch02-c-03",
+      "section": "2.2.7 方块图与梅逊公式实操铁律",
+      "kind": "conclusion",
+      "title": "复杂系统求传递函数的 3 种互验方法与梅逊公式防丢环铁律",
+      "examWeight": "core",
+      "summary": "845 考场遇到复杂多环结构图，三大方法可互为验算：\n1. **梅逊增益公式（最快最稳）**：先把方块图规范化为信号流图（每个比较点/引出点依次标节点），按“① 找全部前向通路 $P_k$ → ② 按节点由左到右穷举所有单回路 $L_i$ → ③ 查两两/三三互不接触回路 → ④ 逐条写余子式 $\\Delta_k$”四步走；\n2. **方块图等效化简**：先消无交叉内环，再用「相加点前除后乘、分支点前乘后除」拆解交叉环；\n3. **中间变量代数消元法**（见例 2-13 方法三）：当环路特别纠缠怕漏回路时，直接给关键节点设变量 $x_1, x_2$ 列线性方程组消元，100% 不会漏项！",
+      "conditions": "若题目明确要求“用方块图化简法”或“用梅逊公式”，必须按题干指定方法展示过程，但草稿纸上强烈建议用另一种方法 1 分钟反查验证！",
+      "pitfalls": "方框图求非输出端信号（如误差传函 $E(s)/R(s)$）时，可把 $E(s)$ 当成输出节点直接再套一次梅逊公式——分母特征式 $\\Delta$ **完全相同**，只需重算从 $R$ 到 $E$ 的前向通路与余子式即可！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.17-19 & P.40-42",
+        "pdfPage": 26,
+        "itemRef": "2.2.6~2.2.7 & 例2-13 三法对比"
+      },
+      "verification": { "method": "sympy", "testId": "ch02_ex_guide213_mason", "verified": true }
+    },
+    {
+      "id": "ctrl-ch02-c-04",
+      "section": "2.2.8 数学模型互转核心规律",
+      "kind": "conclusion",
+      "title": "微分方程、传递函数与状态空间三模型关系及最小实现结论",
+      "examWeight": "core",
+      "summary": "- **微分方程 $\\leftrightarrow$ 传递函数**：零初始条件下经拉氏变换/反变换一一对应；\n- **状态空间 $\\to$ 传递函数**：唯一确定（$\\boldsymbol{G}(s)=\\boldsymbol{C}(s\\boldsymbol{I}-\\boldsymbol{A})^{-1}\\boldsymbol{B}+\\boldsymbol{D}$）；\n- **传递函数 $\\to$ 状态空间（实现问题）**：**不唯一**（选取不同状态变量可得能控型、能观型、对角型或物理变量型，它们之间通过非奇异线性变换代数等价）；\n- **最小实现**：不存在零极点对消（既能控又能观）的实现维数最小，等于传递函数不可约分母的阶次 $n$。",
+      "conditions": "状态空间是内部+外部完整描述，信息量严格大于仅作外部描述的传递函数。",
+      "pitfalls": "从同一系统方块图不同位置取积分器输出画状态变量图，得到的 $(\\boldsymbol{A},\\boldsymbol{B},\\boldsymbol{C})$ 外观迥异，但化简后的 $\\boldsymbol{C}(s\\boldsymbol{I}-\\boldsymbol{A})^{-1}\\boldsymbol{B}$ 必须与原闭环传递函数**完全一致**（极好的考场自查手段）！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.21 & P.23 & P.47",
+        "pdfPage": 30,
+        "itemRef": "2.2.8(3) & 知识脉络图"
+      },
+      "verification": { "method": "sympy", "testId": "ch02_ex_guide219_realizations", "verified": true }
+    },
+    {
+      "id": "ctrl-ch02-c-05",
+      "section": "2.3 特殊环节建模要点",
+      "kind": "conclusion",
+      "title": "特殊环节认知：纯滞后、分布参数与高阶对象拐点近似",
+      "examWeight": "extended",
+      "summary": "1. **纯滞后环节**：输出波形与无滞后时完全一致但整体后移 $\\tau$，传函 $\\mathrm{e}^{-\\tau s}$ 使闭环稳定性显著恶化；\n2. **分布参数系统**：物理量不仅随时间变化还随空间位置变化（如厚壁换热器温度场），需用**偏微分方程**描述（对比集中参数用常微分方程）；\n3. **高阶对象近似**：多容高阶阶跃响应初始段平缓呈 S 形拐点，工程上常在拐点作切线近似为「一阶加纯滞后」模型（与第 3 章实验建模呼应）。",
+      "conditions": "教材对纯滞后、分布参数列为「了解」层次，重点掌握概念区别与滞后定理 $\\mathcal{L}[f(t-\\tau)]=\\mathrm{e}^{-\\tau s}F(s)$。",
+      "pitfalls": "对含纯滞后微分方程 $T\\dot{\\theta}_a+\\theta_a=KW(t-\\tau)$ 取拉氏变换时，切记把延迟项写成 $K\\mathrm{e}^{-\\tau s}W(s)$。",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.41-45",
+        "pdfPage": 50,
+        "itemRef": "2.3 节 一~四 & 图2-21~2-26"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch02-e-01",
+      "section": "2.3 典型例题精选（电路建模）",
+      "kind": "example",
+      "title": "例 2-2：无源 RC 桥 T 型网络建模（节点法 + 结构图双解）",
+      "examWeight": "core",
+      "problem": "无源 RC 网络中，$R_1$ 与 $R_2$ 串联接于输入 $U_i$ 与输出 $U_o$ 之间，中点 $A$ 经电容 $C_2$ 接地，同时电容 $C_1$ 跨接在 $U_i$ 与 $U_o$（节点 $B$）两端。① 求微分方程与传递函数 $U_o(s)/U_i(s)$；② 讨论参数选择是否影响电路绝对稳定性。",
+      "figureSvg": "<svg role='img' viewBox='0 0 380 145' xmlns='http://www.w3.org/2000/svg'><title>例2-2 RC 无源桥T网络电路图（仿图2-9）</title><line x1='35' y1='72' x2='96' y2='72' stroke='#334155' stroke-width='1.6'/><rect x='96' y='62' width='52' height='20' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='122' y='76' text-anchor='middle' font-size='11' fill='#141824'>R₁</text><line x1='148' y1='72' x2='220' y2='72' stroke='#334155' stroke-width='1.6'/><rect x='220' y='62' width='52' height='20' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='246' y='76' text-anchor='middle' font-size='11' fill='#141824'>R₂</text><line x1='272' y1='72' x2='342' y2='72' stroke='#334155' stroke-width='1.6'/><polyline points='66,72 66,26 176,26' fill='none' stroke='#334155' stroke-width='1.5'/><line x1='176' y1='14' x2='176' y2='38' stroke='#0b6e4f' stroke-width='2.2'/><line x1='186' y1='14' x2='186' y2='38' stroke='#0b6e4f' stroke-width='2.2'/><polyline points='186,26 306,26 306,72' fill='none' stroke='#334155' stroke-width='1.5'/><line x1='184' y1='72' x2='184' y2='96' stroke='#334155' stroke-width='1.5'/><line x1='170' y1='96' x2='198' y2='96' stroke='#0b6e4f' stroke-width='2.2'/><line x1='170' y1='106' x2='198' y2='106' stroke='#0b6e4f' stroke-width='2.2'/><line x1='184' y1='106' x2='184' y2='128' stroke='#334155' stroke-width='1.5'/><line x1='35' y1='128' x2='342' y2='128' stroke='#334155' stroke-width='1.6'/><circle cx='35' cy='72' r='3.5' fill='#fff' stroke='#334155' stroke-width='1.5'/><circle cx='35' cy='128' r='3.5' fill='#fff' stroke='#334155' stroke-width='1.5'/><circle cx='342' cy='72' r='3.5' fill='#fff' stroke='#334155' stroke-width='1.5'/><circle cx='342' cy='128' r='3.5' fill='#fff' stroke='#334155' stroke-width='1.5'/><circle cx='184' cy='72' r='3' fill='#b4233c'/><circle cx='306' cy='72' r='3' fill='#b4233c'/><text x='174' y='12' font-size='11' fill='#0b6e4f'>C₁</text><text x='204' y='106' font-size='11' fill='#0b6e4f'>C₂</text><text x='189' y='65' font-size='11' fill='#b4233c' font-weight='700'>A</text><text x='312' y='65' font-size='11' fill='#b4233c' font-weight='700'>B</text><text x='16' y='104' font-size='12' fill='#141824'>Uᵢ</text><text x='348' y='104' font-size='12' fill='#141824'>Uₒ</text></svg>",
+      "steps": [
+        { "stepTitle": "1. 复频域节点电流法列方程（最简最快）", "detail": "对节点 $A$：$\\frac{U_i-U_{C2}}{R_1}+\\frac{U_o-U_{C2}}{R_2}=C_2 s U_{C2}$；\n对节点 $B$（空载 $i_{\\text{out}}=0$）：$C_1 s(U_i-U_o)=\\frac{U_o-U_{C2}}{R_2}$。" },
+        { "stepTitle": "2. 消去中间变量 $U_{C2}$ 得传递函数与微分方程", "detail": "由节点 $B$ 得 $U_{C2}=U_o-R_2 C_1 s(U_i-U_o)$，代入节点 $A$ 整理得：\n$$\\frac{U_o(s)}{U_i(s)}=\\frac{R_1R_2C_1C_2s^2+(R_1+R_2)C_1s+1}{R_1R_2C_1C_2s^2+(R_1C_1+R_1C_2+R_2C_1)s+1}$$\n反变换立得微分方程：$R_1R_2C_1C_2\\ddot{u}_o+(R_1C_1+R_1C_2+R_2C_1)\\dot{u}_o+u_o=R_1R_2C_1C_2\\ddot{u}_i+(R_1+R_2)C_1\\dot{u}_i+u_i$。" },
+        { "stepTitle": "3. 讨论绝对稳定性", "detail": "因所有无源元件 $R_1,R_2,C_1,C_2>0$，二阶特征多项式系数全正，无论元件参数如何选取，电路始终绝对稳定！" }
+      ],
+      "finalAnswer": "$\\frac{U_o(s)}{U_i(s)}=\\frac{R_1R_2C_1C_2s^2+(R_1+R_2)C_1s+1}{R_1R_2C_1C_2s^2+(R_1C_1+R_1C_2+R_2C_1)s+1}$；参数不影响绝对稳定性。",
+      "takeaway": "求无源复杂电路微分方程时，**直接在复频域用运算阻抗 $R, Ls, \\frac{1}{Cs}$ 联立求传函再反写微分方程**，比时域消高阶导数快 3 倍且零出错！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.26-28",
+        "pdfPage": 35,
+        "itemRef": "例2-2 (图2-9~2-10, 式2-47~2-50)"
+      },
+      "verification": { "method": "sympy", "testId": "ch02_ex_guide22_rc_network", "verified": true }
+    },
+    {
+      "id": "ctrl-ch02-e-02",
+      "section": "2.3 典型例题精选（有源运放电路）",
+      "kind": "example",
+      "title": "例 2-3：运算放大器有源 PID 校正网络建模（含式 2-59 勘误）",
+      "examWeight": "core",
+      "problem": "理想反相运算放大器输入端串接电阻 $R_0$ 接输入 $u_1(t)$；反馈支路为 T 型网络：反相输入端经串联的 $R_1, C_1$ 到中点 $u_3(t)$，中点 $u_3(t)$ 经电容 $C_2$ 接地并经电阻 $R_2$ 接输出 $u_2(t)$。① 求传递函数与微分方程；② 说明其在校正中的作用。",
+      "steps": [
+        { "stepTitle": "1. 利用“虚短”“虚断”列复频域方程", "detail": "因同相端接地故反相端虚地（$u_-=0$），且流入运放电流为 $0$，于是：\n$U_1(s)=R_0 I_1(s)$；$U_3(s)=-\\left(R_1+\\frac{1}{C_1 s}\\right)I_1(s)$；$I_1(s)-I_2(s)=C_2 s U_3(s)$；$U_3(s)-R_2 I_2(s)=U_2(s)$。" },
+        { "stepTitle": "2. 消元求传函并写出正确微分方程（含勘误）", "detail": "消去 $I_1, I_2, U_3$ 得：\n$$\\frac{U_2(s)}{U_1(s)} = -\\frac{R_1R_2C_1C_2 s^2 + (R_2C_2+R_2C_1+R_1C_1)s + 1}{R_0C_1 s}$$\n整理为微分方程：$R_0 C_1\\frac{\\mathrm{d}u_2}{\\mathrm{d}t} = -\\left[R_1R_2C_1C_2\\frac{\\mathrm{d}^2 u_1}{\\mathrm{d}t^2} + (R_2C_2+R_2C_1+R_1C_1)\\frac{\\mathrm{d}u_1}{\\mathrm{d}t} + u_1(t)\\right]$。\n【原书勘误】原书 P.29 式(2-59) 右端二阶导项误印为 $\\frac{\\mathrm{d}^2 u_2(t)}{\\mathrm{d}t^2}$，正确应为输入信号 $\\frac{\\mathrm{d}^2 u_1(t)}{\\mathrm{d}t^2}$！" },
+        { "stepTitle": "3. 校正作用分析", "detail": "分子判别式可控，可写成 $G(s)=-K\\frac{(T_1 s+1)(T_2 s+1)}{s}$，相当于 **PID 控制器**：分母积分环节提高系统型别与稳态精度，两个负实零点改善动态品质。" }
+      ],
+      "finalAnswer": "$\\frac{U_2(s)}{U_1(s)} = -\\frac{R_1R_2C_1C_2 s^2 + (R_2C_2+R_2C_1+R_1C_1)s + 1}{R_0C_1 s}$；可作串联 PID 校正器。",
+      "takeaway": "反相运放单回路速算公式：$G(s)=-Z_f(s)/Z_i(s)$；遇到 T 型反馈网络只需用星-三角变换或直接列 4 个节点方程即可。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.28-29",
+        "pdfPage": 37,
+        "itemRef": "例2-3 (图2-11~2-12, 式2-57~2-60)"
+      },
+      "verification": { "method": "sympy", "testId": "ch02_ex_guide23_opamp_pid", "verified": true }
+    },
+    {
+      "id": "ctrl-ch02-e-03",
+      "section": "2.3 典型例题精选（机械系统）",
+      "kind": "example",
+      "title": "例 2-5 & 例 2-6：机械杠杆双质量系统与运动小车弹簧阻尼建模（含 P.31 勘误）",
+      "examWeight": "core",
+      "problem": "①【例 2-5】轻质刚性杠杆左端铰接，距支点 $a$ 处固连质量 $M_1$ 并经弹簧 $k_2$ 悬挂质量 $M_2$（竖直位移 $x$），距支点 $a+b$ 处接上端固定弹簧 $k_1$，距支点 $a+b+c$ 处施加向下外力 $f$（忽略摩擦），求 $X(s)/F(s)$；\n②【例 2-6】小车相对地面水平位移为 $u(t)$，车上质量块 $m$ 经弹簧 $k$ 与阻尼器 $B$ 连至车厢壁，质量块相对地面位移为 $y(t)$，求 $Y(s)/U(s)$。",
+      "figureSvg": "<svg role='img' viewBox='0 0 380 135' xmlns='http://www.w3.org/2000/svg'><title>例2-6 小车上的弹簧-质量-阻尼器系统示意图（仿图2-16）</title><defs><marker id='a216' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><polyline points='45,30 45,104 330,104' fill='none' stroke='#334155' stroke-width='2.2'/><line x1='20' y1='122' x2='355' y2='122' stroke='#64748b' stroke-width='1.5'/><circle cx='110' cy='113' r='8.5' fill='#fff' stroke='#334155' stroke-width='1.6'/><circle cx='280' cy='113' r='8.5' fill='#fff' stroke='#334155' stroke-width='1.6'/><polyline points='45,52 72,52 80,42 90,62 100,42 110,62 120,42 128,52 162,52' fill='none' stroke='#2744a8' stroke-width='1.8'/><line x1='45' y1='84' x2='96' y2='84' stroke='#9a5800' stroke-width='1.8'/><polyline points='96,74 114,74 114,94 96,94' fill='none' stroke='#9a5800' stroke-width='1.8'/><line x1='105' y1='78' x2='105' y2='90' stroke='#9a5800' stroke-width='2.2'/><line x1='105' y1='84' x2='162' y2='84' stroke='#9a5800' stroke-width='1.8'/><rect x='162' y='38' width='96' height='58' rx='6' fill='#e7f6f0' stroke='#0b6e4f' stroke-width='1.8'/><text x='210' y='71' text-anchor='middle' font-size='14' font-weight='700' fill='#0b6e4f'>m</text><line x1='45' y1='18' x2='96' y2='18' stroke='#b4233c' stroke-width='1.5' marker-end='url(#a216)'/><line x1='258' y1='26' x2='316' y2='26' stroke='#0b6e4f' stroke-width='1.5' marker-end='url(#a216)'/><text x='100' y='21' font-size='11' fill='#b4233c' font-weight='600'>u(t)</text><text x='320' y='29' font-size='11' fill='#0b6e4f' font-weight='600'>y(t)</text><text x='98' y='38' font-size='11' fill='#2744a8'>k</text><text x='122' y='98' font-size='11' fill='#9a5800'>B</text></svg>",
+      "steps": [
+        { "stepTitle": "1. 例 2-5：力与力矩平衡方程（含原书漏写力臂勘误）", "detail": "设小转角为 $\\theta$，对 $M_2$：$M_2\\ddot{x}=k_2(a\\theta-x)$；\n对绕支点转动的 $M_1$（$J=M_1 a^2$）：$M_1 a^2\\ddot{\\theta}=(a+b+c)f - k_1(a+b)^2\\theta - a\\cdot k_2(a\\theta-x) = (a+b+c)f - k_1(a+b)^2\\theta - a M_2\\ddot{x}$。\n【原书勘误】原书 P.31 中间行把 $-aM_2\\ddot{x}$ 漏印了力臂 $a$（写成 $-M_2\\ddot{x}$），但下方最终传递函数式(2-63)是按含力臂 $a$ 算出的，经 SymPy 核验式(2-63)完全正确！" },
+        { "stepTitle": "2. 例 2-6：以大地为惯性坐标系列牛顿第二定律", "detail": "弹簧伸长量 $u(t)-y(t)$，阻尼相对速度 $\\dot{u}(t)-\\dot{y}(t)$，故：\n$m\\ddot{y} = k[u(t)-y(t)] + B[\\dot{u}(t)-\\dot{y}(t)] \\implies m\\ddot{y}+B\\dot{y}+ky = B\\dot{u}+ku$。\n零初始条件拉氏变换立得 $\\frac{Y(s)}{U(s)}=\\frac{Bs+k}{ms^2+Bs+k}$。" }
+      ],
+      "finalAnswer": "① $\\frac{X(s)}{F(s)}=\\frac{a+b+c}{\\frac{aM_1M_2}{k_2}s^4+\\left[aM_1+aM_2+\\frac{k_1M_2(a+b)^2}{ak_2}\\right]s^2+\\frac{k_1(a+b)^2}{a}}$；② $\\frac{Y(s)}{U(s)}=\\frac{Bs+k}{ms^2+Bs+k}$。",
+      "takeaway": "机械动力学建模铁律：**加速度必须相对惯性参考系（大地）**，而弹簧/阻尼力取决于**两端相对位移/相对速度**！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.30-32",
+        "pdfPage": 39,
+        "itemRef": "例2-5 & 例2-6 (图2-15~2-16, 式2-63~2-65)"
+      },
+      "verification": { "method": "sympy", "testId": "ch02_ex_guide25_lever_mech", "verified": true }
+    },
+    {
+      "id": "ctrl-ch02-e-04",
+      "section": "2.3 典型例题精选（齿轮系折算）",
+      "kind": "example",
+      "title": "例 2-7：三级齿轮传动系折算到电机轴的等效转动惯量（重大勘误！）",
+      "examWeight": "core",
+      "problem": "两级减速齿轮系：轴 1（电机轴，惯量 $J_1$，转角 $\\theta_1$，齿数 $z_1$）啮合轴 2（惯量 $J_2$，转角 $\\theta_2$，齿数 $z_2$ 与 $z_3$），再由 $z_3$ 啮合轴 3（含负载，惯量 $J_3$，转角 $\\theta_3$，齿数 $z_4$），电机输出转矩为 $M_m$，忽略摩擦。试列写折算到电机轴上的运动方程。",
+      "steps": [
+        { "stepTitle": "1. 确定各级转速（角位移）传动比", "detail": "由啮合节圆线速度相等得 $\\frac{\\theta_1}{\\theta_2}=\\frac{z_2}{z_1},\\; \\frac{\\theta_2}{\\theta_3}=\\frac{z_4}{z_3}$，故：\n$\\theta_2 = \\frac{z_1}{z_2}\\theta_1,\\qquad \\theta_3 = \\frac{z_1}{z_2}\\cdot\\frac{z_3}{z_4}\\theta_1$。" },
+        { "stepTitle": "2. 用动能守恒（功率平衡）精确折算（修正原书重大笔误！）", "detail": "系统总动能 $E_k = \\frac{1}{2}J_1\\dot{\\theta}_1^2 + \\frac{1}{2}J_2\\dot{\\theta}_2^2 + \\frac{1}{2}J_3\\dot{\\theta}_3^2 = \\frac{1}{2}\\left[J_1 + J_2\\left(\\frac{z_1}{z_2}\\right)^2 + J_3\\left(\\frac{z_1 z_3}{z_2 z_4}\\right)^2\\right]\\dot{\\theta}_1^2$。\n由功率平衡 $M_m\\dot{\\theta}_1 = \\frac{\\mathrm{d}E_k}{\\mathrm{d}t}$ 得正确电机轴运动方程：\n$$M_m = \\left[J_1 + J_2\\left(\\frac{z_1}{z_2}\\right)^2 + J_3\\left(\\frac{z_1}{z_2}\\cdot\\frac{z_3}{z_4}\\right)^2\\right]\\frac{\\mathrm{d}^2\\theta_1}{\\mathrm{d}t^2}$$\n【原书重大勘误】原书 P.32 式(2-66) 未乘转矩折算比，且式(2-67)把平方折算比**写反了**（误印成 $\\left(\\frac{z_2}{z_1}\\right)^2$ 与 $\\left(\\frac{z_2}{z_1}\\cdot\\frac{z_4}{z_3}\\right)^2$）！物理检验：减速齿轮（$z_2>z_1$）使低速负载折算到高速电机轴上的等效惯量**变小**（除以减速比平方 $i^2$），绝不可能变大！" }
+      ],
+      "finalAnswer": "$M_m = \\left[J_1 + J_2\\left(\\frac{z_1}{z_2}\\right)^2 + J_3\\left(\\frac{z_1 z_3}{z_2 z_4}\\right)^2\\right]\\ddot{\\theta}_1$。",
+      "takeaway": "必记工程常识：**负载惯量/阻尼折算到高速电机轴一律除以总减速比平方 $i^2$**（即乘以 $\\left(\\frac{\\omega_{\\text{load}}}{\\omega_{\\text{motor}}}\\right)^2$），考场用能量守恒 5 秒即可防背反！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.32",
+        "pdfPage": 41,
+        "itemRef": "例2-7 (图2-17, 式2-66~2-67，已勘误)"
+      },
+      "verification": { "method": "sympy", "testId": "ch02_ex_guide27_gears_errata", "verified": true }
+    },
+    {
+      "id": "ctrl-ch02-e-05",
+      "section": "2.3 典型例题精选（非线性线性化）",
+      "kind": "example",
+      "title": "例 2-8：非线性液位储槽工作点泰勒线性化求放大系数 K 与时间常数 T",
+      "examWeight": "core",
+      "problem": "液位储槽截面积 $S=0.5\\text{ m}^2$，流出流量 $Q_{\\text{out}}=\\alpha\\sqrt{h}$（节流阀开度固定，$\\alpha$ 为常数）。初始稳态工作点为 $h_0=1.5\\text{ m}$，$q_{\\text{in}0}=q_{\\text{out}0}=0.1\\text{ m}^3/\\text{min}$。求以 $Q_{\\text{in}}$ 为输入、$h$ 为输出的微分方程，并求线性化后的放大系数 $K$ 与时间常数 $T$。",
+      "steps": [
+        { "stepTitle": "1. 由静态工作点定参数 $\\alpha$ 并写非线性方程", "detail": "$0.1 = \\alpha\\sqrt{1.5} \\implies \\alpha = \\frac{0.1}{\\sqrt{1.5}}$。物料平衡：$S\\frac{\\mathrm{d}h}{\\mathrm{d}t}=Q_{\\text{in}}-\\alpha\\sqrt{h} \\implies \\frac{\\mathrm{d}h}{\\mathrm{d}t}=2\\left(Q_{\\text{in}}-\\frac{0.1}{\\sqrt{1.5}}\\sqrt{h}\\right)$。" },
+        { "stepTitle": "2. 在 $h_0=1.5$ 处一阶泰勒展开并拉氏变换", "detail": "$\\left.\\frac{\\mathrm{d}(\\alpha\\sqrt{h})}{\\mathrm{d}h}\\right|_{h_0} = \\frac{0.1}{\\sqrt{1.5}}\\cdot\\frac{1}{2\\sqrt{1.5}} = \\frac{0.1}{3} = \\frac{1}{30}$。\n故增量方程：$0.5\\frac{\\mathrm{d}\\Delta h}{\\mathrm{d}t} + \\frac{1}{30}\\Delta h = \\Delta Q_{\\text{in}} \\implies 15\\frac{\\mathrm{d}\\Delta h}{\\mathrm{d}t} + \\Delta h = 30\\Delta Q_{\\text{in}}$。\n拉氏变换得 $\\frac{\\Delta h(s)}{\\Delta Q_{\\text{in}}(s)}=\\frac{30}{15s+1}$。" }
+      ],
+      "finalAnswer": "放大系数 $K=30\\text{ min/m}^2$，时间常数 $T=15\\text{ min}$。",
+      "takeaway": "注意最后一步务必把传递函数分母常数项化为 $1$（尾 1 型 $\\frac{K}{Ts+1}$），分子才是真正的静态放大倍数 $K$！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.32-33",
+        "pdfPage": 41,
+        "itemRef": "例2-8 (图2-18, 式2-68~2-71)"
+      },
+      "verification": { "method": "sympy", "testId": "ch02_ex_guide28_tank_linearize", "verified": true }
+    },
+    {
+      "id": "ctrl-ch02-e-06",
+      "section": "2.3 典型例题精选（方块图化简）",
+      "kind": "example",
+      "title": "例 2-9 & 例 2-10：多环交叉方块图化简求闭环传函与误差传函",
+      "examWeight": "core",
+      "problem": "如图 2-21（例 2-10）控制系统：主前向通道串联 $G_1, G_2, G_3, G_4$；$G_2$ 后引出三条支路——① 向上经 $G_5$ 并联加至 $C(s)$，② 向上经 $H_2$ 负反馈回最左端比较点（该比较点同时接单位负反馈 $-C(s)$，其输出为误差 $E(s)$）；$G_3$ 后经 $H_1$ 负反馈至 $G_1$ 与 $G_2$ 之间的比较点。用方块图化简法求 $\\frac{C(s)}{R(s)}$ 与 $\\frac{E(s)}{R(s)}$。",
+      "figureSvg": "<svg role='img' viewBox='0 0 475 165' xmlns='http://www.w3.org/2000/svg'><title>例2-10 多环交叉控制系统方块图（仿图2-21）</title><defs><marker id='a221' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='10' y1='86' x2='50' y2='86' stroke='#334155' stroke-width='1.5' marker-end='url(#a221)'/><circle cx='60' cy='86' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='68' y1='86' x2='106' y2='86' stroke='#334155' stroke-width='1.5' marker-end='url(#a221)'/><rect x='108' y='70' width='44' height='32' rx='5' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='130' y='90' text-anchor='middle' font-size='12' fill='#141824'>G₁</text><line x1='152' y1='86' x2='176' y2='86' stroke='#334155' stroke-width='1.5' marker-end='url(#a221)'/><circle cx='185' cy='86' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='193' y1='86' x2='216' y2='86' stroke='#334155' stroke-width='1.5' marker-end='url(#a221)'/><rect x='218' y='70' width='44' height='32' rx='5' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='240' y='90' text-anchor='middle' font-size='12' fill='#141824'>G₂</text><line x1='262' y1='86' x2='296' y2='86' stroke='#334155' stroke-width='1.5' marker-end='url(#a221)'/><rect x='298' y='70' width='44' height='32' rx='5' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='320' y='90' text-anchor='middle' font-size='12' fill='#141824'>G₃</text><line x1='342' y1='86' x2='366' y2='86' stroke='#334155' stroke-width='1.5' marker-end='url(#a221)'/><rect x='368' y='70' width='44' height='32' rx='5' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='390' y='90' text-anchor='middle' font-size='12' fill='#141824'>G₄</text><line x1='412' y1='86' x2='430' y2='86' stroke='#334155' stroke-width='1.5' marker-end='url(#a221)'/><circle cx='440' cy='86' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='448' y1='86' x2='470' y2='86' stroke='#334155' stroke-width='1.5'/><polyline points='279,86 279,28 214,28' fill='none' stroke='#9a5800' stroke-width='1.4' marker-end='url(#a221)'/><rect x='168' y='14' width='44' height='28' rx='5' fill='#fef5e5' stroke='#9a5800' stroke-width='1.4'/><text x='190' y='32' text-anchor='middle' font-size='12' fill='#9a5800'>H₂</text><polyline points='168,28 60,28 60,76' fill='none' stroke='#9a5800' stroke-width='1.4' marker-end='url(#a221)'/><polyline points='279,28 338,28' fill='none' stroke='#0b6e4f' stroke-width='1.4' marker-end='url(#a221)'/><rect x='340' y='14' width='44' height='28' rx='5' fill='#e7f6f0' stroke='#0b6e4f' stroke-width='1.4'/><text x='362' y='32' text-anchor='middle' font-size='12' fill='#0b6e4f'>G₅</text><polyline points='384,28 440,28 440,76' fill='none' stroke='#0b6e4f' stroke-width='1.4' marker-end='url(#a221)'/><polyline points='354,86 354,132 292,132' fill='none' stroke='#b4233c' stroke-width='1.4' marker-end='url(#a221)'/><rect x='246' y='118' width='44' height='28' rx='5' fill='#fdecef' stroke='#b4233c' stroke-width='1.4'/><text x='268' y='136' text-anchor='middle' font-size='12' fill='#b4233c'>H₁</text><polyline points='246,132 185,132 185,96' fill='none' stroke='#b4233c' stroke-width='1.4' marker-end='url(#a221)'/><polyline points='456,86 456,154 60,154 60,96' fill='none' stroke='#334155' stroke-width='1.4' marker-end='url(#a221)'/><text x='12' y='76' font-size='11' fill='#141824'>R(s)</text><text x='72' y='76' font-size='11' fill='#141824'>E(s)</text><text x='446' y='76' font-size='11' fill='#141824'>C(s)</text><text x='47' y='78' font-size='11' fill='#141824'>+</text><text x='64' y='75' font-size='11' fill='#9a5800'>−</text><text x='47' y='103' font-size='12' fill='#334155'>−</text><text x='172' y='103' font-size='12' fill='#b4233c'>−</text></svg>",
+      "steps": [
+        { "stepTitle": "1. 分支点后移越过 $G_3$ 拆解交叉", "detail": "将 $G_2$ 后的引出点后移越过 $G_3$（口诀：分支点后移除以 $G_3$），原支路变为 $H_2/G_3$ 与 $G_5/G_3$。此时 $G_2 G_3$ 与 $H_1$ 构成独立内环 $\\frac{G_2G_3}{1+G_2G_3H_1}$，而 $G_4$ 与 $G_5/G_3$ 并联为 $G_4+G_5/G_3$。" },
+        { "stepTitle": "2. 再将 $H_2/G_3$ 引出点后移至 $C(s)$ 处合并外反馈", "detail": "等效前向通道 $G(s)=\\frac{G_1 G_2(G_3G_4+G_5)}{1+G_2G_3H_1}$；等效总反馈 $H(s)=1+\\frac{H_2/G_3}{G_4+G_5/G_3}=\\frac{G_3G_4+G_5+H_2}{G_3G_4+G_5}$。" },
+        { "stepTitle": "3. 求 $C(s)/R(s)$ 与 $E(s)/R(s)$", "detail": "$$\\frac{C(s)}{R(s)}=\\frac{G(s)}{1+G(s)H(s)}=\\frac{G_1G_2(G_3G_4+G_5)}{1+G_2G_3H_1+G_1G_2G_3G_4+G_1G_2G_5+G_1G_2H_2}$$\n因 $E(s)=R(s)-H(s)C(s)$，故 $\\frac{E(s)}{R(s)}=\\frac{1}{1+G(s)H(s)}=\\frac{1+G_2G_3H_1}{1+G_2G_3H_1+G_1G_2G_3G_4+G_1G_2G_5+G_1G_2H_2}$。" }
+      ],
+      "finalAnswer": "$\\frac{C}{R}=\\frac{G_1G_2(G_3G_4+G_5)}{1+G_2G_3H_1+G_1G_2(G_3G_4+G_5+H_2)}$；$\\frac{E}{R}=\\frac{1+G_2G_3H_1}{1+G_2G_3H_1+G_1G_2(G_3G_4+G_5+H_2)}$。",
+      "takeaway": "求误差传函 $E(s)/R(s)$ 时注意 $E(s)$ 必须在**整个反馈化简过程中保持不动**（即比较点不能被移走），且直接用梅逊公式查前向 $R\\to E$（$P_1=1,\\;\\Delta_1=1+G_2G_3H_1$）可 3 秒秒杀验算！（另例 2-9 P.34 式(2-72) 亦已 SymPy 验算通过）",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.33-36",
+        "pdfPage": 42,
+        "itemRef": "例2-9 & 例2-10 (图2-19~2-22, 式2-72~2-76)"
+      },
+      "verification": { "method": "sympy", "testId": "ch02_ex_guide210_block", "verified": true }
+    },
+    {
+      "id": "ctrl-ch02-e-07",
+      "section": "2.3 典型例题精选（方块图 + 梅逊双解）",
+      "kind": "example",
+      "title": "例 2-11：含互不接触回路的多环系统（方块图化简 + 梅逊公式互验）",
+      "examWeight": "core",
+      "problem": "系统信号流图如图 2-26（对应方块图 2-23）：$R$ 经内环 $(G_1, -H_1)$ 后分两支——上支经 $G_2, G_4$、下支经 $G_3, G_5$ 汇合后经 $G_6$ 输出 $C$；两支汇合点经公共反馈 $H_2$ 分别以 $-1$ 负反馈至 $G_4$ 与 $G_5$ 前端；输出 $C$ 经外反馈 $+H_3$ 与 $-H_4$ 回到输入端。求 $C(s)/R(s)$。",
+      "figureSvg": "<svg role='img' viewBox='0 0 470 155' xmlns='http://www.w3.org/2000/svg'><title>例2-11 系统信号流图（含 2 前向通路、7 单回路与 2 对互不接触回路，仿图2-26）</title><defs><marker id='a226' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='24' y1='78' x2='74' y2='78' stroke='#334155' stroke-width='1.5' marker-end='url(#a226)'/><line x1='84' y1='78' x2='144' y2='78' stroke='#2744a8' stroke-width='1.7' marker-end='url(#a226)'/><line x1='154' y1='78' x2='222' y2='44' stroke='#2744a8' stroke-width='1.6' marker-end='url(#a226)'/><line x1='154' y1='78' x2='222' y2='112' stroke='#2744a8' stroke-width='1.6' marker-end='url(#a226)'/><line x1='234' y1='42' x2='310' y2='74' stroke='#2744a8' stroke-width='1.6' marker-end='url(#a226)'/><line x1='234' y1='114' x2='310' y2='82' stroke='#2744a8' stroke-width='1.6' marker-end='url(#a226)'/><line x1='322' y1='78' x2='384' y2='78' stroke='#2744a8' stroke-width='1.7' marker-end='url(#a226)'/><line x1='394' y1='78' x2='442' y2='78' stroke='#334155' stroke-width='1.5' marker-end='url(#a226)'/><line x1='310' y1='78' x2='264' y2='78' stroke='#b4233c' stroke-width='1.5' marker-end='url(#a226)'/><line x1='254' y1='74' x2='233' y2='48' stroke='#b4233c' stroke-width='1.4' marker-end='url(#a226)'/><line x1='254' y1='82' x2='233' y2='108' stroke='#b4233c' stroke-width='1.4' marker-end='url(#a226)'/><path d='M148 84 Q 114 114, 80 84' fill='none' stroke='#b4233c' stroke-width='1.4' marker-end='url(#a226)'/><path d='M388 72 C 350 8, 120 8, 80 72' fill='none' stroke='#0b6e4f' stroke-width='1.4' marker-end='url(#a226)'/><path d='M388 84 C 350 148, 120 148, 80 84' fill='none' stroke='#9a5800' stroke-width='1.4' marker-end='url(#a226)'/><circle cx='18' cy='78' r='4.5' fill='#fff' stroke='#334155' stroke-width='1.6'/><circle cx='79' cy='78' r='4.5' fill='#fff' stroke='#334155' stroke-width='1.6'/><circle cx='149' cy='78' r='4.5' fill='#fff' stroke='#334155' stroke-width='1.6'/><circle cx='228' cy='42' r='4.5' fill='#fff' stroke='#334155' stroke-width='1.6'/><circle cx='228' cy='114' r='4.5' fill='#fff' stroke='#334155' stroke-width='1.6'/><circle cx='258' cy='78' r='4.5' fill='#fff' stroke='#b4233c' stroke-width='1.6'/><circle cx='316' cy='78' r='4.5' fill='#fff' stroke='#334155' stroke-width='1.6'/><circle cx='389' cy='78' r='4.5' fill='#fff' stroke='#334155' stroke-width='1.6'/><circle cx='448' cy='78' r='4.5' fill='#fff' stroke='#334155' stroke-width='1.6'/><text x='14' y='66' font-size='11' fill='#141824'>R</text><text x='444' y='66' font-size='11' fill='#141824'>C</text><text x='110' y='71' font-size='11' fill='#2744a8'>G₁</text><text x='180' y='52' font-size='11' fill='#2744a8'>G₂</text><text x='180' y='110' font-size='11' fill='#2744a8'>G₃</text><text x='274' y='52' font-size='11' fill='#2744a8'>G₄</text><text x='274' y='110' font-size='11' fill='#2744a8'>G₅</text><text x='350' y='71' font-size='11' fill='#2744a8'>G₆</text><text x='280' y='92' font-size='10' fill='#b4233c'>H₂</text><text x='232' y='65' font-size='10' fill='#b4233c'>−1</text><text x='232' y='99' font-size='10' fill='#b4233c'>−1</text><text x='106' y='114' font-size='10' fill='#b4233c'>−H₁</text><text x='230' y='18' font-size='11' fill='#0b6e4f'>+H₃</text><text x='230' y='145' font-size='11' fill='#9a5800'>−H₄</text></svg>",
+      "steps": [
+        { "stepTitle": "1. 列举全部前向通路与余子式", "detail": "$P_1 = G_1 G_2 G_4 G_6\\;(\\Delta_1=1)$；$P_2 = G_1 G_3 G_5 G_6\\;(\\Delta_2=1)$（两条前向通路与所有回路均接触）。" },
+        { "stepTitle": "2. 穷举 7 个单独回路及 2 对互不接触回路", "detail": "- 7 个单回路：$L_1=-G_1 H_1,\\; L_2=-G_4 H_2,\\; L_3=-G_5 H_2,\\; L_4=G_1 G_2 G_4 G_6 H_3,\\; L_5=-G_1 G_2 G_4 G_6 H_4,\\; L_6=G_1 G_3 G_5 G_6 H_3,\\; L_7=-G_1 G_3 G_5 G_6 H_4$。\n- **2 对互不接触回路**：$L_1$ 与 $L_2$ 互不接触（$L_1 L_2 = G_1 G_4 H_1 H_2$）；$L_1$ 与 $L_3$ 互不接触（$L_1 L_3 = G_1 G_5 H_1 H_2$）。无三三互不接触回路。" },
+        { "stepTitle": "3. 代入梅逊公式并因式分解核对", "detail": "$\\Delta = 1 - \\sum_{i=1}^{7} L_i + L_1 L_2 + L_1 L_3 = (1+G_4 H_2+G_5 H_2)(1+G_1 H_1) + G_1 G_6(G_3 G_5+G_2 G_4)(H_4-H_3)$，与方块图化简式(2-77)完全一致！" }
+      ],
+      "finalAnswer": "$\\frac{C(s)}{R(s)}=\\frac{G_1 G_6(G_2 G_4+G_3 G_5)}{(1+G_4 H_2+G_5 H_2)(1+G_1 H_1)+G_1 G_6(G_2 G_4+G_3 G_5)(H_4-H_3)}$。",
+      "takeaway": "对称结构用梅逊公式时，最后把 $\\Delta$ 整理成**因式乘积形式** $(1+G_4H_2+G_5H_2)(1+G_1H_1)+\\cdots$，可以一眼验证有没有漏掉互不接触回路项！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.36-38",
+        "pdfPage": 45,
+        "itemRef": "例2-11 (图2-23~2-26, 式2-77~2-79)"
+      },
+      "verification": { "method": "sympy", "testId": "ch02_ex_guide211_mason", "verified": true }
+    },
+    {
+      "id": "ctrl-ch02-e-08",
+      "section": "2.3 典型例题精选（交叉耦合系统）",
+      "kind": "example",
+      "title": "例 2-12：多环交叉反馈系统求 C(s)/R(s) 与等效开环 C(s)/E(s)",
+      "examWeight": "core",
+      "problem": "单位负反馈系统内部含两条交叉耦合支路：令上支 $G_1(s)=\\frac{10(1+K_1 s)}{s}$、下支 $G_2(s)=\\frac{5(1+K_2 s)}{s}$；$E=R-C$ 同时输入两支，且下支输出以 $+1$ 加到上支输入、上支输出以 $-1$ 减到下支输入，两支输出相加得 $C(s)$。试求 $\\frac{C(s)}{R(s)}$ 与 $\\frac{C(s)}{E(s)}$。",
+      "figureSvg": "<svg role='img' viewBox='0 0 400 135' xmlns='http://www.w3.org/2000/svg'><title>例2-12 多环交叉耦合系统信号流图（仿图2-29）</title><defs><marker id='a229' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='24' y1='68' x2='74' y2='68' stroke='#334155' stroke-width='1.5' marker-end='url(#a229)'/><line x1='84' y1='68' x2='142' y2='30' stroke='#2744a8' stroke-width='1.6' marker-end='url(#a229)'/><line x1='84' y1='68' x2='142' y2='106' stroke='#2744a8' stroke-width='1.6' marker-end='url(#a229)'/><line x1='154' y1='26' x2='244' y2='26' stroke='#2744a8' stroke-width='1.8' marker-end='url(#a229)'/><line x1='154' y1='110' x2='244' y2='110' stroke='#2744a8' stroke-width='1.8' marker-end='url(#a229)'/><line x1='254' y1='30' x2='314' y2='64' stroke='#2744a8' stroke-width='1.6' marker-end='url(#a229)'/><line x1='254' y1='106' x2='314' y2='72' stroke='#2744a8' stroke-width='1.6' marker-end='url(#a229)'/><line x1='326' y1='68' x2='374' y2='68' stroke='#334155' stroke-width='1.5' marker-end='url(#a229)'/><line x1='246' y1='32' x2='154' y2='104' stroke='#b4233c' stroke-width='1.5' marker-end='url(#a229)'/><line x1='246' y1='104' x2='154' y2='32' stroke='#0b6e4f' stroke-width='1.5' marker-end='url(#a229)'/><path d='M318 74 C 280 132, 120 132, 82 74' fill='none' stroke='#9a5800' stroke-width='1.5' marker-end='url(#a229)'/><circle cx='18' cy='68' r='4.5' fill='#fff' stroke='#334155' stroke-width='1.6'/><circle cx='79' cy='68' r='4.5' fill='#fff' stroke='#334155' stroke-width='1.6'/><circle cx='148' cy='26' r='4.5' fill='#fff' stroke='#334155' stroke-width='1.6'/><circle cx='250' cy='26' r='4.5' fill='#fff' stroke='#334155' stroke-width='1.6'/><circle cx='148' cy='110' r='4.5' fill='#fff' stroke='#334155' stroke-width='1.6'/><circle cx='250' cy='110' r='4.5' fill='#fff' stroke='#334155' stroke-width='1.6'/><circle cx='320' cy='68' r='4.5' fill='#fff' stroke='#334155' stroke-width='1.6'/><circle cx='380' cy='68' r='4.5' fill='#fff' stroke='#334155' stroke-width='1.6'/><text x='12' y='56' font-size='11' fill='#141824'>R</text><text x='72' y='56' font-size='11' fill='#141824'>E</text><text x='374' y='56' font-size='11' fill='#141824'>C</text><text x='194' y='19' font-size='11' fill='#2744a8' font-weight='600'>G₁</text><text x='194' y='103' font-size='11' fill='#2744a8' font-weight='600'>G₂</text><text x='214' y='50' font-size='11' fill='#b4233c'>−1</text><text x='214' y='92' font-size='11' fill='#0b6e4f'>+1</text><text x='194' y='131' font-size='11' fill='#9a5800'>−1</text></svg>",
+      "steps": [
+        { "stepTitle": "1. 用信号流图梅逊公式一步出结果", "detail": "- 4 条前向通路（均与所有回路接触，$\\Delta_k=1$）：$P_1=G_1,\\; P_2=G_2,\\; P_3=G_1 G_2,\\; P_4=-G_1 G_2$（$P_3+P_4=0$ 巧妙抵消！）。\n- 5 个单回路（无互不接触回路）：$L_1=-G_1,\\; L_2=-G_2,\\; L_3=-G_1 G_2$（经内部交叉环），$L_4=-G_1 G_2,\\; L_5=+G_1 G_2$（经外环交叉）。\n- 故 $\\Delta = 1-(L_1+\\cdots+L_5)=1+G_1+G_2+G_1 G_2$，得 $\\frac{C}{R}=\\frac{G_1+G_2}{1+G_1+G_2+G_1G_2}$！" },
+        { "stepTitle": "2. 代入具体 $G_1, G_2$ 并求 $C(s)/E(s)$", "detail": "代入 $G_1=\\frac{10(1+K_1s)}{s},\\; G_2=\\frac{5(1+K_2s)}{s}$ 化简得式(2-82)；再利用单位负反馈恒等式 $\\frac{C}{E}=\\frac{C}{R-C}=\\frac{C/R}{1-C/R}=\\frac{G_1+G_2}{1+G_1G_2}$ 得式(2-83)！" }
+      ],
+      "finalAnswer": "$\\frac{C}{R}=\\frac{(10K_1+5K_2)s^2+15s}{(10K_1+5K_2+50K_1K_2+1)s^2+(50K_1+50K_2+15)s+50}$；$\\frac{C}{E}=\\frac{(10K_1+5K_2)s^2+15s}{(50K_1K_2+1)s^2+50(K_1+K_2)s+50}$。",
+      "takeaway": "看到单位负反馈系统的交叉内部框图求 $C/E$ 时，千万别重画流图——直接用 $\\frac{C}{E}=\\frac{\\Phi}{1-\\Phi}$（分子不变，分母减去分子）2 秒钟出答案！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.38-40",
+        "pdfPage": 47,
+        "itemRef": "例2-12 (图2-27~2-29, 式2-80~2-83)"
+      },
+      "verification": { "method": "sympy", "testId": "ch02_ex_guide212_cross", "verified": true }
+    },
+    {
+      "id": "ctrl-ch02-e-09",
+      "section": "2.3 典型例题精选（非平凡余子式 Δk）",
+      "kind": "example",
+      "title": "例 2-13 & 例 2-14：一题三解示范 & 含非 1 余子式 Δ₂ 的梅逊经典题",
+      "examWeight": "core",
+      "problem": "①【例 2-13】系统满足 $x_1=G_1(R-C-x_2),\\; x_2=x_1+R,\\; C=G_2 x_2+x_1$，求 $C(s)/R(s)$；\n②【例 2-14】前向串联 $G_1, G_2, G_3$，另设前馈 $G_4$ 从 $R$ 越过 $G_1, G_2$ 直接加至 $G_3$ 前；$G_1$ 输出与 $H_2 C$ 相加后经 $H_1$ 负反馈至 $G_1$ 前，且 $C$ 同时经 $H_2$ 负反馈至 $G_3$ 前。用梅逊公式求 $C(s)/R(s)$。",
+      "steps": [
+        { "stepTitle": "1. 例 2-13（代数消元 vs 梅逊双解）", "detail": "将 $x_1=G_1(R-C-x_2)$ 代入 $x_2=x_1+R$ 得 $x_2=\\frac{R+G_1 R-G_1 C}{1+G_1}$，再代入 $C=G_2 x_2+x_1$ 整理得 $(1+2G_1+G_1G_2)C=(G_2+G_1G_2)R$，即 $\\frac{C}{R}=\\frac{G_2+G_1G_2}{1+2G_1+G_1G_2}$。" },
+        { "stepTitle": "2. 例 2-14（关键：前向通路 $P_2$ 不接触回路 $L_1$！）", "detail": "- 3 个单回路：$L_1=-G_1 H_1,\\; L_2=-G_3 H_2,\\; L_3=-G_1 G_2 G_3 H_1 H_2$；其中 **$L_1$ 与 $L_2$ 互不接触**（$L_1 L_2 = G_1 G_3 H_1 H_2$）。\n- 特征式 $\\Delta = 1+G_1 H_1+G_3 H_2+G_1 G_2 G_3 H_1 H_2+G_1 G_3 H_1 H_2$。\n- 2 条前向通路：$P_1=G_1 G_2 G_3$（全接触，$\\Delta_1=1$）；**$P_2=G_4 G_3$ 与 $L_1=-G_1 H_1$ 不接触**，故余子式 $\\Delta_2=1-(-G_1 H_1)=1+G_1 H_1$！" }
+      ],
+      "finalAnswer": "① $\\frac{C}{R}=\\frac{G_2+G_1 G_2}{1+2G_1+G_1 G_2}$；② $\\frac{C}{R}=\\frac{G_1 G_2 G_3+G_3 G_4(1+G_1 H_1)}{1+G_1 H_1+G_3 H_2+G_1 G_2 G_3 H_1 H_2+G_1 G_3 H_1 H_2}$。",
+      "takeaway": "看到跨接前馈支路（如 $G_4$ 跳过 $G_1, G_2$）立即警觉：**该前向通路的余子式 $\\Delta_k$ 极可能不为 1**（往往含被跳过局部回路的 $1-L_{\\text{local}}$）！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.40-43",
+        "pdfPage": 49,
+        "itemRef": "例2-13 & 例2-14 (图2-30~2-34, 式2-84~2-87)"
+      },
+      "verification": { "method": "sympy", "testId": "ch02_ex_guide214_mason", "verified": true }
+    },
+    {
+      "id": "ctrl-ch02-e-10",
+      "section": "2.3 典型例题精选（状态空间建模与传函互求）",
+      "kind": "example",
+      "title": "例 2-17 & 例 2-18：RC 电路状态空间建模判稳 & 状态方程转流图求传函",
+      "examWeight": "core",
+      "problem": "①【例 2-17】取例 2-2 无源网络中 $R_1=R_2=R$，选电容电压 $x_1=u_{C1},\\; x_2=u_{C2}$ 为状态变量、$u_i$ 为输入、$u_o$ 为输出，求状态空间模型；当 $R=C_1=C_2=1$ 时求传函并判稳。\n②【例 2-18】已知 $\\dot{\\boldsymbol{x}}=\\begin{bmatrix}0 & 1 & 0\\\\ 0 & 0 & 1\\\\ -3 & -2 & 0\\end{bmatrix}\\boldsymbol{x}+\\begin{bmatrix}0\\\\ 0\\\\ 1\\end{bmatrix}u,\\; y=\\begin{bmatrix}1 & 1 & 0\\end{bmatrix}\\boldsymbol{x}$，画信号流图并用梅逊公式求传函。",
+      "steps": [
+        { "stepTitle": "1. 例 2-17：以储能元件电容电压列状态与输出方程", "detail": "由回路电压与电流关系解出 $\\dot{x}_1, \\dot{x}_2$ 得：\n$$\\dot{\\boldsymbol{x}}=\\begin{bmatrix}-\\frac{1}{RC_1} & -\\frac{1}{RC_1}\\\\ -\\frac{1}{RC_2} & -\\frac{2}{RC_2}\\end{bmatrix}\\boldsymbol{x}+\\begin{bmatrix}\\frac{1}{RC_1}\\\\ \\frac{2}{RC_2}\\end{bmatrix}u_i,\\qquad y=u_o=u_i-x_1=\\begin{bmatrix}-1 & 0\\end{bmatrix}\\boldsymbol{x}+1\\cdot u_i$$\n代入 $R=C_1=C_2=1$ 得 $G(s)=\\boldsymbol{c}(s\\boldsymbol{I}-\\boldsymbol{A})^{-1}\\boldsymbol{b}+d=\\frac{-s}{s^2+3s+1}+1=\\frac{s^2+2s+1}{s^2+3s+1}$。特征多项式 $|s\\boldsymbol{I}-\\boldsymbol{A}|=s^2+3s+1=0$ 两根均为负实根，系统稳定！" },
+        { "stepTitle": "2. 例 2-18：状态方程画积分器流图并套梅逊公式", "detail": "串联 3 个积分器 $1/s$：$x_3\\xrightarrow{1/s}x_2\\xrightarrow{1/s}x_1$，由 $\\dot{x}_3=-3x_1-2x_2+u$ 与 $y=x_1+x_2$ 得前向通路 $P_1=\\frac{1}{s^3},\\;P_2=\\frac{1}{s^2}$（$\\Delta_1=\\Delta_2=1$），回路 $L_1=-\\frac{2}{s^2},\\;L_2=-\\frac{3}{s^3}$，故 $\\frac{Y(s)}{U(s)}=\\frac{1/s^3+1/s^2}{1+2/s^2+3/s^3}=\\frac{s+1}{s^3+2s+3}$。" }
+      ],
+      "finalAnswer": "① $G(s)=\\frac{s^2+2s+1}{s^2+3s+1}$（与例 2-2 一致），系统稳定；② $\\frac{Y(s)}{U(s)}=\\frac{s+1}{s^3+2s+3}$。",
+      "takeaway": "注意例 2-17 中因为 $C_1$ 直接跨接在 $u_i$ 与 $u_o$ 之间，产生了非零直接前馈项 $d=1$，求 $G(s)$ 时千万别漏加 $+d$！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.44-45",
+        "pdfPage": 53,
+        "itemRef": "例2-17 & 例2-18 (图2-38, 式2-91~2-94)"
+      },
+      "verification": { "method": "sympy", "testId": "ch02_ex_guide217_rc_ss", "verified": true }
+    },
+    {
+      "id": "ctrl-ch02-e-11",
+      "section": "2.3 典型例题精选（最小实现综合）",
+      "kind": "example",
+      "title": "例 2-19 & 例 2-20：传递函数 4 种状态空间实现综合（含两处重大勘误！）",
+      "examWeight": "core",
+      "problem": "①【例 2-19】已知 $G(s)=\\frac{s+3}{s(s+1)(s+2)}$，求其微分方程、能控标准型、能观标准型与正则（对角）标准型最小实现；\n②【例 2-20】已知负反馈系统前向为 $\\frac{1}{s+2}\\cdot\\frac{8}{s^2+3s+4}$、反馈为 $\\frac{s+5}{s+3}$，求闭环传函并用能控型、能观型、$\\beta$ 法与状态变量图 4 种方法写出状态空间模型。",
+      "steps": [
+        { "stepTitle": "1. 例 2-19 三大标准型最小实现（含 P.46 勘误）", "detail": "分母 $s^3+3s^2+2s$，分子 $s+3$：\n- **能控型**：$\\boldsymbol{A}_c=\\begin{bmatrix}0 & 1 & 0\\\\ 0 & 0 & 1\\\\ 0 & -2 & -3\\end{bmatrix},\\;\\boldsymbol{b}_c=\\begin{bmatrix}0\\\\ 0\\\\ 1\\end{bmatrix},\\;\\boldsymbol{c}_c=\\begin{bmatrix}3 & 1 & 0\\end{bmatrix}$。\n- **能观型（对偶秒写）**：$\\boldsymbol{A}_o=\\boldsymbol{A}_c^{\\mathrm{T}},\\;\\boldsymbol{b}_o=\\begin{bmatrix}3\\\\ 1\\\\ 0\\end{bmatrix},\\;\\boldsymbol{c}_o=\\begin{bmatrix}0 & 0 & 1\\end{bmatrix}$。\n  【原书勘误 1】原书 P.46 图 2-40 下方把输出方程误印为 $y=x_1$，对应式(2-96) 实际应为 $y=x_3$！\n- **正则（对角）型**：部分分式 $G(s)=\\frac{1.5}{s}-\\frac{2}{s+1}+\\frac{0.5}{s+2} \\implies \\boldsymbol{A}=\\mathrm{diag}(0,-1,-2),\\;\\boldsymbol{b}=[1,1,1]^{\\mathrm{T}},\\;\\boldsymbol{c}=[1.5,-2,0.5]$。" },
+        { "stepTitle": "2. 例 2-20 四种实现与 SymPy 捕获的式(2-101) 两处矩阵勘误", "detail": "先化简闭环传函得 $G(s)=\\frac{8s+24}{s^4+8s^3+25s^2+46s+64}$（四阶微分方程 $y^{(4)}+8y^{(3)}+25\\ddot{y}+46\\dot{y}+64y=8\\dot{u}+24u$）：\n- **能控型 (2-98)** & **能观型 (2-99)** 直接套公式；\n- **$\\beta$ 递推法 (2-100)**：$\\beta_0=\\beta_1=\\beta_2=0,\\;\\beta_3=8,\\;\\beta_4=24-8\\times 8=-40$，故 $\\boldsymbol{b}=[0,0,8,-40]^{\\mathrm{T}},\\;\\boldsymbol{c}=[1,0,0,0]$；\n- **状态变量图法（图 2-44，修正原书两处笔误！）**：将 $\\frac{s+5}{s+3}=1+\\frac{2}{s+3}$、$\\frac{8}{s^2+3s+4}=2\\cdot\\frac{4}{s(s+3)+4}$ 展开画图后，正确方程为 $\\dot{x}_1=-3x_1+x_2,\\;\\dot{x}_2=-4x_1+\\mathbf{8}x_3,\\;\\dot{x}_3=-x_1-2x_3\\mathbf{-}x_4+u,\\;\\dot{x}_4=2x_1-3x_4$，即\n$$\\boldsymbol{A}=\\begin{bmatrix}-3 & 1 & 0 & 0\\\\ -4 & 0 & \\mathbf{8} & 0\\\\ -1 & 0 & -2 & \\mathbf{-1}\\\\ 2 & 0 & 0 & -3\\end{bmatrix},\\quad \\boldsymbol{b}=\\begin{bmatrix}0\\\\ 0\\\\ 1\\\\ 0\\end{bmatrix},\\quad \\boldsymbol{c}=\\begin{bmatrix}1 & 0 & 0 & 0\\end{bmatrix}$$\n【原书勘误 2】原书 P.48 式(2-101) 有两处笔误：① 第 2 行遗漏 $\\times 4$ 误写成 $2x_3$（$a_{23}=2$ 应为 $8$）；② 第 3 行误将 $-x_4$ 写成 $+1$（$a_{34}=+1$ 应为 $-1$）。修正后经 SymPy 验算 $\\boldsymbol{c}(s\\boldsymbol{I}-\\boldsymbol{A})^{-1}\\boldsymbol{b}$ 严丝合缝等于 $\\frac{8s+24}{s^4+8s^3+25s^2+46s+64}$！" }
+      ],
+      "finalAnswer": "同一传递函数可写出多种代数等价的状态空间实现（能控/能观/对角/$\\beta$ 法/状态变量图），所有正确实现的 $\\boldsymbol{c}(s\\boldsymbol{I}-\\boldsymbol{A})^{-1}\\boldsymbol{b}$ 必严格一致！",
+      "takeaway": "845 考场写完状态空间矩阵后，若不放心系数符号，只要口算校验特征多项式常数项 $\\det(-\\boldsymbol{A})=a_0$ 或直流增益 $-\\boldsymbol{c}\\boldsymbol{A}^{-1}\\boldsymbol{b}=G(0)$，10 秒就能揪出符号笔误！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.45-49",
+        "pdfPage": 54,
+        "itemRef": "例2-19 & 例2-20 (图2-39~2-44, 式2-95~2-101，已勘误)",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.75 例2-39 (MIMO传函矩阵)"
+      },
+      "verification": { "method": "sympy", "testId": "ch02_ex_guide220_four_ss", "verified": true }
+    }
+  ]
+}

@@ -1,0 +1,629 @@
+{
+  "chapterId": "ch07",
+  "title": "第 7 章 线性离散时间控制系统分析与综合",
+  "basicRequirements": {
+    "master": "采样过程与香农采样定理、零阶保持器的数学描述与频率特性；Z 变换与 Z 反变换的常用求法及基本性质；差分方程、脉冲传递函数与离散状态空间模型的建立与互转；S 平面到 Z 平面的映射规律、离散系统稳定条件（W 变换+劳斯判据、Z 平面根轨迹）、离散稳态误差计算与最少拍数字调节器设计。",
+    "understand": "采样开关位置对脉冲传递函数存在性的决定作用；采样周期 T 对闭环稳定性及动态响应的影响；离散系统极点位置与瞬态响应波形的对应关系。",
+    "familiar": "离散系统频域分析、数字 PID 算法及有波纹/无波纹最少拍系统对比。"
+  },
+  "sourceMeta": "主教材：孙优贤《自动控制原理》(2011第1版) P.264-321 ｜ 辅导书：孙优贤《学习辅导》(2017第1版) P.162-182",
+  "items": [
+    {
+      "id": "ctrl-ch07-f-01",
+      "section": "7.2.1 采样定理与零阶保持器（ZOH）",
+      "kind": "formula",
+      "title": "香农（Shannon）采样定理与零阶保持器传递函数 $G_h(s)$",
+      "examWeight": "core",
+      "prompt": "写出理想采样频谱周期延拓、香农采样定理条件，以及零阶保持器（ZOH）的传递函数与频率特性：",
+      "formulaLatex": "$$\\begin{aligned} &\\text{香农采样定理：}\\; \\omega_s = \\frac{2\\pi}{T} \\ge 2\\omega_{\\max}\\;\\text{（工程常取 }\\omega_s \\approx (5\\sim 10)\\omega_{\\max}\\text{）} \\\\ &\\text{零阶保持器传函：}\\; G_h(s) = \\frac{1 - \\mathrm{e}^{-Ts}}{s} \\\\ &\\text{ZOH 频率特性：}\\; G_h(\\mathrm{j}\\omega) = T\\,\\frac{\\sin(\\omega T/2)}{\\omega T/2}\\,\\mathrm{e}^{-\\mathrm{j}\\omega T/2} \\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "$\\omega_s = 2\\pi/T$",
+          "desc": "采样角频率（$T$ 为采样周期）；$\\omega_{\\max}$ 为连续信号频谱最高角频率"
+        },
+        {
+          "sym": "$\\mathrm{e}^{-\\mathrm{j}\\omega T/2}$",
+          "desc": "零阶保持器带来的等效半个采样周期纯滞后（相角滞后 $-\\omega T/2$），会降低系统相位裕度与稳定性"
+        }
+      ],
+      "conditions": "香农采样定理要求原连续信号为**带限信号**（$|X(\\mathrm{j}\\omega)|=0,\\;|\\omega|>\\omega_{\\max}$），且配合理想低通滤波器才能无失真恢复原信号。",
+      "pitfalls": "高频陷阱：零阶保持器虽具低通滤波特性（在 $\\omega=k\\omega_s$ 处幅值为 $0$），但它引入了**半拍纯滞后** $\\mathrm{e}^{-\\mathrm{j}\\omega T/2}$！因此引入采样开关与 ZOH 通常会**恶化系统稳定性**；且求含 ZOH 对象的开环脉冲传函时，务必把 $1-\\mathrm{e}^{-Ts}$ 提到 Z 变换外写成 $(1-z^{-1})\\mathcal{Z}\\big[G(s)/s\\big]$，**绝不能漏除 $s$**！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.162",
+        "pdfPage": 171,
+        "itemRef": "7.2.1 式(7-1)~(7-4)",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.264-269"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch07-f-02",
+      "section": "7.2.2 Z 变换定义、常用表与核心性质",
+      "kind": "formula",
+      "title": "Z 变换定义、高频变换对及超前/滞后/初终值定理",
+      "examWeight": "core",
+      "prompt": "默写 Z 变换定义、常用信号 Z 变换表，以及滞后（右移）、超前（左移）、复位移与初/终值定理：",
+      "formulaLatex": "$$\\begin{aligned} &Y(z) = \\mathcal{Z}[y^*(t)] = \\sum_{k=0}^{\\infty} y(kT) z^{-k},\\qquad z = \\mathrm{e}^{sT} \\\\ &\\mathcal{Z}[1(t)] = \\frac{z}{z-1},\\quad \\mathcal{Z}[t] = \\frac{Tz}{(z-1)^2},\\quad \\mathcal{Z}[\\mathrm{e}^{-at}] = \\frac{z}{z-\\mathrm{e}^{-aT}},\\quad \\mathcal{Z}[a^k] = \\frac{z}{z-a} \\\\ &\\text{滞后（右移）：}\\; \\mathcal{Z}[y(t-kT)] = z^{-k}Y(z)\\quad (t<0\\text{ 时 }y(t)=0) \\\\ &\\text{超前（左移）：}\\; \\mathcal{Z}[y(t+kT)] = z^k Y(z) - \\sum_{i=0}^{k-1} y(iT) z^{k-i} \\\\ &\\text{复位移：}\\; \\mathcal{Z}[\\mathrm{e}^{\\mp at}y(t)] = Y(z\\mathrm{e}^{\\pm aT});\\qquad \\text{初值：}\\; y(0) = \\lim_{z\\to\\infty} Y(z) \\\\ &\\text{终值：}\\; y(\\infty) = \\lim_{z\\to 1}(z-1)Y(z) = \\lim_{z\\to 1}(1-z^{-1})Y(z) \\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "$\\mathcal{Z}[t^2/2]$",
+          "desc": "抛物线信号 Z 变换 $\\frac{T^2 z(z+1)}{2(z-1)^3}$（主教材 P.304 计算 $K_a$ 必背）"
+        },
+        {
+          "sym": "反 Z 变换三法",
+          "desc": "长除法（幂级数）、部分分式法（先展开 $Y(z)/z$ 再乘 $z$ 查表）、留数法 $y(kT)=\\sum\\operatorname{Res}[Y(z)z^{k-1}]$"
+        }
+      ],
+      "conditions": "终值定理成立的**硬前提**：$(1-z^{-1})Y(z)$ 的全部极点必须严格位于 **Z 平面单位圆内部**（即 $Y(z)$ 除在 $z=1$ 处至多有一阶单极点外，其余极点均满足 $|z_i|<1$）！",
+      "pitfalls": "两大必考易错点：① 忘记检查终值定理前提（如例 7-2 含单位圆外极点 $z=2$，直接套公式会算出假终值，实际发散不存在！）；② 部分分式反 Z 变换时必须对 **$Y(z)/z$** 展开后再乘回 $z$，否则无法直接套用 $\\frac{z}{z-a}\\leftrightarrow a^k$！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.270-273",
+        "pdfPage": 279,
+        "itemRef": "式(7-17)~(7-31) & 表7-1",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.162-163 式(7-5)~(7-9)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch07_f_z_transform_table",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch07-f-03",
+      "section": "7.2.3 差分方程与脉冲传递函数（含辅导书 P.164 勘误）",
+      "kind": "formula",
+      "title": "差分方程、脉冲传递函数 $G(z)$ 与串联环节有无采样开关法则",
+      "examWeight": "core",
+      "prompt": "写出线性定常离散系统差分方程对应的脉冲传递函数，以及两连续环节串联（中间有/无采样开关）时的 $G(z)$ 区别：",
+      "formulaLatex": "$$\\begin{aligned} &\\text{前向差分方程：}\\; \\sum_{i=0}^{n} a_i y(k+i) = \\sum_{j=0}^{m} b_j x(k+j) \\xrightarrow{\\text{零初态}} G(z)=\\frac{Y(z)}{X(z)}=\\frac{\\sum_{j=0}^m b_j z^j}{\\sum_{i=0}^n a_i z^i} \\\\ &\\text{后向差分方程：}\\; \\sum_{i=0}^{n} a_i y(k-i) = \\sum_{j=0}^{m} b_j x(k-j) \\xrightarrow{\\text{零初态}} G(z)=\\frac{\\sum_{j=0}^m b_j z^{-j}}{\\sum_{i=0}^n a_i z^{-i}} = z^{n-m}\\frac{b_0 z^m + \\cdots + b_m}{a_0 z^n + \\cdots + a_n} \\\\ &\\text{串联中间有采样开关：}\\; G(z) = G_1(z) G_2(z) \\\\ &\\text{串联中间无采样开关：}\\; G(z) = \\mathcal{Z}[G_1(s)G_2(s)] \\triangleq G_1 G_2(z) \\ne G_1(z) G_2(z) \\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "$G_1 G_2(z)$",
+          "desc": "记号 $G_1 G_2(z)$ 表示先在 $s$ 域相乘 $G_1(s)G_2(s)$ 再整体做 Z 变换"
+        },
+        {
+          "sym": "零初态",
+          "desc": "脉冲传递函数定义在**零初始条件**下，且等于单位脉冲响应序列 $h(kT)$ 的 Z 变换"
+        }
+      ],
+      "conditions": "脉冲传递函数仅定义在**采样时刻**；连续环节之间只有存在同步采样开关时，Z 变换才可以相乘拆开。",
+      "pitfalls": "【辅导书 P.164 式(7-10)~(7-11) & P.166 式(7-19)~(7-20) 勘误】辅导书用后向移位写成 $a_n y(k)+\\cdots+a_0 y(k-n)=b_m x(k)+\\cdots+b_0 x(k-m)$，其严格 Z 变换应带因子 **$z^{n-m}$**（即 $G(z)=z^{n-m}\\frac{b_m z^m+\\cdots+b_0}{a_n z^n+\\cdots+a_0}$），原书漏写了 $z^{n-m}$ 因子（仅当 $n=m$ 或采用前向移位形式 $y(k+i),x(k+j)$ 时才无此因子），做题务必直接用 $z^{-k}$ 代换化简，切勿死背错式！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.164-166",
+        "pdfPage": 173,
+        "itemRef": "式(7-10)~(7-20)",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.276-288"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch07_ex_guide71_72_diff_eq",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch07-f-04",
+      "section": "7.2.4 连续状态空间方程的精确离散化",
+      "kind": "formula",
+      "title": "零阶保持器下连续状态空间离散化公式与脉冲传函矩阵",
+      "examWeight": "core",
+      "prompt": "已知连续定常系统 $\\dot{\\boldsymbol{x}}=\\boldsymbol{A}\\boldsymbol{x}+\\boldsymbol{B}\\boldsymbol{u},\\;\\boldsymbol{y}=\\boldsymbol{C}\\boldsymbol{x}+\\boldsymbol{D}\\boldsymbol{u}$ 经零阶保持器（采样周期 $T$）离散化，写出 $\\boldsymbol{G}(T),\\boldsymbol{H}(T)$ 与脉冲传递矩阵 $\\boldsymbol{G}(z)$：",
+      "formulaLatex": "$$\\begin{aligned} &\\boldsymbol{x}(k+1) = \\boldsymbol{G}(T)\\boldsymbol{x}(k) + \\boldsymbol{H}(T)\\boldsymbol{u}(k),\\qquad \\boldsymbol{y}(k) = \\boldsymbol{C}\\boldsymbol{x}(k) + \\boldsymbol{D}\\boldsymbol{u}(k) \\\\ &\\boldsymbol{G}(T) = \\mathrm{e}^{\\boldsymbol{A}T} = \\left.\\mathcal{L}^{-1}\\big[(s\\boldsymbol{I}-\\boldsymbol{A})^{-1}\\big]\\right|_{t=T},\\qquad \\boldsymbol{H}(T) = \\left(\\int_0^T \\mathrm{e}^{\\boldsymbol{A}\\tau}\\,\\mathrm{d}\\tau\\right)\\boldsymbol{B} \\\\ &\\text{若 }\\boldsymbol{A}\\text{ 非奇异：}\\; \\boldsymbol{H}(T) = \\boldsymbol{A}^{-1}\\big(\\mathrm{e}^{\\boldsymbol{A}T} - \\boldsymbol{I}\\big)\\boldsymbol{B} \\\\ &\\text{脉冲传递函数（矩阵）：}\\; \\boldsymbol{G}(z) = \\boldsymbol{C}\\big(z\\boldsymbol{I} - \\boldsymbol{G}(T)\\big)^{-1}\\boldsymbol{H}(T) + \\boldsymbol{D} \\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "$\\boldsymbol{G}(T),\\; \\boldsymbol{H}(T)$",
+          "desc": "离散系统状态矩阵与输入矩阵（仅依赖原连续 $(\\boldsymbol{A},\\boldsymbol{B})$ 及采样周期 $T$）；$\\boldsymbol{C},\\boldsymbol{D}$ 离散化后保持不变"
+        },
+        {
+          "sym": "离散状态转移矩阵",
+          "desc": "$\\boldsymbol{\\Phi}(k)=\\boldsymbol{G}^k=\\mathcal{Z}^{-1}\\big[z(z\\boldsymbol{I}-\\boldsymbol{G})^{-1}\\big]$，解为 $\\boldsymbol{x}(k)=\\boldsymbol{G}^k\\boldsymbol{x}(0)+\\sum_{j=0}^{k-1}\\boldsymbol{G}^{k-1-j}\\boldsymbol{H}\\boldsymbol{u}(j)$"
+        }
+      ],
+      "conditions": "控制输入 $u(t)$ 在采样间隔 $[kT,(k+1)T)$ 内保持常值 $u(kT)$（即串联零阶保持器）；简化式 $\\boldsymbol{H}=\\boldsymbol{A}^{-1}(\\mathrm{e}^{\\boldsymbol{A}T}-\\boldsymbol{I})\\boldsymbol{B}$ 仅在 **$\\det\\boldsymbol{A}\\ne 0$** 时可用！",
+      "pitfalls": "高频大坑：含积分环节的连续系统（如例 7-5 的 $\\boldsymbol{A}=\\begin{bmatrix}0&1\\\\0&-1\\end{bmatrix}$）其 $\\det\\boldsymbol{A}=0$ 奇异，**绝对不能用 $\\boldsymbol{A}^{-1}$ 公式**，必须老老实实对 $\\mathrm{e}^{\\boldsymbol{A}\\tau}\\boldsymbol{B}$ 在 $[0,T]$ 上逐项积分求 $\\boldsymbol{H}(T)$！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.166-167",
+        "pdfPage": 175,
+        "itemRef": "式(7-21)~(7-26)",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.293-298"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch07_ex_guide75_discretize",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch07-f-05",
+      "section": "7.2.5 S 平面与 Z 平面映射关系及稳定充要条件",
+      "kind": "formula",
+      "title": "映射 $z=\\mathrm{e}^{sT}$ 四大典型曲线与离散系统稳定充要条件",
+      "examWeight": "core",
+      "prompt": "写出 $s=\\sigma+\\mathrm{j}\\omega$ 映射到 $z=\\mathrm{e}^{sT}$ 后的模长、相角、四类等值线轨迹，以及线性定常离散系统稳定的充要条件：",
+      "formulaLatex": "$$\\begin{aligned} &z = \\mathrm{e}^{(\\sigma+\\mathrm{j}\\omega)T} = \\mathrm{e}^{\\sigma T}\\,\\mathrm{e}^{\\mathrm{j}\\omega T} \\implies |z| = \\mathrm{e}^{\\sigma T},\\quad \\angle z = \\omega T = \\frac{2\\pi\\omega}{\\omega_s} \\\\ &\\text{稳定充要条件：闭环特征方程 }1+G(z)=0\\text{ 的全部特征根严格位于单位圆内（}|z_i|<1\\text{）} \\\\ &\\text{① 等 }\\sigma\\text{ 线：半径为 }\\mathrm{e}^{\\sigma T}\\text{ 的同心圆（左半 S 平面}\\leftrightarrow\\text{单位圆内，虚轴}\\leftrightarrow\\text{单位圆周）} \\\\ &\\text{② 等 }\\omega\\text{ 线：从原点出发倾角 }\\omega T\\text{ 的射线（主频带 }-\\frac{\\omega_s}{2}\\le\\omega\\le\\frac{\\omega_s}{2}\\text{ 绕单位圆一周）} \\\\ &\\text{③ 等 }\\zeta\\text{ 线：}z = \\exp\\!\\left(-\\frac{\\zeta}{\\sqrt{1-\\zeta^2}}\\omega T\\right)\\mathrm{e}^{\\mathrm{j}\\omega T}\\text{（随 }\\omega\\text{ 增幅衰减的对数螺旋线）} \\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "主频带映射点",
+          "desc": "$\\omega=0\\to z=1$；$\\omega=\\omega_s/4\\to z=\\mathrm{j}$；$\\omega=\\omega_s/2\\to z=-1$；$\\omega=3\\omega_s/4\\to z=-\\mathrm{j}$"
+        },
+        {
+          "sym": "多值逆映射",
+          "desc": "S→Z 映射唯一；Z→S 映射为多值（每个 Z 平面点对应 S 平面无限多个相隔 $\\mathrm{j}\\omega_s$ 的点）"
+        }
+      ],
+      "conditions": "适用于线性定常离散控制系统；若闭环特征根有在单位圆周上的单根（$|z_i|=1$）且无圆外根，称为临界稳定（等幅振荡或常值）；若有圆周上重根或圆外根则不稳定。",
+      "pitfalls": "【主教材 P.300 图 7-35(c) 图题勘误】主教材 P.299 正文明确说明图 7-35(c) 画的是**等 $\\zeta$ 线**（对数螺旋线），但 P.300 图 7-35(c) 下方图题误印成了 `(c) 等ω线`（与图 7-35(a) 重复），切记图 (c) 是**等阻尼比 $\\zeta$ 螺旋线**！",
+      "figureSvg": "<svg role='img' viewBox='0 0 430 165' xmlns='http://www.w3.org/2000/svg'><title>S平面主频带左半平面到Z平面单位圆内的映射关系（仿主教材图7-34/7-38）</title><defs><marker id='a71' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><rect x='24' y='44' width='96' height='76' fill='#dbeafe' opacity='0.8'/><line x1='20' y1='82' x2='168' y2='82' stroke='#334155' stroke-width='1.3' marker-end='url(#a71)'/><line x1='120' y1='154' x2='120' y2='16' stroke='#334155' stroke-width='1.3' marker-end='url(#a71)'/><line x1='24' y1='44' x2='158' y2='44' stroke='#2744a8' stroke-width='1.2' stroke-dasharray='4 3'/><line x1='24' y1='120' x2='158' y2='120' stroke='#2744a8' stroke-width='1.2' stroke-dasharray='4 3'/><text x='126' y='24' font-size='10.5' fill='#141824'>jω (S平面)</text><text x='158' y='96' font-size='10.5' fill='#141824'>σ</text><text x='125' y='42' font-size='9.5' fill='#2744a8'>jω_s/2</text><text x='125' y='131' font-size='9.5' fill='#2744a8'>-jω_s/2</text><text x='42' y='86' font-size='10' fill='#1d4ed8' font-weight='700'>稳定区 σ&lt;0</text><path d='M182 82 L228 82' stroke='#0b6e4f' stroke-width='2' marker-end='url(#a71)'/><text x='184' y='73' font-size='10.5' fill='#0b6e4f' font-weight='700'>z = e^{sT}</text><circle cx='330' cy='82' r='52' fill='#dbeafe' stroke='#2744a8' stroke-width='1.8'/><line x1='252' y1='82' x2='412' y2='82' stroke='#334155' stroke-width='1.3' marker-end='url(#a71)'/><line x1='330' y1='154' x2='330' y2='16' stroke='#334155' stroke-width='1.3' marker-end='url(#a71)'/><text x='336' y='24' font-size='10.5' fill='#141824'>Im (Z平面)</text><text x='398' y='96' font-size='10.5' fill='#141824'>Re</text><text x='385' y='78' font-size='9.5' fill='#141824'>1</text><text x='264' y='78' font-size='9.5' fill='#141824'>-1</text><text x='304' y='77' font-size='10' fill='#1d4ed8' font-weight='700'>稳定区 |z|&lt;1</text></svg>",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.298-301",
+        "pdfPage": 307,
+        "itemRef": "式(7-112)~(7-115) & 图7-34~7-38",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.167-168"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch07-f-06",
+      "section": "7.2.6~7.2.7 双线性（W）变换劳斯判据与离散稳态误差",
+      "kind": "formula",
+      "title": "W 变换（双线性变换）与离散静态误差系数 $K_p, K_v, K_a$",
+      "examWeight": "core",
+      "prompt": "写出将 Z 平面单位圆内映射到 W 左半平面的双线性变换公式，以及单位负反馈离散系统型别 $v$ 与 $K_p, K_v, K_a$ 公式：",
+      "formulaLatex": "$$\\begin{aligned} &\\text{双线性（W）变换：}\\; z = \\frac{w+1}{w-1}\\;\\text{（或 }z=\\frac{1+w}{1-w}\\text{）} \\iff |z|<1 \\Leftrightarrow \\operatorname{Re}(w)<0 \\\\ &\\text{终值定理求采样时刻稳态误差：}\\; e^*(\\infty) = \\lim_{z\\to 1}(z-1)\\frac{1}{1+G(z)}X(z) \\\\ &\\text{① 单位阶跃 }1(t):\\; K_p = \\lim_{z\\to 1} G(z),\\qquad e_{sp} = \\frac{1}{1+K_p} \\\\ &\\text{② 单位斜坡 }t:\\; K_v = \\frac{1}{T}\\lim_{z\\to 1}\\frac{z-1}{z}G(z),\\qquad e_{sv} = \\frac{1}{K_v} \\\\ &\\text{③ 单位抛物线 }\\frac{1}{2}t^2:\\; K_a = \\frac{1}{T^2}\\lim_{z\\to 1}\\frac{(z-1)^2}{z^2}G(z),\\qquad e_{sa} = \\frac{1}{K_a} \\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "离散系统型别 $v$",
+          "desc": "开环脉冲传递函数 $G(z)$ 在 **$z=1$** 处极点的重数（对应连续域 $s=0$ 处积分环节个数）"
+        },
+        {
+          "sym": "W 变换后劳斯表",
+          "desc": "将 $z=\\frac{w+1}{w-1}$（或 $\\frac{1+w}{1-w}$）代入闭环特征方程 $D(z)=0$ 乘去分母得 $D(w)=0$，直接按第 4 章劳斯判据检验第一列全正"
+        }
+      ],
+      "conditions": "静态误差系数 $K_p,K_v,K_a$ 仅适用于**闭环稳定**且**输入侧有采样开关的单位负反馈系统**（如图 7-40）；注意孙优贤教材全书采用 **W 变换 + 劳斯判据**与 **Z 平面根轨迹**判稳（不要求死背朱利表）。",
+      "pitfalls": "超级高频失分点：计算 $K_v$ 时绝不能漏掉前面乘的 **$\\frac{1}{T}$**，计算 $K_a$ 时绝不能漏掉 **$\\frac{1}{T^2}$**！且求任何稳态误差前，第一步必须先检验闭环系统是否稳定（不稳定则 $e(\\infty)$ 不存在，参见例 7-10）！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.303-306",
+        "pdfPage": 312,
+        "itemRef": "式(7-116)~(7-126)",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.168-169 式(7-27)~(7-32)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch07_f_bilinear_w_mapping",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch07-f-07",
+      "section": "7.2.8 数字调节器与最少拍（Deadbeat）系统设计",
+      "kind": "formula",
+      "title": "最少拍无稳态误差数字控制器 $D(z)$ 综合通式与约束条件",
+      "examWeight": "core",
+      "prompt": "已知广义被控对象 $G_h G(z)$ 及典型输入 $R(z)=\\frac{A(z)}{(1-z^{-1})^q}$，写出最少拍误差传函 $\\Phi_e(z)$、闭环传函 $\\Phi(z)$ 与数字控制器 $D(z)$ 设计公式：",
+      "formulaLatex": "$$\\begin{aligned} &\\Phi_e(z) = 1 - \\Phi(z) = (1 - z^{-1})^q F(z) \\\\ &\\text{典型输入最小拍选择（对象无单位圆外/上零极点且 }d=1\\text{）：} \\\\ &\\quad\\bullet\\; \\text{阶跃 }(q=1):\\; \\Phi_e(z) = 1-z^{-1},\\quad \\Phi(z) = z^{-1} \\\\ &\\quad\\bullet\\; \\text{斜坡 }(q=2):\\; \\Phi_e(z) = (1-z^{-1})^2,\\quad \\Phi(z) = 2z^{-1}-z^{-2} \\\\ &\\quad\\bullet\\; \\text{抛物线 }(q=3):\\; \\Phi_e(z) = (1-z^{-1})^3,\\quad \\Phi(z) = 3z^{-1}-3z^{-2}+z^{-3} \\\\ &\\text{数字控制器：}\\; D(z) = \\frac{\\Phi(z)}{G_h G(z)\\,\\Phi_e(z)} = \\frac{\\Phi(z)}{G_h G(z)\\,[1-\\Phi(z)]} \\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "物理可实现性",
+          "desc": "要求 $D(z)$ 分子关于 $z$ 的阶次不高于分母阶次，即 $\\Phi(z)$ 必须包含 $G_h G(z)$ 的纯滞后因子 $z^{-d}$（$d$ 为 $G_h G(z)$ 分母与分子阶次差）"
+        },
+        {
+          "sym": "稳定性防对消",
+          "desc": "$\\Phi(z)$ 必须包含 $G_h G(z)$ 全部位于**单位圆上及圆外的不稳定零点**；$\\Phi_e(z)$ 必须包含 $G_h G(z)$ 全部单位圆外不稳定极点，严禁在 $D(z)$ 中零极点对消！"
+        }
+      ],
+      "conditions": "最少拍设计针对**特定典型输入**（如仅对阶跃最少拍，换成斜坡则会超调或有稳态误差）；若要求采样点间无波纹，还须使 $\\Phi(z)$ 包含 $G_h G(z)$ 的**全部零点**。",
+      "pitfalls": "极易忽略的一步：选完 $\\Phi(z)$ 和 $\\Phi_e(z)$ 算出 $D(z)$ 后，务必核查三件事：① $D(z)$ 中没有抵消掉 $G_h G(z)$ 的圆外零/极点；② $D(z)$ 展开为 $z^{-1}$ 幂级数不含正幂次 $z^{+k}$（物理可实现）；③ $E(z)=\\Phi_e(z)R(z)$ 为 $z^{-1}$ 的有限项多项式（有限拍内误差归零）！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.170-171",
+        "pdfPage": 179,
+        "itemRef": "7.2.8 离散系统的校正设计",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.311-319"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch07_ex_guide711_deadbeat",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch07-c-01",
+      "section": "7.2.3 闭环脉冲传递函数存在性判定法则",
+      "kind": "conclusion",
+      "title": "何时能写出闭环脉冲传递函数 $\\Phi(z)=Y(z)/R(z)$？——看输入端是否先经采样开关",
+      "examWeight": "core",
+      "conditions": "虽然某些闭环结构写不出闭环脉冲传递函数 $Y(z)/R(z)$，但系统的**闭环特征方程 $1 + \\text{环路脉冲传函} = 0$ 依然存在且唯一**，仍可照常分析稳定性与画 Z 平面根轨迹（主教材 P.306）！",
+      "pitfalls": "常见错误是强行把 $[G_1(s)R(s)]^*$ 拆成 $G_1^*(s)R^*(s)$——大错特错！两连续函数先相乘再采样不等于各自采样再相乘，参见例 7-3 与例 7-4(b)。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.165-166 & P.173-175",
+        "pdfPage": 174,
+        "itemRef": "7.2.3 & 例7-3~7-4",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.286-288"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      },
+      "summary": "面对复杂多采样开关闭环离散框图，如何用「虚拟采样法」快速判定 $\\Phi(z)=Y(z)/R(z)$ 是否存在？\n$$\\begin{aligned} &\\text{判据：输入 }R(s)\\text{ 能否从 }Y(z)\\text{ 表达式中作为公因子 }R(z)\\text{ 单独提出} \\\\ &\\quad\\bullet\\; \\text{若 }R(s)\\text{ 在进入任何连续环节 }G_i(s)\\text{ 之前先经过采样开关（形成 }R^*(s)\\text{）} \\implies \\Phi(z)=\\frac{Y(z)}{R(z)}\\text{ 存在} \\\\ &\\quad\\bullet\\; \\text{若 }R(s)\\text{ 未经采样直接穿过连续环节 }G_1(s)\\text{ 再被采样（形成 }[G_1 R]^*(s)\\text{）} \\implies \\Phi(z)\\text{ 不存在，只能写 }Y(z) \\end{aligned}$$\n- **万能解题四步**：① 给每个采样开关输入端命名中间变量（输出即带 $*$）；② 列写各中间变量与 $Y(s)$ 的 $s$ 域代数方程；③ 两边加 $*$ 号（记住 $[A^*(s)B(s)]^* = A^*(s)B^*(s)$）；④ 消元求 $Y^*(s)$ 并把 $*$ 换成 $(z)$"
+    },
+    {
+      "id": "ctrl-ch07-c-02",
+      "section": "7.2.5~7.2.6 采样周期 $T$ 对离散系统性能的影响",
+      "kind": "conclusion",
+      "title": "为什么连续二阶系统永远稳定，离散化后却会发散？——采样周期 $T$ 与增益 $K$ 的权衡",
+      "examWeight": "core",
+      "conditions": "源自孙优贤主教材 P.302 例 7-25 与 P.305-306 例 7-27 的定量推导，经 SymPy 符号验证完全一致。",
+      "pitfalls": "简答题与综合题高频考点：千万不要误以为「原连续系统是二阶最小相位就一定离散稳定」！加了采样器（尤其是再加 ZOH）后，不仅会出现有限稳定增益上限 $K_{\\max}$，还会出现有限稳定采样周期上限 $T_{\\max}$（如例 7-6 中 $0<T<\\ln 2$）！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.302 & P.305-306",
+        "pdfPage": 311,
+        "itemRef": "例7-25 & 例7-27 & 图7-42",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.176-178 例7-6~7-7"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch07_ex_main727_w_routh",
+        "verified": true
+      },
+      "summary": "对比连续系统与引入采样开关后的离散系统，总结采样周期 $T$ 与开环增益 $K$ 变化对稳定性的核心影响：\n$$\\text{连续二阶 }G(s)=\\frac{K}{s(T_d s+1)}\\text{ 恒稳定} \\;\\xrightarrow{\\text{采样 }T}\\; 0 < K < \\frac{2(1+\\mathrm{e}^{-T/T_d})}{1-\\mathrm{e}^{-T/T_d}}$$\n- **增大 $T$（降低采样频率）**：系统允许的最大稳定增益 $K_{\\max}$ 严格**减小**，系统稳定性变差、阻尼减小、超调增大\n- **减小 $T$（提高采样频率）**：$T\\to 0$ 时 $K_{\\max}\\to\\infty$，离散系统逐渐逼近原连续系统特性（但计算负担增加、量化敏感度提高）"
+    },
+    {
+      "id": "ctrl-ch07-c-03",
+      "section": "7.2.5 Z 平面闭环极点分布与瞬态响应形态",
+      "kind": "conclusion",
+      "title": "Z 平面极点位置与离散瞬态序列波形速查规律",
+      "examWeight": "core",
+      "conditions": "对单极点成立；若在单位圆周上出现**重极点**（如 $z=1$ 二重根对应 $k$），响应呈多项式增长发散（不稳定）。",
+      "pitfalls": "经典对比易错点：连续系统只要极点在负实轴就绝对单调不振荡；但离散系统极点在**负实轴 $(-1,0)$** 上时，由于 $(-a)^k$ 每拍变号，会出现剧烈的**每拍正负交变振荡**（称为振铃/高频交替振荡）！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.301 & P.308",
+        "pdfPage": 310,
+        "itemRef": "图7-37 & 图7-44",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.180-181 例7-10"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      },
+      "summary": "不用反 Z 变换，如何仅凭闭环极点 $z_i$ 在 Z 平面上的位置直接判断离散脉冲响应 $y(kT)$ 的收敛与振荡形态？\n$$\\begin{aligned} &\\text{① 正实轴 }0<z_i<1:\\; \\text{单调指数衰减（无振荡，越靠近原点衰减越快）} \\\\ &\\text{② 负实轴 }-1<z_i<0:\\; \\text{每拍正负交替的衰减振荡（采样频率 }\\omega_s/2\\text{ 交变！）} \\\\ &\\text{③ 单位圆内共轭复极点 }r\\mathrm{e}^{\\pm\\mathrm{j}\\theta}\\;(r<1):\\; \\text{衰减正弦振荡（}r\\text{ 越小衰减越快，}\\theta\\text{ 越大振荡越频）} \\\\ &\\text{④ 单位圆周 }|z_i|=1:\\; z=1\\text{ 等幅常值；}z=-1\\text{ 等幅交变；}z=\\mathrm{e}^{\\pm\\mathrm{j}\\theta}\\text{ 等幅正弦振荡} \\\\ &\\text{⑤ 单位圆外 }|z_i|>1:\\; \\text{发散（正实轴单调发散；负实轴交变发散；复极点增幅振荡发散）} \\end{aligned}$$\n- **无振荡临界条件**：要求离散二阶系统动态过程完全**无振荡**，全部闭环极点必须落在 **正实轴区间 $(0,1)$**（不能有负实根，也不能有复根！参见例 7-10）"
+    },
+    {
+      "id": "ctrl-ch07-e-01",
+      "section": "7.3 典型例题 · 差分方程求解与终值定理陷阱",
+      "kind": "example",
+      "title": "【例 7-2】Z 变换求解非零初态差分方程及终值不存在判定",
+      "examWeight": "core",
+      "problem": "先求解差分方程 $x[n+2]-x[n+1]-2x[n]=0$，已知初态 $x(0)=0,\\;x(1)=1$；再用 Z 变换终值定理讨论其终值 $x(\\infty)$。",
+      "steps": [
+        {
+          "stepTitle": "第一步",
+          "detail": "应用 Z 变换**超前（左移）定理**对差分方程两边取 Z 变换：\n$$\\big[z^2 X(z) - z^2 x(0) - z x(1)\\big] - \\big[z X(z) - z x(0)\\big] - 2X(z) = 0$$"
+        },
+        {
+          "stepTitle": "第二步",
+          "detail": "代入初值 $x(0)=0,\\;x(1)=1$ 化简求 $X(z)$：\n$$(z^2 - z - 2)X(z) = z \\implies X(z) = \\frac{z}{z^2 - z - 2} = \\frac{z}{(z-2)(z+1)}$$"
+        },
+        {
+          "stepTitle": "第三步",
+          "detail": "采用部分分式法（对 $X(z)/z$ 展开后乘回 $z$）求反 Z 变换：\n$$\\frac{X(z)}{z} = \\frac{1}{(z-2)(z+1)} = \\frac{1}{3}\\left(\\frac{1}{z-2} - \\frac{1}{z+1}\\right) \\implies X(z) = \\frac{1}{3}\\left(\\frac{z}{z-2} - \\frac{z}{z+1}\\right)$$\n逐项查表得解析序列：\n$$x(k) = \\frac{1}{3}\\big[2^k - (-1)^k\\big],\\quad k \\ge 0$$\n（核验初值：$k=0\\Rightarrow 0$；$k=1\\Rightarrow 1$；$k=2\\Rightarrow 1$；$k=3\\Rightarrow 3$，满足原递推式！）"
+        },
+        {
+          "stepTitle": "第四步",
+          "detail": "判别终值 $x(\\infty)$：观察 $X(z)$ 的两个极点 $z_1=2$（单位圆外！）与 $z_2=-1$（单位圆周上！），均不满足终值定理「$(1-z^{-1})X(z)$ 全部极点在单位圆内」的适用前提，故**绝不可套用终值公式**；序列随 $k\\to\\infty$ 指数发散，终值 $x(\\infty)$ **不存在**。"
+        }
+      ],
+      "takeaway": "考场见到「求终值 $x(\\infty)$」第一反应永远是**先看 $(z-1)X(z)$ 的全部极点是否都在 $|z|<1$ 内**！若贸然套 $\\lim_{z\\to 1}(z-1)X(z)=0$ 立刻掉坑零分。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.172",
+        "pdfPage": 181,
+        "itemRef": "例7-2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch07_ex_guide71_72_diff_eq",
+        "verified": true
+      },
+      "finalAnswer": "$x(k)=\\frac{1}{3}[2^k-(-1)^k]\\;(k\\ge 0)$；因含单位圆外极点 $z=2$，终值 $x(\\infty)$ 不存在。"
+    },
+    {
+      "id": "ctrl-ch07-e-02",
+      "section": "7.3 典型例题 · 闭环采样系统脉冲传递函数求法",
+      "kind": "example",
+      "title": "【例 7-3 & 例 7-4】虚拟采样法求闭环离散输出 $Y(z)$ 与 $\\Phi(z)$ 存在性对比",
+      "examWeight": "core",
+      "problem": "针对辅导书图 7-12（输入 $R(s)$ 先经 $G_1(s)$ 再采样）与图 7-14(a)（误差 $E(s)$ 先采样再经 $G_1(s)$，中间有采样开关再经 $G_2(s)$ 并带局部与主反馈 $H(s)$），分别求输出 $Y(z)$ 并判断闭环脉冲传递函数 $Y(z)/R(z)$ 是否存在。",
+      "figureSvg": "<svg role='img' viewBox='0 0 430 148' xmlns='http://www.w3.org/2000/svg'><title>图7-12(无Φ(z))与图7-14(a)(有Φ(z))采样开关位置对比（仿辅导书图7-12/7-15）</title><defs><marker id='a72' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><text x='12' y='16' font-size='10.5' fill='#b4233c' font-weight='700'>例7-3 (图7-12)：R(s) 未先采样 → 只能写 Y(z)</text><line x1='12' y1='42' x2='44' y2='42' stroke='#334155' stroke-width='1.3' marker-end='url(#a72)'/><circle cx='50' cy='42' r='6' fill='#fff' stroke='#334155' stroke-width='1.3'/><line x1='56' y1='42' x2='80' y2='42' stroke='#334155' stroke-width='1.3' marker-end='url(#a72)'/><rect x='82' y='30' width='48' height='24' rx='3' fill='#eff6ff' stroke='#2744a8' stroke-width='1.3'/><text x='91' y='46' font-size='10' fill='#1e3a8a'>G₁(s)</text><line x1='130' y1='42' x2='158' y2='42' stroke='#334155' stroke-width='1.3' marker-end='url(#a72)'/><circle cx='164' cy='42' r='6' fill='#fff' stroke='#334155' stroke-width='1.3'/><line x1='170' y1='42' x2='196' y2='42' stroke='#334155' stroke-width='1.3'/><line x1='196' y1='42' x2='214' y2='32' stroke='#b4233c' stroke-width='1.8'/><line x1='216' y1='42' x2='244' y2='42' stroke='#334155' stroke-width='1.3' marker-end='url(#a72)'/><rect x='246' y='30' width='48' height='24' rx='3' fill='#eff6ff' stroke='#2744a8' stroke-width='1.3'/><text x='255' y='46' font-size='10' fill='#1e3a8a'>G₂(s)</text><line x1='294' y1='42' x2='395' y2='42' stroke='#334155' stroke-width='1.3' marker-end='url(#a72)'/><text x='400' y='46' font-size='10' fill='#141824'>Y(s)</text><text x='186' y='28' font-size='9' fill='#b4233c'>E₁→E₁*</text><text x='12' y='88' font-size='10.5' fill='#0b6e4f' font-weight='700'>例7-4(a) (图7-15)：E(s) 先采样 → Φ(z) 存在</text><line x1='12' y1='116' x2='44' y2='116' stroke='#334155' stroke-width='1.3' marker-end='url(#a72)'/><circle cx='50' cy='116' r='6' fill='#fff' stroke='#334155' stroke-width='1.3'/><line x1='56' y1='116' x2='78' y2='116' stroke='#334155' stroke-width='1.3'/><line x1='78' y1='116' x2='96' y2='106' stroke='#0b6e4f' stroke-width='1.8'/><line x1='98' y1='116' x2='124' y2='116' stroke='#334155' stroke-width='1.3' marker-end='url(#a72)'/><rect x='126' y='104' width='48' height='24' rx='3' fill='#ecfdf5' stroke='#0b6e4f' stroke-width='1.3'/><text x='135' y='120' font-size='10' fill='#065f46'>G₁(s)</text><line x1='174' y1='116' x2='196' y2='116' stroke='#334155' stroke-width='1.3'/><line x1='196' y1='116' x2='214' y2='106' stroke='#0b6e4f' stroke-width='1.8'/><line x1='216' y1='116' x2='240' y2='116' stroke='#334155' stroke-width='1.3' marker-end='url(#a72)'/><circle cx='246' cy='116' r='6' fill='#fff' stroke='#334155' stroke-width='1.3'/><line x1='252' y1='116' x2='278' y2='116' stroke='#334155' stroke-width='1.3' marker-end='url(#a72)'/><rect x='280' y='104' width='48' height='24' rx='3' fill='#ecfdf5' stroke='#0b6e4f' stroke-width='1.3'/><text x='289' y='120' font-size='10' fill='#065f46'>G₂(s)</text><line x1='328' y1='116' x2='395' y2='116' stroke='#334155' stroke-width='1.3' marker-end='url(#a72)'/><text x='400' y='120' font-size='10' fill='#141824'>Y(s)</text><text x='74' y='102' font-size='9' fill='#0b6e4f'>E→E*</text><text x='194' y='102' font-size='9' fill='#0b6e4f'>X→X*</text></svg>",
+      "steps": [
+        {
+          "stepTitle": "例 7-3（图 7-12）",
+          "detail": "在两个采样开关输入端设中间变量 $E_1(s)$（前向）和 $B(s)$（外反馈经 $H_1(s)$ 采样前），内反馈经 $H_2(s)$ 无采样开关：\n$$Y(s) = G_2(s)E_1^*(s),\\quad B(s) = H_1(s)G_2(s)E_1^*(s),\\quad E_1(s) = G_1(s)[R(s)-B^*(s)] - H_2(s)G_2(s)E_1^*(s)$$"
+        },
+        {
+          "stepTitle": "步骤 2",
+          "detail": "对 $E_1(s)$、$B(s)$ 取采样拉氏变换并消去 $B^*(s)=H_1 G_2^*(s)E_1^*(s)$：\n$$E_1^*(s) = G_1 R^*(s) - G_1^*(s)H_1 G_2^*(s)E_1^*(s) - H_2 G_2^*(s)E_1^*(s) \\implies E_1^*(s) = \\frac{G_1 R^*(s)}{1 + H_2 G_2^*(s) + G_1^*(s)H_1 G_2^*(s)}$$"
+        },
+        {
+          "stepTitle": "步骤 3",
+          "detail": "对输出 $Y(s)$ 虚拟采样得 $Y^*(s)=G_2^*(s)E_1^*(s)$，换写为 Z 域：\n$$Y(z) = \\frac{G_2(z)\\,G_1 R(z)}{1 + G_2 H_2(z) + G_1(z)\\,G_2 H_1(z)}$$\n因为 $G_1 R(z)$ 中 $R(z)$ 无法单独提出，故例 7-3 **不存在**闭环脉冲传递函数 $Y(z)/R(z)$！"
+        },
+        {
+          "stepTitle": "例 7-4(a)（图 7-15）",
+          "detail": "两个采样开关输入端分别设 $E(s)$ 和 $X(s)$，且内反馈 $Y(s)$ 先采样再经减法点进入 $G_2(s)$，主反馈 $H(s)$ 从 $Y(s)$ 接回输入比较点：\n$$Y(s) = G_2(s)[X^*(s)-Y^*(s)],\\quad X(s) = G_1(s)E^*(s),\\quad E(s) = R(s) - H(s)G_2(s)[X^*(s)-Y^*(s)]$$"
+        },
+        {
+          "stepTitle": "步骤 5",
+          "detail": "加 $*$ 消元：$X^*(s)=G_1^*(s)E^*(s)=G_1^*(s)\\big[R^*(s)-HG_2^*(s)(X^*(s)-Y^*(s))\\big]$，联立 $Y^*(s)=G_2^*(s)[X^*(s)-Y^*(s)]$ 解得：\n$$\\Phi(z) = \\frac{Y(z)}{R(z)} = \\frac{G_1(z)G_2(z)}{1 + G_1(z)HG_2(z) + G_2(z)}$$\n因为 $R^*(s)$ 可独立提出，故例 7-4(a) **存在**闭环脉冲传递函数！"
+        }
+      ],
+      "takeaway": "列写多开关采样系统时，绝不要凭眼力套用连续梅逊公式！牢记「开关输入端设变量 → 写 $s$ 域方程 → 整体加 $*$（带 $*$ 项可提出来，不带 $*$ 项捆在一起）→ 消元」，百分百零失误。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.172-175",
+        "pdfPage": 181,
+        "itemRef": "例7-3 & 例7-4 (图7-12~7-16)"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      },
+      "finalAnswer": "例 7-3：$Y(z)=\\frac{G_2(z)G_1 R(z)}{1+G_2 H_2(z)+G_1(z)G_2 H_1(z)}$（无 $\\Phi(z)$）；例 7-4(a)：$\\Phi(z)=\\frac{G_1(z)G_2(z)}{1+G_1(z)HG_2(z)+G_2(z)}$。"
+    },
+    {
+      "id": "ctrl-ch07-e-03",
+      "section": "7.3 典型例题 · 状态空间离散化与脉冲传递函数",
+      "kind": "example",
+      "title": "【例 7-5】含奇异矩阵 $\\boldsymbol{A}$ 的连续状态方程离散化及 $G(z)$ 计算",
+      "examWeight": "core",
+      "problem": "已知连续状态空间模型 $\\begin{bmatrix}\\dot x_1\\\\\\dot x_2\\end{bmatrix}=\\begin{bmatrix}0&1\\\\0&-1\\end{bmatrix}\\begin{bmatrix}x_1\\\\x_2\\end{bmatrix}+\\begin{bmatrix}0\\\\1\\end{bmatrix}u$，$y=\\begin{bmatrix}1&0\\end{bmatrix}\\begin{bmatrix}x_1\\\\x_2\\end{bmatrix}$，求采样周期为 $T$ 时的离散状态空间方程及离散脉冲传递函数 $G(z)$。",
+      "steps": [
+        {
+          "stepTitle": "第一步",
+          "detail": "计算状态转移矩阵 $\\mathrm{e}^{\\boldsymbol{A}t}=\\mathcal{L}^{-1}[(s\\boldsymbol{I}-\\boldsymbol{A})^{-1}]$：\n$$(s\\boldsymbol{I}-\\boldsymbol{A})^{-1} = \\begin{bmatrix}s & -1 \\\\ 0 & s+1\\end{bmatrix}^{-1} = \\begin{bmatrix}\\dfrac{1}{s} & \\dfrac{1}{s(s+1)} \\\\[6pt] 0 & \\dfrac{1}{s+1}\\end{bmatrix} \\implies \\mathrm{e}^{\\boldsymbol{A}t} = \\begin{bmatrix}1 & 1-\\mathrm{e}^{-t} \\\\ 0 & \\mathrm{e}^{-t}\\end{bmatrix}$$\n令 $t=T$ 得 $\\boldsymbol{G}(T)=\\begin{bmatrix}1 & 1-\\mathrm{e}^{-T} \\\\ 0 & \\mathrm{e}^{-T}\\end{bmatrix}$。"
+        },
+        {
+          "stepTitle": "第二步",
+          "detail": "因 $\\det\\boldsymbol{A}=0$ 不可逆，必须直接积分求 $\\boldsymbol{H}(T)$：\n$$\\boldsymbol{H}(T) = \\int_0^T \\begin{bmatrix}1 & 1-\\mathrm{e}^{-t} \\\\ 0 & \\mathrm{e}^{-t}\\end{bmatrix}\\begin{bmatrix}0 \\\\ 1\\end{bmatrix}\\mathrm{d}t = \\int_0^T \\begin{bmatrix}1-\\mathrm{e}^{-t} \\\\ \\mathrm{e}^{-t}\\end{bmatrix}\\mathrm{d}t = \\begin{bmatrix}T + \\mathrm{e}^{-T} - 1 \\\\ 1 - \\mathrm{e}^{-T}\\end{bmatrix}$$"
+        },
+        {
+          "stepTitle": "第三步",
+          "detail": "离散状态空间方程为：\n$$\\boldsymbol{x}(k+1)=\\begin{bmatrix}1 & 1-\\mathrm{e}^{-T} \\\\ 0 & \\mathrm{e}^{-T}\\end{bmatrix}\\boldsymbol{x}(k)+\\begin{bmatrix}T+\\mathrm{e}^{-T}-1 \\\\ 1-\\mathrm{e}^{-T}\\end{bmatrix}u(k),\\quad y(k)=\\begin{bmatrix}1&0\\end{bmatrix}\\boldsymbol{x}(k)$$"
+        },
+        {
+          "stepTitle": "第四步",
+          "detail": "由 $G(z)=\\boldsymbol{C}(z\\boldsymbol{I}-\\boldsymbol{G})^{-1}\\boldsymbol{H}$ 计算脉冲传递函数：\n$$G(z) = \\begin{bmatrix}1 & 0\\end{bmatrix}\\frac{1}{(z-1)(z-\\mathrm{e}^{-T})}\\begin{bmatrix}z-\\mathrm{e}^{-T} & 1-\\mathrm{e}^{-T} \\\\ 0 & z-1\\end{bmatrix}\\begin{bmatrix}T+\\mathrm{e}^{-T}-1 \\\\ 1-\\mathrm{e}^{-T}\\end{bmatrix} = \\frac{(T-1+\\mathrm{e}^{-T})z + 1-\\mathrm{e}^{-T}-T\\mathrm{e}^{-T}}{(z-1)(z-\\mathrm{e}^{-T})}$$\n（交叉验证：原连续对象传函 $G(s)=\\frac{1}{s(s+1)}$，加 ZOH 后 $(1-z^{-1})\\mathcal{Z}\\big[\\frac{1}{s^2(s+1)}\\big]$ 与上式完全一致！）"
+        }
+      ],
+      "takeaway": "连续状态空间加 ZOH 离散化得到的 $G(z)=\\boldsymbol{C}(z\\boldsymbol{I}-\\boldsymbol{G})^{-1}\\boldsymbol{H}$，在数学上严格等价于 $(1-z^{-1})\\mathcal{Z}\\big[\\frac{G(s)}{s}\\big]$，考场上可用后者快速验算！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.175-176",
+        "pdfPage": 184,
+        "itemRef": "例7-5 (图7-17)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch07_ex_guide75_discretize",
+        "verified": true
+      },
+      "finalAnswer": "$\\boldsymbol{G}(T)=\\begin{bmatrix}1&1-\\mathrm{e}^{-T}\\\\0&\\mathrm{e}^{-T}\\end{bmatrix}$，$\\boldsymbol{H}(T)=\\begin{bmatrix}T+\\mathrm{e}^{-T}-1\\\\1-\\mathrm{e}^{-T}\\end{bmatrix}$，$G(z)=\\frac{(T-1+\\mathrm{e}^{-T})z+1-\\mathrm{e}^{-T}-T\\mathrm{e}^{-T}}{(z-1)(z-\\mathrm{e}^{-T})}$。"
+    },
+    {
+      "id": "ctrl-ch07-e-04",
+      "section": "7.3 典型例题 · 采样周期稳定域（W 变换 + 根轨迹双解）",
+      "kind": "example",
+      "title": "【例 7-6】含纯滞后与零阶保持器的离散系统稳定采样周期 $T$ 范围",
+      "examWeight": "core",
+      "problem": "如图 7-18 所示单位负反馈离散系统：前向依次为比例环节 $2$ → 采样开关 $T$ → 零阶保持器 $\\frac{1-\\mathrm{e}^{-Ts}}{s}$ → 单位负反馈积分内环（等效 $\\frac{1}{s+1}$）→ 采样开关 $T$ → 纯滞后 $\\mathrm{e}^{-Ts}$。试求使系统稳定的采样周期 $T$ 范围。",
+      "figureSvg": "<svg role='img' viewBox='0 0 430 102' xmlns='http://www.w3.org/2000/svg'><title>例7-6含内环、ZOH与纯滞后的离散系统框图（仿辅导书图7-18）</title><defs><marker id='a73' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='8' y1='42' x2='32' y2='42' stroke='#334155' stroke-width='1.3' marker-end='url(#a73)'/><circle cx='38' cy='42' r='6' fill='#fff' stroke='#334155' stroke-width='1.3'/><line x1='44' y1='42' x2='62' y2='42' stroke='#334155' stroke-width='1.3' marker-end='url(#a73)'/><rect x='64' y='30' width='24' height='24' rx='3' fill='#eff6ff' stroke='#2744a8' stroke-width='1.3'/><text x='73' y='46' font-size='10.5' fill='#1e3a8a'>2</text><line x1='88' y1='42' x2='106' y2='42' stroke='#334155' stroke-width='1.3'/><line x1='106' y1='42' x2='122' y2='32' stroke='#0b6e4f' stroke-width='1.8'/><text x='110' y='26' font-size='9' fill='#0b6e4f'>T</text><line x1='124' y1='42' x2='142' y2='42' stroke='#334155' stroke-width='1.3' marker-end='url(#a73)'/><rect x='144' y='28' width='52' height='28' rx='3' fill='#ecfdf5' stroke='#0b6e4f' stroke-width='1.3'/><text x='149' y='45' font-size='9.5' fill='#065f46'>(1-e⁻ᵀˢ)/s</text><line x1='196' y1='42' x2='214' y2='42' stroke='#334155' stroke-width='1.3' marker-end='url(#a73)'/><rect x='216' y='28' width='54' height='28' rx='3' fill='#eff6ff' stroke='#2744a8' stroke-width='1.3'/><text x='225' y='45' font-size='9.5' fill='#1e3a8a'>1/(s+1)</text><line x1='270' y1='42' x2='288' y2='42' stroke='#334155' stroke-width='1.3'/><line x1='288' y1='42' x2='304' y2='32' stroke='#0b6e4f' stroke-width='1.8'/><text x='292' y='26' font-size='9' fill='#0b6e4f'>T</text><line x1='306' y1='42' x2='326' y2='42' stroke='#334155' stroke-width='1.3' marker-end='url(#a73)'/><rect x='328' y='30' width='40' height='24' rx='3' fill='#fef3c7' stroke='#9a5800' stroke-width='1.3'/><text x='336' y='46' font-size='10' fill='#78350f'>e⁻ᵀˢ</text><line x1='368' y1='42' x2='414' y2='42' stroke='#334155' stroke-width='1.3' marker-end='url(#a73)'/><text x='400' y='34' font-size='10' fill='#141824'>Y(s)</text><polyline points='388,42 388,82 38,82 38,48' fill='none' stroke='#334155' stroke-width='1.3' marker-end='url(#a73)'/><text x='44' y='59' font-size='11' fill='#b4233c'>−</text><text x='204' y='74' font-size='9.5' fill='#475569'>(1/s 单位负反馈内环已化简为 1/(s+1))</text></svg>",
+      "steps": [
+        {
+          "stepTitle": "第一步",
+          "detail": "化简内环 $\\frac{1/s}{1+1/s}=\\frac{1}{s+1}$；因两采样开关之间的连串对象为 ZOH 与 $\\frac{1}{s+1}$，第二开关后为纯滞后 $\\mathrm{e}^{-Ts}$（对应 $z^{-1}$），故开环脉冲传递函数为：\n$$G(z) = 2z^{-1}(1-z^{-1})\\mathcal{Z}\\!\\left[\\frac{1}{s(s+1)}\\right] = 2z^{-1}(1-z^{-1})\\frac{(1-\\mathrm{e}^{-T})z}{(z-1)(z-\\mathrm{e}^{-T})} = \\frac{2(1-\\mathrm{e}^{-T})}{z(z-\\mathrm{e}^{-T})}$$"
+        },
+        {
+          "stepTitle": "第二步",
+          "detail": "令 $b=\\mathrm{e}^{-T}\\in(0,1)$，得闭环特征方程 $1+G(z)=0$：\n$$z^2 - bz + 2 - 2b = 0$$"
+        },
+        {
+          "stepTitle": "步骤 3",
+          "detail": "第三步（法一：W 变换 + 劳斯判据）：令 $z=\\frac{1+w}{1-w}$ 代入并两边同乘 $(1-w)^2$：\n$$(1+w)^2 - b(1+w)(1-w) + (2-2b)(1-w)^2 = 0 \\implies (3-b)w^2 + (4b-2)w + (3-3b) = 0$$\n对二阶 $w$ 域方程，劳斯稳定充要条件即全部系数同正：\n$$\\begin{cases} 3-b > 0 \\\\ 4b-2 > 0 \\\\ 3-3b > 0 \\end{cases} \\implies 0.5 < b < 1 \\implies 0 < T = -\\ln b < \\ln 2 \\approx 0.693\\,\\text{s}$$"
+        },
+        {
+          "stepTitle": "步骤 4",
+          "detail": "第四步（法二：等效根轨迹验算）：将特征方程改写为 $1 - \\frac{b(z+2)}{z^2+2}=0$（正反馈 $0^\\circ$ 根轨迹），求其与单位圆 $|z|=1$ 交点得 $b_1=0.5$、$b_2=1$，同样锁定稳定区间 $0.5<b<1$ 即 $0<T<0.693\\,\\text{s}$。"
+        }
+      ],
+      "takeaway": "遇到 $T$ 在指数位置 $\\mathrm{e}^{-T}$ 的求稳题，先换元 **$b=\\mathrm{e}^{-T}\\in(0,1)$** 再做 W 变换，代数计算立刻丝滑十倍！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.176-177",
+        "pdfPage": 185,
+        "itemRef": "例7-6 (图7-18~7-19)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch07_ex_guide76_delay_stab",
+        "verified": true
+      },
+      "finalAnswer": "稳定采样周期范围为 $0 < T < \\ln 2 \\approx 0.693\\,\\text{s}$。"
+    },
+    {
+      "id": "ctrl-ch07-e-05",
+      "section": "7.3 典型例题 · ZOH 系统 W 变换劳斯判稳",
+      "kind": "example",
+      "title": "【例 7-7 & 主教材例 7-27】含零阶保持器的开环脉冲传函求法与稳定增益上限",
+      "examWeight": "core",
+      "problem": "①（例 7-7）单位负反馈离散系统采样周期 $T=1\\,\\text{s}$，零阶保持器串联对象 $\\frac{K}{s(0.2s+1)}$，求闭环稳定的 $K$ 范围。\n②（主教材例 7-27）无保持器单位负反馈采样系统 $G(s)=\\frac{K}{s(T_d s+1)}$，求参数 $T/T_d$ 与 $K$ 的稳定边界。",
+      "steps": [
+        {
+          "stepTitle": "① 例 7-7",
+          "detail": "利用部分分式求含 ZOH 的开环脉冲传递函数（$T=1$）：\n$$G(z)=K(1-z^{-1})\\mathcal{Z}\\!\\left[\\frac{1}{s^2(0.2s+1)}\\right]=K(1-z^{-1})\\mathcal{Z}\\!\\left[\\frac{1}{s^2}-\\frac{0.2}{s}+\\frac{0.2}{s+5}\\right]=K\\frac{(0.8+0.2\\mathrm{e}^{-5})z+(0.2-1.2\\mathrm{e}^{-5})}{(z-1)(z-\\mathrm{e}^{-5})}$$"
+        },
+        {
+          "stepTitle": "步骤 2",
+          "detail": "写闭环特征方程 $D(z)=z^2+[-(1+\\mathrm{e}^{-5})+K(0.8+0.2\\mathrm{e}^{-5})]z+[\\mathrm{e}^{-5}+K(0.2-1.2\\mathrm{e}^{-5})]=0$，代入 $z=\\frac{w+1}{w-1}$ 化简（$\\mathrm{e}^{-5}\\approx 0.00674$）：\n$$0.9933 K w^2 + (1.9865 - 0.3838 K)w + (2.0135 - 0.6094 K) = 0$$\n三系数全正给出 $K>0$、$K<5.176$、$K<3.304$，取交集得 **$0 < K < 3.30$**（原书取两位小数 $0<K<3.3$）。"
+        },
+        {
+          "stepTitle": "② 主教材例 7-27",
+          "detail": "无保持器时 $G(z)=\\mathcal{Z}\\big[\\frac{K}{s(T_d s+1)}\\big]=\\frac{Kz(1-b)}{(z-1)(z-b)}$（记 $b=\\mathrm{e}^{-T/T_d}$），特征方程 $z^2+[K(1-b)-(1+b)]z+b=0$。代入 $z=\\frac{w+1}{w-1}$ 得：\n$$K(1-b)w^2 + 2(1-b)w + \\big[2(1+b)-K(1-b)\\big] = 0$$\n由三系数全正得解析稳定界：\n$$0 < K < \\frac{2(1+\\mathrm{e}^{-T/T_d})}{1-\\mathrm{e}^{-T/T_d}}$$\n当 $T/T_d=1$ 时 $K_{\\max}=\\frac{2(1+\\mathrm{e}^{-1})}{1-\\mathrm{e}^{-1}}\\approx 4.33$；故当 $K=10$ 时系统发散（闭环根 $-0.075,-4.88$）。"
+        }
+      ],
+      "takeaway": "二阶特征方程做 W 变换后只需判断三个系数全部大于零（无需再列复杂高阶劳斯表），且一定要记住**ZOH 会在分子引入一个额外零点**，计算切忌跳步。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.177-178",
+        "pdfPage": 186,
+        "itemRef": "例7-7 (图7-20)",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.305-306 例7-27"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch07_ex_guide77_zoh_routh",
+        "verified": true
+      },
+      "finalAnswer": "① $0 < K < 3.30$；② $0 < K < \\frac{2(1+\\mathrm{e}^{-T/T_d})}{1-\\mathrm{e}^{-T/T_d}}$（$T=T_d$ 时 $K<4.33$）。"
+    },
+    {
+      "id": "ctrl-ch07-e-06",
+      "section": "7.3 典型例题 · 【重大原书勘误预警】数字控制器稳定性",
+      "kind": "example",
+      "title": "【例 7-8】差分控制器 $D(z)$ + ZOH 稳定 $K$ 范围（捕获原书漏因子 $\\frac{1}{2}$ 勘误！）",
+      "examWeight": "core",
+      "problem": "采样控制系统如图 7-21 所示，$T=0.5\\,\\text{s}$，数字控制器差分方程为 $u(kT)=u(kT-T)+2e(kT)-e(kT-T)$，后接零阶保持器 $\\frac{1-\\mathrm{e}^{-Ts}}{s}$ 与对象 $\\frac{K}{s+2}$（单位负反馈）。试求：① 使系统稳定的 $K$ 范围；② 单位阶跃稳态误差。",
+      "steps": [
+        {
+          "stepTitle": "第一步",
+          "detail": "对控制器差分方程两边取 Z 变换（滞后定理）：\n$$U(z) = z^{-1}U(z) + 2E(z) - z^{-1}E(z) \\implies D(z) = \\frac{U(z)}{E(z)} = \\frac{2 - z^{-1}}{1 - z^{-1}} = \\frac{2(z-0.5)}{z-1}$$"
+        },
+        {
+          "stepTitle": "第二步",
+          "detail": "【关键勘误核对！】计算 ZOH + 被控对象的广义脉冲传递函数（$T=0.5$，故 $2T=1$）：\n$$\\frac{K}{s(s+2)} = \\mathbf{\\frac{K}{2}}\\left(\\frac{1}{s} - \\frac{1}{s+2}\\right)$$\n因此正确的开环脉冲传递函数为：\n$$G(z) = D(z)\\cdot(1-z^{-1})\\cdot\\frac{K}{2}\\left(\\frac{z}{z-1}-\\frac{z}{z-\\mathrm{e}^{-2T}}\\right) = \\frac{2(z-0.5)}{z-1}\\cdot\\frac{K(1-\\mathrm{e}^{-1})}{2(z-\\mathrm{e}^{-1})} = \\frac{K(1-\\mathrm{e}^{-1})(z-0.5)}{(z-1)(z-\\mathrm{e}^{-1})} \\approx \\frac{0.6321 K (z-0.5)}{(z-1)(z-0.3679)}$$"
+        },
+        {
+          "stepTitle": "第三步",
+          "detail": "开环极点为 $z=1,0.3679$，开环零点为 $z=0.5$；实轴根轨迹在 $[0.3679,0.5]$ 及 $(-\\infty,1)$ 左端出单位圆于 $z=-1$ 处，由幅值条件 $|G(-1)|=1$ 得正确临界增益：\n$$K_{\\max,\\text{正}} = \\frac{|-1-1|\\cdot|-1-\\mathrm{e}^{-1}|}{(1-\\mathrm{e}^{-1})\\cdot|-1-0.5|} = \\frac{2(1+\\mathrm{e}^{-1})}{1.5(1-\\mathrm{e}^{-1})} \\approx \\mathbf{2.885} \\implies \\mathbf{0 < K < 2.885}$$"
+        },
+        {
+          "stepTitle": "第四步",
+          "detail": "【原书印刷错误对照说明】辅导书 P.178 倒数第 1 行展开 $\\frac{K}{s(s+2)}$ 时**漏写了系数 $\\frac{1}{2}$**，导致 P.179 上方把 $G(z)$ 误算大 2 倍为 $\\frac{1.264K(z-0.5)}{(z-1)(z-0.368)}$，从而算出错误结果 $0<K<1.443$（恰好是正确值 $2.885$ 的一半，已由 SymPy 精确验算实锤！）。"
+        },
+        {
+          "stepTitle": "第五步",
+          "detail": "在闭环稳定范围内（$0<K<2.885$），因 $D(z)$ 在 $z=1$ 处引入了一个积分极点，系统为 I 型单位负反馈系统，故单位阶跃输入下的稳态误差 $e_{ss}=0$。"
+        }
+      ],
+      "takeaway": "部分分式展开 $\\frac{1}{s(s+a)}=\\mathbf{\\frac{1}{a}}\\big(\\frac{1}{s}-\\frac{1}{s+a}\\big)$ 是考场最高频的粗心失分点——连原书作者在这里都漏掉了 $\\frac{1}{2}$！写完务必通分口算一遍分子是否还原！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.178-179",
+        "pdfPage": 187,
+        "itemRef": "例7-8 (图7-21~7-22 · 含重要勘误)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch07_ex_guide78_errata",
+        "verified": true
+      },
+      "finalAnswer": "① 正确稳定范围为 $0 < K < 2.885$（注：原辅导书 P.178-179 因部分分式漏乘 $\\frac{1}{2}$ 误印为 $0<K<1.443$）；② 稳定时单位阶跃稳态误差 $e_{ss}=0$。"
+    },
+    {
+      "id": "ctrl-ch07-e-07",
+      "section": "7.3 典型例题 · 稳态误差系数与无振荡临界阻尼设计",
+      "kind": "example",
+      "title": "【例 7-9 & 例 7-10】离散 $K_p/K_v/K_a$、最小稳态误差约束及临界无振荡参数",
+      "examWeight": "core",
+      "problem": "①（例 7-9）ZOH 串联 $\\frac{K}{s(s+1)}$（$T=0.1\\,\\text{s},\\;K=1$），输入 $r(t)=t\\cdot 1(t)$，求 $K_p,K_v,K_a$ 及稳态误差。\n②（例 7-10）ZOH 串联 $G(s)=\\frac{K\\mathrm{e}^{-Ts}}{s}$（$T=0.2\\,\\text{s}$），输入 $r(t)=2\\cdot 1(t)+t$：① 能否使稳态误差小于 $0.1$？最小稳态误差下界是多少？② 要求动态过程无振荡，求临界极点与 $K$。",
+      "steps": [
+        {
+          "stepTitle": "① 例 7-9",
+          "detail": "求 $G(z)=(1-z^{-1})\\mathcal{Z}\\big[\\frac{1}{s^2(s+1)}\\big]=\\frac{(0.1-1+\\mathrm{e}^{-0.1})z+(1-1.1\\mathrm{e}^{-0.1})}{(z-1)(z-\\mathrm{e}^{-0.1})}\\approx\\frac{0.00484(z+0.967)}{(z-1)(z-0.9048)}$（原书近似取 $\\frac{0.005(z+0.9)}{(z-1)(z-0.905)}$）。闭环极点 $|z_{1,2}|\\approx 0.954<1$ 稳定！\n代入系数公式得：$K_p=\\infty$，$K_v=\\frac{1}{0.1}\\lim_{z\\to 1}\\frac{z-1}{z}G(z)=1$，$K_a=0$，故单位斜坡稳态误差 $e(\\infty)=\\frac{1}{K_v}=1$。"
+        },
+        {
+          "stepTitle": "【② 例 7-10 第 1 问】求开环脉冲传函",
+          "detail": "$$G_k(z) = K(1-z^{-1})z^{-1}\\mathcal{Z}\\!\\left[\\frac{1}{s^2}\\right] = K\\frac{z-1}{z}\\cdot\\frac{1}{z}\\cdot\\frac{0.2z}{(z-1)^2} = \\frac{0.2K}{z(z-1)}$$\n特征方程 $z^2-z+0.2K=0$，令 $z=\\frac{w+1}{w-1}$ 得 $0.2Kw^2+(2-0.4K)w+(2+0.2K)=0 \\implies$ 稳定条件为 **$0 < K < 5$**。"
+        },
+        {
+          "stepTitle": "步骤 3",
+          "detail": "系统为 I 型，对阶跃分量 $2\\cdot 1(t)$ 稳态误差为 $0$，对斜坡分量 $t$ 有 $K_v=\\frac{1}{0.2}\\lim_{z\\to 1}\\frac{z-1}{z}\\frac{0.2K}{z(z-1)}=K$，故 $e(\\infty)=\\frac{1}{K}$。欲使 $e(\\infty)<0.1$ 需 $K>10$，与稳定域 $0<K<5$ 矛盾，故**无解**！在稳定域内 $e(\\infty)=\\frac{1}{K}>0.2$（注：原书 P.180 末行简写为「最小稳态误差为 $0.2$」，严格而言 $K=5$ 时系统位于单位圆周上临界振荡，故稳定前提下只能无限逼近下确界 $0.2$，即 $e(\\infty)>0.2$）。"
+        },
+        {
+          "stepTitle": "② 例 7-10 第 2 问",
+          "detail": "要求动态过程无振荡，闭环两极点须为正实数且临界无振荡时重合（二重实根）：\n$$z_{1,2} = \\frac{1 \\pm \\sqrt{1-0.8K}}{2} \\implies 1 - 0.8K = 0 \\implies K = 1.25,\\quad z_1 = z_2 = 0.5$$\n（用根轨迹分离点验证：$\\frac{1}{d}+\\frac{1}{d-1}=0\\Rightarrow d=0.5$，$|d||d-1|=0.2K\\Rightarrow K=1.25$，完全一致！）"
+        }
+      ],
+      "takeaway": "稳定性永远凌驾于稳态精度之上！本题集齐了「离散稳定性 + 叠加输入稳态误差 + Z 平面无振荡临界阻尼」三大考纲热点。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.179-181",
+        "pdfPage": 188,
+        "itemRef": "例7-9 & 例7-10 (图7-23~7-25)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch07_ex_guide710_crit_damp",
+        "verified": true
+      },
+      "finalAnswer": "① $K_p=\\infty,K_v=1,K_a=0,e(\\infty)=1$；② 不存在使 $e(\\infty)<0.1$ 的 $K$，稳定时 $e(\\infty)>0.2$；无振荡临界 $K=1.25$、极点 $z_{1,2}=0.5$。"
+    },
+    {
+      "id": "ctrl-ch07-e-08",
+      "section": "7.3 典型例题 · 最少拍数字调节器综合",
+      "kind": "example",
+      "title": "【例 7-11】单位阶跃输入下的无稳态误差最少拍数字调节器 $D(z)$ 设计",
+      "examWeight": "core",
+      "problem": "已知单位负反馈数字控制系统（图 7-26），采样周期 $T=1\\,\\text{s}$，输入 $r(t)=1(t)$，零阶保持器 $G_h(s)=\\frac{1-\\mathrm{e}^{-Ts}}{s}$，被控对象 $G(s)=\\frac{2}{(s+1)(s+2)}$。试按无稳态误差最少拍系统设计数字控制器 $D(z)$，并写出误差序列 $E(z)$、控制器输出 $E_1(z)$ 与系统输出 $C(z)$。",
+      "figureSvg": "<svg role='img' viewBox='0 0 430 98' xmlns='http://www.w3.org/2000/svg'><title>例7-11最少拍数字控制系统结构图（仿辅导书图7-26）</title><defs><marker id='a74' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='10' y1='40' x2='38' y2='40' stroke='#334155' stroke-width='1.3' marker-end='url(#a74)'/><text x='10' y='32' font-size='10' fill='#141824'>R(s)</text><circle cx='44' cy='40' r='6' fill='#fff' stroke='#334155' stroke-width='1.3'/><line x1='50' y1='40' x2='72' y2='40' stroke='#334155' stroke-width='1.3'/><line x1='72' y1='40' x2='88' y2='30' stroke='#0b6e4f' stroke-width='1.8'/><text x='76' y='24' font-size='9' fill='#0b6e4f'>T</text><line x1='90' y1='40' x2='114' y2='40' stroke='#334155' stroke-width='1.3' marker-end='url(#a74)'/><rect x='116' y='28' width='44' height='24' rx='3' fill='#fef3c7' stroke='#9a5800' stroke-width='1.3'/><text x='126' y='44' font-size='10.5' fill='#78350f'>D(z)</text><line x1='160' y1='40' x2='182' y2='40' stroke='#334155' stroke-width='1.3'/><line x1='182' y1='40' x2='198' y2='30' stroke='#0b6e4f' stroke-width='1.8'/><text x='186' y='24' font-size='9' fill='#0b6e4f'>T</text><line x1='200' y1='40' x2='224' y2='40' stroke='#334155' stroke-width='1.3' marker-end='url(#a74)'/><rect x='226' y='28' width='48' height='24' rx='3' fill='#ecfdf5' stroke='#0b6e4f' stroke-width='1.3'/><text x='234' y='44' font-size='10' fill='#065f46'>G_h(s)</text><line x1='274' y1='40' x2='298' y2='40' stroke='#334155' stroke-width='1.3' marker-end='url(#a74)'/><rect x='300' y='28' width='68' height='24' rx='3' fill='#eff6ff' stroke='#2744a8' stroke-width='1.3'/><text x='304' y='44' font-size='9' fill='#1e3a8a'>2/((s+1)(s+2))</text><line x1='368' y1='40' x2='414' y2='40' stroke='#334155' stroke-width='1.3' marker-end='url(#a74)'/><text x='396' y='32' font-size='10' fill='#141824'>C(s)</text><polyline points='388,40 388,78 44,78 44,46' fill='none' stroke='#334155' stroke-width='1.3' marker-end='url(#a74)'/><text x='50' y='57' font-size='11' fill='#b4233c'>−</text><text x='92' y='55' font-size='8.5' fill='#475569'>e*(t)</text><text x='198' y='55' font-size='8.5' fill='#475569'>e₁*(t)</text></svg>",
+      "steps": [
+        {
+          "stepTitle": "第一步",
+          "detail": "求广义被控对象的脉冲传递函数（$T=1\\,\\text{s}$）：\n$$G_h G(z) = (1-z^{-1})\\mathcal{Z}\\!\\left[\\frac{2}{s(s+1)(s+2)}\\right] = (1-z^{-1})\\mathcal{Z}\\!\\left[\\frac{1}{s}-\\frac{2}{s+1}+\\frac{1}{s+2}\\right] = \\frac{(1-\\mathrm{e}^{-1})^2(z+\\mathrm{e}^{-1})}{(z-\\mathrm{e}^{-1})(z-\\mathrm{e}^{-2})}$$\n代入数值 $\\mathrm{e}^{-1}\\approx 0.3679,\\;\\mathrm{e}^{-2}\\approx 0.1353,\\;(1-\\mathrm{e}^{-1})^2\\approx 0.3996\\approx 0.40$：\n$$G_h G(z) \\approx \\frac{0.4(z+0.368)}{(z-0.135)(z-0.368)}$$\n（原书四舍五入写作 $z+0.369$，SymPy 验算精确值为 $z+\\mathrm{e}^{-1}=z+0.3679$。）"
+        },
+        {
+          "stepTitle": "第二步",
+          "detail": "检查零极点与滞后拍数：$G_h G(z)$ 的零点 $z=-0.368$ 和极点 $z=0.135, 0.368$ **全部严格位于单位圆内部**（无不稳定零极点！），且分母比分子高 $1$ 阶（$d=1$）。"
+        },
+        {
+          "stepTitle": "第三步",
+          "detail": "针对单位阶跃输入 $R(z)=\\frac{1}{1-z^{-1}}$，取最简最少拍形式：\n$$\\Phi_e(z) = 1 - z^{-1},\\qquad \\Phi(z) = 1 - \\Phi_e(z) = z^{-1}$$"
+        },
+        {
+          "stepTitle": "第四步",
+          "detail": "代入设计公式求数字控制器 $D(z)$：\n$$D(z) = \\frac{\\Phi(z)}{G_h G(z)\\,\\Phi_e(z)} = \\frac{z^{-1}}{\\dfrac{0.4(z+0.368)}{(z-0.135)(z-0.368)}\\cdot(1-z^{-1})} = \\frac{2.5(z-0.135)(z-0.368)}{(z-1)(z+0.368)}$$\n核查物理可实现性：分子分母同为 $2$ 阶，且消去的零极点均在单位圆内，满足稳定与可实现要求！"
+        },
+        {
+          "stepTitle": "第五步",
+          "detail": "验证各信号序列：\n$$E(z)=\\Phi_e(z)R(z)=1\\;\\text{（仅 }k=0\\text{ 时 }e(0)=1\\text{，1 拍后误差严格为 0！）}$$\n$$C(z)=\\Phi(z)R(z)=\\frac{z^{-1}}{1-z^{-1}}=z^{-1}+z^{-2}+z^{-3}+\\cdots\\;\\text{（从 }t=T\\text{ 起采样点严格跟踪 1）}$$\n$$E_1(z)=D(z)E(z)=2.50+0.32z^{-1}+1.25z^{-2}+0.91z^{-3}+\\cdots\\;\\text{（采样点间存在轻微衰减波纹）}$$"
+        }
+      ],
+      "takeaway": "若题目进一步要求**无波纹最少拍**，则不可用 $D(z)$ 的极点去对消对象零点 $z=-0.368$，必须让 $\\Phi(z)$ 吸收因子 $(1+0.368z^{-1})$，此时拍数增加 1 拍（2 拍稳定），但控制量 $e_1^*(t)$ 有限拍后即恒定不变，彻底消除采样点间波纹！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.181-182",
+        "pdfPage": 190,
+        "itemRef": "例7-11 (图7-26~7-27)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch07_ex_guide711_deadbeat",
+        "verified": true
+      },
+      "finalAnswer": "$D(z)=\\frac{2.5(z-0.135)(z-0.368)}{(z-1)(z+0.368)}$；$1$ 拍后采样时刻稳态误差严格归零。"
+    }
+  ]
+}

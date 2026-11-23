@@ -1,0 +1,601 @@
+{
+  "chapterId": "ch09",
+  "title": "第 9 章 非线性控制系统分析",
+  "basicRequirements": {
+    "master": "【2027 浙大 845 考纲明确必考】非线性控制系统的基本概念与典型非线性特性；描述函数法（定义、三大前提、常见典型非线性描述函数、方块图化简标准型、推广 Nyquist 稳定判据与极限环自振参数及稳定性分析）；李亚普诺夫稳定性分析方法（稳定性定义、间接法/雅可比线性化、二次型 Sylvester 判据、直接法基本定理及连续/离散线性定常系统李亚普诺夫代数方程）。",
+    "understand": "典型非线性特性的物理意义；李亚普诺夫直接法半负定弱化条件（非零态 V̇ 不恒为零）的巧妙运用；描述函数近似精度与线性部分低通滤波性能的关系。",
+    "familiar": "【拓展了解】相平面分析法（二阶系统奇点分类、解析法与等倾线法绘制相轨迹）。"
+  },
+  "sourceMeta": "主教材：孙优贤《自动控制原理》(2011第1版) P.383-423 ｜ 辅导书：孙优贤《学习辅导》(2017第1版) P.222-237",
+  "items": [
+    {
+      "id": "ctrl-ch09-f-01",
+      "section": "9.2.2 描述函数定义与适用条件（含主教材 P.397 勘误）",
+      "kind": "formula",
+      "title": "描述函数 $N(A)$ 傅里叶基波定义与三大适用前提",
+      "examWeight": "core",
+      "prompt": "当非线性环节 $y=f(x)$ 输入正弦信号 $x(t)=A\\sin\\omega t$ 时，写出描述函数 $N(A)$ 的傅里叶积分定义式及其三大适用条件：",
+      "formulaLatex": "$$\\begin{aligned} &y_1(t) = A_1\\cos\\omega t + B_1\\sin\\omega t = C_1\\sin(\\omega t + \\phi_1) \\\\ &A_1 = \\frac{1}{\\pi}\\int_0^{2\\pi} y(t)\\cos\\omega t\\,\\mathrm{d}(\\omega t),\\qquad B_1 = \\frac{1}{\\pi}\\int_0^{2\\pi} y(t)\\sin\\omega t\\,\\mathrm{d}(\\omega t) \\\\ &N(A) = \\frac{C_1}{A}\\mathrm{e}^{\\mathrm{j}\\phi_1} = \\frac{B_1}{A} + \\mathrm{j}\\frac{A_1}{A} = \\frac{C_1}{A}(\\cos\\phi_1 + \\mathrm{j}\\sin\\phi_1) \\\\ &\\text{单值奇对称（}A_1=0\\text{）简化式：}\\; N(A) = \\frac{B_1}{A} = \\frac{4}{\\pi A}\\int_0^{\\pi/2} y(t)\\sin\\omega t\\,\\mathrm{d}(\\omega t)\\in\\mathbb{R} \\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "三大适用前提",
+          "desc": "① 系统结构图可化简为**单个非线性环节 $N(A)$** 与**一个线性部分 $G(s)$** 串联的单位负反馈标准型；② 非线性特性关于原点**奇对称**（直流分量 $A_0=0$）；③ 线性部分 $G(s)$ 具有**较好的低通滤波性能**（抑制高次谐波，使回到非线性输入端的信号近似纯正弦）"
+        },
+        {
+          "sym": "单值 vs 非单值",
+          "desc": "**单值**奇对称非线性（理想继电、死区、饱和、死区继电）的 $N(A)$ 必为**纯实数**（无相移）；**非单值**（滞环、间隙）的 $N(A)$ 含**负虚部**（产生相位滞后）！"
+        }
+      ],
+      "conditions": "描述函数法本质是「谐波线性化」近似法：适用于任意阶次非线性系统（不受相平面 2 阶限制），主要用于判稳与求周期自振（极限环）的振幅 $A$ 和频率 $\\omega$，但不能给出精确瞬态时间响应。",
+      "pitfalls": "【主教材 P.397 式(9-17) 印刷勘误】主教材式(9-17) 最右端误印为 `B_1/A (cosφ_1 + j sinφ_1)`，正确应为 **$\\frac{C_1}{A}(\\cos\\phi_1+\\mathrm{j}\\sin\\phi_1)$**（因 $B_1=C_1\\cos\\phi_1,\\;A_1=C_1\\sin\\phi_1$）！另外绝不能弄反实虚部：正弦输入 $A\\sin\\omega t$ 下，**$\\sin$ 系数 $B_1/A$ 是实部，$\\cos$ 系数 $A_1/A$ 是虚部**！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.397-398",
+        "pdfPage": 406,
+        "itemRef": "式(9-14)~(9-17)",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.223-224"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch09_f_df_core_integrals",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch09-f-02",
+      "section": "9.2.2 常见典型非线性特性描述函数表（含主教材 P.402 勘误）",
+      "kind": "formula",
+      "title": "八大高频非线性环节描述函数 $N(A)$ 与负倒曲线 $-1/N(A)$ 必背速查",
+      "examWeight": "core",
+      "prompt": "默写理想继电、死区继电、滞环继电、饱和、死区、死区加饱和、间隙及立方非线性的描述函数 $N(A)$：",
+      "formulaLatex": "$$\\begin{aligned} &\\text{① 理想继电 }(M):\\; N(A) = \\frac{4M}{\\pi A} \\implies -\\frac{1}{N(A)} = -\\frac{\\pi A}{4M}\\;\\text{（负实轴 }0\\to -\\infty\\text{）} \\\\ &\\text{② 死区继电 }(M,h):\\; N(A) = \\frac{4M}{\\pi A}\\sqrt{1-\\left(\\frac{h}{A}\\right)^2}\\;(A\\ge h)\\;\\text{，}-\\frac{1}{N}\\text{ 最右端在 }A=\\sqrt{2}h\\text{ 处为 }-\\frac{\\pi h}{2M} \\\\ &\\text{③ 滞环继电 }(M,h):\\; N(A) = \\frac{4M}{\\pi A}\\sqrt{1-\\left(\\frac{h}{A}\\right)^2} - \\mathrm{j}\\frac{4Mh}{\\pi A^2}\\;(A\\ge h) \\implies -\\frac{1}{N(A)} = -\\frac{\\pi A}{4M}\\sqrt{1-\\left(\\frac{h}{A}\\right)^2} - \\mathrm{j}\\frac{\\pi h}{4M} \\\\ &\\text{④ 饱和 }(k,a):\\; N(A) = \\frac{2k}{\\pi}\\!\\left[\\arcsin\\frac{a}{A} + \\frac{a}{A}\\sqrt{1-\\left(\\frac{a}{A}\\right)^2}\\right]\\;(A\\ge a)\\;\\text{（}-\\frac{1}{N}\\text{ 从 }-\\frac{1}{k}\\text{ 到 }-\\infty\\text{）} \\\\ &\\text{⑤ 死区 }(k,\\Delta):\\; N(A) = k - \\frac{2k}{\\pi}\\!\\left[\\arcsin\\frac{\\Delta}{A} + \\frac{\\Delta}{A}\\sqrt{1-\\left(\\frac{\\Delta}{A}\\right)^2}\\right]\\;(A\\ge\\Delta)\\;\\text{（}-\\frac{1}{N}\\text{ 从 }-\\infty\\text{ 到 }-\\frac{1}{k}\\text{）} \\\\ &\\text{⑥ 死区加饱和 }(k,\\Delta,a):\\; N(A)=\\frac{2k}{\\pi}\\!\\left[\\arcsin\\frac{a}{A}-\\arcsin\\frac{\\Delta}{A}+\\frac{a}{A}\\sqrt{1-\\left(\\frac{a}{A}\\right)^2}-\\frac{\\Delta}{A}\\sqrt{1-\\left(\\frac{\\Delta}{A}\\right)^2}\\right]\\;(A\\ge a) \\\\ &\\text{⑦ 间隙 }(k,b):\\; N(A)=\\frac{k}{\\pi}\\!\\left[\\frac{\\pi}{2}+\\arcsin\\!\\left(1-\\frac{2b}{A}\\right)+2\\!\\left(1-\\frac{2b}{A}\\right)\\!\\sqrt{\\frac{b}{A}\\!\\left(1-\\frac{b}{A}\\right)}\\right]+\\mathrm{j}\\frac{4kb}{\\pi A}\\!\\left(\\frac{b}{A}-1\\right)\\;(A\\ge b) \\\\ &\\text{⑧ 立方项 }y=b_3 x^3:\\; N(A) = \\frac{3}{4}b_3 A^2 \\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "超强巧记恒等式",
+          "desc": "饱和与死区之和恒等于纯线性增益 $k$：$N_{\\text{饱和}}(A)+N_{\\text{死区}}(A)\\equiv k$！死区加滞环继电（参数 $m$）：$N(A)=\\frac{2M}{\\pi A}[\\sqrt{1-(mh/A)^2}+\\sqrt{1-(h/A)^2}]+\\mathrm{j}\\frac{2Mh}{\\pi A^2}(m-1)$，取 $m=1$ 得死区继电，取 $m=-1$ 得滞环继电！"
+        },
+        {
+          "sym": "滞环 $-1/N(A)$ 奇迹",
+          "desc": "滞环继电的 $-1/N(A)$ 是一条**平行于负实轴的水平直线**，虚部恒等于常数 **$-\\mathrm{j}\\frac{\\pi h}{4M}$**（经 SymPy 符号精确验算）！"
+        }
+      ],
+      "conditions": "表中各式均针对各自定义域（如饱和 $A\\ge a$，当 $0<A<a$ 时未饱和 $N(A)=k$；死区 $A\\ge\\Delta$，当 $0<A<\\Delta$ 时输出恒零 $N(A)=0$）。",
+      "pitfalls": "【主教材 P.402 表 9-1 两处印刷勘误】①「死区加滞环继电」误将 $\\sqrt{1-(mh/A)^2}$ 印为 `sqrt(1-(mh)^2/A)`（分母漏平方）；②「死区加饱和」误将方括号和减号印乱为 `arcsin[a/A + arcsin(Δ/A) + ...]`（主教材 P.400 式(9-23) 及辅导书 P.224 续表均已修正为正确式 ⑥）。背表时切勿看错 P.402！",
+      "figureSvg": "<svg role='img' viewBox='0 0 430 132' xmlns='http://www.w3.org/2000/svg'><title>四种高频非线性负倒描述函数 -1/N(A) 复平面轨迹示意图（仿表9-1）</title><defs><marker id='a91' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker><marker id='a9r' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#b4233c'/></marker></defs><g transform='translate(0,0)'><text x='14' y='15' font-size='9.5' fill='#1e3a8a' font-weight='700'>饱和 (-1/k → -∞)</text><line x1='8' y1='68' x2='96' y2='68' stroke='#334155' stroke-width='1.1' marker-end='url(#a91)'/><line x1='82' y1='114' x2='82' y2='24' stroke='#334155' stroke-width='1.1' marker-end='url(#a91)'/><line x1='58' y1='68' x2='16' y2='68' stroke='#b4233c' stroke-width='2.4' marker-end='url(#a9r)'/><circle cx='58' cy='68' r='2.8' fill='#b4233c'/><text x='46' y='59' font-size='8.5' fill='#b4233c'>-1/k</text><text x='12' y='83' font-size='8.5' fill='#475569'>A↑</text></g><g transform='translate(106,0)'><text x='14' y='15' font-size='9.5' fill='#1e3a8a' font-weight='700'>死区 (-∞ → -1/k)</text><line x1='8' y1='68' x2='96' y2='68' stroke='#334155' stroke-width='1.1' marker-end='url(#a91)'/><line x1='82' y1='114' x2='82' y2='24' stroke='#334155' stroke-width='1.1' marker-end='url(#a91)'/><line x1='12' y1='68' x2='56' y2='68' stroke='#0b6e4f' stroke-width='2.4' marker-end='url(#a9r)'/><circle cx='58' cy='68' r='2.8' fill='#0b6e4f'/><text x='46' y='59' font-size='8.5' fill='#0b6e4f'>-1/k</text><text x='12' y='83' font-size='8.5' fill='#475569'>A:Δ→∞</text></g><g transform='translate(212,0)'><text x='4' y='15' font-size='9.5' fill='#1e3a8a' font-weight='700'>死区继电(折返 -πh/2M)</text><line x1='8' y1='68' x2='98' y2='68' stroke='#334155' stroke-width='1.1' marker-end='url(#a91)'/><line x1='86' y1='114' x2='86' y2='24' stroke='#334155' stroke-width='1.1' marker-end='url(#a91)'/><path d='M12 63 L56 63 C 62 63, 62 73, 56 73 L16 73' fill='none' stroke='#9a5800' stroke-width='2' marker-end='url(#a9r)'/><text x='38' y='55' font-size='8' fill='#9a5800'>A=√2h</text><text x='10' y='88' font-size='8' fill='#475569'>A=h→√2h→∞</text></g><g transform='translate(320,0)'><text x='8' y='15' font-size='9.5' fill='#1e3a8a' font-weight='700'>滞环继电(水平线)</text><line x1='8' y1='52' x2='98' y2='52' stroke='#334155' stroke-width='1.1' marker-end='url(#a91)'/><line x1='84' y1='114' x2='84' y2='24' stroke='#334155' stroke-width='1.1' marker-end='url(#a91)'/><line x1='84' y1='86' x2='16' y2='86' stroke='#b4233c' stroke-width='2.4' marker-end='url(#a9r)'/><circle cx='84' cy='86' r='2.8' fill='#b4233c'/><text x='48' y='101' font-size='8' fill='#b4233c'>-jπh/(4M)</text><text x='14' y='78' font-size='8' fill='#475569'>A:h→∞</text></g></svg>",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.223-224",
+        "pdfPage": 232,
+        "itemRef": "表9-1 & 续表",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.398-402 式(9-18)~(9-30) & 表9-1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch09_f_df_sat_dz_backlash",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch09-f-03",
+      "section": "9.2.2 推广奈奎斯特判据与自激振荡稳定性",
+      "kind": "formula",
+      "title": "推广 Nyquist 判据、谐波平衡方程与极限环稳定性判别铁律",
+      "examWeight": "core",
+      "prompt": "已知线性部分 $G(s)$ 稳定（无右半平面极点 $P_R=0$），写出利用 $G(\\mathrm{j}\\omega)$ 与 $-\\frac{1}{N(A)}$ 曲线判别稳定性、求自振参数 $(A,\\omega)$ 及判定极限环稳定性的准则：",
+      "formulaLatex": "$$\\begin{aligned} &\\text{闭环特征方程：}\\; 1 + N(A)G(\\mathrm{j}\\omega) = 0 \\iff G(\\mathrm{j}\\omega) = -\\frac{1}{N(A)}\\;\\text{（自振必要条件）} \\\\ &\\text{① 无交点判稳（}P_R=0\\text{）：} \\\\ &\\quad\\bullet\\; G(\\mathrm{j}\\omega)\\text{ 不包围 }-\\frac{1}{N(A)}\\text{ 曲线} \\implies \\text{非线性系统}\\mathbf{\\text{稳定}} \\\\ &\\quad\\bullet\\; G(\\mathrm{j}\\omega)\\text{ 包围 }-\\frac{1}{N(A)}\\text{ 曲线} \\implies \\text{非线性系统}\\mathbf{\\text{不稳定}} \\\\ &\\text{② 有交点（周期运动 / 极限环）稳定性：沿着 }A\\text{ 增大方向看 }-\\frac{1}{N(A)}\\text{ 穿过 }G(\\mathrm{j}\\omega)\\text{ 的方向} \\\\ &\\quad\\bullet\\; \\mathbf{\\text{从不稳定区（被包围侧）穿入稳定区（不被包围侧）}} \\implies \\mathbf{\\text{稳定极限环（自振点！）}} \\\\ &\\quad\\bullet\\; \\mathbf{\\text{从稳定区穿入不稳定区}} \\implies \\mathbf{\\text{不稳定极限环（临界分界点，不是自振点！）}} \\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "物理扰动记忆法",
+          "desc": "根本不用死记！假设工作在交点，扰动使 $A$ 略增：若新点落入**稳定区**，振幅会衰减回交点（稳定自振！）；若新点落入**不稳定区**，振幅会继续增大逃离交点（不稳定极限环！）"
+        },
+        {
+          "sym": "不稳定区怎么找？",
+          "desc": "顺着 $\\omega$ 增大方向沿 $G(\\mathrm{j}\\omega)$ 走，当 $P_R=0$ 时，**$G(\\mathrm{j}\\omega)$ 曲线的左侧为不稳定区（被包围侧），右侧为稳定区**！"
+        }
+      ],
+      "conditions": "要求 $G(s)$ 无右半平面极点（$P_R=0$）；若 $G(s)$ 有 $P_R>0$ 个右半平面极点，则需用完整广义 Nyquist 判据（逆时针包围 $-1/N(A)$ 点 $P_R$ 圈的区域才是稳定区）。",
+      "pitfalls": "高频细节：求得两个交点 $A_1<A_2$（如死区继电常见双交点，例 9-8）时，务必**逐点判断哪一个是稳定自振点**，千万不要把两个解都答成自振振幅！且当题目问「是否存在自振」时，若唯一交点是不稳定极限环（如例 9-9、例 9-10），则系统**不存在持续自激振荡**！",
+      "figureSvg": "<svg role='img' viewBox='0 0 360 156' xmlns='http://www.w3.org/2000/svg'><title>G(jω)与-1/N(A)交点处稳定极限环与不稳定极限环判别示意图（仿主教材图9-36）</title><defs><marker id='a92' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker><marker id='a9b' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#2744a8'/></marker><marker id='a9c' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#b4233c'/></marker></defs><line x1='20' y1='64' x2='336' y2='64' stroke='#334155' stroke-width='1.3' marker-end='url(#a92)'/><line x1='266' y1='148' x2='266' y2='14' stroke='#334155' stroke-width='1.3' marker-end='url(#a92)'/><path d='M238 144 C 216 112, 160 132, 128 96 C 102 66, 134 24, 186 34 C 228 42, 250 56, 266 64' fill='none' stroke='#2744a8' stroke-width='2.2' marker-mid='url(#a9b)'/><path d='M52 96 L216 96' fill='none' stroke='#b4233c' stroke-width='2' marker-end='url(#a9c)'/><circle cx='128' cy='96' r='4.2' fill='#0b6e4f'/><circle cx='200' cy='116' r='0' fill='none'/><path d='M160 116 L246 42' fill='none' stroke='#9a5800' stroke-width='1.8' stroke-dasharray='5 3' marker-end='url(#a9c)'/><circle cx='186' cy='94' r='0'/><text x='324' y='78' font-size='10.5' fill='#141824'>Re</text><text x='272' y='24' font-size='10.5' fill='#141824'>Im</text><text x='158' y='52' font-size='9.5' fill='#b4233c' font-weight='700'>不稳定区(包围侧)</text><text x='46' y='44' font-size='9.5' fill='#0b6e4f' font-weight='700'>稳定区(外部)</text><text x='146' y='24' font-size='10' fill='#2744a8' font-weight='700'>G(jω) (ω↑)</text><text x='36' y='112' font-size='9.5' fill='#b4233c' font-weight='700'>-1/N(A) (A↑)</text><text x='64' y='88' font-size='9.5' fill='#0b6e4f' font-weight='700'>进不稳定→不稳定极限环</text><text x='184' y='138' font-size='9.5' fill='#9a5800' font-weight='700'>不稳定→稳定：稳定自振点</text></svg>",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.404-405",
+        "pdfPage": 413,
+        "itemRef": "图9-36~9-37 & 式(9-33)",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.224-225 & P.231 例9-7"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch09_ex_guide98_relay_dz",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch09-f-04",
+      "section": "9.2.3 李亚普诺夫稳定性定义与间接法（第一法）",
+      "kind": "formula",
+      "title": "李亚普诺夫 $\\varepsilon$-$\\delta$ 稳定性定义与间接法（雅可比线性化）",
+      "examWeight": "core",
+      "prompt": "写出自治系统 $\\dot{\\boldsymbol{x}}=\\boldsymbol{f}(\\boldsymbol{x})$ 平衡点 $\\boldsymbol{x}_e$ 的李氏稳定、渐近稳定、大范围渐近稳定定义，以及李亚普诺夫第一法（间接法）判据：",
+      "formulaLatex": "$$\\begin{aligned} &\\text{平衡状态：}\\; \\boldsymbol{f}(\\boldsymbol{x}_e) = \\boldsymbol{0} \\\\ &\\text{① 李氏意义稳定：}\\; \\forall\\varepsilon>0,\\;\\exists\\delta>0,\\; \\|\\boldsymbol{x}_0-\\boldsymbol{x}_e\\|<\\delta \\implies \\forall t\\ge 0,\\;\\|\\boldsymbol{x}(t;\\boldsymbol{x}_0)-\\boldsymbol{x}_e\\|<\\varepsilon \\\\ &\\text{② 渐近稳定：满足 ① 且 }\\lim_{t\\to\\infty}\\|\\boldsymbol{x}(t;\\boldsymbol{x}_0)-\\boldsymbol{x}_e\\|=0\\;\\text{（若对 }\\forall\\boldsymbol{x}_0\\in\\mathbb{R}^n\\text{ 成立称}\\mathbf{\\text{全局/大范围渐近稳定}}\\text{）} \\\\ &\\text{③ 间接法（在 }\\boldsymbol{x}_e\\text{ 处泰勒展开得雅可比阵 }\\boldsymbol{A}=\\left.\\frac{\\partial\\boldsymbol{f}}{\\partial\\boldsymbol{x}^{\\mathrm{T}}}\\right|_{\\boldsymbol{x}=\\boldsymbol{x}_e}\\text{）：} \\\\ &\\quad\\bullet\\; \\forall i,\\;\\operatorname{Re}(\\lambda_i(\\boldsymbol{A}))<0 \\implies \\boldsymbol{x}_e\\text{ 局部渐近稳定} \\\\ &\\quad\\bullet\\; \\exists i,\\;\\operatorname{Re}(\\lambda_i(\\boldsymbol{A}))>0 \\implies \\boldsymbol{x}_e\\text{ 不稳定} \\\\ &\\quad\\bullet\\; \\max_i\\operatorname{Re}(\\lambda_i(\\boldsymbol{A}))=0\\;\\text{（无正实部但有零实部特征值）} \\implies \\mathbf{\\text{间接法失效！由高阶项决定}} \\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "平衡点平移",
+          "desc": "令 $\\tilde{\\boldsymbol{x}}=\\boldsymbol{x}-\\boldsymbol{x}_e$ 可把任意非零平衡点移至原点，故李亚普诺夫讨论一般不失一般性设原点为平衡点"
+        },
+        {
+          "sym": "全局渐近稳定推论",
+          "desc": "若系统在 $\\boldsymbol{x}_e$ 全局渐近稳定，则 $\\boldsymbol{x}_e$ 必是系统的**唯一平衡点**（反之多平衡点非线性系统必不可能全局渐近稳定！）"
+        }
+      ],
+      "conditions": "李亚普诺夫间接法要求 $\\boldsymbol{f}(\\boldsymbol{x})$ 在 $\\boldsymbol{x}_e$ 邻域连续可微，且所得结论仅保证**局部（小范围内）**稳定或不稳定；对线性定常系统而言，局部渐近稳定与全局渐近稳定完全等价。",
+      "pitfalls": "两大必考判断雷区：① 线性系统若有一个实部为零的**单**特征值（或一对纯虚单根）且其余在左半平面，是**李氏稳定**但非渐近稳定；若有实部为零的**重**特征值（非对角约当块），则含 $t\\mathrm{e}^{0}$ 项**不稳定**！② 非线性系统雅可比阵出现 $\\operatorname{Re}\\lambda=0$ 时，**绝不能判定为临界稳定**，必须改用高阶项或直接法！",
+      "figureSvg": "<svg role='img' viewBox='0 0 430 124' xmlns='http://www.w3.org/2000/svg'><title>李亚普诺夫渐近稳定、李氏稳定与不稳定几何示意图（仿主教材图9-46）</title><defs><marker id='a93' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><g transform='translate(0,0)'><text x='24' y='15' font-size='9.5' fill='#0b6e4f' font-weight='700'>(a) 渐近稳定</text><circle cx='68' cy='68' r='40' fill='#ecfdf5' stroke='#0b6e4f' stroke-width='1.2' stroke-dasharray='3 2'/><circle cx='68' cy='68' r='20' fill='none' stroke='#2744a8' stroke-width='1.1'/><path d='M80 56 C 98 66, 86 92, 68 84 C 54 78, 58 62, 68 68' fill='none' stroke='#0b6e4f' stroke-width='2'/><circle cx='68' cy='68' r='2.5' fill='#141824'/><text x='98' y='38' font-size='8.5' fill='#0b6e4f'>S(ε)</text><text x='86' y='64' font-size='8.5' fill='#2744a8'>S(δ)</text></g><g transform='translate(145,0)'><text x='14' y='15' font-size='9.5' fill='#2744a8' font-weight='700'>(b) 李氏稳定(非渐近)</text><circle cx='68' cy='68' r='40' fill='#eff6ff' stroke='#2744a8' stroke-width='1.2' stroke-dasharray='3 2'/><circle cx='68' cy='68' r='20' fill='none' stroke='#2744a8' stroke-width='1.1'/><ellipse cx='68' cy='68' rx='29' ry='23' fill='none' stroke='#9a5800' stroke-width='2'/><circle cx='68' cy='68' r='2.5' fill='#141824'/><text x='32' y='118' font-size='8.5' fill='#9a5800'>留在S(ε)内不趋于x_e</text></g><g transform='translate(290,0)'><text x='30' y='15' font-size='9.5' fill='#b4233c' font-weight='700'>(c) 不稳定</text><circle cx='68' cy='68' r='40' fill='#fef2f2' stroke='#b4233c' stroke-width='1.2' stroke-dasharray='3 2'/><circle cx='68' cy='68' r='20' fill='none' stroke='#2744a8' stroke-width='1.1'/><path d='M74 60 C 90 50, 102 74, 118 106' fill='none' stroke='#b4233c' stroke-width='2' marker-end='url(#a93)'/><circle cx='68' cy='68' r='2.5' fill='#141824'/><text x='32' y='118' font-size='8.5' fill='#b4233c'>终将跨出 S(ε)</text></g></svg>",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.409-414",
+        "pdfPage": 418,
+        "itemRef": "定义9-1~9-6 & 定理9-1 & 式(9-35)~(9-43)",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.225 式(9-5)~(9-8)"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch09-f-05",
+      "section": "9.2.3 塞尔维斯特（Sylvester）判据与李亚普诺夫直接法",
+      "kind": "formula",
+      "title": "二次型定号性 Sylvester 判据与李亚普诺夫直接法（第二法）四大定理",
+      "examWeight": "core",
+      "prompt": "写出对称矩阵 $\\boldsymbol{P}$ 正定/负定的 Sylvester 顺序主子式判据，以及李亚普诺夫直接法（含半负定 $\\dot V\\le 0$ 弱化判据）核心定理：",
+      "formulaLatex": "$$\\begin{aligned} &\\text{① Sylvester 判据（}V(\\boldsymbol{x})=\\boldsymbol{x}^{\\mathrm{T}}\\boldsymbol{P}\\boldsymbol{x},\\;\\boldsymbol{P}=\\boldsymbol{P}^{\\mathrm{T}}\\text{）：} \\\\ &\\quad\\bullet\\; \\boldsymbol{P}>0\\text{（正定）} \\iff \\Delta_1=p_{11}>0,\\;\\Delta_2=\\begin{vmatrix}p_{11}&p_{12}\\\\p_{21}&p_{22}\\end{vmatrix}>0,\\;\\dots,\\;\\Delta_n=|\\boldsymbol{P}|>0 \\\\ &\\quad\\bullet\\; \\boldsymbol{P}<0\\text{（负定）} \\iff (-1)^k\\Delta_k > 0\\;\\text{（奇阶负、偶阶正，负正相间！）} \\\\ &\\text{② 李亚普诺夫直接法核心定理（设 }V(\\boldsymbol{x})\\text{ 连续一阶偏导且}\\mathbf{\\text{正定}}\\text{，}\\dot V=\\frac{\\partial V}{\\partial\\boldsymbol{x}^{\\mathrm{T}}}\\boldsymbol{f}(\\boldsymbol{x})\\text{）：} \\\\ &\\quad\\bullet\\; \\dot V\\text{ 负定} \\implies \\text{渐近稳定（若再满足径向无界 }\\lim_{\\|\\boldsymbol{x}\\|\\to\\infty}V(\\boldsymbol{x})=\\infty\\text{，则}\\mathbf{\\text{全局渐近稳定}}\\text{）} \\\\ &\\quad\\bullet\\; \\dot V\\text{ 负半定，且沿任意非零轨线 }\\dot V\\not\\equiv 0\\;\\text{（外加径向无界）} \\implies \\mathbf{\\text{全局渐近稳定}} \\\\ &\\quad\\bullet\\; \\dot V\\text{ 负半定（且非零态可恒为零）} \\implies \\text{李氏意义稳定} \\\\ &\\quad\\bullet\\; \\dot V\\text{ 正定（或半正定且非零态不恒为零）} \\implies \\mathbf{\\text{不稳定}} \\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "径向无界不可漏！",
+          "desc": "证明**全局（大范围）渐近稳定**必须显式补写一句「且当 $\\|\\boldsymbol{x}\\|\\to\\infty$ 时 $V(\\boldsymbol{x})\\to\\infty$」，这是标准采分点！"
+        },
+        {
+          "sym": "如何检验 $\\dot V\\not\\equiv 0$？",
+          "desc": "采用反证法（主教材 P.417）：令 $\\dot V(\\boldsymbol{x})\\equiv 0$，把所得坐标恒零关系代回原状态方程求导，若唯一推出 $\\boldsymbol{x}\\equiv\\boldsymbol{0}$，即证非零态 $\\dot V\\not\\equiv 0$（参见例 9-12、例 9-15）！"
+        }
+      ],
+      "conditions": "对**非线性系统**，直接法全部定理均为**充分条件而非必要条件**——若自己构造的某个 $V(\\boldsymbol{x})$ 算得 $\\dot V$ 不定，**绝不能断言系统不稳定**，只能换一个 $V(\\boldsymbol{x})$ 重试！",
+      "pitfalls": "两大必考细节：① 套用 Sylvester 判据前，必须先把二次型写成**对称矩阵 $\\boldsymbol{P}$**（交叉项 $c x_i x_j$ 拆成 $p_{ij}=p_{ji}=c/2$！）；② 判**半正定**不能只看顺序主子式 $\\ge 0$，必须检验**全部主子式** $\\ge 0$（例如 $\\operatorname{diag}(0,-1)$ 顺序主子式为 $0,0$ 但它负半定而非半正定！）。",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.415-418",
+        "pdfPage": 424,
+        "itemRef": "式(9-44)~(9-46) & 定理9-2~9-5",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.226"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch09_ex_guide911_912_lyap_nl",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch09-f-06",
+      "section": "9.2.3 线性定常系统的李亚普诺夫代数方程（连续 + 离散）",
+      "kind": "formula",
+      "title": "连续与离散线性定常系统李亚普诺夫代数方程（充要判据！）",
+      "examWeight": "core",
+      "prompt": "写出连续线性定常系统 $\\dot{\\boldsymbol{x}}=\\boldsymbol{A}\\boldsymbol{x}$ 与离散线性定常系统 $\\boldsymbol{x}(k+1)=\\boldsymbol{A}_z\\boldsymbol{x}(k)$ 原点全局渐近稳定（内稳定）的李亚普诺夫代数方程充要条件：",
+      "formulaLatex": "$$\\begin{aligned} &\\text{① 连续系统 }\\dot{\\boldsymbol{x}}=\\boldsymbol{A}\\boldsymbol{x}\\;\\big(V(\\boldsymbol{x})=\\boldsymbol{x}^{\\mathrm{T}}\\boldsymbol{P}\\boldsymbol{x},\\;\\dot V=-\\boldsymbol{x}^{\\mathrm{T}}\\boldsymbol{Q}\\boldsymbol{x}\\big): \\\\ &\\qquad \\text{原点全局渐近稳定（内稳定）} \\iff \\forall\\boldsymbol{Q}=\\boldsymbol{Q}^{\\mathrm{T}}>0,\\;\\exists\\text{唯一}\\boldsymbol{P}=\\boldsymbol{P}^{\\mathrm{T}}>0,\\quad \\boldsymbol{A}^{\\mathrm{T}}\\boldsymbol{P} + \\boldsymbol{P}\\boldsymbol{A} = -\\boldsymbol{Q} \\\\ &\\text{② 离散系统 }\\boldsymbol{x}(k+1)=\\boldsymbol{A}_z\\boldsymbol{x}(k)\\;\\big(\\Delta V=V(k+1)-V(k)=-\\boldsymbol{x}^{\\mathrm{T}}\\boldsymbol{Q}\\boldsymbol{x}\\big): \\\\ &\\qquad \\text{原点全局渐近稳定（内稳定）} \\iff \\forall\\boldsymbol{Q}=\\boldsymbol{Q}^{\\mathrm{T}}>0,\\;\\exists\\text{唯一}\\boldsymbol{P}=\\boldsymbol{P}^{\\mathrm{T}}>0,\\quad \\boldsymbol{A}_z^{\\mathrm{T}}\\boldsymbol{P}\\boldsymbol{A}_z - \\boldsymbol{P} = -\\boldsymbol{Q} \\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "常用取法 $\\boldsymbol{Q}=\\boldsymbol{I}$",
+          "desc": "因对**任意**正定 $\\boldsymbol{Q}$ 均成立，实战中通常直接取最简单位阵 $\\boldsymbol{Q}=\\boldsymbol{I}$；高阶系统还可巧取**半正定** $\\boldsymbol{Q}$（如 $\\operatorname{diag}(0,0,1)$）大幅减少计算量，前提是验证非零态 $\\dot V\\not\\equiv 0$（见例 9-15）！"
+        },
+        {
+          "sym": "充要性升级",
+          "desc": "区别于非线性系统的充分条件，对线性定常系统，李亚普诺夫方程存在正定解 $\\boldsymbol{P}>0$ 是内稳定的**充分必要条件**——若解不出正定 $\\boldsymbol{P}$（无解或非正定），则可断言系统**必不渐近稳定**（见主教材例 9-14）！"
+        }
+      ],
+      "conditions": "线性定常系统矩阵 $\\boldsymbol{P}$ 必须设成**对称阵**（$p_{ij}=p_{ji}$），$n$ 阶系统只有 $\\frac{n(n+1)}{2}$ 个独立未知数（2 阶 3 个，3 阶 6 个）。",
+      "pitfalls": "两大易混细节：① 连续方程是 $\\boldsymbol{A}^{\\mathrm{T}}\\boldsymbol{P}+\\boldsymbol{P}\\boldsymbol{A}=-\\boldsymbol{Q}$（别把 $\\boldsymbol{A}^{\\mathrm{T}}$ 和 $\\boldsymbol{A}$ 放反成 $\\boldsymbol{A}\\boldsymbol{P}+\\boldsymbol{P}\\boldsymbol{A}^{\\mathrm{T}}$，虽特征值等价但解出的 $\\boldsymbol{P}$ 不是同一二次型！）；② 离散方程是 **$\\boldsymbol{A}_z^{\\mathrm{T}}\\boldsymbol{P}\\boldsymbol{A}_z - \\boldsymbol{P} = -\\boldsymbol{Q}$**（注意减 $\\boldsymbol{P}$ 和右端负号！）。",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.418-421",
+        "pdfPage": 427,
+        "itemRef": "定理9-6~9-11 & 推论9-1~9-2 & 式(9-50)~(9-53)",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.225-226 式(9-9)~(9-10)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch09_ex_guide913_914_lyap_lti",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch09-f-07",
+      "section": "9.2.1【拓展了解】相平面分析法",
+      "kind": "formula",
+      "title": "二阶系统相平面方程、等倾线法与六类奇点分类",
+      "examWeight": "extended",
+      "prompt": "【2027 考纲拓展了解】写出二阶自治系统 $\\ddot x=f(x,\\dot x)$ 的相轨迹斜率方程、等倾线方程及奇点类型：",
+      "formulaLatex": "$$\\begin{aligned} &\\text{相轨迹微分方程：}\\; \\frac{\\mathrm{d}\\dot x}{\\mathrm{d}x} = \\frac{\\ddot x}{\\dot x} = \\frac{f(x,\\dot x)}{\\dot x} \\\\ &\\text{等倾线法：令斜率 }\\alpha = \\frac{\\mathrm{d}\\dot x}{\\mathrm{d}x} = \\text{常数} \\implies f(x,\\dot x) = \\alpha\\dot x \\\\ &\\text{运动时间公式：}\\; \\Delta t = \\int_{x_1}^{x_2} \\frac{\\mathrm{d}x}{\\dot x} \\approx \\frac{x_2 - x_1}{(\\dot x_1 + \\dot x_2)/2} \\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "六类奇点（线性化特征根）",
+          "desc": "实根同号→**稳定/不稳定节点**；实根异号→**鞍点**（不稳定）；共轭复根非纯虚→**稳定/不稳定焦点**；纯虚根 $\\pm\\mathrm{j}\\omega$→**中心点**（闭椭圆族）"
+        },
+        {
+          "sym": "相轨迹运动方向",
+          "desc": "上半相平面（$\\dot x>0$）轨迹必**向右**运动；下半相平面（$\\dot x<0$）必**向左**运动；穿过横轴（$\\dot x=0$）时若非奇点必**垂直**横轴！"
+        }
+      ],
+      "conditions": "相平面法主要用于一阶和**二阶**自治/分段线性系统（如继电开关系统，例 9-4）；高阶系统无法在平面直观绘图。",
+      "pitfalls": "按 2027 浙大 845 考试大纲，第 9 章明确必考**描述函数法**与**李亚普诺夫稳定性分析**，相平面法仅作概念理解（掌握奇点判定与上半平面向右/下半平面向左规律即可）。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.222-223 & P.227-229",
+        "pdfPage": 231,
+        "itemRef": "9.2.1 式(9-1) & 例9-1~9-4",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.385-396"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch09-c-01",
+      "section": "9.1 非线性控制系统的五大本质特征",
+      "kind": "conclusion",
+      "title": "非线性系统区别于线性定常系统的五大核心特征（简答题必背！）",
+      "examWeight": "core",
+      "conditions": "对应辅导书 P.237 习题 A9-1 与 P.239 自测题 B9-1 的标准满分答题框架。",
+      "pitfalls": "简答题常见漏答点：不要只写「不满足叠加原理」，一定要答出**「稳定性与初态/输入幅值有关」**和**「可能出现自激振荡（极限环）及多平衡点」**这两个最核心的物理现象！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.383-384 & P.421",
+        "pdfPage": 392,
+        "itemRef": "第九章 第一节 & 本章小结",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.226 图9-2"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      },
+      "summary": "为什么不能直接把经典线性系统的传递函数与叠加原理套用到非线性系统？概括非线性系统的五大本质区别：\n$$\\begin{aligned} &\\text{① 不满足叠加原理（齐次性与可加性失效，故不存在严格传递函数）} \\\\ &\\text{② 稳定性不仅取决于系统自身结构参数，还依赖于}\\mathbf{\\text{初始条件与输入信号幅值}} \\\\ &\\text{③ 可能存在不依赖外部周期激励的等幅周期运动——}\\mathbf{\\text{自激振荡（极限环）}} \\\\ &\\text{④ 可能存在}\\mathbf{\\text{多个平衡状态}}\\text{（甚至平衡点集，如死区/单摆 }x_e=k\\pi\\text{）} \\\\ &\\text{⑤ 正弦输入下稳态输出含高次谐波畸变，可能出现跳变谐振、倍频/分频现象} \\end{aligned}$$\n- **三大研究方法分工**：**相平面法**（二阶精确图解，分析瞬态与极限环）｜**描述函数法**（任意阶近似频域法，分析稳定性与自振参数）｜**李亚普诺夫法**（任意阶通用严格稳定性理论，适用多变量/时变/离散/非线性）"
+    },
+    {
+      "id": "ctrl-ch09-c-02",
+      "section": "9.2.2 描述函数法化简与精度铁律",
+      "kind": "conclusion",
+      "title": "描述函数组合运算法则（并联可加、串联不可乘！）与精度高低比较",
+      "examWeight": "core",
+      "conditions": "利用线性积分可加性直接证得并联 $N=N_1+N_2$；而串联时第一级输出已非纯正弦（含高次谐波），直接注入第二级非线性必然产生互调失真，故不可相乘！",
+      "pitfalls": "遇到非线性环节藏在内反馈回路里的复杂框图（如主教材例 9-5 图 9-40、辅导书例 9-10 图 9-16），记住先令外部参考 $r=0$，用线性梅逊公式或方块图变换求出**从非线性输出 $y$ 绕回非线性输入 $-x$ 的等效线性传递函数 $G_{\\mathrm{eq}}(s)$**（见例 9-5 / 例 9-10）！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.407-408",
+        "pdfPage": 416,
+        "itemRef": "9.3.3 非线性组合与动态分离小结",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.230 例9-5 & P.239 题B9-9"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      },
+      "summary": "多个非线性环节并联或串联时描述函数能否直接运算？不同线性部分 $G(s)$ 如何判断哪个用描述函数法分析最准确？\n$$\\begin{aligned} &\\text{① 同一输入下两非线性环节}\\mathbf{\\text{并联}}\\text{ }y=f_1(x)+f_2(x):\\quad N(A) = N_1(A) + N_2(A)\\;\\text{（严格成立！）} \\\\ &\\text{② 两非线性环节}\\mathbf{\\text{串联}}\\text{ }z=f_2(f_1(x)):\\quad N(A) \\ne N_1(A)\\cdot N_2(A)\\;\\text{（必须先合成为 }f(x)=f_2[f_1(x)]\\text{ 再求！）} \\\\ &\\text{③ 非线性含纯滞后/惯性 }y=\\mathrm{e}^{-\\tau s}f(x):\\quad \\text{先分离出动态环节并入线性部分 }G(s)\\text{ 中！} \\\\ &\\text{④ 精度判别：}G(s)\\text{ 高频衰减斜率越陡（分母阶次越高、无多余微分零点），低通滤波越好，描述函数越精确！} \\end{aligned}$$\n- **自测题 B9-9 经典对比**：$G_1=\\frac{2}{s(0.1s+1)}$（$-40\\text{ dB/dec}$）、$G_2=\\frac{2}{s(s+1)}$（$-40\\text{ dB/dec}$ 且转折频率更低 $1<10$）、$G_3=\\frac{2(1.5s+1)}{s(s+1)(0.1s+1)}$（含微分零点抬升高频）$\\implies$ **$G_2(s)$ 低通滤波最好，分析最准确**！"
+    },
+    {
+      "id": "ctrl-ch09-c-03",
+      "section": "9.2.3 李亚普诺夫稳定 vs 经典控制稳定概念辨析",
+      "kind": "conclusion",
+      "title": "为什么无阻尼振荡或稳定极限环算「李亚普诺夫稳定」，却不算经典控制稳定？",
+      "examWeight": "core",
+      "conditions": "出自孙优贤主教材 P.411-412 对定义 9-3 与定义 9-5 的重点说明。",
+      "pitfalls": "判断大题结论表述务必严谨：用直接法算得 $V>0,\\;\\dot V\\equiv 0$（如例 9-11 当 $a=0$）时，准确结论是**「原点为李亚普诺夫意义下稳定（非渐近稳定）」**，不能笼统答成「渐近稳定」！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.411-412",
+        "pdfPage": 420,
+        "itemRef": "定义9-3~9-5 对比说明",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.234 例9-11"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      },
+      "summary": "辨析李亚普诺夫意义下的稳定、渐近稳定与经典控制理论中的「稳定」之区别：\n$$\\begin{aligned} &\\text{经典控制理论的「线性定常系统稳定」} \\equiv \\text{李亚普诺夫意义下的}\\mathbf{\\text{（全局）渐近稳定}}\\text{（所有极点 }\\operatorname{Re}\\lambda_i<0\\text{）} \\\\ &\\text{无阻尼自由振荡（}\\ddot x+x=0\\text{）或稳定极限环：}\\; \\text{轨迹留在 }S(\\varepsilon)\\text{ 内但不趋于 }\\boldsymbol{x}_e \\\\ &\\implies \\text{属于}\\mathbf{\\text{李亚普诺夫意义下稳定}}\\text{，但}\\mathbf{\\text{非渐近稳定}}\\text{（经典控制称临界稳定/不稳定）} \\end{aligned}$$\n- **主教材 P.411 经典反例**：系统 $\\dot x_1=-x_1,\\;\\dot x_2=0$（特征值 $-1,0$）：对任意 $\\varepsilon>0$ 取 $\\delta=\\varepsilon/2$ 恒有 $\\|\\boldsymbol{x}(t)\\|\\le\\|\\boldsymbol{x}_0\\|<\\varepsilon$，故原点**李氏稳定**；但因有零极点不收敛到原点，**不是内稳定（非渐近稳定）**！"
+    },
+    {
+      "id": "ctrl-ch09-e-01",
+      "section": "9.3 典型例题 · 【重大原书勘误预警】组合与动态非线性描述函数",
+      "kind": "example",
+      "title": "【例 9-5 & 例 9-6】并联叠加求 $N(A)$ & 例 9-6 漏绝对值号重大勘误辨析",
+      "examWeight": "core",
+      "problem": "①（例 9-5）求带斜率 $K$ 的带偏置继电特性（$y=C\\operatorname{sgn}(x)+Kx$）的描述函数。\n②（例 9-6）求非线性环节 $y=x\\dot x+4x$ 与 $y=|x|\\dot x+4x$ 的描述函数（辨析辅导书 P.230 原题印刷失误！）。",
+      "steps": [
+        {
+          "stepTitle": "① 例 9-5",
+          "detail": "将图 9-9 分解为理想继电器（幅值 $C$）与线性比例环节（增益 $K$）的**并联**！由并联描述函数可加性直接秒出：\n$$N(A) = N_{\\text{继电}}(A) + N_{\\text{线性}}(A) = \\frac{4C}{\\pi A} + K$$"
+        },
+        {
+          "stepTitle": "【② 例 9-6 重大原书勘误实锤（SymPy 精确积分验证！）】",
+          "detail": "- **若严格按辅导书 P.230 印刷题干 $y=x\\dot x+4x$ 计算**：令 $x=A\\sin\\omega t$，则 $x\\dot x = A^2\\omega\\sin\\omega t\\cos\\omega t = \\frac{1}{2}A^2\\omega\\sin(2\\omega t)$ 是纯粹的**二次谐波**（关于半周期为**偶对称** $y(\\theta+\\pi)=+y(\\theta)$！），在整个周期 $[0,2\\pi]$ 上积分严格为零：\n$$A_1 = \\frac{1}{\\pi}\\int_0^{2\\pi} A^2\\omega\\sin\\theta\\cos^2\\theta\\,\\mathrm{d}\\theta = \\mathbf{0},\\qquad B_1 = \\frac{1}{\\pi}\\int_0^{2\\pi} A^2\\omega\\sin^2\\theta\\cos\\theta\\,\\mathrm{d}\\theta = \\mathbf{0} \\implies N_{\\text{字面}}(A) = \\mathbf{4}$$"
+        },
+        {
+          "stepTitle": "步骤 3",
+          "detail": "- **原书作者为何算出了 $4+\\mathrm{j}\\frac{4A\\omega}{3\\pi}$？**：因为辅导书 P.230 误把全周期 $\\frac{1}{\\pi}\\int_0^{2\\pi}$ 错写成了半周期 $\\frac{2}{\\pi}\\int_0^{\\pi}$（该简式仅对**半波奇对称** $y(\\theta+\\pi)=-y(\\theta)$ 成立！）。实际上原经典考研题干应是 **$y = |x|\\dot x + 4x$**（漏印了绝对值号 `| |`！）：此时 $|x|\\dot x$ 满足半波奇对称，有：\n$$A_1 = \\frac{2}{\\pi}\\int_0^{\\pi} A^2\\omega\\sin\\theta\\cos^2\\theta\\,\\mathrm{d}\\theta = \\frac{4A^2\\omega}{3\\pi},\\quad B_1 = 0 \\implies N_{|x|\\dot x+4x}(A) = 4 + \\mathrm{j}\\frac{4A\\omega}{3\\pi}$$"
+        }
+      ],
+      "takeaway": "这是极宝贵的考场防坑警钟：**只有在确认 $y(\\omega t+\\pi)=-y(\\omega t)$（半波奇对称）之后，才能把 $\\frac{1}{\\pi}\\int_0^{2\\pi}$ 简化成 $\\frac{2}{\\pi}\\int_0^{\\pi}$**！碰到 $x^2, x\\dot x$ 等偶对称乘积项，千万别盲用半周期积分！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.229-230",
+        "pdfPage": 238,
+        "itemRef": "例9-5 & 例9-6 (图9-9~9-10 · 含重要勘误)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch09_ex_guide96_df_errata",
+        "verified": true
+      },
+      "finalAnswer": "① $N(A)=\\frac{4C}{\\pi A}+K$；② 字面 $y=x\\dot x+4x$ 精确解为 $N(A)=4$（二次谐波基波为零）；原题意图为 $y=|x|\\dot x+4x$（原书漏绝对值号），其解为 $N(A)=4+\\mathrm{j}\\frac{4A\\omega}{3\\pi}$。"
+    },
+    {
+      "id": "ctrl-ch09-e-02",
+      "section": "9.3 典型例题 · 死区继电稳定性与双交点极限环",
+      "kind": "example",
+      "title": "【例 9-8】死区继电非线性系统稳定参数条件与稳定/不稳定极限环求解",
+      "examWeight": "core",
+      "problem": "单位负反馈非线性系统前向串联死区继电环节（死区宽度 $a$、输出幅值 $b$）与线性部分 $G(s)=\\frac{2}{s(0.5s+1)(s+1)}$。设 $a=1,\\;b=3$，用描述函数法分析系统稳定性与极限环；并求使系统全局稳定（无自振）的参数 $a,b$ 调整条件。",
+      "figureSvg": "<svg role='img' viewBox='0 0 340 148' xmlns='http://www.w3.org/2000/svg'><title>例9-8死区继电-1/N(A)与G(jω)双交点极限环图（仿辅导书图9-13）</title><defs><marker id='a94' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker><marker id='a94r' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#b4233c'/></marker></defs><line x1='16' y1='66' x2='318' y2='66' stroke='#334155' stroke-width='1.3' marker-end='url(#a94)'/><line x1='266' y1='140' x2='266' y2='14' stroke='#334155' stroke-width='1.3' marker-end='url(#a94)'/><path d='M138 138 C 142 98, 162 46, 204 42 C 236 39, 254 54, 266 66' fill='none' stroke='#2744a8' stroke-width='2.2'/><path d='M26 60 L218 60 C 228 60, 228 72, 218 72 L30 72' fill='none' stroke='#b4233c' stroke-width='2' marker-end='url(#a94r)'/><circle cx='160' cy='60' r='3.6' fill='#9a5800'/><circle cx='158' cy='72' r='4.2' fill='#0b6e4f'/><text x='306' y='80' font-size='10' fill='#141824'>Re</text><text x='272' y='24' font-size='10' fill='#141824'>Im</text><text x='150' y='34' font-size='9.5' fill='#2744a8' font-weight='700'>G(jω)</text><text x='128' y='52' font-size='9' fill='#9a5800' font-weight='700'>A₁=1.11(不稳定)</text><text x='100' y='92' font-size='9' fill='#0b6e4f' font-weight='700'>A₂=2.29(稳定自振)</text><text x='172' y='85' font-size='8.5' fill='#2744a8'>(-2/3, 0)</text><text x='218' y='54' font-size='8.5' fill='#b4233c'>B: -πa/(2b)</text></svg>",
+      "steps": [
+        {
+          "stepTitle": "第一步",
+          "detail": "写死区继电器的负倒描述函数（$A\\ge a$）并求其最右端极值点：\n$$N(A)=\\frac{4b}{\\pi A}\\sqrt{1-\\left(\\frac{a}{A}\\right)^2} \\implies -\\frac{1}{N(A)} = -\\frac{\\pi A}{4b\\sqrt{1-(a/A)^2}}$$\n令 $\\frac{\\mathrm{d}}{\\mathrm{d}A}\\big[-\\frac{1}{N(A)}\\big]=0$ 解得极值点 **$A=\\sqrt{2}a$**，此时 $-\\frac{1}{N(A)}$ 到达负实轴最右端点 **$B\\big(-\\frac{\\pi a}{2b},\\;0\\big)$**（随后随 $A$ 继续增大再折返向左至 $-\\infty$）。"
+        },
+        {
+          "stepTitle": "第二步",
+          "detail": "求线性部分 $G(\\mathrm{j}\\omega)$ 与负实轴的交点：\n$$G(\\mathrm{j}\\omega)=\\frac{2}{\\mathrm{j}\\omega(0.5\\mathrm{j}\\omega+1)(\\mathrm{j}\\omega+1)} = \\frac{2}{-1.5\\omega^2 + \\mathrm{j}\\omega(1-0.5\\omega^2)}$$\n令虚部为 $0$ 得 $1-0.5\\omega^2=0\\implies \\omega=\\sqrt{2}\\,\\text{rad/s}$，交点实部为：\n$$G(\\mathrm{j}\\sqrt{2}) = \\frac{2}{-1.5\\times 2} = -\\frac{2}{3}$$"
+        },
+        {
+          "stepTitle": "第三步",
+          "detail": "求系统稳定（无交点、不包围）的参数条件：须使 $-1/N(A)$ 最右端 $B$ 严格位于交点 $(-2/3,0)$ 的左侧：\n$$-\\frac{\\pi a}{2b} < -\\frac{2}{3} \\iff \\mathbf{\\frac{a}{b} > \\frac{4}{3\\pi} \\approx 0.4244}$$"
+        },
+        {
+          "stepTitle": "第四步",
+          "detail": "代入题给 $a=1,\\;b=3$（此时 $\\frac{a}{b}=\\frac{1}{3}<\\frac{4}{3\\pi}$，两曲线相交两次！）：解谐波平衡方程：\n$$-\\frac{\\pi A}{12\\sqrt{1-(1/A)^2}} = -\\frac{2}{3} \\implies \\left(\\frac{\\pi A}{8}\\right)^2 = 1 - \\frac{1}{A^2}$$\n解关于 $A^2$ 的一元二次方程得两正解：**$A_1 \\approx 1.11$**（$A$ 增大穿过 $G(\\mathrm{j}\\omega)$ 进入不稳定区 $\\implies$ **不稳定极限环**）与 **$A_2 \\approx 2.29$**（$A$ 增大折返从不稳定区穿出进入稳定区 $\\implies$ **稳定极限环 / 自振点**），自振频率 $\\omega=\\sqrt{2}\\approx 1.414\\,\\text{rad/s}$！"
+        }
+      ],
+      "takeaway": "死区继电器的「折返最右端点 $A=\\sqrt{2}a,\\;-\\frac{1}{N}=-\\frac{\\pi a}{2b}$」是 845 描述函数大题出场率第一的黄金结论——记住**小解 $A_1$ 不稳定（扰动小于 $A_1$ 时衰减归零），大解 $A_2$ 是稳定自振点**！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.231-232",
+        "pdfPage": 240,
+        "itemRef": "例9-8 (图9-12~9-13)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch09_ex_guide98_relay_dz",
+        "verified": true
+      },
+      "finalAnswer": "无自振稳定条件 $\\frac{a}{b}>\\frac{4}{3\\pi}$；当 $a=1,b=3$ 时系统存在稳定自振，振幅 $A_2\\approx 2.29$、频率 $\\omega=\\sqrt{2}\\,\\text{rad/s}$（另在 $A_1\\approx 1.11$ 处有不稳定极限环）。"
+    },
+    {
+      "id": "ctrl-ch09-e-03",
+      "section": "9.3 典型例题 · 微分方程化标准型 & 反馈非线性框图化简",
+      "kind": "example",
+      "title": "【例 9-9 & 主教材例 9-5】三次非线性不稳定极限环 & 反馈非线性化简消自振",
+      "examWeight": "core",
+      "problem": "①（例 9-9）用描述函数法分析非线性微分方程 $\\dddot x+3\\ddot x+2\\dot x+x+4x^3=0$ 的稳定性。\n②（主教材例 9-5）死区继电环节（$M=h=1$）位于反馈支路（与 $G_2(s)=2/s,\\;G_3(s)$ 串联后负反馈至前向 $G_1(s)=\\frac{1}{s(s+1)}$，且另有一路单位负反馈），分别分析 $G_3(s)=1$ 与 $G_3(s)=s$ 时的自振情况。",
+      "steps": [
+        {
+          "stepTitle": "【① 例 9-9】将非线性项移到一侧写成负反馈标准型",
+          "detail": "$y=4x^3=-(\\dddot x+3\\ddot x+2\\dot x+x)$，即非线性 $y=4x^3$ 与线性 $G(s)=\\frac{1}{s^3+3s^2+2s+1}$ 串联成单位负反馈！\n1. $N(A)=\\frac{3}{4}\\cdot 4A^2=3A^2\\implies -\\frac{1}{N(A)}=-\\frac{1}{3A^2}$（随 $A:0\\to\\infty$ 从 $-\\infty\\to 0$ 向右移动！）；\n2. $G(\\mathrm{j}\\omega)=\\frac{1}{(1-3\\omega^2)+\\mathrm{j}\\omega(2-\\omega^2)}$，令虚部为 0 得 $\\omega=\\sqrt{2}$，交点 $G(\\mathrm{j}\\sqrt{2})=-\\frac{1}{5}$；\n3. 令 $-\\frac{1}{3A^2}=-\\frac{1}{5}\\implies A=\\sqrt{5/3}\\approx 1.29$。因 $A$ 增大时 $-1/N(A)$ 从左侧稳定区向右进入被包围的不稳定区，故交点是**不稳定极限环**（$A<1.29$ 时收敛到 0，$A>1.29$ 时发散至 $\\infty$）！"
+        },
+        {
+          "stepTitle": "② 主教材例 9-5",
+          "detail": "设 $r=0$，将两路负反馈中的纯线性内环 $G_1(s)$ 先化简为 $\\frac{G_1(s)}{1+G_1(s)}$，得到非线性 $N(A)$ 串联等效线性传递函数：\n$$G_{\\mathrm{eq}}(s) = \\frac{G_1(s)G_2(s)G_3(s)}{1+G_1(s)}$$"
+        },
+        {
+          "stepTitle": "步骤 3",
+          "detail": "- **情形 1（$G_3(s)=1$）**：$G_{\\mathrm{eq}}(s)=\\frac{2}{s(s^2+s+1)}$，令 $-N(A)=\\frac{1}{G_{\\mathrm{eq}}(\\mathrm{j}\\omega)}=-\\frac{\\omega^2}{2}+\\mathrm{j}\\frac{\\omega(1-\\omega^2)}{2}$，比较实虚部得 $\\omega=1$ 且 $\\frac{4}{\\pi A}\\sqrt{1-1/A^2}=\\frac{1}{2}$，解得稳定极限环（较大根）**$A\\approx 2.29,\\;\\omega=1$**！\n- **情形 2（$G_3(s)=s$，引入微分测速反馈！）**：$G_{\\mathrm{eq}}(s)=\\frac{2}{s^2+s+1}$，整个奈氏曲线退至下半平面（相角 $-0^\\circ\\to -180^\\circ$），**不再包围负实轴上的 $-1/N(A)$**，系统彻底消除自振、实现全局稳定！"
+        }
+      ],
+      "takeaway": "由微分方程反建描述函数标准型只需记住「**把非线性项 $y=f(x)$ 单独放一边，其余线性微分算子取倒数即 $G(s)$，检查符号是否为负反馈**」；而引入微分反馈 $G_3(s)=s$ 提供相位超前，是工程上消除非线性极限环的经典手段！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.232-233",
+        "pdfPage": 241,
+        "itemRef": "例9-9 (图9-14~9-15)",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.406-407 例9-5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch09_ex_main95_feedback_nl",
+        "verified": true
+      },
+      "finalAnswer": "① 例 9-9 在 $A\\approx 1.29,\\;\\omega=\\sqrt{2}$ 处存在不稳定极限环；② 例 9-5：$G_3=1$ 时有稳定自振 $A\\approx 2.29,\\;\\omega=1$；改为 $G_3=s$ 后彻底消除自振并稳定。"
+    },
+    {
+      "id": "ctrl-ch09-e-04",
+      "section": "9.3 典型例题 · 李亚普诺夫间接法与直接法分参数判稳",
+      "kind": "example",
+      "title": "【主教材例 9-8 & 辅导例 9-11】雅可比线性化多平衡点 & 直接法 $a$ 分情形讨论",
+      "examWeight": "core",
+      "problem": "①（主教材例 9-8）用间接法求非线性自治系统 $\\dot x=-x^2+x$ 的全部平衡点并判断稳定性。\n②（辅导书例 9-11）用直接法判断 $\\dot x_1=-x_2+a x_1^3,\\;\\dot x_2=x_1+a x_2^3$ 在平衡点处的稳定性（按参数 $a$ 分类讨论）。",
+      "steps": [
+        {
+          "stepTitle": "① 主教材例 9-8（间接法标准流程）",
+          "detail": "令 $\\dot x = -x^2+x = 0$，解得两个平衡点 $x_{e1}=0,\\;x_{e2}=1$。计算雅可比导数 $\\frac{\\mathrm{d}f}{\\mathrm{d}x}=-2x+1$：\n- 在 $x_{e1}=0$ 处：$\\left.\\frac{\\mathrm{d}f}{\\mathrm{d}x}\\right|_{0}=+1 > 0 \\implies$ **$x_{e1}=0$ 不稳定**；\n- 在 $x_{e2}=1$ 处：$\\left.\\frac{\\mathrm{d}f}{\\mathrm{d}x}\\right|_{1}=-1 < 0 \\implies$ **$x_{e2}=1$ 局部渐近稳定**！（注意由解析解图 9-47 可见，$x_0<0$ 时轨迹趋向 $-\\infty$，印证了间接法只保证**局部**渐近稳定！）"
+        },
+        {
+          "stepTitle": "② 辅导书例 9-11（直接法经典能量函数）",
+          "detail": "令 $\\dot x_1=0,\\;\\dot x_2=0$ 得唯一平衡点原点 $(0,0)$（注意若用间接法，原点处雅可比阵 $\\begin{bmatrix}0&-1\\\\1&0\\end{bmatrix}$ 特征值为纯虚根 $\\pm\\mathrm{j}$，**间接法失效！**必须用直接法！）。\n取正定径向无界李亚普诺夫函数 $V(\\boldsymbol{x})=x_1^2+x_2^2$，求全导数：\n$$\\dot V(\\boldsymbol{x}) = 2x_1(-x_2+a x_1^3) + 2x_2(x_1+a x_2^3) = 2a(x_1^4 + x_2^4)$$"
+        },
+        {
+          "stepTitle": "步骤 3",
+          "detail": "按参数 $a$ 分类给出精确结论：\n- **$a < 0$**：$\\dot V(\\boldsymbol{x})$ 负定，且 $\\lim_{\\|\\boldsymbol{x}\\|\\to\\infty}V(\\boldsymbol{x})=\\infty \\implies$ 原点**全局（大范围）渐近稳定**；\n- **$a > 0$**：$\\dot V(\\boldsymbol{x})$ 正定 $\\implies$ 原点**不稳定**；\n- **$a = 0$**：$\\dot V(\\boldsymbol{x})\\equiv 0$（负半定且在非零态恒为零）$\\implies$ 原点为**李亚普诺夫意义下稳定**（非渐近稳定；注：辅导书 P.234 倒数第 2 行写作「可看作正半定」，按定理 9-4 规范表述应称为**负半定且恒为零**）。"
+        }
+      ],
+      "takeaway": "看到 $\\dot x_1=-x_2+\\cdots,\\;\\dot x_2=x_1+\\cdots$ 这种反对称旋转骨架，立刻想到取 **$V=x_1^2+x_2^2$** 让交叉项 $-2x_1 x_2 + 2x_1 x_2$ 完美抵消！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.234",
+        "pdfPage": 243,
+        "itemRef": "例9-11",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.413-414 例9-8"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch09_ex_guide911_912_lyap_nl",
+        "verified": true
+      },
+      "finalAnswer": "① $x_{e1}=0$ 不稳定，$x_{e2}=1$ 局部渐近稳定；② $a<0$ 全局渐近稳定，$a>0$ 不稳定，$a=0$ 李氏意义稳定。"
+    },
+    {
+      "id": "ctrl-ch09-e-05",
+      "section": "9.3 典型例题 · 半负定 $\\dot V\\le 0$ 巧证全局渐近稳定",
+      "kind": "example",
+      "title": "【例 9-12 & 主教材例 9-11】构造能量型 $V(\\boldsymbol{x})$ 与「非零态 $\\dot V\\not\\equiv 0$」反证法",
+      "examWeight": "core",
+      "problem": "①（例 9-12）判断非线性系统 $\\dot x_1=x_2,\\;\\dot x_2=-x_2-x_1^3$ 在原点处的稳定性。\n②（主教材例 9-11）判断 $\\dot x_1=x_2,\\;\\dot x_2=-x_1-x_2$ 在原点处的稳定性。",
+      "steps": [
+        {
+          "stepTitle": "① 例 9-12",
+          "detail": "原点是系统唯一平衡点。受物理机械能「势能 $\\int x_1^3\\mathrm{d}x_1$ + 动能 $\\frac{1}{2}x_2^2$」启发，构造正定径向无界李亚普诺夫函数：\n$$V(\\boldsymbol{x}) = \\frac{1}{4}x_1^4 + \\frac{1}{2}x_2^2 > 0\\;(\\boldsymbol{x}\\ne\\boldsymbol{0}),\\qquad \\lim_{\\|\\boldsymbol{x}\\|\\to\\infty}V(\\boldsymbol{x})=\\infty$$"
+        },
+        {
+          "stepTitle": "求全导数",
+          "detail": "$$\\dot V(\\boldsymbol{x}) = x_1^3\\dot x_1 + x_2\\dot x_2 = x_1^3 x_2 + x_2(-x_2-x_1^3) = -x_2^2 \\le 0\\;\\text{（仅负半定！）}$$"
+        },
+        {
+          "stepTitle": "【核心反证法（定理 9-3 / 拉萨尔不变原理思想）】",
+          "detail": "令 $\\dot V(\\boldsymbol{x})\\equiv 0$，必有 $x_2(t)\\equiv 0 \\implies \\dot x_2(t)\\equiv 0$。代回第二个状态方程 $\\dot x_2 = -x_2 - x_1^3 \\equiv 0$，立即推出 $x_1(t)\\equiv 0$！\n可见除原点外，系统沿任意非零轨线都有 $\\dot V(\\boldsymbol{x})\\not\\equiv 0$，结合径向无界，故原点**全局渐近稳定**！"
+        },
+        {
+          "stepTitle": "② 主教材例 9-11",
+          "detail": "同理取 $V=x_1^2+x_2^2\\implies\\dot V=-2x_2^2\\le 0$，令 $\\dot V\\equiv 0\\Rightarrow x_2\\equiv 0\\Rightarrow \\dot x_2=-x_1\\equiv 0\\Rightarrow x_1\\equiv 0$，一样三行秒证全局渐近稳定！（无需费劲硬凑 $V=\\frac{1}{2}[(x_1+x_2)^2+2x_1^2+x_2^2]$！）"
+        }
+      ],
+      "takeaway": "见到形如 $\\ddot x + f(\\dot x) + g(x) = 0$ 的广义非线性阻尼振子，万用能量函数公式是 **$V(x,\\dot x) = \\int_0^x g(\\xi)\\,\\mathrm{d}\\xi + \\frac{1}{2}\\dot x^2$**，求导立刻得 $\\dot V = -\\dot x f(\\dot x)\\le 0$，再补两行「$\\dot V\\equiv 0\\Rightarrow x\\equiv 0$」完美封杀！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.235",
+        "pdfPage": 244,
+        "itemRef": "例9-12",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.416-417 例9-11 & 定理9-3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch09_ex_guide911_912_lyap_nl",
+        "verified": true
+      },
+      "finalAnswer": "① 与 ② 的原点均是**全局渐近稳定**平衡点。"
+    },
+    {
+      "id": "ctrl-ch09-e-06",
+      "section": "9.3 典型例题 · 连续 LTI 李亚普诺夫方程（含原书 2 处勘误）",
+      "kind": "example",
+      "title": "【例 9-13 & 例 9-14 & 主教材例 9-14】解 $\\boldsymbol{A}^{\\mathrm{T}}\\boldsymbol{P}+\\boldsymbol{P}\\boldsymbol{A}=-\\boldsymbol{I}$ 判稳与求稳定参数 $K$",
+      "examWeight": "core",
+      "problem": "①（例 9-13）用李亚普诺夫直接法判断 $\\dot{\\boldsymbol{x}}=\\begin{bmatrix}0&1\\\\-3&-9\\end{bmatrix}\\boldsymbol{x}$ 稳定性并写出 $V(\\boldsymbol{x})$。\n②（例 9-14）用直接法求单位负反馈 $G(s)=\\frac{K}{s(s+3)}$ 渐近稳定的 $K(>0)$ 范围。\n③（主教材例 9-14）判别 $\\boldsymbol{A}_1=\\begin{bmatrix}1&-3\\\\1&-2\\end{bmatrix}$、$\\boldsymbol{A}_2=\\begin{bmatrix}0&0\\\\1&-6\\end{bmatrix}$、$\\boldsymbol{A}_3=\\begin{bmatrix}0&1\\\\1&0\\end{bmatrix}$ 的内稳定性。",
+      "steps": [
+        {
+          "stepTitle": "① 例 9-13",
+          "detail": "（注：辅导书 P.235 题干右端把 $\\boldsymbol{x}$ 误印成 `ẋ`，应为 $\\dot{\\boldsymbol{x}}=\\boldsymbol{A}\\boldsymbol{x}$）。取 $\\boldsymbol{Q}=\\boldsymbol{I}$，解 $\\boldsymbol{A}^{\\mathrm{T}}\\boldsymbol{P}+\\boldsymbol{P}\\boldsymbol{A}=-\\boldsymbol{I}$：\n$$\\begin{cases}-6p_{12}=-1 \\\\ p_{11}-9p_{12}-3p_{22}=0 \\\\ 2p_{12}-18p_{22}=-1\\end{cases} \\implies \\boldsymbol{P}=\\begin{bmatrix}\\dfrac{31}{18} & \\dfrac{1}{6} \\\\[6pt] \\dfrac{1}{6} & \\dfrac{2}{27}\\end{bmatrix}$$\n顺序主子式 $\\Delta_1=\\frac{31}{18}>0,\\;\\Delta_2=\\frac{31}{243}-\\frac{1}{36}>0\\implies\\boldsymbol{P}>0$，全局渐近稳定，$V(\\boldsymbol{x})=\\frac{31}{18}x_1^2+\\frac{1}{3}x_1 x_2+\\frac{2}{27}x_2^2$。"
+        },
+        {
+          "stepTitle": "② 例 9-14",
+          "detail": "闭环自治矩阵 $\\boldsymbol{A}=\\begin{bmatrix}0&-K\\\\1&-3\\end{bmatrix}$，取 $\\boldsymbol{Q}=\\boldsymbol{I}$ 解得：\n$$\\boldsymbol{P}=\\begin{bmatrix}\\dfrac{K+10}{6K} & -\\dfrac{1}{2} \\\\[6pt] -\\dfrac{1}{2} & \\dfrac{K+1}{6}\\end{bmatrix},\\qquad \\Delta_1=\\frac{K+10}{6K}>0,\\quad \\Delta_2=\\frac{K^2+2K+10}{36K}>0$$\n因 $K^2+2K+10=(K+1)^2+9>0$ 恒成立，故 $\\boldsymbol{P}>0 \\iff \\mathbf{K > 0}$！"
+        },
+        {
+          "stepTitle": "③ 主教材例 9-14（展示李氏方程「有正定解 / 无解 / 解非正定」全部 3 种结局！）",
+          "detail": "：\n- $\\boldsymbol{A}_1$：解得 $\\boldsymbol{P}=\\begin{bmatrix}3&-3.5\\\\-3.5&5.5\\end{bmatrix}$（$\\Delta_1=3>0,\\;\\Delta_2=4.25>0$）$\\implies$ **内稳定**；\n- $\\boldsymbol{A}_2$：方程组 $2p_{12}=-1,\\;p_{22}-6p_{12}=0,\\;-12p_{22}=-1$ 矛盾**无解** $\\implies$ **不内稳定**（注：主教材 P.419 把第一式 `2p_{12}=-1` 误印成了 `2p_{11}=-1`，实际方程确实无解！）；\n- $\\boldsymbol{A}_3$：通解 $\\boldsymbol{P}=\\begin{bmatrix}p_{11}&-0.5\\\\-0.5&-p_{11}\\end{bmatrix}$，恒有 $|\\boldsymbol{P}|=-p_{11}^2-0.25<0$（绝不正定！）$\\implies$ **不内稳定**！"
+        }
+      ],
+      "takeaway": "写 $V(\\boldsymbol{x})=\\boldsymbol{x}^{\\mathrm{T}}\\boldsymbol{P}\\boldsymbol{x}$ 时，非对角元 $p_{12}=\\frac{1}{6}$ 对应的交叉项要乘 2 写成 **$\\frac{1}{3}x_1 x_2$**（千万别忘乘 2！）！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.235-236",
+        "pdfPage": 244,
+        "itemRef": "例9-13 & 例9-14 (图9-20)",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.419-420 例9-14"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch09_ex_guide913_914_lyap_lti",
+        "verified": true
+      },
+      "finalAnswer": "① 全局渐近稳定；② $K>0$；③ $\\boldsymbol{A}_1$ 内稳定，$\\boldsymbol{A}_2$（无解）与 $\\boldsymbol{A}_3$（$|\\boldsymbol{P}|<0$）均不内稳定。"
+    },
+    {
+      "id": "ctrl-ch09-e-07",
+      "section": "9.3 典型例题 · 【原书勘误预警】三阶系统巧取半正定 $\\boldsymbol{Q}$",
+      "kind": "example",
+      "title": "【例 9-15】巧取半正定 $\\boldsymbol{Q}=\\operatorname{diag}(0,0,1)$ 解三阶李氏方程（捕获 $\\Delta_2,\\Delta_3$ 勘误！）",
+      "examWeight": "core",
+      "problem": "三阶单位负反馈系统前向串联 $\\frac{0.5k}{s+1}\\cdot\\frac{1}{s+2}\\cdot\\frac{1}{s}$（$k>0$），用李亚普诺夫直接法求原点渐近稳定的 $k$ 取值范围。",
+      "steps": [
+        {
+          "stepTitle": "第一步",
+          "detail": "写出自治闭环状态矩阵 $\\boldsymbol{A}=\\begin{bmatrix}0&1&0\\\\0&-2&1\\\\-0.5k&0&-1\\end{bmatrix}$（$|\\boldsymbol{A}|=-0.5k\\ne 0$，原点为唯一平衡点）。"
+        },
+        {
+          "stepTitle": "第二步",
+          "detail": "【三阶解题绝技——巧取半正定 $\\boldsymbol{Q}$！】若取 $\\boldsymbol{Q}=\\boldsymbol{I}$ 计算量巨大；改取半正定 $\\boldsymbol{Q}=\\operatorname{diag}(0,0,1)$，则 $\\dot V(\\boldsymbol{x})=-\\boldsymbol{x}^{\\mathrm{T}}\\boldsymbol{Q}\\boldsymbol{x}=-x_3^2\\le 0$。验证非零态 $\\dot V\\not\\equiv 0$：\n$$\\dot V\\equiv 0 \\implies x_3\\equiv 0 \\implies \\dot x_3 = -0.5k x_1 - x_3\\equiv 0 \\implies x_1\\equiv 0 \\implies \\dot x_1=x_2\\equiv 0$$\n唯一推出 $\\boldsymbol{x}\\equiv\\boldsymbol{0}$！故只要由 $\\boldsymbol{A}^{\\mathrm{T}}\\boldsymbol{P}+\\boldsymbol{P}\\boldsymbol{A}=-\\boldsymbol{Q}$ 解出正定 $\\boldsymbol{P}>0$，即可确保渐近稳定！"
+        },
+        {
+          "stepTitle": "第三步",
+          "detail": "6 个线性方程极易口算消元，解得：\n$$\\boldsymbol{P} = \\frac{1}{48-4k}\\begin{bmatrix}k^2+24k & 12k & 0 \\\\ 12k & 6k & 2k \\\\ 0 & 2k & 24\\end{bmatrix}$$"
+        },
+        {
+          "stepTitle": "第四步",
+          "detail": "【Sylvester 顺序主子式精确计算与原书 P.236 勘误对照！】提取常数系数 $\\frac{1}{48-4k}$ 出 $m$ 阶行列式时必须带 **$m$ 次方**（SymPy 实测精确结果）：\n$$\\Delta_1 = \\frac{k^2+24k}{48-4k} > 0, \\qquad \\Delta_2 = \\frac{6k^3}{(48-4k)^2} > 0, \\qquad \\Delta_3 = \\frac{k^3}{(48-4k)^2} > 0$$\n结合 $k>0$，由 $\\Delta_1>0$ 立即得 $48-4k>0\\implies \\mathbf{0 < k < 12}$（此时 $\\Delta_2,\\Delta_3$ 自动大于 0；注：辅导书 P.236 末两行提取公因式出 $2\\times 2$ 和 $3\\times 3$ 行列式时忘了给分母平方/立方，把 $\\Delta_2$ 误印为 $\\frac{6k^3}{48-4k}$、把 $\\Delta_3$ 误印为 $k^3$，虽然巧合推出了同样答案 $0<k<12$，但考试千万别犯提公因式漏幂次的低级错误！）。"
+        }
+      ],
+      "takeaway": "三阶系统用李氏方程时，「**先取 $\\boldsymbol{Q}=\\operatorname{diag}(0,0,1)$ 并验证 $\\dot V\\equiv 0\\Rightarrow\\boldsymbol{x}\\equiv\\boldsymbol{0}$**」能把 20 分钟计算量压缩到 3 分钟；同时记住 $n$ 阶行列式提公因子 $c$ 出来是 **$c^n$**，考完还能拿劳斯判据一秒验算！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.236",
+        "pdfPage": 245,
+        "itemRef": "例9-15 (图9-21 · 含行列式幂次勘误)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch09_ex_guide915_lyap_errata",
+        "verified": true
+      },
+      "finalAnswer": "系统在原点渐近稳定的参数范围为 $0 < k < 12$（与劳斯判据 $(s+1)(s+2)s+0.5k=s^3+3s^2+2s+0.5k=0\\Rightarrow 6>0.5k$ 严丝合缝！）。"
+    },
+    {
+      "id": "ctrl-ch09-e-08",
+      "section": "9.3 典型例题 · 离散系统李亚普诺夫方程判稳",
+      "kind": "example",
+      "title": "【例 9-16 & 主教材例 9-15】解离散李亚普诺夫方程 $\\boldsymbol{A}_z^{\\mathrm{T}}\\boldsymbol{P}\\boldsymbol{A}_z-\\boldsymbol{P}=-\\boldsymbol{I}$",
+      "examWeight": "core",
+      "problem": "①（例 9-16）用离散李亚普诺夫直接法求对角系统 $\\boldsymbol{x}(k+1)=\\operatorname{diag}(\\lambda_1,\\lambda_2)\\boldsymbol{x}(k)$ 渐近稳定的条件。\n②（主教材例 9-15）用离散李亚普诺夫方程判别 $\\boldsymbol{x}(k+1)=\\begin{bmatrix}0&-0.5\\\\1&-1\\end{bmatrix}\\boldsymbol{x}(k)$ 是否内稳定。",
+      "steps": [
+        {
+          "stepTitle": "① 例 9-16",
+          "detail": "取 $\\boldsymbol{Q}=\\boldsymbol{I}$，代入 $\\boldsymbol{A}_z^{\\mathrm{T}}\\boldsymbol{P}\\boldsymbol{A}_z-\\boldsymbol{P}=-\\boldsymbol{I}$ 直接解得对角矩阵：\n$$\\boldsymbol{P} = \\begin{bmatrix}\\dfrac{1}{1-\\lambda_1^2} & 0 \\\\[8pt] 0 & \\dfrac{1}{1-\\lambda_2^2}\\end{bmatrix}$$\n由 Sylvester 判据 $\\Delta_1>0,\\;\\Delta_2>0$ 得 $1-\\lambda_1^2>0$ 且 $1-\\lambda_2^2>0 \\iff \\mathbf{|\\lambda_1|<1,\\;|\\lambda_2|<1}$，完美印证「离散系统极点严格位于单位圆内」的稳定条件！"
+        },
+        {
+          "stepTitle": "② 主教材例 9-15",
+          "detail": "取 $\\boldsymbol{Q}=\\boldsymbol{I}$、$\\boldsymbol{P}=\\begin{bmatrix}p_{11}&p_{12}\\\\p_{12}&p_{22}\\end{bmatrix}$，代入 $\\boldsymbol{A}_z^{\\mathrm{T}}\\boldsymbol{P}\\boldsymbol{A}_z-\\boldsymbol{P}=-\\boldsymbol{I}$：\n$$\\begin{bmatrix}0&1\\\\-0.5&-1\\end{bmatrix}\\begin{bmatrix}p_{11}&p_{12}\\\\p_{12}&p_{22}\\end{bmatrix}\\begin{bmatrix}0&-0.5\\\\1&-1\\end{bmatrix} - \\begin{bmatrix}p_{11}&p_{12}\\\\p_{12}&p_{22}\\end{bmatrix} = \\begin{bmatrix}-1&0\\\\0&-1\\end{bmatrix}$$\n展开得三个方程：\n$$\\begin{cases}p_{22}-p_{11}=-1 \\\\ -1.5p_{12}-p_{22}=0 \\\\ 0.25p_{11}+p_{12}=-1\\end{cases} \\implies \\boldsymbol{P}=\\begin{bmatrix}4 & -2 \\\\ -2 & 3\\end{bmatrix}$$\n验算 $\\Delta_1=4>0,\\;\\Delta_2=4\\times 3-(-2)^2=8>0 \\implies \\boldsymbol{P}>0$，故该离散系统**内稳定**！"
+        }
+      ],
+      "takeaway": "离散李氏方程计算时先算右乘 $\\boldsymbol{P}\\boldsymbol{A}_z$ 再左乘 $\\boldsymbol{A}_z^{\\mathrm{T}}$，利用结果必定对称的特点只需算上三角 3 个元素（2 阶）即可快速列方程，最后不忘验算 $\\Delta_1>0,\\Delta_2>0$！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.421",
+        "pdfPage": 430,
+        "itemRef": "例9-15",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.237 例9-16"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch09_ex_disc_lyap",
+        "verified": true
+      },
+      "finalAnswer": "① $|\\lambda_1|<1$ 且 $|\\lambda_2|<1$；② $\\boldsymbol{P}=\\begin{bmatrix}4&-2\\\\-2&3\\end{bmatrix}>0$，系统内稳定。"
+    }
+  ]
+}

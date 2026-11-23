@@ -1,0 +1,236 @@
+{
+  "chapterId": "ch01",
+  "title": "第 1 章 概述（自动控制的一般概念）",
+  "basicRequirements": {
+    "master": "控制系统的基本结构与组成；反馈特别是负反馈的控制原理以及在控制系统中的作用；能够由系统的工作原理与结构图，确定控制系统的被控对象、被控变量、控制量、检测量等要素，并画出系统的方块图。",
+    "understand": "控制系统的主要类型；自动控制系统的结构、工作原理及过程。",
+    "familiar": "控制理论的发展过程及发展趋势，对控制系统的基本要求。"
+  },
+  "sourceMeta": "主教材：孙优贤《自动控制原理》(2011第1版) P.1-15 ｜ 辅导书：孙优贤《学习辅导》(2017第1版) P.1-11",
+  "items": [
+    {
+      "id": "ctrl-ch01-f-01",
+      "section": "1.2.3 线性系统数学定义",
+      "kind": "formula",
+      "title": "线性系统（叠加性 + 均匀性 / 齐次性）数学判据",
+      "examWeight": "core",
+      "prompt": "若输入 $r_1(t)\\to y_1(t)$、$r_2(t)\\to y_2(t)$，写出系统满足线性原理的充要数学关系：",
+      "formulaLatex": "$$\\begin{aligned} &r(t) = a\\,r_1(t) + b\\,r_2(t) \\implies y(t) = a\\,y_1(t) + b\\,y_2(t) \\\\ &\\text{分解为：叠加性 } T[r_1+r_2]=T[r_1]+T[r_2]，\\quad \\text{均匀性（齐次性）} T[a\\,r]=a\\,T[r] \\end{aligned}$$",
+      "symbols": [
+        { "sym": "$a, b$", "desc": "任意常数（按主教材说明，也可推广为与输入无关的时变标量系数）" },
+        { "sym": "$T[\\cdot]$", "desc": "系统从输入到输出的映射算子（默认零初始状态）" }
+      ],
+      "conditions": "必须**同时**满足叠加性与均匀性（在零初始状态下验证）；只要系统含任一非线性环节（如平方项、常偏置项 $+C$），即属非线性系统。",
+      "pitfalls": "超级高频易错点：像 $c(t)=r(t)\\cos\\omega t + 5$ 含常数偏置 $+5$，令 $r(t)=0$ 时 $c(t)=5\\ne 0$，破坏齐次性 $T[0]=0$，因此是**非线性系统**（见习题 A1-10）！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.10-11",
+        "pdfPage": 19,
+        "itemRef": "式(1-8)~(1-10)",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.2 1.2.3③"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch01-f-02",
+      "section": "1.2.3 线性定常与时变系统判据",
+      "kind": "formula",
+      "title": "单变量线性连续系统微分方程通式与时不变性判据",
+      "examWeight": "core",
+      "prompt": "写出 $n$ 阶单变量线性连续系统的微分方程通式，并给出定常（时不变）系统的时域平移判据：",
+      "formulaLatex": "$$\\begin{aligned} &\\frac{\\mathrm{d}^n y(t)}{\\mathrm{d}t^n} + a_{n-1}\\frac{\\mathrm{d}^{n-1} y(t)}{\\mathrm{d}t^{n-1}} + \\cdots + a_1\\frac{\\mathrm{d}y(t)}{\\mathrm{d}t} + a_0 y(t) = b_m\\frac{\\mathrm{d}^m r(t)}{\\mathrm{d}t^m} + \\cdots + b_1\\frac{\\mathrm{d}r(t)}{\\mathrm{d}t} + b_0 r(t) \\\\ &\\text{时不变（定常）性：若 } r(t)\\to y(t),\\; \\text{则 } \\forall\\tau,\\; r(t-\\tau) \\to y(t-\\tau) \\end{aligned}$$",
+      "symbols": [
+        { "sym": "$a_i, b_j$", "desc": "全为常数 $\\Rightarrow$ 线性定常（LTI）系统；任一系数为时间 $t$ 的显函数 $\\Rightarrow$ 线性时变系统" }
+      ],
+      "conditions": "全书（除第 9 章非线性外）若未加特别说明，默认研究**单变量线性定常（时不变）连续系统**。",
+      "pitfalls": "判断“时变 vs 非线性”要拆开看：如 $t\\dot{c}(t)+c(t)=r(t)+3\\dot{r}(t)$ 中因子 $t$ 只乘在线性项上，仍满足叠加与齐次性，故为**线性时变**系统而非非线性系统！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.11",
+        "pdfPage": 20,
+        "itemRef": "式(1-11) & 图1-12",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.2 1.2.3④"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch01-c-01",
+      "section": "1.2.1 常用核心术语",
+      "kind": "conclusion",
+      "title": "自动控制系统核心术语精确辨析（画方块图必背）",
+      "examWeight": "core",
+      "summary": "- **被控对象（被控过程）**：要求实现控制的设备、装置或运行变化过程（如转台、汽车、蒸汽加热器）。\n- **被控变量（系统输出）**：具体要求实现控制的物理量（如转速、出口温度、实际行车路线）。\n- **控制器**：按预先设计好的控制规律，根据**偏差信号**给出控制作用的部件。\n- **执行机构**：执行控制器指令，通过**控制变量（操纵变量）**将控制作用施加于被控对象的装置（如直流电机、调节阀）。\n- **参考输入（给定值）**：希望被控变量达到的期望值或运行规律。\n- **扰动输入（扰动量）**：任何引起被控变量偏离期望值的外界因素（如进料流量波动、负载转矩突变）。",
+      "conditions": "分析任何物理系统原理图时，第一步先锁定「要控制什么物理量（被控变量）」和「靠改什么物理量去调它（控制变量）」。",
+      "pitfalls": "最常混淆的是一对概念：**控制变量（操纵变量）**是执行机构施加给被控对象的物理量（如加热蒸汽流量），而**被控变量**是最终要稳住的输出量（如物料出口温度），两者绝不能写反！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.1",
+        "pdfPage": 10,
+        "itemRef": "1.2.1(1) 常用术语",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.1-3"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch01-c-02",
+      "section": "1.2.1 基本要求与负反馈机理",
+      "kind": "conclusion",
+      "title": "控制系统三大基本要求「稳 · 准 · 快」与负反馈核心原理",
+      "examWeight": "core",
+      "summary": "1. **稳（稳定性）**：系统正常工作的**首要必要条件**；受扰偏离平衡后能重新回到原平衡状态（第 4 章核心）。\n2. **准（稳态性能）**：过渡过程结束后稳态误差 $e_{ss}$ 尽可能小（第 4 章核心）。\n3. **快（动态性能）**：快速而平稳地跟踪参考输入或抑制扰动，用 $T_r, T_p, \\sigma\\%, T_s$ 衡量（第 3 章核心）。\n4. **负反馈核心机理**：将输出经测量变送引回输入端，与参考输入相减得**偏差信号**，驱动控制器产生能**减小或消除偏差**的控制作用。",
+      "conditions": "「稳、准、快」三者往往互相制约（例如提高增益使系统更准更快，却可能引发振荡甚至失稳），系统校正与综合的本质就是在三者间取得最佳折中。",
+      "pitfalls": "并非所有反馈都能稳定系统——**正反馈**会将偏差越放越大（如习题 A1-9 的物价-工资通胀螺旋），闭环自动控制的核心机理是**负反馈**。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.1-2",
+        "pdfPage": 10,
+        "itemRef": "1.2.1(2)-(3)",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.12"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch01-c-03",
+      "section": "1.2.4 组成与方块图",
+      "kind": "conclusion",
+      "title": "典型单回路闭环自动控制系统组成方块图（标准模板）",
+      "examWeight": "core",
+      "summary": "典型自动控制系统由四大基本部分构成：**被控对象**、**检测（传感）与变送元件**、**控制器**及**执行机构**（再加比较环节组成负反馈回路）。\n**画方块图 3 步铁律**：① 输入置最左、输出置最右；② 方框内写**物理装置/部件名称**（原理方块图）或传递函数（数学方块图），箭头连线上标**物理信号/变量名称**；③ 比较点务必标明 `+` / `−` 极性，并画出主要扰动入口。",
+      "conditions": "适用于将物理工艺流程或机电原理图抽象为控制系统职能方块图（845 大纲第一项明确要求掌握）。",
+      "pitfalls": "画系统原理方块图时切忌把“物料流”与“信息流”混为一谈！方块图中的箭头一律表示**信号的因果传递方向**（信息流），而非管道里的实际流向。",
+      "figureSvg": "<svg role='img' viewBox='0 0 470 155' xmlns='http://www.w3.org/2000/svg'><title>典型的闭环自动控制系统组成方块图（仿图1-1）</title><defs><marker id='a11' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='10' y1='68' x2='68' y2='68' stroke='#334155' stroke-width='1.5' marker-end='url(#a11)'/><circle cx='78' cy='68' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='86' y1='68' x2='118' y2='68' stroke='#334155' stroke-width='1.5' marker-end='url(#a11)'/><rect x='120' y='50' width='72' height='36' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='156' y='72' text-anchor='middle' font-size='12' fill='#141824' font-weight='600'>控制器</text><line x1='192' y1='68' x2='224' y2='68' stroke='#334155' stroke-width='1.5' marker-end='url(#a11)'/><rect x='226' y='50' width='76' height='36' rx='6' fill='#fef5e5' stroke='#9a5800' stroke-width='1.5'/><text x='264' y='72' text-anchor='middle' font-size='12' fill='#9a5800' font-weight='600'>执行机构</text><line x1='302' y1='68' x2='334' y2='68' stroke='#334155' stroke-width='1.5' marker-end='url(#a11)'/><rect x='336' y='50' width='76' height='36' rx='6' fill='#e7f6f0' stroke='#0b6e4f' stroke-width='1.5'/><text x='374' y='72' text-anchor='middle' font-size='12' fill='#0b6e4f' font-weight='600'>被控对象</text><line x1='412' y1='68' x2='460' y2='68' stroke='#334155' stroke-width='1.5' marker-end='url(#a11)'/><line x1='374' y1='18' x2='374' y2='48' stroke='#b4233c' stroke-width='1.5' marker-end='url(#a11)'/><polyline points='435,68 435,126 306,126' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a11)'/><rect x='222' y='110' width='82' height='32' rx='6' fill='#f3e8ff' stroke='#6b21a8' stroke-width='1.5'/><text x='263' y='130' text-anchor='middle' font-size='12' fill='#6b21a8' font-weight='600'>检测仪表</text><polyline points='222,126 78,126 78,78' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a11)'/><text x='12' y='58' font-size='11' fill='#141824'>参考输入</text><text x='91' y='58' font-size='10' fill='#475569'>偏差</text><text x='380' y='28' font-size='11' fill='#b4233c'>扰动输入</text><text x='416' y='58' font-size='11' fill='#141824'>被控变量</text><text x='64' y='59' font-size='12' fill='#141824'>+</text><text x='65' y='88' font-size='13' fill='#b4233c'>−</text></svg>",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.2-3",
+        "pdfPage": 11,
+        "itemRef": "1.2.4 & 图1-1",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.4-5"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch01-c-04",
+      "section": "1.2.2 基本控制结构形式",
+      "kind": "conclusion",
+      "title": "开环控制、闭环控制与复合控制（前馈+反馈）优缺点对比",
+      "examWeight": "core",
+      "summary": "1. **开环控制**（含单纯按扰动前馈控制）：输出不反馈到输入端。结构简单、成本低、**不存在由反馈引起的稳定性问题**；但**抗未知扰动能力差、对内部参数变化敏感、控制精度低**。\n2. **闭环控制（负反馈）**：按偏差调节，既能克服外部扰动又对内部参数摄动不敏感，精度高；但属于**“事后”调节**（必须先出现偏差才动作），且反馈回路可能引发**振荡甚至不稳定**。\n3. **复合控制（前馈 + 反馈）**：前馈对主要可测扰动做**“事前”及时补偿**，反馈兜底消除其余未测扰动与模型误差，兼顾高精度、快抑制与稳态无差（成本与复杂度较高）。",
+      "conditions": "前馈补偿要求主要扰动可测量且扰动通道模型较准确。",
+      "pitfalls": "高频概念陷阱：**单纯前馈控制（按扰动控制）没有测量和反馈被控输出，结构上仍属于开环控制！** 只有与输出反馈结合才构成复合控制（见例 1-3 方案三 vs 方案四）。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.2 & P.6-7",
+        "pdfPage": 11,
+        "itemRef": "1.2.2 & 例1-3分析",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.4-8"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch01-c-05",
+      "section": "1.2.3 控制系统的分类",
+      "kind": "conclusion",
+      "title": "自动控制系统的六大分类维度（重点：恒值 / 随动 / 程序）",
+      "examWeight": "core",
+      "summary": "1. **按结构形式**：开环 / 闭环 / 复合控制系统。\n2. **按传递信号性质**：连续时间系统（全为连续函数） / 离散时间系统（含脉冲或数字信号，第 7 章）。\n3. **按系统特性**：线性系统 / 非线性系统（第 9 章）。\n4. **按参数是否随时间变化**：定常（时不变）系统 / 时变系统。\n5. **按输入输出数量**：单变量（SISO，经典控制核心） / 多变量（MIMO，现代控制状态空间核心）。\n6. **按参考输入特征（工程最常用）**：\n   - **恒值（定值/调节）系统**：给定值为常数，核心任务是**强抗干扰**（如温度、液位调节）；\n   - **随动（伺服）系统**：给定值随时间任意未知变化，核心任务是**快速准确跟踪**（如雷达跟踪）；\n   - **程序控制系统**：给定值按预设已知函数规律变化（如数控机床加工）。",
+      "conditions": "分类维度彼此正交，同一物理系统可同时标注多个属性（如“连续线性定常单变量恒值闭环系统”）。",
+      "pitfalls": "考题常问“某温度控制属于定值还是随动系统？为什么？”——答法模板：因给定温度恒定不变（如 $15\\pm 1.5^\\circ\\text{C}$），核心任务是克服外界扰动维持恒温，故属**恒值（定值）控制系统**。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.2",
+        "pdfPage": 11,
+        "itemRef": "1.2.3 ①~⑥",
+        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.9-11"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch01-e-01",
+      "section": "1.3 典型例题精选",
+      "kind": "example",
+      "title": "例 1-1：转台速度控制系统——开环结构剖析与闭环改造",
+      "examWeight": "core",
+      "problem": "某转台速度控制装置由电池电位器（速度设置电压）、直流放大器、直流电机和转台依次串联组成，无测速反馈。问：① 该系统的被控对象、控制器与执行机构分别是什么？② 判断其属于开环还是闭环系统并画方块图；③ 如何提高控制精度？画出改进后的闭环方块图。",
+      "figureSvg": "<svg role='img' viewBox='0 0 470 155' xmlns='http://www.w3.org/2000/svg'><title>例1-1 转台转速闭环控制系统方块图（加装测速仪负反馈，仿图1-5）</title><defs><marker id='a15' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='10' y1='52' x2='72' y2='52' stroke='#334155' stroke-width='1.5' marker-end='url(#a15)'/><circle cx='82' cy='52' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='90' y1='52' x2='122' y2='52' stroke='#334155' stroke-width='1.5' marker-end='url(#a15)'/><rect x='124' y='34' width='80' height='36' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='164' y='56' text-anchor='middle' font-size='12' fill='#141824'>直流放大器</text><line x1='204' y1='52' x2='234' y2='52' stroke='#334155' stroke-width='1.5' marker-end='url(#a15)'/><rect x='236' y='34' width='76' height='36' rx='6' fill='#fef5e5' stroke='#9a5800' stroke-width='1.5'/><text x='274' y='56' text-anchor='middle' font-size='12' fill='#9a5800'>直流电机</text><line x1='312' y1='52' x2='342' y2='52' stroke='#334155' stroke-width='1.5' marker-end='url(#a15)'/><rect x='344' y='34' width='58' height='36' rx='6' fill='#e7f6f0' stroke='#0b6e4f' stroke-width='1.5'/><text x='373' y='56' text-anchor='middle' font-size='12' fill='#0b6e4f'>转台</text><line x1='402' y1='52' x2='460' y2='52' stroke='#334155' stroke-width='1.5' marker-end='url(#a15)'/><polyline points='428,52 428,118 294,118' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a15)'/><rect x='220' y='102' width='72' height='32' rx='6' fill='#f3e8ff' stroke='#6b21a8' stroke-width='1.5'/><text x='256' y='122' text-anchor='middle' font-size='12' fill='#6b21a8'>转速仪</text><polyline points='220,118 82,118 82,62' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a15)'/><text x='12' y='40' font-size='10' fill='#141824'>期望速度(电压)</text><text x='410' y='40' font-size='10' fill='#141824'>实际速度</text><text x='100' y='110' font-size='10' fill='#6b21a8'>测量速度(电压)</text><text x='68' y='43' font-size='12' fill='#141824'>+</text><text x='69' y='71' font-size='13' fill='#b4233c'>−</text></svg>",
+      "steps": [
+        { "stepTitle": "1. 识别系统核心部件", "detail": "被控对象为**转台**（被控变量为实际转速），控制器为**直流放大器**，执行机构为**直流电机**。" },
+        { "stepTitle": "2. 判定开环结构及其缺陷", "detail": "原系统无转速测量与反馈回路，属于**开环控制系统**（期望速度电压 $\\to$ 直流放大器 $\\to$ 直流电机 $\\to$ 转台 $\\to$ 实际速度）。一旦电机参数漂移或负载变化，放大器无从得知转速偏差，无法自动纠偏。" },
+        { "stepTitle": "3. 闭环改造措施", "detail": "在转台轴上加装**转速仪**（测速发电机），将实际转速转换为成比例的电压信号反馈到输入比较点，与速度给定电压相减得偏差信号送入直流放大器，构成**负反馈闭环系统**（如图）。部件精密时，闭环误差可降至开环误差的 $1/100$。" }
+      ],
+      "finalAnswer": "① 对象：转台；控制器：直流放大器；执行机构：直流电机。② 原为开环系统。③ 加装转速仪构成速度负反馈闭环系统。",
+      "takeaway": "开环改闭环的标准套路 = 「加装输出传感器」+「引回输入端作负反馈比较」。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.3-4",
+        "pdfPage": 12,
+        "itemRef": "例1-1 (图1-2~1-5)"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch01-e-02",
+      "section": "1.3 典型例题精选",
+      "kind": "example",
+      "title": "例 1-2：驾驶员驾驶汽车的人机闭环控制系统抽象建模",
+      "examWeight": "core",
+      "problem": "将驾驶员驾驶汽车沿预期车道行驶的过程看作一个控制系统，说明其工作原理，指出被控对象、输入量、输出量、反馈量、执行机构、检测传感部分与控制器，并画出系统方块图。",
+      "figureSvg": "<svg role='img' viewBox='0 0 460 135' xmlns='http://www.w3.org/2000/svg'><title>例1-2 汽车驾驶控制系统组成方块图（仿图1-6）</title><defs><marker id='a16' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='10' y1='46' x2='78' y2='46' stroke='#334155' stroke-width='1.5' marker-end='url(#a16)'/><circle cx='88' cy='46' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='96' y1='46' x2='130' y2='46' stroke='#334155' stroke-width='1.5' marker-end='url(#a16)'/><rect x='132' y='28' width='80' height='36' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='172' y='50' text-anchor='middle' font-size='11' fill='#141824'>驾驶员(大脑)</text><line x1='212' y1='46' x2='242' y2='46' stroke='#334155' stroke-width='1.5' marker-end='url(#a16)'/><rect x='244' y='28' width='76' height='36' rx='6' fill='#fef5e5' stroke='#9a5800' stroke-width='1.5'/><text x='282' y='50' text-anchor='middle' font-size='11' fill='#9a5800'>驾驶机构</text><line x1='320' y1='46' x2='348' y2='46' stroke='#334155' stroke-width='1.5' marker-end='url(#a16)'/><rect x='350' y='28' width='52' height='36' rx='6' fill='#e7f6f0' stroke='#0b6e4f' stroke-width='1.5'/><text x='376' y='50' text-anchor='middle' font-size='11' fill='#0b6e4f'>汽车</text><line x1='402' y1='46' x2='452' y2='46' stroke='#334155' stroke-width='1.5' marker-end='url(#a16)'/><polyline points='425,46 425,104 334,104' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a16)'/><rect x='186' y='88' width='146' height='32' rx='6' fill='#f3e8ff' stroke='#6b21a8' stroke-width='1.5'/><text x='259' y='108' text-anchor='middle' font-size='11' fill='#6b21a8'>驾驶员的视觉、听觉测量</text><polyline points='186,104 88,104 88,56' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a16)'/><text x='12' y='35' font-size='10' fill='#141824'>预期行车路线</text><text x='100' y='36' font-size='10' fill='#475569'>偏差</text><text x='400' y='35' font-size='10' fill='#141824'>实际路线</text><text x='74' y='38' font-size='12' fill='#141824'>+</text><text x='75' y='65' font-size='13' fill='#b4233c'>−</text></svg>",
+      "steps": [
+        { "stepTitle": "1. 梳理闭环负反馈工作原理", "detail": "驾驶员通过眼睛与耳朵持续观测实际行车位置与路况，大脑将其与预期车道（参考输入）比较；若产生偏差，便指令手脚操控方向盘、油门和制动装置修正汽车行驶轨迹，使偏差不断缩小。" },
+        { "stepTitle": "2. 逐一对应控制系统 7 大要素", "detail": "**被控对象**：汽车；**输入变量**：预期行车路线；**输出变量**：实际行车路线；**反馈量**：眼睛观察到的实际行车路线；**检测传感器**：驾驶员的眼睛、耳朵及神经传输系统；**控制器**：驾驶员大脑；**执行机构**：驾驶员的手、脚及整套驾驶与制动机构。" }
+      ],
+      "finalAnswer": "属人机负反馈闭环随动控制系统（7 大要素与方块图见上）。",
+      "takeaway": "非电/生物/人机类题目只需紧扣「测量—比较—决策—执行—对象」五环节一一对号入座即可满分。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.4-5",
+        "pdfPage": 13,
+        "itemRef": "例1-2 (图1-6)"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch01-e-03",
+      "section": "1.3 典型例题精选",
+      "kind": "example",
+      "title": "例 1-3：蒸汽加热器四种控制方案对比（开环 / 反馈 / 前馈 / 复合）",
+      "examWeight": "core",
+      "problem": "某蒸汽加热器需控制物料出口温度，共有 4 种工艺方案：(a) 仅设温度控制器 TC 按给定调节蒸汽阀；(b) 增设出口温度变送器 TT 反馈至 TC；(c) 仅在进料端设流量测量 FT 与前馈控制器 FC 调节蒸汽阀；(d) 同时结合出口 TT 反馈与进料 FT 前馈（经加法器 $\\Sigma$ 叠加后控制蒸汽阀）。① 指出被控对象、被控变量、给定值与控制变量；② 分析 4 种方案结构特点并画复合控制方块图。",
+      "figureSvg": "<svg role='img' viewBox='0 0 475 185' xmlns='http://www.w3.org/2000/svg'><title>例1-3 方案四：蒸汽加热器前馈+反馈复合控制系统方块图（仿图1-8c）</title><defs><marker id='a18' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='10' y1='102' x2='72' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#a18)'/><circle cx='82' cy='102' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='90' y1='102' x2='116' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#a18)'/><rect x='118' y='85' width='78' height='34' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='157' y='106' text-anchor='middle' font-size='11' fill='#141824'>温度控制器TC</text><line x1='196' y1='102' x2='222' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#a18)'/><circle cx='232' cy='102' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='240' y1='102' x2='266' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#a18)'/><rect x='268' y='85' width='56' height='34' rx='6' fill='#fef5e5' stroke='#9a5800' stroke-width='1.5'/><text x='296' y='106' text-anchor='middle' font-size='11' fill='#9a5800'>调节阀</text><line x1='324' y1='102' x2='354' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#a18)'/><rect x='356' y='85' width='58' height='34' rx='6' fill='#e7f6f0' stroke='#0b6e4f' stroke-width='1.5'/><text x='385' y='106' text-anchor='middle' font-size='11' fill='#0b6e4f'>加热器</text><line x1='414' y1='102' x2='465' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#a18)'/><line x1='385' y1='14' x2='385' y2='83' stroke='#b4233c' stroke-width='1.5' marker-end='url(#a18)'/><polyline points='385,40 360,40' fill='none' stroke='#b4233c' stroke-width='1.4' marker-end='url(#a18)'/><rect x='284' y='25' width='74' height='30' rx='6' fill='#fdecef' stroke='#b4233c' stroke-width='1.4'/><text x='321' y='44' text-anchor='middle' font-size='11' fill='#b4233c'>流量测量FT</text><line x1='284' y1='40' x2='260' y2='40' stroke='#b4233c' stroke-width='1.4' marker-end='url(#a18)'/><rect x='184' y='25' width='74' height='30' rx='6' fill='#fdecef' stroke='#b4233c' stroke-width='1.4'/><text x='221' y='44' text-anchor='middle' font-size='11' fill='#b4233c'>前馈控制FC</text><polyline points='184,40 232,40' fill='none'/><polyline points='184,40 165,40 165,68 232,68 232,92' fill='none' stroke='#b4233c' stroke-width='1.4' marker-end='url(#a18)'/><polyline points='438,102 438,158 310,158' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a18)'/><rect x='228' y='142' width='80' height='30' rx='6' fill='#f3e8ff' stroke='#6b21a8' stroke-width='1.5'/><text x='268' y='161' text-anchor='middle' font-size='11' fill='#6b21a8'>温度测量TT</text><polyline points='228,158 82,158 82,112' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a18)'/><text x='12' y='92' font-size='10' fill='#141824'>温度给定值</text><text x='416' y='92' font-size='10' fill='#141824'>出口温度</text><text x='392' y='24' font-size='10' fill='#b4233c'>进料流量(干扰)</text><text x='68' y='93' font-size='12' fill='#141824'>+</text><text x='69' y='122' font-size='13' fill='#b4233c'>−</text><text x='218' y='95' font-size='11' fill='#141824'>+</text><text x='238' y='92' font-size='11' fill='#b4233c'>+</text></svg>",
+      "steps": [
+        { "stepTitle": "1. 确定四要素", "detail": "被控对象：**蒸汽加热器**；被控变量：**热物料的出口温度**；给定值：**期望出口温度**；控制变量（操纵变量）：**加热蒸汽流量**。" },
+        { "stepTitle": "2. 逐一对比四种方案结构本质", "detail": "- **方案一**：无出口温度反馈，属**按给定开环控制**，完全无法克服进料流量/温度等扰动。\n- **方案二**：出口 TT 测温反馈给 TC，属**负反馈闭环控制**；能克服一切扰动使出口温度趋于给定，但属“事后”调节。\n- **方案三**：进料 FT 测干扰直接驱动 FC 调蒸汽阀，属**前馈控制（按扰动开环控制）**；属“事前”及时补偿，但对给定值变化及其他未测扰动无能为力。\n- **方案四**：**前馈 + 反馈复合控制系统**（如图）；前馈迅速抵消主要进料流量扰动，反馈闭环消除残差与其余扰动，控制品质最优。" }
+      ],
+      "finalAnswer": "对象：蒸汽加热器；被控变量：出口温度；控制变量：加热蒸汽量；方案一～四依次为：开环 / 负反馈闭环 / 按扰动前馈（开环） / 前馈+反馈复合控制。",
+      "takeaway": "这是浙大过程控制与 845 最经典的工业案例：牢记「反馈=事后万能兜底，前馈=事前专克主扰动，复合=强强联合」。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.5-7",
+        "pdfPage": 14,
+        "itemRef": "例1-3 (图1-7~1-8)"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch01-e-04",
+      "section": "1.4 习题精选（高频判断）",
+      "kind": "example",
+      "title": "习题 A1-10：线性定常 / 线性时变 / 非线性系统 7 式精准判定",
+      "examWeight": "core",
+      "problem": "下列各式描述系统的输入 $r(t)$ 与输出 $c(t)$ 关系，判断哪些是线性定常系统、哪些是线性时变系统、哪些是非线性系统：\n① $c(t)=5+r^2(t)+t\\frac{\\mathrm{d}^2 r(t)}{\\mathrm{d}t^2}$；\n② $\\frac{\\mathrm{d}^3 c}{\\mathrm{d}t^3}+3\\frac{\\mathrm{d}^2 c}{\\mathrm{d}t^2}+6\\frac{\\mathrm{d}c}{\\mathrm{d}t}+8c(t)=r(t)$；\n③ $t\\frac{\\mathrm{d}c(t)}{\\mathrm{d}t}+c(t)=r(t)+3\\frac{\\mathrm{d}r(t)}{\\mathrm{d}t}$；\n④ $c(t)=r(t)\\cos\\omega t + 5$；\n⑤ $c(t)=3r(t)+6\\frac{\\mathrm{d}r(t)}{\\mathrm{d}t}+5\\int_{-\\infty}^{t}r(\\tau)\\mathrm{d}\\tau$；\n⑥ $c(t)=r^2(t)$；\n⑦ $c(t)=\\begin{cases}0, & t<6 \\\\ r(t), & t\\ge 6\\end{cases}$。",
+      "steps": [
+        { "stepTitle": "1. 先筛非线性系统（违背叠加性或齐次性）", "detail": "- ① 含常数项 $5$ 及平方项 $r^2(t)$ $\\Rightarrow$ **非线性**（且含时变因子 $t$）；\n- ④ 含常数偏置 $+5$，令 $r(t)\\equiv 0$ 时 $c(t)=5\\ne 0$，违背齐次性 $T[ar]=aT[r]$ $\\Rightarrow$ **非线性**！\n- ⑥ $r^2(t)$ 不满足叠加与齐次性 $\\Rightarrow$ **非线性**。" },
+        { "stepTitle": "2. 再区分线性定常 vs 线性时变", "detail": "- ② 常系数线性微分方程 $\\Rightarrow$ **线性定常**；\n- ⑤ 常系数比例、微分、积分线性组合（积分下限 $-\\infty$ 保持平移不变） $\\Rightarrow$ **线性定常**；\n- ③ 对 $c, r$ 及其导数全是一次线性，但 $\\dot{c}(t)$ 系数为时间 $t$ $\\Rightarrow$ **线性时变**；\n- ⑦ 满足叠加与齐次性（可写作 $c(t)=1(t-6)\\cdot r(t)$），但门控因子 $1(t-6)$ 显含时间 $t$，输入平移 $\\tau$ 后截断时刻不随输入平移 $\\Rightarrow$ **线性时变**！" }
+      ],
+      "finalAnswer": "线性定常：②、⑤；线性时变：③、⑦；非线性：①、④、⑥。",
+      "takeaway": "考场两大秒杀口诀：① 方程中出现**独立常数偏置 $+C$** 必为非线性（严格按 $T[0]=0$ 判定）；② 出现仅与时间 $t$ 有关的**乘法系数或定时开关**（如 $t\\dot c$、$\\cos\\omega t\\cdot r(t)$、$1(t-6)r(t)$）是**线性时变**而非非线性！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.10",
+        "pdfPage": 19,
+        "itemRef": "习题 A1-10"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    }
+  ]
+}
