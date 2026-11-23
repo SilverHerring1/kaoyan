@@ -12,10 +12,12 @@ import shutil
 from pathlib import Path
 
 WORKSPACE_DIR = Path(r"D:\Documents\antigravity-workspace\kaoyan-english-sprint")
-DEFAULT_REPO_DIR = Path(r"D:\Documents\GitHub\kaoyan-english-sprint")
+DEFAULT_REPO_DIR = Path(r"D:\Documents\GitHub\kaoyan")
 
-EXCLUDE_TOP = {".git", ".env", ".env.local", "__pycache__", ".venv", "tmp", "status.md"}
+EXCLUDE_TOP = {".git", ".env", ".env.local", "__pycache__", ".venv", "tmp", "status.md", "AGENTS.md"}
+EXCLUDE_FILENAMES = {"CONTENT_SPEC.md"}
 EXCLUDE_REL_PREFIXES = ("data/raw", "scripts/__pycache__")
+STALE_FILES_TO_REMOVE = (".github/workflows/pages.yml",)
 
 
 def should_exclude(rel: Path) -> bool:
@@ -23,6 +25,8 @@ def should_exclude(rel: Path) -> bool:
     if not parts:
         return True
     if parts[0] in EXCLUDE_TOP:
+        return True
+    if rel.name in EXCLUDE_FILENAMES:
         return True
     if any(p == "__pycache__" or p.endswith(".pyc") for p in parts):
         return True
@@ -56,13 +60,24 @@ def sync(src: Path = WORKSPACE_DIR, dst: Path = DEFAULT_REPO_DIR) -> int:
             shutil.copy2(path, target)
             copied += 1
 
+    # Remove obsolete GitHub Actions Pages workflow so pure branch deploy runs cleanly
+    for stale_rel in STALE_FILES_TO_REMOVE:
+        stale_path = dst / stale_rel
+        if stale_path.exists():
+            stale_path.unlink()
+            print(f"[CLEAN] Removed obsolete file in target repo: {stale_rel}")
+            parent = stale_path.parent
+            while parent != dst and parent.exists() and not any(parent.iterdir()):
+                parent.rmdir()
+                parent = parent.parent
+
     # Double-check forbidden files do NOT exist in destination
-    for forbidden in (dst / ".env", dst / "data" / "raw"):
+    for forbidden in (dst / ".env", dst / "data" / "raw", dst / ".venv", dst / "tmp", dst / "status.md"):
         if forbidden.exists():
             raise RuntimeError(f"SECURITY GUARD: Forbidden path exists in target repo: {forbidden}")
 
     print(f"[OK] Synced {copied} clean files from {src} -> {dst}")
-    print("[OK] Verified .env and data/raw are NOT present in target repo.")
+    print("[OK] Verified .env, data/raw, .venv, tmp, and status.md are NOT present in target repo.")
     return copied
 
 

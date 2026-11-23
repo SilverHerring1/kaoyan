@@ -1,0 +1,104 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "subjectName": "考研数学一（27 张宇六书体系）",
+  "syllabusRef": "2027 考研数学一大纲 · 按单元分讲编写（全部保留公式、结论、例题与精确页码出处）",
+  "primaryBooks": [
+    "27 张宇《基础 30 讲》（高数 / 线代 / 概率）",
+    "27 张宇《高数 18 讲》《线代 9 讲》《概率 9 讲》（强化）"
+  ],
+  "referenceBooks": [
+    "27 没咋了《线代强化讲义》(116页)",
+    "27 版高数公式-数一 / 线代独家大总结 / 27 版概率论全总结"
+  ],
+  "chapters": [
+    {
+      "id": "calc-u1",
+      "num": "高数 · 单元 1",
+      "title": "极限、连续与一元微分学",
+      "syllabusCode": "高数 1-6 讲",
+      "examWeight": "core",
+      "pages": "27 张宇基础30讲 + 高数18讲",
+      "syllabusReq": "函数极限、无穷小阶比较、导数微分定义、中值定理、泰勒公式与极值凹凸性（待自控验收后按讲逐页录入）。",
+      "file": "calc-u1.json",
+      "ready": false
+    },
+    {
+      "id": "calc-u2",
+      "num": "高数 · 单元 2",
+      "title": "一元积分学与常微分方程",
+      "syllabusCode": "高数 7-11 讲",
+      "examWeight": "core",
+      "pages": "27 张宇基础30讲 + 高数18讲",
+      "syllabusReq": "不定积分、定积分几何与物理应用、反常积分敛散性、各类常微分方程与欧拉方程。",
+      "file": "calc-u2.json",
+      "ready": false
+    },
+    {
+      "id": "calc-u3",
+      "num": "高数 · 单元 3",
+      "title": "多元微分学与重积分",
+      "syllabusCode": "高数 12-14 讲",
+      "examWeight": "core",
+      "pages": "27 张宇基础30讲 + 高数18讲",
+      "syllabusReq": "多元可微性、偏导与全微分、条件极值、二重与三重积分计算及空间解析几何。",
+      "file": "calc-u3.json",
+      "ready": false
+    },
+    {
+      "id": "calc-u4",
+      "num": "高数 · 单元 4",
+      "title": "曲线曲面积分与无穷级数（数一专属重点）",
+      "syllabusCode": "高数 15-18 讲",
+      "examWeight": "core",
+      "pages": "27 张宇基础30讲 + 高数18讲",
+      "syllabusReq": "格林/高斯/斯托克斯公式、散度旋度、数项级数、幂级数展开求和与傅里叶级数。",
+      "file": "calc-u4.json",
+      "ready": false
+    },
+    {
+      "id": "la-u1",
+      "num": "线代 · 单元 1",
+      "title": "行列式、矩阵、向量组与线性方程组",
+      "syllabusCode": "线代 1-5 讲",
+      "examWeight": "core",
+      "pages": "27 张宇线代 + 27 没咋了线代强化讲义",
+      "syllabusReq": "行列式计算、伴随与逆矩阵、秩不等式、线性相关性、同解与公共解。",
+      "file": "la-u1.json",
+      "ready": false
+    },
+    {
+      "id": "la-u2",
+      "num": "线代 · 单元 2",
+      "title": "特征值特征向量、相似对角化与二次型",
+      "syllabusCode": "线代 6-9 讲",
+      "examWeight": "core",
+      "pages": "27 张宇线代 + 27 没咋了线代强化讲义",
+      "syllabusReq": "实对称矩阵正交相似对角化、标准形与规范形、正定矩阵判定与合同等价关系。",
+      "file": "la-u2.json",
+      "ready": false
+    },
+    {
+      "id": "prob-u1",
+      "num": "概率 · 单元 1",
+      "title": "随机事件、一维/多维分布与数字特征",
+      "syllabusCode": "概率 1-5 讲",
+      "examWeight": "core",
+      "pages": "27 张宇基础30讲概率 + 概率9讲",
+      "syllabusReq": "全概率与贝叶斯公式、常见分布、卷积与最值分布、期望方差协方差相关系数。",
+      "file": "prob-u1.json",
+      "ready": false
+    },
+    {
+      "id": "prob-u2",
+      "num": "概率 · 单元 2",
+      "title": "大数定律、中心极限定理与数理统计",
+      "syllabusCode": "概率 6-9 讲",
+      "examWeight": "core",
+      "pages": "27 张宇基础30讲概率 + 概率9讲",
+      "syllabusReq": "三大抽样分布、矩估计与最大似然估计、无偏性有效性、区间估计与假设检验（数一）。",
+      "file": "prob-u2.json",
+      "ready": false
+    }
+  ]
+}

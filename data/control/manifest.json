@@ -1,0 +1,115 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "control",
+  "subjectName": "845 自动控制原理（浙江大学）",
+  "syllabusRef": "浙江大学控制科学与工程学院 2027 年《自动控制原理》(科目代码 845) 考试大纲（2026-09-29 发布，满分 150 分）",
+  "primaryBooks": [
+    "孙优贤、王慧主编《自动控制原理》(化学工业出版社，2011第1版)",
+    "孙优贤主编、王慧副主编《自动控制原理学习辅导——知识精粹、习题详解、考研真题》(2017第1版)"
+  ],
+  "referenceBooks": [
+    "胡寿松主编《自动控制原理》(第七版) & 《题海与考研指导》(第三版)",
+    "刘豹、唐万生《现代控制理论》(第3版) & 习题解答"
+  ],
+  "chapters": [
+    {
+      "id": "ch01",
+      "num": "第 1 章",
+      "title": "概述（自动控制的一般概念）",
+      "syllabusCode": "大纲(1)",
+      "examWeight": "core",
+      "pages": "主教材 P.1-18 · 辅导 P.1-11",
+      "syllabusReq": "掌握自动控制的基本概念、基本原理与系统组成及分类；能熟练将物理结构图抽象为控制系统方块图并分析物理量与信息流。",
+      "file": "ch01.json",
+      "ready": false
+    },
+    {
+      "id": "ch02",
+      "num": "第 2 章",
+      "title": "连续时间控制系统的数学模型",
+      "syllabusCode": "大纲(2)",
+      "examWeight": "core",
+      "pages": "主教材 P.19-89 · 辅导 P.12-59",
+      "syllabusReq": "建立微分方程、传递函数、状态空间模型；熟练运用方块图简化与信号流图（梅逊公式）；掌握模型互转与非线性环节线性化。",
+      "file": "ch02.json",
+      "ready": false
+    },
+    {
+      "id": "ch03",
+      "num": "第 3 章",
+      "title": "连续时间控制系统的时域分析",
+      "syllabusCode": "大纲(3)",
+      "examWeight": "core",
+      "pages": "主教材 P.90-138 · 辅导 P.60-85",
+      "syllabusReq": "熟悉一阶、二阶及高阶系统特征；掌握微分方程与拉氏变换求解、状态空间模型求解与状态转移矩阵、时域动态性能指标、常规 PID 控制规律与高阶主导极点降阶。",
+      "file": "ch03.json",
+      "ready": true
+    },
+    {
+      "id": "ch04",
+      "num": "第 4 章",
+      "title": "连续时间控制系统的稳定性与稳态误差",
+      "syllabusCode": "大纲(3)",
+      "examWeight": "core",
+      "pages": "主教材 P.139-161 · 辅导 P.86-101",
+      "syllabusReq": "掌握稳定性充要条件、劳斯判据（含两种特殊情况与相对稳定裕度）与赫尔维茨判据；掌握系统型别、稳态误差系数 Kp/Kv/Ka、给定/扰动稳态误差及非单位反馈等效变换。",
+      "file": "ch04.json",
+      "ready": true
+    },
+    {
+      "id": "ch05",
+      "num": "第 5 章",
+      "title": "根轨迹分析法",
+      "syllabusCode": "大纲(4)",
+      "examWeight": "core",
+      "pages": "主教材 P.162-205 · 辅导 P.102-135",
+      "syllabusReq": "掌握根轨迹基本概念、常规与广义根轨迹绘制法则；利用根轨迹分析系统性能并进行系统校正设计。",
+      "file": "ch05.json",
+      "ready": false
+    },
+    {
+      "id": "ch06",
+      "num": "第 6 章",
+      "title": "频率特性分析法与超前/滞后校正",
+      "syllabusCode": "大纲(5)-(6)",
+      "examWeight": "core",
+      "pages": "主教材 P.206-263 · 辅导 P.136-161",
+      "syllabusReq": "掌握开环典型环节分解、Bode 图绘制与由 Bode 图反求传递函数、Nyquist 稳定判据与稳定裕度；熟悉串联超前与滞后校正设计。",
+      "file": "ch06.json",
+      "ready": false
+    },
+    {
+      "id": "ch07",
+      "num": "第 7 章",
+      "title": "线性离散时间控制系统分析与综合",
+      "syllabusCode": "大纲(7)",
+      "examWeight": "core",
+      "pages": "主教材 P.264-321 · 辅导 P.162-189",
+      "syllabusReq": "掌握采样定理、Z 变换与反 Z 变换、差分方程与脉冲传递函数、离散稳定性与稳态误差、动态分析及数字调节器设计。",
+      "file": "ch07.json",
+      "ready": false
+    },
+    {
+      "id": "ch08",
+      "num": "第 8 章",
+      "title": "线性定常系统的状态空间分析与综合",
+      "syllabusCode": "大纲(8)",
+      "examWeight": "core",
+      "pages": "主教材 P.322-382 · 辅导 P.190-221",
+      "syllabusReq": "掌握状态能控性、能观性与典型标准型、线性变换、状态反馈极点配置与状态观测器设计（8.4 最优控制、8.7 内模控制为拓展参考）。",
+      "file": "ch08.json",
+      "ready": false
+    },
+    {
+      "id": "ch09",
+      "num": "第 9 章",
+      "title": "非线性控制系统分析",
+      "syllabusCode": "大纲(9)",
+      "examWeight": "core",
+      "pages": "主教材 P.383-423 · 辅导 P.222-239",
+      "syllabusReq": "【2027 考纲明确要求】掌握非线性控制系统基本概念与描述函数法，掌握李亚普诺夫稳定性分析方法（相平面法作拓展了解）。",
+      "file": "ch09.json",
+      "ready": false
+    }
+  ]
+}

@@ -3,11 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>考研英语一冲刺工作台 | 核心词库 · 纯记忆速背 · 外刊刷题与翻译</title>
-  <meta name="description" content="考研英语一冲刺一体化学习站：7大可刷题核心词模块（含完形近义辨析与固定搭配）、4大纯记忆速背模块（态度词/学术名词/作文主题词）、同源外刊单选、句子成分划分与英一翻译对照。">
+  <title>考研三科冲刺工作台 | 英语一 · 845 自动控制原理 · 考研数学一</title>
+  <meta name="description" content="考研三科一体化冲刺学习工作台：英语一核心词库/速背/外刊刷题、浙江大学 845 自动控制原理（全公式/结论/例题/精确页码溯源/SymPy 验算）、考研数学一张宇六书体系。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="./assets/styles.css">
 </head>
 <body>
@@ -21,10 +24,10 @@
           <svg class="icon-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
           </svg>
-          <h1>考研英语一冲刺工作台</h1>
-          <span class="header-badge">11 模块 · 刷题/速背分离</span>
+          <h1>考研三科冲刺工作台</h1>
+          <span class="header-badge" id="headerBadge">英语一 · 845 自控 · 数学一</span>
         </div>
-        <p class="brand-subtitle">可刷题（词组 · 熟词生义 · 形近 · 完形近义辨析 · 固定搭配 · 逻辑 · 同义替换）｜ 纯速背（态度正反 · 学术词 · 作文主题词）</p>
+        <p class="brand-subtitle" id="headerSubtitle">英语一（11 模块词库/速背/外刊刷题）｜ 845 自动控制原理（原书页码溯源 · SymPy 验算）｜ 考研数学一（张宇六书分单元）</p>
       </div>
 
       <div class="header-actions no-print">
@@ -43,8 +46,43 @@
       </div>
     </div>
 
-    <!-- 主视图切换 Tablist -->
-    <div class="tab-bar-wrap no-print">
+    <!-- 顶层三科切换（语义 nav + a，非 tablist） -->
+    <nav class="subject-nav-wrap no-print" aria-label="科目切换">
+      <div class="container">
+        <ul class="subject-nav-list">
+          <li>
+            <a href="#english" class="subject-link" data-subject="english" aria-current="page">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+              </svg>
+              <span>英语一</span>
+              <span class="subject-chip">625词 · 27题</span>
+            </a>
+          </li>
+          <li>
+            <a href="#control" class="subject-link" data-subject="control">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+              <span>845 自动控制原理</span>
+              <span class="subject-chip subject-chip-new">试点第3/4章</span>
+            </a>
+          </li>
+          <li>
+            <a href="#math1" class="subject-link" data-subject="math1">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 17h16M7 4l10 16"/>
+              </svg>
+              <span>考研数学一</span>
+              <span class="subject-chip">8单元框架</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- 英语一子视图切换 Tablist -->
+    <div id="englishTabBarWrap" class="tab-bar-wrap no-print">
       <div class="container">
         <div class="primary-tablist" role="tablist" aria-label="学习模式切换">
           <button type="button" role="tab" id="tab-vocab" class="primary-tab" aria-selected="true" tabindex="0" data-panel="panel-vocab">
@@ -83,8 +121,10 @@
   <main id="main-content" class="container main-shell" tabindex="-1">
     <div id="printSummary" class="print-only print-summary">导出范围：全部词条</div>
 
-    <!-- ==================== 视图 1：核心刷题词库（7 大可出题模块） ==================== -->
-    <div id="panel-vocab" role="tabpanel" aria-labelledby="tab-vocab">
+    <!-- ==================== 科目 1：考研英语一 ==================== -->
+    <div id="subject-english">
+      <!-- ==================== 视图 1：核心刷题词库（7 大可出题模块） ==================== -->
+      <div id="panel-vocab" role="tabpanel" aria-labelledby="tab-vocab">
       <div class="panel-body">
         <!-- 小品词空间隐喻速查 -->
         <details id="particleGuide" class="card disclosure-card no-print">
@@ -330,12 +370,19 @@
         <div id="mistakesList" class="mistakes-list"></div>
       </div>
     </div>
+    </div><!-- /#subject-english -->
+
+    <!-- ==================== 科目 2：845 自动控制原理 ==================== -->
+    <div id="subject-control" class="stem-subject-view" hidden></div>
+
+    <!-- ==================== 科目 3：考研数学一 ==================== -->
+    <div id="subject-math1" class="stem-subject-view" hidden></div>
   </main>
 
   <footer class="site-footer no-print">
     <div class="container footer-inner">
-      <p>开源自用学习项目 · 词库与速背支持本地持久化与 JSON 备份 · 外刊例句仅摘录单句并保留原文出处与链接</p>
-      <p class="footer-shortcuts">刷题快捷键：<kbd>1</kbd>–<kbd>4</kbd> 选答案 · <kbd>←</kbd> / <kbd>→</kbd> 切题 · <kbd>S</kbd> 切换主干/全成分</p>
+      <p>开源自用学习项目 · 三科进度支持本地持久化与 JSON 备份 · 理工科公式/结论/例题均标注教材页码并经 SymPy 符号验算</p>
+      <p class="footer-shortcuts">英语刷题快捷键：<kbd>1</kbd>–<kbd>4</kbd> 选答案 · <kbd>←</kbd> / <kbd>→</kbd> 切题 · <kbd>S</kbd> 切换主干/全成分</p>
     </div>
   </footer>
 
@@ -351,7 +398,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <p class="modal-desc">你的重点词、已掌握进度、刷题记录、译文草稿与错题本默认保存在当前浏览器 <code>localStorage</code>。更换设备时可用下方 JSON 文件一键迁移。</p>
+        <p class="modal-desc">你的英语重点/掌握/错题/译文草稿，以及自控与数一的重点、已掌握、存疑待核标记均保存在当前浏览器 <code>localStorage</code>。更换设备时可用下方 JSON 文件一键迁移（向下兼容旧版备份）。</p>
         <div class="backup-actions">
           <button id="exportProgressBtn" type="button" class="btn btn-primary">导出进度 JSON 文件</button>
           <label class="btn btn-subtle file-input-label">

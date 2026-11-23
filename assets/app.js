@@ -1,6 +1,7 @@
 import { initVocabView } from './vocab.js';
 import { initMemorizeView } from './memorize.js';
 import { initQuizView } from './quiz.js';
+import { initStemSubjectView } from './stem.js';
 
 const STORAGE_KEY = 'kaoyan_english_sprint_v3';
 
@@ -18,6 +19,7 @@ export function createStore() {
     vocabData: null,
     questionData: null,
     questionsByVocabId: new Map(),
+    activeSubject: 'english',
     activePanel: 'panel-vocab',
     starred: new Set(),
     mastered: new Set(),
@@ -25,6 +27,9 @@ export function createStore() {
     mistakes: new Set(),
     drafts: {},
     syntaxMode: 'full',
+    stemStarred: new Set(),
+    stemMastered: new Set(),
+    stemFlagged: new Set(),
     listeners: new Set(),
 
     subscribe(fn) {
@@ -52,6 +57,9 @@ export function createStore() {
         if (['full', 'backbone', 'plain'].includes(parsed.syntaxMode)) {
           this.syntaxMode = parsed.syntaxMode;
         }
+        if (Array.isArray(parsed.stemStarred)) this.stemStarred = new Set(parsed.stemStarred);
+        if (Array.isArray(parsed.stemMastered)) this.stemMastered = new Set(parsed.stemMastered);
+        if (Array.isArray(parsed.stemFlagged)) this.stemFlagged = new Set(parsed.stemFlagged);
       } catch (err) {
         console.warn('读取本地进度失败，将使用内存状态。', err);
       }
@@ -60,7 +68,7 @@ export function createStore() {
     save() {
       try {
         const payload = {
-          version: 3,
+          version: 4,
           updatedAt: new Date().toISOString(),
           starred: [...this.starred],
           mastered: [...this.mastered],
@@ -68,6 +76,9 @@ export function createStore() {
           mistakes: [...this.mistakes],
           drafts: this.drafts,
           syntaxMode: this.syntaxMode,
+          stemStarred: [...this.stemStarred],
+          stemMastered: [...this.stemMastered],
+          stemFlagged: [...this.stemFlagged],
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
       } catch (err) {
@@ -77,14 +88,17 @@ export function createStore() {
 
     exportPayload() {
       return {
-        app: 'kaoyan-english-sprint',
-        version: 3,
+        app: 'kaoyan-sprint-studio',
+        version: 4,
         exportedAt: new Date().toISOString(),
         starred: [...this.starred],
         mastered: [...this.mastered],
         answers: this.answers,
         mistakes: [...this.mistakes],
         drafts: this.drafts,
+        stemStarred: [...this.stemStarred],
+        stemMastered: [...this.stemMastered],
+        stemFlagged: [...this.stemFlagged],
       };
     },
 
@@ -97,6 +111,9 @@ export function createStore() {
       if (parsed.answers && typeof parsed.answers === 'object') this.answers = parsed.answers;
       if (Array.isArray(parsed.mistakes)) this.mistakes = new Set(parsed.mistakes);
       if (parsed.drafts && typeof parsed.drafts === 'object') this.drafts = parsed.drafts;
+      if (Array.isArray(parsed.stemStarred)) this.stemStarred = new Set(parsed.stemStarred);
+      if (Array.isArray(parsed.stemMastered)) this.stemMastered = new Set(parsed.stemMastered);
+      if (Array.isArray(parsed.stemFlagged)) this.stemFlagged = new Set(parsed.stemFlagged);
       this.notify('import');
     },
   };
@@ -174,10 +191,10 @@ function initTabs(store, onTabChange) {
   const panels = new Map(tabs.map(t => [t.dataset.panel, document.getElementById(t.dataset.panel)]));
 
   const titleMap = {
-    'panel-vocab': '核心刷题词库 | 考研英语一冲刺工作台',
-    'panel-memorize': '纯记忆速背区 | 考研英语一冲刺工作台',
-    'panel-quiz': '外刊刷题与长难句翻译 | 考研英语一冲刺工作台',
-    'panel-mistakes': '错题本 | 考研英语一冲刺工作台',
+    'panel-vocab': '核心刷题词库 · 英语一 | 考研三科冲刺工作台',
+    'panel-memorize': '纯记忆速背区 · 英语一 | 考研三科冲刺工作台',
+    'panel-quiz': '外刊刷题与长难句翻译 · 英语一 | 考研三科冲刺工作台',
+    'panel-mistakes': '错题本 · 英语一 | 考研三科冲刺工作台',
   };
 
   function activate(panelId, moveFocus = false) {
@@ -192,7 +209,9 @@ function initTabs(store, onTabChange) {
         tab.focus();
       }
     }
-    document.title = titleMap[panelId] || '考研英语一冲刺工作台';
+    if (store.activeSubject === 'english') {
+      document.title = titleMap[panelId] || '英语一 | 考研三科冲刺工作台';
+    }
     if (onTabChange) onTabChange(panelId);
   }
 
@@ -277,10 +296,83 @@ function initBackToTop() {
   });
 }
 
+function initSubjectNav(store, onSubjectChange) {
+  const VALID = new Set(['english', 'control', 'math1']);
+  const links = [...document.querySelectorAll('.subject-link[data-subject]')];
+  const englishTabWrap = document.getElementById('englishTabBarWrap');
+  const containers = {
+    english: document.getElementById('subject-english'),
+    control: document.getElementById('subject-control'),
+    math1: document.getElementById('subject-math1'),
+  };
+  const subtitleEl = document.getElementById('headerSubtitle');
+  const subtitleMap = {
+    english: '英语一：7 大可刷题核心词模块 · 4 大纯记忆速背模块 · 同源外刊单选与长难句翻译',
+    control: '845 自动控制原理（浙大 2027 考纲）：孙优贤《自动控制原理》+《学习辅导》逐页溯源 · SymPy 验算',
+    math1: '考研数学一：27 张宇六书（基础30讲 + 高数18讲/线代9讲/概率9讲）+ 27 没咋了线代强化讲义',
+  };
+
+  function resolveFromHash() {
+    const h = window.location.hash.replace(/^#/, '').trim().toLowerCase();
+    return VALID.has(h) ? h : 'english';
+  }
+
+  function activate(subjectId, updateHash = false) {
+    const target = VALID.has(subjectId) ? subjectId : 'english';
+    store.activeSubject = target;
+
+    for (const link of links) {
+      const active = link.dataset.subject === target;
+      if (active) link.setAttribute('aria-current', 'page');
+      else link.removeAttribute('aria-current');
+    }
+
+    if (englishTabWrap) englishTabWrap.hidden = target !== 'english';
+    for (const [id, el] of Object.entries(containers)) {
+      if (el) el.hidden = id !== target;
+    }
+    if (subtitleEl && subtitleMap[target]) {
+      subtitleEl.textContent = subtitleMap[target];
+    }
+
+    if (updateHash && window.location.hash !== `#${target}`) {
+      history.replaceState(null, '', `#${target}`);
+    }
+
+    if (onSubjectChange) onSubjectChange(target);
+  }
+
+  for (const link of links) {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      activate(link.dataset.subject, true);
+    });
+  }
+
+  window.addEventListener('hashchange', () => {
+    activate(resolveFromHash(), false);
+  });
+
+  return { activate, resolveFromHash };
+}
+
 async function bootstrap() {
   const store = createStore();
 
-  document.getElementById('printBtn').addEventListener('click', () => window.print());
+  let controlApi = null;
+  let mathApi = null;
+
+  document.getElementById('printBtn').addEventListener('click', () => {
+    const summaryEl = document.getElementById('printSummary');
+    if (summaryEl) {
+      if (store.activeSubject === 'control' && controlApi) {
+        summaryEl.textContent = controlApi.getPrintSummary() || '导出科目：845 自动控制原理';
+      } else if (store.activeSubject === 'math1' && mathApi) {
+        summaryEl.textContent = mathApi.getPrintSummary() || '导出科目：考研数学一';
+      }
+    }
+    window.print();
+  });
   initBackupDialog(store);
   initBackToTop();
 
@@ -348,6 +440,26 @@ async function bootstrap() {
     },
   });
 
+  controlApi = initStemSubjectView(store, {
+    subjectId: 'control',
+    containerId: 'subject-control',
+  });
+
+  mathApi = initStemSubjectView(store, {
+    subjectId: 'math1',
+    containerId: 'subject-math1',
+  });
+
+  const subjectNav = initSubjectNav(store, (subjectId) => {
+    if (subjectId === 'english') {
+      tabs.activate(store.activePanel, false);
+    } else if (subjectId === 'control') {
+      controlApi.activate();
+    } else if (subjectId === 'math1') {
+      mathApi.activate();
+    }
+  });
+
   function updateHeaderCounts() {
     const quizVocabCount = store.vocabData.items.filter(i => i.mode === 'quiz').length;
     const memVocabCount = store.vocabData.items.filter(i => i.mode === 'memorize').length;
@@ -361,10 +473,16 @@ async function bootstrap() {
     updateHeaderCounts();
     vocabApi.updateStats();
     memApi.updateStats();
-    if (store.activePanel === 'panel-vocab') vocabApi.render();
-    if (store.activePanel === 'panel-memorize') memApi.render();
-    if (store.activePanel === 'panel-quiz') quizApi.render();
-    if (store.activePanel === 'panel-mistakes') quizApi.renderMistakes();
+    if (store.activeSubject === 'english') {
+      if (store.activePanel === 'panel-vocab') vocabApi.render();
+      if (store.activePanel === 'panel-memorize') memApi.render();
+      if (store.activePanel === 'panel-quiz') quizApi.render();
+      if (store.activePanel === 'panel-mistakes') quizApi.renderMistakes();
+    } else if (store.activeSubject === 'control') {
+      controlApi.render();
+    } else if (store.activeSubject === 'math1') {
+      mathApi.render();
+    }
   });
 
   updateHeaderCounts();
@@ -373,6 +491,9 @@ async function bootstrap() {
   memApi.render();
   quizApi.render();
   quizApi.renderMistakes();
+
+  // Activate initial subject from URL hash (defaults to #english)
+  subjectNav.activate(subjectNav.resolveFromHash(), false);
 }
 
 window.addEventListener('DOMContentLoaded', bootstrap);

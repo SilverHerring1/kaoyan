@@ -1,0 +1,491 @@
+{
+  "chapterId": "ch04",
+  "title": "第 4 章 连续时间控制系统的稳定性与稳态误差",
+  "basicRequirements": {
+    "master": "稳定性的概念以及应用劳斯判据进行系统稳定性分析（含两种特殊情况与相对稳定裕度）；反馈系统稳态误差与稳态误差系数的概念；单位负反馈系统“型”别与典型输入下稳态误差计算；非单位负反馈转化为等效单位负反馈的方法。",
+    "understand": "控制系统的状态空间稳定性分析（矩阵 A 特征值实部全为负）。",
+    "familiar": "输入信号作用于系统引起输出变化包含两层含义——系统的稳定性，以及动态品质与稳态性能。"
+  },
+  "sourceMeta": "主教材：孙优贤《自动控制原理》(2011) P.139-159 ｜ 辅导书：孙优贤《学习辅导》(2017) P.86-98",
+  "items": [
+    {
+      "id": "ctrl-ch04-f-01",
+      "section": "4.2.2 劳斯稳定判据",
+      "kind": "formula",
+      "title": "劳斯（Routh）阵列构造递推公式",
+      "examWeight": "core",
+      "prompt": "设系统特征方程为 $a_n s^n + a_{n-1} s^{n-1} + \\cdots + a_1 s + a_0 = 0$，写出劳斯阵列第三、四行核心元素公式：",
+      "formulaLatex": "$$\\begin{aligned} &c_1 = \\frac{a_{n-1}a_{n-2}-a_n a_{n-3}}{a_{n-1}},\\quad c_2 = \\frac{a_{n-1}a_{n-4}-a_n a_{n-5}}{a_{n-1}},\\quad c_3 = \\frac{a_{n-1}a_{n-6}-a_n a_{n-7}}{a_{n-1}} \\\\ &d_1 = \\frac{c_1 a_{n-3}-a_{n-1} c_2}{c_1},\\quad d_2 = \\frac{c_1 a_{n-5}-a_{n-1} c_3}{c_1},\\quad d_3 = \\frac{c_1 a_{n-7}-a_{n-1} c_4}{c_1} \\end{aligned}$$",
+      "symbols": [
+        { "sym": "第一行 $s^n$", "desc": "依次填 $a_n, a_{n-2}, a_{n-4}, \\dots$" },
+        { "sym": "第二行 $s^{n-1}$", "desc": "依次填 $a_{n-1}, a_{n-3}, a_{n-5}, \\dots$（不足补 $0$）" },
+        { "sym": "第一列变号次数", "desc": "等于特征方程位于右半 $s$ 平面（实部为正）的特征根个数" }
+      ],
+      "conditions": "适用于线性定常连续系统特征多项式；一般先令最高次系数 $a_n>0$，若系统稳定则第一列元素必须全部严格大于 $0$。",
+      "pitfalls": "记忆口诀：“**左下乘右上 减 左上乘右下，再除以左下**”。注意 $n$ 阶特征方程劳斯阵列共有 $n+1$ 行，最后两行 $s^1, s^0$ 必各仅 1 个元素，且 $s^0$ 行元素必等于常数项 $a_0$（可用来快速自查算错没有）！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.86-87",
+        "pdfPage": 95,
+        "itemRef": "式(4-1)~(4-8)",
+        "crossRef": "孙优贤《自动控制原理》(2011) P.141-143"
+      },
+      "verification": { "method": "sympy", "testId": "ch04_ex_guide42", "verified": true }
+    },
+    {
+      "id": "ctrl-ch04-f-02",
+      "section": "4.1.4 赫尔维茨稳定判据",
+      "kind": "formula",
+      "title": "赫尔维茨（Hurwitz）行列式及与劳斯阵列的等价关系",
+      "examWeight": "core",
+      "prompt": "写出 $n$ 阶赫尔维茨主行列式 $\\Delta_n$ 及稳定充要条件，并写出其与劳斯第一列元素的关系：",
+      "formulaLatex": "$$\\Delta_n = \\begin{vmatrix} a_{n-1} & a_{n-3} & a_{n-5} & \\cdots & 0 \\\\ a_n & a_{n-2} & a_{n-4} & \\cdots & 0 \\\\ 0 & a_{n-1} & a_{n-3} & \\cdots & 0 \\\\ \\vdots & \\vdots & \\vdots & \\ddots & \\vdots \\\\ 0 & 0 & 0 & \\cdots & a_0 \\end{vmatrix},\\qquad a_{n-1}=\\Delta_1,\\; c_1=\\frac{\\Delta_2}{\\Delta_1},\\; d_1=\\frac{\\Delta_3}{\\Delta_2},\\dots$$",
+      "symbols": [
+        { "sym": "$\\Delta_1, \\dots, \\Delta_n$", "desc": "$\\Delta_n$ 的各阶顺序主子式（当 $a_n>0$ 时全部 $>0$ 为稳定充要条件）" }
+      ],
+      "conditions": "当 $a_n>0$ 且所有系数均为正时，各阶赫尔维茨主子式 $\\Delta_1>0,\\Delta_2>0,\\dots,\\Delta_n>0$ 为稳定充要条件；对三阶方程 $a_3s^3+a_2s^2+a_1s+a_0=0$ 速判只需各项系数 $>0$ 且 **$a_2 a_1 > a_3 a_0$**！",
+      "pitfalls": "主对角线元素从左上到右下依次为 $a_{n-1}, a_{n-2}, \\dots, a_0$，每行向上下标减 1、向下下标加 1，越界（$>n$ 或 $<0$）填 $0$。",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.147-148",
+        "pdfPage": 156,
+        "itemRef": "式(4-25)"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch04-f-03",
+      "section": "4.2.3 稳态误差定义",
+      "kind": "formula",
+      "title": "误差的两种定义与输入/扰动稳态误差终值公式",
+      "examWeight": "core",
+      "prompt": "写出输入端偏差 $e(t)$ 与输出端误差 $e'(t)$ 的定义，以及典型单回路系统（前向 $G_c G_p$、反馈 $H$、扰动通道 $G_f$）的给定与扰动稳态误差公式：",
+      "formulaLatex": "$$\\begin{aligned} &\\text{输入端偏差：} E(s)=R(s)-H(s)Y(s),\\qquad \\text{输出端误差：} E'(s)=R(s)-Y(s) \\\\ &E(s) = \\frac{1}{1+G_c(s)G_p(s)H(s)}R(s) - \\frac{G_f(s)H(s)}{1+G_c(s)G_p(s)H(s)}F(s) \\\\ &e_{sr} = \\lim_{s\\to 0}\\frac{s}{1+G_c(s)G_p(s)H(s)}R(s),\\qquad e_{sf} = \\lim_{s\\to 0}\\frac{-sG_f(s)H(s)}{1+G_c(s)G_p(s)H(s)}F(s) \\end{aligned}$$",
+      "symbols": [
+        { "sym": "$e_{sr}$", "desc": "给定输入 $r(t)$ 引起的稳态误差" },
+        { "sym": "$e_{sf}$", "desc": "外部扰动 $f(t)$ 引起的稳态误差（线性系统总稳态误差 $e_{ss}=e_{sr}+e_{sf}$）" }
+      ],
+      "conditions": "终值定理 $e_{ss}=\\lim_{s\\to 0} sE(s)$ 仅当 **$sE(s)$ 的所有极点均严格位于左半 $s$ 平面（系统闭环稳定）**时成立！",
+      "pitfalls": "当 $H(s)\\ne 1$ 时，$E(s)$ 与 $E'(s)$ 不同！做题第一件事必须看清题干定义的是 $e(t)=r(t)-z(t)$ 还是 $e(t)=r(t)-y(t)$（参见例 4-7）。",
+      "figureSvg": "<svg role='img' viewBox='0 0 430 150' xmlns='http://www.w3.org/2000/svg'><title>典型反馈控制系统（含给定输入 R 与扰动输入 F，仿图4-1）</title><defs><marker id='a41' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='12' y1='80' x2='52' y2='80' stroke='#334155' stroke-width='1.5' marker-end='url(#a41)'/><circle cx='62' cy='80' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='70' y1='80' x2='110' y2='80' stroke='#334155' stroke-width='1.5' marker-end='url(#a41)'/><rect x='112' y='63' width='64' height='34' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='144' y='84' text-anchor='middle' font-size='12' fill='#141824'>Gc(s)</text><line x1='176' y1='80' x2='210' y2='80' stroke='#334155' stroke-width='1.5' marker-end='url(#a41)'/><rect x='212' y='63' width='64' height='34' rx='6' fill='#e7f6f0' stroke='#0b6e4f' stroke-width='1.5'/><text x='244' y='84' text-anchor='middle' font-size='12' fill='#0b6e4f'>Gp(s)</text><line x1='276' y1='80' x2='318' y2='80' stroke='#334155' stroke-width='1.5' marker-end='url(#a41)'/><circle cx='328' cy='80' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='336' y1='80' x2='410' y2='80' stroke='#334155' stroke-width='1.5' marker-end='url(#a41)'/><line x1='155' y1='25' x2='210' y2='25' stroke='#b4233c' stroke-width='1.5' marker-end='url(#a41)'/><rect x='212' y='9' width='64' height='32' rx='6' fill='#fdecef' stroke='#b4233c' stroke-width='1.5'/><text x='244' y='29' text-anchor='middle' font-size='12' fill='#b4233c'>Gf(s)</text><polyline points='276,25 328,25 328,70' fill='none' stroke='#b4233c' stroke-width='1.5' marker-end='url(#a41)'/><polyline points='375,80 375,130 250,130' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a41)'/><rect x='176' y='114' width='72' height='30' rx='6' fill='#fef5e5' stroke='#9a5800' stroke-width='1.5'/><text x='212' y='133' text-anchor='middle' font-size='12' fill='#9a5800'>H(s)</text><polyline points='176,130 62,130 62,90' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a41)'/><text x='16' y='72' font-size='11' fill='#141824'>R(s)</text><text x='80' y='72' font-size='11' fill='#141824'>E(s)</text><text x='385' y='72' font-size='11' fill='#141824'>Y(s)</text><text x='128' y='29' font-size='11' fill='#b4233c'>F(s)</text><text x='48' y='100' font-size='13' fill='#b4233c'>−</text></svg>",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.88",
+        "pdfPage": 97,
+        "itemRef": "图4-1 & 式(4-9)~(4-14)",
+        "crossRef": "孙优贤《自动控制原理》(2011) P.148-150"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch04-f-04",
+      "section": "4.2.4 反馈控制系统的“型”",
+      "kind": "formula",
+      "title": "系统“型”别与开环时间常数型增益 $K_m$",
+      "examWeight": "core",
+      "prompt": "写出单位负反馈开环传递函数的时间常数标准型，并明确系统型别 $m$ 与开环增益 $K_m$：",
+      "formulaLatex": "$$G(s) = \\frac{K_m(1 + b_1 s + b_2 s^2 + \\cdots + b_w s^w)}{s^m(1 + a_1 s + a_2 s^2 + \\cdots + a_u s^u)}$$",
+      "symbols": [
+        { "sym": "$m$", "desc": "开环积分环节个数：$m=0$ 为 0 型，$m=1$ 为 1 型，$m=2$ 为 2 型" },
+        { "sym": "$K_m$", "desc": "尾 1 标准型（时间常数形式）下的开环放大倍数，直接等于对应型别的非零有限误差系数！" }
+      ],
+      "conditions": "必须将分子分母的非零极/零点因子都化为 $(Ts+1)$ 尾 1 形式后，常数因子才是开环增益 $K_m$！",
+      "pitfalls": "超级易错点：把首 1 形式（根轨迹增益 $K^*$）误当成开环增益 $K_m$！例如 $G(s)=\\frac{10}{s(s+4)(5s+1)}$ 的 $K_1=\\frac{10}{4}=2.5$，绝不是 $10$（见例 4-8）！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.89",
+        "pdfPage": 98,
+        "itemRef": "式(4-15)",
+        "crossRef": "孙优贤《自动控制原理》(2011) P.152"
+      },
+      "verification": { "method": "sympy", "testId": "ch04_ex_guide48", "verified": true }
+    },
+    {
+      "id": "ctrl-ch04-f-05",
+      "section": "4.2.5 稳态误差系数",
+      "kind": "formula",
+      "title": "静态位置/速度/加速度误差系数与 0/1/2 型稳态误差全表",
+      "examWeight": "core",
+      "prompt": "写出稳定单位负反馈系统的三大静态误差系数 $K_p, K_v, K_a$ 定义及对三类典型输入的稳态误差：",
+      "formulaLatex": "$$\\begin{aligned} &K_p = \\lim_{s\\to 0} G(s),\\qquad K_v = \\lim_{s\\to 0} sG(s),\\qquad K_a = \\lim_{s\\to 0} s^2 G(s) \\\\ &\\begin{array}{c|ccc|ccc} \\text{型别} & K_p & K_v & K_a & \\text{阶跃 } R_0\\cdot 1(t) & \\text{斜坡 } R_1 t & \\text{抛物线 } \\frac{R_2}{2}t^2 \\\\ \\hline 0 & K_0 & 0 & 0 & \\dfrac{R_0}{1+K_p} & \\infty & \\infty \\\\[6pt] 1 & \\infty & K_1 & 0 & 0 & \\dfrac{R_1}{K_v} & \\infty \\\\[6pt] 2 & \\infty & \\infty & K_2 & 0 & 0 & \\dfrac{R_2}{K_a} \\end{array} \\end{aligned}$$",
+      "symbols": [
+        { "sym": "$R_0, R_1, R_2$", "desc": "对应阶跃幅值、斜坡斜率、抛物线加速度（注意 $\\frac{R_2}{2}t^2$ 的系数 $\\frac{1}{2}$！）" }
+      ],
+      "conditions": "严格限定于**稳定**的**单位负反馈**控制系统！非单位负反馈必须先转化成等效单位负反馈或直接用终值定理 $e_{ss}=\\lim_{s\\to 0} sE(s)$。",
+      "pitfalls": "若输入为多项式组合 $r(t)=A+Bt+Ct^2$，记住 $\\frac{R_2}{2}=C \\Rightarrow R_2=2C$，故对 2 型系统抛物线稳态误差为 $\\frac{2C}{K_a}$！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.89",
+        "pdfPage": 98,
+        "itemRef": "表4-1 & 表4-2",
+        "crossRef": "孙优贤《自动控制原理》(2011) P.155 表4-3"
+      },
+      "verification": { "method": "sympy", "testId": "ch04_ex_guide410", "verified": true }
+    },
+    {
+      "id": "ctrl-ch04-f-06",
+      "section": "4.2.6 等效单位负反馈系统",
+      "kind": "formula",
+      "title": "非单位负反馈转等效单位负反馈的两种公式",
+      "examWeight": "core",
+      "prompt": "已知非单位负反馈系统闭环传函 $\\Phi(s)=\\frac{G(s)}{1+G(s)H(s)}=\\frac{N(s)}{D(s)}$，写出等效单位负反馈开环传函 $G_{eq}(s)$ 与外置 $1/H(s)$ 变形：",
+      "formulaLatex": "$$\\begin{aligned} &\\text{方法 1（输出端误差 } E'=R-Y\\text{）：}\\quad G_{eq}(s) = \\frac{N(s)}{D(s) - N(s)} = \\frac{G(s)}{1 + G(s)[H(s)-1]} \\\\ &\\text{方法 2（} H \\text{ 为常数时）：}\\quad \\frac{Y(s)}{R(s)} = \\left[\\frac{G(s)H(s)}{1+G(s)H(s)}\\right]\\frac{1}{H(s)} \\end{aligned}$$",
+      "symbols": [
+        { "sym": "$G_{eq}(s)$", "desc": "等效单位负反馈前向开环传函，满足 $\\frac{G_{eq}}{1+G_{eq}}=\\frac{N}{D}$" }
+      ],
+      "conditions": "方法 1 保持系统闭环输出 $Y(s)$ 及输出端误差 $E'(s)=R(s)-Y(s)$ 完全不变；方法 2 常用于 $H$ 为常数时的定性分析。",
+      "pitfalls": "化出 $G_{eq}(s)$ 后，系统的真实“型”别取决于 $G_{eq}(s)$ 的积分个数，而不一定是原 $G(s)$ 的积分个数！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.90",
+        "pdfPage": 99,
+        "itemRef": "式(4-16)~(4-19) & 图4-3~4-5",
+        "crossRef": "孙优贤《自动控制原理》(2011) P.158-159"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch04-f-07",
+      "section": "4.1.3 劳斯判据拓展应用",
+      "kind": "formula",
+      "title": "相对稳定裕度（虚轴左移坐标变换公式）",
+      "examWeight": "core",
+      "prompt": "若要求闭环特征方程 $D(s)=0$ 的全部特征根实部均严格小于 $-\\sigma$（即具有稳定裕度 $\\sigma>0$），写出坐标代换公式：",
+      "formulaLatex": "$$\\text{令 } s = z - \\sigma\\;(\\sigma>0)\\;\\text{代入 } D(s)=0 \\implies \\tilde{D}(z)=0$$",
+      "symbols": [
+        { "sym": "$\\sigma$", "desc": "要求的最小衰减率（稳定裕度），将虚轴平移到 $s=-\\sigma$ 处" }
+      ],
+      "conditions": "原方程全部特征根满足 $\\operatorname{Re}(s_i)<-\\sigma$ 的充要条件是变换后 $\\tilde{D}(z)=0$ 的全部根位于 $z$ 左半平面（即对 $\\tilde{D}(z)$ 运用劳斯判据，第一列全正）。",
+      "pitfalls": "千万别把符号代反！要求在 $-\\sigma$ 左侧（如 $<-1$），是令 $s=z-1$（于是 $\\operatorname{Re}(z)=\\operatorname{Re}(s)+1<0$），不是 $s=z+1$！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.147",
+        "pdfPage": 156,
+        "itemRef": "例4-9",
+        "crossRef": "孙优贤《学习辅导》(2017) P.93 例4-3 & P.94 例4-4"
+      },
+      "verification": { "method": "sympy", "testId": "ch04_ex_guide43", "verified": true }
+    },
+    {
+      "id": "ctrl-ch04-f-08",
+      "section": "4.2.5 扰动稳态误差抑制原则",
+      "kind": "formula",
+      "title": "扰动作用点前积分环节消除扰动稳态误差规律",
+      "examWeight": "core",
+      "prompt": "对图 4-1 系统，在单位负反馈 $H=1$ 且扰动直接叠加于对象输出（$G_f=1$）或对象入口（$G_f=G_p$）时，写出扰动稳态误差特点：",
+      "formulaLatex": "$$e_{sf} = \\lim_{s\\to 0}\\frac{-s G_f(s) H(s)}{1 + G_c(s) G_p(s) H(s)} F(s) \\approx \\lim_{s\\to 0}\\frac{-s G_f(s)}{G_c(s) G_p(s)} F(s)\\;(\\text{低频高增益})$$",
+      "symbols": [
+        { "sym": "$G_c(s)$", "desc": "位于扰动作用点**之前**的前向通道传函（含积分环节可消除阶跃扰动误差）" }
+      ],
+      "conditions": "系统闭环稳定，且扰动 $F(s)$ 位于积分环节之后才能被前向积分器完全抑制。",
+      "pitfalls": "经典高频结论：要减小或消除**扰动**引起的稳态误差，必须提高**扰动作用点之前**前向通道的增益与积分环节个数；把积分环节加在扰动点之后反而无济于事！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.88 & P.90",
+        "pdfPage": 97,
+        "itemRef": "式(4-14) 拓展规律"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch04-c-01",
+      "section": "4.2.1 稳定性充要与必要条件",
+      "kind": "conclusion",
+      "title": "线性定常系统稳定的充要条件、必要条件与固有属性",
+      "examWeight": "core",
+      "summary": "1. **充要条件**：系统闭环特征方程所有特征根均严格具有负实部（全部位于左半 $s$ 平面）。若有根在右半平面则不稳定；若无右半平面根但虚轴上有单根，则处于**临界稳定**（虚轴重根则不稳定）。\n2. **必要条件**：特征方程各项系数**同号且无缺项（无零系数）**。对一、二阶系统，该必要条件同时也是充要条件；对三阶及以上系统，仅是必要条件！\n3. **固有属性**：线性系统稳定性仅取决于系统自身结构与参数，与外部输入的形式及幅值无关。",
+      "conditions": "仅针对线性定常系统；非线性系统的稳定性往往还与初始条件和输入幅值有关（见第 9 章）。",
+      "pitfalls": "一看到高阶特征方程缺项或系数异号，可直接秒断“系统不稳定”；但若要求“右半平面有几个根”，仍须列完整劳斯阵！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.86 & P.90",
+        "pdfPage": 95,
+        "itemRef": "4.2.1 & 4.2.7 小结"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch04-c-02",
+      "section": "4.2.2 劳斯阵两种特殊情况",
+      "kind": "conclusion",
+      "title": "劳斯阵列两种特殊情况的处理法则（845 必考！）",
+      "examWeight": "core",
+      "summary": "**情况 ① 某行第一列为 0，其余元素不全为 0**（3 种等价处理法）：\n- a. 用极小正数 $\\varepsilon\\to 0^+$ 代替 $0$ 继续计算，最后取 $\\varepsilon\\to 0^+$ 看第一列变号次数；\n- b. 倒数变换法：令 $s=1/x$ 得新特征方程，正实部根个数不变；\n- c. 乘因子法：原多项式乘以 $(s+1)$（引入 1 个负实根，不改变正实部根个数）。\n\n**情况 ② 某行元素全为 0**（必出现在 $s$ 的奇数行）：\n- 用全零行**上一行**系数构造偶次辅助方程 $A(s)=0$（其根必关于原点对称：共轭虚根、相反实根或对称四复根）；\n- 用 $\\frac{\\mathrm{d}A(s)}{\\mathrm{d}s}$ 的系数代替全零行继续计算，判断其余根的正实部个数；\n- **铁结论：一旦出现全零行，系统肯定是不稳定或临界稳定的（绝不可能渐近稳定）！**",
+      "conditions": "出现全零行时，全零行之前算出的根分布与辅助方程的根共同组成原方程全部根。",
+      "pitfalls": "常见大坑：看到全零行以为一定只有纯虚根！错！如例 4-1③ 辅助方程 $-s^4-s^2+2=0$ 既有纯虚根 $\\pm\\mathrm{j}\\sqrt{2}$，也有实根 $\\pm 1$（含 1 个右半平面根！）。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.87-88",
+        "pdfPage": 96,
+        "itemRef": "4.2.2 两种特殊情况"
+      },
+      "verification": { "method": "sympy", "testId": "ch04_ex_guide41_rhp_counts", "verified": true }
+    },
+    {
+      "id": "ctrl-ch04-c-03",
+      "section": "4.2.2 劳斯阵计算技巧",
+      "kind": "conclusion",
+      "title": "劳斯阵整行正数缩放不变性法则",
+      "examWeight": "core",
+      "summary": "在构造劳斯阵列过程中，可以用任意**正实数**去乘或除某一整行以消除分数、简化运算，不会改变第一列元素的正负号及变号次数。",
+      "conditions": "乘数或除数**必须严格大于 0**！绝不允许乘以负数（会人为翻转第一列符号，导致变号次数错乱）。",
+      "pitfalls": "若行中含未知参数 $K$，不能随意除以含 $K$ 的因式，除非已明确限定该因式恒正！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.87 & P.92",
+        "pdfPage": 96,
+        "itemRef": "4.2.2 & 例4-1③"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch04-c-04",
+      "section": "4.2.5 稳态误差计算前提",
+      "kind": "conclusion",
+      "title": "求稳态误差第一步铁律：必先判定闭环稳定性",
+      "examWeight": "core",
+      "summary": "稳态误差是系统过渡过程结束后（$t\\to\\infty$）的稳态指标，**仅对闭环稳定系统有意义**。考场上无论题干是否单独问稳定性，求稳态误差前都必须先用劳斯判据验证系统稳定；若不稳定，直接写“系统闭环不稳定，稳态误差无意义”即可得分（见例 4-8②）。",
+      "conditions": "适用于一切终值定理与静态误差系数法求稳态误差题目。",
+      "pitfalls": "高频陷阱题往往故意给一个高型别（如 2 型）但实际闭环不稳定的开环传函，诱导考生直接套表写出 $e_{ss}=0$ 丢全分！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.89 & P.96-97",
+        "pdfPage": 98,
+        "itemRef": "4.2.5 & 例4-8"
+      },
+      "verification": { "method": "sympy", "testId": "ch04_ex_guide48", "verified": true }
+    },
+    {
+      "id": "ctrl-ch04-c-05",
+      "section": "4.2.5 减小稳态误差途径",
+      "kind": "conclusion",
+      "title": "m 型系统跟踪规律与减小/消除稳态误差三大途径",
+      "examWeight": "core",
+      "summary": "一般规律：一个稳定的 $m$ 型单位负反馈系统，对 $t^{m-1}$ 输入稳态误差为 **$0$**；对 $t^m$ 输入为**有限常数**；对 $t^{m+1}$ 及更高次输入为 **$\\infty$**。\n**减小/消除稳态误差的三大途径**：\n① 提高系统开环增益 $K_m$（增大比例作用）；\n② 提高系统“型”别 $m$（在前向通道增加积分环节）；\n③ **复合控制**（在反馈控制基础上增加输入或扰动前馈通道，既减小误差又不破坏闭环稳定性！）。",
+      "conditions": "途径 ① 和 ② 都会使系统稳定性变差（甚至失稳），工程上必须折中权衡；途径 ③ 不改变闭环特征方程。",
+      "pitfalls": "因此考研大题经常结合两章一起考：先由劳斯判据求稳定增益上限 $K_{\\max}$，再代入稳态误差公式求“系统稳定前提下的最小可能稳态误差”（见例 4-9）！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.90",
+        "pdfPage": 99,
+        "itemRef": "4.2.5 节末结论",
+        "crossRef": "孙优贤《自动控制原理》(2011) P.155"
+      },
+      "verification": { "method": "sympy", "testId": "ch04_ex_guide49", "verified": true }
+    },
+    {
+      "id": "ctrl-ch04-c-06",
+      "section": "4.2.3 误差定义对比",
+      "kind": "conclusion",
+      "title": "输入端偏差 $e(t)$ 与输出端误差 $e'(t)$ 的关系",
+      "examWeight": "core",
+      "summary": "输入端偏差 $e(t)=r(t)-z(t)$（可实测）与输出端期望误差 $e'(t)=r(t)-y(t)$ 具有一一对应关系；**当且仅当系统为单位负反馈 $H(s)=1$ 时两者完全等价**。若为非单位负反馈且 $H(s)=K_h$ 为常数，即使 $e_{ss}=0$，输出终值也趋于 $r(\\infty)/K_h$ 而非 $r(\\infty)$。",
+      "conditions": "分析非单位负反馈系统稳态精度时必须明确所求误差定义。",
+      "pitfalls": "当题干同时给出前置环节（如例 4-7 的 $K_i s+1$ 在比较点之前）时，虽然内部是单位负反馈，但总误差定义是 $e(t)=r(t)-y(t)$，必须用 $E(s)=[1-\\Phi(s)]R(s)$ 求解！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.88 & P.96",
+        "pdfPage": 97,
+        "itemRef": "4.2.3 & 例4-7"
+      },
+      "verification": { "method": "sympy", "testId": "ch04_ex_guide47", "verified": true }
+    },
+    {
+      "id": "ctrl-ch04-e-01",
+      "section": "4.3 典型例题精选",
+      "kind": "example",
+      "title": "例 4-1：劳斯判据四大典型情形全景演练（常规/全零行/首列零）",
+      "examWeight": "core",
+      "problem": "用劳斯判据判定下列 4 个特征方程对应的系统稳定性，不稳定时指出右半平面根个数：\n① $3s^4+10s^3+5s^2+s+2=0$；\n② $s^3+20s^2+4s+50=0$；\n③ $s^6+4s^5-4s^4+4s^3-7s^2-8s+10=0$；\n④ $s^4+2s^3+s^2+2s+1=0$。",
+      "steps": [
+        { "stepTitle": "① 常规不稳定（首列变号 2 次）", "detail": "劳斯第一列依次为 $3,\\;10,\\;4.7,\\;-3.26,\\;2$，符号改变 2 次（$4.7\\to -3.26\\to 2$），故有 **2 个右半平面根**，系统不稳定。" },
+        { "stepTitle": "② 常规稳定（首列全正）", "detail": "劳斯第一列依次为 $1,\\;20,\\;1.5,\\;50$，无变号（或用三阶速判 $20\\times 4=80>1\\times 50$），所有根在左半平面，**系统稳定**。" },
+        { "stepTitle": "③ 特殊情况二：全零行与偶次辅助方程", "detail": "$s^6:[1,-4,-7,10]$，$s^5:[4,4,-8]$，$s^4:[-5,-5,10]\\xrightarrow{\\div 5}[-1,-1,2]$，$s^3:[0,0]$！由上一行得辅助方程 $-s^4-s^2+2=0$（根为 $\\pm\\mathrm{j}\\sqrt{2}$ 和 $\\pm 1$），求导得 $-4s^3-2s=0$ 填入 $s^3:[-4,-2]$；继续得 $s^2:[-0.5,2]\\xrightarrow{\\times 2}[-1,4]$，$s^1:[-18]$，$s^0:[4]$。第一列 $[1,4,-1,-4,-1,-18,4]$ 变号 **2 次**，故有 **2 个右半平面根**（实际全根为 $\\pm\\mathrm{j}\\sqrt{2},\\pm 1,1,-5$，重根 $s=1$ 为 2 个正实根），系统不稳定。" },
+        { "stepTitle": "④ 特殊情况一：首列为 0（极小正数 $\\varepsilon$ 法）", "detail": "$s^4:[1,1,1]$，$s^3:[2,2]$，$s^2:[0(\\varepsilon),1]$，$s^1:[\\frac{2\\varepsilon-2}{\\varepsilon}]$，$s^0:[1]$。当 $\\varepsilon\\to 0^+$ 时 $\\frac{2\\varepsilon-2}{\\varepsilon}<0$，第一列符号为 $+,+,+,-,+$，变号 **2 次**，有 **2 个右半平面根**，系统不稳定。" }
+      ],
+      "finalAnswer": "① 不稳定（2 个右半平面根）；② 稳定；③ 不稳定（2 个右半平面根）；④ 不稳定（2 个右半平面根）。",
+      "takeaway": "一道例题打包劳斯判据全部 4 种考法！特别是 ③ 同时综合了正数缩放、全零行辅助方程与多根分布核验。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.91-92",
+        "pdfPage": 100,
+        "itemRef": "例4-1"
+      },
+      "verification": { "method": "sympy", "testId": "ch04_ex_guide41_rhp_counts", "verified": true }
+    },
+    {
+      "id": "ctrl-ch04-e-02",
+      "section": "4.3 典型例题精选",
+      "kind": "example",
+      "title": "例 4-2：双参数 $(K, T)$ 稳定区域分类讨论",
+      "examWeight": "core",
+      "problem": "单位负反馈系统的开环传递函数为 $G(s)=\\frac{K(s+1)}{s(Ts+1)(2s+1)}$，试确定使闭环系统稳定的 $K$ 和 $T$ 的取值范围。",
+      "steps": [
+        { "stepTitle": "1. 列闭环特征方程与劳斯阵", "detail": "特征方程 $2Ts^3+(2+T)s^2+(K+1)s+K=0$。劳斯第一列依次为：$s^3:\\;2T$，$s^2:\\;2+T$，$s^1:\\;\\frac{(2+T)(K+1)-2TK}{2+T}=\\frac{2+T+K(2-T)}{2+T}$，$s^0:\\;K$。" },
+        { "stepTitle": "2. 联立第一列全正不等式并按 $T$ 分类", "detail": "由 $2T>0,\\;2+T>0,\\;K>0$ 得 $T>0,\\;K>0$。再看 $s^1$ 分子 $2+T+K(2-T)>0$：\n- 当 $0<T\\le 2$ 时，$2-T\\ge 0$，分子对一切 $K>0$ 恒正；\n- 当 $T>2$ 时，$2-T<0$，解得 $0<K<\\frac{T+2}{T-2}$。" }
+      ],
+      "finalAnswer": "$T>0$，且当 $0<T\\le 2$ 时 $K>0$；当 $T>2$ 时 $0<K<\\frac{T+2}{T-2}$。",
+      "takeaway": "解含双参数不等式 $K(2-T)>-(2+T)$ 时，除以 $(2-T)$ 之前**务必对 $2-T$ 的正负和零分类讨论**！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.92-93",
+        "pdfPage": 101,
+        "itemRef": "例4-2 (图4-6)"
+      },
+      "verification": { "method": "sympy", "testId": "ch04_ex_guide42", "verified": true }
+    },
+    {
+      "id": "ctrl-ch04-e-03",
+      "section": "4.3 典型例题精选",
+      "kind": "example",
+      "title": "例 4-3：相对稳定裕度（全部特征根实部小于 $-1$）",
+      "examWeight": "core",
+      "problem": "单位负反馈系统的开环传递函数为 $G(s)=\\frac{K}{s(1+\\frac{1}{3}s)(1+\\frac{1}{6}s)}$，要求闭环特征根实部均小于 $-1$，试确定 $K$ 的取值范围。",
+      "steps": [
+        { "stepTitle": "1. 写出闭环特征方程并做平移代换 $s=z-1$", "detail": "闭环特征方程化整为 $s^3+9s^2+18s+18K=0$。令 $s=z-1$ 代入展开：$(z-1)^3+9(z-1)^2+18(z-1)+18K=z^3+6z^2+3z+(18K-10)=0$。" },
+        { "stepTitle": "2. 对 $z$ 方程列劳斯阵求解", "detail": "第一列为 $z^3:1,\\;z^2:6,\\;z^1:\\frac{18-(18K-10)}{6}=\\frac{14-9K}{3},\\;z^0:18K-10$。令全正：$\\frac{14-9K}{3}>0$ 且 $18K-10>0$，解得 $\\frac{5}{9}<K<\\frac{14}{9}$。" }
+      ],
+      "finalAnswer": "$\\frac{5}{9} < K < \\frac{14}{9}$。",
+      "takeaway": "坐标左移法是浙大 845 必考题型：先通分消去分数系数再代入 $s=z-\\sigma$，可显著减少展开计算失误。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.93-94",
+        "pdfPage": 102,
+        "itemRef": "例4-3"
+      },
+      "verification": { "method": "sympy", "testId": "ch04_ex_guide43", "verified": true }
+    },
+    {
+      "id": "ctrl-ch04-e-04",
+      "section": "4.3 典型例题精选",
+      "kind": "example",
+      "title": "例 4-4：S 平面极点区域约束（实部 $<-2$ 且 $\\zeta\\ge 0.5$）",
+      "examWeight": "core",
+      "problem": "单位负反馈系统开环传函 $G(s)=\\frac{K}{s(Ts+1)}$，要求闭环所有特征根实部均小于 $-2$，且阻尼比 $\\zeta\\ge 0.5$。试画出期望特征根在 $s$ 平面上的分布区域并确定 $K$ 和 $T$ 的取值范围。",
+      "figureSvg": "<svg role='img' viewBox='0 0 300 175' xmlns='http://www.w3.org/2000/svg'><title>例4-4 期望闭环特征根在 S 平面分布阴影区（Re<-2 且 |angle|<=60°，仿图4-7）</title><defs><marker id='a44' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><polygon points='20,16 142,16 142,159 20,159' fill='#eaf0ff' opacity='0.35'/><polygon points='20,16 142,35 142,140 20,159' fill='#bfd0ff' opacity='0.75'/><line x1='20' y1='88' x2='278' y2='88' stroke='#334155' stroke-width='1.4' marker-end='url(#a44)'/><line x1='210' y1='164' x2='210' y2='14' stroke='#334155' stroke-width='1.4' marker-end='url(#a44)'/><line x1='142' y1='16' x2='142' y2='160' stroke='#b4233c' stroke-width='1.6' stroke-dasharray='4,3'/><line x1='210' y1='88' x2='106' y2='16' stroke='#2744a8' stroke-width='1.4'/><line x1='210' y1='88' x2='106' y2='160' stroke='#2744a8' stroke-width='1.4'/><text x='262' y='104' font-size='11' fill='#141824'>Re</text><text x='216' y='24' font-size='11' fill='#141824'>Im</text><text x='215' y='102' font-size='11' fill='#334155'>0</text><text x='124' y='102' font-size='11' fill='#b4233c' font-weight='700'>-2</text><text x='166' y='69' font-size='11' fill='#2744a8'>π/3</text><text x='32' y='83' font-size='11' fill='#1e3a8a' font-weight='700'>期望极点区</text></svg>",
+      "steps": [
+        { "stepTitle": "1. 确定 $s$ 平面阴影区域", "detail": "$\\zeta\\ge 0.5\\Rightarrow\\beta=\\arccos\\zeta\\le\\frac{\\pi}{3}$（即位于负实轴上下各 $60^\\circ$ 的楔形区域内），同时位于直线 $\\operatorname{Re}(s)=-2$ 左侧。" },
+        { "stepTitle": "2. 平移 $s=z-2$ 满足实部 $<-2$", "detail": "闭环特征方程 $Ts^2+s+K=0$ 代入 $s=z-2$ 整理得 $Tz^2+(1-4T)z+(4T+K-2)=0$。二阶方程全正即充要：$T>0,\\;1-4T>0,\\;4T+K-2>0$，即 $0<T<\\frac{1}{4}$ 且 $4T+K>2$。" },
+        { "stepTitle": "3. 叠加阻尼比约束", "detail": "由标准二阶关系 $\\zeta=\\frac{1}{2\\sqrt{KT}}\\ge 0.5 \\implies KT\\le 1$。" }
+      ],
+      "finalAnswer": "$0<T<\\frac{1}{4}$，$KT\\le 1$ 且 $4T+K-2>0$。",
+      "takeaway": "极点区域综合设计 = 「左移劳斯保实部」∩「$\\zeta=\\cos\\beta$ 保楔角」，高分大题常见模板。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.94",
+        "pdfPage": 103,
+        "itemRef": "例4-4 (图4-7)"
+      },
+      "verification": { "method": "sympy", "testId": "ch04_ex_guide44", "verified": true }
+    },
+    {
+      "id": "ctrl-ch04-e-05",
+      "section": "4.3 典型例题精选",
+      "kind": "example",
+      "title": "例 4-6：内环测速反馈稳定不稳定对象 + 动态指标综合（含原书公式勘误）",
+      "examWeight": "core",
+      "problem": "系统前向通道为比例 $K$ 串联不稳定对象 $\\frac{1}{s(0.25s-1)}$，内环采用测速负反馈 $K_t s$ 接至 $K$ 前端，外环为单位负反馈。① 确定使闭环系统稳定的 $KK_t$ 范围；② 若要求 $\\sigma\\%=10\\%$ 且 $T_s=1.5\\text{ s}$（$5\\%$ 误差带），求 $K$ 和 $K_t$。",
+      "figureSvg": "<svg role='img' viewBox='0 0 410 140' xmlns='http://www.w3.org/2000/svg'><title>例4-6 内环测速反馈镇定不稳定对象系统图（仿图4-8）</title><defs><marker id='a46' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='12' y1='42' x2='48' y2='42' stroke='#334155' stroke-width='1.5' marker-end='url(#a46)'/><circle cx='57' cy='42' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='65' y1='42' x2='96' y2='42' stroke='#334155' stroke-width='1.5' marker-end='url(#a46)'/><circle cx='105' cy='42' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='113' y1='42' x2='146' y2='42' stroke='#334155' stroke-width='1.5' marker-end='url(#a46)'/><rect x='148' y='24' width='44' height='36' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='170' y='46' text-anchor='middle' font-size='12' fill='#141824'>K</text><line x1='192' y1='42' x2='226' y2='42' stroke='#334155' stroke-width='1.5' marker-end='url(#a46)'/><rect x='228' y='20' width='105' height='44' rx='6' fill='#fdecef' stroke='#b4233c' stroke-width='1.5'/><text x='280' y='37' text-anchor='middle' font-size='11' fill='#b4233c'>1</text><line x1='240' y1='42' x2='320' y2='42' stroke='#b4233c' stroke-width='1'/><text x='280' y='56' text-anchor='middle' font-size='11' fill='#b4233c'>s(0.25s − 1)</text><line x1='333' y1='42' x2='395' y2='42' stroke='#334155' stroke-width='1.5' marker-end='url(#a46)'/><polyline points='362,42 362,92 270,92' fill='none' stroke='#334155' stroke-width='1.4' marker-end='url(#a46)'/><rect x='218' y='78' width='50' height='28' rx='5' fill='#fef5e5' stroke='#9a5800' stroke-width='1.4'/><text x='243' y='96' text-anchor='middle' font-size='12' fill='#9a5800'>Kt·s</text><polyline points='218,92 105,92 105,52' fill='none' stroke='#334155' stroke-width='1.4' marker-end='url(#a46)'/><polyline points='362,92 362,126 57,126 57,52' fill='none' stroke='#334155' stroke-width='1.4' marker-end='url(#a46)'/><text x='14' y='34' font-size='11' fill='#141824'>R(s)</text><text x='372' y='34' font-size='11' fill='#141824'>Y(s)</text><text x='45' y='60' font-size='13' fill='#b4233c'>−</text><text x='93' y='60' font-size='13' fill='#b4233c'>−</text></svg>",
+      "steps": [
+        { "stepTitle": "1. 化简闭环传函并判稳", "detail": "先消内环得开环传函 $G(s)=\\frac{K}{s(0.25s-1+KK_t)}$，闭环传函 $\\Phi(s)=\\frac{K}{0.25s^2+(KK_t-1)s+K}$。二阶系统稳定充要条件为系数全正：$K>0$ 且 $KK_t-1>0\\implies KK_t>1$。" },
+        { "stepTitle": "2. 由指标反求 $\\zeta$ 与 $\\omega_n$", "detail": "由 $\\sigma\\%=\\mathrm{e}^{-\\frac{\\pi\\zeta}{\\sqrt{1-\\zeta^2}}}=0.10$ 解得 $\\zeta\\approx 0.591$（书取 $0.59$）。按原书近似式 $T_s\\approx\\frac{3}{\\zeta\\omega_n}=1.5$ 得 $\\omega_n=\\frac{3}{0.59\\times 1.5}\\approx 3.39\\text{ rad/s}$。" },
+        { "stepTitle": "3. 反求 $K, K_t$ 与 SymPy 勘误说明", "detail": "由 $4K=\\omega_n^2$ 与 $4(KK_t-1)=2\\zeta\\omega_n$，代入书值 $\\omega_n=3.39,\\zeta=0.59$ 得 $K\\approx 2.87,\\;K_t\\approx 0.697$。\n【SymPy 核查提示】原书 P.95 印刷的公式 $T_s=\\frac{\\ln(\\Delta\\sqrt{1-\\zeta^2})}{\\zeta\\omega_n}$ 漏掉了负号（正确包络线式为 $-\\frac{\\ln(\\Delta\\sqrt{1-\\zeta^2})}{\\zeta\\omega_n}$，算得 $\\omega_n\\approx 3.62,\\;K\\approx 3.28,\\;K_t\\approx 0.631$），而原书数值 $3.39$ 实为按工程简式 $3/(\\zeta\\omega_n)$ 算得。考场按简式 $3/(\\zeta\\omega_n)$ 写清公式即可得满分！" }
+      ],
+      "finalAnswer": "① $K>0$ 且 $KK_t>1$；② 按工程简式 $T_s\\approx\\frac{3}{\\zeta\\omega_n}$ 得 $K\\approx 2.87,\\;K_t\\approx 0.697$（按包络线精确式则 $K\\approx 3.28,\\;K_t\\approx 0.631$）。",
+      "takeaway": "不稳定开环对象 $0.25s-1$ 靠纯比例单位负反馈无法镇定，引入速度负反馈把负阻尼转为正阻尼即可镇定。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.95",
+        "pdfPage": 104,
+        "itemRef": "例4-6 (图4-8)"
+      },
+      "verification": { "method": "sympy", "testId": "ch04_ex_guide46_exact_note", "verified": true }
+    },
+    {
+      "id": "ctrl-ch04-e-06",
+      "section": "4.3 典型例题精选",
+      "kind": "example",
+      "title": "例 4-7：前置微分补偿 $(K_i s+1)$ 消除斜坡稳态误差",
+      "examWeight": "core",
+      "problem": "系统由前置环节 $(K_i s+1)$ 串联一个单位负反馈回路（开环传函 $G(s)=\\frac{K}{s(Ts+1)}$，其中 $K,T>0$）组成。定义误差 $e(t)=r(t)-y(t)$，输入斜坡信号 $r(t)=at\\;(a\\ne 0)$，如何调节 $K_i$ 使系统对斜坡输入的稳态误差为零？",
+      "figureSvg": "<svg role='img' viewBox='0 0 410 105' xmlns='http://www.w3.org/2000/svg'><title>例4-7 前置微分补偿系统结构图（仿图4-9）</title><defs><marker id='a47' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='12' y1='38' x2='52' y2='38' stroke='#334155' stroke-width='1.5' marker-end='url(#a47)'/><rect x='54' y='21' width='76' height='34' rx='6' fill='#fef5e5' stroke='#9a5800' stroke-width='1.5'/><text x='92' y='42' text-anchor='middle' font-size='12' fill='#9a5800'>Ki·s + 1</text><line x1='130' y1='38' x2='166' y2='38' stroke='#334155' stroke-width='1.5' marker-end='url(#a47)'/><circle cx='176' cy='38' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='184' y1='38' x2='224' y2='38' stroke='#334155' stroke-width='1.5' marker-end='url(#a47)'/><rect x='226' y='16' width='100' height='44' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='276' y='33' text-anchor='middle' font-size='12' fill='#141824'>K</text><line x1='244' y1='38' x2='308' y2='38' stroke='#141824' stroke-width='1'/><text x='276' y='52' text-anchor='middle' font-size='12' fill='#141824'>s(Ts + 1)</text><line x1='326' y1='38' x2='395' y2='38' stroke='#334155' stroke-width='1.5' marker-end='url(#a47)'/><polyline points='362,38 362,88 176,88 176,48' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a47)'/><text x='15' y='30' font-size='11' fill='#141824'>R(s)</text><text x='368' y='30' font-size='11' fill='#141824'>Y(s)</text><text x='163' y='58' font-size='13' fill='#b4233c'>−</text></svg>",
+      "steps": [
+        { "stepTitle": "1. 求总闭环传函并判稳", "detail": "$\\Phi(s)=(K_i s+1)\\frac{K}{Ts^2+s+K}=\\frac{K(K_i s+1)}{Ts^2+s+K}$。因 $K,T>0$，二阶特征方程系数全正，闭环稳定。" },
+        { "stepTitle": "2. 按题干定义 $E(s)=R(s)-Y(s)$ 应用终值定理", "detail": "$E(s)=[1-\\Phi(s)]\\frac{a}{s^2}=\\frac{Ts^2+s+K-KK_i s-K}{Ts^2+s+K}\\cdot\\frac{a}{s^2}=\\frac{a(Ts+1-KK_i)}{s(Ts^2+s+K)}$。于是 $e_{ss}=\\lim_{s\\to 0} sE(s)=\\frac{a(1-KK_i)}{K}$。令其为 $0$ 得 $K_i=\\frac{1}{K}$。" }
+      ],
+      "finalAnswer": "调节 $K_i=\\frac{1}{K}$ 时，系统对斜坡输入的稳态误差为零。",
+      "takeaway": "这是复合控制消除 1 型系统斜坡稳态误差的经典模型：前置环节不改变闭环极点（不影响稳定性），却让闭环传函误差分子多消掉一阶 $s$！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.95-96",
+        "pdfPage": 104,
+        "itemRef": "例4-7 (图4-9)"
+      },
+      "verification": { "method": "sympy", "testId": "ch04_ex_guide47", "verified": true }
+    },
+    {
+      "id": "ctrl-ch04-e-07",
+      "section": "4.3 典型例题精选",
+      "kind": "example",
+      "title": "例 4-8：求稳态误差前“先判稳”的经典正反对比题",
+      "examWeight": "core",
+      "problem": "已知两个单位负反馈系统的开环传递函数：\n① $G_1(s)=\\frac{10}{s(s+4)(5s+1)}$；\n② $G_2(s)=\\frac{10(s+0.1)}{s^2(s+4)(5s+1)}$。\n当输入分别为 $r_1(t)=t$ 和 $r_2(t)=2\\cdot 1(t)+4t+5t^2$ 时，试求两系统的稳态误差。",
+      "steps": [
+        { "stepTitle": "1. 系统 ①：先判稳再化尾 1 型求误差", "detail": "特征方程 $5s^3+21s^2+4s+10=0$，劳斯第一列 $[5, 21, \\frac{34}{21}, 10]$ 全正，稳定！化尾 1 型 $G_1(s)=\\frac{2.5}{s(0.25s+1)(5s+1)}$，为 1 型系统且 $K_v=2.5$。对 $r_1(t)=t$：$e_{ss}=\\frac{1}{2.5}=0.4$；对 $r_2(t)=2+4t+5t^2$：叠加得 $0+\\frac{4}{2.5}+\\infty=\\infty$。" },
+        { "stepTitle": "2. 系统 ②：劳斯判出不稳定，直接终止！", "detail": "特征方程 $5s^4+21s^3+4s^2+10s+1=0$，劳斯第一列 $[5, 21, \\frac{34}{21}, -\\frac{101}{34}, 1]$ 变号 2 次，**闭环不稳定**！故稳态误差无意义，绝不可套 2 型表去算！" }
+      ],
+      "finalAnswer": "① 系统稳定，$r_1$ 时 $e_{ss}=0.4$，$r_2$ 时 $e_{ss}=\\infty$；② 闭环不稳定，稳态误差无意义。",
+      "takeaway": "845 考场救命例题！看到 2 型系统别兴奋，先花 10 秒列劳斯阵判稳！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.96-97",
+        "pdfPage": 105,
+        "itemRef": "例4-8"
+      },
+      "verification": { "method": "sympy", "testId": "ch04_ex_guide48", "verified": true }
+    },
+    {
+      "id": "ctrl-ch04-e-08",
+      "section": "4.3 典型例题精选",
+      "kind": "example",
+      "title": "例 4-9：稳定性与稳态精度综合——求最小可能稳态误差",
+      "examWeight": "core",
+      "problem": "单位负反馈系统开环传递函数为 $G(s)=\\frac{K}{s(s+1)(s+5)}$，试求当输入单位斜坡函数 $r(t)=t$ 时，系统可能达到的最小稳态误差范围。",
+      "steps": [
+        { "stepTitle": "1. 由劳斯判据求闭环稳定增益上限", "detail": "特征方程 $s^3+6s^2+5s+K=0$，劳斯第一列 $[1, 6, \\frac{30-K}{6}, K]$，稳定充要条件为 $0<K<30$。" },
+        { "stepTitle": "2. 化尾 1 型求速度误差系数并代边界", "detail": "$G(s)=\\frac{K/5}{s(s+1)(0.2s+1)}$ 为 1 型系统，$K_v=\\frac{K}{5}$，故单位斜坡稳态误差 $e_{ss}=\\frac{1}{K_v}=\\frac{5}{K}$。因 $0<K<30$，$K$ 越接近 $30$ 误差越小，故 $e_{ss}>\\frac{5}{30}=\\frac{1}{6}$。" }
+      ],
+      "finalAnswer": "系统稳态误差满足 $e_{ss} > \\frac{1}{6}$（不存在严格达到 $\\frac{1}{6}$ 的稳定解，下确界为 $\\frac{1}{6}$）。",
+      "takeaway": "注意是严格大于号 $e_{ss} > \\frac{1}{6}$（$K=30$ 时临界稳定，不算渐近稳定）。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.97",
+        "pdfPage": 106,
+        "itemRef": "例4-9"
+      },
+      "verification": { "method": "sympy", "testId": "ch04_ex_guide49", "verified": true }
+    },
+    {
+      "id": "ctrl-ch04-e-09",
+      "section": "4.3 典型例题精选",
+      "kind": "example",
+      "title": "例 4-10：由输入波形图写出 $r(t)$ 并求稳态误差",
+      "examWeight": "core",
+      "problem": "单位负反馈系统开环传递函数为 $G(s)=\\frac{50(s+1)}{s(s+6)(s+9)}$，输入信号 $r(t)$ 是一条过 $(0,20)$ 与 $(10,0)$ 的直线（即 $r(t)=-2t+20,\\;t\\ge 0$），求系统的稳态误差。",
+      "figureSvg": "<svg role='img' viewBox='0 0 380 120' xmlns='http://www.w3.org/2000/svg'><title>例4-10 系统方块图与直线输入波形图（仿图4-10与4-11）</title><defs><marker id='a410' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='10' y1='42' x2='42' y2='42' stroke='#334155' stroke-width='1.4' marker-end='url(#a410)'/><circle cx='51' cy='42' r='8' fill='#fff' stroke='#334155' stroke-width='1.4'/><line x1='59' y1='42' x2='88' y2='42' stroke='#334155' stroke-width='1.4' marker-end='url(#a410)'/><rect x='90' y='20' width='108' height='44' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.4'/><text x='144' y='37' text-anchor='middle' font-size='11' fill='#141824'>50(s + 1)</text><line x1='100' y1='42' x2='188' y2='42' stroke='#141824' stroke-width='1'/><text x='144' y='56' text-anchor='middle' font-size='11' fill='#141824'>s(s + 6)(s + 9)</text><line x1='198' y1='42' x2='236' y2='42' stroke='#334155' stroke-width='1.4' marker-end='url(#a410)'/><polyline points='216,42 216,95 51,95 51,52' fill='none' stroke='#334155' stroke-width='1.4' marker-end='url(#a410)'/><text x='12' y='34' font-size='10' fill='#141824'>R(s)</text><text x='220' y='34' font-size='10' fill='#141824'>Y(s)</text><text x='39' y='60' font-size='12' fill='#b4233c'>−</text><line x1='265' y1='86' x2='366' y2='86' stroke='#334155' stroke-width='1.4' marker-end='url(#a410)'/><line x1='278' y1='110' x2='278' y2='14' stroke='#334155' stroke-width='1.4' marker-end='url(#a410)'/><line x1='278' y1='26' x2='342' y2='106' stroke='#b4233c' stroke-width='2'/><text x='254' y='30' font-size='10' fill='#b4233c'>20</text><text x='318' y='99' font-size='10' fill='#b4233c'>10</text><text x='284' y='20' font-size='10' fill='#141824'>r(t)</text><text x='358' y='98' font-size='10' fill='#141824'>t</text></svg>",
+      "steps": [
+        { "stepTitle": "1. 判稳并识别输入信号表达式", "detail": "闭环特征方程 $s^3+15s^2+104s+50=0$，三阶速判 $15\\times 104=1560 > 50$，闭环稳定。由直线过 $(0,20)$ 和 $(10,0)$ 得 $r(t)=20\\cdot 1(t)-2t$（阶跃与负斜坡的叠加）。" },
+        { "stepTitle": "2. 计算速度误差系数并叠加", "detail": "系统为 1 型，对阶跃分量 $20\\cdot 1(t)$ 稳态误差为 $0$；$K_v=\\lim_{s\\to 0} sG(s)=\\frac{50}{6\\times 9}=\\frac{50}{54}$。故对 $-2t$ 的稳态误差 $e_{ss}=\\frac{-2}{50/54}=-2.16$。" }
+      ],
+      "finalAnswer": "$e_{ss} = -2.16$。",
+      "takeaway": "由波形图列式时注意负斜率不要丢掉负号，稳态误差本身带符号（正/负分别表示滞后方向）。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.97-98",
+        "pdfPage": 106,
+        "itemRef": "例4-10 (图4-10~4-11)"
+      },
+      "verification": { "method": "sympy", "testId": "ch04_ex_guide410", "verified": true }
+    }
+  ]
+}

@@ -74,7 +74,7 @@
   --radius-lg: 16px;
   --shadow-sm: 0 1px 2px rgba(20, 24, 36, 0.05);
   --shadow-md: 0 8px 24px rgba(20, 24, 36, 0.08);
-  --header-offset: 132px;
+  --header-offset: 176px;
 }
 
 *, *::before, *::after {
@@ -1831,6 +1831,782 @@ kbd {
   display: none;
 }
 
+/* ==========================================================================
+   三科顶层切换导航（语义 <nav> + <a> + aria-current="page"）
+   ========================================================================== */
+.subject-nav-wrap {
+  background: rgba(15, 23, 42, 0.28);
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.subject-nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 0.35rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.subject-nav-list::-webkit-scrollbar {
+  display: none;
+}
+
+.subject-nav-list li {
+  flex: none;
+}
+
+.subject-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.48rem;
+  padding: 0.68rem 1rem;
+  color: rgba(255, 255, 255, 0.84);
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 700;
+  min-block-size: 42px;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.subject-link:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.subject-link[aria-current="page"] {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.subject-link[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  inset: auto 0.55rem 0;
+  border-block-end: 3px solid #fbbf24;
+  border-radius: 3px 3px 0 0;
+}
+
+.subject-chip {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.1rem 0.48rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.subject-chip-new {
+  background: #fbbf24;
+  color: #1e293b;
+}
+
+/* ==========================================================================
+   理工科学习引擎（845 自动控制原理 / 考研数学一）
+   ========================================================================== */
+.stem-subject-banner {
+  padding: 1.05rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.stem-subject-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.65rem;
+}
+
+.stem-subject-kicker {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.stem-subject-books {
+  margin-top: 0.2rem;
+  font-size: 0.82rem;
+  color: var(--ink-secondary);
+}
+
+.stem-chapter-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+  gap: 0.55rem;
+}
+
+.stem-chapter-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.18rem;
+  padding: 0.62rem 0.8rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-subtle);
+  color: var(--ink-primary);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.12s ease;
+}
+
+.stem-chapter-pill:hover {
+  border-color: var(--accent-border);
+  background: #f3f6ff;
+}
+
+.stem-chapter-pill.is-upcoming {
+  opacity: 0.78;
+}
+
+.stem-chapter-pill[aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+  opacity: 1;
+}
+
+.stem-ch-num {
+  font-size: 0.74rem;
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+.stem-ch-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.stem-ch-status {
+  margin-top: 0.15rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.08rem 0.45rem;
+  border-radius: 999px;
+  background: var(--emerald-soft);
+  color: var(--emerald);
+}
+
+.stem-chapter-pill.is-upcoming .stem-ch-status {
+  background: rgba(100, 110, 130, 0.12);
+  color: var(--ink-muted);
+}
+
+.stem-chapter-pill[aria-pressed="true"] .stem-ch-status {
+  background: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+}
+
+.stem-chapter-hero {
+  padding: 1.15rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.stem-chapter-heading {
+  margin: 0.45rem 0 0.25rem;
+  font-size: clamp(1.12rem, 2.2vw, 1.38rem);
+  font-weight: 700;
+  color: var(--ink-primary);
+}
+
+.stem-source-line {
+  margin: 0;
+  font-size: 0.83rem;
+  color: var(--ink-muted);
+}
+
+.stem-req-details {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: #faf9f5;
+}
+
+.stem-req-summary {
+  padding: 0.65rem 0.9rem;
+}
+
+.stem-req-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 0.75rem;
+  padding: 0 0.9rem 0.9rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.stem-req-cell {
+  padding-top: 0.7rem;
+}
+
+.stem-req-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.stem-req-cell p {
+  margin: 0;
+  font-size: 0.83rem;
+  color: var(--ink-secondary);
+  line-height: 1.55;
+}
+
+.pill-toggle.pill-rose[aria-pressed="true"] {
+  background: var(--rose);
+  border-color: var(--rose);
+  color: #ffffff;
+}
+
+.pill-toggle.pill-rose[aria-pressed="true"] .count-badge {
+  background: rgba(255, 255, 255, 0.24);
+  color: #ffffff;
+}
+
+/* STEM Cards */
+.stem-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.stem-card {
+  padding: 1.15rem 1.25rem 0.95rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  border-left: 4px solid var(--accent);
+}
+
+.stem-card.stem-kind-formula {
+  border-left-color: var(--accent);
+}
+
+.stem-card.stem-kind-conclusion {
+  border-left-color: var(--teal);
+}
+
+.stem-card.stem-kind-example {
+  border-left-color: var(--purple);
+}
+
+.stem-card.is-mastered {
+  background: #f5fbf8;
+}
+
+.stem-card.is-flagged {
+  border-color: var(--rose-border);
+  border-left-color: var(--rose);
+  box-shadow: 0 0 0 2px rgba(180, 35, 60, 0.12);
+}
+
+.stem-card-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.stem-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.stem-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.icon-btn.flag-btn.is-flagged {
+  color: var(--rose);
+  background: var(--rose-soft);
+  border-color: var(--rose-border);
+}
+
+.stem-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.16rem 0.56rem;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.stem-kind-formula-chip {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid var(--accent-border);
+}
+
+.stem-kind-conclusion-chip {
+  background: var(--teal-soft);
+  color: var(--teal);
+  border: 1px solid var(--teal-border);
+}
+
+.stem-kind-example-chip {
+  background: var(--purple-soft);
+  color: var(--purple);
+  border: 1px solid var(--purple-border);
+}
+
+.stem-badge-core {
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+}
+
+.stem-badge-ext {
+  background: var(--amber-soft);
+  color: var(--amber);
+  border: 1px solid var(--amber-border);
+}
+
+.stem-badge-sympy {
+  background: var(--emerald-soft);
+  color: var(--emerald);
+  border: 1px solid var(--emerald-border);
+}
+
+.stem-badge-checked {
+  background: var(--sky-soft);
+  color: var(--sky);
+  border: 1px solid var(--sky-border);
+}
+
+.stem-badge-pending {
+  background: var(--amber-soft);
+  color: var(--amber);
+  border: 1px solid var(--amber-border);
+}
+
+.stem-section-tag {
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+  font-weight: 600;
+}
+
+.stem-card-title {
+  margin: 0;
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: var(--ink-primary);
+  line-height: 1.45;
+}
+
+.stem-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.stem-prompt {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--ink-secondary);
+}
+
+/* Formula & Math Scroll Container */
+.stem-formula-box,
+.stem-conclusion-box {
+  position: relative;
+  border-radius: var(--radius-md);
+  border: 1px solid #dce3f2;
+  background: #f8faff;
+  padding: 0.95rem 1.1rem;
+}
+
+.stem-conclusion-box {
+  border-color: var(--teal-border);
+  background: #f5fcfa;
+}
+
+.math-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 0.15rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.math-scroll .katex-display {
+  margin: 0.35rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 0.2rem;
+}
+
+.stem-conclusion-text {
+  font-size: 0.92rem;
+  line-height: 1.72;
+  color: var(--ink-primary);
+}
+
+.is-blurred {
+  filter: blur(8px);
+  user-select: none;
+  pointer-events: none;
+  opacity: 0.45;
+}
+
+.stem-mask-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(248, 250, 255, 0.55);
+  border-radius: inherit;
+}
+
+.stem-rehide-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.45rem;
+}
+
+.btn-link-muted {
+  background: transparent;
+  border: 0;
+  color: var(--ink-muted);
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0.15rem 0.35rem;
+}
+
+.btn-link-muted:hover {
+  color: var(--accent);
+}
+
+/* Symbols Definition List */
+.stem-symbols-list {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.45rem 1rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: var(--radius-sm);
+  background: #faf9f5;
+  border: 1px solid var(--border-subtle);
+}
+
+.stem-symbol-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 0.86rem;
+}
+
+.stem-symbol-row dt {
+  font-weight: 700;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.stem-symbol-row dd {
+  margin: 0;
+  color: var(--ink-secondary);
+}
+
+/* SVG Figure Box */
+.stem-figure {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.stem-svg-stage {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+}
+
+.stem-svg-stage svg {
+  max-width: 100%;
+  width: min(500px, 100%);
+  height: auto;
+  display: block;
+}
+
+.stem-figcaption {
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+  text-align: center;
+}
+
+/* Callouts (Preconditions & Pitfalls) */
+.stem-callouts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.65rem;
+}
+
+.stem-callout {
+  padding: 0.68rem 0.9rem;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid transparent;
+  font-size: 0.86rem;
+  line-height: 1.62;
+}
+
+.stem-callout p {
+  margin: 0.25rem 0 0;
+  color: var(--ink-primary);
+}
+
+.callout-cond {
+  background: var(--sky-soft);
+  border-left-color: var(--sky);
+}
+
+.callout-pitfall {
+  background: var(--amber-soft);
+  border-left-color: var(--amber);
+}
+
+.callout-tag {
+  display: inline-block;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--ink-secondary);
+}
+
+.callout-cond .callout-tag {
+  color: var(--sky);
+}
+
+.callout-pitfall .callout-tag {
+  color: var(--amber);
+}
+
+/* Worked Example Problem & Collapsible Solution */
+.stem-problem-box {
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-sm);
+  background: #faf9f6;
+  border: 1px solid var(--border-subtle);
+}
+
+.stem-problem-label {
+  display: inline-block;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--purple);
+  margin-bottom: 0.3rem;
+}
+
+.stem-problem-text {
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: var(--ink-primary);
+}
+
+.stem-solution-details {
+  border: 1px solid var(--purple-border);
+  border-radius: var(--radius-md);
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.stem-solution-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.72rem 1rem;
+  background: var(--purple-soft);
+  color: var(--purple);
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+  min-block-size: 42px;
+}
+
+.stem-solution-summary::-webkit-details-marker {
+  display: none;
+}
+
+.stem-solution-details[open] .stem-solution-summary {
+  border-bottom: 1px solid var(--purple-border);
+}
+
+.stem-solution-details[open] .disclosure-chevron {
+  transform: rotate(-135deg);
+}
+
+.stem-solution-body {
+  padding: 0.95rem 1.05rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.stem-steps-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.stem-step-item {
+  padding-left: 0.2rem;
+}
+
+.stem-step-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--ink-primary);
+  margin-bottom: 0.2rem;
+}
+
+.stem-step-detail {
+  font-size: 0.89rem;
+  color: var(--ink-secondary);
+  line-height: 1.9;
+  padding-block: 0.2rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.stem-final-answer {
+  padding: 0.75rem 0.95rem;
+  border-radius: var(--radius-sm);
+  background: var(--emerald-soft);
+  border: 1px solid var(--emerald-border);
+  border-left: 4px solid var(--emerald);
+  font-size: 0.91rem;
+  line-height: 1.65;
+}
+
+.stem-final-answer .callout-tag {
+  color: var(--emerald);
+  margin-bottom: 0.2rem;
+}
+
+/* Citation Footer Bar */
+.stem-citation-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-top: 0.65rem;
+  border-top: 1px dashed var(--border-subtle);
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+}
+
+.stem-cite-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.stem-cite-label {
+  font-weight: 700;
+  color: var(--ink-secondary);
+  background: var(--bg-subtle);
+  padding: 0.08rem 0.42rem;
+  border-radius: 4px;
+}
+
+.stem-citation-bar cite {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--ink-secondary);
+}
+
+.stem-cite-page {
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.stem-cite-ref {
+  font-weight: 600;
+  color: var(--ink-primary);
+}
+
+.stem-verify-code {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 4px;
+  background: #f1f5f9;
+  color: #475569;
+}
+
+/* Roadmap Preview Card */
+.stem-roadmap-card {
+  padding: 1.35rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.stem-roadmap-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.85rem;
+}
+
+.stem-roadmap-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 0.85rem;
+  padding: 0.9rem 1rem;
+  border-radius: var(--radius-sm);
+  background: #faf9f5;
+  border: 1px solid var(--border-subtle);
+}
+
+.stem-roadmap-meta h3 {
+  margin: 0 0 0.4rem;
+  font-size: 0.86rem;
+  color: var(--ink-primary);
+}
+
+.stem-roadmap-meta ul {
+  margin: 0;
+  padding-left: 1.15rem;
+  font-size: 0.84rem;
+  color: var(--ink-secondary);
+  line-height: 1.6;
+}
+
+.stem-roadmap-note {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  line-height: 1.65;
+}
+
 /* Coarse Pointer Touch Target Enhancement (WCAG 2.5.8) */
 @media (pointer: coarse) {
   .icon-btn,
@@ -1845,8 +2621,18 @@ kbd {
   .site-header {
     position: static;
   }
-  .quiz-card {
-    padding: 1rem;
+  .quiz-card,
+  .stem-card,
+  .stem-chapter-hero,
+  .stem-subject-banner {
+    padding: 0.9rem;
+  }
+  .stem-chapter-strip {
+    grid-template-columns: 1fr;
+  }
+  .stem-formula-box,
+  .stem-conclusion-box {
+    padding: 0.75rem 0.8rem;
   }
 }
 
@@ -1919,5 +2705,21 @@ kbd {
     break-inside: avoid;
     page-break-inside: avoid;
     padding: 8px !important;
+  }
+  .stem-card {
+    border: 1px solid #cbd5e1 !important;
+    border-left: 3px solid #1e293b !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    padding: 10px !important;
+    margin-bottom: 8px !important;
+  }
+  .stem-formula-box,
+  .stem-conclusion-box,
+  .stem-problem-box,
+  .stem-final-answer,
+  .stem-callout {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
   }
 }

@@ -392,9 +392,9 @@ export function initQuizView(store, callbacks) {
     store.save();
   });
 
-  // 刷题键盘快捷键（仅在刷题面板激活且焦点不在输入控件时生效）
+  // 刷题键盘快捷键（仅在英语一刷题面板激活且焦点不在输入控件时生效）
   document.addEventListener('keydown', (e) => {
-    if (store.activePanel !== 'panel-quiz') return;
+    if (store.activeSubject !== 'english' || store.activePanel !== 'panel-quiz') return;
     const tag = document.activeElement?.tagName;
     if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
 

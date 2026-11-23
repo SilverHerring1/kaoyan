@@ -1,0 +1,641 @@
+{
+  "chapterId": "ch03",
+  "title": "第 3 章 连续时间控制系统的时域分析",
+  "basicRequirements": {
+    "master": "几种典型输入信号的表达式、特性及其波形；单位脉冲响应与单位阶跃响应；一阶、二阶系统的基本特性，特别是二阶系统在单位阶跃输入下的动态响应与过渡过程；控制系统动态响应的时域质量指标与稳态误差指标的物理意义和求取方法。",
+    "understand": "微分方程的拉氏变换求解原理及求解方法；常规 PID 控制器的控制规律与控制作用（不同参数对过渡过程的影响）；状态转移矩阵的概念、性质与计算方法，线性定常状态方程的求解；高阶系统的闭环主导极点概念。",
+    "familiar": "不同信号输入下稳态响应与暂态响应求解及时间常数；高阶系统降阶；被控对象的实验建模方法（一阶加纯滞后近似）。"
+  },
+  "sourceMeta": "主教材：孙优贤《自动控制原理》(2011) P.90-134 ｜ 辅导书：孙优贤《学习辅导》(2017) P.60-78",
+  "items": [
+    {
+      "id": "ctrl-ch03-f-01",
+      "section": "3.2.1 典型输入信号",
+      "kind": "formula",
+      "title": "5 种典型输入信号及其拉普拉斯变换",
+      "examWeight": "core",
+      "prompt": "写出单位脉冲、单位阶跃、单位斜坡、单位抛物线（加速度）和正弦函数的时域表达式及拉氏变换：",
+      "formulaLatex": "$$\\begin{aligned} &\\text{(1) 单位脉冲：} \\delta(t) \\xleftrightarrow{\\mathcal{L}} 1 \\\\ &\\text{(2) 单位阶跃：} 1(t) \\xleftrightarrow{\\mathcal{L}} \\frac{1}{s} \\\\ &\\text{(3) 单位斜坡：} r(t)=t\\cdot 1(t) \\xleftrightarrow{\\mathcal{L}} \\frac{1}{s^2} \\\\ &\\text{(4) 单位抛物线：} r(t)=\\frac{1}{2}t^2\\cdot 1(t) \\xleftrightarrow{\\mathcal{L}} \\frac{1}{s^3} \\\\ &\\text{(5) 正弦函数：} r(t)=A\\sin\\omega t \\xleftrightarrow{\\mathcal{L}} \\frac{A\\omega}{s^2+\\omega^2} \\end{aligned}$$",
+      "symbols": [
+        { "sym": "$1(t)$", "desc": "单位阶跃函数（$t\\ge 0$ 为 $1$，$t<0$ 为 $0$）" },
+        { "sym": "$\\frac{1}{2}t^2$", "desc": "注意系数 $\\frac{1}{2}$ 使加速度（二阶导数）恰好为 $1$" }
+      ],
+      "conditions": "单边拉普拉斯变换默认 $t<0$ 时输入信号恒为 $0$，对应系统处于零初始条件。",
+      "pitfalls": "单位抛物线（单位加速度）信号是 $\\frac{1}{2}t^2$ 而不是 $t^2$！若题干给 $r(t)=t^2$，拉氏变换为 $\\frac{2}{s^3}$，稳态误差要乘 $2$。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.60-61",
+        "pdfPage": 69,
+        "itemRef": "式(3-1)~(3-5')",
+        "crossRef": "孙优贤《自动控制原理》(2011) P.90-91"
+      },
+      "verification": { "method": "sympy", "testId": "ch03_f_first_order_step", "verified": true }
+    },
+    {
+      "id": "ctrl-ch03-f-02",
+      "section": "3.2.2 微分方程的拉氏变换求解",
+      "kind": "formula",
+      "title": "部分分式展开留数公式（单实根 / p 重实根 / 共轭复根）",
+      "examWeight": "core",
+      "prompt": "零初始条件下 $Y(s)=G(s)R(s)=\\frac{P(s)}{Q(s)}$，写出单根、$p$ 重根及共轭复根的反变换通式：",
+      "formulaLatex": "$$\\begin{aligned} &\\text{① 单实根 } s_k:\\quad A_k = \\left[(s-s_k)\\frac{P(s)}{Q(s)}\\right]_{s=s_k} \\implies A_k \\mathrm{e}^{s_k t} \\\\ &\\text{② } p \\text{ 重实根 } s_q:\\quad A_{q(p-k)} = \\left\\{\\frac{1}{k!}\\frac{\\mathrm{d}^k}{\\mathrm{d}s^k}\\left[(s-s_q)^p\\frac{P(s)}{Q(s)}\\right]\\right\\}_{s=s_q} \\\\ &\\quad\\implies \\frac{A_{qp}}{(p-1)!}t^{p-1}\\mathrm{e}^{s_q t} + \\cdots + A_{q1}\\mathrm{e}^{s_q t} \\\\ &\\text{③ 共轭复根 } s_{1,2}=-\\zeta\\omega_n \\pm \\mathrm{j}\\omega_n\\sqrt{1-\\zeta^2}: \\\\ &\\quad y_{\\text{osc}}(t) = 2|A_1|\\mathrm{e}^{-\\zeta\\omega_n t}\\sin(\\omega_d t + \\phi),\\; \\phi = \\angle A_1 + 90^\\circ \\end{aligned}$$",
+      "symbols": [
+        { "sym": "$A_1$", "desc": "对应正虚部特征根 $s_1=-\\zeta\\omega_n+\\mathrm{j}\\omega_d$ 的复留数" },
+        { "sym": "$\\omega_d$", "desc": "阻尼振荡频率 $\\omega_d = \\omega_n\\sqrt{1-\\zeta^2}$" }
+      ],
+      "conditions": "要求 $Y(s)=\\frac{P(s)}{Q(s)}$ 为真分式（分子阶次低于分母阶次）；若初始条件非零，须对微分方程两边直接取单边拉氏变换保留 $y(0),\\dot{y}(0)$。",
+      "pitfalls": "共轭复根相角公式 $\\phi=\\angle A_1 + 90^\\circ$ 中的 $A_1$ 必须取正虚部根 $s_1=-\\zeta\\omega_n+\\mathrm{j}\\omega_d$ 处的留数；若写成余弦形式则是 $2|A_1|\\mathrm{e}^{\\sigma t}\\cos(\\omega_d t + \\angle A_1)$。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.61-62",
+        "pdfPage": 70,
+        "itemRef": "式(3-6)~(3-14)",
+        "crossRef": "孙优贤《自动控制原理》(2011) P.97-99"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch03-f-03",
+      "section": "3.2.3 时域性能指标",
+      "kind": "formula",
+      "title": "单位阶跃动态指标定义与 4 种误差积分指标",
+      "examWeight": "core",
+      "prompt": "写出超调量 $\\sigma\\%$、最大偏差 $B$、稳态误差 $e_{ss}$ 及 4 种误差积分指标（ISE / ITSE / IAE / ITAE）：",
+      "formulaLatex": "$$\\begin{aligned} &\\sigma\\% = \\frac{y(T_p)-y(\\infty)}{y(\\infty)}\\times 100\\%,\\quad B = M_p - r(t),\\quad e_{ss}=\\lim_{t\\to\\infty}e(t)=r(\\infty)-y(\\infty) \\\\ &\\text{ISE: } J_1=\\int_0^\\infty e^2(t)\\mathrm{d}t,\\qquad \\text{ITSE: } J_2=\\int_0^\\infty t e^2(t)\\mathrm{d}t \\\\ &\\text{IAE: } J_3=\\int_0^\\infty |e(t)|\\mathrm{d}t,\\qquad \\text{ITAE: } J_4=\\int_0^\\infty t|e(t)|\\mathrm{d}t \\end{aligned}$$",
+      "symbols": [
+        { "sym": "$T_r$", "desc": "上升时间：欠阻尼取首次达终值 $0\\to 100\\%$；过阻尼取 $10\\%\\to 90\\%$" },
+        { "sym": "$T_p$", "desc": "峰值时间：首次达第一峰值的时间（过阻尼不存在）" },
+        { "sym": "$T_s$", "desc": "调节时间：进入并保持在终值 $\\pm 5\\%$ 或 $\\pm 2\\%$ 误差带内所需时间" },
+        { "sym": "$T_d$", "desc": "延迟时间：首次达到终值 $50\\%$ 所需时间" },
+        { "sym": "$n$", "desc": "衰减比：同方向相邻两波峰值之比 $B/B'$" }
+      ],
+      "conditions": "动态性能指标均基于系统稳定、零初始条件且输入为单位阶跃信号定义。",
+      "pitfalls": "极易踩坑：过阻尼系统的上升时间 $T_r$ 定义是 $10\\%\\to 90\\%$，而欠阻尼是 $0\\to 100\\%$；过阻尼不存在 $T_p$、$\\sigma\\%$ 和 $n$！",
+      "figureSvg": "<svg role='img' viewBox='0 0 420 205' xmlns='http://www.w3.org/2000/svg'><title>单位阶跃响应曲线与时域性能指标示意图（仿图3-1）</title><defs><marker id='arr31' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto-start-reverse'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><rect x='40' y='64' width='355' height='24' fill='#eaf0ff' opacity='0.75'/><line x1='40' y1='175' x2='400' y2='175' stroke='#334155' stroke-width='1.5' marker-end='url(#arr31)'/><line x1='40' y1='180' x2='40' y2='16' stroke='#334155' stroke-width='1.5' marker-end='url(#arr31)'/><line x1='40' y1='76' x2='395' y2='76' stroke='#64748b' stroke-dasharray='5,4' stroke-width='1.2'/><path d='M40 175 C 68 175, 82 40, 122 36 C 154 33, 174 102, 206 96 C 232 91, 250 65, 278 72 C 304 79, 326 74, 390 76' fill='none' stroke='#2744a8' stroke-width='2.4'/><line x1='94' y1='76' x2='94' y2='175' stroke='#0f766e' stroke-dasharray='3,3'/><line x1='122' y1='36' x2='122' y2='175' stroke='#b4233c' stroke-dasharray='3,3'/><line x1='262' y1='64' x2='262' y2='175' stroke='#9a5800' stroke-dasharray='3,3'/><line x1='122' y1='36' x2='122' y2='76' stroke='#b4233c' stroke-width='2'/><text x='18' y='24' font-size='12' fill='#141824' font-style='italic'>y(t)</text><text x='392' y='193' font-size='12' fill='#141824' font-style='italic'>t</text><text x='10' y='80' font-size='11' fill='#334155'>y(∞)</text><text x='128' y='58' font-size='11' fill='#b4233c' font-weight='700'>超调量 σ%</text><text x='86' y='191' font-size='11' fill='#0f766e' font-weight='700'>Tr</text><text x='114' y='191' font-size='11' fill='#b4233c' font-weight='700'>Tp</text><text x='255' y='191' font-size='11' fill='#9a5800' font-weight='700'>Ts</text><text x='324' y='59' font-size='10' fill='#2744a8'>±Δ 误差带(5%或2%)</text></svg>",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.62-63",
+        "pdfPage": 71,
+        "itemRef": "图3-1 & 式(3-15)~(3-17)",
+        "crossRef": "孙优贤《自动控制原理》(2011) P.99-103"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch03-f-04",
+      "section": "3.2.4 一阶系统时域分析",
+      "kind": "formula",
+      "title": "一阶惯性系统标准型、三种典型响应与时域指标",
+      "examWeight": "core",
+      "prompt": "已知无纯滞后一阶系统 $\\Phi(s)=\\frac{K}{Ts+1}$，写出单位阶跃、脉冲、斜坡响应及 $T_d, T_r, T_s$：",
+      "formulaLatex": "$$\\begin{aligned} &\\text{单位阶跃：} y(t) = K\\left(1 - \\mathrm{e}^{-t/T}\\right),\\quad t\\ge 0,\\quad \\dot{y}(0^+)=\\frac{K}{T} \\\\ &\\text{单位脉冲：} g(t) = \\frac{K}{T}\\mathrm{e}^{-t/T},\\quad t\\ge 0,\\quad g_{\\max}=g(0)=\\frac{K}{T} \\\\ &\\text{单位斜坡：} y(t) = K\\left(t - T + T\\mathrm{e}^{-t/T}\\right),\\quad t\\ge 0 \\\\ &\\text{动态指标：} T_d = 0.69T,\\quad T_r = 2.20T,\\quad T_s = \\begin{cases} 3T, & \\Delta = 5\\% \\\\ 4T, & \\Delta = 2\\% \\end{cases} \\end{aligned}$$",
+      "symbols": [
+        { "sym": "$T$", "desc": "时间常数（$T=a_1/a_0$），决定一阶系统响应快慢的唯一特征参数" },
+        { "sym": "$K$", "desc": "静态放大倍数（当 $K=1$ 时斜坡响应稳态跟踪误差恰好等于 $T$）" }
+      ],
+      "conditions": "要求无纯滞后且稳定（$T>0$），初始状态为零；一阶阶跃响应单调无振荡，不存在 $T_p, \\sigma\\%, n$。",
+      "pitfalls": "$T_d = T\\ln 2 \\approx 0.693T$，$T_r = T\\ln 9 \\approx 2.197T$（按 $10\\%\\to 90\\%$）；$t=T$ 时阶跃响应达到终值的 $63.2\\%$，切线在 $t=T$ 处交于终值。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.63-64",
+        "pdfPage": 72,
+        "itemRef": "式(3-18)~(3-20)",
+        "crossRef": "孙优贤《自动控制原理》(2011) P.105-106 式(3-67)~(3-71)"
+      },
+      "verification": { "method": "sympy", "testId": "ch03_f_first_order_td_tr", "verified": true }
+    },
+    {
+      "id": "ctrl-ch03-f-05",
+      "section": "3.2.5 二阶系统时域分析",
+      "kind": "formula",
+      "title": "标准二阶系统 5 种阻尼比的特征根与单位阶跃响应",
+      "examWeight": "core",
+      "prompt": "标准二阶闭环传函 $\\Phi(s)=\\frac{\\omega_n^2}{s^2+2\\zeta\\omega_n s+\\omega_n^2}$，写出 5 种 $\\zeta$ 取值下的特征根与阶跃响应：",
+      "formulaLatex": "$$\\begin{aligned} &0<\\zeta<1\\;(\\text{欠阻尼}):\\; s_{1,2}=-\\zeta\\omega_n\\pm\\mathrm{j}\\omega_n\\sqrt{1-\\zeta^2},\\; y(t)=1-\\frac{1}{\\sqrt{1-\\zeta^2}}\\mathrm{e}^{-\\zeta\\omega_n t}\\sin(\\omega_d t+\\beta) \\\\ &\\zeta=1\\;(\\text{临界阻尼}):\\; s_{1,2}=-\\omega_n,\\; y(t)=1-\\mathrm{e}^{-\\omega_n t}(1+\\omega_n t) \\\\ &\\zeta>1\\;(\\text{过阻尼}):\\; s_{1,2}=-\\zeta\\omega_n\\pm\\omega_n\\sqrt{\\zeta^2-1},\\; y(t)=1+\\frac{\\mathrm{e}^{-t/T_1}}{T_2/T_1-1}+\\frac{\\mathrm{e}^{-t/T_2}}{T_1/T_2-1} \\\\ &\\zeta=0\\;(\\text{无阻尼}):\\; s_{1,2}=\\pm\\mathrm{j}\\omega_n,\\; y(t)=1-\\cos\\omega_n t \\\\ &\\zeta<0\\;(\\text{不稳定}):\\; \\text{存在右半平面极点，响应发散} \\end{aligned}$$",
+      "symbols": [
+        { "sym": "$\\omega_d$", "desc": "阻尼振荡频率 $\\omega_d = \\omega_n\\sqrt{1-\\zeta^2}$" },
+        { "sym": "$\\beta$", "desc": "阻尼角 $\\beta = \\arccos\\zeta = \\arctan\\frac{\\sqrt{1-\\zeta^2}}{\\zeta}$" },
+        { "sym": "$T_{1,2}$", "desc": "过阻尼等效时间常数 $T_{1,2} = \\frac{1}{\\omega_n(\\zeta \\pm \\sqrt{\\zeta^2-1})}$" }
+      ],
+      "conditions": "仅针对无零点、静态增益为 $1$ 的标准二阶闭环传递函数 $\\Phi(s)=\\frac{\\omega_n^2}{s^2+2\\zeta\\omega_n s+\\omega_n^2}$；若分子为 $K\\omega_n^2$，所有响应乘以 $K$。",
+      "pitfalls": "过阻尼（$\\zeta>1$）和临界阻尼（$\\zeta=1$）**绝不能**套用欠阻尼公式 $T_s\\approx\\frac{3}{\\zeta\\omega_n}$，必须由时域表达式按定义求解！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.108",
+        "pdfPage": 117,
+        "itemRef": "式(3-82)~(3-92)",
+        "crossRef": "孙优贤《学习辅导》(2017) P.64 表3-1 & 式(3-21)~(3-22')"
+      },
+      "verification": { "method": "sympy", "testId": "ch03_f_second_order_tp_overshoot", "verified": true }
+    },
+    {
+      "id": "ctrl-ch03-f-06",
+      "section": "3.2.5 欠阻尼二阶系统动态性能指标",
+      "kind": "formula",
+      "title": "欠阻尼二阶系统全套时域性能指标公式（必考核心）",
+      "examWeight": "core",
+      "prompt": "写出欠阻尼（$0<\\zeta<1$）标准二阶系统的 $T_r, T_p, \\sigma\\%, T_s, n$ 计算公式：",
+      "formulaLatex": "$$\\begin{aligned} &T_r = \\frac{\\pi - \\beta}{\\omega_n\\sqrt{1-\\zeta^2}} = \\frac{\\pi - \\arccos\\zeta}{\\omega_d},\\qquad T_p = \\frac{\\pi}{\\omega_n\\sqrt{1-\\zeta^2}} = \\frac{\\pi}{\\omega_d} \\\\ &\\sigma\\% = \\mathrm{e}^{-\\frac{\\pi\\zeta}{\\sqrt{1-\\zeta^2}}}\\times 100\\%,\\qquad n = \\frac{B}{B'} = \\mathrm{e}^{\\frac{2\\pi\\zeta}{\\sqrt{1-\\zeta^2}}} = \\frac{1}{\\sigma^2} \\\\ &T_s \\approx \\begin{cases} \\dfrac{3}{\\zeta\\omega_n} & (\\Delta = 5\\%) \\\\[6pt] \\dfrac{4}{\\zeta\\omega_n} & (\\Delta = 2\\%) \\end{cases} \\quad\\text{（包络线精确式：} T_s = \\frac{-\\ln(\\Delta\\sqrt{1-\\zeta^2})}{\\zeta\\omega_n}\\text{）} \\end{aligned}$$",
+      "symbols": [
+        { "sym": "$\\zeta$", "desc": "阻尼比，$\\sigma\\%$ 与衰减比 $n$ 均与 $\\zeta$ 一一对应（如 $\\zeta=0.5\\Rightarrow\\sigma\\%=16.3\\%$，$\\zeta=0.707\\Rightarrow\\sigma\\%=4.3\\%$）" },
+        { "sym": "$\\zeta\\omega_n$", "desc": "极点实部绝对值 $|\\sigma|$，直接决定调节时间 $T_s$" }
+      ],
+      "conditions": "严格要求 $0<\\zeta<1$ 且系统为无零点标准二阶系统。若使用近似式 $T_s\\approx 3/(\\zeta\\omega_n)$ 或 $4/(\\zeta\\omega_n)$，工程上通常适用于 $0<\\zeta<0.8$。",
+      "pitfalls": "必背常用数值对：$\\zeta=0.5\\leftrightarrow\\sigma\\%=16.3\\%$；$\\zeta=0.707\\leftrightarrow\\sigma\\%=4.3\\%$；$\\zeta=0.591\\leftrightarrow\\sigma\\%=10\\%$；$\\zeta=0.404\\leftrightarrow\\sigma\\%=25\\%$。若闭环含附加零点，必须按原式重新求导找 $T_p$ 和 $\\sigma\\%$（见例 3-11）。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.65",
+        "pdfPage": 74,
+        "itemRef": "式(3-23)~(3-28)",
+        "crossRef": "孙优贤《自动控制原理》(2011) P.109-112"
+      },
+      "verification": { "method": "sympy", "testId": "ch03_f_decay_ratio", "verified": true }
+    },
+    {
+      "id": "ctrl-ch03-f-07",
+      "section": "3.2.5 二阶系统稳态误差",
+      "kind": "formula",
+      "title": "定值系统与随动系统的阶跃稳态误差公式",
+      "examWeight": "core",
+      "prompt": "在系统稳定前提下，分别写出定值系统（扰动）与随动系统（单位阶跃给定）的稳态误差公式：",
+      "formulaLatex": "$$\\begin{aligned} &\\text{定值系统（余差）：} e_{ss} = \\lim_{t\\to\\infty} e(t) = -y(\\infty) = -\\lim_{s\\to 0} \\Phi_d(s) \\\\ &\\text{随动系统（单位阶跃）：} e_{ss} = \\lim_{t\\to\\infty} e(t) = 1 - y(\\infty) = 1 - \\lim_{s\\to 0} \\Phi(s) \\end{aligned}$$",
+      "symbols": [
+        { "sym": "$\\Phi(s)$", "desc": "系统闭环传递函数" }
+      ],
+      "conditions": "必须先判定闭环系统稳定（所有极点严格位于左半 $s$ 平面），拉氏终值定理才成立！",
+      "pitfalls": "未判稳直接套终值定理是考研 845 经典失分陷阱；对于标准二阶随动系统 $\\Phi(0)=1$，故单位阶跃稳态误差恒为 $0$。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.65",
+        "pdfPage": 74,
+        "itemRef": "式(3-29)~(3-30)"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch03-f-08",
+      "section": "3.2.6 高阶系统时域分析",
+      "kind": "formula",
+      "title": "高阶系统闭环响应通式与主导极点降阶原则",
+      "examWeight": "core",
+      "prompt": "写出单回路高阶系统单位阶跃响应的模态叠加通式及降阶时静态增益不变原则：",
+      "formulaLatex": "$$\\begin{aligned} &\\Phi(s)=\\frac{N(s)}{D(s)}=\\frac{b_m s^m+\\cdots+b_0}{s^n+a_{n-1}s^{n-1}+\\cdots+a_0}\\;(m\\le n) \\\\ &y(t)=A_0+\\sum_{i=1}^{q}A_i\\mathrm{e}^{-p_i t}+\\sum_{k=1}^{r}B_k\\mathrm{e}^{-\\zeta_k\\omega_{nk}t}\\sin(\\omega_{dk}t+\\beta_k),\\quad t\\ge 0 \\\\ &\\text{其中 } \\omega_{dk}=\\omega_{nk}\\sqrt{1-\\zeta_k^2},\\quad \\beta_k=\\arccos\\zeta_k \\end{aligned}$$",
+      "symbols": [
+        { "sym": "$A_i, B_k$", "desc": "与 $Y(s)$ 在对应闭环极点处的留数有关（受闭环零点影响极大）" }
+      ],
+      "conditions": "高阶系统按闭环主导极点降阶为一阶/二阶时，必须保持降阶前后**稳态增益 $\\Phi(0)$ 不变**（即对消掉的非主导极点写成 $(T_i s+1)$ 形式后令 $T_i\\to 0$）。",
+      "pitfalls": "【勘误提示】孙优贤《学习辅导》P.65 式(3-32) 下方印刷处误印为 $\\omega_{dk}=\\omega_{dk}\\sqrt{1-\\zeta_k^2}$，正确应为 $\\omega_{dk}=\\omega_{nk}\\sqrt{1-\\zeta_k^2}$。此外，降阶时若直接抹掉 $(s+5)$ 而忘记分子除以 $5$，会导致稳态值放大 $5$ 倍！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.65-66",
+        "pdfPage": 74,
+        "itemRef": "式(3-31)~(3-32)",
+        "crossRef": "孙优贤《自动控制原理》(2011) P.113-114"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch03-f-09",
+      "section": "3.2.7 常规控制器及其影响",
+      "kind": "formula",
+      "title": "P / PI / PD / PID 控制器控制规律与传递函数总表",
+      "examWeight": "core",
+      "prompt": "写出工业过程控制中 P、PI、PD、PID 四种常规控制器的时域方程与传递函数（孙优贤教材参数符号）：",
+      "formulaLatex": "$$\\begin{aligned} &\\text{P: }\\; G_c(s) = K_c \\\\ &\\text{PI: }\\; G_c(s) = K_c\\left(1 + \\frac{1}{T_i s}\\right) \\\\ &\\text{PD: }\\; G_c(s) = K_c\\left(1 + T_d s\\right) \\\\ &\\text{PID: }\\; p(t)=K_c\\left[e(t)+\\frac{1}{T_i}\\int_0^t e(\\tau)\\mathrm{d}\\tau+T_d\\frac{\\mathrm{d}e(t)}{\\mathrm{d}t}\\right] \\implies G_c(s)=K_c\\left(1+\\frac{1}{T_i s}+T_d s\\right) \\end{aligned}$$",
+      "symbols": [
+        { "sym": "$K_c$", "desc": "比例放大倍数（同时影响比例、积分、微分三部分！）" },
+        { "sym": "$T_i$", "desc": "积分时间常数（$T_i$ 越小积分作用越强）" },
+        { "sym": "$T_d$", "desc": "微分时间常数（$T_d$ 越大微分超前作用越强）" }
+      ],
+      "conditions": "式(3-33)~(3-36') 为理想连续 PID 表达；实际物理微分环节往往带高频滤波惯性。",
+      "pitfalls": "注意浙大孙优贤教材用 $K_c(1+\\frac{1}{T_i s}+T_d s)$ 形式：**调 $K_c$ 会同时改变比例与积分作用**，而调 $T_i$ 只影响积分作用；纯微分环节只在输入变化瞬间有效，**不能单独使用**！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.66",
+        "pdfPage": 75,
+        "itemRef": "式(3-33)~(3-36')",
+        "crossRef": "孙优贤《自动控制原理》(2011) P.115-119"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch03-f-10",
+      "section": "3.2.8 状态方程求解与状态转移矩阵",
+      "kind": "formula",
+      "title": "齐次状态方程解、状态转移矩阵与拉氏变换求法",
+      "examWeight": "core",
+      "prompt": "写出线性定常齐次状态方程 $\\dot{\\boldsymbol{x}}(t)=\\boldsymbol{A}\\boldsymbol{x}(t)$ 的解、状态转移矩阵 $\\boldsymbol{\\Phi}(t,\\tau)$ 定义及拉氏变换求法：",
+      "formulaLatex": "$$\\begin{aligned} &\\boldsymbol{x}(t) = \\mathrm{e}^{\\boldsymbol{A}(t-t_0)}\\boldsymbol{x}(t_0) = \\boldsymbol{\\Phi}(t,t_0)\\boldsymbol{x}(t_0),\\qquad \\boldsymbol{\\Phi}(t,\\tau)=\\mathrm{e}^{\\boldsymbol{A}(t-\\tau)} \\\\ &\\mathrm{e}^{\\boldsymbol{A}t} = \\boldsymbol{I} + \\boldsymbol{A}t + \\frac{1}{2!}(\\boldsymbol{A}t)^2 + \\cdots + \\frac{1}{k!}(\\boldsymbol{A}t)^k + \\cdots \\\\ &\\boldsymbol{\\Phi}(t) = \\mathrm{e}^{\\boldsymbol{A}t} = \\mathcal{L}^{-1}\\left[(s\\boldsymbol{I}-\\boldsymbol{A})^{-1}\\right] \\end{aligned}$$",
+      "symbols": [
+        { "sym": "$\\boldsymbol{\\Phi}(t,\\tau)$", "desc": "状态转移矩阵，将 $\\tau$ 时刻状态 $\\boldsymbol{x}(\\tau)$ 映射到 $t$ 时刻 $\\boldsymbol{x}(t)$" },
+        { "sym": "$\\boldsymbol{\\Phi}(s)$", "desc": "预解矩阵 $(s\\boldsymbol{I}-\\boldsymbol{A})^{-1}$" }
+      ],
+      "conditions": "仅适用于线性定常（LTI）系统；对线性时变系统，一般不能用 $\\mathrm{e}^{\\int \\boldsymbol{A}(\\tau)\\mathrm{d}\\tau}$ 直接表示。",
+      "pitfalls": "若题干已知 $\\boldsymbol{\\Phi}(t)$ 反求系统矩阵 $\\boldsymbol{A}$，直接用性质 $\\boldsymbol{A} = \\left.\\dot{\\boldsymbol{\\Phi}}(t)\\right|_{t=0}$（主教材 P.127），极快且不出错！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.121-122",
+        "pdfPage": 130,
+        "itemRef": "式(3-124)~(3-134)",
+        "crossRef": "孙优贤《学习辅导》(2017) P.67 式(3-37)~(3-40)"
+      },
+      "verification": { "method": "sympy", "testId": "ch03_ex_main311_expAt", "verified": true }
+    },
+    {
+      "id": "ctrl-ch03-f-11",
+      "section": "3.2.8 状态转移矩阵计算（对角化与约当块）",
+      "kind": "formula",
+      "title": "对角矩阵与约当块矩阵指数函数 $\\mathrm{e}^{\\boldsymbol{A}t}$ 闭式公式",
+      "examWeight": "core",
+      "prompt": "写出经非奇异变换 $\\boldsymbol{\\Lambda}=\\boldsymbol{T}^{-1}\\boldsymbol{A}\\boldsymbol{T}$ 化为对角型或 $m\\times m$ 约当块 $\\boldsymbol{A}_i$ 时的矩阵指数函数：",
+      "formulaLatex": "$$\\begin{aligned} &\\mathrm{e}^{\\boldsymbol{A}t} = \\boldsymbol{T}\\mathrm{e}^{\\boldsymbol{\\Lambda}t}\\boldsymbol{T}^{-1} \\\\ &\\text{对角阵：}\\; \\mathrm{e}^{\\operatorname{diag}[\\lambda_1,\\dots,\\lambda_n]t} = \\operatorname{diag}\\left[\\mathrm{e}^{\\lambda_1 t},\\dots,\\mathrm{e}^{\\lambda_n t}\\right] \\\\ &m\\times m \\text{ 约当块：}\\; \\mathrm{e}^{\\boldsymbol{A}_i t} = \\mathrm{e}^{\\lambda_i t}\\begin{bmatrix} 1 & t & \\frac{t^2}{2!} & \\cdots & \\frac{t^{m-1}}{(m-1)!} \\\\ 0 & 1 & t & \\cdots & \\frac{t^{m-2}}{(m-2)!} \\\\ \\vdots & \\vdots & \\ddots & \\ddots & \\vdots \\\\ 0 & 0 & \\cdots & 0 & 1 \\end{bmatrix}_{m\\times m} \\end{aligned}$$",
+      "symbols": [
+        { "sym": "$\\boldsymbol{T}$", "desc": "由特征向量（重根时含广义特征向量）按列拼成的非奇异变换阵" }
+      ],
+      "conditions": "约当块超对角线元素为 $+1$（上三角标准约当块）；分块对角阵的指数等于各约当块指数的分块对角阵。",
+      "pitfalls": "务必注意相似变换顺序 $\\mathrm{e}^{\\boldsymbol{A}t}=\\boldsymbol{T}\\mathrm{e}^{\\boldsymbol{\\Lambda}t}\\boldsymbol{T}^{-1}$，切勿把 $\\boldsymbol{T}$ 与 $\\boldsymbol{T}^{-1}$ 写反！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.123-124",
+        "pdfPage": 132,
+        "itemRef": "式(3-143)~(3-149)",
+        "crossRef": "刘豹《现代控制理论》(第3版) 第2章 2.2"
+      },
+      "verification": { "method": "sympy", "testId": "ch03_ex_main312_jordan_expAt", "verified": true }
+    },
+    {
+      "id": "ctrl-ch03-f-12",
+      "section": "3.2.8 非齐次状态方程与输出响应",
+      "kind": "formula",
+      "title": "线性定常非齐次状态方程解（时域卷积与拉氏变换）",
+      "examWeight": "core",
+      "prompt": "已知 $\\dot{\\boldsymbol{x}}=\\boldsymbol{A}\\boldsymbol{x}+\\boldsymbol{B}\\boldsymbol{u},\\;\\boldsymbol{y}=\\boldsymbol{C}\\boldsymbol{x}+\\boldsymbol{D}\\boldsymbol{u}$，写出状态响应 $\\boldsymbol{x}(t)$、拉氏解 $\\boldsymbol{X}(s)$ 及输出 $\\boldsymbol{y}(t)$：",
+      "formulaLatex": "$$\\begin{aligned} &\\boldsymbol{x}(t) = \\boldsymbol{\\Phi}(t,t_0)\\boldsymbol{x}(t_0) + \\int_{t_0}^{t}\\boldsymbol{\\Phi}(t,\\tau)\\boldsymbol{B}\\boldsymbol{u}(\\tau)\\mathrm{d}\\tau \\\\ &\\boldsymbol{X}(s) = (s\\boldsymbol{I}-\\boldsymbol{A})^{-1}\\boldsymbol{x}(0) + (s\\boldsymbol{I}-\\boldsymbol{A})^{-1}\\boldsymbol{B}\\boldsymbol{U}(s) \\\\ &\\boldsymbol{y}(t) = \\boldsymbol{C}\\boldsymbol{\\Phi}(t,0)\\boldsymbol{x}(0) + \\boldsymbol{C}\\int_{0}^{t}\\boldsymbol{\\Phi}(t,\\tau)\\boldsymbol{B}\\boldsymbol{u}(\\tau)\\mathrm{d}\\tau + \\boldsymbol{D}\\boldsymbol{u}(t) \\end{aligned}$$",
+      "symbols": [
+        { "sym": "第一项", "desc": "零输入响应（自由运动），仅由初始状态 $\\boldsymbol{x}(t_0)$ 引起" },
+        { "sym": "第二项", "desc": "零状态响应（强迫运动），仅由外部输入 $\\boldsymbol{u}(t)$ 引起" }
+      ],
+      "conditions": "拉氏变换公式默认 $t_0=0$；对含分段或复杂三角输入，直接用拉氏变换往往比时域矩阵卷积计算量更小、更不易出错。",
+      "pitfalls": "主教材 P.128 式(3-158) 第一项印刷体误写为 $\\boldsymbol{C}\\boldsymbol{\\Phi}(t,0)\\boldsymbol{x}(t)$，正确应为 $\\boldsymbol{C}\\boldsymbol{\\Phi}(t,0)\\boldsymbol{x}(0)$（下文例 3-18 实际计算用的是正确的 $\\boldsymbol{x}(0)$）！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.127-128",
+        "pdfPage": 136,
+        "itemRef": "式(3-151)~(3-158)",
+        "crossRef": "孙优贤《学习辅导》(2017) P.67 式(3-41)~(3-41')"
+      },
+      "verification": { "method": "sympy", "testId": "ch03_ex_main317_nonhomog", "verified": true }
+    },
+    {
+      "id": "ctrl-ch03-f-13",
+      "section": "3.2.9 被控对象的实验建模",
+      "kind": "formula",
+      "title": "一阶加纯滞后对象切线法近似模型与方波转阶跃",
+      "examWeight": "extended",
+      "prompt": "写出多数工业被控对象的一阶加纯滞后（FOPDT）近似传递函数及静态增益 $K$ 求法：",
+      "formulaLatex": "$$G(s) = \\frac{K\\mathrm{e}^{-\\tau s}}{Ts + 1},\\qquad K = \\frac{y(\\infty) - y_0}{x_0}$$",
+      "symbols": [
+        { "sym": "$\\tau$", "desc": "纯滞后时间（在阶跃响应曲线拐点 $p$ 作切线，交时间轴于 $A$，$OA$ 段为 $\\tau$）" },
+        { "sym": "$T$", "desc": "时间常数（切线交终值线 $y(\\infty)$ 于 $B$，$AB$ 在时间轴投影为 $T$）" }
+      ],
+      "conditions": "适用于单调自衡工业过程对象；方波输入响应 $y(t)$ 与阶跃响应 $y_1(t)$ 满足线性叠加 $y(t)=y_1(t)-y_1(t-\\Delta t)\\;(t>\\Delta t)$。",
+      "pitfalls": "大纲对实验建模列为「了解」，重点记住拐点切线法如何从图中读取 $K, T, \\tau$ 即可。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.68",
+        "pdfPage": 77,
+        "itemRef": "式(3-42)~(3-44) & 图3-4",
+        "crossRef": "孙优贤《自动控制原理》(2011) P.130-133"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch03-c-01",
+      "section": "3.2.4 线性定常系统响应微积分性质",
+      "kind": "conclusion",
+      "title": "脉冲、阶跃、斜坡响应之间的微积分定理",
+      "examWeight": "core",
+      "summary": "对任意**线性定常连续系统**（不限于一阶）：系统对输入信号导数的响应等于对该输入信号响应的导数；系统对输入信号积分的响应等于对该输入信号响应的积分（积分常数由初始条件决定）。即：$g(t)=\\dot{h}(t)$，$h(t)=\\int_0^t g(\\tau)\\mathrm{d}\\tau$，斜坡响应为阶跃响应的积分。",
+      "conditions": "仅适用于**线性定常（LTI）系统**且在零初始条件下直接对应；非线性或时变系统不成立。",
+      "pitfalls": "因此研究 LTI 系统时间响应时，往往只需研究单位阶跃响应 $h(t)$（或脉冲响应 $g(t)$）即可推出其他典型输入响应。",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.106",
+        "pdfPage": 115,
+        "itemRef": "3.4.1 节末核心结论"
+      },
+      "verification": { "method": "sympy", "testId": "ch03_f_first_order_impulse", "verified": true }
+    },
+    {
+      "id": "ctrl-ch03-c-02",
+      "section": "3.2.5 二阶系统参数影响规律",
+      "kind": "conclusion",
+      "title": "二阶系统阻尼比 $\\zeta$ 与自然频率 $\\omega_n$ 对动态指标的单调影响",
+      "examWeight": "core",
+      "summary": "1. **超调量 $\\sigma\\%$ 与衰减比 $n$ 只与阻尼比 $\\zeta$ 有关**，与 $\\omega_n$ 无关：$\\zeta$ 增大，$\\sigma\\%$ 严格减小、振荡减弱（工程最佳阻尼比常取 $\\zeta=0.707$，对应 $\\sigma\\%=4.3\\%$）。\n2. **调节时间 $T_s$ 与极点实部绝对值 $\\zeta\\omega_n$ 成反比**：极点距虚轴越远，暂态分量衰减越快，$T_s$ 越小。\n3. **峰值时间 $T_p=\\frac{\\pi}{\\omega_d}$ 与虚部 $\\omega_d$ 成反比**：$\\zeta$ 固定时提高 $\\omega_n$ 可在不增大超调的前提下加快响应速度。",
+      "conditions": "仅对无零点标准欠阻尼（$0<\\zeta<1$）二阶系统严格成立。",
+      "pitfalls": "当 $\\zeta\\ge 1$（临界阻尼或过阻尼）时，将其中一个负实极点向左移（远离虚轴），系统响应变快、调节时间 $T_s$ 减小（见例 3-4）。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.65 & P.72",
+        "pdfPage": 74,
+        "itemRef": "3.2.5 节结论 & 例3-4"
+      },
+      "verification": { "method": "sympy", "testId": "ch03_ex_guide34", "verified": true }
+    },
+    {
+      "id": "ctrl-ch03-c-03",
+      "section": "3.2.6 高阶系统闭环主导极点",
+      "kind": "conclusion",
+      "title": "闭环主导极点判定条件与非主导极点影响结论",
+      "examWeight": "core",
+      "summary": "在稳定的高阶系统中，闭环主导极点需同时满足两条：\n① **距离 $s$ 平面虚轴最近**，且其附近没有其他闭环零点或极点（否则形成偶极子削弱其留数）；\n② **实部绝对值比其他非主导极点的实部绝对值小 5 倍以上**。\n**降阶误差规律**：忽略非主导闭环负实极点后，估算得到的**超调量偏大**（实际非主导极点有阻尼平滑作用），而估算的**调节时间偏小**（实际响应略慢于降阶二阶系统）。",
+      "conditions": "系统必须闭环稳定，且主导极点附近不能存在相近闭环零点。",
+      "pitfalls": "考研简答/分析高频考点：附加非主导**极点** → 减小超调、延长上升/调节时间；附加闭环**零点** → 增大超调、缩短峰值/上升时间！两者影响恰好相反。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.66 & P.77",
+        "pdfPage": 75,
+        "itemRef": "3.2.6 主导极点特征 & 例3-12(3)"
+      },
+      "verification": { "method": "sympy", "testId": "ch03_ex_guide312", "verified": true }
+    },
+    {
+      "id": "ctrl-ch03-c-04",
+      "section": "3.2.7 常规控制器定性规律",
+      "kind": "conclusion",
+      "title": "P / PI / PD / PID 四种控制作用对性能的影响规律",
+      "examWeight": "core",
+      "summary": "1. **纯比例（P）**：增大 $K_c$ 可减小余差、加快响应，但对 0 型对象**总存在稳态余差**，且 $K_c$ 过大易使系统振荡甚至失稳。\n2. **比例+积分（PI）**：积分环节提高系统型别 1 阶，可**彻底消除阶跃稳态余差**；但积分滞后使稳定性与快速性变差。\n3. **比例+微分（PD）**：增加高频分量、使响应曲线前沿变陡，**提高响应快速性与相对稳定性（增大阻尼比）**；但对常值稳态误差无改善，且不能单独使用。\n4. **比例+积分+微分（PID）**：集三者之长，兼顾无余差、响应快与稳定性好。",
+      "conditions": "针对常规最小相位被控对象在闭环稳定范围内讨论。",
+      "pitfalls": "测速发电机负反馈（内环速度反馈 $K_h s$）本质上等效增加系统阻尼比 $\\zeta$、改善相对稳定性且不引入附加闭环零点，但会降低开环增益、增大斜坡稳态误差。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.66",
+        "pdfPage": 75,
+        "itemRef": "3.2.7 (1)-(4) 结论"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch03-c-05",
+      "section": "3.2.8 状态转移矩阵性质",
+      "kind": "conclusion",
+      "title": "状态转移矩阵 $\\boldsymbol{\\Phi}(t,\\tau)$ 的 5 大核心性质",
+      "examWeight": "core",
+      "summary": "线性定常系统状态转移矩阵 $\\boldsymbol{\\Phi}(t,\\tau)=\\mathrm{e}^{\\boldsymbol{A}(t-\\tau)}$ 满足：\n① 微分方程与初值：$\\dot{\\boldsymbol{\\Phi}}(t,\\tau)=\\boldsymbol{A}\\boldsymbol{\\Phi}(t,\\tau)$，$\\boldsymbol{\\Phi}(t_0,t_0)=\\boldsymbol{I}$；\n② 传递性（半群性）：$\\boldsymbol{\\Phi}(t_2,t_1)\\boldsymbol{\\Phi}(t_1,t_0)=\\boldsymbol{\\Phi}(t_2,t_0)$；\n③ 逆转性（恒非奇异）：$\\boldsymbol{\\Phi}^{-1}(t,t_0)=\\boldsymbol{\\Phi}(t_0,t)$，特别地 $\\boldsymbol{\\Phi}^{-1}(t)=\\boldsymbol{\\Phi}(-t)$；\n④ 结合律/交换性：$\\boldsymbol{\\Phi}(t_1+t_2)=\\boldsymbol{\\Phi}(t_1)\\boldsymbol{\\Phi}(t_2)=\\boldsymbol{\\Phi}(t_2)\\boldsymbol{\\Phi}(t_1)$；\n⑤ 幂次性质：$[\\boldsymbol{\\Phi}(t)]^n=\\boldsymbol{\\Phi}(nt)$。",
+      "conditions": "性质 ④ 与 ⑤ 及 $\\boldsymbol{\\Phi}^{-1}(t)=\\boldsymbol{\\Phi}(-t)$ 仅对**线性定常系统**成立；性质 ①②③ 对一般线性时变系统同样成立。",
+      "pitfalls": "检验一道状态转移矩阵题做没做对的 3 秒速查法：令 $t=0$ 必须等于单位阵 $\\boldsymbol{I}$，且求导后令 $t=0$ 必须等于矩阵 $\\boldsymbol{A}$！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.122",
+        "pdfPage": 131,
+        "itemRef": "式(3-135)~(3-141)",
+        "crossRef": "孙优贤《学习辅导》(2017) P.67 3.2.8"
+      },
+      "verification": { "method": "textbook-checked", "verified": true }
+    },
+    {
+      "id": "ctrl-ch03-c-06",
+      "section": "3.2.10 时域分析方法总结",
+      "kind": "conclusion",
+      "title": "含附加闭环零点二阶系统的动态指标变化规律（PD 控制）",
+      "examWeight": "core",
+      "summary": "当标准二阶系统引入一个负实闭环零点 $s=-z$（即 $\\Phi(s)=\\frac{\\omega_n^2}{z}\\frac{s+z}{s^2+2\\zeta_d\\omega_n s+\\omega_n^2}$）时，由于微分作用叠加在原阶跃响应上：\n- **超调量 $\\sigma\\%$ 显著增大**（$z$ 越靠近虚轴即 $z/(\\zeta\\omega_n)$ 越小，超调增幅越剧烈）；\n- **峰值时间 $T_p$ 与上升时间 $T_r$ 缩短**（响应加快）；\n- 不能直接套用无零点标准二阶公式，必须使用含零点公式或重新求导。",
+      "conditions": "闭环零点位于左半平面 $-z<0$（最小相位）；若零点位于右半平面（非最小相位），阶跃响应会出现初始反向（逆响应）。",
+      "pitfalls": "典型例题见辅导书例 3-11：同样是 $\\zeta_d=0.707$，无零点时 $\\sigma\\%=4.3\\%$，引入零点 $z=1/3$ 后超调量飙升至 $20.7\\%$！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.76-77",
+        "pdfPage": 85,
+        "itemRef": "例3-11 结论"
+      },
+      "verification": { "method": "sympy", "testId": "ch03_ex_guide311", "verified": true }
+    },
+    {
+      "id": "ctrl-ch03-e-01",
+      "section": "3.3 典型例题精选",
+      "kind": "example",
+      "title": "例 3-1：一阶系统脉冲、阶跃与斜坡响应综合求解",
+      "examWeight": "core",
+      "problem": "已知控制系统的微分方程为 $T\\dot{y}(t)+y(t)=Kr(t)$，设初始条件为零。试求：\n① 系统的单位脉冲响应 $g(t)$ 及使 $g(t_1)=1$ 的时刻 $t_1$；\n② 时刻 $t_1$ 对应的单位阶跃响应 $y_1(t_1)$ 和单位斜坡响应 $y_2(t_1)$。",
+      "steps": [
+        { "stepTitle": "1. 求传函与单位脉冲响应", "detail": "零初始条件下取拉氏变换得 $G(s)=\\frac{Y(s)}{R(s)}=\\frac{K}{Ts+1}$，故单位脉冲响应为 $g(t)=\\mathcal{L}^{-1}\\left[\\frac{K}{Ts+1}\\right]=\\frac{K}{T}\\mathrm{e}^{-t/T}$。" },
+        { "stepTitle": "2. 求解时刻 $t_1$", "detail": "令 $g(t_1)=\\frac{K}{T}\\mathrm{e}^{-t_1/T}=1$，得 $\\mathrm{e}^{t_1/T}=\\frac{K}{T}$，即 $t_1=T\\ln\\frac{K}{T}$（隐含条件 $K\\ge T$）。" },
+        { "stepTitle": "3. 求 $t_1$ 处的阶跃与斜坡响应", "detail": "单位阶跃响应 $y_1(t)=K(1-\\mathrm{e}^{-t/T})$，斜坡响应 $y_2(t)=K(t-T+T\\mathrm{e}^{-t/T})$。将 $\\mathrm{e}^{-t_1/T}=\\frac{T}{K}$ 及 $t_1=T\\ln\\frac{K}{T}$ 代入得：$y_1(t_1)=K-T$，$y_2(t_1)=KT\\ln\\frac{K}{T}-KT+T^2$。" }
+      ],
+      "finalAnswer": "$g(t)=\\frac{K}{T}\\mathrm{e}^{-t/T}$，$t_1=T\\ln\\frac{K}{T}$；$y_1(t_1)=K-T$，$y_2(t_1)=KT\\ln\\frac{K}{T}-KT+T^2$。",
+      "takeaway": "利用 $\\mathrm{e}^{-t_1/T}=T/K$ 整体代换可迅速化简，避免繁琐指数运算。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.69-70",
+        "pdfPage": 78,
+        "itemRef": "例3-1"
+      },
+      "verification": { "method": "sympy", "testId": "ch03_ex_guide31", "verified": true }
+    },
+    {
+      "id": "ctrl-ch03-e-02",
+      "section": "3.3 典型例题精选",
+      "kind": "example",
+      "title": "例 3-2：由误差响应反求过阻尼二阶参数与调节时间 $T_s$",
+      "examWeight": "core",
+      "problem": "单位负反馈位置随动系统开环传递函数为 $G(s)=\\frac{K}{s(T_m s+1)}$。已知系统在单位阶跃输入下的误差响应为 $e(t)=1.4\\mathrm{e}^{-1.07t}-0.4\\mathrm{e}^{-3.73t}\\;(t\\ge 0)$。试求：① 系统参数 $K, T_m$ 与特征参数 $\\zeta, \\omega_n$；② 系统的调节时间 $T_s$（取 $\\Delta=5\\%$）。",
+      "figureSvg": "<svg role='img' viewBox='0 0 380 110' xmlns='http://www.w3.org/2000/svg'><title>例3-2 位置随动系统方块图（仿图3-5）</title><defs><marker id='a32' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='15' y1='40' x2='68' y2='40' stroke='#334155' stroke-width='1.5' marker-end='url(#a32)'/><circle cx='78' cy='40' r='9' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='87' y1='40' x2='148' y2='40' stroke='#334155' stroke-width='1.5' marker-end='url(#a32)'/><rect x='150' y='18' width='115' height='44' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='207' y='36' text-anchor='middle' font-size='12' fill='#141824'>K</text><line x1='168' y1='41' x2='246' y2='41' stroke='#141824' stroke-width='1'/><text x='207' y='55' text-anchor='middle' font-size='12' fill='#141824'>s(Tm·s + 1)</text><line x1='265' y1='40' x2='355' y2='40' stroke='#334155' stroke-width='1.5' marker-end='url(#a32)'/><polyline points='315,40 315,90 78,90 78,51' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a32)'/><text x='22' y='32' font-size='12' fill='#141824'>Θi(s)</text><text x='104' y='32' font-size='12' fill='#141824'>E(s)</text><text x='324' y='32' font-size='12' fill='#141824'>Θo(s)</text><text x='63' y='62' font-size='14' fill='#b4233c'>−</text></svg>",
+      "steps": [
+        { "stepTitle": "1. 由误差响应读取闭环极点", "detail": "误差传函与闭环传函同分母，$e(t)$ 中的两个衰减指数项对应闭环极点 $s_1=-1.07,\\;s_2=-3.73$，故闭环特征方程为 $(s+1.07)(s+3.73)=s^2+4.8s+3.9911=0$。" },
+        { "stepTitle": "2. 对比系数求 $T_m, K, \\zeta, \\omega_n$", "detail": "系统特征方程为 $s^2+\\frac{1}{T_m}s+\\frac{K}{T_m}=0$，对比得 $T_m=\\frac{1}{4.8}\\approx 0.208$，$K=3.9911T_m\\approx 0.831$；再对照 $s^2+2\\zeta\\omega_n s+\\omega_n^2=0$ 得 $\\omega_n=\\sqrt{3.9911}\\approx 1.998$，$\\zeta=\\frac{4.8}{2\\omega_n}\\approx 1.201>1$（过阻尼！）。" },
+        { "stepTitle": "3. 过阻尼按定义求调节时间 $T_s$", "detail": "因 $\\zeta>1$ 不能套用 $3/(\\zeta\\omega_n)$！单位阶跃响应 $h(t)=1-e(t)=1-1.4\\mathrm{e}^{-1.07t}+0.4\\mathrm{e}^{-3.73t}$。取 $5\\%$ 误差带令 $e(T_s)=0.05$，由于快速衰减项 $0.4\\mathrm{e}^{-3.73T_s}\\approx 0$ 可忽略，由 $1.4\\mathrm{e}^{-1.07T_s}=0.05$ 解得 $T_s=\\frac{\\ln(0.05/1.4)}{-1.07}\\approx 3.114\\text{ s}$。" }
+      ],
+      "finalAnswer": "$T_m\\approx 0.208,\\;K\\approx 0.831,\\;\\zeta\\approx 1.201,\\;\\omega_n\\approx 1.998$；$T_s\\approx 3.114\\text{ s}$。",
+      "takeaway": "必考坑点：算出来 $\\zeta>1$ 第一反应必须是“过阻尼，禁止套欠阻尼 $T_s$ 公式，必须按定义解超越方程（忽略远极点快衰减项）”！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.70-71",
+        "pdfPage": 79,
+        "itemRef": "例3-2 (图3-5, 式3-48~3-50)"
+      },
+      "verification": { "method": "sympy", "testId": "ch03_ex_guide32", "verified": true }
+    },
+    {
+      "id": "ctrl-ch03-e-03",
+      "section": "3.3 典型例题精选",
+      "kind": "example",
+      "title": "例 3-3：由非单位终值阶跃响应曲线反求二阶开环传函（双解）",
+      "examWeight": "core",
+      "problem": "某单位负反馈二阶系统由典型环节组成，其单位阶跃响应曲线终值为 $h(\\infty)=0.95$，在峰值时间 $T_p=1\\text{ s}$ 处达到第一峰值 $M_p=1.25$。试求该系统的开环传递函数及两种可能的结构形式。",
+      "figureSvg": "<svg role='img' viewBox='0 0 380 175' xmlns='http://www.w3.org/2000/svg'><title>例3-3 单位阶跃响应曲线（终值0.95，峰值1.25，Tp=1s）</title><defs><marker id='a33' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='45' y1='145' x2='355' y2='145' stroke='#334155' stroke-width='1.5' marker-end='url(#a33)'/><line x1='45' y1='150' x2='45' y2='15' stroke='#334155' stroke-width='1.5' marker-end='url(#a33)'/><line x1='45' y1='68' x2='345' y2='68' stroke='#64748b' stroke-dasharray='4,4'/><line x1='45' y1='32' x2='115' y2='32' stroke='#b4233c' stroke-dasharray='3,3'/><line x1='115' y1='32' x2='115' y2='145' stroke='#b4233c' stroke-dasharray='3,3'/><path d='M45 145 C 72 145, 86 32, 115 32 C 145 32, 165 88, 195 82 C 225 76, 248 61, 278 67 C 305 71, 325 68, 345 68' fill='none' stroke='#2744a8' stroke-width='2.3'/><text x='12' y='36' font-size='11' fill='#b4233c' font-weight='700'>1.25</text><text x='12' y='72' font-size='11' fill='#334155' font-weight='700'>0.95</text><text x='111' y='162' font-size='11' fill='#b4233c' font-weight='700'>1</text><text x='340' y='163' font-size='11' fill='#141824'>t/s</text><text x='24' y='20' font-size='11' fill='#141824'>c(t)</text></svg>",
+      "steps": [
+        { "stepTitle": "1. 由终值与超调量求 $K, \\zeta, \\omega_n$", "detail": "因 $h(\\infty)=0.95\\ne 1$，设闭环传函 $\\Phi(s)=K\\frac{\\omega_n^2}{s^2+2\\zeta\\omega_n s+\\omega_n^2}$，得 $K=0.95$。由 $\\sigma\\%=\\frac{1.25-0.95}{0.95}\\approx 31.6\\%=\\mathrm{e}^{-\\frac{\\pi\\zeta}{\\sqrt{1-\\zeta^2}}}$ 解得 $\\zeta\\approx 0.344$；再由 $T_p=\\frac{\\pi}{\\omega_n\\sqrt{1-\\zeta^2}}=1$ 解得 $\\omega_n\\approx 3.344$。" },
+        { "stepTitle": "2. 情形(a)：纯单位负反馈 $G_1(s)$", "detail": "由 $\\Phi(s)=\\frac{G_1(s)}{1+G_1(s)}$ 反推 $G_1(s)=\\frac{\\Phi(s)}{1-\\Phi(s)}=\\frac{10.623}{s^2+2.301s+0.559}\\approx\\frac{19.007}{(3.623s+1)(0.494s+1)}$（0 型，由 1 个比例+2 个惯性环节构成）。" },
+        { "stepTitle": "3. 情形(b)：前置增益 $K$ 串联单位负反馈 $G_2(s)$", "detail": "若 $\\Phi(s)=K\\frac{G_2(s)}{1+G_2(s)}$，则 $K=0.95$，$G_2(s)=\\frac{11.182}{s^2+2.301s}=\\frac{4.860}{s(0.435s+1)}$（1 型，由 1 个比例+1 个积分+1 个惯性环节构成）。" }
+      ],
+      "finalAnswer": "$\\zeta\\approx 0.344,\\;\\omega_n\\approx 3.344$；两种开环传函：$G_1(s)\\approx\\frac{19.007}{(3.623s+1)(0.494s+1)}$ 或 $K=0.95$ 串联 $G_2(s)=\\frac{4.860}{s(0.435s+1)}$。",
+      "takeaway": "看到阶跃终值不是 $1$ 时，千万别直接用 $1.25-1$ 算超调！必须除以终值 $h(\\infty)=0.95$，且注意 $G(s)=\\frac{\\Phi(s)}{1-\\Phi(s)}$ 才是从闭环反求开环的通式。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.71-72",
+        "pdfPage": 80,
+        "itemRef": "例3-3 (图3-6~3-7, 式3-51)"
+      },
+      "verification": { "method": "sympy", "testId": "ch03_ex_guide33", "verified": true }
+    },
+    {
+      "id": "ctrl-ch03-e-04",
+      "section": "3.3 典型例题精选",
+      "kind": "example",
+      "title": "例 3-4：极点左移对二阶系统调节时间 $T_s$ 的定性与定量分析",
+      "examWeight": "core",
+      "problem": "若一个二阶系统的闭环传递函数为 $\\Phi_1(s)=\\frac{1}{(s+1)^2}$ 时，调节时间 $T_s=4.75\\text{ s}$（$5\\%$ 误差带）。若将其中一个极点向左移到 $-2$，使 $\\Phi_2(s)=\\frac{2}{(s+1)(s+2)}$，试问 $T_s$ 是增大还是减小（说明理由），并求此时的 $T_s$。",
+      "steps": [
+        { "stepTitle": "1. 定性分析", "detail": "把其中一个极点由 $-1$ 左移到 $-2$ 后，该极点远离虚轴，其对应暂态模态 $\\mathrm{e}^{-2t}$ 衰减变快，故系统整体响应加快，调节时间 $T_s$ **减小**。" },
+        { "stepTitle": "2. 求单位阶跃响应", "detail": "$c(t)=\\mathcal{L}^{-1}\\left[\\frac{2}{s(s+1)(s+2)}\\right]=\\mathcal{L}^{-1}\\left[\\frac{1}{s}-\\frac{2}{s+1}+\\frac{1}{s+2}\\right]=1-2\\mathrm{e}^{-t}+\\mathrm{e}^{-2t}$。" },
+        { "stepTitle": "3. 按 $5\\%$ 误差带精确求解 $T_s$", "detail": "因系统为过阻尼，单调上升，令 $c(T_s)=1-2\\mathrm{e}^{-T_s}+\\mathrm{e}^{-2T_s}=0.95$，设 $x=\\mathrm{e}^{-T_s}\\in(0,1)$，解 $x^2-2x+0.05=0$ 得 $x=\\frac{2-\\sqrt{3.8}}{2}\\approx 0.02532$，故 $T_s=-\\ln(0.02532)\\approx 3.677\\text{ s} < 4.75\\text{ s}$。" }
+      ],
+      "finalAnswer": "$T_s$ 减小；定量结果为 $T_s\\approx 3.677\\text{ s} < 4.75\\text{ s}$。",
+      "takeaway": "极点左移→衰减加快→$T_s$ 减小；遇到 $e^{-2t}$ 与 $e^{-t}$ 共存时，换元 $x=e^{-T_s}$ 解二次方程可得精确值。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.72",
+        "pdfPage": 81,
+        "itemRef": "例3-4"
+      },
+      "verification": { "method": "sympy", "testId": "ch03_ex_guide34", "verified": true }
+    },
+    {
+      "id": "ctrl-ch03-e-05",
+      "section": "3.3 典型例题精选",
+      "kind": "example",
+      "title": "例 3-5：速度内环调阻尼比 + 前馈控制器 $G_c(s)$ 全补偿扰动",
+      "examWeight": "core",
+      "problem": "系统前向通道为比例环节 $25$ 串联双积分环节 $\\frac{1}{s^2}$，单位主负反馈，另在输出端引出速度负反馈 $\\beta s$ 接回 $25$ 前端；扰动 $N(s)$ 直接作用在输出端 $C(s)$ 处，同时经前馈通道 $-G_c(s)$ 接入 $\\frac{1}{s^2}$ 前端。试选取 $\\beta$ 使系统阻尼比 $\\zeta=0.707$，并设计前馈控制器 $G_c(s)$ 使扰动 $N(s)$ 对输出无影响。",
+      "figureSvg": "<svg role='img' viewBox='0 0 430 170' xmlns='http://www.w3.org/2000/svg'><title>例3-5 速度反馈与扰动前馈复合控制系统方块图（仿图3-8）</title><defs><marker id='a35' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='12' y1='90' x2='48' y2='90' stroke='#334155' stroke-width='1.4' marker-end='url(#a35)'/><circle cx='57' cy='90' r='8' fill='#fff' stroke='#334155' stroke-width='1.4'/><line x1='65' y1='90' x2='96' y2='90' stroke='#334155' stroke-width='1.4' marker-end='url(#a35)'/><circle cx='105' cy='90' r='8' fill='#fff' stroke='#334155' stroke-width='1.4'/><line x1='113' y1='90' x2='142' y2='90' stroke='#334155' stroke-width='1.4' marker-end='url(#a35)'/><rect x='144' y='74' width='48' height='32' rx='5' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.4'/><text x='168' y='94' text-anchor='middle' font-size='12' fill='#141824'>25</text><line x1='192' y1='90' x2='218' y2='90' stroke='#334155' stroke-width='1.4' marker-end='url(#a35)'/><circle cx='227' cy='90' r='8' fill='#fff' stroke='#334155' stroke-width='1.4'/><line x1='235' y1='90' x2='264' y2='90' stroke='#334155' stroke-width='1.4' marker-end='url(#a35)'/><rect x='266' y='74' width='50' height='32' rx='5' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.4'/><text x='291' y='94' text-anchor='middle' font-size='12' fill='#141824'>1 / s²</text><line x1='316' y1='90' x2='342' y2='90' stroke='#334155' stroke-width='1.4' marker-end='url(#a35)'/><circle cx='351' cy='90' r='8' fill='#fff' stroke='#334155' stroke-width='1.4'/><line x1='359' y1='90' x2='412' y2='90' stroke='#334155' stroke-width='1.4' marker-end='url(#a35)'/><line x1='351' y1='14' x2='351' y2='80' stroke='#b4233c' stroke-width='1.4' marker-end='url(#a35)'/><polyline points='351,38 308,38' fill='none' stroke='#b4233c' stroke-width='1.4' marker-end='url(#a35)'/><rect x='254' y='22' width='52' height='30' rx='5' fill='#fdecef' stroke='#b4233c' stroke-width='1.4'/><text x='280' y='41' text-anchor='middle' font-size='12' fill='#b4233c'>Gc(s)</text><polyline points='254,38 227,38 227,80' fill='none' stroke='#b4233c' stroke-width='1.4' marker-end='url(#a35)'/><polyline points='382,90 382,135 280,135' fill='none' stroke='#334155' stroke-width='1.4' marker-end='url(#a35)'/><rect x='232' y='121' width='46' height='28' rx='5' fill='#fef5e5' stroke='#9a5800' stroke-width='1.4'/><text x='255' y='139' text-anchor='middle' font-size='12' fill='#9a5800'>βs</text><polyline points='232,135 105,135 105,100' fill='none' stroke='#334155' stroke-width='1.4' marker-end='url(#a35)'/><polyline points='382,135 382,160 57,160 57,100' fill='none' stroke='#334155' stroke-width='1.4' marker-end='url(#a35)'/><text x='14' y='82' font-size='11' fill='#141824'>R(s)</text><text x='392' y='82' font-size='11' fill='#141824'>C(s)</text><text x='358' y='22' font-size='11' fill='#b4233c'>N(s)</text><text x='215' y='77' font-size='13' fill='#b4233c'>−</text><text x='93' y='108' font-size='13' fill='#b4233c'>−</text><text x='45' y='108' font-size='13' fill='#b4233c'>−</text></svg>",
+      "steps": [
+        { "stepTitle": "1. 列闭环特征方程求 $\\beta$", "detail": "由梅逊公式或框图化简，系统闭环特征方程为 $1+\\frac{25\\beta s}{s^2}+\\frac{25}{s^2}=0 \\implies s^2+25\\beta s+25=0$。对照 $s^2+2\\zeta\\omega_n s+\\omega_n^2=0$ 得 $\\omega_n=5$，令 $\\zeta=0.707$ 解得 $\\beta=\\frac{2\\zeta\\omega_n}{25}=\\frac{2\\times 0.707\\times 5}{25}=0.2828$。" },
+        { "stepTitle": "2. 求扰动闭环传函 $\\frac{C(s)}{N(s)}$ 并令分子为零", "detail": "由梅逊公式，从 $N(s)$ 到 $C(s)$ 有两条前向通道：$P_1=1$（余子式 $\\Delta_1=1+\\frac{25\\beta s}{s^2}$）和 $P_2=-\\frac{G_c(s)}{s^2}$（$\\Delta_2=1$），故 $\\frac{C(s)}{N(s)}=\\frac{s^2+25\\beta s-G_c(s)}{s^2+25\\beta s+25}$。令分子恒为 $0$ 得 $G_c(s)=s^2+25\\beta s=s^2+7.07s$。" }
+      ],
+      "finalAnswer": "$\\beta=0.2828$；$G_c(s)=s^2+7.07s$。",
+      "takeaway": "按扰动全不变性条件设计前馈 $G_c(s)$ 时，核心就是列出 $\\frac{C(s)}{N(s)}$ 并令其分子多项式恒等于零（注意检查 $P_1$ 与不接触回路的余子式 $\\Delta_1$！）。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.72-73",
+        "pdfPage": 81,
+        "itemRef": "例3-5 (图3-8)"
+      },
+      "verification": { "method": "sympy", "testId": "ch03_ex_guide35", "verified": true }
+    },
+    {
+      "id": "ctrl-ch03-e-06",
+      "section": "3.3 典型例题精选",
+      "kind": "example",
+      "title": "例 3-6：三阶系统持续等幅振荡条件（一题三解）",
+      "examWeight": "core",
+      "problem": "单位负反馈系统的开环传递函数为 $G(s)=\\frac{K(s+1)}{s^3+as^2+2s+1}$。试确定 $K$ 和 $a$ 取何值时，闭环系统将维持角频率 $\\omega=2\\text{ rad/s}$ 的持续振荡。",
+      "steps": [
+        { "stepTitle": "1. 写出闭环特征方程", "detail": "$D(s)=s^3+as^2+(2+K)s+(1+K)=0$。" },
+        { "stepTitle": "2. 方法一（因式分解法）", "detail": "维持 $\\omega=2$ 持续振荡须有一对共轭纯虚根 $s_{1,2}=\\pm\\mathrm{j}2$ 且另一根 $s_3=-b<0$。令 $(s^2+4)(s+b)=s^3+bs^2+4s+4b$，对照系数得 $2+K=4\\Rightarrow K=2$，$1+K=4b\\Rightarrow a=b=\\frac{3}{4}$。" },
+        { "stepTitle": "3. 方法二（代入 $s=\\mathrm{j}2$）与方法三（劳斯阵全零行）", "detail": "代入 $s=\\mathrm{j}2$ 分离实虚部：虚部 $-8+2(2+K)=0\\Rightarrow K=2$；实部 $-4a+K+1=0\\Rightarrow a=\\frac{3}{4}$（同时验证第三根 $-a<0$）。方法三列劳斯阵令 $s^1$ 行 $a(2+K)-(1+K)=0$ 且 $s^2$ 辅助方程 $as^2+(1+K)=0$ 具根 $\\pm\\mathrm{j}2$，同样得 $K=2, a=\\frac{3}{4}$。" }
+      ],
+      "finalAnswer": "$K=2,\\quad a=\\frac{3}{4}$。",
+      "takeaway": "一题三解融通第 3、4 章核心！注意一定要检验其余特征根位于左半平面（$b=a>0$），否则不是等幅持续振荡而是发散振荡。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.73",
+        "pdfPage": 82,
+        "itemRef": "例3-6 (图3-9)",
+        "crossRef": "同题在第4章 例4-5 (P.94-95)"
+      },
+      "verification": { "method": "sympy", "testId": "ch03_ex_guide36", "verified": true }
+    },
+    {
+      "id": "ctrl-ch03-e-07",
+      "section": "3.3 典型例题精选",
+      "kind": "example",
+      "title": "例 3-8：测速发电机反馈改善相对稳定性与指标反求",
+      "examWeight": "core",
+      "problem": "系统前向通道为 $\\frac{K}{s(s+1)}$，反馈通道为 $H(s)=1+K_h s$（比例+测速发电机反馈）。① 当 $K=10$ 且阻尼比 $\\zeta=0.5$ 时求 $K_h$；② 若要求 $\\sigma\\%=2\\%$、$T_p=1\\text{ s}$，求 $K$、$K_h$ 及此时的上升时间 $T_r$。",
+      "figureSvg": "<svg role='img' viewBox='0 0 380 115' xmlns='http://www.w3.org/2000/svg'><title>例3-8 测速发电机反馈系统方块图（仿图3-10）</title><defs><marker id='a38' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='15' y1='35' x2='68' y2='35' stroke='#334155' stroke-width='1.5' marker-end='url(#a38)'/><circle cx='78' cy='35' r='9' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='87' y1='35' x2='148' y2='35' stroke='#334155' stroke-width='1.5' marker-end='url(#a38)'/><rect x='150' y='14' width='105' height='42' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='202' y='31' text-anchor='middle' font-size='12' fill='#141824'>K</text><line x1='172' y1='36' x2='232' y2='36' stroke='#141824' stroke-width='1'/><text x='202' y='50' text-anchor='middle' font-size='12' fill='#141824'>s(s + 1)</text><line x1='255' y1='35' x2='355' y2='35' stroke='#334155' stroke-width='1.5' marker-end='url(#a38)'/><polyline points='315,35 315,90 250,90' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a38)'/><rect x='158' y='74' width='90' height='30' rx='6' fill='#fef5e5' stroke='#9a5800' stroke-width='1.5'/><text x='203' y='93' text-anchor='middle' font-size='12' fill='#9a5800'>1 + Kh·s</text><polyline points='158,90 78,90 78,46' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a38)'/><text x='24' y='27' font-size='12' fill='#141824'>Xi</text><text x='328' y='27' font-size='12' fill='#141824'>Xo</text><text x='63' y='58' font-size='14' fill='#b4233c'>−</text></svg>",
+      "steps": [
+        { "stepTitle": "1. 求闭环传递函数与 $\\omega_n, \\zeta$ 关系", "detail": "$\\Phi(s)=\\frac{K}{s^2+(KK_h+1)s+K}$，与标准二阶对比得 $\\omega_n^2=K$，$2\\zeta\\omega_n=KK_h+1$。" },
+        { "stepTitle": "2. 第 ① 问求解", "detail": "代入 $K=10,\\;\\zeta=0.5$ 得 $K_h=\\frac{2\\times 0.5\\sqrt{10}-1}{10}=\\frac{\\sqrt{10}-1}{10}\\approx 0.216$。" },
+        { "stepTitle": "3. 第 ② 问由指标反求参数", "detail": "由 $\\sigma\\%=\\mathrm{e}^{-\\frac{\\pi\\zeta}{\\sqrt{1-\\zeta^2}}}=0.02$ 解得 $\\zeta\\approx 0.780$；由 $T_p=\\frac{\\pi}{\\omega_n\\sqrt{1-\\zeta^2}}=1$ 得 $\\omega_n\\approx 5.017$（原书约取 $5$）。于是 $K=\\omega_n^2\\approx 25$（精确 $25.17$），$K_h=\\frac{2\\zeta\\omega_n-1}{K}\\approx 0.27$，$T_r=\\frac{\\pi-\\arccos\\zeta}{\\omega_n\\sqrt{1-\\zeta^2}}\\approx 0.788\\text{ s}$（精确 $0.785\\text{ s}$）。" }
+      ],
+      "finalAnswer": "① $K_h=\\frac{\\sqrt{10}-1}{10}$；② $K\\approx 25,\\;K_h\\approx 0.27,\\;T_r\\approx 0.788\\text{ s}$。",
+      "takeaway": "测速反馈加在反馈通道中不会引入闭环零点，故仍可严格套用标准二阶系统公式。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.74-75",
+        "pdfPage": 83,
+        "itemRef": "例3-8 (图3-10)"
+      },
+      "verification": { "method": "sympy", "testId": "ch03_ex_guide38", "verified": true }
+    },
+    {
+      "id": "ctrl-ch03-e-08",
+      "section": "3.3 典型例题精选",
+      "kind": "example",
+      "title": "例 3-11：含附加闭环零点二阶系统（PD 控制宇宙飞船）动态指标",
+      "examWeight": "core",
+      "problem": "宇宙飞船姿态控制单位负反馈系统前向通道为 PD 控制器 $K_1(Ts+1)$ 串联被控对象 $\\frac{1}{Js^2}$。已知 $T=3$，$\\frac{K_1}{J}=\\frac{2}{9}$。试求系统的阻尼比及峰值时间 $T_p$、超调量 $\\sigma\\%$ 和调节时间 $T_s$（$\\Delta=2\\%$）。",
+      "figureSvg": "<svg role='img' viewBox='0 0 400 105' xmlns='http://www.w3.org/2000/svg'><title>例3-11 宇宙飞船 PD 控制简化结构图（仿图3-12）</title><defs><marker id='a311' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='15' y1='38' x2='62' y2='38' stroke='#334155' stroke-width='1.5' marker-end='url(#a311)'/><circle cx='72' cy='38' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='80' y1='38' x2='118' y2='38' stroke='#334155' stroke-width='1.5' marker-end='url(#a311)'/><rect x='120' y='20' width='90' height='36' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='165' y='43' text-anchor='middle' font-size='12' fill='#141824'>K₁(Ts + 1)</text><line x1='210' y1='38' x2='244' y2='38' stroke='#334155' stroke-width='1.5' marker-end='url(#a311)'/><rect x='246' y='20' width='68' height='36' rx='6' fill='#e7f6f0' stroke='#0b6e4f' stroke-width='1.5'/><text x='280' y='43' text-anchor='middle' font-size='12' fill='#0b6e4f'>1 / (Js²)</text><line x1='314' y1='38' x2='382' y2='38' stroke='#334155' stroke-width='1.5' marker-end='url(#a311)'/><polyline points='348,38 348,88 72,88 72,48' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a311)'/><text x='20' y='30' font-size='11' fill='#141824'>R(s)</text><text x='356' y='30' font-size='11' fill='#141824'>C(s)</text><text x='59' y='58' font-size='13' fill='#b4233c'>−</text></svg>",
+      "steps": [
+        { "stepTitle": "1. 化为含附加零点的二阶标准型", "detail": "闭环传函 $\\Phi(s)=\\frac{(2/3)s+(2/9)}{s^2+(2/3)s+(2/9)}=\\frac{\\omega_n^2}{z}\\frac{s+z}{s^2+2\\zeta_d\\omega_n s+\\omega_n^2}$。对照得 $z=\\frac{1}{3}$， $\\omega_n=\\frac{\\sqrt{2}}{3}$，阻尼比 $\\zeta_d=\\frac{\\sqrt{2}}{2}\\approx 0.707$。" },
+        { "stepTitle": "2. 计算零点修正参数 $r, \\psi, \\beta_d$", "detail": "$r=\\frac{\\sqrt{z^2-2\\zeta_d\\omega_n z+\\omega_n^2}}{z\\sqrt{1-\\zeta_d^2}}=\\sqrt{2}\\approx 1.414$；$\\psi=-\\pi+\\arctan\\frac{\\omega_n\\sqrt{1-\\zeta_d^2}}{z-\\zeta_d\\omega_n}+\\arctan\\frac{\\sqrt{1-\\zeta_d^2}}{\\zeta_d}=-\\pi+\\frac{\\pi}{2}+\\frac{\\pi}{4}=-\\frac{\\pi}{4}$；$\\beta_d=\\frac{\\pi}{4}$。" },
+        { "stepTitle": "3. 求含零点动态指标", "detail": "$T_p=\\frac{\\beta_d-\\psi}{\\omega_n\\sqrt{1-\\zeta_d^2}}=\\frac{\\pi/2}{1/3}=\\frac{3\\pi}{2}\\approx 4.71\\text{ s}$（书取 $4.72\\text{ s}$）；$\\sigma\\%=r\\sqrt{1-\\zeta_d^2}\\mathrm{e}^{-\\zeta_d\\omega_n T_p}\\times 100\\%=\\mathrm{e}^{-\\pi/2}\\times 100\\%\\approx 20.8\\%$（书取 $20.7\\%$）；$T_s=\\frac{4+\\ln r}{\\zeta_d\\omega_n}\\approx 13.04\\text{ s}$。" }
+      ],
+      "finalAnswer": "$\\zeta_d=0.707$，$T_p\\approx 4.71\\text{ s}$，$\\sigma\\%\\approx 20.8\\%$，$T_s\\approx 13.04\\text{ s}$。",
+      "takeaway": "必考对比题：PD 控制器引入闭环零点 $s=-1/T$ 后，尽管 $\\zeta_d=0.707$，超调量从无零点时的 $4.3\\%$ 激增到 $20.8\\%$！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.76-77",
+        "pdfPage": 85,
+        "itemRef": "例3-11 (图3-12)"
+      },
+      "verification": { "method": "sympy", "testId": "ch03_ex_guide311", "verified": true }
+    },
+    {
+      "id": "ctrl-ch03-e-09",
+      "section": "3.3 典型例题精选",
+      "kind": "example",
+      "title": "例 3-12：三阶系统闭环主导极点判别、降阶与误差定性分析",
+      "examWeight": "core",
+      "problem": "设单位负反馈系统的开环传递函数为 $G(s)=\\frac{10}{s(s+4.28)(s+2.22)}$，试求：① 闭环极点并判断是否存在主导极点；② 按主导极点降阶估算动态性能；③ 分析降阶所造成的误差方向。",
+      "steps": [
+        { "stepTitle": "1. 求闭环极点并验主导极点条件", "detail": "$\\Phi(s)=\\frac{10}{s^3+6.5s^2+9.5016s+10}\\approx\\frac{10}{(s+5)(s^2+1.5s+2)}$，闭环极点 $s_1=-5$，$s_{2,3}=-0.75\\pm\\mathrm{j}1.2$。实部比 $\\frac{|-5|}{|-0.75|}=6.67 > 5$ 且周围无闭环零点，故 $s_{2,3}$ 为闭环主导极点。" },
+        { "stepTitle": "2. 保持稳态增益不变降阶计算", "detail": "将 $(s+5)=5(0.2s+1)$ 中的 $0.2s$ 略去，得 $\\Phi(s)\\approx\\frac{10}{5(s^2+1.5s+2)}=\\frac{2}{s^2+1.5s+2}$。于是 $\\omega_n=\\sqrt{2}$，$\\zeta=\\frac{1.5}{2\\sqrt{2}}=\\frac{3\\sqrt{2}}{8}\\approx 0.530$，$\\omega_d\\approx 1.2\\text{ rad/s}$，估算得 $T_s=\\frac{3}{\\zeta\\omega_n}=4\\text{ s}$，$T_p=\\frac{\\pi}{\\omega_d}\\approx 2.6\\text{ s}$，$\\sigma\\%\\approx 14\\%$。" },
+        { "stepTitle": "3. 误差方向分析", "detail": "因忽略了左半平面非主导实极点 $s_1=-5$，降阶算出的超调量**大于**实际超调量，调节时间**小于**实际调节时间。" }
+      ],
+      "finalAnswer": "存在主导极点 $s_{2,3}=-0.75\\pm\\mathrm{j}1.2$；降阶估算 $T_s=4\\text{ s},\\;T_p\\approx 2.6\\text{ s},\\;\\sigma\\%\\approx 14\\%$；估算超调偏大、调节时间偏小。",
+      "takeaway": "记住降阶黄金法则：先提常数项写 $(Ts+1)$ 再令 $T\\to 0$，保证 $\\Phi(0)$ 不变！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.77",
+        "pdfPage": 86,
+        "itemRef": "例3-12"
+      },
+      "verification": { "method": "sympy", "testId": "ch03_ex_guide312", "verified": true }
+    },
+    {
+      "id": "ctrl-ch03-e-10",
+      "section": "3.7 状态方程的求解与分析",
+      "kind": "example",
+      "title": "主教材 例 3-11 & 例 3-17：对角化求 $\\mathrm{e}^{\\boldsymbol{A}t}$ 与拉氏变换解非齐次状态方程",
+      "examWeight": "core",
+      "problem": "【题 A（例 3-11）】设 $\\boldsymbol{A}=\\begin{bmatrix}2&-1\\\\-1&2\\end{bmatrix}$，用对角化法求 $\\mathrm{e}^{\\boldsymbol{A}t}$。\n【题 B（例 3-17）】设系统 $\\dot{\\boldsymbol{x}}=\\begin{bmatrix}0&1\\\\-2&-3\\end{bmatrix}\\boldsymbol{x}+\\begin{bmatrix}0\\\\1\\end{bmatrix}u$，初值 $\\boldsymbol{x}(0)=[x_1(0),x_2(0)]^T$，用拉氏变换法求单位阶跃输入下的状态响应 $\\boldsymbol{x}(t)$。",
+      "steps": [
+        { "stepTitle": "1. 题 A：求特征值与特征向量对角化", "detail": "$\\det(\\lambda\\boldsymbol{I}-\\boldsymbol{A})=(\\lambda-1)(\\lambda-3)=0\\Rightarrow\\lambda_1=1,\\lambda_2=3$。特征向量 $\\boldsymbol{v}_1=[1,1]^T,\\;\\boldsymbol{v}_2=[-1,1]^T$，得 $\\boldsymbol{T}=\\begin{bmatrix}1&-1\\\\1&1\\end{bmatrix},\\;\\boldsymbol{T}^{-1}=\\frac{1}{2}\\begin{bmatrix}1&1\\\\-1&1\\end{bmatrix}$。故 $\\mathrm{e}^{\\boldsymbol{A}t}=\\boldsymbol{T}\\operatorname{diag}[\\mathrm{e}^t,\\mathrm{e}^{3t}]\\boldsymbol{T}^{-1}=\\frac{1}{2}\\begin{bmatrix}\\mathrm{e}^t+\\mathrm{e}^{3t}&\\mathrm{e}^t-\\mathrm{e}^{3t}\\\\\\mathrm{e}^t-\\mathrm{e}^{3t}&\\mathrm{e}^t+\\mathrm{e}^{3t}\\end{bmatrix}$。" },
+        { "stepTitle": "2. 题 B：求预解矩阵 $(s\\boldsymbol{I}-\\boldsymbol{A})^{-1}$", "detail": "$s\\boldsymbol{I}-\\boldsymbol{A}=\\begin{bmatrix}s&-1\\\\2&s+3\\end{bmatrix}$，行列式 $(s+1)(s+2)$，故 $\\boldsymbol{\\Phi}(s)=(s\\boldsymbol{I}-\\boldsymbol{A})^{-1}=\\frac{1}{(s+1)(s+2)}\\begin{bmatrix}s+3&1\\\\-2&s\\end{bmatrix}$。" },
+        { "stepTitle": "3. 题 B：由 $\\boldsymbol{X}(s)=\\boldsymbol{\\Phi}(s)\\boldsymbol{x}(0)+\\boldsymbol{\\Phi}(s)\\boldsymbol{B}U(s)$ 反变换", "detail": "零输入部分反变换得 $\\boldsymbol{\\Phi}(t)=\\begin{bmatrix}2\\mathrm{e}^{-t}-\\mathrm{e}^{-2t}&\\mathrm{e}^{-t}-\\mathrm{e}^{-2t}\\\\-2\\mathrm{e}^{-t}+2\\mathrm{e}^{-2t}&-\\mathrm{e}^{-t}+2\\mathrm{e}^{-2t}\\end{bmatrix}$；零状态部分 $\\boldsymbol{\\Phi}(s)\\boldsymbol{B}\\frac{1}{s}=\\begin{bmatrix}\\frac{1}{s(s+1)(s+2)}\\\\\\frac{1}{(s+1)(s+2)}\\end{bmatrix}$，拉氏反变换得 $\\begin{bmatrix}\\frac{1}{2}-\\mathrm{e}^{-t}+\\frac{1}{2}\\mathrm{e}^{-2t}\\\\\\mathrm{e}^{-t}-\\mathrm{e}^{-2t}\\end{bmatrix}$。" }
+      ],
+      "finalAnswer": "题 A：$\\mathrm{e}^{\\boldsymbol{A}t}=\\frac{1}{2}\\begin{bmatrix}\\mathrm{e}^t+\\mathrm{e}^{3t}&\\mathrm{e}^t-\\mathrm{e}^{3t}\\\\\\mathrm{e}^t-\\mathrm{e}^{3t}&\\mathrm{e}^t+\\mathrm{e}^{3t}\\end{bmatrix}$；题 B：$\\boldsymbol{x}(t)=\\boldsymbol{\\Phi}(t)\\boldsymbol{x}(0)+\\begin{bmatrix}\\frac{1}{2}-\\mathrm{e}^{-t}+\\frac{1}{2}\\mathrm{e}^{-2t}\\\\\\mathrm{e}^{-t}-\\mathrm{e}^{-2t}\\end{bmatrix}$。",
+      "takeaway": "浙大 845 明确在时域分析中考查“状态空间模型的求解”！2×2 矩阵首选拉氏变换法求 $(sI-A)^{-1}$，3×3 含重根可结合约当块公式（见主教材例 3-12）。",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.123 & P.127-128",
+        "pdfPage": 132,
+        "itemRef": "例3-11 & 例3-17"
+      },
+      "verification": { "method": "sympy", "testId": "ch03_ex_main317_nonhomog", "verified": true }
+    }
+  ]
+}
