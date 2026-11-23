@@ -1173,6 +1173,48 @@ def run_all_checks() -> list[tuple[str, bool, str]]:
           and sol914m_2 == []
           and sp.simplify(P914m_3.det() - (-p22**2 - sp.Rational(1, 4))) == 0)
 
+    # --- Ch01 Formulas & Exercises (sun_main P.6-18, sun_guide P.1-11 & P.240) ---
+    G_s, H_s, G1_s, G2_s, F_s, f_dist = sp.symbols("G H G_1 G_2 F f_dist", nonzero=True)
+    M_cl = G_s / (1 + G_s * H_s)
+    S_G_M = sp.simplify(sp.diff(M_cl, G_s) * G_s / M_cl)
+    S_H_M = sp.simplify(sp.diff(M_cl, H_s) * H_s / M_cl)
+    G0_ol = G_s * H_s
+    S_G_G0 = sp.simplify(sp.diff(G0_ol, G_s) * G_s / G0_ol)
+    # Disturbance eq (1-6): y = G2*(f_dist - G1*H*y) -> y = G2*f_dist / (1 + G1*G2*H)
+    y_sym = sp.Symbol("y_sym")
+    y_cl_dist = sp.solve(sp.Eq(y_sym, G2_s * (f_dist - G1_s * H_s * y_sym)), y_sym)[0]
+    # Multi-loop stabilization eq (1-7)
+    Phi_ml = sp.simplify(M_cl / (1 + M_cl * F_s))
+    check("ch01_f_sensitivity_disturbance",
+          sp.simplify(S_G_M - 1 / (1 + G_s * H_s)) == 0
+          and sp.simplify(S_H_M + G_s * H_s / (1 + G_s * H_s)) == 0
+          and S_G_G0 == 1
+          and sp.simplify(y_cl_dist - G2_s * f_dist / (1 + G1_s * G2_s * H_s)) == 0
+          and sp.simplify(Phi_ml - G_s / (1 + G_s * H_s + G_s * F_s)) == 0)
+
+    # Ex 1-10 / A1-10: verify linearity (T[a*r1+b*r2] == a*T[r1]+b*T[r2]) & time-invariance for all 7 equations
+    r1 = sp.Function("r1")(t_r)
+    r2 = sp.Function("r2")(t_r)
+    w_sym = sp.Symbol("omega", real=True, nonzero=True)
+    # Eq (1) c = 5 + r^2 + t*r'' -> nonlinear & time-varying
+    T1 = lambda r: 5 + r**2 + t_r * sp.diff(r, t_r, 2)
+    eq1_lin = sp.simplify(T1(a * r1 + b * r2) - (a * T1(r1) + b * T1(r2))) == 0
+    # Eq (4) c = r*cos(w*t) + 5 -> nonlinear (T[0]=5 != 0) & time-varying
+    T4 = lambda r: r * sp.cos(w_sym * t_r) + 5
+    eq4_lin = sp.simplify(T4(a * r1 + b * r2) - (a * T4(r1) + b * T4(r2))) == 0
+    # Eq (6) c = r^2 -> nonlinear & time-invariant
+    T6 = lambda r: r**2
+    eq6_lin = sp.simplify(T6(a * r1 + b * r2) - (a * T6(r1) + b * T6(r2))) == 0
+    # Eq (5) c = 3*r + 6*r' + 5*int -> linear & time-invariant (operator part 3*r + 6*r')
+    T5 = lambda r: 3 * r + 6 * sp.diff(r, t_r)
+    eq5_lin = sp.simplify(T5(a * r1 + b * r2) - (a * T5(r1) + b * T5(r2))) == 0
+    # Eq (7) gated step c = H(t-6)*r(t) -> linear & time-varying
+    T7 = lambda r, tv: sp.Heaviside(tv - 6) * r
+    eq7_lin = sp.simplify(T7(a * r1 + b * r2, t_r) - (a * T7(r1, t_r) + b * T7(r2, t_r))) == 0
+    eq7_ti = (T7(sp.Integer(1), sp.Integer(7)) == T7(sp.Integer(1), sp.Integer(5)))  # shifted input differs
+    check("ch01_ex_a1_10_classify_7eqs",
+          (not eq1_lin) and (not eq4_lin) and (not eq6_lin) and eq5_lin and eq7_lin and (not eq7_ti))
+
     return results
 
 

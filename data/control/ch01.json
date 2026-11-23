@@ -6,22 +6,130 @@
     "understand": "控制系统的主要类型；自动控制系统的结构、工作原理及过程。",
     "familiar": "控制理论的发展过程及发展趋势，对控制系统的基本要求。"
   },
-  "sourceMeta": "主教材：孙优贤《自动控制原理》(2011第1版) P.1-15 ｜ 辅导书：孙优贤《学习辅导》(2017第1版) P.1-11",
+  "sourceMeta": "主教材：孙优贤《自动控制原理》(2011第1版) P.1-18（全量公式/表格/例1-1~1-5/习题1-1~1-10） ｜ 辅导书：孙优贤《学习辅导》(2017第1版) P.1-11 & P.240（例1-1~1-4/自测B1-8~B1-11）",
   "items": [
     {
       "id": "ctrl-ch01-f-01",
-      "section": "1.2.3 线性系统数学定义",
+      "section": "1.2.3 开环与闭环比较 · 敏感度函数",
+      "kind": "formula",
+      "title": "单回路负反馈闭环增益与系统对参数变化的敏感度函数",
+      "examWeight": "core",
+      "prompt": "写出单回路负反馈闭环增益 $M$、敏感度函数 $S_G^M$ 的定义，以及闭环敏感度 $S_G^M$、$S_H^M$ 与开环敏感度 $S_G^{G_0}$ 的精确公式：",
+      "formulaLatex": "$$\\begin{aligned}&M = \\frac{y}{r} = \\frac{G}{1+GH} \\qquad\\text{式(1-2)} \\\\&S_G^M = \\frac{\\partial M / M}{\\partial G / G} = \\frac{\\partial M}{\\partial G}\\cdot\\frac{G}{M} = \\frac{1}{1+GH} \\qquad\\text{式(1-1), (1-3)} \\\\&\\text{对比开环 } G_0=GH\\text{：}\\; S_G^{G_0} = \\frac{\\partial G_0/G_0}{\\partial G/G} = 1 \\qquad\\text{式(1-4)} \\\\&\\text{延伸（主教材 P.7 思考）：闭环对反馈元件 }H\\text{ 的敏感度 }\\; S_H^M = \\frac{\\partial M}{\\partial H}\\cdot\\frac{H}{M} = -\\frac{GH}{1+GH}\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "$G,\\;H$",
+          "desc": "前向通道增益与反馈通道增益；$GH$ 为开环回路增益"
+        },
+        {
+          "sym": "$S_G^M$",
+          "desc": "闭环增益 $M$ 的相对变化百分比与前向增益 $G$ 的相对变化百分比之比"
+        }
+      ],
+      "conditions": "单回路线性负反馈系统处于**稳定**状态（且 $1+GH\\ne 0$）；式(1-1)~(1-4) 为静态增益推导，频域中将 $G,H$ 换为 $G(s),H(s)$ 同样成立。",
+      "pitfalls": "① **核心工程结论**：增大回路增益 $|GH|$ 可将前向参数摄动敏感度压缩至 $\\frac{1}{1+GH}\\ll 1$，但同时 $S_H^M=-\\frac{GH}{1+GH}\\to -1$——即闭环系统对**反馈检测仪表 $H$ 的精度极其敏感**（传感器不准，闭环也救不了！）。\n② **原书轻微笔误**：主教材 P.6 式(1-1) 分子汉字误印为「$M$ 变换的百分比」，应为「$M$ **变化**的百分比」。",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.6-7",
+        "pdfPage": 15,
+        "itemRef": "式(1-1)~(1-4) & 图1-6(a)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch01_f_sensitivity_disturbance",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch01-f-02",
+      "section": "1.2.3 开环与闭环比较 · 抗扰动能力",
+      "kind": "formula",
+      "title": "外加扰动（噪声）作用下的开环与闭环输出对比公式",
+      "examWeight": "core",
+      "prompt": "如图 1-6(b)，前向通道由 $G_1$、$G_2$ 串联且外加扰动 $f$ 注入两者之间，写出无反馈（开环）与负反馈（闭环）时扰动 $f$ 单独引起的输出 $y$：",
+      "formulaLatex": "$$\\begin{aligned}&\\text{开环（无反馈）：}\\quad y = G_2\\, f \\qquad\\text{式(1-5)} \\\\&\\text{闭环（负反馈）：}\\quad y = \\frac{G_2}{1 + G_1 G_2 H}\\, f \\qquad\\text{式(1-6)}\\end{aligned}$$",
+      "figureSvg": "<svg role='img' viewBox='0 0 465 142' xmlns='http://www.w3.org/2000/svg'><title>单回路负反馈与外加扰动通道方块图（仿主教材图1-6b）</title><defs><marker id='c1d' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='14' y1='64' x2='68' y2='64' stroke='#334155' stroke-width='1.5' marker-end='url(#c1d)'/><circle cx='78' cy='64' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='86' y1='64' x2='128' y2='64' stroke='#334155' stroke-width='1.5' marker-end='url(#c1d)'/><rect x='130' y='46' width='68' height='36' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='164' y='69' text-anchor='middle' font-size='13' fill='#1e3a8a' font-weight='700'>G₁</text><line x1='198' y1='64' x2='244' y2='64' stroke='#334155' stroke-width='1.5' marker-end='url(#c1d)'/><circle cx='254' cy='64' r='8' fill='#fff' stroke='#b4233c' stroke-width='1.5'/><line x1='254' y1='14' x2='254' y2='54' stroke='#b4233c' stroke-width='1.5' marker-end='url(#c1d)'/><line x1='262' y1='64' x2='304' y2='64' stroke='#334155' stroke-width='1.5' marker-end='url(#c1d)'/><rect x='306' y='46' width='68' height='36' rx='6' fill='#e7f6f0' stroke='#0b6e4f' stroke-width='1.5'/><text x='340' y='69' text-anchor='middle' font-size='13' fill='#0b6e4f' font-weight='700'>G₂</text><line x1='374' y1='64' x2='448' y2='64' stroke='#334155' stroke-width='1.5' marker-end='url(#c1d)'/><polyline points='414,64 414,116 286,116' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#c1d)'/><rect x='218' y='100' width='66' height='32' rx='6' fill='#f3e8ff' stroke='#6b21a8' stroke-width='1.5'/><text x='251' y='121' text-anchor='middle' font-size='13' fill='#6b21a8' font-weight='700'>H</text><polyline points='218,116 78,116 78,74' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#c1d)'/><text x='18' y='54' font-size='12' fill='#141824' font-weight='700'>r</text><text x='436' y='54' font-size='12' fill='#141824' font-weight='700'>y</text><text x='262' y='24' font-size='11' fill='#b4233c' font-weight='700'>扰动 f</text><text x='64' y='55' font-size='12' fill='#141824'>+</text><text x='65' y='83' font-size='13' fill='#b4233c'>−</text><text x='240' y='55' font-size='12' fill='#141824'>+</text><text x='262' y='53' font-size='12' fill='#b4233c'>+</text></svg>",
+      "symbols": [
+        {
+          "sym": "$G_1$",
+          "desc": "扰动注入点**之前**的前向通道增益（越接近输入端越大越好）"
+        },
+        {
+          "sym": "$G_2$",
+          "desc": "扰动注入点**之后**的前向通道增益"
+        },
+        {
+          "sym": "$1+G_1 G_2 H$",
+          "desc": "负反馈回路对环内扰动的衰减倍数（当 $1+G_1 G_2 H > 1$ 且系统稳定时显著削弱扰动）"
+        }
+      ],
+      "conditions": "系统满足线性叠加原理（置 $r=0$ 单独考察扰动 $f$），且闭环稳定并满足 $1+G_1 G_2 H > 1$。",
+      "pitfalls": "高频设计铁律（主教材 P.7）：只有**被包在负反馈回路以内**的扰动才能被回路增益 $1+G_1 G_2 H$ 削弱，且扰动点之前的增益 $G_1$ 越大抗扰越强；若扰动位于**反馈回路之外**，负反馈对其毫无抑制作用！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.7",
+        "pdfPage": 16,
+        "itemRef": "式(1-5)~(1-6) & 图1-6(b)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch01_f_sensitivity_disturbance",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch01-f-03",
+      "section": "1.2.3 反馈对稳定性的双刃剑作用",
+      "kind": "formula",
+      "title": "多回路负反馈镇定原理（外环 $F$ 挽救失稳内环 $GH=-1$）",
+      "examWeight": "core",
+      "prompt": "当单回路反馈系统因 $GH=-1$ 失稳时，引入外环负反馈增益 $F$（图 1-7），写出整个系统的闭环输入输出关系 $\\Phi$：",
+      "formulaLatex": "$$\\Phi = \\frac{\\dfrac{G}{1+GH}}{1 + \\dfrac{G}{1+GH}F} = \\frac{G}{1 + GH + GF} \\qquad\\text{式(1-7)}$$",
+      "figureSvg": "<svg role='img' viewBox='0 0 430 148' xmlns='http://www.w3.org/2000/svg'><title>多回路反馈镇定结构图（内环H + 外环F，仿主教材图1-7）</title><defs><marker id='c1m' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='16' y1='38' x2='62' y2='38' stroke='#334155' stroke-width='1.5' marker-end='url(#c1m)'/><circle cx='72' cy='38' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='80' y1='38' x2='124' y2='38' stroke='#334155' stroke-width='1.5' marker-end='url(#c1m)'/><circle cx='134' cy='38' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='142' y1='38' x2='196' y2='38' stroke='#334155' stroke-width='1.5' marker-end='url(#c1m)'/><rect x='198' y='20' width='76' height='36' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='236' y='43' text-anchor='middle' font-size='13' fill='#1e3a8a' font-weight='700'>G</text><line x1='274' y1='38' x2='408' y2='38' stroke='#334155' stroke-width='1.5' marker-end='url(#c1m)'/><polyline points='336,38 336,84 276,84' fill='none' stroke='#b4233c' stroke-width='1.5' marker-end='url(#c1m)'/><rect x='198' y='69' width='76' height='30' rx='6' fill='#fdecef' stroke='#b4233c' stroke-width='1.5'/><text x='236' y='89' text-anchor='middle' font-size='12' fill='#b4233c' font-weight='700'>内环 H</text><polyline points='198,84 134,84 134,48' fill='none' stroke='#b4233c' stroke-width='1.5' marker-end='url(#c1m)'/><polyline points='368,38 368,128 276,128' fill='none' stroke='#0b6e4f' stroke-width='1.5' marker-end='url(#c1m)'/><rect x='198' y='113' width='76' height='30' rx='6' fill='#e7f6f0' stroke='#0b6e4f' stroke-width='1.5'/><text x='236' y='133' text-anchor='middle' font-size='12' fill='#0b6e4f' font-weight='700'>外环 F</text><polyline points='198,128 72,128 72,48' fill='none' stroke='#0b6e4f' stroke-width='1.5' marker-end='url(#c1m)'/><text x='22' y='28' font-size='12' fill='#141824' font-weight='700'>r</text><text x='392' y='28' font-size='12' fill='#141824' font-weight='700'>y</text><text x='58' y='30' font-size='11' fill='#141824'>+</text><text x='60' y='58' font-size='12' fill='#0b6e4f'>−</text><text x='120' y='30' font-size='11' fill='#141824'>+</text><text x='122' y='58' font-size='12' fill='#b4233c'>−</text></svg>",
+      "symbols": [
+        {
+          "sym": "$GH=-1$",
+          "desc": "静态单回路闭环增益 $M=\\frac{G}{1+GH}$ 分母为零而发散失稳的条件（一般动态系统并非唯一条件）"
+        },
+        {
+          "sym": "$F$",
+          "desc": "新增外环负反馈增益，合理选取 $F$ 使 $1+GH+GF\\ne 0$ 且满足稳定判据"
+        }
+      ],
+      "conditions": "原单回路内环不稳定时，引入额外负反馈外环 $F$ 可改变整体闭环特征分母。",
+      "pitfalls": "记住反馈的「双刃剑」结论（主教材 P.7）：① 反馈设计不当会使原本稳定的开环系统变不稳定；② 合理引入反馈又能使原本不稳定的对象或内环恢复稳定！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.7",
+        "pdfPage": 16,
+        "itemRef": "式(1-7) & 图1-7"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch01_f_sensitivity_disturbance",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch01-f-04",
+      "section": "1.3.5 线性系统数学定义",
       "kind": "formula",
       "title": "线性系统（叠加性 + 均匀性 / 齐次性）数学判据",
       "examWeight": "core",
       "prompt": "若输入 $r_1(t)\\to y_1(t)$、$r_2(t)\\to y_2(t)$，写出系统满足线性原理的充要数学关系：",
-      "formulaLatex": "$$\\begin{aligned} &r(t) = a\\,r_1(t) + b\\,r_2(t) \\implies y(t) = a\\,y_1(t) + b\\,y_2(t) \\\\ &\\text{分解为：叠加性 } T[r_1+r_2]=T[r_1]+T[r_2]，\\quad \\text{均匀性（齐次性）} T[a\\,r]=a\\,T[r] \\end{aligned}$$",
+      "formulaLatex": "$$\\begin{aligned}&r(t) = a\\,r_1(t) + b\\,r_2(t) \\implies y(t) = a\\,y_1(t) + b\\,y_2(t) \\qquad\\text{式(1-8)~(1-10)} \\\\&\\text{等价拆为：叠加性 } T[r_1+r_2]=T[r_1]+T[r_2]，\\quad \\text{均匀性（齐次性）} T[a\\,r]=a\\,T[r]\\end{aligned}$$",
       "symbols": [
-        { "sym": "$a, b$", "desc": "任意常数（按主教材说明，也可推广为与输入无关的时变标量系数）" },
-        { "sym": "$T[\\cdot]$", "desc": "系统从输入到输出的映射算子（默认零初始状态）" }
+        {
+          "sym": "$a, b$",
+          "desc": "任意常数（主教材 P.10 特别注明：$a,b$ 也可以是与输入无关的时变标量系数）"
+        },
+        {
+          "sym": "$T[\\cdot]$",
+          "desc": "系统从输入到输出的映射算子（默认零初始状态）"
+        }
       ],
       "conditions": "必须**同时**满足叠加性与均匀性（在零初始状态下验证）；只要系统含任一非线性环节（如平方项、常偏置项 $+C$），即属非线性系统。",
-      "pitfalls": "超级高频易错点：像 $c(t)=r(t)\\cos\\omega t + 5$ 含常数偏置 $+5$，令 $r(t)=0$ 时 $c(t)=5\\ne 0$，破坏齐次性 $T[0]=0$，因此是**非线性系统**（见习题 A1-10）！",
+      "pitfalls": "超级高频易错点：像 $c(t)=r(t)\\cos\\omega t + 5$ 含独立常数偏置 $+5$，令 $r(t)=0$ 时 $c(t)=5\\ne 0$，破坏齐次性 $T[0]=0$，因此必为**非线性系统**（见习题 1-10 ④）！",
       "source": {
         "book": "孙优贤《自动控制原理》(2011第1版)",
         "printedPage": "P.10-11",
@@ -29,21 +137,33 @@
         "itemRef": "式(1-8)~(1-10)",
         "crossRef": "孙优贤《学习辅导》(2017第1版) P.2 1.2.3③"
       },
-      "verification": { "method": "textbook-checked", "verified": true }
+      "verification": {
+        "method": "sympy",
+        "testId": "ch01_ex_a1_10_classify_7eqs",
+        "verified": true
+      }
     },
     {
-      "id": "ctrl-ch01-f-02",
-      "section": "1.2.3 线性定常与时变系统判据",
+      "id": "ctrl-ch01-f-05",
+      "section": "1.3.5-1.3.6 线性微分方程与定常系统判据",
       "kind": "formula",
-      "title": "单变量线性连续系统微分方程通式与时不变性判据",
+      "title": "单变量线性连续系统 $n$ 阶微分方程通式与定常（时不变）平移判据",
       "examWeight": "core",
       "prompt": "写出 $n$ 阶单变量线性连续系统的微分方程通式，并给出定常（时不变）系统的时域平移判据：",
-      "formulaLatex": "$$\\begin{aligned} &\\frac{\\mathrm{d}^n y(t)}{\\mathrm{d}t^n} + a_{n-1}\\frac{\\mathrm{d}^{n-1} y(t)}{\\mathrm{d}t^{n-1}} + \\cdots + a_1\\frac{\\mathrm{d}y(t)}{\\mathrm{d}t} + a_0 y(t) = b_m\\frac{\\mathrm{d}^m r(t)}{\\mathrm{d}t^m} + \\cdots + b_1\\frac{\\mathrm{d}r(t)}{\\mathrm{d}t} + b_0 r(t) \\\\ &\\text{时不变（定常）性：若 } r(t)\\to y(t),\\; \\text{则 } \\forall\\tau,\\; r(t-\\tau) \\to y(t-\\tau) \\end{aligned}$$",
+      "formulaLatex": "$$\\begin{aligned}&\\frac{\\mathrm{d}^n y(t)}{\\mathrm{d}t^n} + a_{n-1}\\frac{\\mathrm{d}^{n-1} y(t)}{\\mathrm{d}t^{n-1}} + \\cdots + a_1\\frac{\\mathrm{d}y(t)}{\\mathrm{d}t} + a_0 y(t) = b_m\\frac{\\mathrm{d}^m r(t)}{\\mathrm{d}t^m} + \\cdots + b_1\\frac{\\mathrm{d}r(t)}{\\mathrm{d}t} + b_0 r(t) \\qquad\\text{式(1-11)} \\\\&\\text{时不变（定常）性：若 } r(t)\\to y(t),\\; \\text{则 } \\forall\\tau,\\; r(t-\\tau) \\to y(t-\\tau)\\end{aligned}$$",
+      "figureSvg": "<svg role='img' viewBox='0 0 440 118' xmlns='http://www.w3.org/2000/svg'><title>线性定常（时不变）系统时间平移响应特性示意图（仿主教材图1-12）</title><defs><marker id='c1t' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><g transform='translate(0,0)'><text x='14' y='16' font-size='9.5' fill='#1e3a8a' font-weight='700'>t₀ 时刻加输入 r(t) → 响应 y(t)</text><line x1='16' y1='94' x2='200' y2='94' stroke='#334155' stroke-width='1.2' marker-end='url(#c1t)'/><line x1='28' y1='106' x2='28' y2='24' stroke='#334155' stroke-width='1.2' marker-end='url(#c1t)'/><polyline points='28,94 62,94 62,56 190,56' fill='none' stroke='#2744a8' stroke-width='1.6' stroke-dasharray='4 2'/><path d='M62 94 C 74 44, 92 42, 112 58 C 128 66, 150 54, 190 56' fill='none' stroke='#0b6e4f' stroke-width='2.1'/><text x='57' y='108' font-size='9' fill='#475569'>t₀</text><text x='194' y='108' font-size='9' fill='#334155'>t</text><text x='132' y='44' font-size='8.5' fill='#0b6e4f' font-weight='700'>y(t)</text></g><g transform='translate(222,0)'><text x='8' y='16' font-size='9.5' fill='#0b6e4f' font-weight='700'>平移 τ：r(t−τ) → 形状完全不变 y(t−τ)</text><line x1='16' y1='94' x2='206' y2='94' stroke='#334155' stroke-width='1.2' marker-end='url(#c1t)'/><line x1='28' y1='106' x2='28' y2='24' stroke='#334155' stroke-width='1.2' marker-end='url(#c1t)'/><polyline points='28,94 94,94 94,56 198,56' fill='none' stroke='#2744a8' stroke-width='1.6' stroke-dasharray='4 2'/><path d='M94 94 C 106 44, 124 42, 144 58 C 160 66, 176 54, 198 56' fill='none' stroke='#0b6e4f' stroke-width='2.1'/><text x='82' y='108' font-size='9' fill='#475569'>t₀+τ</text><text x='200' y='108' font-size='9' fill='#334155'>t</text><text x='150' y='44' font-size='8.5' fill='#0b6e4f' font-weight='700'>y(t−τ)</text></g></svg>",
       "symbols": [
-        { "sym": "$a_i, b_j$", "desc": "全为常数 $\\Rightarrow$ 线性定常（LTI）系统；任一系数为时间 $t$ 的显函数 $\\Rightarrow$ 线性时变系统" }
+        {
+          "sym": "$a_i, b_j$",
+          "desc": "全为常数 $\\Rightarrow$ **线性定常（LTI）系统**；任一系数为时间 $t$ 的显函数 $\\Rightarrow$ **线性时变系统**"
+        },
+        {
+          "sym": "静态 vs 动态",
+          "desc": "若方程仅含即时函数关系（无导数、积分或时间延迟），为**静态系统**；否则为**动态系统**"
+        }
       ],
-      "conditions": "全书（除第 9 章非线性外）若未加特别说明，默认研究**单变量线性定常（时不变）连续系统**。",
-      "pitfalls": "判断“时变 vs 非线性”要拆开看：如 $t\\dot{c}(t)+c(t)=r(t)+3\\dot{r}(t)$ 中因子 $t$ 只乘在线性项上，仍满足叠加与齐次性，故为**线性时变**系统而非非线性系统！",
+      "conditions": "全书（除第 9 章非线性系统外）若未加特别说明，默认研究**单变量线性定常（LTI）连续系统**。",
+      "pitfalls": "判断「时变 vs 非线性」务必拆开看：如 $t\\dot{c}(t)+c(t)=r(t)+3\\dot{r}(t)$（习题 1-10 ③）中因子 $t$ 仅乘在线性项上，仍满足叠加性与齐次性，故为**线性时变动态系统**而非非线性系统！",
       "source": {
         "book": "孙优贤《自动控制原理》(2011第1版)",
         "printedPage": "P.11",
@@ -51,111 +171,518 @@
         "itemRef": "式(1-11) & 图1-12",
         "crossRef": "孙优贤《学习辅导》(2017第1版) P.2 1.2.3④"
       },
-      "verification": { "method": "textbook-checked", "verified": true }
+      "verification": {
+        "method": "sympy",
+        "testId": "ch01_ex_a1_10_classify_7eqs",
+        "verified": true
+      }
     },
     {
       "id": "ctrl-ch01-c-01",
-      "section": "1.2.1 常用核心术语",
+      "section": "1.1 自动控制系统的基本概念 · 常用术语",
       "kind": "conclusion",
-      "title": "自动控制系统核心术语精确辨析（画方块图必背）",
+      "title": "自动控制系统 10 大核心术语精确对照表（画方块图与简答必背）",
       "examWeight": "core",
-      "summary": "- **被控对象（被控过程）**：要求实现控制的设备、装置或运行变化过程（如转台、汽车、蒸汽加热器）。\n- **被控变量（系统输出）**：具体要求实现控制的物理量（如转速、出口温度、实际行车路线）。\n- **控制器**：按预先设计好的控制规律，根据**偏差信号**给出控制作用的部件。\n- **执行机构**：执行控制器指令，通过**控制变量（操纵变量）**将控制作用施加于被控对象的装置（如直流电机、调节阀）。\n- **参考输入（给定值）**：希望被控变量达到的期望值或运行规律。\n- **扰动输入（扰动量）**：任何引起被控变量偏离期望值的外界因素（如进料流量波动、负载转矩突变）。",
-      "conditions": "分析任何物理系统原理图时，第一步先锁定「要控制什么物理量（被控变量）」和「靠改什么物理量去调它（控制变量）」。",
-      "pitfalls": "最常混淆的是一对概念：**控制变量（操纵变量）**是执行机构施加给被控对象的物理量（如加热蒸汽流量），而**被控变量**是最终要稳住的输出量（如物料出口温度），两者绝不能写反！",
+      "summary": "主教材 P.1-3 给出了自动控制系统的**五大基本要素**（① 被控变量、② 被控对象、③ 检测传感器、④ 控制器、⑤ 执行机构）与完整专业术语体系，并明确区分了**工艺流程图 / 带控制点工艺流程图 / 控制系统方块图**以及**静态特性 vs 动态特性**。",
+      "tables": [
+        {
+          "caption": "表 1-1 自动控制系统核心术语精确辨析表（整理自主教材 P.1-3 & 学习辅导 P.1）",
+          "headers": [
+            "术语",
+            "精确定义",
+            "典型物理示例"
+          ],
+          "rows": [
+            [
+              "系统",
+              "为完成特定任务而有机组合的整体（不仅限于物理系统，也可为软件、经济或数学变换）",
+              "液位系统、操作系统、Laplace/Z变换"
+            ],
+            [
+              "被控对象（过程）",
+              "要求实现控制的设备、装置或运行变化过程",
+              "水槽、直流电机、蒸汽加热器、汽车"
+            ],
+            [
+              "被控变量（系统输出）",
+              "具体要求实现控制的物理量，表征对象状态和性能",
+              "实际液位 $h$、电机转速、出口温度"
+            ],
+            [
+              "控制变量（操纵变量）",
+              "执行机构作用于被控对象、用于改变其运行状态的量",
+              "出水/进水流量、加热蒸汽流量、电枢电压"
+            ],
+            [
+              "参考输入（给定值）",
+              "人们希望被控变量达到的期望数值或变化规律",
+              "期望液位 $H$、设定温度 $15^\\circ\\text{C}$"
+            ],
+            [
+              "反馈信号（正/负反馈）",
+              "由输出端取出并反向送回输入端的信号；与参考输入**相减为负反馈，相加为正反馈**",
+              "液位变送器 LT 信号、测速发电机电压"
+            ],
+            [
+              "偏差信号（误差）",
+              "期望输出值与实际输出值（或参考输入与反馈信号）之差；易引起误解时须用文字或公式说明",
+              "$e = H - h$、转速电压偏差 $e$"
+            ],
+            [
+              "扰动信号（内扰/外扰）",
+              "使输出偏离期望值的因素；产生于内部称**内扰**，来自外部称**外扰**",
+              "进水流量波动、电机负载转矩突变"
+            ],
+            [
+              "控制器 & 执行机构",
+              "控制器按偏差与预设控制规律发出指令；执行机构执行指令施加控制作用",
+              "液位控制器 LC + 调节阀；放大器 + 电机"
+            ],
+            [
+              "静态特性 vs 动态特性",
+              "**静态特性**：稳定后的输入输出关系（常为静态放大倍数）；**动态特性**：从一平衡态过渡到另一平衡态的过渡过程特性",
+              "稳态增益 $K$ vs 阶跃过渡响应曲线"
+            ]
+          ]
+        }
+      ],
+      "conditions": "分析任何物理系统原理图时，第一步先锁定「要稳住什么物理量（被控变量）」和「靠调节哪个物理量去改变它（控制/操纵变量）」。",
+      "pitfalls": "① 最常写反的是**被控变量**（输出）与**控制变量/操纵变量**（执行机构输出）；② **工艺流程图**表示物料流向，**控制系统方块图**箭头表示**信息因果流向**，两者方向可能完全相反！",
       "source": {
-        "book": "孙优贤《学习辅导》(2017第1版)",
-        "printedPage": "P.1",
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.1-3",
         "pdfPage": 10,
-        "itemRef": "1.2.1(1) 常用术语",
-        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.1-3"
+        "itemRef": "第一节 常用术语",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.1 1.2.1(1)"
       },
-      "verification": { "method": "textbook-checked", "verified": true }
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
     },
     {
       "id": "ctrl-ch01-c-02",
-      "section": "1.2.1 基本要求与负反馈机理",
+      "section": "1.4 对自动控制系统的基本要求",
       "kind": "conclusion",
       "title": "控制系统三大基本要求「稳 · 准 · 快」与负反馈核心原理",
       "examWeight": "core",
-      "summary": "1. **稳（稳定性）**：系统正常工作的**首要必要条件**；受扰偏离平衡后能重新回到原平衡状态（第 4 章核心）。\n2. **准（稳态性能）**：过渡过程结束后稳态误差 $e_{ss}$ 尽可能小（第 4 章核心）。\n3. **快（动态性能）**：快速而平稳地跟踪参考输入或抑制扰动，用 $T_r, T_p, \\sigma\\%, T_s$ 衡量（第 3 章核心）。\n4. **负反馈核心机理**：将输出经测量变送引回输入端，与参考输入相减得**偏差信号**，驱动控制器产生能**减小或消除偏差**的控制作用。",
-      "conditions": "「稳、准、快」三者往往互相制约（例如提高增益使系统更准更快，却可能引发振荡甚至失稳），系统校正与综合的本质就是在三者间取得最佳折中。",
-      "pitfalls": "并非所有反馈都能稳定系统——**正反馈**会将偏差越放越大（如习题 A1-9 的物价-工资通胀螺旋），闭环自动控制的核心机理是**负反馈**。",
+      "summary": "1. **稳（稳定性）**：保证系统正常工作的**先决（必要）条件**。不仅要绝对稳定，还须有一定**稳定裕度**以防参数摄动导致失稳；**工程上临界稳定状态亦视作不稳定状态**（主教材 P.12）。\n2. **快（瞬态/动态性能）**：含储能/惯性元件的系统必有过渡过程，要求**既快又稳**——过渡时间短（快）、振荡及超调幅度小（稳），用 $T_r, T_p, \\sigma\\%, T_s$ 衡量。\n3. **准（稳态误差）**：稳定系统过渡过程结束后，被控量与期望值之差称为稳态误差 $e_{ss}$，体现最终响应准确度，要求尽可能小。\n4. **侧重点差异**：**定值（恒值）系统**对稳定性和稳态准确度要求严格；**随动（伺服）系统**对快速跟踪性能要求更高。\n5. **负反馈核心机理**：把输出经测量引回输入端与给定相减得偏差，驱动控制器产生**消除或减小偏差**的控制作用。",
+      "conditions": "「稳、准、快」三者互相制约（如增大增益可减小稳态误差并提速，但可能加大振荡甚至破坏稳定），控制系统校正的本质就是在三者间取得最佳折中。",
+      "pitfalls": "并非所有反馈都起稳定作用——**正反馈**会将偏差持续放大（如习题 1-9 的物价-工资通胀模型），自动控制闭环系统绝大多数采用**负反馈**！",
       "source": {
-        "book": "孙优贤《学习辅导》(2017第1版)",
-        "printedPage": "P.1-2",
-        "pdfPage": 10,
-        "itemRef": "1.2.1(2)-(3)",
-        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.12"
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.12",
+        "pdfPage": 21,
+        "itemRef": "第四节 对自动控制系统的基本要求",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.1-2 1.2.1(2)-(3)"
       },
-      "verification": { "method": "textbook-checked", "verified": true }
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
     },
     {
       "id": "ctrl-ch01-c-03",
-      "section": "1.2.4 组成与方块图",
+      "section": "1.1 & 1.2.4 控制系统组成与方块图画法",
       "kind": "conclusion",
-      "title": "典型单回路闭环自动控制系统组成方块图（标准模板）",
+      "title": "典型单回路闭环自动控制系统组成方块图与画图三大通则",
       "examWeight": "core",
-      "summary": "典型自动控制系统由四大基本部分构成：**被控对象**、**检测（传感）与变送元件**、**控制器**及**执行机构**（再加比较环节组成负反馈回路）。\n**画方块图 3 步铁律**：① 输入置最左、输出置最右；② 方框内写**物理装置/部件名称**（原理方块图）或传递函数（数学方块图），箭头连线上标**物理信号/变量名称**；③ 比较点务必标明 `+` / `−` 极性，并画出主要扰动入口。",
-      "conditions": "适用于将物理工艺流程或机电原理图抽象为控制系统职能方块图（845 大纲第一项明确要求掌握）。",
-      "pitfalls": "画系统原理方块图时切忌把“物料流”与“信息流”混为一谈！方块图中的箭头一律表示**信号的因果传递方向**（信息流），而非管道里的实际流向。",
-      "figureSvg": "<svg role='img' viewBox='0 0 470 155' xmlns='http://www.w3.org/2000/svg'><title>典型的闭环自动控制系统组成方块图（仿图1-1）</title><defs><marker id='a11' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='10' y1='68' x2='68' y2='68' stroke='#334155' stroke-width='1.5' marker-end='url(#a11)'/><circle cx='78' cy='68' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='86' y1='68' x2='118' y2='68' stroke='#334155' stroke-width='1.5' marker-end='url(#a11)'/><rect x='120' y='50' width='72' height='36' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='156' y='72' text-anchor='middle' font-size='12' fill='#141824' font-weight='600'>控制器</text><line x1='192' y1='68' x2='224' y2='68' stroke='#334155' stroke-width='1.5' marker-end='url(#a11)'/><rect x='226' y='50' width='76' height='36' rx='6' fill='#fef5e5' stroke='#9a5800' stroke-width='1.5'/><text x='264' y='72' text-anchor='middle' font-size='12' fill='#9a5800' font-weight='600'>执行机构</text><line x1='302' y1='68' x2='334' y2='68' stroke='#334155' stroke-width='1.5' marker-end='url(#a11)'/><rect x='336' y='50' width='76' height='36' rx='6' fill='#e7f6f0' stroke='#0b6e4f' stroke-width='1.5'/><text x='374' y='72' text-anchor='middle' font-size='12' fill='#0b6e4f' font-weight='600'>被控对象</text><line x1='412' y1='68' x2='460' y2='68' stroke='#334155' stroke-width='1.5' marker-end='url(#a11)'/><line x1='374' y1='18' x2='374' y2='48' stroke='#b4233c' stroke-width='1.5' marker-end='url(#a11)'/><polyline points='435,68 435,126 306,126' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a11)'/><rect x='222' y='110' width='82' height='32' rx='6' fill='#f3e8ff' stroke='#6b21a8' stroke-width='1.5'/><text x='263' y='130' text-anchor='middle' font-size='12' fill='#6b21a8' font-weight='600'>检测仪表</text><polyline points='222,126 78,126 78,78' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a11)'/><text x='12' y='58' font-size='11' fill='#141824'>参考输入</text><text x='91' y='58' font-size='10' fill='#475569'>偏差</text><text x='380' y='28' font-size='11' fill='#b4233c'>扰动输入</text><text x='416' y='58' font-size='11' fill='#141824'>被控变量</text><text x='64' y='59' font-size='12' fill='#141824'>+</text><text x='65' y='88' font-size='13' fill='#b4233c'>−</text></svg>",
+      "summary": "典型闭环系统由**被控对象（过程）、检测（传感）仪表、控制器（含比较器）与执行机构**组成，包含三条关键通道：**控制通道（前向通道）**、**扰动通道**与**反馈通道**（主教材 P.2-3）。\n**画方块图三大通则（主教材 P.8）**：\n1. **输入置最左、输出置最右**，按汉字书写习惯沿信息因果流向从左向右画出各环节；\n2. **反馈通道画在下方，前馈通道画在上方**，比较点明确标出 `+` / `−` 极性；\n3. **方框内写设备/装置名，连线箭头上写物理信号/变量名**，且箭头表示**信息流向**而非物料流向。",
+      "figureSvg": "<svg role='img' viewBox='0 0 470 155' xmlns='http://www.w3.org/2000/svg'><title>典型的闭环自动控制系统组成方块图（仿主教材图1-2与学习辅导图1-1）</title><defs><marker id='a11' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='10' y1='68' x2='68' y2='68' stroke='#334155' stroke-width='1.5' marker-end='url(#a11)'/><circle cx='78' cy='68' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='86' y1='68' x2='118' y2='68' stroke='#334155' stroke-width='1.5' marker-end='url(#a11)'/><rect x='120' y='50' width='72' height='36' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='156' y='72' text-anchor='middle' font-size='12' fill='#141824' font-weight='600'>控制器</text><line x1='192' y1='68' x2='224' y2='68' stroke='#334155' stroke-width='1.5' marker-end='url(#a11)'/><rect x='226' y='50' width='76' height='36' rx='6' fill='#fef5e5' stroke='#9a5800' stroke-width='1.5'/><text x='264' y='72' text-anchor='middle' font-size='12' fill='#9a5800' font-weight='600'>执行机构</text><line x1='302' y1='68' x2='334' y2='68' stroke='#334155' stroke-width='1.5' marker-end='url(#a11)'/><rect x='336' y='50' width='76' height='36' rx='6' fill='#e7f6f0' stroke='#0b6e4f' stroke-width='1.5'/><text x='374' y='72' text-anchor='middle' font-size='12' fill='#0b6e4f' font-weight='600'>被控对象</text><line x1='412' y1='68' x2='460' y2='68' stroke='#334155' stroke-width='1.5' marker-end='url(#a11)'/><line x1='374' y1='18' x2='374' y2='48' stroke='#b4233c' stroke-width='1.5' marker-end='url(#a11)'/><polyline points='435,68 435,126 306,126' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a11)'/><rect x='222' y='110' width='82' height='32' rx='6' fill='#f3e8ff' stroke='#6b21a8' stroke-width='1.5'/><text x='263' y='130' text-anchor='middle' font-size='12' fill='#6b21a8' font-weight='600'>检测仪表</text><polyline points='222,126 78,126 78,78' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a11)'/><text x='12' y='58' font-size='11' fill='#141824'>参考输入</text><text x='91' y='58' font-size='10' fill='#475569'>偏差</text><text x='380' y='28' font-size='11' fill='#b4233c'>扰动输入</text><text x='416' y='58' font-size='11' fill='#141824'>被控变量</text><text x='64' y='59' font-size='12' fill='#141824'>+</text><text x='65' y='88' font-size='13' fill='#b4233c'>−</text></svg>",
+      "conditions": "845 考纲第一条明确要求「能由系统工作原理与结构图确定要素并绘制方块图」，本章全部工程例题与习题均围绕此标准模板展开。",
+      "pitfalls": "画带控制点的工业系统方块图时，切勿漏画**主要扰动入口**（箭头指向被控对象方框顶部）或漏标比较点负号 `−`！",
       "source": {
-        "book": "孙优贤《学习辅导》(2017第1版)",
-        "printedPage": "P.2-3",
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.2-3, P.8",
         "pdfPage": 11,
-        "itemRef": "1.2.4 & 图1-1",
-        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.4-5"
+        "itemRef": "图1-2 & 画方块图一般原则",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.2-3 1.2.4 图1-1"
       },
-      "verification": { "method": "textbook-checked", "verified": true }
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
     },
     {
       "id": "ctrl-ch01-c-04",
-      "section": "1.2.2 基本控制结构形式",
+      "section": "1.2 控制系统的基本结构形式",
       "kind": "conclusion",
-      "title": "开环控制、闭环控制与复合控制（前馈+反馈）优缺点对比",
+      "title": "开环控制、闭环控制与复合控制（前馈+反馈）七维全面对比表",
       "examWeight": "core",
-      "summary": "1. **开环控制**（含单纯按扰动前馈控制）：输出不反馈到输入端。结构简单、成本低、**不存在由反馈引起的稳定性问题**；但**抗未知扰动能力差、对内部参数变化敏感、控制精度低**。\n2. **闭环控制（负反馈）**：按偏差调节，既能克服外部扰动又对内部参数摄动不敏感，精度高；但属于**“事后”调节**（必须先出现偏差才动作），且反馈回路可能引发**振荡甚至不稳定**。\n3. **复合控制（前馈 + 反馈）**：前馈对主要可测扰动做**“事前”及时补偿**，反馈兜底消除其余未测扰动与模型误差，兼顾高精度、快抑制与稳态无差（成本与复杂度较高）。",
-      "conditions": "前馈补偿要求主要扰动可测量且扰动通道模型较准确。",
-      "pitfalls": "高频概念陷阱：**单纯前馈控制（按扰动控制）没有测量和反馈被控输出，结构上仍属于开环控制！** 只有与输出反馈结合才构成复合控制（见例 1-3 方案三 vs 方案四）。",
+      "summary": "控制系统的基本结构分为**开环控制**、**闭环控制（负反馈）**与**复合控制（前馈+反馈）**三大类。特别注意：**单纯按扰动的前馈控制没有检测输出反馈，本质上仍属于开环控制！**",
+      "tables": [
+        {
+          "caption": "表 1-2 开环、闭环、纯前馈与复合控制系统全面对比表（整理自主教材 P.4-8 & 学习辅导 P.2, 6-7）",
+          "headers": [
+            "对比维度",
+            "按给定开环控制",
+            "纯前馈控制（按扰动开环）",
+            "负反馈闭环控制",
+            "前馈+反馈复合控制"
+          ],
+          "rows": [
+            [
+              "信息流结构",
+              "单向传递，无输出反馈",
+              "测主扰动补偿，**无输出反馈（仍属开环）**",
+              "输出反馈构成闭合环路",
+              "前馈通道（上）+ 负反馈闭环（下）"
+            ],
+            [
+              "作用时机",
+              "按预设规律直接动作",
+              "**事前控制**（扰动影响输出前即抵消）",
+              "**事后控制**（出现偏差后才纠偏）",
+              "事前快速抑制主扰 + 事后闭环兜底"
+            ],
+            [
+              "抗外部扰动",
+              "差，无法察觉任何扰动",
+              "仅能克服**已测的特定主扰动**，对其余扰动无效",
+              "强，可克服环内一切扰动（按 $\\frac{1}{1+G_1G_2H}$ 削弱）",
+              "**最强**，主扰动近似全消、其余扰动由闭环消除"
+            ],
+            [
+              "内部参数敏感度",
+              "高（$S_G^{G_0}=1$）",
+              "对对象/通道模型精确度要求高",
+              "低（$S_G^M=\\frac{1}{1+GH}\\ll 1$）",
+              "低，反馈闭环自动补偿前馈模型误差"
+            ],
+            [
+              "稳定性问题",
+              "只要各环节稳定即稳定，**无反馈失稳**",
+              "无反馈回路，一般不引入反馈失稳",
+              "设计不当可能引发振荡甚至不稳定",
+              "需保证反馈闭环稳定"
+            ],
+            [
+              "成本与复杂度",
+              "结构简单、调整方便、成本低",
+              "中等（需加装扰动测量与补偿器）",
+              "较复杂、成本较高",
+              "最复杂、成本最高"
+            ],
+            [
+              "典型实例",
+              "微波炉定时、自动售货机、开环电机调速",
+              "蒸汽加热器方案三（仅 FT+FC）",
+              "水槽液位闭环、测速电机闭环、丙烯冷却器",
+              "水槽液位/加热器/换热器/谷物湿度复合控制"
+            ]
+          ]
+        }
+      ],
+      "conditions": "开环适用于输入预先已知且扰动可忽略的场合；高精度抗扰必用闭环；当存在可测强扰动且对动态品质要求极高时采用复合控制。",
+      "pitfalls": "高频概念考题陷阱：问「单纯前馈控制系统是开环还是闭环？」——**答案必为开环控制**（按扰动控制的开环系统），因为它不测量、不反馈被控输出！",
       "source": {
-        "book": "孙优贤《学习辅导》(2017第1版)",
-        "printedPage": "P.2 & P.6-7",
-        "pdfPage": 11,
-        "itemRef": "1.2.2 & 例1-3分析",
-        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.4-8"
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.4-8",
+        "pdfPage": 13,
+        "itemRef": "第二节 一~三 & 复合控制",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.2 1.2.2 & P.5-7 例1-3"
       },
-      "verification": { "method": "textbook-checked", "verified": true }
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
     },
     {
       "id": "ctrl-ch01-c-05",
-      "section": "1.2.3 控制系统的分类",
+      "section": "1.3 自动控制系统的分类",
       "kind": "conclusion",
-      "title": "自动控制系统的六大分类维度（重点：恒值 / 随动 / 程序）",
+      "title": "自动控制系统六大分类维度与典型实例总表",
       "examWeight": "core",
-      "summary": "1. **按结构形式**：开环 / 闭环 / 复合控制系统。\n2. **按传递信号性质**：连续时间系统（全为连续函数） / 离散时间系统（含脉冲或数字信号，第 7 章）。\n3. **按系统特性**：线性系统 / 非线性系统（第 9 章）。\n4. **按参数是否随时间变化**：定常（时不变）系统 / 时变系统。\n5. **按输入输出数量**：单变量（SISO，经典控制核心） / 多变量（MIMO，现代控制状态空间核心）。\n6. **按参考输入特征（工程最常用）**：\n   - **恒值（定值/调节）系统**：给定值为常数，核心任务是**强抗干扰**（如温度、液位调节）；\n   - **随动（伺服）系统**：给定值随时间任意未知变化，核心任务是**快速准确跟踪**（如雷达跟踪）；\n   - **程序控制系统**：给定值按预设已知函数规律变化（如数控机床加工）。",
-      "conditions": "分类维度彼此正交，同一物理系统可同时标注多个属性（如“连续线性定常单变量恒值闭环系统”）。",
-      "pitfalls": "考题常问“某温度控制属于定值还是随动系统？为什么？”——答法模板：因给定温度恒定不变（如 $15\\pm 1.5^\\circ\\text{C}$），核心任务是克服外界扰动维持恒温，故属**恒值（定值）控制系统**。",
+      "summary": "主教材 P.9-11 按六个正交维度对控制系统分类。工程中同一物理系统可同时兼具多个标签（例如「单变量线性定常连续恒值闭环系统」）。注意**单变量系统（SISO）内部也可以包含多个反馈回路**（主教材图 1-10），只看对外呈现的输入输出个数！",
+      "tables": [
+        {
+          "caption": "表 1-3 自动控制系统六大分类维度总表（整理自主教材 P.9-11 & 学习辅导 P.2）",
+          "headers": [
+            "分类原则",
+            "子类名称",
+            "核心特征 / 数学模型",
+            "典型实例与主要任务"
+          ],
+          "rows": [
+            [
+              "① 按结构形式",
+              "开环 / 闭环 / 复合",
+              "有无输出反馈通道与前馈通道",
+              "见表 1-2 详细对比"
+            ],
+            [
+              "② 按给定信号特征（工程最常用）",
+              "恒值（定值/调节）/ 随动（伺服）/ 程序",
+              "**恒值**：给定为常数；**随动**：给定未知随机变化；**程序**：给定按预设已知函数变化",
+              "恒温恒压液位（重抗扰） / 雷达火炮跟踪（重快速跟踪） / 数控机床、热处理炉温"
+            ],
+            [
+              "③ 按传输信号性质",
+              "连续时间 / 离散时间",
+              "连续：各处均为 $t$ 的连续函数（微分方程）；离散：一处或多处为脉冲/数字信号（差分方程）",
+              "一般模拟物理系统 / 含计算机与 A/D、D/A 采样保持的系统（第 7 章）"
+            ],
+            [
+              "④ 按输入输出数量",
+              "单变量（SISO）/ 多变量（MIMO）",
+              "SISO：一入一出（经典控制，传函/微分方程）；MIMO：多入多出且变量耦合（现代控制，状态空间）",
+              "单回路/多回路液位（图 1-10） / 耦合化工精馏塔、飞行器姿态（图 1-11）"
+            ],
+            [
+              "⑤ 按数学描述特性",
+              "线性系统 / 非线性系统",
+              "线性：同时满足叠加性与均匀性；非线性：含任一非线性环节即是非线性",
+              "线性微分方程系统 / 含饱和、死区、继电器、平方项系统（第 9 章）"
+            ],
+            [
+              "⑥ 按参数是否随时间变化",
+              "定常（时不变）/ 时变",
+              "定常：方程系数全为常数，满足时移不变性；时变：结构或参数随时间变化",
+              "常规机电/过程系统 / 燃料不断消耗的火箭质量时变系统"
+            ]
+          ]
+        }
+      ],
+      "conditions": "六个分类维度彼此正交；本教材前八章除特别说明外均研究**单变量线性定常系统**，第 9 章专门介绍非线性系统。",
+      "pitfalls": "简答模板：凡题目问「属于定值还是随动系统？为什么？」——先看给定值是否恒定（如 $15\\pm 1.5^\\circ\\text{C}$ 恒定不变），再点明主要任务是克服外界扰动维持期望值不变，故属**恒值（定值）控制系统**！",
       "source": {
-        "book": "孙优贤《学习辅导》(2017第1版)",
-        "printedPage": "P.2",
-        "pdfPage": 11,
-        "itemRef": "1.2.3 ①~⑥",
-        "crossRef": "孙优贤《自动控制原理》(2011第1版) P.9-11"
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.9-11",
+        "pdfPage": 18,
+        "itemRef": "第三节 一~六 & 图1-10~1-11",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.2 1.2.3"
       },
-      "verification": { "method": "textbook-checked", "verified": true }
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch01-c-06",
+      "section": "1.5-1.6 自动控制理论发展概况与全书结构体系",
+      "kind": "conclusion",
+      "title": "【教材拓展】自动控制理论四大发展阶段里程碑总表与经典控制局限性",
+      "examWeight": "extended",
+      "summary": "主教材第五节（P.12-14）系统梳理了控制理论从古代直觉应用到智能控制的演进脉络，并明确指出**经典控制理论的两大局限性**：\n1. **只适用于线性定常系统和单输入单输出（SISO）系统**；\n2. **数学模型（传递函数）仅描述系统外部输入输出特性，无法揭示系统内部状态，研究综合设计时多依赖试探法，难以得到严格最优结果**。\n此外，主教材第六节（P.15）明确了**系统分析 vs 系统设计（校正）**的辩证关系：分析是已知结构参数求性能指标；若不满足指标而对象不可变，则通过改变参数或附加校正装置使系统达标（即校正）。",
+      "tables": [
+        {
+          "caption": "表 1-4 自动控制理论发展四大阶段里程碑总表（整理自主教材 P.12-14 第五节）",
+          "headers": [
+            "发展阶段",
+            "标志性人物与年份",
+            "历史突破 / 核心贡献"
+          ],
+          "rows": [
+            [
+              "一、早期自动控制（古代—18世纪）",
+              "中国指南车、北宋苏颂/韩公廉水运仪象台；凯特斯比斯（前3世纪）、赫容、德勒贝尔（1620）、帕平（1681）；**普尔佐诺夫（1765）、瓦特（1784）**",
+              "指南车（按扰动齿轮传动）、水运仪象台天衡（闭环偏差控制）；锅炉水位调节器与蒸汽机离心式调速器将比例反馈控制引入工业生产"
+            ],
+            [
+              "二、经典控制理论（19世纪下半叶—20世纪40年代末）",
+              "**麦克斯韦（1868）**、**劳斯（1877）**、**霍尔维茨（1895）**、**李亚普诺夫（1892）**；米罗斯基（1922 PID）、哈仁（1934伺服）、齐格勒-尼科尔斯（1942 PID整定）；**奈奎斯特（1932）**、**波特（1940）**、哈尔（1943 s域方块图）、**伊万斯（1948根轨迹）**",
+              "建立以微分方程、传递函数为基础的时域、频域与复频域（根轨迹）三大分析体系；成为现代工科核心基石"
+            ],
+            [
+              "三、现代控制理论（20世纪50年代后期—60年代初）",
+              "**钱学森（1954《工程控制论》启蒙名著）**；**贝尔曼（1957动态规划）**、**庞特里亚金（1960极大值原理）**、**卡尔曼（1960状态空间、卡尔曼滤波与最优调节器）**",
+              "以一阶微分（差分）方程组的状态空间模型为核心，借助计算机将控制推广至多变量（MIMO）、非线性、时变与最优控制"
+            ],
+            [
+              "四、大系统与智能控制（20世纪70年代至今）",
+              "大系统递阶/分散优化控制；模糊控制、专家控制、神经网络等智能控制",
+              "针对规模庞大、多目标、难以建立精确数学模型的复杂系统（注：经典与现代均以数学模型为基础，智能控制则不强依赖精确模型）"
+            ]
+          ]
+        }
+      ],
+      "conditions": "本条对应主教材第五、六节及学习辅导 P.1「了解」级要求、自测题 B1-7，标为「教材拓展」，完整保留全书知识脉络供概念简答与复试面试参考。",
+      "pitfalls": "区分经典控制与现代控制的核心差异：① 模型（外部传递函数 vs 内部状态空间）；② 适用对象（SISO LTI vs MIMO/时变/非线性）；③ 数学工具（拉氏变换/图解法 vs 线性代数/矩阵与变分优化）。",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.12-15",
+        "pdfPage": 21,
+        "itemRef": "第五节 & 第六节",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.3 知识脉络图 & P.10 B1-7"
+      },
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
     },
     {
       "id": "ctrl-ch01-e-01",
-      "section": "1.3 典型例题精选",
+      "section": "主教材 1.1 · 例 1-1",
       "kind": "example",
-      "title": "例 1-1：转台速度控制系统——开环结构剖析与闭环改造",
+      "title": "【主教材例 1-1】工业水槽液位控制系统：从人工控制到自动负反馈闭环",
       "examWeight": "core",
-      "problem": "某转台速度控制装置由电池电位器（速度设置电压）、直流放大器、直流电机和转台依次串联组成，无测速反馈。问：① 该系统的被控对象、控制器与执行机构分别是什么？② 判断其属于开环还是闭环系统并画方块图；③ 如何提高控制精度？画出改进后的闭环方块图。",
-      "figureSvg": "<svg role='img' viewBox='0 0 470 155' xmlns='http://www.w3.org/2000/svg'><title>例1-1 转台转速闭环控制系统方块图（加装测速仪负反馈，仿图1-5）</title><defs><marker id='a15' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='10' y1='52' x2='72' y2='52' stroke='#334155' stroke-width='1.5' marker-end='url(#a15)'/><circle cx='82' cy='52' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='90' y1='52' x2='122' y2='52' stroke='#334155' stroke-width='1.5' marker-end='url(#a15)'/><rect x='124' y='34' width='80' height='36' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='164' y='56' text-anchor='middle' font-size='12' fill='#141824'>直流放大器</text><line x1='204' y1='52' x2='234' y2='52' stroke='#334155' stroke-width='1.5' marker-end='url(#a15)'/><rect x='236' y='34' width='76' height='36' rx='6' fill='#fef5e5' stroke='#9a5800' stroke-width='1.5'/><text x='274' y='56' text-anchor='middle' font-size='12' fill='#9a5800'>直流电机</text><line x1='312' y1='52' x2='342' y2='52' stroke='#334155' stroke-width='1.5' marker-end='url(#a15)'/><rect x='344' y='34' width='58' height='36' rx='6' fill='#e7f6f0' stroke='#0b6e4f' stroke-width='1.5'/><text x='373' y='56' text-anchor='middle' font-size='12' fill='#0b6e4f'>转台</text><line x1='402' y1='52' x2='460' y2='52' stroke='#334155' stroke-width='1.5' marker-end='url(#a15)'/><polyline points='428,52 428,118 294,118' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a15)'/><rect x='220' y='102' width='72' height='32' rx='6' fill='#f3e8ff' stroke='#6b21a8' stroke-width='1.5'/><text x='256' y='122' text-anchor='middle' font-size='12' fill='#6b21a8'>转速仪</text><polyline points='220,118 82,118 82,62' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a15)'/><text x='12' y='40' font-size='10' fill='#141824'>期望速度(电压)</text><text x='410' y='40' font-size='10' fill='#141824'>实际速度</text><text x='100' y='110' font-size='10' fill='#6b21a8'>测量速度(电压)</text><text x='68' y='43' font-size='12' fill='#141824'>+</text><text x='69' y='71' font-size='13' fill='#b4233c'>−</text></svg>",
+      "problem": "工业水槽要求通过调节出水口阀门开度将液位保持在期望高度 $H$（主教材图 1-1）。正常工况下进水量 $Q_{\\text{in}}$ 与出水量 $Q_{\\text{out}}$ 平衡；当 $Q_{\\text{in}}$ 波动时液位 $h$ 偏离 $H$。说明人工控制与自动控制（配置液位传感器 LT、液位控制器 LC 与出水控制阀）的调节过程，并指出被控对象、被控变量、控制变量、执行机构、扰动量及方块图结构。",
       "steps": [
-        { "stepTitle": "1. 识别系统核心部件", "detail": "被控对象为**转台**（被控变量为实际转速），控制器为**直流放大器**，执行机构为**直流电机**。" },
-        { "stepTitle": "2. 判定开环结构及其缺陷", "detail": "原系统无转速测量与反馈回路，属于**开环控制系统**（期望速度电压 $\\to$ 直流放大器 $\\to$ 直流电机 $\\to$ 转台 $\\to$ 实际速度）。一旦电机参数漂移或负载变化，放大器无从得知转速偏差，无法自动纠偏。" },
-        { "stepTitle": "3. 闭环改造措施", "detail": "在转台轴上加装**转速仪**（测速发电机），将实际转速转换为成比例的电压信号反馈到输入比较点，与速度给定电压相减得偏差信号送入直流放大器，构成**负反馈闭环系统**（如图）。部件精密时，闭环误差可降至开环误差的 $1/100$。" }
+        {
+          "stepTitle": "1. 剖析人工控制 vs 自动控制机理",
+          "detail": "- **人工控制**：人眼观测实际液位 $h$ $\\to$ 大脑将 $h$ 与目标 $H$ 比较得误差 $\\to$ 手动开大或关小出水阀，需要操作工不间断监视。\n- **自动控制**：液位传感器 LT 代替人眼连续测 $h$ 送给液位控制器 LC；LC 比较 $h$ 与期望值 $H$ 计算偏差，驱动出水控制阀动作：若 $Q_{\\text{in}}\\uparrow \\Rightarrow h\\uparrow \\Rightarrow$ LC 指令**加大**出水阀开度使 $Q_{\\text{out}}\\uparrow$；若 $Q_{\\text{in}}\\downarrow \\Rightarrow h\\downarrow \\Rightarrow$ LC 指令**关小**出水阀使 $Q_{\\text{out}}\\downarrow$，直至偏差为零达到新平衡。"
+        },
+        {
+          "stepTitle": "2. 精准锁定系统各组成要素",
+          "detail": "- **被控对象**：水槽；\n- **被控变量（输出）**：水槽实际液位 $h$；\n- **参考输入（给定值）**：期望液位 $H$；\n- **控制变量（操纵变量）**：出水口流量 $Q_{\\text{out}}$；\n- **执行机构**：出水控制阀；\n- **检测传感器**：液位传感器 LT；\n- **控制器**：液位控制器 LC；\n- **扰动量**：进水流量 $Q_{\\text{in}}$。\n系统方块图即典型单回路负反馈结构（见重要结论 `ctrl-ch01-c-03` 图 1-2）。"
+        }
+      ],
+      "finalAnswer": "属单回路负反馈闭环恒值控制系统；对象：水槽，被控变量：液位 $h$，控制变量：出口流量 $Q_{\\text{out}}$，执行机构：出水阀，扰动：进水流量 $Q_{\\text{in}}$。",
+      "takeaway": "牢记「人工 $\\to$ 自动」三替身：传感器替人眼、控制器替人脑、执行机构替人手；并且搞清工艺流程图（水从进水阀流向出水阀）与方块图信息流（LT $\\to$ LC $\\to$ 出水阀 $\\to$ 水槽）的区别！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.1-3",
+        "pdfPage": 10,
+        "itemRef": "例1-1 (图1-1~1-2)"
+      },
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch01-e-02",
+      "section": "主教材 1.2 · 例 1-2",
+      "kind": "example",
+      "title": "【主教材例 1-2】微波炉加热牛奶开环控制系统剖析与方块图",
+      "examWeight": "core",
+      "problem": "用固定功率的微波炉将牛奶加热到合适温度：面板上不能直接设定温度，只能设定加热时间（时间按钮 $\\to$ 定时器 $\\to$ 微波炉加热部分 $\\to$ 牛奶实际温度）。分析各环节角色，说明为何它属于开环控制系统，并写出其方块图串联结构。",
+      "steps": [
+        {
+          "stepTitle": "1. 识别开环单向串联各环节",
+          "detail": "参考输入为**期望的牛奶温度**；因无法直接输入温度，**时间按钮**充当**参考值转换器**将其转换为「加热时间设定」；**定时器**充当**控制器**；微波炉加热部分为**执行机构**，微波炉与牛奶整体承担加热的**动态部分（被控对象）**，输出为加热后的牛奶实际温度。"
+        },
+        {
+          "stepTitle": "2. 判定结构形式与本质缺陷",
+          "detail": "方块图单向串联：`期望牛奶温度 → [时间按钮(参考值转换器)] → 加热时间设定 → [定时器] → [微波炉(动态部分)] → 实际牛奶温度`。\n无论牛奶实际温度够不够热、是否沸腾，输出温度都无法反过来影响定时器的动作，因此属于典型的**开环控制系统**；若牛奶初始温度或份量改变（扰动），必须人工取出试温并重新定时。"
+        }
+      ],
+      "finalAnswer": "属按给定开环控制系统；时间按钮为参考值转换器，定时器为控制器，微波炉为动态被控对象，输出无法影响控制作用。",
+      "takeaway": "开环系统的两个最鲜明特征：① 控制作用**单向传递**；② 精度完全取决于各元器件标定与经验，对未知扰动（如牛奶初温变化）完全无能为力。",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.4",
+        "pdfPage": 13,
+        "itemRef": "例1-2 (图1-3)"
+      },
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch01-e-03",
+      "section": "主教材 1.2 · 例 1-3",
+      "kind": "example",
+      "title": "【主教材例 1-3】直流电动机转速开环控制系统剖析",
+      "examWeight": "core",
+      "problem": "某工业电枢控制直流电动机转速系统由电位器（滑臂位置调节输入电压）、功率放大器（提供电枢电压）与直流电动机（带动负载旋转）组成（主教材图 1-4）。写出系统方块图并分析当负载转矩突然增大时的系统行为。",
+      "steps": [
+        {
+          "stepTitle": "1. 梳理开环方块图与各部分职能",
+          "detail": "信息流单向串联：`滑臂位置(参考输入) → [电位器(参考值转换器)] → 放大器输入电压 → [功率放大器] → 电枢电压 → [直流电动机(动态部分)] → 实际转速`。\n正常稳态下，输入电压与输出转速维持对应平衡关系。"
+        },
+        {
+          "stepTitle": "2. 分析负载扰动下的开环局限性",
+          "detail": "当电动机**负载突然增大**（外部扰动）时，输出转速下降；但由于系统没有转速检测反馈，电位器滑臂位置不会随之改变，电枢电压保持原值，转速无法自动恢复——说明对控制精度要求较高的调速场合必须改用闭环控制。"
+        }
+      ],
+      "finalAnswer": "属开环控制系统（电位器 $\\to$ 功率放大器 $\\to$ 电动机）；结构简单成本低，但负载扰动时无法自动纠偏导致转速跌落。",
+      "takeaway": "例 1-3 与下题例 1-4 构成教材经典对比：只差一台测速发电机与比较点，系统抗扰能力天壤之别！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.4-5",
+        "pdfPage": 13,
+        "itemRef": "例1-3 (图1-4)"
+      },
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch01-e-04",
+      "section": "主教材 1.2 · 例 1-4",
+      "kind": "example",
+      "title": "【主教材例 1-4】直流电动机转速闭环控制系统改造（加装测速发电机负反馈）",
+      "examWeight": "core",
+      "problem": "在主教材例 1-3 的直流电动机调速系统基础上增加一台**测速发电机**构成闭环调速系统（图 1-5）。画出闭环控制系统方块图，详细说明负载增大时的自动调节过程，并归纳闭环控制区别于开环的三大本质特征。",
+      "figureSvg": "<svg role='img' viewBox='0 0 470 150' xmlns='http://www.w3.org/2000/svg'><title>主教材例1-4 直流电动机转速闭环控制系统方块图（仿主教材图1-5b）</title><defs><marker id='c1dc' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='8' y1='64' x2='52' y2='64' stroke='#334155' stroke-width='1.5' marker-end='url(#c1dc)'/><rect x='54' y='48' width='56' height='32' rx='6' fill='#f8fafc' stroke='#64748b' stroke-width='1.4'/><text x='82' y='68' text-anchor='middle' font-size='11' fill='#334155'>电位器</text><line x1='110' y1='64' x2='136' y2='64' stroke='#334155' stroke-width='1.5' marker-end='url(#c1dc)'/><circle cx='146' cy='64' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='154' y1='64' x2='186' y2='64' stroke='#334155' stroke-width='1.5' marker-end='url(#c1dc)'/><rect x='188' y='46' width='78' height='36' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='227' y='68' text-anchor='middle' font-size='11' fill='#1e3a8a' font-weight='600'>功率放大器</text><line x1='266' y1='64' x2='298' y2='64' stroke='#334155' stroke-width='1.5' marker-end='url(#c1dc)'/><rect x='300' y='46' width='76' height='36' rx='6' fill='#e7f6f0' stroke='#0b6e4f' stroke-width='1.5'/><text x='338' y='68' text-anchor='middle' font-size='11' fill='#0b6e4f' font-weight='600'>直流电动机</text><line x1='376' y1='64' x2='454' y2='64' stroke='#334155' stroke-width='1.5' marker-end='url(#c1dc)'/><line x1='338' y1='14' x2='338' y2='44' stroke='#b4233c' stroke-width='1.5' marker-end='url(#c1dc)'/><polyline points='416,64 416,120 314,120' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#c1dc)'/><rect x='226' y='104' width='86' height='32' rx='6' fill='#f3e8ff' stroke='#6b21a8' stroke-width='1.5'/><text x='269' y='124' text-anchor='middle' font-size='11' fill='#6b21a8' font-weight='600'>测速发电机</text><polyline points='226,120 146,120 146,74' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#c1dc)'/><text x='8' y='44' font-size='10' fill='#141824'>给定位置</text><text x='160' y='54' font-size='10' fill='#475569'>偏差 e</text><text x='346' y='26' font-size='10' fill='#b4233c'>负载扰动</text><text x='420' y='54' font-size='10' fill='#141824'>实际转速</text><text x='132' y='55' font-size='12' fill='#141824'>+</text><text x='133' y='83' font-size='13' fill='#b4233c'>−</text></svg>",
+      "steps": [
+        {
+          "stepTitle": "1. 详述负载增大时的闭环负反馈调节过程",
+          "detail": "测速发电机实时检测电动机实际转速并输出成正比的反馈电压，送回输入比较点与电位器给定的参考电压相减得偏差电压 $e$：\n当**负载增大** $\\Rightarrow$ 实际转速 $\\downarrow$ $\\Rightarrow$ 测速发电机反馈电压 $\\downarrow$ $\\Rightarrow$ 偏差电压 $e\\uparrow$ $\\Rightarrow$ 功率放大器输出电枢电压 $\\uparrow$ $\\Rightarrow$ 电磁转矩 $\\uparrow$ 推动转速回升，自动维持在期望值附近！（负载减小或内部元件磨损老化同理自动补偿。）"
+        },
+        {
+          "stepTitle": "2. 归纳闭环控制区别于开环的三大本质特征（主教材 P.5）",
+          "detail": "① **偏差驱动**：控制作用不直接来自给定输入，而是由偏差信号 $e$ 驱动；\n② **输出反馈**：被控量反馈至输入端，保证只要出现偏差就触发纠偏；\n③ **闭合环路**：信息传递路径首尾相连形成自成循环的封闭环路。"
+        }
+      ],
+      "finalAnswer": "加装测速发电机构成转速负反馈闭环（方块图见上）；既抗外部负载扰动，又抗内部元器件老化参数摄动。",
+      "takeaway": "记住「写自动调节过程」的满分箭头链格式：**扰动变化 $\\Rightarrow$ 输出偏离 $\\Rightarrow$ 反馈信号变化 $\\Rightarrow$ 偏差变化 $\\Rightarrow$ 控制器/执行机构动作 $\\Rightarrow$ 抵消扰动使输出恢复**！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.5-6",
+        "pdfPage": 14,
+        "itemRef": "例1-4 (图1-5)"
+      },
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch01-e-05",
+      "section": "主教材 1.2 · 例 1-5",
+      "kind": "example",
+      "title": "【主教材例 1-5】水槽液位前馈 + 反馈复合控制系统（含 P.8 思考题变形）",
+      "examWeight": "core",
+      "problem": "在主教材例 1-1 水槽液位系统中，主要干扰是可测的进水流量 $Q_{\\text{in}}$。为此增设流量传感器 FT 与前馈补偿装置 FC（按不变性原理设计），将其输出经加法器叠加到反馈控制器 LC 输出上共同控制出水阀（图 1-8）。① 说明前馈与反馈的协同工作原理并画原理方块图；② 完成主教材 P.8 思考题：若改以**进水量为控制量、出水量为扰动量**，系统组成与方块图如何变化？",
+      "figureSvg": "<svg role='img' viewBox='0 0 475 178' xmlns='http://www.w3.org/2000/svg'><title>主教材例1-5 水槽液位前馈+反馈复合控制系统方块图（仿主教材图1-9）</title><defs><marker id='c1tk' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='10' y1='102' x2='72' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#c1tk)'/><circle cx='82' cy='102' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='90' y1='102' x2='118' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#c1tk)'/><rect x='120' y='85' width='80' height='34' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='160' y='106' text-anchor='middle' font-size='11' fill='#1e3a8a'>液位控制器LC</text><line x1='200' y1='102' x2='226' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#c1tk)'/><circle cx='236' cy='102' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='244' y1='102' x2='270' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#c1tk)'/><rect x='272' y='85' width='58' height='34' rx='6' fill='#fef5e5' stroke='#9a5800' stroke-width='1.5'/><text x='301' y='106' text-anchor='middle' font-size='11' fill='#9a5800'>出水阀</text><line x1='330' y1='102' x2='362' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#c1tk)'/><rect x='364' y='85' width='52' height='34' rx='6' fill='#e7f6f0' stroke='#0b6e4f' stroke-width='1.5'/><text x='390' y='106' text-anchor='middle' font-size='11' fill='#0b6e4f'>水槽</text><line x1='416' y1='102' x2='466' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#c1tk)'/><line x1='390' y1='14' x2='390' y2='83' stroke='#b4233c' stroke-width='1.5' marker-end='url(#c1tk)'/><polyline points='390,38 358,38' fill='none' stroke='#b4233c' stroke-width='1.4' marker-end='url(#c1tk)'/><rect x='282' y='23' width='74' height='30' rx='6' fill='#fdecef' stroke='#b4233c' stroke-width='1.4'/><text x='319' y='42' text-anchor='middle' font-size='11' fill='#b4233c'>流量测量FT</text><line x1='282' y1='38' x2='258' y2='38' stroke='#b4233c' stroke-width='1.4' marker-end='url(#c1tk)'/><rect x='178' y='23' width='78' height='30' rx='6' fill='#fdecef' stroke='#b4233c' stroke-width='1.4'/><text x='217' y='42' text-anchor='middle' font-size='11' fill='#b4233c'>补偿装置FC</text><polyline points='178,38 164,38 164,66 236,66 236,92' fill='none' stroke='#b4233c' stroke-width='1.4' marker-end='url(#c1tk)'/><polyline points='442,102 442,154 312,154' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#c1tk)'/><rect x='230' y='138' width='80' height='30' rx='6' fill='#f3e8ff' stroke='#6b21a8' stroke-width='1.5'/><text x='270' y='157' text-anchor='middle' font-size='11' fill='#6b21a8'>液位测量LT</text><polyline points='230,154 82,154 82,112' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#c1tk)'/><text x='10' y='92' font-size='10' fill='#141824'>给定液位H</text><text x='420' y='92' font-size='10' fill='#141824'>实际液位h</text><text x='332' y='92' font-size='9.5' fill='#9a5800'>Qout</text><text x='396' y='24' font-size='10' fill='#b4233c'>进水Qin(扰动)</text><text x='68' y='93' font-size='12' fill='#141824'>+</text><text x='69' y='122' font-size='13' fill='#b4233c'>−</text><text x='222' y='94' font-size='11' fill='#141824'>+</text><text x='242' y='92' font-size='11' fill='#b4233c'>+</text></svg>",
+      "steps": [
+        {
+          "stepTitle": "1. 剖析前馈 + 反馈复合工作原理",
+          "detail": "- **前馈通道（事前补偿）**：FT 实时检测进水流量 $Q_{\\text{in}}$ 变化，FC 在液位 $h$ 尚未发生明显变动前就立刻发出补偿信号叠加到出水阀（如 $Q_{\\text{in}}\\downarrow \\Rightarrow$ 立即指令出水阀关小减少 $Q_{\\text{out}}$），抢先抵消主扰动。\n- **反馈闭环（事后兜底）**：LT 测量实际液位 $h$ 反馈至 LC，消除前馈模型不精确残留的静差以及其他未测扰动（如管压波动、蒸发等）。\n方块图见上图（反馈在下，前馈在上）。"
+        },
+        {
+          "stepTitle": "2. 解答主教材 P.8 思考题（进水作控制量、出水作扰动）",
+          "detail": "若将控制量改为**进水流量 $Q_{\\text{in}}$**、扰动改为**出水流量 $Q_{\\text{out}}$**：\n- 执行机构变为**进水控制阀**；\n- 前馈流量测量 FT 改装在**出水管**上测扰动 $Q_{\\text{out}}$，经前馈补偿 FC 叠加至**进水阀**；\n- 液位反馈 LT $\\to$ LC 仍控制进水阀（注意调节方向反相：实际液位 $h\\uparrow$ 时须**关小**进水阀，而原方案是开大出水阀！）；\n- 此时方块图整体结构与图 1-9 同构，仅将「入口流量 $Q_{\\text{in}}$（扰动）」与「出口流量 $Q_{\\text{out}}$（控制量）」、「出水阀」与「进水阀」互换即可！"
+        }
+      ],
+      "finalAnswer": "① 属前馈+反馈复合控制系统（方块图见上）；② 互换控制量/扰动量后，执行机构改为进水阀、FT 改测出水量 $Q_{\\text{out}}$，方块图拓扑同构、信号标签互换且控制作用方向取反。",
+      "takeaway": "牢记主教材 P.8 金句：**前馈控制是「事前」控制（开环，专克特定可测扰动）；反馈控制是「事后」控制（闭环，万能兜底）**！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.8",
+        "pdfPage": 17,
+        "itemRef": "例1-5 (图1-8~1-9) & P.8思考题"
+      },
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch01-e-06",
+      "section": "学习辅导 1.3 · 例 1-1",
+      "kind": "example",
+      "title": "【辅导例 1-1】转台速度控制系统——开环结构剖析与加装测速仪闭环改造",
+      "examWeight": "core",
+      "problem": "某转台速度控制装置由电池电位器（速度设置电压）、直流放大器、直流电机和转台依次串联组成，无测速反馈（学习辅导图 1-2）。问：① 该系统的被控对象、控制器与执行机构分别是什么？② 判断其属于开环还是闭环系统并画方块图；③ 如何提高控制精度？画出改进后的闭环方块图。",
+      "figureSvg": "<svg role='img' viewBox='0 0 470 155' xmlns='http://www.w3.org/2000/svg'><title>学习辅导例1-1 转台转速闭环控制系统方块图（加装测速仪负反馈，仿图1-5）</title><defs><marker id='a15' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='10' y1='52' x2='72' y2='52' stroke='#334155' stroke-width='1.5' marker-end='url(#a15)'/><circle cx='82' cy='52' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='90' y1='52' x2='122' y2='52' stroke='#334155' stroke-width='1.5' marker-end='url(#a15)'/><rect x='124' y='34' width='80' height='36' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='164' y='56' text-anchor='middle' font-size='12' fill='#141824'>直流放大器</text><line x1='204' y1='52' x2='234' y2='52' stroke='#334155' stroke-width='1.5' marker-end='url(#a15)'/><rect x='236' y='34' width='76' height='36' rx='6' fill='#fef5e5' stroke='#9a5800' stroke-width='1.5'/><text x='274' y='56' text-anchor='middle' font-size='12' fill='#9a5800'>直流电机</text><line x1='312' y1='52' x2='342' y2='52' stroke='#334155' stroke-width='1.5' marker-end='url(#a15)'/><rect x='344' y='34' width='58' height='36' rx='6' fill='#e7f6f0' stroke='#0b6e4f' stroke-width='1.5'/><text x='373' y='56' text-anchor='middle' font-size='12' fill='#0b6e4f'>转台</text><line x1='402' y1='52' x2='460' y2='52' stroke='#334155' stroke-width='1.5' marker-end='url(#a15)'/><polyline points='428,52 428,118 294,118' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a15)'/><rect x='220' y='102' width='72' height='32' rx='6' fill='#f3e8ff' stroke='#6b21a8' stroke-width='1.5'/><text x='256' y='122' text-anchor='middle' font-size='12' fill='#6b21a8'>转速仪</text><polyline points='220,118 82,118 82,62' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a15)'/><text x='12' y='40' font-size='10' fill='#141824'>期望速度(电压)</text><text x='410' y='40' font-size='10' fill='#141824'>实际速度</text><text x='100' y='110' font-size='10' fill='#6b21a8'>测量速度(电压)</text><text x='68' y='43' font-size='12' fill='#141824'>+</text><text x='69' y='71' font-size='13' fill='#b4233c'>−</text></svg>",
+      "steps": [
+        {
+          "stepTitle": "1. 识别系统核心部件",
+          "detail": "被控对象为**转台**（被控变量为实际转速），控制器为**直流放大器**，执行机构为**直流电机**。"
+        },
+        {
+          "stepTitle": "2. 判定开环结构及其缺陷",
+          "detail": "原系统无转速测量与反馈回路，属于**开环控制系统**（`期望速度(电压) → 直流放大器 → 直流电机 → 转台 → 实际速度`）。一旦电机参数漂移或负载变化，放大器无从得知转速偏差，无法自动纠偏。"
+        },
+        {
+          "stepTitle": "3. 闭环改造措施",
+          "detail": "在转台轴上加装**转速仪**（测速发电机），将实际转速转换为成比例电压反馈到输入比较点，与速度给定电压相减得偏差送入直流放大器，构成**负反馈闭环系统**（如图）。部件精密时，闭环误差可降至开环误差的 $1/100$。"
+        }
       ],
       "finalAnswer": "① 对象：转台；控制器：直流放大器；执行机构：直流电机。② 原为开环系统。③ 加装转速仪构成速度负反馈闭环系统。",
       "takeaway": "开环改闭环的标准套路 = 「加装输出传感器」+「引回输入端作负反馈比较」。",
@@ -165,19 +692,28 @@
         "pdfPage": 12,
         "itemRef": "例1-1 (图1-2~1-5)"
       },
-      "verification": { "method": "textbook-checked", "verified": true }
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
     },
     {
-      "id": "ctrl-ch01-e-02",
-      "section": "1.3 典型例题精选",
+      "id": "ctrl-ch01-e-07",
+      "section": "学习辅导 1.3 · 例 1-2",
       "kind": "example",
-      "title": "例 1-2：驾驶员驾驶汽车的人机闭环控制系统抽象建模",
+      "title": "【辅导例 1-2】驾驶员驾驶汽车的人机闭环控制系统抽象建模",
       "examWeight": "core",
       "problem": "将驾驶员驾驶汽车沿预期车道行驶的过程看作一个控制系统，说明其工作原理，指出被控对象、输入量、输出量、反馈量、执行机构、检测传感部分与控制器，并画出系统方块图。",
-      "figureSvg": "<svg role='img' viewBox='0 0 460 135' xmlns='http://www.w3.org/2000/svg'><title>例1-2 汽车驾驶控制系统组成方块图（仿图1-6）</title><defs><marker id='a16' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='10' y1='46' x2='78' y2='46' stroke='#334155' stroke-width='1.5' marker-end='url(#a16)'/><circle cx='88' cy='46' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='96' y1='46' x2='130' y2='46' stroke='#334155' stroke-width='1.5' marker-end='url(#a16)'/><rect x='132' y='28' width='80' height='36' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='172' y='50' text-anchor='middle' font-size='11' fill='#141824'>驾驶员(大脑)</text><line x1='212' y1='46' x2='242' y2='46' stroke='#334155' stroke-width='1.5' marker-end='url(#a16)'/><rect x='244' y='28' width='76' height='36' rx='6' fill='#fef5e5' stroke='#9a5800' stroke-width='1.5'/><text x='282' y='50' text-anchor='middle' font-size='11' fill='#9a5800'>驾驶机构</text><line x1='320' y1='46' x2='348' y2='46' stroke='#334155' stroke-width='1.5' marker-end='url(#a16)'/><rect x='350' y='28' width='52' height='36' rx='6' fill='#e7f6f0' stroke='#0b6e4f' stroke-width='1.5'/><text x='376' y='50' text-anchor='middle' font-size='11' fill='#0b6e4f'>汽车</text><line x1='402' y1='46' x2='452' y2='46' stroke='#334155' stroke-width='1.5' marker-end='url(#a16)'/><polyline points='425,46 425,104 334,104' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a16)'/><rect x='186' y='88' width='146' height='32' rx='6' fill='#f3e8ff' stroke='#6b21a8' stroke-width='1.5'/><text x='259' y='108' text-anchor='middle' font-size='11' fill='#6b21a8'>驾驶员的视觉、听觉测量</text><polyline points='186,104 88,104 88,56' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a16)'/><text x='12' y='35' font-size='10' fill='#141824'>预期行车路线</text><text x='100' y='36' font-size='10' fill='#475569'>偏差</text><text x='400' y='35' font-size='10' fill='#141824'>实际路线</text><text x='74' y='38' font-size='12' fill='#141824'>+</text><text x='75' y='65' font-size='13' fill='#b4233c'>−</text></svg>",
+      "figureSvg": "<svg role='img' viewBox='0 0 460 135' xmlns='http://www.w3.org/2000/svg'><title>学习辅导例1-2 汽车驾驶控制系统组成方块图（仿图1-6）</title><defs><marker id='a16' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='10' y1='46' x2='78' y2='46' stroke='#334155' stroke-width='1.5' marker-end='url(#a16)'/><circle cx='88' cy='46' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='96' y1='46' x2='130' y2='46' stroke='#334155' stroke-width='1.5' marker-end='url(#a16)'/><rect x='132' y='28' width='80' height='36' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='172' y='50' text-anchor='middle' font-size='11' fill='#141824'>驾驶员(大脑)</text><line x1='212' y1='46' x2='242' y2='46' stroke='#334155' stroke-width='1.5' marker-end='url(#a16)'/><rect x='244' y='28' width='76' height='36' rx='6' fill='#fef5e5' stroke='#9a5800' stroke-width='1.5'/><text x='282' y='50' text-anchor='middle' font-size='11' fill='#9a5800'>驾驶机构</text><line x1='320' y1='46' x2='348' y2='46' stroke='#334155' stroke-width='1.5' marker-end='url(#a16)'/><rect x='350' y='28' width='52' height='36' rx='6' fill='#e7f6f0' stroke='#0b6e4f' stroke-width='1.5'/><text x='376' y='50' text-anchor='middle' font-size='11' fill='#0b6e4f'>汽车</text><line x1='402' y1='46' x2='452' y2='46' stroke='#334155' stroke-width='1.5' marker-end='url(#a16)'/><polyline points='425,46 425,104 334,104' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a16)'/><rect x='186' y='88' width='146' height='32' rx='6' fill='#f3e8ff' stroke='#6b21a8' stroke-width='1.5'/><text x='259' y='108' text-anchor='middle' font-size='11' fill='#6b21a8'>驾驶员的视觉、听觉测量</text><polyline points='186,104 88,104 88,56' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a16)'/><text x='12' y='35' font-size='10' fill='#141824'>预期行车路线</text><text x='100' y='36' font-size='10' fill='#475569'>偏差</text><text x='400' y='35' font-size='10' fill='#141824'>实际路线</text><text x='74' y='38' font-size='12' fill='#141824'>+</text><text x='75' y='65' font-size='13' fill='#b4233c'>−</text></svg>",
       "steps": [
-        { "stepTitle": "1. 梳理闭环负反馈工作原理", "detail": "驾驶员通过眼睛与耳朵持续观测实际行车位置与路况，大脑将其与预期车道（参考输入）比较；若产生偏差，便指令手脚操控方向盘、油门和制动装置修正汽车行驶轨迹，使偏差不断缩小。" },
-        { "stepTitle": "2. 逐一对应控制系统 7 大要素", "detail": "**被控对象**：汽车；**输入变量**：预期行车路线；**输出变量**：实际行车路线；**反馈量**：眼睛观察到的实际行车路线；**检测传感器**：驾驶员的眼睛、耳朵及神经传输系统；**控制器**：驾驶员大脑；**执行机构**：驾驶员的手、脚及整套驾驶与制动机构。" }
+        {
+          "stepTitle": "1. 梳理闭环负反馈工作原理",
+          "detail": "驾驶员通过眼睛与耳朵持续观测实际行车位置与路况，大脑将其与预期车道（参考输入）比较；若产生偏差，便指令手脚操控方向盘、油门和制动装置修正汽车行驶轨迹，使偏差不断缩小。"
+        },
+        {
+          "stepTitle": "2. 逐一对应控制系统 7 大要素",
+          "detail": "**被控对象**：汽车；**输入变量**：预期行车路线；**输出变量**：实际行车路线；**反馈量**：眼睛观察到的实际行车路线；**检测传感器**：驾驶员的眼睛、耳朵及神经传输系统；**控制器**：驾驶员大脑；**执行机构**：驾驶员的手、脚及整套驾驶与制动机构。"
+        }
       ],
       "finalAnswer": "属人机负反馈闭环随动控制系统（7 大要素与方块图见上）。",
       "takeaway": "非电/生物/人机类题目只需紧扣「测量—比较—决策—执行—对象」五环节一一对号入座即可满分。",
@@ -187,19 +723,28 @@
         "pdfPage": 13,
         "itemRef": "例1-2 (图1-6)"
       },
-      "verification": { "method": "textbook-checked", "verified": true }
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
     },
     {
-      "id": "ctrl-ch01-e-03",
-      "section": "1.3 典型例题精选",
+      "id": "ctrl-ch01-e-08",
+      "section": "学习辅导 1.3 · 例 1-3",
       "kind": "example",
-      "title": "例 1-3：蒸汽加热器四种控制方案对比（开环 / 反馈 / 前馈 / 复合）",
+      "title": "【辅导例 1-3】蒸汽加热器四种控制方案对比（开环 / 反馈 / 前馈 / 复合）",
       "examWeight": "core",
-      "problem": "某蒸汽加热器需控制物料出口温度，共有 4 种工艺方案：(a) 仅设温度控制器 TC 按给定调节蒸汽阀；(b) 增设出口温度变送器 TT 反馈至 TC；(c) 仅在进料端设流量测量 FT 与前馈控制器 FC 调节蒸汽阀；(d) 同时结合出口 TT 反馈与进料 FT 前馈（经加法器 $\\Sigma$ 叠加后控制蒸汽阀）。① 指出被控对象、被控变量、给定值与控制变量；② 分析 4 种方案结构特点并画复合控制方块图。",
-      "figureSvg": "<svg role='img' viewBox='0 0 475 185' xmlns='http://www.w3.org/2000/svg'><title>例1-3 方案四：蒸汽加热器前馈+反馈复合控制系统方块图（仿图1-8c）</title><defs><marker id='a18' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='10' y1='102' x2='72' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#a18)'/><circle cx='82' cy='102' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='90' y1='102' x2='116' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#a18)'/><rect x='118' y='85' width='78' height='34' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='157' y='106' text-anchor='middle' font-size='11' fill='#141824'>温度控制器TC</text><line x1='196' y1='102' x2='222' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#a18)'/><circle cx='232' cy='102' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='240' y1='102' x2='266' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#a18)'/><rect x='268' y='85' width='56' height='34' rx='6' fill='#fef5e5' stroke='#9a5800' stroke-width='1.5'/><text x='296' y='106' text-anchor='middle' font-size='11' fill='#9a5800'>调节阀</text><line x1='324' y1='102' x2='354' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#a18)'/><rect x='356' y='85' width='58' height='34' rx='6' fill='#e7f6f0' stroke='#0b6e4f' stroke-width='1.5'/><text x='385' y='106' text-anchor='middle' font-size='11' fill='#0b6e4f'>加热器</text><line x1='414' y1='102' x2='465' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#a18)'/><line x1='385' y1='14' x2='385' y2='83' stroke='#b4233c' stroke-width='1.5' marker-end='url(#a18)'/><polyline points='385,40 360,40' fill='none' stroke='#b4233c' stroke-width='1.4' marker-end='url(#a18)'/><rect x='284' y='25' width='74' height='30' rx='6' fill='#fdecef' stroke='#b4233c' stroke-width='1.4'/><text x='321' y='44' text-anchor='middle' font-size='11' fill='#b4233c'>流量测量FT</text><line x1='284' y1='40' x2='260' y2='40' stroke='#b4233c' stroke-width='1.4' marker-end='url(#a18)'/><rect x='184' y='25' width='74' height='30' rx='6' fill='#fdecef' stroke='#b4233c' stroke-width='1.4'/><text x='221' y='44' text-anchor='middle' font-size='11' fill='#b4233c'>前馈控制FC</text><polyline points='184,40 232,40' fill='none'/><polyline points='184,40 165,40 165,68 232,68 232,92' fill='none' stroke='#b4233c' stroke-width='1.4' marker-end='url(#a18)'/><polyline points='438,102 438,158 310,158' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a18)'/><rect x='228' y='142' width='80' height='30' rx='6' fill='#f3e8ff' stroke='#6b21a8' stroke-width='1.5'/><text x='268' y='161' text-anchor='middle' font-size='11' fill='#6b21a8'>温度测量TT</text><polyline points='228,158 82,158 82,112' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a18)'/><text x='12' y='92' font-size='10' fill='#141824'>温度给定值</text><text x='416' y='92' font-size='10' fill='#141824'>出口温度</text><text x='392' y='24' font-size='10' fill='#b4233c'>进料流量(干扰)</text><text x='68' y='93' font-size='12' fill='#141824'>+</text><text x='69' y='122' font-size='13' fill='#b4233c'>−</text><text x='218' y='95' font-size='11' fill='#141824'>+</text><text x='238' y='92' font-size='11' fill='#b4233c'>+</text></svg>",
+      "problem": "某蒸汽加热器需控制物料出口温度，共有 4 种工艺方案（图 1-7）：(a) 仅设温度控制器 TC 按给定调节蒸汽阀；(b) 增设出口温度变送器 TT 反馈至 TC；(c) 仅在进料端设流量测量 FT 与前馈控制器 FC 调节蒸汽阀；(d) 同时结合出口 TT 反馈与进料 FT 前馈（经加法器 $\\Sigma$ 叠加后控制蒸汽阀）。① 指出被控对象、被控变量、给定值与控制变量；② 分析 4 种方案结构特点并画复合控制方块图。",
+      "figureSvg": "<svg role='img' viewBox='0 0 475 185' xmlns='http://www.w3.org/2000/svg'><title>学习辅导例1-3 方案四：蒸汽加热器前馈+反馈复合控制系统方块图（仿图1-8c）</title><defs><marker id='a18' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='10' y1='102' x2='72' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#a18)'/><circle cx='82' cy='102' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='90' y1='102' x2='116' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#a18)'/><rect x='118' y='85' width='78' height='34' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='157' y='106' text-anchor='middle' font-size='11' fill='#141824'>温度控制器TC</text><line x1='196' y1='102' x2='222' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#a18)'/><circle cx='232' cy='102' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='240' y1='102' x2='266' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#a18)'/><rect x='268' y='85' width='56' height='34' rx='6' fill='#fef5e5' stroke='#9a5800' stroke-width='1.5'/><text x='296' y='106' text-anchor='middle' font-size='11' fill='#9a5800'>调节阀</text><line x1='324' y1='102' x2='354' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#a18)'/><rect x='356' y='85' width='58' height='34' rx='6' fill='#e7f6f0' stroke='#0b6e4f' stroke-width='1.5'/><text x='385' y='106' text-anchor='middle' font-size='11' fill='#0b6e4f'>加热器</text><line x1='414' y1='102' x2='465' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#a18)'/><line x1='385' y1='14' x2='385' y2='83' stroke='#b4233c' stroke-width='1.5' marker-end='url(#a18)'/><polyline points='385,40 360,40' fill='none' stroke='#b4233c' stroke-width='1.4' marker-end='url(#a18)'/><rect x='284' y='25' width='74' height='30' rx='6' fill='#fdecef' stroke='#b4233c' stroke-width='1.4'/><text x='321' y='44' text-anchor='middle' font-size='11' fill='#b4233c'>流量测量FT</text><line x1='284' y1='40' x2='260' y2='40' stroke='#b4233c' stroke-width='1.4' marker-end='url(#a18)'/><rect x='184' y='25' width='74' height='30' rx='6' fill='#fdecef' stroke='#b4233c' stroke-width='1.4'/><text x='221' y='44' text-anchor='middle' font-size='11' fill='#b4233c'>前馈控制FC</text><polyline points='184,40 165,40 165,68 232,68 232,92' fill='none' stroke='#b4233c' stroke-width='1.4' marker-end='url(#a18)'/><polyline points='438,102 438,158 310,158' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a18)'/><rect x='228' y='142' width='80' height='30' rx='6' fill='#f3e8ff' stroke='#6b21a8' stroke-width='1.5'/><text x='268' y='161' text-anchor='middle' font-size='11' fill='#6b21a8'>温度测量TT</text><polyline points='228,158 82,158 82,112' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#a18)'/><text x='12' y='92' font-size='10' fill='#141824'>温度给定值</text><text x='416' y='92' font-size='10' fill='#141824'>出口温度</text><text x='392' y='24' font-size='10' fill='#b4233c'>进料流量(干扰)</text><text x='68' y='93' font-size='12' fill='#141824'>+</text><text x='69' y='122' font-size='13' fill='#b4233c'>−</text><text x='218' y='95' font-size='11' fill='#141824'>+</text><text x='238' y='92' font-size='11' fill='#b4233c'>+</text></svg>",
       "steps": [
-        { "stepTitle": "1. 确定四要素", "detail": "被控对象：**蒸汽加热器**；被控变量：**热物料的出口温度**；给定值：**期望出口温度**；控制变量（操纵变量）：**加热蒸汽流量**。" },
-        { "stepTitle": "2. 逐一对比四种方案结构本质", "detail": "- **方案一**：无出口温度反馈，属**按给定开环控制**，完全无法克服进料流量/温度等扰动。\n- **方案二**：出口 TT 测温反馈给 TC，属**负反馈闭环控制**；能克服一切扰动使出口温度趋于给定，但属“事后”调节。\n- **方案三**：进料 FT 测干扰直接驱动 FC 调蒸汽阀，属**前馈控制（按扰动开环控制）**；属“事前”及时补偿，但对给定值变化及其他未测扰动无能为力。\n- **方案四**：**前馈 + 反馈复合控制系统**（如图）；前馈迅速抵消主要进料流量扰动，反馈闭环消除残差与其余扰动，控制品质最优。" }
+        {
+          "stepTitle": "1. 确定四要素",
+          "detail": "被控对象：**蒸汽加热器**；被控变量：**热物料的出口温度**；给定值：**期望出口温度**；控制变量（操纵变量）：**加热蒸汽流量**。"
+        },
+        {
+          "stepTitle": "2. 逐一对比四种方案结构本质",
+          "detail": "- **方案一**：无出口温度反馈，属**按给定开环控制**，完全无法克服进料流量/温度等扰动。\n- **方案二**：出口 TT 测温反馈给 TC，属**负反馈闭环控制**；能克服一切扰动使出口温度趋于给定，但属「事后」调节。\n- **方案三**：进料 FT 测干扰直接驱动 FC 调蒸汽阀，属**前馈控制（按扰动开环控制）**；属「事前」及时补偿，但对给定值变化及其他未测扰动无能为力。\n- **方案四**：**前馈 + 反馈复合控制系统**（如图）；前馈迅速抵消主要进料流量扰动，反馈闭环消除残差与其余扰动，控制品质最优。"
+        }
       ],
       "finalAnswer": "对象：蒸汽加热器；被控变量：出口温度；控制变量：加热蒸汽量；方案一～四依次为：开环 / 负反馈闭环 / 按扰动前馈（开环） / 前馈+反馈复合控制。",
       "takeaway": "这是浙大过程控制与 845 最经典的工业案例：牢记「反馈=事后万能兜底，前馈=事前专克主扰动，复合=强强联合」。",
@@ -209,28 +754,676 @@
         "pdfPage": 14,
         "itemRef": "例1-3 (图1-7~1-8)"
       },
-      "verification": { "method": "textbook-checked", "verified": true }
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
     },
     {
-      "id": "ctrl-ch01-e-04",
-      "section": "1.4 习题精选（高频判断）",
+      "id": "ctrl-ch01-e-09",
+      "section": "学习辅导 1.3 · 例 1-4",
       "kind": "example",
-      "title": "习题 A1-10：线性定常 / 线性时变 / 非线性系统 7 式精准判定",
-      "examWeight": "core",
-      "problem": "下列各式描述系统的输入 $r(t)$ 与输出 $c(t)$ 关系，判断哪些是线性定常系统、哪些是线性时变系统、哪些是非线性系统：\n① $c(t)=5+r^2(t)+t\\frac{\\mathrm{d}^2 r(t)}{\\mathrm{d}t^2}$；\n② $\\frac{\\mathrm{d}^3 c}{\\mathrm{d}t^3}+3\\frac{\\mathrm{d}^2 c}{\\mathrm{d}t^2}+6\\frac{\\mathrm{d}c}{\\mathrm{d}t}+8c(t)=r(t)$；\n③ $t\\frac{\\mathrm{d}c(t)}{\\mathrm{d}t}+c(t)=r(t)+3\\frac{\\mathrm{d}r(t)}{\\mathrm{d}t}$；\n④ $c(t)=r(t)\\cos\\omega t + 5$；\n⑤ $c(t)=3r(t)+6\\frac{\\mathrm{d}r(t)}{\\mathrm{d}t}+5\\int_{-\\infty}^{t}r(\\tau)\\mathrm{d}\\tau$；\n⑥ $c(t)=r^2(t)$；\n⑦ $c(t)=\\begin{cases}0, & t<6 \\\\ r(t), & t\\ge 6\\end{cases}$。",
+      "title": "【辅导例 1-4 · 拓展】国民收入与政府调控宏观经济反馈控制系统模型",
+      "examWeight": "extended",
+      "problem": "除工业领域外，社会、政治与经济领域也常采用反馈方法建模分析。请给出一个描述国民收入与政府调控、商品生产、税收、消费者消费、私人商业投资等关系的宏观模型，并以反馈控制系统的方块图形式表示。",
+      "figureSvg": "<svg role='img' viewBox='0 0 465 170' xmlns='http://www.w3.org/2000/svg'><title>学习辅导例1-4 国民收入反馈控制系统宏观模型方块图（仿学习辅导图1-9）</title><defs><marker id='c1ec' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='10' y1='56' x2='68' y2='56' stroke='#334155' stroke-width='1.5' marker-end='url(#c1ec)'/><circle cx='78' cy='56' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='86' y1='56' x2='116' y2='56' stroke='#334155' stroke-width='1.5' marker-end='url(#c1ec)'/><rect x='118' y='38' width='66' height='34' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='151' y='59' text-anchor='middle' font-size='11' fill='#1e3a8a'>政府调控</text><line x1='184' y1='56' x2='244' y2='56' stroke='#334155' stroke-width='1.5' marker-end='url(#c1ec)'/><circle cx='254' cy='56' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='254' y1='14' x2='254' y2='46' stroke='#0b6e4f' stroke-width='1.4' marker-end='url(#c1ec)'/><line x1='262' y1='56' x2='292' y2='56' stroke='#334155' stroke-width='1.5' marker-end='url(#c1ec)'/><rect x='294' y='38' width='76' height='34' rx='6' fill='#e7f6f0' stroke='#0b6e4f' stroke-width='1.5'/><text x='332' y='59' text-anchor='middle' font-size='11' fill='#0b6e4f'>商品生产</text><line x1='370' y1='56' x2='452' y2='56' stroke='#334155' stroke-width='1.5' marker-end='url(#c1ec)'/><polyline points='410,56 410,142 350,142' fill='none' stroke='#334155' stroke-width='1.4' marker-end='url(#c1ec)'/><rect x='288' y='127' width='60' height='28' rx='6' fill='#fef5e5' stroke='#9a5800' stroke-width='1.4'/><text x='318' y='145' text-anchor='middle' font-size='11' fill='#9a5800'>税收</text><line x1='288' y1='142' x2='264' y2='142' stroke='#334155' stroke-width='1.4' marker-end='url(#c1ec)'/><circle cx='254' cy='142' r='7' fill='#fff' stroke='#334155' stroke-width='1.4'/><polyline points='410,110 254,110 254,133' fill='none' stroke='#334155' stroke-width='1.4' marker-end='url(#c1ec)'/><rect x='220' y='88' width='68' height='26' rx='6' fill='#f8fafc' stroke='#475569' stroke-width='1.4'/><text x='254' y='105' text-anchor='middle' font-size='10.5' fill='#334155'>消费者</text><line x1='254' y1='88' x2='254' y2='66' stroke='#334155' stroke-width='1.4' marker-end='url(#c1ec)'/><polyline points='254,135 254,116' fill='none' stroke='#334155' stroke-width='1.4' marker-end='url(#c1ec)'/><polyline points='432,56 432,162 78,162 78,118' fill='none' stroke='#6b21a8' stroke-width='1.4'/><rect x='40' y='92' width='76' height='26' rx='6' fill='#f3e8ff' stroke='#6b21a8' stroke-width='1.4'/><text x='78' y='109' text-anchor='middle' font-size='10.5' fill='#6b21a8'>统计测量</text><line x1='78' y1='92' x2='78' y2='66' stroke='#6b21a8' stroke-width='1.4' marker-end='url(#c1ec)'/><text x='10' y='44' font-size='9.5' fill='#141824'>预期国民收入</text><text x='190' y='48' font-size='9.5' fill='#475569'>政府支出</text><text x='262' y='24' font-size='9.5' fill='#0b6e4f'>私人商业投资</text><text x='382' y='44' font-size='9.5' fill='#141824'>实际国民收入</text><text x='64' y='48' font-size='11' fill='#141824'>+</text><text x='65' y='74' font-size='12' fill='#b4233c'>−</text></svg>",
       "steps": [
-        { "stepTitle": "1. 先筛非线性系统（违背叠加性或齐次性）", "detail": "- ① 含常数项 $5$ 及平方项 $r^2(t)$ $\\Rightarrow$ **非线性**（且含时变因子 $t$）；\n- ④ 含常数偏置 $+5$，令 $r(t)\\equiv 0$ 时 $c(t)=5\\ne 0$，违背齐次性 $T[ar]=aT[r]$ $\\Rightarrow$ **非线性**！\n- ⑥ $r^2(t)$ 不满足叠加与齐次性 $\\Rightarrow$ **非线性**。" },
-        { "stepTitle": "2. 再区分线性定常 vs 线性时变", "detail": "- ② 常系数线性微分方程 $\\Rightarrow$ **线性定常**；\n- ⑤ 常系数比例、微分、积分线性组合（积分下限 $-\\infty$ 保持平移不变） $\\Rightarrow$ **线性定常**；\n- ③ 对 $c, r$ 及其导数全是一次线性，但 $\\dot{c}(t)$ 系数为时间 $t$ $\\Rightarrow$ **线性时变**；\n- ⑦ 满足叠加与齐次性（可写作 $c(t)=1(t-6)\\cdot r(t)$），但门控因子 $1(t-6)$ 显含时间 $t$，输入平移 $\\tau$ 后截断时刻不随输入平移 $\\Rightarrow$ **线性时变**！" }
+        {
+          "stepTitle": "1. 辨析宏观经济中的反馈环与外部输入",
+          "detail": "- **主闭环（负反馈）**：统计测量机构测得「实际国民收入」反馈至输入端，与「预期国民收入」比较得偏差，驱动**政府调控**增减政府支出；\n- **生产端汇总**：政府支出 + 消费者支出 + 私人商业投资（外生输入）共同投入**商品生产**环节，产出实际国民收入；\n- **内部消费-税收环**：实际国民收入经税收调节后形成消费者可支配收入，经**消费者**环节转化为消费者支出反馈至商品生产。"
+        },
+        {
+          "stepTitle": "2. 总结该模型的控制意义",
+          "detail": "当实际国民收入低于预期时，政府可通过扩大财政支出或减税刺激消费与商品生产，使实际国民收入向预期收敛（该宏观模型简化了财政预算、赤字等因素，但已清晰展示反馈调节思想在经济系统中的迁移应用）。"
+        }
       ],
-      "finalAnswer": "线性定常：②、⑤；线性时变：③、⑦；非线性：①、④、⑥。",
-      "takeaway": "考场两大秒杀口诀：① 方程中出现**独立常数偏置 $+C$** 必为非线性（严格按 $T[0]=0$ 判定）；② 出现仅与时间 $t$ 有关的**乘法系数或定时开关**（如 $t\\dot c$、$\\cos\\omega t\\cdot r(t)$、$1(t-6)r(t)$）是**线性时变**而非非线性！",
+      "finalAnswer": "宏观经济反馈控制系统方块图如上所示（主环为统计测量-政府支出负反馈环，内含税收-消费支路与私人商业投资输入）。",
+      "takeaway": "反馈控制思想高度普适，不仅限于机电/化工硬件，在社会经济、生物生态建模中同样遵循「测量—比较—调控—对象」结构。",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.7",
+        "pdfPage": 16,
+        "itemRef": "例1-4 (图1-9)"
+      },
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch01-x-01",
+      "section": "习题一 · 1-1 (A1-1)",
+      "kind": "exercise",
+      "title": "【习题 1-1 / A1-1】精确光信号源闭环控制系统的四类变量识别",
+      "examWeight": "core",
+      "problem": "精确的光信号源可以将功率输出精度控制在 $1\\%$ 以内。激光器由输入电流控制并产生输出功率，作用在激光器上的输入电流由一个微处理器控制，微处理器将期望的功率值与传感器测得的激光器的输出功率值作比较（主教材图 1-13：`期望功率 → (+)比较(-) → 偏差 → [微处理器] → 电流 i(t) → [激光器] → 输出功率`，反馈支路经 `[传感器]` 输出 `输出功率检测值` 回到比较点）。试指明该系统的输出变量、输入变量、被测变量和控制变量。",
+      "steps": [
+        {
+          "stepTitle": "1. 对照标准闭环方块图逐一锁定四类变量",
+          "detail": "该系统被控对象为**激光器**，控制器为**微处理器**，测量环节为**传感器**：\n- **输出变量（被控变量）**：激光器的**输出功率**；\n- **输入变量（参考输入）**：**期望功率**；\n- **被测变量**：传感器直接测量的物理量——仍为激光器的**输出功率**（传感器输出为输出功率检测值）；\n- **控制变量（操纵变量）**：控制器施加给被控对象激光器的驱动量——**输入电流 $i(t)$**。"
+        }
+      ],
+      "finalAnswer": "输出变量：输出功率；输入变量：期望功率；被测变量：输出功率；控制变量：电流 $i(t)$（与学习辅导 P.240 附录 1 完全一致）。",
+      "takeaway": "看清「被测变量」是传感器去测的那个物理量（输出功率），而「控制变量」是作用到被控对象入口的物理量（电流 $i(t)$）！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.15-16",
+        "pdfPage": 24,
+        "itemRef": "习题1-1 (图1-13)",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.7 A1-1 & P.240 答案"
+      },
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch01-x-02",
+      "section": "习题一 · 1-2 (A1-2)",
+      "kind": "exercise",
+      "title": "【习题 1-2 / A1-2】汽车人工车速控制 vs 巡航定速自动保持反馈控制系统方块图",
+      "examWeight": "core",
+      "problem": "画出由驾驶员驾驶汽车时的汽车速度控制系统的框图。如果采用目前很多车辆上已经安装的速度保持控制系统（只要按下「巡航控制」按钮，它就会自动地保持一个设定的速度，由此司机驾车就可以限定的速度或较为经济的速度行驶，而不需要经常查看速度表，也不需要长时间控制油门），试画出汽车速度保持控制系统的反馈控制系统框图。",
+      "figureSvg": "<svg role='img' viewBox='0 0 465 138' xmlns='http://www.w3.org/2000/svg'><title>习题1-2 汽车巡航定速自动保持反馈控制系统方块图</title><defs><marker id='c1cr' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='10' y1='56' x2='68' y2='56' stroke='#334155' stroke-width='1.5' marker-end='url(#c1cr)'/><circle cx='78' cy='56' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='86' y1='56' x2='116' y2='56' stroke='#334155' stroke-width='1.5' marker-end='url(#c1cr)'/><rect x='118' y='38' width='80' height='36' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='158' y='60' text-anchor='middle' font-size='11' fill='#1e3a8a'>巡航控制器</text><line x1='198' y1='56' x2='226' y2='56' stroke='#334155' stroke-width='1.5' marker-end='url(#c1cr)'/><rect x='228' y='38' width='88' height='36' rx='6' fill='#fef5e5' stroke='#9a5800' stroke-width='1.5'/><text x='272' y='60' text-anchor='middle' font-size='11' fill='#9a5800'>油门/发动机</text><line x1='316' y1='56' x2='344' y2='56' stroke='#334155' stroke-width='1.5' marker-end='url(#c1cr)'/><rect x='346' y='38' width='54' height='36' rx='6' fill='#e7f6f0' stroke='#0b6e4f' stroke-width='1.5'/><text x='373' y='60' text-anchor='middle' font-size='11' fill='#0b6e4f'>汽车</text><line x1='400' y1='56' x2='454' y2='56' stroke='#334155' stroke-width='1.5' marker-end='url(#c1cr)'/><line x1='373' y1='10' x2='373' y2='36' stroke='#b4233c' stroke-width='1.4' marker-end='url(#c1cr)'/><polyline points='424,56 424,112 310,112' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#c1cr)'/><rect x='214' y='96' width='94' height='30' rx='6' fill='#f3e8ff' stroke='#6b21a8' stroke-width='1.5'/><text x='261' y='115' text-anchor='middle' font-size='11' fill='#6b21a8'>车速传感器</text><polyline points='214,112 78,112 78,66' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#c1cr)'/><text x='10' y='45' font-size='10' fill='#141824'>设定车速</text><text x='410' y='45' font-size='10' fill='#141824'>实际车速</text><text x='380' y='22' font-size='10' fill='#b4233c'>坡度/风阻扰动</text><text x='64' y='47' font-size='12' fill='#141824'>+</text><text x='65' y='74' font-size='13' fill='#b4233c'>−</text></svg>",
+      "steps": [
+        {
+          "stepTitle": "1. 人工驾驶车速控制系统方块图（人机负反馈闭环）",
+          "detail": "- **给定输入**：期望车速；**输出（被控变量）**：汽车实际车速；\n- **检测反馈**：速度表 + 驾驶员眼睛（测量实际车速）；\n- **控制器**：驾驶员大脑（比较期望车速与表显车速得偏差）；\n- **执行机构**：驾驶员脚部 + 油门/刹车踏板 + 发动机；\n- **被控对象**：汽车（受坡度、风阻等外扰）。\n结构：`期望车速 → (+)比较(-) → [驾驶员大脑] → [脚/油门与发动机] → [汽车] → 实际车速`（下环经 `[速度表与眼睛]` 负反馈）。"
+        },
+        {
+          "stepTitle": "2. 巡航定速（速度保持）自动控制系统方块图",
+          "detail": "按下巡航按钮后，自动控制器与车速传感器替代人脑与人眼（见上方矢量图）：\n- **给定输入**：设定巡航车速；**检测反馈**：车速传感器；**控制器**：巡航控制器（ECU）；**执行机构**：节气门（油门）执行器与发动机；**被控对象**：汽车；**外扰**：路面坡度、风阻、载重变化。当上坡致车速下降时，偏差为正，巡航控制器自动加大节气门开度维持定速！"
+        }
+      ],
+      "finalAnswer": "人工驾驶属人机闭环，巡航定速属自动恒值负反馈闭环控制系统（方块图见上，核心是用车速传感器+巡航控制器替换速度表+人眼+人脑）。",
+      "takeaway": "对比两张图可深刻体会自动化本质：传感器取代感官、控制器取代大脑、伺服执行器取代手脚，闭环拓扑结构完全一致！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.15-16",
+        "pdfPage": 24,
+        "itemRef": "习题1-2",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.7 A1-2"
+      },
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch01-x-03",
+      "section": "习题一 · 1-3 (A1-3)",
+      "kind": "exercise",
+      "title": "【习题 1-3 / A1-3】汽车车内温度自动空调控制系统方块图与各部件功能",
+      "examWeight": "core",
+      "problem": "许多汽车都安装有控制温度的空调系统。使用空调系统时，司机可以在控制面板上设置预期的车内温度。请画出该空调系统的框图，并指明该系统各部分的功能。",
+      "steps": [
+        {
+          "stepTitle": "1. 列出系统方块图串联与负反馈结构",
+          "detail": "标准单回路负反馈恒值温控结构：\n`预期车内温度（控制面板设定） → (+)比较(-) → 温度偏差 → [空调微机控制器] → [压缩机/风门/制冷制热执行机构] → 冷/热风量 → [汽车车厢（被控对象）] → 实际车内温度`；\n下方反馈通道：`实际车内温度 → [车内温度传感器] → 测量温度信号 → 比较点（−）`；顶部扰动入口：`车外气温、日照辐射、乘员散热、开关车门`作用在车厢。"
+        },
+        {
+          "stepTitle": "2. 指明各组成部分的功能",
+          "detail": "- **控制面板（给定环节）**：将司机期望温度转化为设定电信号；\n- **温度传感器（检测反馈环节）**：实时测量车内实际温度并转换为反馈电信号；\n- **比较器与空调控制器**：将设定温度与实测温度相减得偏差，按控制规律决定制冷/制热强度及风速；\n- **压缩机、暖风水阀与鼓风机（执行机构）**：执行控制器指令，向车厢输送相应温度和流量的空气；\n- **汽车车厢（被控对象）**：被控热容空间，其温度为被控变量。"
+        }
+      ],
+      "finalAnswer": "属单回路负反馈恒值温度控制系统，由设定面板、空调控制器、制冷/制热执行机构、车厢（对象）及车内温度传感器组成。",
+      "takeaway": "答「指明各部分功能」题时务必按「给定—比较—控制—执行—对象—检测—扰动」7 项清单逐一写出，绝不漏项。",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.16",
+        "pdfPage": 25,
+        "itemRef": "习题1-3",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.7 A1-3"
+      },
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch01-x-04",
+      "section": "习题一 · 1-4 (A1-4)",
+      "kind": "exercise",
+      "title": "【习题 1-4 / A1-4 · 拓展】人体痛觉与体温调节的生物负反馈过程剖析",
+      "examWeight": "extended",
+      "problem": "请描述人调整痛觉、体温等感觉时的生物反馈过程。生物反馈是人能够自觉而且成功地调整脉搏、疼痛反应和体温等感觉的一种机能。",
+      "steps": [
+        {
+          "stepTitle": "1. 体温恒定调节（经典生理负反馈闭环）",
+          "detail": "- **期望值（参考输入）**：人体正常核心体温（约 $37^\\circ\\text{C}$）；\n- **检测传感器**：皮肤与体内的温度感受器（监测实际体温变化并通过传入神经上报）；\n- **控制器**：下丘脑体温调节中枢（比较实测体温与 $37^\\circ\\text{C}$ 设定值）；\n- **执行机构**：汗腺、皮肤毛细血管、骨骼肌（若偏热则排汗+血管扩张散热；若偏冷则寒战产热+血管收缩保温）；\n- **被控对象**：人体躯干与血液循环系统（外界环境温度为扰动）。"
+        },
+        {
+          "stepTitle": "2. 痛觉与自觉生物反馈调节",
+          "detail": "- **痛觉反射**：痛觉感受器检测异常伤害刺激 $\\to$ 神经传导至脊髓/大脑皮层（控制器）与无痛安全状态比较 $\\to$ 指令肌肉迅速缩回避险（消除痛源）或释放内啡肽抑制痛觉；\n- **自觉生物反馈训练**：借助外部监测仪把脉搏、皮温、肌电等隐蔽生理量可视化反馈给大脑，大脑经刻意放松呼吸等行为调节自主神经，实现精准闭环自我调控。"
+        }
+      ],
+      "finalAnswer": "人体体温、痛觉及生物反馈均为典型的生物负反馈闭环调节机制（感受器=传感器，中枢神经/大脑=控制器，腺体/血管/肌肉=执行机构，人体=被控对象）。",
+      "takeaway": "拓展概念题重在体会「负反馈维持稳态（Homeostasis）」是工程控制论与生命科学共同的底层原理。",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.16",
+        "pdfPage": 25,
+        "itemRef": "习题1-4",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.8 A1-4"
+      },
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch01-x-05",
+      "section": "习题一 · 1-5 (A1-5)",
+      "kind": "exercise",
+      "title": "【习题 1-5 / A1-5】水槽液位双方案方块图对比与「信息流 vs 物料流」辨析",
+      "examWeight": "core",
+      "problem": "主教材图 1-14 给出水槽液位系统的两种不同控制方案：方案一将液位传感器 LT 信号送液位控制器 LC 调节**出口阀**（$Q_o$）；方案二将 LT 信号送 LC 调节**入口阀**（$Q_{\\text{in}}$）。① 分别画出两个控制系统的方块图；② 分别指出两者的被控对象、被控变量和操纵（控制）变量；③ 结合方块图说明方块图中的信号流与工艺流程中的物料流。",
+      "figureSvg": "<svg role='img' viewBox='0 0 470 154' xmlns='http://www.w3.org/2000/svg'><title>习题1-5 水槽液位双方案对比方块图（方案一调出口阀 vs 方案二调入口阀）</title><defs><marker id='c1t2' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><text x='12' y='16' font-size='9.5' fill='#1e3a8a' font-weight='700'>方案一（调出口阀 Qo，扰动 Qin）与 方案二（调入口阀 Qin，扰动 Qo）结构同构，唯执行机构与扰动互换：</text><line x1='12' y1='64' x2='68' y2='64' stroke='#334155' stroke-width='1.5' marker-end='url(#c1t2)'/><circle cx='78' cy='64' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='86' y1='64' x2='114' y2='64' stroke='#334155' stroke-width='1.5' marker-end='url(#c1t2)'/><rect x='116' y='46' width='74' height='36' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='153' y='68' text-anchor='middle' font-size='11' fill='#1e3a8a'>液位控制LC</text><line x1='190' y1='64' x2='218' y2='64' stroke='#334155' stroke-width='1.5' marker-end='url(#c1t2)'/><rect x='220' y='46' width='96' height='36' rx='6' fill='#fef5e5' stroke='#9a5800' stroke-width='1.5'/><text x='268' y='62' text-anchor='middle' font-size='10' fill='#9a5800'>方案一：出口阀</text><text x='268' y='76' text-anchor='middle' font-size='10' fill='#0e7490'>方案二：入口阀</text><line x1='316' y1='64' x2='348' y2='64' stroke='#334155' stroke-width='1.5' marker-end='url(#c1t2)'/><rect x='350' y='46' width='54' height='36' rx='6' fill='#e7f6f0' stroke='#0b6e4f' stroke-width='1.5'/><text x='377' y='68' text-anchor='middle' font-size='11' fill='#0b6e4f'>水槽</text><line x1='404' y1='64' x2='456' y2='64' stroke='#334155' stroke-width='1.5' marker-end='url(#c1t2)'/><line x1='377' y1='22' x2='377' y2='44' stroke='#b4233c' stroke-width='1.4' marker-end='url(#c1t2)'/><polyline points='428,64 428,124 304,124' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#c1t2)'/><rect x='218' y='108' width='84' height='30' rx='6' fill='#f3e8ff' stroke='#6b21a8' stroke-width='1.5'/><text x='260' y='127' text-anchor='middle' font-size='11' fill='#6b21a8'>液位变送LT</text><polyline points='218,124 78,124 78,74' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#c1t2)'/><text x='12' y='54' font-size='10' fill='#141824'>给定液位</text><text x='412' y='54' font-size='10' fill='#141824'>实际液位h₁</text><text x='384' y='34' font-size='9.5' fill='#b4233c'>扰动(Qin或Qo)</text><text x='64' y='55' font-size='12' fill='#141824'>+</text><text x='65' y='83' font-size='13' fill='#b4233c'>−</text></svg>",
+      "steps": [
+        {
+          "stepTitle": "1. 解答 ①②：两方案方块图与三要素对比",
+          "detail": "两方案均为单回路负反馈恒值闭环（见上方对比方块图）：\n- **共同点**：被控对象均为**水槽**，被控变量均为**水槽液位 $h_1$**，测量元件均为 LT，控制器均为 LC。\n- **核心不同点**：\n  - **方案一**：操纵（控制）变量为**水的出口流量 $Q_o$**（执行机构为出口阀，主扰动为入口流量 $Q_{\\text{in}}$；液位偏高须**开大**出口阀）；\n  - **方案二**：操纵（控制）变量为**水的入口流量 $Q_{\\text{in}}$**（执行机构为入口阀，主扰动为出口流量 $Q_o$；液位偏高须**关小**入口阀）。"
+        },
+        {
+          "stepTitle": "2. 解答 ③：辨析信号流（信息流）与物料流",
+          "detail": "- **物料流（工艺流程图）**：水总是沿重力/压差从进水管经入口阀流入水槽，再经出口阀流出（物理走向单向：`入口 → 水槽 → 出口`）。\n- **信号流/信息流（方块图）**：反映因果控制传递关系，形成闭环：`给定液位 → 比较点 → LC → 调节阀 → 水槽 → 液位 h₁ → LT → 比较点`。\n- **关键对照**：在方案二中，入口阀位于水槽上游，信号流（阀 $\\to$ 水槽）与物料流方向一致；而在方案一中，出口阀物理位置位于水槽**下游**，但因出口阀开度决定液位高低，方块图中出口阀画在水槽**之前**，信息流方向（出口阀 $\\to$ 水槽液位）与水的物料流方向（水槽 $\\to$ 出口阀）**恰好相反**！"
+        }
+      ],
+      "finalAnswer": "两方案被控对象均为水槽、被控变量均为液位 $h_1$；方案一控制变量为出口流量 $Q_o$，方案二控制变量为入口流量 $Q_{\\text{in}}$（与学习辅导 P.240 附录 1 一致）；方块图反映因果信息流，与物理物料流方向未必相同。",
+      "takeaway": "这是理解「信息流 ≠ 物料流」的封神习题：切记方块图按**因果先后**排位置——谁控制谁，谁就画在前面！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.16",
+        "pdfPage": 25,
+        "itemRef": "习题1-5 (图1-14)",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.8 A1-5 & P.240 答案"
+      },
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch01-x-06",
+      "section": "习题一 · 1-6 (A1-6)",
+      "kind": "exercise",
+      "title": "【习题 1-6 / A1-6】丙烯冷却器乙烯裂解气温度控制系统（四问全解）",
+      "examWeight": "core",
+      "problem": "在石油化工生产中，利用液态丙烯汽化吸收裂解气体热量使乙烯裂解气温度控制在 $(15\\pm 1.5)^\\circ\\text{C}$（图 1-15：出口温度变送器 TT 测经冷却后的裂解气温度送温度控制器 TC，TC 调节气态丙烯出口调节阀）。① 指出被控对象、被控变量、操纵变量及设定值；② 画出系统方块图；③ 可能的扰动有哪些？④ 该系统属于定值还是随动控制系统？为什么？",
+      "figureSvg": "<svg role='img' viewBox='0 0 470 144' xmlns='http://www.w3.org/2000/svg'><title>习题1-6 丙烯冷却器乙烯裂解气温度定值闭环控制系统方块图</title><defs><marker id='c1pr' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='10' y1='60' x2='68' y2='60' stroke='#334155' stroke-width='1.5' marker-end='url(#c1pr)'/><circle cx='78' cy='60' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='86' y1='60' x2='114' y2='60' stroke='#334155' stroke-width='1.5' marker-end='url(#c1pr)'/><rect x='116' y='42' width='76' height='36' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='154' y='64' text-anchor='middle' font-size='11' fill='#1e3a8a'>温度控制TC</text><line x1='192' y1='60' x2='220' y2='60' stroke='#334155' stroke-width='1.5' marker-end='url(#c1pr)'/><rect x='222' y='42' width='80' height='36' rx='6' fill='#fef5e5' stroke='#9a5800' stroke-width='1.5'/><text x='262' y='64' text-anchor='middle' font-size='11' fill='#9a5800'>丙烯调节阀</text><line x1='302' y1='60' x2='330' y2='60' stroke='#334155' stroke-width='1.5' marker-end='url(#c1pr)'/><rect x='332' y='42' width='74' height='36' rx='6' fill='#e7f6f0' stroke='#0b6e4f' stroke-width='1.5'/><text x='369' y='64' text-anchor='middle' font-size='11' fill='#0b6e4f'>丙烯冷却器</text><line x1='406' y1='60' x2='460' y2='60' stroke='#334155' stroke-width='1.5' marker-end='url(#c1pr)'/><line x1='369' y1='10' x2='369' y2='40' stroke='#b4233c' stroke-width='1.4' marker-end='url(#c1pr)'/><polyline points='432,60 432,118 308,118' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#c1pr)'/><rect x='218' y='102' width='88' height='30' rx='6' fill='#f3e8ff' stroke='#6b21a8' stroke-width='1.5'/><text x='262' y='121' text-anchor='middle' font-size='11' fill='#6b21a8'>温度变送TT</text><polyline points='218,118 78,118 78,70' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#c1pr)'/><text x='8' y='48' font-size='10' fill='#141824'>给定15℃</text><text x='412' y='48' font-size='10' fill='#141824'>裂解气温度</text><text x='376' y='22' font-size='9.5' fill='#b4233c'>进气/环境/丙烯扰动</text><text x='64' y='51' font-size='12' fill='#141824'>+</text><text x='65' y='79' font-size='13' fill='#b4233c'>−</text></svg>",
+      "steps": [
+        {
+          "stepTitle": "1. 解答 ①②：锁定四要素并画闭环方块图",
+          "detail": "- **被控对象**：丙烯冷却器；\n- **被控变量**：经冷却后的乙烯裂解气出口温度；\n- **操纵（控制）变量**：液态/气态丙烯流量（通过调节气态丙烯阀开度改变蒸发量与液态丙烯供冷量）；\n- **设定值**：$15^\\circ\\text{C}$（允许波动范围 $\\pm 1.5^\\circ\\text{C}$）。\n系统负反馈闭环方块图见上方 SVG。"
+        },
+        {
+          "stepTitle": "2. 解答 ③④：枚举主要扰动并判定系统类型",
+          "detail": "- **③ 可能的扰动**：乙烯裂解气的入口温度与流量波动、液态丙烯的供给温度/压力与流量波动、周围环境温度变化、冷却器换热管结垢等。\n- **④ 系统类型**：属于**定值（恒值）控制系统**。因为其参考输入（温度设定值 $15^\\circ\\text{C}$）为恒定常数，控制系统的主要任务是克服上述各种外界扰动，将裂解气出口温度稳定在 $(15\\pm 1.5)^\\circ\\text{C}$ 允许范围内。"
+        }
+      ],
+      "finalAnswer": "① 对象：丙烯冷却器，被控变量：乙烯裂解气温度，操纵变量：液态丙烯（流量），设定值：$15^\\circ\\text{C}$；② 见方块图；③ 丙烯温度/流量、环境温度、裂解气入口温度/流量等；④ 定值控制系统（与学习辅导 P.240 附录 1 一致）。",
+      "takeaway": "遇到化工换热器/冷却器题，扰动清单记住「三源法」：**工艺物料侧**（入口温度/流量）、**冷热介质侧**（温度/压力/流量）、**外界环境侧**（室温/结垢），写全必拿满分！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.16-17",
+        "pdfPage": 25,
+        "itemRef": "习题1-6 (图1-15)",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.8 A1-6 & P.240 答案"
+      },
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch01-x-07",
+      "section": "习题一 · 1-7 (A1-7)",
+      "kind": "exercise",
+      "title": "【习题 1-7 / A1-7】热交换器水温前馈 + 反馈复合控制系统分析与方块图",
+      "examWeight": "core",
+      "problem": "主教材图 1-16 为水温控制系统示意图：冷水在热交换器中由通入管道的蒸汽加热得到一定温度的热水；冷水流量变化用流量计测量作为按流量前馈信号送入温度控制器，出口热水温度由温度测量装置测得并反馈至温度控制器，共同控制蒸汽管道调节阀。试绘制系统方块图，说明系统如何使热水温度维持在期望值，并指出被控对象和控制装置。",
+      "figureSvg": "<svg role='img' viewBox='0 0 475 178' xmlns='http://www.w3.org/2000/svg'><title>习题1-7 热交换器水温前馈+反馈复合控制系统方块图</title><defs><marker id='c1wt' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='10' y1='102' x2='70' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#c1wt)'/><circle cx='80' cy='102' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='88' y1='102' x2='116' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#c1wt)'/><rect x='118' y='85' width='80' height='34' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='158' y='106' text-anchor='middle' font-size='11' fill='#1e3a8a'>温度控制器</text><line x1='198' y1='102' x2='224' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#c1wt)'/><circle cx='234' cy='102' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='242' y1='102' x2='268' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#c1wt)'/><rect x='270' y='85' width='64' height='34' rx='6' fill='#fef5e5' stroke='#9a5800' stroke-width='1.5'/><text x='302' y='106' text-anchor='middle' font-size='11' fill='#9a5800'>蒸汽调节阀</text><line x1='334' y1='102' x2='360' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#c1wt)'/><rect x='362' y='85' width='58' height='34' rx='6' fill='#e7f6f0' stroke='#0b6e4f' stroke-width='1.5'/><text x='391' y='106' text-anchor='middle' font-size='11' fill='#0b6e4f'>热交换器</text><line x1='420' y1='102' x2='466' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#c1wt)'/><line x1='391' y1='14' x2='391' y2='83' stroke='#b4233c' stroke-width='1.5' marker-end='url(#c1wt)'/><polyline points='391,38 358,38' fill='none' stroke='#b4233c' stroke-width='1.4' marker-end='url(#c1wt)'/><rect x='282' y='23' width='74' height='30' rx='6' fill='#fdecef' stroke='#b4233c' stroke-width='1.4'/><text x='319' y='42' text-anchor='middle' font-size='11' fill='#b4233c'>冷水流量计</text><line x1='282' y1='38' x2='258' y2='38' stroke='#b4233c' stroke-width='1.4' marker-end='url(#c1wt)'/><rect x='178' y='23' width='78' height='30' rx='6' fill='#fdecef' stroke='#b4233c' stroke-width='1.4'/><text x='217' y='42' text-anchor='middle' font-size='11' fill='#b4233c'>前馈补偿器</text><polyline points='178,38 164,38 164,66 234,66 234,92' fill='none' stroke='#b4233c' stroke-width='1.4' marker-end='url(#c1wt)'/><polyline points='442,102 442,154 312,154' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#c1wt)'/><rect x='228' y='138' width='82' height='30' rx='6' fill='#f3e8ff' stroke='#6b21a8' stroke-width='1.5'/><text x='269' y='157' text-anchor='middle' font-size='11' fill='#6b21a8'>温度测量装置</text><polyline points='228,154 80,154 80,112' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#c1wt)'/><text x='10' y='92' font-size='10' fill='#141824'>期望水温</text><text x='422' y='92' font-size='10' fill='#141824'>热水温度</text><text x='396' y='24' font-size='10' fill='#b4233c'>冷水流量扰动</text><text x='66' y='93' font-size='12' fill='#141824'>+</text><text x='67' y='122' font-size='13' fill='#b4233c'>−</text><text x='220' y='94' font-size='11' fill='#141824'>+</text><text x='240' y='92' font-size='11' fill='#b4233c'>+</text></svg>",
+      "steps": [
+        {
+          "stepTitle": "1. 识别对象、变量与控制装置",
+          "detail": "- **被控对象**：热交换器；\n- **被控变量**：出口热水温度；\n- **控制变量（操纵变量）**：加热蒸汽流量；\n- **控制装置（执行机构）**：蒸汽调节阀（配温度控制器、出口温度传感器与冷水流量计）；\n- **主要可测扰动**：冷水入口流量波动。"
+        },
+        {
+          "stepTitle": "2. 详述前馈 + 反馈复合维持恒温机理",
+          "detail": "- **前馈（事前补偿）**：当冷水流量突然增大时，入口流量计立刻测得扰动信号送入前馈通道，在出口水温尚未下降前提前开大蒸汽调节阀增加供热，迅速抵消冷水流量变化的影响。\n- **反馈（事后精调）**：出口温度测量装置连续监测实际热水温度并负反馈至温度控制器，与期望水温比较；只要存在偏差（无论来自冷水初温、蒸汽压力波动还是前馈残差），控制器即调整蒸汽阀开度直至出口水温恢复期望值。方块图见上方 SVG。"
+        }
+      ],
+      "finalAnswer": "属前馈+反馈复合控制系统；被控对象：热交换器，被控变量：热水温度，控制装置：蒸汽调节阀（与学习辅导 P.240 附录 1 一致；方块图见上）。",
+      "takeaway": "画复合控制方块图时切记「两入一汇」：反馈控制器输出与前馈补偿输出在执行机构（蒸汽阀）前的相加点汇合，共同驱动同一调节阀！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.16-17",
+        "pdfPage": 25,
+        "itemRef": "习题1-7 (图1-16)",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.9 A1-7 & P.240 答案"
+      },
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch01-x-08",
+      "section": "习题一 · 1-8 (A1-8)",
+      "kind": "exercise",
+      "title": "【习题 1-8 / A1-8】谷物磨粉湿度前馈 + 反馈复合控制系统方块图",
+      "examWeight": "core",
+      "problem": "在谷物磨粉生产中（主教材图 1-17），为达到出粉最多的最佳湿度，谷物经传送装置按一定流量通过加水处，加水量由自动阀门控制。加水过程中，谷物流量、加水前谷物湿度以及水压都是扰动作用。系统在入口处设「前馈湿度测量」、在出口处设「反馈湿度测量」，均送入控制器调节自动加水阀。试指出要素并画出系统方块图。",
+      "figureSvg": "<svg role='img' viewBox='0 0 475 178' xmlns='http://www.w3.org/2000/svg'><title>习题1-8 谷物磨粉湿度前馈+反馈复合控制系统方块图</title><defs><marker id='c1gr' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><line x1='10' y1='102' x2='70' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#c1gr)'/><circle cx='80' cy='102' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='88' y1='102' x2='116' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#c1gr)'/><rect x='118' y='85' width='76' height='34' rx='6' fill='#eaf0ff' stroke='#2744a8' stroke-width='1.5'/><text x='156' y='106' text-anchor='middle' font-size='11' fill='#1e3a8a'>湿度控制器</text><line x1='194' y1='102' x2='222' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#c1gr)'/><circle cx='232' cy='102' r='8' fill='#fff' stroke='#334155' stroke-width='1.5'/><line x1='240' y1='102' x2='266' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#c1gr)'/><rect x='268' y='85' width='64' height='34' rx='6' fill='#fef5e5' stroke='#9a5800' stroke-width='1.5'/><text x='300' y='106' text-anchor='middle' font-size='11' fill='#9a5800'>自动加水阀</text><line x1='332' y1='102' x2='358' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#c1gr)'/><rect x='360' y='85' width='62' height='34' rx='6' fill='#e7f6f0' stroke='#0b6e4f' stroke-width='1.5'/><text x='391' y='106' text-anchor='middle' font-size='11' fill='#0b6e4f'>传送装置</text><line x1='422' y1='102' x2='466' y2='102' stroke='#334155' stroke-width='1.5' marker-end='url(#c1gr)'/><line x1='391' y1='14' x2='391' y2='83' stroke='#b4233c' stroke-width='1.5' marker-end='url(#c1gr)'/><polyline points='391,38 358,38' fill='none' stroke='#b4233c' stroke-width='1.4' marker-end='url(#c1gr)'/><rect x='272' y='23' width='84' height='30' rx='6' fill='#fdecef' stroke='#b4233c' stroke-width='1.4'/><text x='314' y='42' text-anchor='middle' font-size='10.5' fill='#b4233c'>前馈湿度测量</text><line x1='272' y1='38' x2='248' y2='38' stroke='#b4233c' stroke-width='1.4' marker-end='url(#c1gr)'/><rect x='172' y='23' width='74' height='30' rx='6' fill='#fdecef' stroke='#b4233c' stroke-width='1.4'/><text x='209' y='42' text-anchor='middle' font-size='10.5' fill='#b4233c'>前馈控制</text><polyline points='172,38 158,38 158,66 232,66 232,92' fill='none' stroke='#b4233c' stroke-width='1.4' marker-end='url(#c1gr)'/><polyline points='442,102 442,154 316,154' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#c1gr)'/><rect x='224' y='138' width='90' height='30' rx='6' fill='#f3e8ff' stroke='#6b21a8' stroke-width='1.5'/><text x='269' y='157' text-anchor='middle' font-size='10.5' fill='#6b21a8'>反馈湿度测量</text><polyline points='224,154 80,154 80,112' fill='none' stroke='#334155' stroke-width='1.5' marker-end='url(#c1gr)'/><text x='10' y='92' font-size='10' fill='#141824'>给定湿度</text><text x='424' y='92' font-size='10' fill='#141824'>输出湿度</text><text x='396' y='24' font-size='9.5' fill='#b4233c'>入口湿度/流量</text><text x='66' y='93' font-size='12' fill='#141824'>+</text><text x='67' y='122' font-size='13' fill='#b4233c'>−</text><text x='218' y='94' font-size='11' fill='#141824'>+</text><text x='238' y='92' font-size='11' fill='#b4233c'>+</text></svg>",
+      "steps": [
+        {
+          "stepTitle": "1. 识别系统核心要素与结构类型",
+          "detail": "- **系统类型**：按干扰补偿的**前馈 + 反馈复合控制系统**（恒值调节系统）；\n- **被控对象**：传送装置（及加水混合段谷物）；\n- **被控变量（输出）**：输出谷物湿度；\n- **给定值**：期望的谷物最佳湿度；\n- **控制变量**：加水量（执行机构为自动加水阀）；\n- **扰动量**：加水前入口谷物湿度（已测，引入前馈）、谷物流量波动及水压波动（未测，靠反馈闭环克服）。"
+        },
+        {
+          "stepTitle": "2. 绘制前馈 + 反馈复合方块图",
+          "detail": "前馈湿度测量检测输入谷物初始湿度变化，经前馈控制通道提前增减自动阀加水量；出口反馈湿度测量监测实际输出湿度并负反馈至输入端比较点，驱动湿度控制器消除水压、谷物流量等其余扰动造成的残差（方块图见上方 SVG）。"
+        }
+      ],
+      "finalAnswer": "属前馈+反馈复合控制系统；对象：传送装置，被控变量：输出谷物湿度，给定值：期望谷物湿度，控制量：加水量（与学习辅导 P.240 附录 1 一致；方块图见上）。",
+      "takeaway": "审题抓关键词：凡工艺图同时标出「入口检测（前馈）」和「出口检测（反馈）」，二话不说就是**前馈+反馈复合控制**标准模板！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.17",
+        "pdfPage": 26,
+        "itemRef": "习题1-8 (图1-17)",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.9 A1-8 & P.240 答案"
+      },
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch01-x-09",
+      "section": "习题一 · 1-9 (A1-9)",
+      "kind": "exercise",
+      "title": "【习题 1-9 / A1-9 · 拓展】物价-工资通货膨胀正反馈系统稳定性条件与政策分析",
+      "examWeight": "extended",
+      "problem": "反馈系统不一定都是负反馈的。以物价持续上涨为标志的经济膨胀就是一个正反馈系统（主教材图 1-18：`初始工资 → (+)比较(+) → 实际工资 → [工业 G] → 价格`，正反馈支路为 `价格 → [K₁] → 生活费用 → [生活费用自动上升 H] → 工资上涨 → 比较点(+)`）。请问在什么条件下，通过修改或延缓分配生活费用，可以使物价稳定？国家的工资与物价政策是如何影响这个正反馈系统的？",
+      "steps": [
+        {
+          "stepTitle": "1. 从正反馈闭环增益公式分析稳定条件",
+          "detail": "设前向工业价格传导增益为 $G>0$，正反馈通路总增益为 $K_f = K_1 H > 0$，则该**正反馈**系统的静态闭环传递关系为：$$\\frac{\\text{价格}}{\\text{初始工资}} = \\frac{G}{1 - G K_1 H}$$当开环正反馈增益满足 **$G K_1 H \\ge 1$** 时，每轮涨薪引发的物价上涨超过上一轮，形成发散的螺旋通货膨胀（不稳定）；只有通过压低生活费用指数挂钩比例 $K_1$（或减弱自动传导增益 $H$）使总环路增益 **$0 < G K_1 H < 1$**，正反馈级数 $\\sum_{n=0}^\\infty (GK_1 H)^n$ 才会收敛，物价趋于有限新稳态！"
+        },
+        {
+          "stepTitle": "2. 剖析延缓分配与国家宏观政策的控制作用",
+          "detail": "- **延缓分配生活费用（增大反馈延迟/时间常数）**：虽不改变稳态增益，但拉长了通胀传导周期，显著减缓物价飙升速率，为宏观调控赢得窗口；\n- **国家工资与物价政策（引入外环负反馈 / 削弱正反馈增益）**：如实施累进税率调节（对应增大负反馈抑制）、工资指导线限制（减小 $K_1$）、平抑物价/增加供给（降低工业成本传导 $G$）或通过立法限价（参考式(1-7)多回路镇定原理），本质上都是**降低正反馈环路增益至 $<1$ 或叠加足够强的负反馈外环**，使系统从发散转为稳定。"
+        }
+      ],
+      "finalAnswer": "物价稳定条件为正反馈环路增益 $GK_1 H < 1$（压低生活费用挂钩系数 $K_1$、延缓调整周期减缓发散速度）；国家工资/税收/限价政策通过降低正反馈增益或引入负反馈外环实现经济系统镇定。",
+      "takeaway": "对照负反馈分母 $1+GH$ 与正反馈分母 $1-GH$：正反馈系统只有环路增益严格小于 $1$ 才可能收敛不爆炸！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.18",
+        "pdfPage": 27,
+        "itemRef": "习题1-9 (图1-18)",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.9 A1-9"
+      },
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch01-x-10",
+      "section": "习题一 · 1-10 (A1-10)",
+      "kind": "exercise",
+      "title": "【习题 1-10 / A1-10 · 必考压轴】7 个系统方程「线性/非线性 · 定常/时变 · 动态/静态」三维判定",
+      "examWeight": "core",
+      "problem": "下列各式描述系统的数学方程，$c(t)$ 为输出量，$r(t)$ 为输入量，试判断哪些是线性定常或时变系统，哪些是非线性系统（并同步判别动态/静态，对照学习辅导 P.240 附录 1）：\n① $c(t)=5+r^2(t)+t\\frac{\\mathrm{d}^2 r(t)}{\\mathrm{d}t^2}$；\n② $\\frac{\\mathrm{d}^3 c(t)}{\\mathrm{d}t^3}+3\\frac{\\mathrm{d}^2 c(t)}{\\mathrm{d}t^2}+6\\frac{\\mathrm{d}c(t)}{\\mathrm{d}t}+8c(t)=r(t)$；\n③ $t\\frac{\\mathrm{d}c(t)}{\\mathrm{d}t}+c(t)=r(t)+3\\frac{\\mathrm{d}r(t)}{\\mathrm{d}t}$；\n④ $c(t)=r(t)\\cos\\omega t + 5$；\n⑤ $c(t)=3r(t)+6\\frac{\\mathrm{d}r(t)}{\\mathrm{d}t}+5\\int_{-\\infty}^{t}r(\\tau)\\,\\mathrm{d}\\tau$；\n⑥ $c(t)=r^2(t)$；\n⑦ $c(t)=\\begin{cases}0, & t<6 \\\\ r(t), & t\\ge 6\\end{cases}$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第一关：筛选非线性系统（①、④、⑥）",
+          "detail": "- **①**：含常数偏置 $5$ 与平方项 $r^2(t)$ $\\Rightarrow$ **非线性**；又含时变系数 $t$ 及二阶导数 $\\Rightarrow$ **非线性、时变动态系统**。\n- **④**：含独立常数偏置 $+5$，令 $r(t)\\equiv 0$ 时 $c(t)=5\\ne 0$，违背齐次性 $T[0]=0$ $\\Rightarrow$ **非线性**；又含显式时间因子 $\\cos\\omega t$ 且无微积分 $\\Rightarrow$ **非线性、时变静态系统**！\n- **⑥**：$r^2(t)$ 不满足叠加与齐次性，系数为常数且无微积分 $\\Rightarrow$ **非线性、时不变（定常）静态系统**。"
+        },
+        {
+          "stepTitle": "2. 第二关：区分线性定常（②、⑤）vs 线性时变（③、⑦）",
+          "detail": "- **②**：常系数三阶线性微分方程 $\\Rightarrow$ **线性、时不变（定常）动态系统**。\n- **③**：对 $c, r$ 及其导数全为一次线性（满足叠加与齐次性），但 $\\dot{c}(t)$ 系数为时间 $t$ $\\Rightarrow$ **线性、时变动态系统**！\n- **⑤**：常系数比例、微分、积分（下限 $-\\infty$ 保持时间平移不变）的线性组合 $\\Rightarrow$ **线性、时不变（定常）动态系统**。\n- **⑦**：可写成 $c(t)=1(t-6)\\,r(t)$，对 $r(t)$ 严格满足叠加性与齐次性；但门控截断时刻 $t=6$ 固定，输入平移后输出不随之平移（且无微积分） $\\Rightarrow$ **线性、时变静态系统**！"
+        }
+      ],
+      "finalAnswer": "① 非线性、时变动态；② 线性、定常动态；③ 线性、时变动态；④ 非线性、时变静态；⑤ 线性、定常动态；⑥ 非线性、定常静态；⑦ 线性、时变静态（全部 7 式与学习辅导 P.240 附录 1 及 SymPy 验算 100% 一致！）。",
+      "takeaway": "牢记 3 条秒杀铁律：① 出现**独立常数 $+C$** 直接判非线性（$T[0]\\ne 0$）；② **时间 $t$ 只作系数乘在线性项上**（③⑦）是**线性时变**而非非线性；③ 含微积分即动态，纯代数即时关系即静态！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.18",
+        "pdfPage": 27,
+        "itemRef": "习题1-10",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.10 A1-10 & P.240 附录1答案"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch01_ex_a1_10_classify_7eqs",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch01-x-11",
+      "section": "学习辅导 1.5 自测题 · B1-8",
+      "kind": "exercise",
+      "title": "【自测题 B1-8】煤气烘箱温度自动控制系统原理剖析与方块图",
+      "examWeight": "core",
+      "problem": "某烘箱温度控制系统原理如图 1-16（学习辅导 P.10）：给定电位器输出参考电压 $u_r$；热电偶测温元件测烘箱温度，经功率放大器得反馈电压 $u_T$；偏差 $\\Delta u = u_r - u_T$ 经功率放大器输出电枢电压 $u_a$ 驱动直流电动机转动角位移 $\\theta$，带动煤气阀门开度变化，调节进入混合箱的煤气流量以加热烘箱。试分析工作原理，确定被控对象、被控量与参考输入量，并给出系统方块图。",
+      "steps": [
+        {
+          "stepTitle": "1. 识别核心要素",
+          "detail": "- **被控对象**：烘箱（含混合燃烧箱）；\n- **被控量（输出）**：烘箱实际温度；\n- **参考输入量**：给定温度（对应给定电位器电压 $u_r$）；\n- **控制变量（操纵变量）**：煤气流量；\n- **执行机构**：直流电动机 + 煤气调节阀；\n- **检测反馈环节**：热电偶 + 测量侧功率放大器。"
+        },
+        {
+          "stepTitle": "2. 剖析负反馈闭环调节过程与方块图",
+          "detail": "- **工作原理**：若烘箱温度低于设定值 $\\Rightarrow$ 热电偶反馈电压 $u_T\\downarrow$ $\\Rightarrow$ 偏差 $\\Delta u = u_r - u_T > 0$ $\\Rightarrow$ 功率放大器输出正向电枢电压 $u_a$ $\\Rightarrow$ 电动机正转增大煤气阀门开度 $\\theta$ $\\Rightarrow$ 煤气流量增大、发热量增加 $\\Rightarrow$ 烘箱温度回升，直至 $\\Delta u=0$ 电机停转稳定；若温度偏高则反向关小煤气阀。\n- **方块图串联结构**：`给定温度(电位器 ur) → (+)比较(-) → Δu → [功率放大器] → ua → [电动机] → θ → [煤气阀门] → 煤气流量 → [烘箱] → 实际烘箱温度`（下环经 `[热电偶与测温放大器]` 输出 $u_T$ 负反馈回比较点）。"
+        }
+      ],
+      "finalAnswer": "属单回路负反馈恒值温控闭环；对象：烘箱，被控量：烘箱温度，参考输入：给定温度（电位器电压 $u_r$），方块图按「电位器 $\\to$ 功放 $\\to$ 电机 $\\to$ 煤气阀 $\\to$ 烘箱」与「热电偶反馈」画出。",
+      "takeaway": "机电+热工混合系统（如本题电枢电机带煤气阀）画方块图时，务必按**信号物理形态转换链**（电压 $\\to$ 转角 $\\to$ 流量 $\\to$ 温度）逐级标清！",
       "source": {
         "book": "孙优贤《学习辅导》(2017第1版)",
         "printedPage": "P.10",
         "pdfPage": 19,
-        "itemRef": "习题 A1-10"
+        "itemRef": "自测题 B1-8 (图1-16)"
       },
-      "verification": { "method": "textbook-checked", "verified": true }
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch01-x-12",
+      "section": "学习辅导 1.5 自测题 · B1-9",
+      "kind": "exercise",
+      "title": "【自测题 B1-9】加热炉两种温控方案（出口反馈 vs 入口前馈）对比与扰动判定",
+      "examWeight": "core",
+      "problem": "流程工业加热炉用燃料油燃烧加热原料油，要求原料油出口温度恒定（学习辅导图 1-17）：方案 (a) 在**出口**设温度变送器 TT 送温度控制器 TC 调节燃料油阀；方案 (b) 在**入口**设 TT 送前馈控制器 FC 调节燃料油阀。① 画出两方案方块图并指出控制系统类型；② 当原料油入口温度经常波动时，方案 (b) 能否保证出口温度完全不变？",
+      "steps": [
+        {
+          "stepTitle": "1. 解答 ①：判定两方案结构与方块图",
+          "detail": "- **方案 (a)**：检测被控量（原料油出口温度）并反馈至 TC 调节燃料油阀，属**负反馈闭环控制系统**（`出口温度给定 → (+)比较(-) → [TC] → [燃料油阀] → [加热炉] → 出口温度`，下环经 `[出口TT]` 负反馈）。\n- **方案 (b)**：不测出口温度，仅测入口原料油温度扰动送 FC 调节燃料油阀，属**纯前馈控制系统（按扰动控制的开环系统）**（`入口油温扰动 → [入口TT] → [FC] → [燃料油阀] → [加热炉] → 出口温度`，同时该入口油温也直接作为扰动作用于加热炉）。"
+        },
+        {
+          "stepTitle": "2. 解答 ②：分析方案 (b) 抗入口温度波动的局限性",
+          "detail": "**不能保证完全不变！**原因有二：\n① 理论上只有当加热炉扰动通道与控制通道数学模型完全精确已知且前馈控制器完全物理可实现时，才能实现全补偿，实际工程中必存在模型误差；\n② 除原料油入口温度外，实际工况还存在**原料油流量波动、燃料油热值/压力波动、炉体散热变化**等其他未测扰动，纯前馈（开环）系统因不检测出口温度，对这些扰动与建模残差完全无能为力。"
+        }
+      ],
+      "finalAnswer": "① 方案 (a) 为负反馈闭环控制，方案 (b) 为按扰动前馈控制（开环）；② 方案 (b) 只能显著减弱但**不能保证**出口温度完全不变（因存在模型误差及其他未测扰动）。",
+      "takeaway": "切记：工业现场**几乎从不单独使用纯前馈控制**，必须配上反馈闭环消除残差与未测扰动（即下题 B1-10 的设计思路）！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.10-11",
+        "pdfPage": 19,
+        "itemRef": "自测题 B1-9 (图1-17)"
+      },
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch01-x-13",
+      "section": "学习辅导 1.5 自测题 · B1-10",
+      "kind": "exercise",
+      "title": "【自测题 B1-10】加热炉复合控制系统方案综合设计（结合 B1-9）",
+      "examWeight": "core",
+      "problem": "对图 1-18 所示加热炉（学习辅导 P.11），通过改变燃料油流量使原料油出口温度不变。分析知原料油入口温度是主要扰动，但其余扰动也不容忽视。试：① 设计一个既能及时克服主要扰动、又能维持出口温度不变的控制方案；② 说明原理图改造与系统方块图组成。",
+      "steps": [
+        {
+          "stepTitle": "1. 方案选型：前馈 + 反馈复合控制系统",
+          "detail": "结合自测题 B1-9 的 (a)(b) 两方案优点，设计**前馈 + 反馈复合控制系统**：\n- **前馈支路（针对主要扰动）**：在原料油**入口管线**安装温度变送器 $\\text{TT}_1$ 实时检测入口油温，接入前馈补偿器 FC，一旦入口油温波动立即「事前」修正燃料油量；\n- **反馈闭环（克服其余扰动与残差）**：在原料油**出口管线**安装温度变送器 $\\text{TT}_2$ 实时检测出口油温，反馈至温度控制器 TC 与给定出口温度比较；\n- **信号汇合**：FC 输出与 TC 输出送入加法器 $\\Sigma$ 叠加后共同驱动**燃料油调节阀**。"
+        },
+        {
+          "stepTitle": "2. 方块图标准布局",
+          "detail": "前向主通道：`出口温度给定 → (+)比较(-) → [温度控制器TC] → (+)加法器Σ(+) → [燃料油调节阀] → 燃料油流量 → [加热炉] → 原料油出口温度`；\n上方前馈通道：`入口油温(主扰动) → [入口测温TT₁] → [前馈补偿FC] → 加法器Σ(+)`（同时主扰动指向加热炉）；\n下方反馈通道：`出口温度 → [出口测温TT₂] → 比较点(−)`（其余扰动如原料流量、燃料压力亦指向加热炉）。"
+        }
+      ],
+      "finalAnswer": "采用「入口油温前馈（$\\text{TT}_1\\to\\text{FC}$）+ 出口油温负反馈（$\\text{TT}_2\\to\\text{TC}$）」经加法器 $\\Sigma$ 共控燃料油阀的复合控制系统。",
+      "takeaway": "看到「既能及时克服主要可测扰动，又能消除其余未知扰动保证稳态无差」的工程设计题，**唯一标准答案 = 前馈 + 反馈复合控制**！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.11",
+        "pdfPage": 20,
+        "itemRef": "自测题 B1-10 (图1-18)"
+      },
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch01-x-14",
+      "section": "学习辅导 1.5 自测题 · B1-11",
+      "kind": "exercise",
+      "title": "【自测题 B1-11】电冰箱制冷继电控制系统原理、方块图与防压缩机频繁启停措施",
+      "examWeight": "core",
+      "problem": "电冰箱制冷系统原理如图 1-19（学习辅导 P.11）：档位电位器输出温度设定电压 $u_1$；箱内温度传感器输出反馈电压 $u_2$；放大器输出偏差 $\\Delta u = u_2 - u_1$ 驱动继电器，继电器输出工作电压 $u_R$ 控制压缩机启停，经冷凝器、蒸发器制冷降低冰箱温度。要求：① 绘制控制系统框图；② 简述工作原理；③ 若出现压缩机频繁启动，提出相应改进措施。",
+      "steps": [
+        {
+          "stepTitle": "1. 解答 ①②：方块图结构与两位式开关控制工作原理",
+          "detail": "- **方块图**：`设定档位电压 u₁ → (−)比较(+) → Δu → [放大器] → [继电器] → uR → [压缩机+冷凝器+蒸发器(制冷执行机构)] → 制冷量 → [电冰箱箱体(被控对象)] → 箱内实际温度`（下环经 `[温度传感器]` 输出 $u_2$ 接比较点，构成负反馈——注意箱温高需要**启动制冷降温**，故放大器同相/反相极性保证箱温高于设定时继电器吸合！）。\n- **工作原理**：当箱内温度高于设定温度时，$u_2$ 超过设定阈值使继电器吸合，输出 $u_R$ 启动压缩机制冷降温；当箱温降至设定值以下时，继电器断开，压缩机停转；待外界传热使箱温回升后再次启动，从而将箱温维持在设定值附近。"
+        },
+        {
+          "stepTitle": "2. 解答 ③：解决压缩机频繁启停的核心工程措施",
+          "detail": "频繁启停的根源是**理想继电器在设定点无回差（死区）**，箱温稍一波动就反复通断，极易烧毁压缩机电机！标准改进措施：\n1. **给继电器引入滞环（回差/不灵敏区）特性**（最核心措施，见第 9 章非线性滞环继电器！）：设**启动上限温度 $T_{\\text{on}}$** 与**停机下限温度 $T_{\\text{off}}$**（如 $T_{\\text{on}}=6^\\circ\\text{C},\\;T_{\\text{off}}=2^\\circ\\text{C}$），让压缩机在 $[T_{\\text{off}}, T_{\\text{on}}]$ 温差区间内保持原状态，大幅拉长启停周期；\n2. **增加最短停机/延时保护电路**（压缩机停机后强制延时数分钟才允许再次启动）；\n3. **改善箱体保温隔热性能**或升级为**变频连续调速压缩机**（消除开关式通断冲击）。"
+        }
+      ],
+      "finalAnswer": "① 属继电开关式负反馈恒温闭环系统；② 箱温超限吸合制冷、低于设定断开停机；③ 最核心改进是在继电器/温控器中**引入滞环（回差/温差区间）特性**并可配延时保护或变频调速。",
+      "takeaway": "第 1 章 B1-11 与第 9 章「带滞环继电特性」遥相呼应——工业/家电开关控温防抖动的黄金招式就是**加滞环（回差）**！",
+      "source": {
+        "book": "孙优贤《学习辅导》(2017第1版)",
+        "printedPage": "P.11",
+        "pdfPage": 20,
+        "itemRef": "自测题 B1-11 (图1-19)"
+      },
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch01-s-01",
+      "section": "第 1 章题型总结 · 一、工艺/物理原理图转方块图",
+      "kind": "summary",
+      "title": "【破题总图】物理/工艺原理图 → 控制系统方块图 5 步标准画法与仪表代号速查",
+      "examWeight": "core",
+      "overview": "第 1 章在 845 考纲中最核心的动手题型就是「给一张陌生工业/机电/生活装置示意图，要求指出要素、说明调节过程并画出系统方块图」。只要记住化工仪表两位字母代号并严格走完 5 步流水线，任何陌生设备都能 2 分钟规范画全。",
+      "figureSvg": "<svg role='img' viewBox='0 0 460 156' xmlns='http://www.w3.org/2000/svg'><title>第1章 物理原理图转控制系统方块图五步标准破题流程图</title><defs><marker id='c1sd' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><rect x='8' y='12' width='80' height='54' rx='6' fill='#eef2ff' stroke='#2744a8' stroke-width='1.4'/><text x='48' y='30' text-anchor='middle' font-size='9.2' fill='#1e3a8a' font-weight='700'>① 定对象输出</text><text x='48' y='45' text-anchor='middle' font-size='8' fill='#334155'>要稳谁(输出)</text><text x='48' y='58' text-anchor='middle' font-size='8' fill='#334155'>谁被控(对象)</text><line x1='88' y1='39' x2='100' y2='39' stroke='#334155' stroke-width='1.3' marker-end='url(#c1sd)'/><rect x='102' y='12' width='80' height='54' rx='6' fill='#fef5e5' stroke='#b45309' stroke-width='1.4'/><text x='142' y='30' text-anchor='middle' font-size='9.2' fill='#92400e' font-weight='700'>② 找执行机构</text><text x='142' y='45' text-anchor='middle' font-size='8' fill='#334155'>靠调谁改变输出</text><text x='142' y='58' text-anchor='middle' font-size='8' fill='#334155'>(阀/电机/加热)</text><line x1='182' y1='39' x2='194' y2='39' stroke='#334155' stroke-width='1.3' marker-end='url(#c1sd)'/><rect x='196' y='12' width='80' height='54' rx='6' fill='#f3e8ff' stroke='#6b21a8' stroke-width='1.4'/><text x='236' y='30' text-anchor='middle' font-size='9.2' fill='#6b21a8' font-weight='700'>③ 查检测反馈</text><text x='236' y='45' text-anchor='middle' font-size='8' fill='#334155'>测输出→反馈闭环</text><text x='236' y='58' text-anchor='middle' font-size='8' fill='#334155'>测扰动→前馈通道</text><line x1='276' y1='39' x2='288' y2='39' stroke='#334155' stroke-width='1.3' marker-end='url(#c1sd)'/><rect x='290' y='12' width='76' height='54' rx='6' fill='#ecfdf5' stroke='#0b6e4f' stroke-width='1.4'/><text x='328' y='30' text-anchor='middle' font-size='9.2' fill='#065f46' font-weight='700'>④ 按信息流排</text><text x='328' y='45' text-anchor='middle' font-size='8' fill='#334155'>左输入 右输出</text><text x='328' y='58' text-anchor='middle' font-size='8' fill='#334155'>下反馈 上前馈</text><line x1='366' y1='39' x2='378' y2='39' stroke='#334155' stroke-width='1.3' marker-end='url(#c1sd)'/><rect x='380' y='12' width='72' height='54' rx='6' fill='#fff1f2' stroke='#be123c' stroke-width='1.4'/><text x='416' y='30' text-anchor='middle' font-size='9.2' fill='#9f1239' font-weight='700'>⑤ 标正负扰动</text><text x='416' y='45' text-anchor='middle' font-size='8' fill='#334155'>比较点标 + / −</text><text x='416' y='58' text-anchor='middle' font-size='8' fill='#334155'>补画主扰动入口</text><rect x='14' y='86' width='432' height='58' rx='6' fill='#f8fafc' stroke='#64748b' stroke-width='1.2'/><text x='230' y='104' text-anchor='middle' font-size='9.5' fill='#0f172a' font-weight='700'>画图自检红线（浙大 845 阅卷高频扣分点）</text><text x='230' y='120' text-anchor='middle' font-size='8.6' fill='#1e3a8a'>• 方框里写「设备/装置名」，箭头线上写「物理量/信号名」，绝不把物理量写进方框！</text><text x='230' y='135' text-anchor='middle' font-size='8.6' fill='#b4233c'>• 箭头代表「信息因果流向」而非管道物料流向；闭环比较点务必标清负反馈「−」号！</text></svg>",
+      "tables": [
+        {
+          "caption": "表 1-5 第 1 章高频工业仪表字母代号速查表（主教材 & 学习辅导通用）",
+          "headers": [
+            "仪表代号",
+            "英文/中文全称",
+            "在方块图中的固定角色",
+            "常见出现题目"
+          ],
+          "rows": [
+            [
+              "**LT / TT / FT**",
+              "Level / Temperature / Flow Transmitter（液位/温度/流量测量变送器）",
+              "**检测传感器**（测输出画下方反馈通道；测入口扰动画上方前馈通道）",
+              "主例1-1, 1-5; 辅例1-3; 习题1-5~1-8"
+            ],
+            [
+              "**LC / TC / FC**",
+              "Level / Temperature / Flow Controller（液位/温度/流量控制器）",
+              "**控制器 / 前馈补偿器**（反馈控制器画前向通道；前馈 FC 画上方通道）",
+              "主例1-1, 1-5; 辅例1-3; B1-9~B1-10"
+            ],
+            [
+              "**$\\Sigma$（或 $+$ 圈）**",
+              "加法器 / 综合比较点",
+              "输入比较点标 `+`/`−`；前馈与反馈汇合点标 `+`/`+`",
+              "主例1-5; 辅例1-3; 习题1-7~1-8"
+            ],
+            [
+              "**调节阀 / 直流电机**",
+              "Control Valve / DC Motor",
+              "**执行机构**（紧挨被控对象之前，输出为控制/操纵变量）",
+              "几乎全部第 1 章工程例题与习题"
+            ]
+          ]
+        }
+      ],
+      "patterns": [
+        {
+          "typeName": "物理/工艺系统原理图 → 要素识别 + 方块图绘制 + 调节过程口述",
+          "triggers": "题干给出水槽、加热器、冷却器、直流电机、烘箱、电冰箱、汽车等物理结构图，要求「指出对象/被控量/控制量」「说明工作原理」「画出方块图」。",
+          "method": "① 盯准工艺目标定**被控变量**与**被控对象**；② 盯准阀门/电机/加热丝定**执行机构**与**控制变量**；③ 查传感器位置：装在出口测被控量 $\\Rightarrow$ **负反馈闭环**（画下方）；装在入口测干扰 $\\Rightarrow$ **前馈通道**（画上方）；两处都有 $\\Rightarrow$ **复合控制**；④ 口述调节过程用因果链：`扰动↑ ⇒ 输出偏离 ⇒ 反馈信号变化 ⇒ 偏差变化 ⇒ 控制器指令执行机构反向动作 ⇒ 消除偏差`。",
+          "pitfall": "两大高频失分点：① 把**物料流向**错画成方块图箭头（反例：习题 1-5 方案一出口阀在水槽下游，但方块图中出口阀画在水槽前面！）；② 把物理量名写进方框里（方框写**部件名**，箭线上写**信号/物理量名**）！",
+          "relatedRefs": "主例1-1~1-5, 辅例1-1~1-3, 习题1-1~1-8, B1-8~B1-11"
+        }
+      ],
+      "takeaway": "画完方块图必查 4 项：**左进右出、下反馈上前馈、框内设备线上量、负号扰动不漏画**！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.1-8, 15-17",
+        "pdfPage": 10,
+        "itemRef": "第1章方块图画法总括",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.2-11"
+      },
+      "verification": {
+        "method": "textbook-checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch01-s-02",
+      "section": "第 1 章题型总结 · 二、数学方程三维性质判定",
+      "kind": "summary",
+      "title": "【高频必考】系统数学方程「线性/非线性 · 定常/时变 · 动态/静态」三步秒判法",
+      "examWeight": "core",
+      "overview": "凡题目给出输入 $r(t)$ 与输出 $c(t)$ 的数学方程，要求判定系统性质（如习题 1-10 / A1-10），切忌凭直觉混为一谈——严格按「**第 1 关判线性 $\\to$ 第 2 关判定常 $\\to$ 第 3 关判动态**」三步独立过筛，准确率 100%。",
+      "figureSvg": "<svg role='img' viewBox='0 0 460 148' xmlns='http://www.w3.org/2000/svg'><title>第1章 系统数学方程三维性质（线性/定常/动态）快速决策树</title><defs><marker id='c1sc' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><rect x='12' y='12' width='134' height='56' rx='6' fill='#fff1f2' stroke='#be123c' stroke-width='1.4'/><text x='79' y='29' text-anchor='middle' font-size='9.5' fill='#9f1239' font-weight='700'>第1关：判线性 / 非线性</text><text x='79' y='44' text-anchor='middle' font-size='8.2' fill='#334155'>先代 r=0 查 c=0 否？</text><text x='79' y='58' text-anchor='middle' font-size='8.2' fill='#334155'>有 +C / r² / c·r → 非线性</text><line x1='146' y1='40' x2='162' y2='40' stroke='#334155' stroke-width='1.3' marker-end='url(#c1sc)'/><rect x='164' y='12' width='136' height='56' rx='6' fill='#fffbeb' stroke='#b45309' stroke-width='1.4'/><text x='232' y='29' text-anchor='middle' font-size='9.5' fill='#92400e' font-weight='700'>第2关：判定常 / 时变</text><text x='232' y='44' text-anchor='middle' font-size='8.2' fill='#334155'>系数显含 t 或分段定时？</text><text x='232' y='58' text-anchor='middle' font-size='8.2' fill='#334155'>有 t·ċ / cos(ωt) / t≥6 → 时变</text><line x1='300' y1='40' x2='316' y2='40' stroke='#334155' stroke-width='1.3' marker-end='url(#c1sc)'/><rect x='318' y='12' width='130' height='56' rx='6' fill='#ecfdf5' stroke='#0b6e4f' stroke-width='1.4'/><text x='383' y='29' text-anchor='middle' font-size='9.5' fill='#065f46' font-weight='700'>第3关：判动态 / 静态</text><text x='383' y='44' text-anchor='middle' font-size='8.2' fill='#334155'>含微积分/记忆/延迟？</text><text x='383' y='58' text-anchor='middle' font-size='8.2' fill='#334155'>仅即时代数关系 → 静态</text><rect x='14' y='86' width='432' height='50' rx='6' fill='#f8fafc' stroke='#64748b' stroke-width='1.2'/><text x='230' y='104' text-anchor='middle' font-size='9' fill='#0f172a' font-weight='700'>三条维度完全独立、互不混淆（对应习题 A1-10 全部 7 式）</text><text x='230' y='122' text-anchor='middle' font-size='8.5' fill='#1e3a8a'>例：t·ċ + c = r + 3ṙ（线性+时变+动态） ｜ c = r·cos(ωt)+5（非线性+时变+静态） ｜ c = r²（非线性+定常+静态）</text></svg>",
+      "tables": [
+        {
+          "caption": "表 1-6 系统数学方程高频伪装陷阱与秒判对照表（整合主教材 P.10-11 & 习题 1-10）",
+          "headers": [
+            "典型伪装项",
+            "线性 vs 非线性",
+            "定常 vs 时变",
+            "易错原因深度拆解"
+          ],
+          "rows": [
+            [
+              "独立常数偏置 $+5$（如 $c=r\\cos\\omega t + 5$）",
+              "**非线性**",
+              "看其余系数（含 $\\cos\\omega t$ 为时变）",
+              "零输入响应 $T[0]=5\\ne 0$，直接违背齐次性 $T[ar]=aT[r]$！"
+            ],
+            [
+              "显式时间乘子（如 $t\\dot{c}$、$\\cos\\omega t\\cdot r$）",
+              "**线性**",
+              "**时变**",
+              "$t$ 仅作为外部系数乘在一次项上，叠加与齐次性完全成立！"
+            ],
+            [
+              "定时分段门控（如 $t<6$ 为 $0$，$t\\ge 6$ 为 $r(t)$）",
+              "**线性**",
+              "**时变**",
+              "等价于 $1(t-6)\\cdot r(t)$，满足叠加齐次，但截断时刻不随输入平移！"
+            ],
+            [
+              "输入输出幂次/乘积（如 $r^2,\\;c\\cdot r,\\;\\sin c$）",
+              "**非线性**",
+              "看系数是否含 $t$",
+              "违背叠加性 $(r_1+r_2)^2\\ne r_1^2+r_2^2$"
+            ],
+            [
+              "无限下限积分 $\\int_{-\\infty}^{t}r(\\tau)\\mathrm{d}\\tau$",
+              "**线性**",
+              "**定常（时不变）**",
+              "积分是线性算子，且下限 $-\\infty$ 保证 $r(t-t_0)$ 积分严格平移不变！（注：若下限为固定常数 $0$ 且含负时间输入须小心）"
+            ]
+          ]
+        }
+      ],
+      "patterns": [
+        {
+          "typeName": "系统数学方程多维度性质判定（选填/简答高频）",
+          "triggers": "给出含 $c(t), r(t)$、导数、积分、时变因子或分段定义的方程，要求区分线性定常 / 线性时变 / 非线性（及静态/动态）。",
+          "method": "① **先代 $r(t)\\equiv 0$**，看是否推出 $c(t)\\equiv 0$（有 $+C$ 立刻判非线性），再扫视有无 $r^2, c^2, c\\dot c, \\sin r, |r|$ 等非线性项；② **再看时间 $t$ 是否裸露出现**在系数、三角函数或分段界点中（出现即判时变）；③ **最后看有无导数/积分/延迟**（有即动态，无即静态）。",
+          "pitfall": "绝对不要看到 $\\cos\\omega t$ 或 $t\\dot{c}$ 就脱口而出「非线性」——它们只是**时变**！线性看的是对**信号 $r,c$ 本身**是否一次齐次！",
+          "relatedRefs": "主教材式(1-8)~(1-11), 习题1-10 (A1-10)"
+        }
+      ],
+      "takeaway": "一句话刻进脑子：**常数偏置 $+C$ 毁线性，时间系数 $t$ 毁定常，微积分延迟定动态**！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.10-11, 18",
+        "pdfPage": 19,
+        "itemRef": "线性定常判据与习题1-10",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.2, 10, 240"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch01_ex_a1_10_classify_7eqs",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-ch01-s-03",
+      "section": "第 1 章题型总结 · 三、方案选型与敏感度/抗扰定量分析",
+      "kind": "summary",
+      "title": "【分析简答】控制方案选型、敏感度/抗扰定量公式与概念辨析答题模板",
+      "examWeight": "core",
+      "overview": "第 1 章的简答、方案对比与定量分析题（如「如何改进开环系统」「为什么用复合控制」「反馈为什么能降敏感度/抗扰/镇定」），直接套用以下定量公式与标准话术即可精准踩中全部得分点。",
+      "tables": [
+        {
+          "caption": "表 1-7 第 1 章定量分析核心公式与答题话术速查表（主教材 P.6-8）",
+          "headers": [
+            "设问类型",
+            "必备定量公式 / 依据",
+            "标准满分答题要点"
+          ],
+          "rows": [
+            [
+              "为什么闭环对内部参数摄动不敏感？",
+              "开环 $S_G^{G_0}=1$；闭环 $S_G^M=\\frac{1}{1+GH}$",
+              "在闭环稳定前提下增大回路增益 $|GH|$，可使系统对前向通道参数 $G$ 变化的敏感度大幅降低（但对反馈检测环节 $H$ 敏感度 $S_H^M\\approx -1$，故传感器必须精密）"
+            ],
+            [
+              "为什么闭环能抑制外部扰动？",
+              "开环 $y=G_2 f$；闭环 $y=\\frac{G_2}{1+G_1 G_2 H}f$",
+              "当扰动被**包在反馈环内**且 $1+G_1 G_2 H>1$ 时，扰动影响被削弱 $1+G_1 G_2 H$ 倍；且扰动点前增益 $G_1$ 越大抑制越强"
+            ],
+            [
+              "反馈一定能改善稳定性吗？",
+              "单环 $M=\\frac{G}{1+GH}$；双环 $\\Phi=\\frac{G}{1+GH+GF}$",
+              "反馈是**双刃剑**：设计不当会使原本稳定的开环系统失稳（如 $GH=-1$）；合理增加外环反馈 $F$ 又能使失稳内环恢复稳定"
+            ],
+            [
+              "开环 / 闭环 / 复合如何选型改造？",
+              "按给定开环 vs 负反馈闭环 vs 前馈+反馈复合",
+              "① 开环精度低 $\\to$ **加传感器构成负反馈闭环**；② 主扰动大且可测 $\\to$ **叠加前馈构成复合控制**；③ 开关温控频繁启停 $\\to$ **加滞环（回差）**"
+            ]
+          ]
+        }
+      ],
+      "patterns": [
+        {
+          "typeName": "系统方案评价、定值/随动判定与工程改进设计",
+          "triggers": "问「属于什么控制系统」「方案 (b) 能否使输出完全不变」「如何提高精度 / 消除频繁启停」「设计既抗主扰又无静差的方案」。",
+          "method": "① 判结构先查**有无输出反馈**（无输出反馈的纯前馈仍是开环！）；② 判给定类型看目标是否恒定（恒定 $\\to$ 定值系统，未知随变 $\\to$ 随动系统）；③ 提精度首选加反馈闭环，克强可测主扰动用「前馈+反馈复合」，防继电抖动用「加滞环回差」。",
+          "pitfall": "回答概念简答题时不要只写一句空话——**顺手写出式(1-3)敏感度或式(1-6)抗扰公式**作为数学佐证，阅卷印象分立刻拉满！",
+          "relatedRefs": "式(1-1)~(1-7), 主例1-4~1-5, 辅例1-1, 1-3, 习题1-6, 1-9, B1-9~B1-11"
+        }
+      ],
+      "takeaway": "第 1 章看似概念多，其实核心浓缩成三件事：**画准方块图、判准三维方程性质、讲清反馈与前馈的定量优劣**！",
+      "source": {
+        "book": "孙优贤《自动控制原理》(2011第1版)",
+        "printedPage": "P.4-12",
+        "pdfPage": 13,
+        "itemRef": "第1章全章综合提炼",
+        "crossRef": "孙优贤《学习辅导》(2017第1版) P.1-11"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ch01_f_sensitivity_disturbance",
+        "verified": true
+      }
     }
   ]
 }
