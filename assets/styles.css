@@ -2092,6 +2092,11 @@ kbd {
   max-width: 100%;
 }
 
+.stem-card:nth-child(n + 6) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto none auto 340px;
+}
+
 .stem-card.stem-kind-formula {
   border-left-color: var(--accent);
 }
@@ -2198,6 +2203,33 @@ kbd {
   background: var(--amber-soft);
   color: var(--amber);
   border: 1px solid var(--amber-border);
+}
+
+.stem-badge-foundation {
+  background: #e0f2fe;
+  color: #075985;
+  border: 1px solid #bae6fd;
+}
+
+.stem-badge-intensive {
+  background: #fef2f2;
+  color: #9f1239;
+  border: 1px solid #fecdd3;
+}
+
+.stem-badge-both {
+  background: #f3e8ff;
+  color: #6b21a8;
+  border: 1px solid #e9d5ff;
+}
+
+.stem-group-bar {
+  margin-bottom: 0.25rem;
+}
+
+.stem-stage-filter-bar {
+  padding-top: 0.45rem;
+  border-top: 1px dashed var(--border-subtle);
 }
 
 .stem-section-tag {
@@ -2748,6 +2780,7 @@ kbd {
     padding: 8px !important;
   }
   .stem-card {
+    content-visibility: visible !important;
     border: 1px solid #cbd5e1 !important;
     border-left: 3px solid #1e293b !important;
     break-inside: avoid;

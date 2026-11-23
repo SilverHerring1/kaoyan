@@ -6,6 +6,12 @@ const KIND_META = {
   example: { label: '经典例题', badgeClass: 'stem-kind-example-chip' },
 };
 
+const STAGE_META = {
+  foundation: { label: '基础30讲', badgeClass: 'stem-badge-foundation' },
+  intensive: { label: '强化18讲', badgeClass: 'stem-badge-intensive' },
+  both: { label: '基础+强化', badgeClass: 'stem-badge-both' },
+};
+
 const KATEX_OPTIONS = {
   delimiters: [
     { left: '$$', right: '$$', display: true },
@@ -71,6 +77,7 @@ function renderFigureBlock(item) {
 function buildSearchHaystack(item) {
   const parts = [
     item.id,
+    item.stage ? STAGE_META[item.stage]?.label : '',
     item.section,
     item.title,
     item.prompt,
@@ -107,8 +114,10 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
     error: null,
     manifest: null,
     chapterCache: new Map(),
+    activeGroupId: null,
     activeChapterId: null,
     kindFilter: 'all', // all | formula | conclusion | example
+    stageFilter: 'all', // all | foundation | intensive
     searchQuery: '',
     maskMode: false,
     starOnly: false,
@@ -125,7 +134,11 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     state.manifest = await res.json();
     const firstReady = (state.manifest.chapters || []).find(ch => ch.ready);
-    state.activeChapterId = firstReady ? firstReady.id : (state.manifest.chapters?.[0]?.id || null);
+    const initialCh = firstReady || state.manifest.chapters?.[0] || null;
+    state.activeChapterId = initialCh?.id || null;
+    if (Array.isArray(state.manifest.groups) && state.manifest.groups.length) {
+      state.activeGroupId = initialCh?.group || state.manifest.groups[0].id;
+    }
     return state.manifest;
   }
 
@@ -154,6 +167,10 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
     const q = state.searchQuery.trim().toLowerCase();
     return items.filter(item => {
       if (state.kindFilter !== 'all' && item.kind !== state.kindFilter) return false;
+      if (state.stageFilter !== 'all' && item.stage) {
+        if (state.stageFilter === 'foundation' && item.stage !== 'foundation' && item.stage !== 'both') return false;
+        if (state.stageFilter === 'intensive' && item.stage !== 'intensive' && item.stage !== 'both') return false;
+      }
       if (state.coreOnly && item.examWeight === 'extended') return false;
       if (state.starOnly && !store.stemStarred.has(item.id)) return false;
       if (state.hideMastered && store.stemMastered.has(item.id)) return false;
@@ -180,12 +197,17 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
     const weightBadge = item.examWeight === 'extended'
       ? `<span class="stem-badge stem-badge-ext">拓展了解</span>`
       : `<span class="stem-badge stem-badge-core">大纲核心</span>`;
+    const stageMeta = item.stage ? STAGE_META[item.stage] : null;
+    const stageBadge = stageMeta
+      ? `<span class="stem-badge ${stageMeta.badgeClass}">${stageMeta.label}</span>`
+      : '';
     const plainTitle = String(item.title || '').replace(/\$/g, '');
 
     return `
       <div class="stem-card-top">
         <div class="stem-card-meta">
           <span class="stem-badge ${meta.badgeClass}">${meta.label}</span>
+          ${stageBadge}
           <span class="stem-section-tag">${escapeHtml(item.section)}</span>
           ${weightBadge}
           ${renderVerificationBadge(item)}
@@ -454,6 +476,12 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
       conclusion: allItems.filter(i => i.kind === 'conclusion').length,
       example: allItems.filter(i => i.kind === 'example').length,
     };
+    const hasStages = allItems.some(i => Boolean(i.stage));
+    const stageCounts = hasStages ? {
+      all: allItems.length,
+      foundation: allItems.filter(i => i.stage === 'foundation' || i.stage === 'both').length,
+      intensive: allItems.filter(i => i.stage === 'intensive' || i.stage === 'both').length,
+    } : null;
     const extendedCount = allItems.filter(i => i.examWeight === 'extended').length;
     const starCount = allItems.filter(i => store.stemStarred.has(i.id)).length;
     const masteredCount = allItems.filter(i => store.stemMastered.has(i.id)).length;
@@ -462,6 +490,10 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
 
     const req = chapterData.basicRequirements || {};
     const searchId = `stemSearch-${subjectId}`;
+    const syllabusShortLabel = state.manifest?.syllabusShortLabel
+      || (subjectId === 'control' ? '2027 浙大 845 大纲要求' : '2027 考研数学一大纲要求');
+    const searchPlaceholder = state.manifest?.searchPlaceholder
+      || '搜索公式名、关键词、例题号（如 例4-8 / 劳斯 / 主导极点 / P.95）...';
 
     return `
       <!-- 章节大纲与教材要求 -->
@@ -488,7 +520,7 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
           </summary>
           <div class="stem-req-grid">
             <div class="stem-req-cell">
-              <div class="stem-req-label tone-rose">2027 浙大 845 大纲要求</div>
+              <div class="stem-req-label tone-rose">${escapeHtml(syllabusShortLabel)}</div>
               <p>${escapeHtml(chMeta.syllabusReq)}</p>
             </div>
             ${req.master ? `
@@ -521,7 +553,7 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
             <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
             </svg>
-            <input id="${searchId}" class="stem-search-input" type="search" value="${escapeHtml(state.searchQuery)}" placeholder="搜索公式名、关键词、例题号（如 例4-8 / 劳斯 / 主导极点 / P.95）...">
+            <input id="${searchId}" class="stem-search-input" type="search" value="${escapeHtml(state.searchQuery)}" placeholder="${escapeHtml(searchPlaceholder)}">
             <button type="button" class="icon-btn clear-search-btn" data-action="clear-search" ${state.searchQuery ? '' : 'hidden'} aria-label="清空搜索关键词">
               <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
@@ -566,6 +598,21 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
             </button>
           `).join('')}
         </div>
+
+        ${hasStages ? `
+          <div class="module-filter-bar stem-stage-filter-bar" role="group" aria-label="按复习阶段筛选">
+            ${[
+              { key: 'all', label: '全部阶段（基础+强化）', count: stageCounts.all },
+              { key: 'foundation', label: '基础 30 讲', count: stageCounts.foundation },
+              { key: 'intensive', label: '强化 18 讲', count: stageCounts.intensive },
+            ].map(s => `
+              <button type="button" class="module-pill stem-stage-pill" data-stage-filter="${s.key}" aria-pressed="${state.stageFilter === s.key}">
+                <span>${s.label}</span>
+                <span class="count-badge">${s.count}</span>
+              </button>
+            `).join('')}
+          </div>
+        ` : ''}
 
         <div class="stats-footer">
           <div class="stats-left">
@@ -623,6 +670,11 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
     const readyCount = (manifest.chapters || []).filter(c => c.ready).length;
     const totalChapters = (manifest.chapters || []).length;
 
+    const groups = Array.isArray(manifest.groups) && manifest.groups.length ? manifest.groups : null;
+    const visibleChapters = groups && state.activeGroupId
+      ? (manifest.chapters || []).filter(ch => ch.group === state.activeGroupId)
+      : (manifest.chapters || []);
+
     root.innerHTML = `
       <div class="panel-body">
         <!-- 学科顶栏：来源声明 + 章节导航 -->
@@ -637,8 +689,23 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
             </div>
           </div>
 
+          ${groups ? `
+            <div class="module-filter-bar stem-group-bar no-print" role="group" aria-label="子学科分组切换">
+              ${groups.map(g => {
+                const grpChapters = (manifest.chapters || []).filter(c => c.group === g.id);
+                const grpReady = grpChapters.filter(c => c.ready).length;
+                return `
+                  <button type="button" class="module-pill" data-group-id="${escapeHtml(g.id)}" aria-pressed="${state.activeGroupId === g.id}">
+                    <span>${escapeHtml(g.label)}</span>
+                    <span class="count-badge">${grpReady}/${grpChapters.length}</span>
+                  </button>
+                `;
+              }).join('')}
+            </div>
+          ` : ''}
+
           <div class="stem-chapter-strip no-print" role="group" aria-label="章节与单元切换">
-            ${(manifest.chapters || []).map(ch => {
+            ${visibleChapters.map(ch => {
               const active = ch.id === state.activeChapterId;
               return `
                 <button
@@ -732,7 +799,9 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
     const chMeta = (state.manifest.chapters || []).find(c => c.id === chapterId);
     if (!chMeta) return;
     state.activeChapterId = chapterId;
+    if (chMeta.group) state.activeGroupId = chMeta.group;
     state.kindFilter = 'all';
+    state.stageFilter = 'all';
     state.searchQuery = '';
     state.revealedIds.clear();
 
@@ -783,6 +852,20 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
 
   // Event delegation on root
   root?.addEventListener('click', (e) => {
+    const grpBtn = e.target.closest('[data-group-id]');
+    if (grpBtn && state.manifest) {
+      const gid = grpBtn.dataset.groupId;
+      state.activeGroupId = gid;
+      const grpChapters = (state.manifest.chapters || []).filter(c => c.group === gid);
+      const nextCh = grpChapters.find(c => c.ready) || grpChapters[0];
+      if (nextCh && nextCh.id !== state.activeChapterId) {
+        selectChapter(nextCh.id);
+      } else {
+        render();
+      }
+      return;
+    }
+
     const chBtn = e.target.closest('[data-chapter-id]');
     if (chBtn) {
       selectChapter(chBtn.dataset.chapterId);
@@ -798,6 +881,13 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
     const kindBtn = e.target.closest('[data-kind-filter]');
     if (kindBtn) {
       state.kindFilter = kindBtn.dataset.kindFilter;
+      render();
+      return;
+    }
+
+    const stageBtn = e.target.closest('[data-stage-filter]');
+    if (stageBtn) {
+      state.stageFilter = stageBtn.dataset.stageFilter;
       render();
       return;
     }

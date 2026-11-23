@@ -22,6 +22,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SUBJECTS = ["control", "math1"]
 VALID_KINDS = {"formula", "conclusion", "example"}
 VALID_WEIGHTS = {"core", "extended"}
+VALID_STAGES = {"foundation", "intensive", "both"}
 
 
 def check_latex_delimiters(text: str, ctx: str, errors: list[str]) -> None:
@@ -92,6 +93,8 @@ def validate_subject(subj: str) -> tuple[int, int, list[str]]:
                 errors.append(f"{ctx}: invalid kind '{kind}'")
             if item.get("examWeight", "core") not in VALID_WEIGHTS:
                 errors.append(f"{ctx}: invalid examWeight '{item.get('examWeight')}'")
+            if "stage" in item and item.get("stage") not in VALID_STAGES:
+                errors.append(f"{ctx}: invalid stage '{item.get('stage')}'")
             for req in ("title", "section"):
                 if not str(item.get(req, "")).strip():
                     errors.append(f"{ctx}: missing {req}")
