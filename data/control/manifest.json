@@ -3,6 +3,7 @@
   "subjectId": "control",
   "subjectName": "845 自动控制原理（浙江大学）",
   "syllabusRef": "浙江大学控制科学与工程学院 2027 年《自动控制原理》(科目代码 845) 考试大纲（2026-09-29 发布，满分 150 分）",
+  "kinds": ["formula", "conclusion", "example", "exercise", "summary"],
   "primaryBooks": [
     "孙优贤、王慧主编《自动控制原理》(化学工业出版社，2011第1版)",
     "孙优贤主编、王慧副主编《自动控制原理学习辅导——知识精粹、习题详解、考研真题》(2017第1版)"

@@ -4,6 +4,7 @@
   "subjectName": "考研数学一（27 张宇六书体系）",
   "syllabusRef": "2027 考研数学一大纲 · 高数 18 讲逐讲整合（基础 30 讲 + 强化 18 讲合编 · 全部公式/结论/例题逐页溯源 + SymPy 验算）",
   "syllabusShortLabel": "2027 考研数学一大纲要求",
+  "kinds": ["formula", "conclusion", "example", "summary"],
   "searchPlaceholder": "搜索公式名、关键词、例题号（如 例1.12 / 泰勒 / 等价无穷小 / 强化 / P.45）...",
   "primaryBooks": [
     "27 张宇《考研数学基础 30 讲》（高数 / 线代 / 概率）",

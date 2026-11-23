@@ -10,8 +10,13 @@ function fisherYates(arr) {
 }
 
 export function initVocabView(store, callbacks) {
+  const modules = store.vocabData.modules.filter(m => m.mode === 'quiz');
+  const items = store.vocabData.items.filter(i => i.mode === 'quiz');
+  const quizIdSet = new Set(items.map(i => i.id));
+  const moduleMap = new Map(modules.map(m => [m.id, m]));
+
   const state = {
-    filter: 'all',
+    filter: modules[0]?.id || 'idioms',
     search: '',
     sort: 'default',
     starOnly: false,
@@ -23,11 +28,6 @@ export function initVocabView(store, callbacks) {
     shuffleOrder: new Map(),
     resetConfirmPending: false,
   };
-
-  const modules = store.vocabData.modules.filter(m => m.mode === 'quiz');
-  const items = store.vocabData.items.filter(i => i.mode === 'quiz');
-  const quizIdSet = new Set(items.map(i => i.id));
-  const moduleMap = new Map(modules.map(m => [m.id, m]));
 
   const searchInput = document.getElementById('searchInput');
   const clearSearchBtn = document.getElementById('clearSearchBtn');
@@ -59,15 +59,12 @@ export function initVocabView(store, callbacks) {
   regenerateShuffle();
 
   function renderModulePills() {
-    const counts = { all: items.length };
+    const counts = {};
     for (const item of items) {
       counts[item.type] = (counts[item.type] || 0) + 1;
     }
 
-    const pills = [
-      { id: 'all', label: '全部词条', count: counts.all },
-      ...modules.map(m => ({ id: m.id, label: m.label, count: counts[m.id] || 0 })),
-    ];
+    const pills = modules.map(m => ({ id: m.id, label: m.label, count: counts[m.id] || 0 }));
 
     moduleFilterBar.innerHTML = pills
       .map(
@@ -379,7 +376,14 @@ export function initVocabView(store, callbacks) {
     render,
     updateStats,
     searchWord(word) {
-      state.filter = 'all';
+      const qLower = String(word || '').trim().toLowerCase();
+      const matched = items.find(
+        i =>
+          i.word.toLowerCase().includes(qLower) ||
+          i.meaning.toLowerCase().includes(qLower) ||
+          i.notes.toLowerCase().includes(qLower)
+      );
+      if (matched) state.filter = matched.type;
       state.starOnly = false;
       state.hideMastered = false;
       state.hasQuizOnly = false;

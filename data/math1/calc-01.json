@@ -2239,6 +2239,285 @@
         "testId": "m1_c01_ex_zy18_07_15",
         "verified": true
       }
+    },
+    {
+      "id": "m1-c01-s-01",
+      "stage": "both",
+      "section": "第 1 讲题型总结 · 一、求极限计算总纲",
+      "kind": "summary",
+      "title": "【破题总图】七种未定式求极限决策流程图与全型转化速查表",
+      "examWeight": "core",
+      "overview": "考研函数极限计算题 90% 以上都落入「**先化简 $\\to$ 判未定式 $\\to$ 化归 $0/0$ 或 $\\infty/\\infty$ $\\to$ 等价/泰勒/洛必达/抓大头**」的固定流水线。动手算前先扫 3 秒：有没有极限非零的乘除因子可先提出？有没有极限存在的「干扰项」可先拆出？有没有幂指函数需要 $\\mathrm{e}$ 抬起？",
+      "figureSvg": "<svg role='img' viewBox='0 0 460 186' xmlns='http://www.w3.org/2000/svg'><title>高数第1讲 七种未定式求极限破题总决策流程图</title><defs><marker id='alf' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><rect x='110' y='6' width='240' height='30' rx='6' fill='#eef2ff' stroke='#2744a8' stroke-width='1.5'/><text x='230' y='25' text-anchor='middle' font-size='10.5' fill='#1e3a8a' font-weight='700'>第1步 化简先行：提非零因子 / 拆干扰项 / 判型</text><line x1='230' y1='36' x2='230' y2='52' stroke='#334155' stroke-width='1.3'/><line x1='58' y1='52' x2='402' y2='52' stroke='#334155' stroke-width='1.3'/><line x1='58' y1='52' x2='58' y2='66' stroke='#334155' stroke-width='1.3' marker-end='url(#alf)'/><line x1='172' y1='52' x2='172' y2='66' stroke='#334155' stroke-width='1.3' marker-end='url(#alf)'/><line x1='288' y1='52' x2='288' y2='66' stroke='#334155' stroke-width='1.3' marker-end='url(#alf)'/><line x1='402' y1='52' x2='402' y2='66' stroke='#334155' stroke-width='1.3' marker-end='url(#alf)'/><rect x='8' y='68' width='100' height='36' rx='6' fill='#ecfdf5' stroke='#0b6e4f' stroke-width='1.3'/><text x='58' y='83' text-anchor='middle' font-size='9.5' fill='#065f46' font-weight='700'>0/0 或 ∞/∞</text><text x='58' y='97' text-anchor='middle' font-size='8.5' fill='#334155'>核心主战场</text><rect x='122' y='68' width='100' height='36' rx='6' fill='#f0f9ff' stroke='#0284c7' stroke-width='1.3'/><text x='172' y='83' text-anchor='middle' font-size='9.5' fill='#075985' font-weight='700'>0·∞ 型</text><text x='172' y='97' text-anchor='middle' font-size='8.5' fill='#334155'>简单因子下放</text><rect x='238' y='68' width='100' height='36' rx='6' fill='#fffbeb' stroke='#b45309' stroke-width='1.3'/><text x='288' y='83' text-anchor='middle' font-size='9.5' fill='#92400e' font-weight='700'>∞ - ∞ 型</text><text x='288' y='97' text-anchor='middle' font-size='8.5' fill='#334155'>通分/倒代/中值</text><rect x='352' y='68' width='100' height='36' rx='6' fill='#fff1f2' stroke='#be123c' stroke-width='1.3'/><text x='402' y='83' text-anchor='middle' font-size='9.5' fill='#9f1239' font-weight='700'>1^∞ / 0^0 / ∞^0</text><text x='402' y='97' text-anchor='middle' font-size='8.5' fill='#334155'>1^∞套公式/e抬起</text><line x1='58' y1='104' x2='58' y2='124' stroke='#334155' stroke-width='1.3' marker-end='url(#alf)'/><line x1='172' y1='104' x2='172' y2='124' stroke='#334155' stroke-width='1.3' marker-end='url(#alf)'/><line x1='288' y1='104' x2='288' y2='124' stroke='#334155' stroke-width='1.3' marker-end='url(#alf)'/><line x1='402' y1='104' x2='402' y2='124' stroke='#334155' stroke-width='1.3' marker-end='url(#alf)'/><rect x='8' y='126' width='444' height='52' rx='6' fill='#f8fafc' stroke='#64748b' stroke-width='1.3'/><text x='230' y='143' text-anchor='middle' font-size='9.8' fill='#0f172a' font-weight='700'>第3步 精准落刀（统一化归至 0/0 或 ∞/∞ 后四选一）</text><text x='230' y='159' text-anchor='middle' font-size='8.8' fill='#1e3a8a'>① 乘除位置：等价无穷小/变限积分速替　② 加减相消：泰勒展开（对齐分母阶数）</text><text x='230' y='172' text-anchor='middle' font-size='8.8' fill='#0b6e4f'>③ 变限积分或难展开：洛必达法则　④ 有理/根式 x→∞：抓大头（注意 x→-∞ 时 √x²=-x）</text></svg>",
+      "tables": [
+        {
+          "caption": "表 1-1 七种未定式标准破题转化速查表（整合基础30讲 P.54-62 & 强化18讲 P.2-9）",
+          "headers": [
+            "未定式类型",
+            "核心特征",
+            "首选转化与落刀招式",
+            "本讲代表例题"
+          ],
+          "rows": [
+            [
+              "$\\frac{0}{0}$ 型",
+              "分子分母同趋于 $0$",
+              "乘除直接等价替换；加减相消用泰勒展开；含变限积分先用洛必达",
+              "例1.14, 1.24, 强化例1.1"
+            ],
+            [
+              "$\\frac{\\infty}{\\infty}$ 型",
+              "分子分母同趋于 $\\infty$",
+              "多项式/根式抓大头（$x\\to-\\infty$ 盯紧 $\\sqrt{x^2}=-x$）；对数/幂/指数用比较链或洛必达",
+              "例1.23, 1.25"
+            ],
+            [
+              "$0\\cdot\\infty$ 型",
+              "无穷小乘无穷大",
+              "**简单因子下放原则**：把 $x^\\alpha,\\mathrm{e}^{\\beta x},\\sin rx$ 放分母，保留 $\\ln x,\\arctan x$ 在分子",
+              "例1.28"
+            ],
+            [
+              "$\\infty-\\infty$ 型",
+              "两无穷大相减",
+              "有分母先通分；无分母提公因式/倒代换 $u=\\frac{1}{x}$；同型差用拉格朗日；对数差凑 $1=\\ln\\mathrm{e}$",
+              "例1.30~1.31, 强化例1.2, 1.7~1.10"
+            ],
+            [
+              "$1^\\infty$ 型",
+              "$u\\to 1,\\;v\\to\\infty$",
+              "直接套公式 $\\lim u^v=\\exp\\{\\lim v(u-1)\\}$；多指数均值把 $-1$ 均分给每项",
+              "例1.33, 1.36, 强化例1.3"
+            ],
+            [
+              "$\\infty^0,\\;0^0$ 型",
+              "幂指函数底趋 $\\infty$ 或 $0$",
+              "统一 $\\mathrm{e}$ 抬起化为 $\\exp\\{\\lim v\\ln u\\}$，再用 $0\\cdot\\infty$ 规则（牢记 $x^\\alpha\\ln^\\beta x\\to 0$）",
+              "例1.32, 强化例1.11"
+            ]
+          ]
+        }
+      ],
+      "patterns": [
+        {
+          "typeName": "先化简再动笔（拆干扰项 + 提非零因子）",
+          "triggers": "分子含「常数 + 变限积分」或乘积里混有 $\\cos x,\\;\\mathrm{e}^x,\\;1+x^2$ 等极限为非零常数的因子。",
+          "method": "① 乘除位置中极限为非零常数 $C\\ne 0$ 的因子直接先算出来提走；② 加减拆项时，只要被拆出的那一项（如 $\\lim_{x\\to 0}\\frac{\\int_0^x\\frac{\\sin t}{t}\\mathrm{d}t}{x}=1$）自身极限存在，就立刻先算出拆走，切忌带进通分！",
+          "pitfall": "加减法中「只有某一部分极限存在」才允许拆出；若两部分均发散（如 $\\infty-\\infty$）严禁硬拆！",
+          "relatedRefs": "例1.24, 例1.30, 强化例1.2"
+        },
+        {
+          "typeName": "含 $x\\to\\infty$ 与 $\\frac{1}{x}$ 混合的极限",
+          "triggers": "极限过程为 $x\\to\\infty$（或 $+\\infty$），式内频繁出现 $\\mathrm{e}^{1/x},\\;\\ln(1+\\frac{1}{x}),\\;(1+\\frac{1}{x})^x$。",
+          "method": "先提公因式化出 $u=\\frac{1}{x}\\to 0$，执行倒代换（表达式和趋向同步替换），瞬间变回最熟的 $0$ 点泰勒展开！",
+          "pitfall": "若题干给双侧 $x\\to\\infty$，倒代换对应 $u\\to 0$（不能擅自缩为 $u\\to 0^+$）；若开偶次根号，务必分 $x\\to+\\infty$ 与 $x\\to-\\infty$ 验正负号！",
+          "relatedRefs": "例1.25, 例1.31, 强化例1.10"
+        }
+      ],
+      "takeaway": "记住三字真言：**先化简、再判型、后落刀**；任何计算题卡壳超过 20 秒，90% 是漏了第一步「提公因式 / 拆干扰项 / 倒代换」！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.48-64",
+        "pdfPage": 53,
+        "itemRef": "第四节 极限计算总括",
+        "crossRef": "27张宇《高数18讲》(强化) P.2-9 第一节 求极限"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c01-s-02",
+      "stage": "both",
+      "section": "第 1 讲题型总结 · 二、无穷小比阶、反求参数与泰勒选阶",
+      "kind": "summary",
+      "title": "【高频大类】无穷小比阶、反求未知参数与泰勒防抵消展开阶数速查",
+      "examWeight": "core",
+      "overview": "选填题最高频考点之一：核心就抓两条铁律——**泰勒展开「上下同阶 + 展到首项不抵消」**，以及**含参极限双引理「分母为 $0$ 极限存在 $\\Rightarrow$ 分子必为 $0$；分子为 $0$ 极限非零 $\\Rightarrow$ 分母必为 $0$」**。",
+      "tables": [
+        {
+          "caption": "表 1-2 泰勒展开精确截断阶数与高阶无穷小速算对照表（基础 P.50-53 & 强化 P.4-6）",
+          "headers": [
+            "题目结构",
+            "展开/替换原则",
+            "高频核心公式",
+            "代表例题"
+          ],
+          "rows": [
+            [
+              "分式 $\\frac{A(x)}{B(x)}$（分母单项 $cx^k$）",
+              "**上下同阶**：分子展到 $x^k$ 即可",
+              "$\\sin x=x-\\frac{x^3}{6}+o(x^3),\\;\\tan x=x+\\frac{x^3}{3}+o(x^3)$",
+              "例1.27, 例1.34"
+            ],
+            [
+              "差函数 $f(x)-g(x)$",
+              "**展至首项系数不抵消**为止",
+              "$x-\\sin x\\sim\\frac{1}{6}x^3,\\;\\tan x-\\sin x\\sim\\frac{1}{2}x^3,\\;x-\\ln(1+x)\\sim\\frac{1}{2}x^2$",
+              "例1.19, 例1.30"
+            ],
+            [
+              "复合函数 $f[g(x)]$",
+              "内外分别找主部再套复合公式",
+              "$f\\sim ax^m,\\;g\\sim bx^n \\implies f[g(x)]\\sim ab^m x^{mn}$",
+              "强化例1.4"
+            ],
+            [
+              "变上限积分 $\\int_0^{g(x)}f(t)\\mathrm{d}t$",
+              "先看 $f(0)$ 是否为 $0$ 分一/二型",
+              "$f\\sim at^m,g\\sim bx^n\\Rightarrow\\frac{ab^{m+1}}{m+1}x^{n(m+1)}$；$f(0)=A\\ne 0\\Rightarrow Ag(x)$",
+              "强化例1.6, P.5-6 注"
+            ],
+            [
+              "和式 $\\alpha+\\beta$（$\\alpha=o(\\beta)$）",
+              "**带头大哥型**：低阶 $\\beta$ 决定主部与符号",
+              "$\\alpha+\\beta\\sim\\beta$，与 $\\beta$ 局部同号，$\\alpha\\beta=o(\\beta^2)$",
+              "强化例1.5"
+            ]
+          ]
+        }
+      ],
+      "patterns": [
+        {
+          "typeName": "已知极限值为有限数/非零数，反求未知参数 $a,b$ 或抽象极限",
+          "triggers": "题干给 $\\lim_{x\\to 0}\\frac{f(x,a,b)}{x^k}=A$ 或 $\\lim\\frac{\\tan 2x+xf(x)}{\\sin x^3}=0$。",
+          "method": "① 若分母 $\\to 0$ 且极限存在 $\\Rightarrow$ 先由分子 $\\to 0$ 锁死低次项参数；② 分子多项展开对齐分母阶数，让所有低于 $x^k$ 的项系数为 $0$，第 $k$ 次项系数比 $=A$；③ 抽象函数可用**脱帽法** $f(x)=\\frac{x^3\\alpha(x)-\\tan 2x}{x}$ 直接代回目标式。",
+          "pitfall": "由「分子 $\\to 0$ 推分母 $\\to 0$」**必须先核实极限值 $A\\ne 0$**（若 $A=0$ 绝对不能推分母为 $0$！）",
+          "relatedRefs": "例1.20, 例1.21, 例1.27, 例1.34"
+        },
+        {
+          "typeName": "求分式函数在 $x=0$ 处的 $n$ 阶泰勒多项式",
+          "triggers": "求 $\\frac{\\sin x}{1+x^2}$ 等有理/三角组合的 3 次泰勒多项式 $ax+bx^2+cx^3$。",
+          "method": "① 先看**奇偶性**（奇函数偶次项全 $0$，偶函数奇次项全 $0$，选择题直接砍半）；② 改写成基本展开式乘积（如 $\\sin x\\cdot\\frac{1}{1+x^2}=(x-\\frac{x^3}{6})(1-x^2)$）直接相乘截断到目标阶数！",
+          "pitfall": "展开乘积时只挑能凑出 $x^k$ 的成对项相乘，不要傻傻全展开浪费时间！",
+          "relatedRefs": "例1.35"
+        }
+      ],
+      "takeaway": "遇到加减相消别硬赌等价替换，**直接泰勒展到不抵消**最稳；遇到变上限积分阶数题先判 $f(0)=0$ 还是 $f(0)=A\\ne 0$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.43-53, 62-64",
+        "pdfPage": 48,
+        "itemRef": "无穷小比阶与泰勒应用",
+        "crossRef": "27张宇《高数18讲》(强化) P.4-6 一·3 高阶等价定理"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c01-s-03",
+      "stage": "both",
+      "section": "第 1 讲题型总结 · 三、函数构造、分段复合与间断点分类",
+      "kind": "summary",
+      "title": "【必考压轴】含参极限定义函数、分段复合与间断点分类四步闭环",
+      "examWeight": "core",
+      "overview": "本讲最易掉坑的综合选择题型：把「**用极限 $\\lim_{n\\to\\infty}f(n,x)$ 定义分段函数**」与「**找全无定义点并统计第一/二类间断点个数**」拼成一道题。严格执行下方四步闭环，一个漏点都不会丢。",
+      "figureSvg": "<svg role='img' viewBox='0 0 460 154' xmlns='http://www.w3.org/2000/svg'><title>高数第1讲 含参极限函数与间断点分类四步闭环流程图</title><defs><marker id='adf' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><rect x='8' y='14' width='96' height='54' rx='6' fill='#eef2ff' stroke='#2744a8' stroke-width='1.4'/><text x='56' y='32' text-anchor='middle' font-size='9.5' fill='#1e3a8a' font-weight='700'>① 化显式</text><text x='56' y='46' text-anchor='middle' font-size='8.2' fill='#334155'>去极限号 n→∞</text><text x='56' y='59' text-anchor='middle' font-size='8.2' fill='#334155'>幂指化 e^(v ln u)</text><line x1='104' y1='41' x2='122' y2='41' stroke='#334155' stroke-width='1.3' marker-end='url(#adf)'/><rect x='124' y='14' width='102' height='54' rx='6' fill='#fffbeb' stroke='#b45309' stroke-width='1.4'/><text x='175' y='32' text-anchor='middle' font-size='9.5' fill='#92400e' font-weight='700'>② 找全备选点</text><text x='175' y='46' text-anchor='middle' font-size='8.2' fill='#334155'>无定义点+分段点</text><text x='175' y='59' text-anchor='middle' font-size='8.2' fill='#334155'>查8大隐蔽漏点</text><line x1='226' y1='41' x2='244' y2='41' stroke='#334155' stroke-width='1.3' marker-end='url(#adf)'/><rect x='246' y='14' width='98' height='54' rx='6' fill='#ecfdf5' stroke='#0b6e4f' stroke-width='1.4'/><text x='295' y='32' text-anchor='middle' font-size='9.5' fill='#065f46' font-weight='700'>③ 算左右极限</text><text x='295' y='46' text-anchor='middle' font-size='8.2' fill='#334155'>e^(1/x)、|x|、[x]</text><text x='295' y='59' text-anchor='middle' font-size='8.2' fill='#334155'>arctan(1/x) 必分侧</text><line x1='344' y1='41' x2='362' y2='41' stroke='#334155' stroke-width='1.3' marker-end='url(#adf)'/><rect x='364' y='14' width='88' height='54' rx='6' fill='#fff1f2' stroke='#be123c' stroke-width='1.4'/><text x='408' y='32' text-anchor='middle' font-size='9.5' fill='#9f1239' font-weight='700'>④ 准确归类</text><text x='408' y='46' text-anchor='middle' font-size='8.2' fill='#334155'>双存在→第一类</text><text x='408' y='59' text-anchor='middle' font-size='8.2' fill='#334155'>任一不存在→第二类</text><rect x='14' y='88' width='208' height='56' rx='6' fill='#f0fdf4' stroke='#15803d' stroke-width='1.2'/><text x='118' y='105' text-anchor='middle' font-size='9.2' fill='#166534' font-weight='700'>第一类间断点（左、右极限均存在且有限）</text><text x='118' y='121' text-anchor='middle' font-size='8.5' fill='#334155'>• 左 = 右 ≠ f(x₀)（或无定义）→ 可去间断点</text><text x='118' y='135' text-anchor='middle' font-size='8.5' fill='#334155'>• 左 ≠ 右 → 跳跃间断点（与 f(x₀) 无关）</text><rect x='238' y='88' width='208' height='56' rx='6' fill='#fef2f2' stroke='#b91c1c' stroke-width='1.2'/><text x='342' y='105' text-anchor='middle' font-size='9.2' fill='#991b1b' font-weight='700'>第二类间断点（至少一侧极限不存在）</text><text x='342' y='121' text-anchor='middle' font-size='8.5' fill='#334155'>• 至少一侧为 ∞ → 无穷间断点（单侧即判！）</text><text x='342' y='135' text-anchor='middle' font-size='8.5' fill='#334155'>• 振荡无极限（如 sin(1/x)）→ 振荡间断点</text></svg>",
+      "patterns": [
+        {
+          "typeName": "反求原函数表达式与分段函数复合 $g[f(x)]$",
+          "triggers": "给 $f(x+\\frac{1}{x})$、函数方程 $af(x)+bf(\\frac{1}{x})=h(x)$ 或分段函数嵌套 $g[f(x)]$。",
+          "method": "① 复合反求：整体配凑（如 $x^2+\\frac{1}{x^2}=(x+\\frac{1}{x})^2-2$）并标新定义域；② 函数方程：做倒代换 $x\\to\\frac{1}{x}$ 或对称代换 $x\\to -x$ 联立消元；③ 分段复合：**画出内层 $f(x)$ 图像**，由值域落入外层哪一段反查 $x$ 区间。",
+          "pitfall": "整体换元后一定写清值域决定出的新定义域（如 $x>0\\Rightarrow x+\\frac{1}{x}\\ge 2$）；开方必须看清题干给的正负符号条件！",
+          "relatedRefs": "例1.1~1.5, 例1.16"
+        },
+        {
+          "typeName": "含参极限 $\\lim_{n\\to\\infty}f(n,x)$ / $\\lim_{t\\to x}$ 脱极限号与间断点计数",
+          "triggers": "函数由极限定义（含 $n\\to\\infty$、$|x|^n$、$nx^{2n}$、$\\sin^2\\pi x$）或含 $\\mathrm{e}^{1/(x-a)},\\;\\ln|u|,\\;|x|^{v(x)}$。",
+          "method": "① 先分清**谁是极限变量、谁是常数**，讨论最高阶项系数是否为**真 $0$**（$\\lim n\\cdot 0=0$）以及 $|x|=1$、$x=0$ 等分界点；② 幂指函数先写 $\\mathrm{e}^{v\\ln u}$ 找全无定义点（底数 $0$ 必无定义！）；③ 遇 $\\mathrm{e}^{1/(x-a)}$、$|x|$、$[x]$ 必分左右极限逐点判类。",
+          "pitfall": "两大经典陷阱：① 孤立分界点也有可能恰好两段重合而**连续**（如例 1.38 中 $x=0$ 连续！）；② 计算单侧无穷极限时别漏看其他因子的负号（如例 1.37 在 $x\\to 1^+$ 因 $x-2\\to -1$ 实为 $-\\infty$！）",
+          "relatedRefs": "例1.15, 例1.26, 例1.36~1.38, 强化例1.3, 强化例1.11"
+        }
+      ],
+      "takeaway": "判间断点只查**无定义点 + 分段点**；闭区间端点不谈间断；只要有一侧极限为 $\\infty$ 或振荡不存在，立刻定性为第二类间断点！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.3-8, 37-39, 64-68",
+        "pdfPage": 8,
+        "itemRef": "函数构造与连续间断综合",
+        "crossRef": "27张宇《高数18讲》(强化) P.3-4, 9-10 局部判定与八大备选点"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c01-s-04",
+      "stage": "both",
+      "section": "第 1 讲题型总结 · 四、强化拔高（∞-∞ 压轴与证明大题）",
+      "kind": "summary",
+      "title": "【强化拔高】$\\infty-\\infty$ 化归乘除四招与微观性态证明题工具选型",
+      "examWeight": "core",
+      "overview": "强化阶段真正拉开分差的两类压轴题：**一是无分母/含幂指的 $\\infty-\\infty$ 计算**（核心全靠「把差变成积」），**二是研究 $x\\to\\bullet$ 局部性态的证明题**（核心在于根据题干信号精准选用定义、保号、夹逼或函数单调有界准则）。",
+      "tables": [
+        {
+          "caption": "表 1-3 极限证明与微观性态四大工具选型对照表（基础 P.40-42, 54 & 强化 P.7-13）",
+          "headers": [
+            "工具 / 招式",
+            "题干触发信号",
+            "核心变形或放缩动作",
+            "代表例题"
+          ],
+          "rows": [
+            [
+              "极限 $\\varepsilon$-$X/\\delta$ 定义",
+              "已知 $\\lim f(x)=A$，要证存在 $\\xi$ 满足具体不等式",
+              "按目标「倒推」巧取 $\\varepsilon$（如 $\\varepsilon=1-f(1)$），从 $|f(x)-A|<\\varepsilon$ 脱绝对值配中值定理",
+              "强化例1.12"
+            ],
+            [
+              "局部有界 & 保号性",
+              "证开区间 $(a,b)$ 有界 / 判局部正负 / 证 $f(x)\\ge 0$",
+              "开区间连续有界 $\\iff$ 两端点有界；单调递减趋于 $0$ 用 $f(x)\\ge f(x+t)$ 戴帽取极限得 $\\ge 0$",
+              "例1.17~1.18, 强化例1.6, 1.13"
+            ],
+            [
+              "夹逼准则",
+              "含取整函数 $[x]$、周期函数积分平均 $\\frac{1}{x}\\int_0^x f$ 等不可导结构",
+              "用 $u-1<[u]\\le u$（分正负乘！）或 $nT\\le x<(n+1)T$ 夹出两端同极限",
+              "例1.29, 强化例1.14"
+            ],
+            [
+              "函数单调有界准则",
+              "给 $f'(x)$ 微分方程及初值，证 $\\lim_{x\\to+\\infty}f(x)$ 存在并估上界",
+              "$f'>0$ 证单增 $\\Rightarrow$ 下界 $f(x)\\ge f(0)$ 反代分母放缩 $\\Rightarrow$ 积分得上界 + 戴帽取 $\\le$",
+              "强化例1.15"
+            ]
+          ]
+        }
+      ],
+      "patterns": [
+        {
+          "typeName": "强化 $\\infty-\\infty$ 压轴变形四连招（化差为积）",
+          "triggers": "见到 $f(b)-f(a)$、同底/同指幂指相减、$x\\ln(\\mathrm{e}+\\frac{1}{x-1})-x$ 或 $\\frac{x^{1+x}}{(1+x)^x}-\\frac{x}{\\mathrm{e}}$。",
+          "method": "① 同型差 $f(b)-f(a)$（$b-a\\to 0$）$\\to$ 拉格朗日中值定理；② 同底/同指幂指差 $\\to$ 提公因式化出 $a^u-1\\sim u\\ln a$；③ 对数减一次项 $\\to$ 提 $x$ 并用 $1=\\ln\\mathrm{e}$ 合并成 $\\ln(1+\\text{无穷小})$；④ 斜渐近线型 $f(x)-ax$ $\\to$ 提 $ax$ 造出 $\\mathrm{e}^{\\text{无穷小}}-1$ 后倒代换！",
+          "pitfall": "套 $a^u-1\\sim u\\ln a$ 时严防漏掉 $\\ln a$；用夹逼准则证明极限存在时必须**两端极限各自存在且相等**，仅证两端差趋于 $0$ 是经典伪命题！",
+          "relatedRefs": "强化例1.7~1.10"
+        },
+        {
+          "typeName": "开区间 $(a,b)$ 连续函数有界性判定",
+          "triggers": "问 $f(x)$ 在哪个开区间上有界，或反求参数 $\\alpha$ 使 $f(x)$ 在 $(0,+\\infty)$ 上有界。",
+          "method": "① 先确认函数在开区间内处处连续（无内部铅直渐近线/无定义点）；② 只需分别检验左端点 $a^+$ 与右端点 $b^-$ 处是否局部有界（极限存在或振荡有界如 $\\sin\\frac{1}{x}$）；③ 临界端点值（如 $\\alpha=1$ 与 $\\alpha=3$）务必单独代入检验能否取等号！",
+          "pitfall": "切勿把「极限不存在」等价于「无界」——$\\sin\\frac{1}{x}$ 在 $x\\to 0$ 处极限不存在但依然有界！",
+          "relatedRefs": "例1.6, 例1.17, 强化例1.6"
+        }
+      ],
+      "takeaway": "记住证明大题两句保命口诀：**「脱帽由严变严，戴帽必带等号」**（去极限得局部严格不等，取极限只能保证 $\\le/\\ge$）；**「单增有上界看积分放缩，取整周期看两边夹逼」**！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.6-13",
+        "pdfPage": 19,
+        "itemRef": "一·5 涉及∞计算 & 三、微观性态证明",
+        "crossRef": "27张宇《基础30讲·高等数学分册》 P.40-42, 54, 59-61"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
     }
   ]
 }

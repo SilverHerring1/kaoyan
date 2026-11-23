@@ -40,10 +40,7 @@ export function initMemorizeView(store) {
       counts[item.type] = (counts[item.type] || 0) + 1;
     }
 
-    const tabs = [
-      ...memModules.map(m => ({ id: m.id, label: m.label, count: counts[m.id] || 0 })),
-      { id: 'all', label: '全部速背', count: memItems.length },
-    ];
+    const tabs = memModules.map(m => ({ id: m.id, label: m.label, count: counts[m.id] || 0 }));
 
     moduleBar.innerHTML = tabs
       .map(

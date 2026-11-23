@@ -2,9 +2,13 @@ import { escapeHtml, showToast } from './app.js';
 
 const KIND_META = {
   formula: { label: '核心公式', badgeClass: 'stem-kind-formula-chip' },
-  conclusion: { label: '结论与判据', badgeClass: 'stem-kind-conclusion-chip' },
+  conclusion: { label: '重要结论', badgeClass: 'stem-kind-conclusion-chip' },
   example: { label: '经典例题', badgeClass: 'stem-kind-example-chip' },
+  exercise: { label: '课后习题', badgeClass: 'stem-kind-exercise-chip' },
+  summary: { label: '题型总结', badgeClass: 'stem-kind-summary-chip' },
 };
+
+const DEFAULT_KINDS = ['formula', 'conclusion', 'example', 'summary'];
 
 const STAGE_META = {
   foundation: { label: '基础30讲', badgeClass: 'stem-badge-foundation' },
@@ -74,6 +78,40 @@ function renderFigureBlock(item) {
   `;
 }
 
+function renderTablesBlock(item) {
+  const tables = Array.isArray(item.tables) ? item.tables : [];
+  if (!tables.length) return '';
+  return tables.map((tbl, idx) => {
+    const capId = `tbl-cap-${String(item.id || 'item').replace(/[^a-zA-Z0-9_-]/g, '')}-${idx}`;
+    const headers = Array.isArray(tbl.headers) ? tbl.headers : [];
+    const rows = Array.isArray(tbl.rows) ? tbl.rows : [];
+    const useRowHeader = tbl.firstColHeader !== false;
+    return `
+      <div tabindex="0" role="region" aria-labelledby="${capId}" class="stem-table-wrapper">
+        <table class="stem-data-table">
+          <caption id="${capId}">${renderRichText(tbl.caption || '对照表')}</caption>
+          <thead>
+            <tr>
+              ${headers.map(h => `<th scope="col">${renderRichText(h)}</th>`).join('')}
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(row => `
+              <tr>
+                ${row.map((cell, ci) =>
+                  (ci === 0 && useRowHeader)
+                    ? `<th scope="row">${renderRichText(cell)}</th>`
+                    : `<td>${renderRichText(cell)}</td>`
+                ).join('')}
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }).join('');
+}
+
 function buildSearchHaystack(item) {
   const parts = [
     item.id,
@@ -83,6 +121,7 @@ function buildSearchHaystack(item) {
     item.prompt,
     item.formulaLatex,
     item.summary,
+    item.overview,
     item.conditions,
     item.pitfalls,
     item.problem,
@@ -103,6 +142,17 @@ function buildSearchHaystack(item) {
       parts.push(st.stepTitle, st.detail);
     }
   }
+  if (Array.isArray(item.tables)) {
+    for (const tbl of item.tables) {
+      parts.push(tbl.caption, ...(tbl.headers || []));
+      for (const row of tbl.rows || []) parts.push(...row);
+    }
+  }
+  if (Array.isArray(item.patterns)) {
+    for (const p of item.patterns) {
+      parts.push(p.typeName, p.triggers, p.method, p.pitfall, p.relatedRefs);
+    }
+  }
   return parts.filter(Boolean).join(' ').toLowerCase();
 }
 
@@ -116,8 +166,8 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
     chapterCache: new Map(),
     activeGroupId: null,
     activeChapterId: null,
-    kindFilter: 'all', // all | formula | conclusion | example
-    stageFilter: 'all', // all | foundation | intensive
+    kindFilter: 'formula', // formula | conclusion | example | exercise | summary
+    stageFilter: 'foundation', // foundation | intensive (no 'all')
     searchQuery: '',
     maskMode: false,
     starOnly: false,
@@ -162,12 +212,43 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
     return (state.manifest?.chapters || []).find(c => c.id === state.activeChapterId) || null;
   }
 
+  function getSubjectKinds() {
+    const kinds = state.manifest?.kinds;
+    if (Array.isArray(kinds) && kinds.length) {
+      return kinds.filter(k => Boolean(KIND_META[k]));
+    }
+    return DEFAULT_KINDS;
+  }
+
+  function hasStageSplit(kindItems) {
+    return kindItems.some(i => i.stage === 'foundation' || i.stage === 'intensive');
+  }
+
+  function ensureValidFilters(chapterData) {
+    const kinds = getSubjectKinds();
+    if (!kinds.includes(state.kindFilter)) {
+      state.kindFilter = kinds[0] || 'formula';
+    }
+    const kindItems = (chapterData?.items || []).filter(i => i.kind === state.kindFilter);
+    if (hasStageSplit(kindItems)) {
+      const matchCur = kindItems.some(i =>
+        state.stageFilter === 'foundation'
+          ? (i.stage === 'foundation' || i.stage === 'both')
+          : (i.stage === 'intensive' || i.stage === 'both')
+      );
+      if (!matchCur) {
+        state.stageFilter = state.stageFilter === 'foundation' ? 'intensive' : 'foundation';
+      }
+    }
+  }
+
   function getFilteredItems(chapterData) {
     const items = chapterData?.items || [];
     const q = state.searchQuery.trim().toLowerCase();
-    return items.filter(item => {
-      if (state.kindFilter !== 'all' && item.kind !== state.kindFilter) return false;
-      if (state.stageFilter !== 'all' && item.stage) {
+    const kindItems = items.filter(i => i.kind === state.kindFilter);
+    const applyStage = hasStageSplit(kindItems);
+    return kindItems.filter(item => {
+      if (applyStage && item.stage) {
         if (state.stageFilter === 'foundation' && item.stage !== 'foundation' && item.stage !== 'both') return false;
         if (state.stageFilter === 'intensive' && item.stage !== 'intensive' && item.stage !== 'both') return false;
       }
@@ -195,8 +276,8 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
     const isMastered = store.stemMastered.has(item.id);
     const isFlagged = store.stemFlagged.has(item.id);
     const weightBadge = item.examWeight === 'extended'
-      ? `<span class="stem-badge stem-badge-ext">拓展了解</span>`
-      : `<span class="stem-badge stem-badge-core">大纲核心</span>`;
+      ? `<span class="stem-badge stem-badge-ext">教材拓展</span>`
+      : `<span class="stem-badge stem-badge-core">★ 考纲重点</span>`;
     const stageMeta = item.stage ? STAGE_META[item.stage] : null;
     const stageBadge = stageMeta
       ? `<span class="stem-badge ${stageMeta.badgeClass}">${stageMeta.label}</span>`
@@ -307,6 +388,7 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
         ` : '')}
       </div>
       ${renderFigureBlock(item)}
+      ${renderTablesBlock(item)}
       ${symbolsHtml}
       <div class="stem-callouts">
         ${item.conditions ? `
@@ -341,6 +423,7 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
         ` : '')}
       </div>
       ${renderFigureBlock(item)}
+      ${renderTablesBlock(item)}
       <div class="stem-callouts">
         ${item.conditions ? `
           <div class="stem-callout callout-cond">
@@ -358,18 +441,23 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
     `;
   }
 
-  function renderExampleBody(item) {
+  function renderWorkedProblemBody(item, { isExercise = false } = {}) {
     const isOpen = state.openExampleIds.has(item.id);
     const steps = item.steps || [];
+    const problemLabel = isExercise ? '课后习题题干' : '题目条件';
+    const summaryLabel = isExercise
+      ? `展开课后习题详解与最终答案（共 ${steps.length} 步）`
+      : `展开分步详解与最终答案（共 ${steps.length} 步）`;
     return `
-      <div class="stem-problem-box">
-        <span class="stem-problem-label">题目条件</span>
+      <div class="stem-problem-box ${isExercise ? 'stem-exercise-problem-box' : ''}">
+        <span class="stem-problem-label">${problemLabel}</span>
         <div class="stem-problem-text">${renderRichText(item.problem)}</div>
       </div>
       ${renderFigureBlock(item)}
-      <details class="stem-solution-details" data-example-id="${escapeHtml(item.id)}" ${isOpen ? 'open' : ''}>
+      ${renderTablesBlock(item)}
+      <details class="stem-solution-details ${isExercise ? 'stem-exercise-details' : ''}" data-example-id="${escapeHtml(item.id)}" ${isOpen ? 'open' : ''}>
         <summary class="stem-solution-summary">
-          <span class="stem-summary-label">展开分步详解与最终答案（共 ${steps.length} 步）</span>
+          <span class="stem-summary-label">${summaryLabel}</span>
           <span class="disclosure-chevron" aria-hidden="true"></span>
         </summary>
         <div class="stem-solution-body">
@@ -396,13 +484,64 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
     `;
   }
 
+  function renderSummaryBody(item) {
+    const overviewText = item.overview || item.summary || '';
+    const patterns = Array.isArray(item.patterns) ? item.patterns : [];
+    return `
+      ${overviewText ? `
+        <div class="stem-summary-overview">
+          <div class="stem-summary-overview-text">${renderRichText(overviewText)}</div>
+        </div>
+      ` : ''}
+      ${renderFigureBlock(item)}
+      ${renderTablesBlock(item)}
+      ${patterns.length ? `
+        <div class="stem-pattern-list">
+          ${patterns.map((p, idx) => `
+            <div class="stem-pattern-card">
+              <div class="stem-pattern-head">
+                <span class="stem-pattern-index">题型 ${idx + 1}</span>
+                <h4 class="stem-pattern-title">${renderRichText(p.typeName)}</h4>
+                ${p.relatedRefs ? `<span class="stem-pattern-refs">对应：${escapeHtml(p.relatedRefs)}</span>` : ''}
+              </div>
+              <div class="stem-pattern-grid">
+                <div class="stem-pattern-cell">
+                  <span class="callout-tag tone-indigo">识别信号</span>
+                  <p>${renderRichText(p.triggers)}</p>
+                </div>
+                <div class="stem-pattern-cell">
+                  <span class="callout-tag tone-emerald">标准破题步骤</span>
+                  <p>${renderRichText(p.method)}</p>
+                </div>
+                ${p.pitfall ? `
+                  <div class="stem-pattern-cell stem-pattern-pitfall">
+                    <span class="callout-tag tone-amber">避坑要点</span>
+                    <p>${renderRichText(p.pitfall)}</p>
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      ` : ''}
+      ${item.takeaway ? `
+        <div class="stem-callout callout-pitfall">
+          <span class="callout-tag">考场总口诀</span>
+          <p>${renderRichText(item.takeaway)}</p>
+        </div>
+      ` : ''}
+    `;
+  }
+
   function renderItemCard(item) {
     const isMastered = store.stemMastered.has(item.id);
     const isFlagged = store.stemFlagged.has(item.id);
     let bodyHtml = '';
     if (item.kind === 'formula') bodyHtml = renderFormulaBody(item);
     else if (item.kind === 'conclusion') bodyHtml = renderConclusionBody(item);
-    else if (item.kind === 'example') bodyHtml = renderExampleBody(item);
+    else if (item.kind === 'example') bodyHtml = renderWorkedProblemBody(item, { isExercise: false });
+    else if (item.kind === 'exercise') bodyHtml = renderWorkedProblemBody(item, { isExercise: true });
+    else if (item.kind === 'summary') bodyHtml = renderSummaryBody(item);
 
     return `
       <article class="card stem-card stem-kind-${escapeHtml(item.kind)} ${isMastered ? 'is-mastered' : ''} ${isFlagged ? 'is-flagged' : ''}" data-item-id="${escapeHtml(item.id)}">
@@ -461,27 +600,77 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
     `;
   }
 
+  function renderEmptyListState(allItems) {
+    const kindMeta = KIND_META[state.kindFilter] || { label: state.kindFilter };
+    const totalInKind = allItems.filter(i => i.kind === state.kindFilter).length;
+    if (totalInKind === 0) {
+      return `
+        <section class="card empty-state">
+          <p class="empty-title">本章「${escapeHtml(kindMeta.label)}」尚未补齐</p>
+          <p class="empty-desc">正严格对照原书逐页核读、SymPy 验算并按章补全中，可先切换上方其他分区浏览。</p>
+        </section>
+      `;
+    }
+    const q = state.searchQuery.trim().toLowerCase();
+    let otherHitsHtml = '';
+    if (q) {
+      const kinds = getSubjectKinds();
+      const otherHits = kinds
+        .filter(k => k !== state.kindFilter)
+        .map(k => ({
+          key: k,
+          label: KIND_META[k].label,
+          cnt: allItems.filter(i => i.kind === k && i._haystack.includes(q)).length,
+        }))
+        .filter(x => x.cnt > 0);
+      if (otherHits.length) {
+        otherHitsHtml = `
+          <div class="stem-empty-jumps">
+            <span>其他分区有匹配结果：</span>
+            ${otherHits.map(x => `
+              <button type="button" class="module-pill" data-kind-filter="${escapeHtml(x.key)}">
+                <span>${escapeHtml(x.label)}</span>
+                <span class="count-badge">${x.cnt}</span>
+              </button>
+            `).join('')}
+          </div>
+        `;
+      }
+    }
+    return `
+      <section class="card empty-state">
+        <p class="empty-title">当前「${escapeHtml(kindMeta.label)}」分区没有找到匹配内容</p>
+        <p class="empty-desc">可以清空搜索词、切换复习阶段，或关闭「重点 / 隐藏已掌握 / 存疑待核 / 仅看考纲重点」筛选。</p>
+        ${otherHitsHtml}
+      </section>
+    `;
+  }
+
   function renderChapterContent(chMeta, chapterData) {
     if (!chMeta) return '';
     if (!chMeta.ready || !chapterData) {
       return renderRoadmapPanel(chMeta);
     }
 
+    ensureValidFilters(chapterData);
+
     const allItems = chapterData.items || [];
+    const kinds = getSubjectKinds();
+    const kindItems = allItems.filter(i => i.kind === state.kindFilter);
     const filtered = getFilteredItems(chapterData);
 
-    const kindCounts = {
-      all: allItems.length,
-      formula: allItems.filter(i => i.kind === 'formula').length,
-      conclusion: allItems.filter(i => i.kind === 'conclusion').length,
-      example: allItems.filter(i => i.kind === 'example').length,
-    };
-    const hasStages = allItems.some(i => Boolean(i.stage));
-    const stageCounts = hasStages ? {
-      all: allItems.length,
-      foundation: allItems.filter(i => i.stage === 'foundation' || i.stage === 'both').length,
-      intensive: allItems.filter(i => i.stage === 'intensive' || i.stage === 'both').length,
+    const kindCounts = {};
+    for (const k of kinds) {
+      kindCounts[k] = allItems.filter(i => i.kind === k).length;
+    }
+
+    const showStageBar = hasStageSplit(kindItems);
+    const stageCounts = showStageBar ? {
+      foundation: kindItems.filter(i => i.stage === 'foundation' || i.stage === 'both').length,
+      intensive: kindItems.filter(i => i.stage === 'intensive' || i.stage === 'both').length,
     } : null;
+
+    const canMask = state.kindFilter === 'formula' || state.kindFilter === 'conclusion';
     const extendedCount = allItems.filter(i => i.examWeight === 'extended').length;
     const starCount = allItems.filter(i => store.stemStarred.has(i.id)).length;
     const masteredCount = allItems.filter(i => store.stemMastered.has(i.id)).length;
@@ -545,11 +734,37 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
         </details>
       </section>
 
-      <!-- 搜索与筛选控制栏 -->
+      <!-- 搜索与分区切换控制栏 -->
       <section class="card control-panel no-print">
+        <div class="module-filter-bar stem-kind-tabs" role="group" aria-label="按单元内容分区切换">
+          ${kinds.map(key => {
+            const meta = KIND_META[key];
+            return `
+              <button type="button" class="module-pill stem-kind-tab" data-kind-filter="${key}" aria-pressed="${state.kindFilter === key}">
+                <span>${meta.label}</span>
+                <span class="count-badge">${kindCounts[key] || 0}</span>
+              </button>
+            `;
+          }).join('')}
+        </div>
+
+        ${showStageBar ? `
+          <div class="module-filter-bar stem-stage-filter-bar" role="group" aria-label="按复习阶段切换">
+            ${[
+              { key: 'foundation', label: '基础 30 讲', count: stageCounts.foundation },
+              { key: 'intensive', label: '强化 18 讲', count: stageCounts.intensive },
+            ].map(s => `
+              <button type="button" class="module-pill stem-stage-pill" data-stage-filter="${s.key}" aria-pressed="${state.stageFilter === s.key}">
+                <span>${s.label}</span>
+                <span class="count-badge">${s.count}</span>
+              </button>
+            `).join('')}
+          </div>
+        ` : ''}
+
         <search class="control-top-row">
           <div class="search-field">
-            <label for="${searchId}" class="visually-hidden">搜索本章公式、结论、例题或原书页码</label>
+            <label for="${searchId}" class="visually-hidden">搜索本分区公式、结论、例题或原书页码</label>
             <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
             </svg>
@@ -562,9 +777,11 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
           </div>
 
           <div class="toolbar-controls">
-            <button type="button" class="pill-toggle" data-toggle="maskMode" aria-pressed="${state.maskMode}">
-              <span>默写遮罩：${state.maskMode ? '开' : '关'}</span>
-            </button>
+            ${canMask ? `
+              <button type="button" class="pill-toggle" data-toggle="maskMode" aria-pressed="${state.maskMode}">
+                <span>默写遮罩：${state.maskMode ? '开' : '关'}</span>
+              </button>
+            ` : ''}
             <button type="button" class="pill-toggle pill-amber" data-toggle="starOnly" aria-pressed="${state.starOnly}">
               <span>重点</span>
               <span class="count-badge">${starCount}</span>
@@ -579,47 +796,18 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
             </button>
             ${extendedCount > 0 ? `
               <button type="button" class="pill-toggle pill-indigo" data-toggle="coreOnly" aria-pressed="${state.coreOnly}">
-                <span>仅看大纲核心</span>
+                <span>仅看考纲重点</span>
               </button>
             ` : ''}
           </div>
         </search>
 
-        <div class="module-filter-bar" role="group" aria-label="按内容类型筛选">
-          ${[
-            { key: 'all', label: '全部内容', count: kindCounts.all },
-            { key: 'formula', label: '核心公式', count: kindCounts.formula },
-            { key: 'conclusion', label: '结论与判据', count: kindCounts.conclusion },
-            { key: 'example', label: '经典例题', count: kindCounts.example },
-          ].map(k => `
-            <button type="button" class="module-pill" data-kind-filter="${k.key}" aria-pressed="${state.kindFilter === k.key}">
-              <span>${k.label}</span>
-              <span class="count-badge">${k.count}</span>
-            </button>
-          `).join('')}
-        </div>
-
-        ${hasStages ? `
-          <div class="module-filter-bar stem-stage-filter-bar" role="group" aria-label="按复习阶段筛选">
-            ${[
-              { key: 'all', label: '全部阶段（基础+强化）', count: stageCounts.all },
-              { key: 'foundation', label: '基础 30 讲', count: stageCounts.foundation },
-              { key: 'intensive', label: '强化 18 讲', count: stageCounts.intensive },
-            ].map(s => `
-              <button type="button" class="module-pill stem-stage-pill" data-stage-filter="${s.key}" aria-pressed="${state.stageFilter === s.key}">
-                <span>${s.label}</span>
-                <span class="count-badge">${s.count}</span>
-              </button>
-            `).join('')}
-          </div>
-        ` : ''}
-
         <div class="stats-footer">
           <div class="stats-left">
-            <span>当前显示 <strong>${filtered.length}</strong> 条</span>
+            <span>当前分区 <strong>${filtered.length}</strong> 条</span>
             <span class="sep" aria-hidden="true">·</span>
             <span>本章已掌握 <strong>${pct}% (${masteredCount}/${allItems.length})</strong></span>
-            <span class="module-tip">每条均附原书页码出处 · 例题详解默认折叠可先自做</span>
+            <span class="module-tip">每条均附原书页码出处 · 例题/习题详解默认折叠可先自做</span>
           </div>
           <div class="progress-track" role="progressbar" aria-label="本章掌握进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}">
             <div class="progress-fill" style="--pct: ${pct}%;"></div>
@@ -627,7 +815,7 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
         </div>
       </section>
 
-      ${state.maskMode ? `
+      ${canMask && state.maskMode ? `
         <div class="selftest-banner no-print">
           <span><strong>公式/结论默写遮罩已开启</strong>：根据题示默写公式或口述结论，点击卡片「翻开核对」逐条检查。</span>
           <button type="button" class="btn btn-subtle" data-action="reveal-all">全部翻开 / 重新遮罩</button>
@@ -637,12 +825,7 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
       <div class="stem-card-list">
         ${filtered.length
           ? filtered.map(renderItemCard).join('')
-          : `
-            <section class="card empty-state">
-              <p class="empty-title">没有找到匹配的知识点或例题</p>
-              <p class="empty-desc">可以清空搜索词，或关闭「重点 / 隐藏已掌握 / 存疑待核 / 仅看大纲核心」筛选。</p>
-            </section>
-          `}
+          : renderEmptyListState(allItems)}
       </div>
     `;
   }
@@ -771,12 +954,7 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
     const filtered = getFilteredItems(chapterData);
     listEl.innerHTML = filtered.length
       ? filtered.map(renderItemCard).join('')
-      : `
-        <section class="card empty-state">
-          <p class="empty-title">没有找到匹配的知识点或例题</p>
-          <p class="empty-desc">可以清空搜索词，或关闭「重点 / 隐藏已掌握 / 存疑待核 / 仅看大纲核心」筛选。</p>
-        </section>
-      `;
+      : renderEmptyListState(chapterData.items || []);
 
     // Update count display without blowing away search input focus
     const countStrong = root.querySelector('.stats-left strong');
@@ -800,8 +978,8 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
     if (!chMeta) return;
     state.activeChapterId = chapterId;
     if (chMeta.group) state.activeGroupId = chMeta.group;
-    state.kindFilter = 'all';
-    state.stageFilter = 'all';
+    state.kindFilter = getSubjectKinds()[0] || 'formula';
+    state.stageFilter = 'foundation';
     state.searchQuery = '';
     state.revealedIds.clear();
 
@@ -882,6 +1060,14 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
     if (kindBtn) {
       state.kindFilter = kindBtn.dataset.kindFilter;
       render();
+      const activeTab = root.querySelector(`[data-kind-filter="${CSS.escape(state.kindFilter)}"]`);
+      if (activeTab && typeof activeTab.scrollIntoView === 'function') {
+        try {
+          activeTab.scrollIntoView({ block: 'nearest', inline: 'nearest', container: 'nearest' });
+        } catch {
+          activeTab.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+        }
+      }
       return;
     }
 

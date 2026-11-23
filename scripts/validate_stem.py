@@ -20,7 +20,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SUBJECTS = ["control", "math1"]
-VALID_KINDS = {"formula", "conclusion", "example"}
+VALID_KINDS = {"formula", "conclusion", "example", "exercise", "summary"}
 VALID_WEIGHTS = {"core", "extended"}
 VALID_STAGES = {"foundation", "intensive", "both"}
 
@@ -124,6 +124,35 @@ def validate_subject(subj: str) -> tuple[int, int, list[str]]:
                 if not str(src.get(sf, "")).strip():
                     errors.append(f"{ctx}: missing strict source.{sf}")
 
+            # Optional structured tables validation (allowed on any kind)
+            tables = item.get("tables")
+            if tables is not None:
+                if not isinstance(tables, list):
+                    errors.append(f"{ctx}: tables must be a list")
+                else:
+                    for ti, tbl in enumerate(tables):
+                        if not isinstance(tbl, dict):
+                            errors.append(f"{ctx}.tables[{ti}]: must be an object")
+                            continue
+                        tcap = str(tbl.get("caption", "")).strip()
+                        if not tcap:
+                            errors.append(f"{ctx}.tables[{ti}]: missing caption")
+                        check_latex_delimiters(tcap, f"{ctx}.tables[{ti}].caption", errors)
+                        headers = tbl.get("headers", [])
+                        rows = tbl.get("rows", [])
+                        if not isinstance(headers, list) or len(headers) == 0:
+                            errors.append(f"{ctx}.tables[{ti}]: missing headers")
+                        if not isinstance(rows, list) or len(rows) == 0:
+                            errors.append(f"{ctx}.tables[{ti}]: missing rows")
+                        for hi, hcell in enumerate(headers):
+                            check_latex_delimiters(str(hcell), f"{ctx}.tables[{ti}].headers[{hi}]", errors)
+                        for ri, row in enumerate(rows):
+                            if not isinstance(row, list) or (headers and len(row) != len(headers)):
+                                errors.append(f"{ctx}.tables[{ti}].rows[{ri}]: column count mismatch")
+                                continue
+                            for ci, cell in enumerate(row):
+                                check_latex_delimiters(str(cell), f"{ctx}.tables[{ti}].rows[{ri}][{ci}]", errors)
+
             # Kind-specific checks
             if kind == "formula":
                 if not str(item.get("formulaLatex", "")).strip():
@@ -145,20 +174,38 @@ def validate_subject(subj: str) -> tuple[int, int, list[str]]:
                 check_latex_delimiters(item.get("summary", ""), f"{ctx}.summary", errors)
                 check_latex_delimiters(item.get("conditions", ""), f"{ctx}.conditions", errors)
                 check_latex_delimiters(item.get("pitfalls", ""), f"{ctx}.pitfalls", errors)
-            elif kind == "example":
+            elif kind in ("example", "exercise"):
                 if not str(item.get("problem", "")).strip():
-                    errors.append(f"{ctx}: example missing problem")
+                    errors.append(f"{ctx}: {kind} missing problem")
                 steps = item.get("steps", [])
                 if not isinstance(steps, list) or len(steps) == 0:
-                    errors.append(f"{ctx}: example missing steps")
+                    errors.append(f"{ctx}: {kind} missing steps")
                 if not str(item.get("finalAnswer", "")).strip():
-                    errors.append(f"{ctx}: example missing finalAnswer")
+                    errors.append(f"{ctx}: {kind} missing finalAnswer")
                 check_latex_delimiters(item.get("problem", ""), f"{ctx}.problem", errors)
                 check_latex_delimiters(item.get("finalAnswer", ""), f"{ctx}.finalAnswer", errors)
                 check_latex_delimiters(item.get("takeaway", ""), f"{ctx}.takeaway", errors)
                 for si, st in enumerate(steps):
                     check_latex_delimiters(st.get("stepTitle", ""), f"{ctx}.steps[{si}].stepTitle", errors)
                     check_latex_delimiters(st.get("detail", ""), f"{ctx}.steps[{si}].detail", errors)
+            elif kind == "summary":
+                ov = str(item.get("overview", "") or item.get("summary", "")).strip()
+                if not ov:
+                    errors.append(f"{ctx}: summary missing overview")
+                check_latex_delimiters(ov, f"{ctx}.overview", errors)
+                check_latex_delimiters(item.get("takeaway", ""), f"{ctx}.takeaway", errors)
+                patterns = item.get("patterns", [])
+                if patterns is not None:
+                    if not isinstance(patterns, list):
+                        errors.append(f"{ctx}: summary patterns must be a list")
+                    else:
+                        for pi, pat in enumerate(patterns):
+                            for pf in ("typeName", "triggers", "method"):
+                                if not str(pat.get(pf, "")).strip():
+                                    errors.append(f"{ctx}.patterns[{pi}]: missing {pf}")
+                                check_latex_delimiters(str(pat.get(pf, "")), f"{ctx}.patterns[{pi}].{pf}", errors)
+                            check_latex_delimiters(str(pat.get("pitfall", "")), f"{ctx}.patterns[{pi}].pitfall", errors)
+                            check_latex_delimiters(str(pat.get("relatedRefs", "")), f"{ctx}.patterns[{pi}].relatedRefs", errors)
 
     return ready_chapters, total_items, errors
 
