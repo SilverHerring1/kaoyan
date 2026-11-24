@@ -9,6 +9,7 @@ Run via project .venv:
 
 from __future__ import annotations
 
+import cmath
 import math
 import sys
 import sympy as sp
@@ -1786,6 +1787,98 @@ def run_all_checks() -> list[tuple[str, bool, str]]:
           _rc4(s_c**3 + 7 * s_c**2 + 17 * s_c + 119) == (0, 2, 1)
           and sp.simplify(p_b412_sh - (z4**3 + z4**2 + z4 + K4 - 14)) == 0
           and abs((1.4 / 0.25)**2 - 31.36) < 1e-9)
+
+    # --- Ch05 Full Textbook Edition (Main Ex 5-1..5-17, Guide Ex 5-14..5-15, A5-1..A5-28, B5-12..B5-20) ---
+    # 1. Main Ex 5-1 ~ 5-8 (includes Main 5-7 Routh s1 typo 2.75K vs 11K/12)
+    eq54 = sp.numer(sp.together(sp.diff(-s_c * (s_c + 4) * (s_c + 9) / (s_c + 2), s_c)))
+    d54_real = [float(sp.re(r)) for r in sp.nroots(sp.Poly(eq54, s_c)) if abs(sp.im(r)) < 1e-6][0]
+    eq57 = sp.numer(sp.together(sp.diff(-s_c**2 * (s_c + 12) / (s_c + 1), s_c)))
+    d57 = sorted([float(r.evalf()) for r in sp.solve(eq57, s_c) if r != 0])
+    p58_rts = [complex(r.evalf()) for r in sp.nroots(sp.Poly(sp.diff(s_c * (s_c + 2) * ((s_c + 1)**2 + 4), s_c), s_c))]
+    g52_ang = math.degrees(cmath.phase(((-1 + 2j) + 1) / ((-1 + 2j) * (((-1 + 2j) + 2)**2 + 4) * ((-1 + 2j) + 5))))
+    check("ch05_main_ex5_1_to_5_8",
+          abs(g52_ang - (-129.09)) < 0.2
+          and abs(d54_real - (-6.268)) < 0.01
+          and abs(d57[0] - (-5.186)) < 0.01 and abs(d57[1] - (-2.314)) < 0.01
+          and sp.Rational(12 - 1, 12) == sp.Rational(11, 12)
+          and abs(math.sqrt(2.5) - 1.5811) < 0.001 and abs(9 * 2.5 - 2.5**2 - 16.25) < 1e-9
+          and any(abs(r.real + 1) < 1e-5 and abs(abs(r.imag) - math.sqrt(1.5)) < 1e-3 for r in p58_rts),
+          "Confirmed Main 5-7 Routh s1=11K*/12 (book typo 2.75K*)")
+
+    # 2. Main Ex 5-9 ~ 5-17 (includes Main 5-11 d1=-26.19 sign typo & Main 5-14 Pade & Main 5-17 PID)
+    eq511 = sp.numer(sp.together(sp.diff(-(s_c + 50) * (s_c**2 + 5 * s_c + 25) / (s_c + 1), s_c)))
+    d511 = sorted([float(sp.re(r)) for r in sp.nroots(sp.Poly(eq511, s_c)) if abs(sp.im(r)) < 1e-6])
+    cl517 = sp.expand((s_c + 10) * (s_c**2 + 4 * s_c + 8))
+    den514 = sp.expand((10 * s_c + 1) * (6 * s_c + 1) * (1 + sp.Rational(5, 2) * s_c + sp.Rational(20825, 10000) * s_c**2))
+    check("ch05_main_ex5_9_to_5_17",
+          abs(abs((-2 + 2j) * (-2 + 2j + 2) / (-2 + 2j + 4)) - 2.0) < 1e-9
+          and abs(d511[0] - (-26.189)) < 0.01 and abs(d511[1] - (-5.943)) < 0.01 and abs(d511[2] - 3.132) < 0.01
+          and sp.simplify(cl517 - (s_c**3 + 14 * s_c**2 + 48 * s_c + 80)) == 0
+          and abs(float(sp.Poly(den514, s_c).all_coeffs()[0]) - 124.95) < 1e-6,
+          "Confirmed Main 5-11 d1=-26.19 (book dropped minus sign -> 26.2)")
+
+    # 3. Missing Guide Ex 5-14 & 5-15 (captures Guide 5-14 2+K vs 2+2K typo)
+    eq_g514 = sp.numer(sp.together(sp.diff(-(s_c + 1) * (s_c + 2) / (s_c - 2), s_c)))
+    d_g514 = sorted([float(r.evalf()) for r in sp.solve(eq_g514, s_c)])
+    check("ch05_guide_ex5_14_15",
+          abs(d_g514[0] - (2 - 2 * math.sqrt(3))) < 1e-6
+          and abs(d_g514[1] - (2 + 2 * math.sqrt(3))) < 1e-6
+          and sp.simplify((s_c + 1) * (s_c + 2) - K4 * (s_c - 2) - (s_c**2 + (3 - K4) * s_c + 2 + 2 * K4)) == 0,
+          "Confirmed Guide 5-14 char eq 2+2K (book typo 2+K), 0<K<3 & -1<K<0")
+
+    # 4. Exercises A5-1 ~ A5-8
+    Kr5, zr5 = sp.symbols("Kr5 zr5", real=True, positive=True)
+    e81 = sp.expand(sp.I**2 * (sp.I + 10) * (sp.I + 20) + Kr5 * (sp.I + zr5))
+    sol81 = sp.solve([sp.re(e81), sp.im(e81)], [Kr5, zr5])[0]
+    p57_c = sp.Poly(sp.expand((1 + sp.Rational(1, 2) * s_c) * (1 + sp.Rational(1, 5) * s_c) * (1 + sp.Rational(1, 8) * s_c)**2 + K4), s_c).all_coeffs()
+    k57_max = float(sp.solve(p57_c[1] * p57_c[2] * p57_c[3] - p57_c[0] * p57_c[3]**2 - p57_c[1]**2 * p57_c[4], K4)[0])
+    d56_max = max(float(r.evalf()) for r in sp.solve(sp.diff(s_c * (s_c + 100) * (s_c + 50), s_c), s_c))
+    K56_cd = abs(d56_max * (0.01 * d56_max + 1) * (0.02 * d56_max + 1))
+    check("ch05_ex_a5_1_to_8",
+          abs(abs((-1 + math.sqrt(3) * 1j + 1) * (-1 + math.sqrt(3) * 1j + 2) * (-1 + math.sqrt(3) * 1j + 4)) - 12.0) < 1e-9
+          and abs(K56_cd - 9.6225) < 0.01 and abs(k57_max - 5.5907) < 0.01
+          and sol81 == (30, sp.Rational(199, 30)),
+          f"A5-6 K_cd={K56_cd:.3f}, A5-7 K0_max={k57_max:.3f}, A5-8(1) K*=30, z=199/30")
+
+    # 5. Exercises A5-9 ~ A5-15 (captures A5-11 Appendix 'K>0无解' major erratum!)
+    k511_disc = [float(r.evalf()) for r in sp.solve((sp.Rational(5, 2) + 2 * K4)**2 - 4 * (1 + K4) * (1 + 5 * K4), K4) if float(r.evalf()) > 0][0]
+    k59_rep = sorted([float(r.evalf()) for r in sp.solve((2 - K4)**2 - 4 * K4, K4)])
+    check("ch05_ex_a5_9_to_15",
+          abs(k59_rep[0] - 0.5359) < 0.001 and abs(k59_rep[1] - 7.4641) < 0.001
+          and _rc4((1 + 10) * s_c**2 + (sp.Rational(5, 2) + 20) * s_c + (1 + 50)) == (0, 0, 2)
+          and abs(k511_disc - 0.1387) < 0.001
+          and sp.Rational(2, 27) == sp.Rational(4, 54)
+          and abs(3 / math.sqrt(10) - 0.9487) < 0.001,
+          "Confirmed A5-11 K>0 ALWAYS stable (Appendix P.250 erratum 'K>0无解')")
+
+    # 6. Exercises A5-16 ~ A5-22
+    k517_max = float(sp.solve(7 * 10 * (2 * K4) - (2 * K4)**2 - 49 * K4, K4)[1])
+    cl521 = sp.expand((s_c + 4) * (s_c + 2)**2 + 32)
+    check("ch05_ex_a5_16_to_22",
+          abs(k517_max - 22.75) < 1e-9
+          and sp.factor(cl521) == (s_c + 6) * (s_c**2 + 2 * s_c + 8)
+          and abs(math.exp(-math.pi / math.sqrt(7)) * 100 - 30.50) < 0.1
+          and sp.Rational(2, 5) == sp.Rational(4, 10))
+
+    # 7. Exercises A5-25 ~ A5-28 (Lead, Lag, Lead-Lag compensator design)
+    sd26 = -2 + 2 * math.sqrt(3) * 1j
+    val26 = 4.728 * (sd26 + 2.93) / (sd26 + 5.46) * 4 / (sd26 * (sd26 + 2))
+    sd28 = -2.5 + 2.5 * math.sqrt(3) * 1j
+    val28 = 6.25 * (sd28 + 0.5) * (sd28 + 0.1) / ((sd28 + 5) * (sd28 + 0.01)) * 4 / (sd28 * (sd28 + 0.5))
+    check("ch05_ex_a5_25_to_28",
+          abs(val26 - (-1.0)) < 0.01
+          and abs(val28 - (-1.0)) < 0.02
+          and abs(6.25 * 0.5 * 0.1 / (5 * 0.01) * 4 / 0.5 - 50.0) < 1e-9)
+
+    # 8. Self-test B5-12 ~ B5-20
+    k516_rep = sorted([float(r.evalf()) for r in sp.solve((4 - 2 * K4)**2 - 16 * K4, K4)])
+    check("ch05_selftest_b5_12_to_20",
+          abs(abs((-1 + 0j) * ((-1)**2 + 4 * (-1) + 8) / (-1 + 5)) - 1.25) < 1e-9
+          and abs(abs((-1.5 + 2j) * ((-1.5 + 2j)**2 + 4 * (-1.5 + 2j) + 8) / (-1.5 + 2j + 5)) - 1.25) < 1e-9
+          and abs(k516_rep[0] - 0.5359) < 0.001 and abs(k516_rep[1] - 7.4641) < 0.001
+          and sp.Rational(102, 40) == sp.Rational(51, 20)
+          and sp.factor(s_c**3 + 6 * s_c**2 + 8 * s_c + 15) == (s_c + 5) * (s_c**2 + s_c + 3)
+          and abs(math.exp(-math.pi * 0.5 / math.sqrt(2.75)) * 100 - 38.78) < 0.1)
 
     return results
 
