@@ -1519,6 +1519,274 @@ def run_all_checks() -> list[tuple[str, bool, str]]:
           and sp.simplify(sol_b225[Y1m] / Fim - (M2 * s_c**2 + (B1m + B2m) * s_c + Km_s) / den_b225) == 0
           and sp.simplify(sol_b225[Y2m] / Fim - (B1m * s_c + Km_s) / den_b225) == 0)
 
+    # --- Ch03 Full Textbook Edition (Main Ex 3-1..3-19, Guide Ex 3-7/9/10/13, A3-1..A3-32, B3-11..B3-20) ---
+    def _ilt3(expr):
+        return sp.simplify(sp.inverse_laplace_transform(sp.apart(expr, s_c), s_c, t))
+
+    # 1. P.95 (3-25) parabolic SS errata + P.102 Ex 3-5 ISE + P.119-120 PD/PI damping
+    a0c, a1c, a2c = sp.symbols("a0c a1c a2c", positive=True)
+    c0c, c1c, c2c = sp.symbols("c0c c1c c2c", real=True)
+    y_p3 = c0c + c1c * t + sp.Rational(1, 2) * c2c * t**2
+    sol_p3 = sp.solve(sp.Poly(a2c * sp.diff(y_p3, t, 2) + a1c * sp.diff(y_p3, t) + a0c * y_p3 - sp.Rational(1, 2) * t**2, t).coeffs(), [c0c, c1c, c2c])
+    s1_ise = -zeta * wn + wn * sp.sqrt(zeta**2 - 1)
+    s2_ise = -zeta * wn - wn * sp.sqrt(zeta**2 - 1)
+    C1_ise, C2_ise = s2_ise / (s2_ise - s1_ise), -s1_ise / (s2_ise - s1_ise)
+    J1_ise = sp.simplify(-C1_ise**2 / (2 * s1_ise) - 2 * C1_ise * C2_ise / (s1_ise + s2_ise) - C2_ise**2 / (2 * s2_ise))
+    zeta_ise_opt = sp.solve(sp.diff(J1_ise, zeta), zeta)
+    check("ch03_f_parabolic_ss_and_ise_errata",
+          sp.simplify(sol_p3[c0c] - (a1c**2 / a0c**3 - a2c / a0c**2)) == 0
+          and sp.simplify(J1_ise - (zeta / wn + 1 / (4 * zeta * wn))) == 0
+          and zeta_ise_opt == [sp.Rational(1, 2)],
+          "Confirmed P.95 (3-25) +a1^2/a0^3 & P.102 Ex3-5 ISE opt zeta=0.5")
+
+    # 2. Main Ex 3-2, 3-3, 3-4, 3-6, 3-7, 3-8
+    y_m32 = _ilt3((s_c + 2) / (s_c * (s_c + 1) * (s_c + 3)))
+    y_m33 = _ilt3(1 / ((s_c + 2)**3 * (s_c + 3)))
+    y_m34 = _ilt3(10 / ((s_c**2 + 6 * s_c + 25) * (s_c + 2)))
+    A1_m34 = complex((10 / ((s_c + 3 + 4 * sp.I) * (s_c + 2))).subs(s_c, -3 + 4 * sp.I).evalf())
+    wn38 = math.sqrt(1.117)
+    z38 = 0.6 / (2 * wn38)
+    wd38 = wn38 * math.sqrt(1 - z38**2)
+    check("ch03_main_ex3_2_to_3_8",
+          sp.simplify(y_m32 - (sp.Rational(2, 3) - sp.exp(-t) / 2 - sp.exp(-3 * t) / 6)) == 0
+          and sp.simplify(y_m33 - (t**2 * sp.exp(-2 * t) / 2 - t * sp.exp(-2 * t) + sp.exp(-2 * t) - sp.exp(-3 * t))) == 0
+          and abs(2 * abs(A1_m34) - 0.6063) < 0.001
+          and abs(math.pi / wd38 - 3.100) < 0.005
+          and abs(math.exp(-math.pi * z38 / math.sqrt(1 - z38**2)) * 100 - 39.46) < 0.1
+          and abs((1 - 1.037 / 1.117) - 0.0716) < 0.001)
+
+    # 3. Main Ex 3-9 & Ex 3-10 (proves P.114 0.188 typo -> true +1.4118)
+    y_m39 = _ilt3(1 / (s_c * (s_c + 6) * (s_c**2 + 2 * s_c + 5)))
+    y_m310 = _ilt3(sp.Rational(125, 2) * (s_c + sp.Rational(5, 2)) / (s_c * (s_c + sp.Rational(25, 4)) * (s_c**2 + 6 * s_c + 25)))
+    c_m310 = float(sp.N(y_m310.coeff(sp.exp(-sp.Rational(25, 4) * t))))
+    f_m310 = sp.lambdify(t, y_m310, "math")
+    mp_m310 = max(f_m310(i * 0.002) for i in range(1, 1500))
+    check("ch03_main_ex3_9_3_10_errata",
+          abs(float(sp.N(y_m39.subs(t, 0)))) < 1e-12
+          and abs(float(sp.N(y_m310.subs(t, 0)))) < 1e-12
+          and abs(c_m310 - 1.4118) < 0.001
+          and abs((mp_m310 - 1) * 100 - 37.97) < 0.1,
+          f"Ex3-10 true coeff=+{c_m310:.4f} (book typo +0.188), sim overshoot={(mp_m310-1)*100:.2f}%")
+
+    # 4. Main Ex 3-13, 3-14/15, 3-16, 3-18, 3-19
+    A_m313 = sp.Matrix([[0, 1, 0], [0, 0, 1], [2, 3, 0]])
+    eA_m313 = sp.simplify(sp.exp(A_m313 * t))
+    A_m314 = sp.Matrix([[0, 1, 0], [0, 0, 1], [0, 1, 0]])
+    eA_m314 = sp.simplify(sp.exp(A_m314 * t))
+    A_m316 = sp.Matrix([[0, 2], [-1, -3]])
+    eA_m316 = sp.simplify(sp.exp(A_m316 * t))
+    A_m318 = sp.Matrix([[0, 1], [-1, -2]])
+    X_m318 = (s_c * sp.eye(2) - A_m318).inv() * (sp.Matrix([1, 0]) + sp.Matrix([0, 1]) * (1 + s_c) / (s_c**2 + 1))
+    y_m318 = _ilt3(X_m318[0])
+    x10_s, x20_s = sp.symbols("x10_s x20_s", real=True)
+    A_m319 = sp.Matrix([[0, 1], [-wn**2, -2 * zeta * wn]])
+    Y_m319 = sp.simplify((sp.Matrix([[1, 0]]) * (s_c * sp.eye(2) - A_m319).inv() * (sp.Matrix([x10_s, x20_s]) + sp.Matrix([0, wn**2]) / s_c))[0])
+    check("ch03_main_ex3_13_to_3_19",
+          sp.simplify(9 * eA_m313[0, 0] - (sp.exp(2 * t) + (8 + 6 * t) * sp.exp(-t))) == 0
+          and sp.simplify(9 * eA_m313[2, 1] - (8 * sp.exp(2 * t) + (-8 + 3 * t) * sp.exp(-t))) == 0
+          and sp.simplify(eA_m314 - sp.Matrix([[1, sp.sinh(t), sp.cosh(t) - 1], [0, sp.cosh(t), sp.sinh(t)], [0, sp.sinh(t), sp.cosh(t)]])) == sp.zeros(3, 3)
+          and sp.simplify(eA_m316[0, 1] - (2 * sp.exp(-t) - 2 * sp.exp(-2 * t))) == 0
+          and sp.simplify(y_m318 - (sp.Rational(3, 2) * sp.exp(-t) + t * sp.exp(-t) + sp.sin(t) / 2 - sp.cos(t) / 2)) == 0
+          and sp.simplify(Y_m319 - ((s_c + 2 * zeta * wn) * x10_s + x20_s + wn**2 / s_c) / (s_c**2 + 2 * zeta * wn * s_c + wn**2)) == 0)
+
+    # 5. Missing Guide Examples 3-7, 3-9, 3-10 (with Gn sign errata check), 3-13
+    z_g310 = math.sqrt(math.log(0.25)**2 / (math.pi**2 + math.log(0.25)**2))
+    wn_g310 = math.pi / (2 * math.sqrt(1 - z_g310**2))
+    K1_g310, Kt_g310 = wn_g310**2, 2 * z_g310 * wn_g310 / wn_g310**2
+    # Guide Ex 3-13: (s^2+2s+2)(s+6) = s^3 + 8s^2 + 14s + 12 -> a=4.5, b=10.5, c=11
+    poly_g313 = sp.expand((s_c**2 + 2 * s_c + 2) * (s_c + 6))
+    check("ch03_guide_ex3_7_9_10_13",
+          sp.expand((s_c + 5)**2 + (5 * sp.sqrt(3))**2) == s_c**2 + 10 * s_c + 100
+          and abs(K1_g310 - 2.948) < 0.01 and abs(Kt_g310 - 0.470) < 0.01
+          and sp.expand(s_c**3 + (sp.Rational(9, 2) + sp.Rational(7, 2)) * s_c**2 + (sp.Rational(21, 2) + sp.Rational(7, 2)) * s_c + (11 + 1)) == poly_g313)
+
+    # 6. Exercises A3-1 ~ A3-8
+    y_a31_1 = _ilt3(9 / (s_c * (s_c**2 + 4 * s_c + 3)))
+    y_a34 = _ilt3(6 / (s_c * (s_c**3 + 4 * s_c**2 + 4 * s_c)))
+    y_a35 = _ilt3(4 / (s_c * (s_c**2 + 5 * s_c + 4)))
+    y_a36_step = _ilt3((2 * s_c + 1) / (s_c * (s_c + 1)**2))
+    y_a36_ramp = _ilt3((2 * s_c + 1) / (s_c**2 * (s_c + 1)**2))
+    y_a37_imp = _ilt3(10 * (2 * s_c + 1) / ((s_c + 1) * (s_c**2 + 4 * s_c + 8)))
+    y_a37_step = _ilt3(10 * (2 * s_c + 1) / (s_c * (s_c + 1) * (s_c**2 + 4 * s_c + 8)))
+    G_a38_5 = sp.simplify(sp.Rational(2, 100) * (1 / (s_c + sp.Rational(1, 2)) - 1 / (s_c + sp.Rational(1, 5))))
+    check("ch03_ex_a3_1_to_8",
+          sp.simplify(y_a31_1 - (3 + sp.Rational(3, 2) * sp.exp(-3 * t) - sp.Rational(9, 2) * sp.exp(-t))) == 0
+          and sp.simplify(y_a34 - sp.Rational(3, 2) * (t - 1 + t * sp.exp(-2 * t) + sp.exp(-2 * t))) == 0
+          and sp.simplify(y_a35 - (1 + sp.Rational(1, 3) * sp.exp(-4 * t) - sp.Rational(4, 3) * sp.exp(-t))) == 0
+          and sp.simplify(y_a36_step - (1 - sp.exp(-t) + t * sp.exp(-t))) == 0
+          and sp.simplify(y_a36_ramp - (t - t * sp.exp(-t))) == 0
+          and sp.simplify(y_a37_imp - (-2 * sp.exp(-t) + 2 * sp.exp(-2 * t) * sp.cos(2 * t) + 11 * sp.exp(-2 * t) * sp.sin(2 * t))) == 0
+          and sp.simplify(y_a37_step - (sp.Rational(5, 4) + 2 * sp.exp(-t) - sp.Rational(13, 4) * sp.exp(-2 * t) * sp.cos(2 * t) - sp.Rational(9, 4) * sp.exp(-2 * t) * sp.sin(2 * t))) == 0
+          and sp.simplify(G_a38_5 - (-sp.Rational(6, 100) / ((2 * s_c + 1) * (5 * s_c + 1)))) == 0)
+
+    # 7. Exercises A3-9 ~ A3-14
+    z_41_c = math.log(4) / math.sqrt(4 * math.pi**2 + math.log(4)**2)
+    Kc_a311 = ((2.5 / (2 * z_41_c))**2 - 1) / 2
+    Kc_a312 = (4 * (1 / (2 * z_41_c))**2 - 1) / 4
+    y_a314b = _ilt3((s_c + 1) / (s_c * (s_c**2 + s_c + 1)))
+    f_a314b = sp.lambdify(t, y_a314b, "math")
+    sig_14b = (max(f_a314b(i * 0.005) for i in range(1, 2000)) - 1) * 100
+    check("ch03_ex_a3_9_to_14",
+          abs(math.sqrt(600) - 24.4949) < 0.001 and abs(70 / (2 * math.sqrt(600)) - 1.4289) < 0.001
+          and abs(math.exp(-math.pi * 0.6 / 0.8) * 100 - 9.478) < 0.01 and abs(math.pi / 1.6 - 1.9635) < 0.001
+          and abs(Kc_a311 - 16.330) < 0.01 and abs(Kc_a312 - 5.136) < 0.01
+          and abs(36 / 25 - 1.44) < 1e-9 and abs(11.2 / 36 - 0.3111) < 0.001
+          and abs(sig_14b - 29.84) < 0.1)
+
+    # 8. Exercises A3-15 ~ A3-18
+    Kc_s15 = sp.Symbol("Kc_s15", positive=True)
+    sol_15_0 = [float(x) for x in sp.solve(70**2 - 4 * sp.Rational(49, 100) * 600 * (1 + Kc_s15), Kc_s15)]
+    sol_15_3 = sorted(float(x) for x in sp.solve((70 + 3 * Kc_s15)**2 - 4 * sp.Rational(49, 100) * 600 * (1 + Kc_s15), Kc_s15))
+    z_a317 = math.sqrt(math.log(0.3)**2 / (math.pi**2 + math.log(0.3)**2))
+    wn_a317 = math.pi / (0.1 * math.sqrt(1 - z_a317**2))
+    check("ch03_ex_a3_15_to_18",
+          abs(sol_15_0[0] - 3.1667) < 0.001
+          and abs(sol_15_3[0] - 5.2546) < 0.001 and abs(sol_15_3[1] - 78.7454) < 0.001
+          and abs(wn_a317**2 / (2 * z_a317 * wn_a317) - 47.01) < 0.05)
+
+    # 9. Exercises A3-19 ~ A3-23
+    eA_19_1 = sp.simplify(sp.exp(sp.Matrix([[0, 1], [-6, -5]]) * t))
+    eA_20_6 = sp.simplify(sp.exp(sp.Matrix([[1, 0, 0], [0, 1, 0], [0, 1, 2]]) * t))
+    eA_21 = sp.simplify(sp.exp(sp.Matrix([[0, 1, 0], [0, 0, 1], [-6, -11, -6]]) * t))
+    A_a322 = sp.Matrix([[-12, sp.Rational(2, 3)], [-36, -1]])
+    X_a322 = (s_c * sp.eye(2) - A_a322).inv() * (sp.Matrix([2, 1]) + sp.Matrix([sp.Rational(1, 3), 1]) / s_c)
+    eA_23 = sp.simplify(sp.exp(sp.Matrix([[0, 1, 0], [0, 0, 1], [-5, -7, -3]]) * t))
+    check("ch03_ex_a3_19_to_23",
+          sp.simplify(eA_19_1[0, 0] - (3 * sp.exp(-2 * t) - 2 * sp.exp(-3 * t))) == 0
+          and sp.simplify(eA_20_6[2, 1] - (sp.exp(2 * t) - sp.exp(t))) == 0
+          and sp.simplify(eA_21[0, 0] - (3 * sp.exp(-t) - 3 * sp.exp(-2 * t) + sp.exp(-3 * t))) == 0
+          and sp.simplify(_ilt3(X_a322[0]) - (sp.Rational(1, 36) + sp.Rational(136, 45) * sp.exp(-9 * t) - sp.Rational(21, 20) * sp.exp(-4 * t))) == 0
+          and sp.simplify(_ilt3(X_a322[1]) - (sp.Rational(68, 5) * sp.exp(-9 * t) - sp.Rational(63, 5) * sp.exp(-4 * t))) == 0
+          and sp.simplify(eA_23[0, 2] - sp.Rational(1, 4) * (1 - sp.cos(2 * t)) * sp.exp(-t)) == 0)
+
+    # 10. Exercises A3-24 ~ A3-27 (captures A3-24(1) row2 col1 erratum)
+    A_a324 = sp.Matrix([[-6, 4], [-2, 0]])
+    eA_24 = sp.simplify(sp.exp(A_a324 * t))
+    X_a324 = (s_c * sp.eye(2) - A_a324).inv() * (sp.Matrix([2, 0]) + sp.Matrix([0, 1]) / s_c)
+    A_a325 = sp.Matrix([[-2, 1], [2, -3]])
+    Y_a325 = ((sp.Matrix([[1, 0]]) * (s_c * sp.eye(2) - A_a325).inv()) * (sp.Matrix([0, 1]) + sp.Matrix([0, 1]) / s_c))[0]
+    A_a326 = sp.Matrix([[-6, -1], [5, 0]])
+    X_a326 = (s_c * sp.eye(2) - A_a326).inv() * sp.Matrix([1, 0]) / s_c
+    A_a327 = sp.Matrix([[-2, -1], [0, 3]])
+    X_a327 = (s_c * sp.eye(2) - A_a327).inv() * sp.Matrix([0, 10]) / s_c
+    check("ch03_ex_a3_24_to_27",
+          sp.simplify(eA_24[1, 0] - (-sp.exp(-2 * t) + sp.exp(-4 * t))) == 0
+          and sp.simplify(_ilt3(X_a324[0]) - (sp.Rational(1, 2) - 3 * sp.exp(-2 * t) + sp.Rational(9, 2) * sp.exp(-4 * t))) == 0
+          and sp.simplify(_ilt3(Y_a325) - sp.Rational(1, 4) * (1 - sp.exp(-4 * t))) == 0
+          and sp.simplify(_ilt3(X_a326[1]) - sp.Rational(1, 4) * (4 - 5 * sp.exp(-t) + sp.exp(-5 * t))) == 0
+          and sp.simplify(_ilt3(X_a327[0]) - (-sp.exp(-2 * t) - sp.Rational(2, 3) * sp.exp(3 * t) + sp.Rational(5, 3))) == 0,
+          "Confirmed A3-24(1) Phi21 = -e^-2t + e^-4t (Appendix 1 typo -e^-4t)")
+
+    # 11. Exercises A3-28 ~ A3-32 (captures A3-28(1)(2) & A3-30(3) major errata + A3-32 two-point fit)
+    X_a328_2 = sp.Matrix([[2 * sp.exp(-t), sp.exp(-t) + 2 * t * sp.exp(-t)], [sp.exp(-t), sp.exp(-t) + t * sp.exp(-t)]])
+    Phi_a328_2 = sp.simplify(X_a328_2 * sp.Matrix([[2, 1], [1, 1]]).inv())
+    A_a328_2 = sp.simplify(sp.diff(Phi_a328_2, t).subs(t, 0))
+    Phi_a330 = sp.Matrix([[1, (1 - sp.exp(-2 * t)) / 2], [0, sp.exp(-2 * t)]])
+    T_a332 = (210 - 150) / (math.log(1 - 0.379) - math.log(1 - 0.595))
+    tau_a332 = 150 + T_a332 * math.log(1 - 0.379)
+    check("ch03_ex_a3_28_to_32",
+          A_a328_2 == sp.Matrix([[-3, 4], [-1, 1]])
+          and sp.simplify(sp.exp(A_a328_2 * t) - Phi_a328_2) == sp.zeros(2, 2)
+          and sp.simplify(Phi_a330.inv() - Phi_a330.subs(t, -t)) == sp.zeros(2, 2)
+          and abs(T_a332 - 140.4) < 0.5 and abs(tau_a332 - 83.1) < 0.5,
+          "Confirmed A3-28(2) A=[[-3,4],[-1,1]], A3-30 Phi^-1(t)=+Phi(-t)")
+
+    # 12. Self-test B3-13, B3-14, B3-15, B3-16, B3-18, B3-20
+    e_b313 = _ilt3((s_c + 2) / (s_c**2 + 4 * s_c + 2))
+    char_b320 = sp.expand(s_c * (s_c + 1) * (sp.Rational(1, 18) * s_c + 1) + 10 * sp.Rational(4, 5) * (sp.Rational(13, 48) * s_c + 1))
+    check("ch03_selftest_b3_11_to_20",
+          sp.simplify(e_b313 - sp.Rational(1, 2) * (sp.exp((-2 - sp.sqrt(2)) * t) + sp.exp((-2 + sp.sqrt(2)) * t))) == 0
+          and sp.factor(char_b320) == (s_c + 16) * (s_c**2 + 3 * s_c + 9) / 18
+          and abs((1.4 / 0.25)**2 - 31.36) < 1e-9
+          and abs(1 - sp.Rational(10, 9) - (-sp.Rational(1, 9))) == 0)
+
+    # --- Ch04 Full Textbook Edition (Main Ex 4-1..4-15, Guide Ex 4-5, A4-1..A4-16, B4-6..B4-15) ---
+    def _rc4(poly_expr, var=s_c):
+        rts = sp.nroots(sp.Poly(poly_expr, var), n=14)
+        rhp = sum(1 for r in rts if sp.re(r) > 1e-7)
+        im = sum(1 for r in rts if abs(sp.re(r)) <= 1e-7)
+        lhp = sum(1 for r in rts if sp.re(r) < -1e-7)
+        return rhp, im, lhp
+
+    # 1. Main Ex 4-1 ~ 4-6
+    check("ch04_main_ex4_1_to_4_6",
+          _rc4(s_c**5 + s_c**4 + 10 * s_c**3 + 72 * s_c**2 + 152 * s_c + 240) == (2, 0, 3)
+          and _rc4(s_c**6 + 3 * s_c**5 + 2 * s_c**4 + 9 * s_c**3 + 5 * s_c**2 + 12 * s_c + 20) == (2, 0, 4)
+          and _rc4(s_c**4 + s_c**3 + 2 * s_c**2 + 2 * s_c + 5) == (2, 0, 2)
+          and _rc4(s_c**4 + 3 * s_c**3 + 3 * s_c**2 + 3 * s_c + 2) == (0, 2, 2)
+          and _rc4(s_c**4 + 2 * s_c**3 + 11 * s_c**2 + 18 * s_c + 18) == (0, 2, 2)
+          and _rc4(s_c**6 + s_c**5 + 5 * s_c**4 + 3 * s_c**3 + 8 * s_c**2 + 2 * s_c + 4) == (0, 4, 2))
+
+    # 2. Main Ex 4-7 ~ 4-15
+    z4 = sp.Symbol("z4")
+    K4 = sp.Symbol("K4", real=True)
+    kmax47 = [float(x) for x in sp.solve((80 - K4) * (25 + K4) - 98 * K4, K4) if float(x) > 0][0]
+    kmax49 = max(float(x) for x in sp.solve((sp.Rational(61, 4) - K4) * (sp.Rational(59, 4) + K4) - 25 * (sp.Rational(3, 2) * K4 - sp.Rational(153, 16)), K4))
+    p48_sh = sp.expand((2 * s_c**3 + 10 * s_c**2 + 13 * s_c + 4).subs(s_c, z4 - 1))
+    check("ch04_main_ex4_7_to_4_15",
+          abs(kmax47 - 28.121) < 0.005
+          and _rc4(2 * s_c**3 + 10 * s_c**2 + 13 * s_c + 4) == (0, 0, 3)
+          and _rc4(p48_sh, z4) == (1, 0, 2)
+          and abs(kmax49 - 9.8945) < 0.002
+          and _rc4(s_c**3 + s_c**2 + 10 * s_c + 5) == (0, 0, 3)
+          and _rc4(s_c**5 + 2 * s_c**4 + 4 * s_c**3 + 8 * s_c**2 + 10 * s_c + 6) == (2, 0, 3),
+          f"Ex4-7 Kmax={kmax47:.3f}, Ex4-9 Kmax={kmax49:.4f} (book 9.8)")
+
+    # 3. Missing Guide Ex 4-5
+    check("ch04_guide_ex4_5",
+          _rc4(s_c**3 + sp.Rational(3, 4) * s_c**2 + 4 * s_c + 3) == (0, 2, 1))
+
+    # 4. Exercises A4-1 ~ A4-5
+    T1c, T2c, T3c = sp.symbols("T1c T2c T3c", positive=True)
+    kmax_a43_3 = sp.expand((T1c * T2c + T1c * T3c + T2c * T3c) * (T1c + T2c + T3c) / (T1c * T2c * T3c) - 1)
+    p_a44_sh = sp.expand((2 * s_c**3 + 10 * s_c**2 + 13 * s_c + 5).subs(s_c, z4 - 1))
+    p_a45_sh = sp.expand(((s_c + 1) * (s_c + sp.Rational(3, 2)) * (s_c + 2) + K4).subs(s_c, z4 - 1))
+    check("ch04_ex_a4_1_to_5",
+          _rc4(s_c**4 + 2 * s_c**3 + 2 * s_c**2 + 4 * s_c + 10) == (2, 0, 2)
+          and _rc4(s_c**5 + s_c**4 + 4 * s_c**3 + 4 * s_c**2 + 2 * s_c + 1) == (2, 0, 3)
+          and _rc4(s_c**4 + 2 * s_c**2 + 9) == (2, 0, 2)
+          and _rc4(s_c**6 + 3 * s_c**5 + 5 * s_c**4 + 9 * s_c**3 + 8 * s_c**2 + 6 * s_c + 4) == (0, 4, 2)
+          and _rc4(s_c * (s_c + 1) * (s_c + 5) + 20) == (0, 0, 3)
+          and _rc4(s_c**3 * (s_c + 1) * (s_c + 2) + 5 * s_c + 1) == (2, 0, 3)
+          and sp.simplify(kmax_a43_3 - ((T1c + T2c) / T3c + (T1c + T3c) / T2c + (T2c + T3c) / T1c + 2)) == 0
+          and _rc4(2 * s_c**3 + 10 * s_c**2 + 13 * s_c + 5) == (0, 0, 3)
+          and _rc4(p_a44_sh, z4) == (1, 1, 1)
+          and sp.simplify(p_a45_sh - (z4**3 + sp.Rational(3, 2) * z4**2 + sp.Rational(1, 2) * z4 + K4)) == 0)
+
+    # 5. Exercises A4-6 ~ A4-10
+    K_a48 = sp.Rational(7995, 12)
+    w2_a48 = sp.Rational(200 + K_a48, sp.Rational(105, 2))
+    wn_a49 = math.pi / math.sqrt(0.75)
+    check("ch04_ex_a4_6_to_10",
+          _rc4(sp.Rational(1, 5) * s_c**3 + s_c**2 + 5 * s_c + 10) == (0, 0, 3)
+          and K_a48 == sp.Rational(2665, 4) and w2_a48 == sp.Rational(33, 2)
+          and abs(wn_a49**2 / 10 - 1.3159) < 0.001
+          and abs((wn_a49 - 1) / 10 - 0.2628) < 0.001
+          and abs(1.5 / wn_a49 - 0.4135) < 0.001)
+
+    # 6. Exercises A4-11 ~ A4-16
+    check("ch04_ex_a4_11_to_16",
+          _rc4(s_c**2 * (s_c**2 + 6 * s_c + 100) + 10 * (2 * s_c + 1)) == (0, 0, 4)
+          and sp.Rational(40, 25) == sp.Rational(8, 5)
+          and abs(40 / 22.5 - 1.7778) < 0.001
+          and sp.Rational(2, sp.Rational(20, 3)) == sp.Rational(3, 10)
+          and abs(2740 / 9 - 304.444) < 0.005 and abs(1044 / 30 - 34.8) < 1e-9)
+
+    # 7. Self-test B4-6 ~ B4-10
+    check("ch04_selftest_b4_6_to_10",
+          _rc4(2 * s_c**5 + s_c**4 - 15 * s_c**3 + 25 * s_c**2 + 2 * s_c - 7) == (3, 0, 2)
+          and _rc4(s_c**4 + 7 * s_c**3 + 25 * s_c**2 + 42 * s_c + 30) == (0, 0, 4)
+          and _rc4(s_c**6 + 2 * s_c**5 + 5 * s_c**4 + 28 * s_c**3 + 27 * s_c**2 + 66 * s_c + 63) == (2, 2, 2)
+          and _rc4(s_c**3 + 3 * s_c**2 + 2 * s_c + 24) == (2, 0, 1)
+          and abs((-5 + math.sqrt(45)) - 1.7082) < 0.001)
+
+    # 8. Self-test B4-11 ~ B4-15
+    p_b412_sh = sp.expand((s_c**3 + 7 * s_c**2 + 17 * s_c + K4).subs(s_c, z4 - 2))
+    check("ch04_selftest_b4_11_to_15",
+          _rc4(s_c**3 + 7 * s_c**2 + 17 * s_c + 119) == (0, 2, 1)
+          and sp.simplify(p_b412_sh - (z4**3 + z4**2 + z4 + K4 - 14)) == 0
+          and abs((1.4 / 0.25)**2 - 31.36) < 1e-9)
+
     return results
 
 
