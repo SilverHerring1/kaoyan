@@ -1489,7 +1489,10 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
       const depthInfo = state.drawerStack.length > 1 ? `（第 ${state.drawerStack.length} 层预览）` : '';
       kickerEl.textContent = `侧边浮窗预览 · ${kindLabel}${depthInfo} · 原阅读位置已保留`;
     }
-    if (titleEl) titleEl.textContent = plainTitle;
+    if (titleEl) {
+      titleEl.innerHTML = renderRichText(target.title || '');
+      renderMathSafe(titleEl);
+    }
     if (backBtn) backBtn.hidden = state.drawerStack.length <= 1;
     if (bodyEl) {
       bodyEl.innerHTML = renderItemCard(target, { refIndex: chapterData._refIndex, inDrawer: true });

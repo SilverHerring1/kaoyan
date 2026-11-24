@@ -1880,6 +1880,168 @@ def run_all_checks() -> list[tuple[str, bool, str]]:
           and sp.factor(s_c**3 + 6 * s_c**2 + 8 * s_c + 15) == (s_c + 5) * (s_c**2 + s_c + 3)
           and abs(math.exp(-math.pi * 0.5 / math.sqrt(2.75)) * 100 - 38.78) < 0.1)
 
+    # --- Ch06 Full Textbook Edition (Main Ex 6-1..6-16, A6-1..A6-26, B6-21..B6-30) ---
+    # 1. Main Ex 6-7, 6-13, 6-14
+    Mr67 = 10**(8 / 20)
+    z67 = math.sqrt((1 - math.sqrt(1 - 1 / Mr67**2)) / 2)
+    T613 = math.sqrt(99) / (2 * (math.pi - math.atan(math.sqrt(99))))
+    wc614_4 = math.sqrt(4**(2 / 3) - 1)
+    pm614_4 = 180 - 3 * math.degrees(math.atan(wc614_4))
+    wc614_10 = math.sqrt(10**(2 / 3) - 1)
+    pm614_10 = 180 - 3 * math.degrees(math.atan(wc614_10))
+    check("ch06_main_ex6_7_to_6_14",
+          abs(z67 - 0.2033) < 0.001
+          and abs(T613 - 2.977) < 0.01
+          and abs(pm614_4 - 27.14) < 0.1 and abs(pm614_10 - (-7.03)) < 0.1)
+
+    # 2. Exercises A6-1 ~ A6-9
+    G61 = sp.simplify(s_c * (1 / s_c - sp.Rational(9, 5) / (s_c + 4) + sp.Rational(4, 5) / (s_c + 9)))
+    wn63 = math.sqrt(2 + math.sqrt(2))
+    z63 = (wn63**2 - 1) / (2 * wn63)
+    check("ch06_ex_a6_1_to_9",
+          sp.simplify(G61 - 36 / (s_c**2 + 13 * s_c + 36)) == 0
+          and abs(abs((1j + 1) / (1j + 2)) - 0.6325) < 0.001
+          and abs(abs((2j + 1) / (2j + 2)) - 0.7906) < 0.001
+          and abs(wn63 - 1.8478) < 0.001 and abs(z63 - 0.6533) < 0.001
+          and abs(10 * math.sqrt(1 + 0.05**2) / math.sqrt(1 + 20**2) - 0.5) < 1e-9)
+
+    # 3. Exercises A6-11 ~ A6-16 (captures A6-11 exact vs asym & A6-12(c) -1.10dB erratum!)
+    Ga12 = 8.9125 * (1 + 4j / 6) / (4j * (1 + 4j) * (1 + 4j / 15))
+    Gb12 = 20 * (1 + 2j) / (4j * (1 + 20j) * (1 + 0.5j))
+    Gc12 = 0.4 * (1 + 40j) / ((1 + 2j) * (1 + 4j / 32)**2)
+    diff12_a = 20 * math.log10(abs(Ga12)) - (-40 * math.log10(4 / 3))
+    diff12_b = 20 * math.log10(abs(Gb12)) - (-20 * math.log10(2))
+    diff12_c = 20 * math.log10(abs(Gc12)) - 20 * math.log10(8)
+    w4_14 = 100 * 10**(-5 / 60)
+    w3_14 = w4_14 * 10**(-15 / 40)
+    w2_14 = w3_14 * 10**(-20 / 20)
+    check("ch06_ex_a6_11_to_16",
+          abs(diff12_a - 0.951) < 0.01 and abs(diff12_b - (-0.011)) < 0.01
+          and abs(diff12_c - (-1.101)) < 0.01
+          and abs(10**(30 / 20) - 31.62) < 0.01
+          and abs(w2_14 - 3.481) < 0.01 and abs(w4_14 - 82.54) < 0.02,
+          "Confirmed A6-12(c) w=4 diff=-1.10dB (Appendix typo '无偏差')")
+
+    # 4. Exercises A6-18 ~ A6-22 (captures A6-20(2) exact K1=25.93, K2=241.0 vs Appendix 20)
+    G620_fn = lambda kv, wv: kv * (1 + 0.2j * wv) / ((1j * wv)**2 * (1 + 0.02j * wv))
+    w20_sols = sorted([float(r) for r in sp.solve(sp.Rational(18, 100) * s_c - (1 + sp.Rational(4, 1000) * s_c**2), s_c)])
+    K20_sols = [1 / abs(G620_fn(1, wv)) for wv in w20_sols]
+    wn21 = math.sqrt(20)
+    z21 = 5 / (2 * wn21)
+    Mr21 = 1 / (2 * z21 * math.sqrt(1 - z21**2))
+    wr21 = wn21 * math.sqrt(1 - 2 * z21**2)
+    check("ch06_ex_a6_18_to_22",
+          _rc4(sp.Rational(1, 200) * s_c**5 + sp.Rational(3, 20) * s_c**4 + s_c**3 + 5 * s_c**2 + 15 * s_c + 10) == (0, 0, 5)
+          and abs(K20_sols[0] - 25.93) < 0.05 and abs(K20_sols[1] - 241.0) < 0.5
+          and abs(Mr21 - 1.079) < 0.005 and abs(wr21 - 2.739) < 0.005
+          and abs(2**(-0.25) - 0.8409) < 0.001,
+          "Confirmed A6-20(2) exact K=25.93/241.0 (Appendix approx 20)")
+
+    # 5. Exercises A6-23 ~ A6-26 (captures A6-23(2) MAJOR GM erratum: true h=5.79/15.25dB vs book 0.82!)
+    w25_c, pm25_c = pm_at(lambda z_v: 40 / (z_v * (2 + z_v)) * (1 + 0.226 * z_v) / (1 + 0.0542 * z_v), 8.88)
+    w26_c, pm26_c = pm_at(lambda z_v: 5 / (z_v * (1 + z_v) * (1 + 0.5 * z_v)) * (1 + 10 * z_v) / (1 + 100 * z_v), 0.454)
+    check("ch06_ex_a6_23_to_26",
+          abs(48 / 8.296 - 5.786) < 0.01
+          and abs(2 * math.pi / (3 * math.sqrt(3)) - 1.209) < 0.005
+          and pm25_c >= 50.0 and pm26_c >= 40.0,
+          "Confirmed A6-23(2) true GM=5.79 (15.25dB), Appendix 0.82 = 1-1/h erratum!")
+
+    # 6. Self-test B6-21 ~ B6-30 (also captures B6-22(2) Appendix denom (2+w^2) vs true (4+w^2)!)
+    w6_sym = sp.Symbol("w6_sym", real=True, positive=True)
+    Gb22 = sp.together(s_c * (1 / s_c + 1 / (s_c + 1) + 1 / (s_c + 2)))
+    Gb22_jw = sp.expand(sp.re(Gb22.subs(s_c, sp.I * w6_sym))), sp.expand(sp.im(Gb22.subs(s_c, sp.I * w6_sym)))
+    check("ch06_selftest_b6_21_to_30",
+          abs(abs(3 / (4j + 4)) - 0.5303) < 0.001
+          and sp.simplify(Gb22 - (3 * s_c**2 + 6 * s_c + 2) / ((s_c + 1) * (s_c + 2))) == 0
+          and sp.simplify(Gb22_jw[0] - (4 + 10 * w6_sym**2 + 3 * w6_sym**4) / ((1 + w6_sym**2) * (4 + w6_sym**2))) == 0
+          and sp.simplify(Gb22_jw[1] - (6 + 3 * w6_sym**2) * w6_sym / ((1 + w6_sym**2) * (4 + w6_sym**2))) == 0
+          and abs(10**(-10 / 20) - 0.3162) < 0.001,
+          "Confirmed B6-22(2) true denom (1+w^2)(4+w^2) (Appendix P.260 typo (2+w^2)!)")
+
+    # --- Ch07 Full Textbook Edition (Main Ex 7-1..7-29, A7-1..A7-31, B7-9..B7-22) ---
+    z7, w7, K7 = sp.symbols("z7 w7 K7")
+    def _bw7(poly_z):
+        cs = sp.Poly(sp.expand(poly_z), z7).all_coeffs()
+        dg = len(cs) - 1
+        return sp.Poly(sp.expand(sum(c * (w7 + 1)**(dg - i) * (w7 - 1)**i for i, c in enumerate(cs))), w7)
+
+    # 1. Main Ex 7-12, 7-17, 7-18, 7-20, 7-23, 7-25 (major erratum!), 7-28 (w-sub erratum!)
+    e07_7 = math.exp(-0.7)
+    r725 = [complex(r.evalf()) for r in sp.nroots(sp.Poly(z7**2 - 2 * e07_7 * z7 + e07_7, z7))]
+    A718_m = sp.Matrix([[0, 1], [-3, -5]])
+    G718_m = sp.simplify((sp.Matrix([[1, 0]]) * (z7 * sp.eye(2) - A718_m).inv() * sp.Matrix([1, -3]))[0])
+    G728_1p = sp.simplify((sp.Rational(253, 100) * (1 + w7) / (1 - w7)) / (((1 + w7) / (1 - w7) - 1) * ((1 + w7) / (1 - w7) - sp.Rational(368, 1000))))
+    check("ch07_main_ex7_12_to_7_28",
+          abs((-10 * 0.8**2 + 0.4**2 + 10) - (1.2 * 2.4 - 0.32 * 1 + 1.2)) < 1e-9
+          and sp.simplify(G718_m - (z7 + 2) / (z7**2 + 5 * z7 + 3)) == 0
+          and all(abs(r) < 0.71 for r in r725)
+          and sp.simplify(G728_1p - 1265 * (1 + w7) * (1 - w7) / (8 * w7 * (79 + 171 * w7))) == 0,
+          "Confirmed Main 7-25 TRUE |z|=0.705 STABLE (book forgot /10!) & Main 7-28 uses z=(1+w)/(1-w)")
+
+    # 2. Exercises A7-1 ~ A7-9
+    F74_1 = z7 * (z7 + sp.Rational(1, 2)) / ((z7 - 1) * (z7**2 - sp.Rational(1, 2) * z7 + sp.Rational(5, 16)))
+    C77_4 = (z7**3 + 7 * z7**2 + 17 * z7) / ((z7 + 1) * (z7 + 2) * (z7 + 3))
+    check("ch07_ex_a7_1_to_9",
+          sp.limit((z7 - 1) * F74_1, z7, 1) == sp.Rational(24, 13)
+          and sp.apart(C77_4 / z7, z7) == sp.Rational(11, 2) / (z7 + 1) - 7 / (z7 + 2) + sp.Rational(5, 2) / (z7 + 3)
+          and abs((1 + 1) / (1 - 1.4 + 0.48) - 25.0) < 1e-9)
+
+    # 3. Exercises A7-13 ~ A7-19 (discrete state space, discretization, step response)
+    A714_m = sp.Matrix([[0, 1], [-sp.Rational(4, 25), -1]])
+    G714_m = sp.simplify(sp.Matrix([[1, 1], [0, 1]]) * (z7 * sp.eye(2) - A714_m).inv() * sp.Matrix([0, 1]))
+    G717_m = sp.simplify((sp.Matrix([[1, 0]]) * (z7 * sp.eye(2) - sp.Matrix([[1, 1], [0, 1]])).inv() * sp.Matrix([sp.Rational(1, 2), 1]))[0])
+    check("ch07_ex_a7_13_to_19",
+          sp.simplify(G714_m[0] - (z7 + 1) / ((z7 + sp.Rational(1, 5)) * (z7 + sp.Rational(4, 5)))) == 0
+          and sp.simplify(G714_m[1] - z7 / ((z7 + sp.Rational(1, 5)) * (z7 + sp.Rational(4, 5)))) == 0
+          and sp.simplify(G717_m - (z7 + 1) / (2 * (z7 - 1)**2)) == 0)
+
+    # 4. Exercises A7-21 ~ A7-26 (stability boundaries, A7-23/24/25/26)
+    e1_7 = math.exp(-1)
+    bw21_7 = _bw7(z7**2 + (K7 - 2) * z7 + (1 - sp.Rational(1, 2) * K7))
+    bw22_7 = _bw7((z7 - 1) * (z7 - e1_7) + K7 * (e1_7 * z7 + 1 - 2 * e1_7))
+    k22_7 = min(float(sp.solve(c, K7)[0]) for c in bw22_7.all_coeffs()[1:])
+    M25_5 = sp.Matrix([[math.exp(-5), math.exp(-5) - 1], [1 - math.exp(-5), 2 - 5 - math.exp(-5)]])
+    check("ch07_ex_a7_21_to_26",
+          sp.solve(bw21_7.all_coeffs()[2], K7)[0] == sp.Rational(8, 3)
+          and abs(k22_7 - 2.3922) < 0.005
+          and abs(math.log(4 / 3) - 0.2877) < 0.001
+          and any(abs(complex(ev.evalf())) > 2.5 for ev in M25_5.eigenvals().keys())
+          and abs(e1_7 / (1 - e1_7)**2 - 0.9207) < 0.002
+          and abs(1 / (1 - e1_7)**2 - 2.5026) < 0.005)
+
+    # 5. Exercises A7-27 ~ A7-31 (A7-28 actuating error=0.1, A7-29 Kmax=2.472, A7-30/31 deadbeat)
+    H28_7 = sp.simplify((1 - 1 / z7) * (sp.Rational(1, 5) * z7 * (z7 + 1) / (z7 - 1)**3 + z7 / (z7 - 1)**2))
+    Pe28_7 = sp.simplify(1 / (1 + H28_7))
+    e28_para = sp.limit((z7 - 1) * Pe28_7 * (sp.Rational(1, 25) * z7 * (z7 + 1) / (2 * (z7 - 1)**3)), z7, 1)
+    c29_7 = _bw7(z7**3 - z7**2 + sp.Rational(1, 4) * K7).all_coeffs()
+    k29_7 = [float(r.evalf()) for r in sp.solve(c29_7[1] * c29_7[2] - c29_7[0] * c29_7[3], K7) if float(r.evalf()) > 0][0]
+    check("ch07_ex_a7_27_to_31",
+          e28_para == sp.Rational(1, 10)
+          and abs(k29_7 - 2.4721) < 0.005
+          and abs(1 / (1 - e1_7) - 1.5820) < 0.002)
+
+    # 6. Self-tests B7-9 ~ B7-16 (captures B7-15 MAJOR erratum: true Kmax=2.181 vs Appendix 5.79!)
+    e05_7 = math.exp(-0.5)
+    bw_b15 = _bw7((z7 - 1) * (z7 - e05_7) + K7 * ((2 * e05_7 - 1) * z7 + (2 - 3 * e05_7)))
+    k_b15 = min(float(sp.solve(c, K7)[0]) for c in bw_b15.all_coeffs()[1:])
+    e5_7 = math.exp(-5.0)
+    Gb13_7 = z7 / (5 * (z7 - 1)**2) - z7 / (25 * (z7 - 1)) + z7 / (25 * (z7 - e5_7))
+    Pb13_7 = sp.simplify(Gb13_7 / (1 + Gb13_7))
+    check("ch07_selftest_b7_9_to_16",
+          any(abs(complex(r.evalf())) > 1.01 for r in sp.nroots(sp.denom(Pb13_7)))
+          and abs(2 * (1 + e1_7) / (1 - e1_7) - 4.3279) < 0.005
+          and abs(k_b15 - 2.1810) < 0.002,
+          "Confirmed B7-15(2) TRUE Kmax=2.181 (Appendix P.261 erratum 5.79 -> |z|=1.285 unstable!)")
+
+    # 7. Self-tests B7-17 ~ B7-22 (captures B7-17 Kp=Kv=inf vs '8' & B7-21 unstable zero absorption!)
+    Gb21_7 = sp.together((1 - 1 / z7) * (5 * z7 / (z7 - 1)**2 - 11 * z7 / (z7 - 1) + (100 / 9) * z7 / (z7 - e05_7) - (1 / 9) * z7 / (z7 - e5_7)))
+    n21_7, d21_7 = sp.fraction(Gb21_7)
+    r21_7 = sorted([float(r.evalf()) for r in sp.nroots(sp.Poly(n21_7, z7))])
+    check("ch07_selftest_b7_17_to_22",
+          abs(math.log(3) / 2 - 0.5493) < 0.001
+          and abs(r21_7[0] - (-1.5159)) < 0.002 and abs(r21_7[1] - (-0.0517)) < 0.002,
+          "Confirmed B7-21 unstable zero z=-1.516 absorbed into Phi(z) -> 2-beat deadbeat!")
+
     return results
 
 

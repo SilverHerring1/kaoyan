@@ -18,6 +18,21 @@ EXCLUDE_TOP = {".git", ".env", ".env.local", "__pycache__", ".venv", "tmp", "sta
 EXCLUDE_FILENAMES = {"CONTENT_SPEC.md"}
 EXCLUDE_REL_PREFIXES = ("data/raw", "scripts/__pycache__")
 STALE_FILES_TO_REMOVE = (".github/workflows/pages.yml",)
+TEXT_SUFFIXES = {
+    ".json", ".js", ".css", ".html", ".md", ".py", ".txt", ".yml", ".yaml",
+    ".svg", ".xml", ".csv", ".tsv", ".sh", ".ps1",
+}
+TEXT_NAMES = {".gitignore", ".gitattributes", ".nojekyll", ".env.example"}
+
+
+def copy_normalized(src_file: Path, dst_file: Path) -> None:
+    """Copy file to target repo, normalizing CRLF/CR to LF for text files to match .gitattributes."""
+    if src_file.suffix.lower() in TEXT_SUFFIXES or src_file.name in TEXT_NAMES:
+        raw = src_file.read_bytes()
+        norm = raw.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+        dst_file.write_bytes(norm)
+    else:
+        shutil.copy2(src_file, dst_file)
 
 
 def should_exclude(rel: Path) -> bool:
@@ -42,22 +57,23 @@ def sync(src: Path = WORKSPACE_DIR, dst: Path = DEFAULT_REPO_DIR) -> int:
         raise FileNotFoundError(f"Target GitHub repo directory does not exist: {dst}")
 
     copied = 0
-    # Copy .gitignore first so git immediately ignores local untracked patterns
-    gitignore = src / ".gitignore"
-    if gitignore.exists():
-        shutil.copy2(gitignore, dst / ".gitignore")
-        copied += 1
+    # Copy .gitignore and .gitattributes first so git immediately applies ignore & LF rules
+    for meta_name in (".gitignore", ".gitattributes"):
+        meta_file = src / meta_name
+        if meta_file.exists():
+            copy_normalized(meta_file, dst / meta_name)
+            copied += 1
 
     for path in sorted(src.rglob("*")):
         rel = path.relative_to(src)
-        if rel.as_posix() == ".gitignore" or should_exclude(rel):
+        if rel.as_posix() in {".gitignore", ".gitattributes"} or should_exclude(rel):
             continue
         target = dst / rel
         if path.is_dir():
             target.mkdir(parents=True, exist_ok=True)
         else:
             target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(path, target)
+            copy_normalized(path, target)
             copied += 1
 
     # Remove obsolete GitHub Actions Pages workflow so pure branch deploy runs cleanly
