@@ -38,10 +38,12 @@ def check_latex_delimiters(text: str, ctx: str, errors: list[str]) -> None:
     if dd_count % 2 != 0:
         errors.append(f"{ctx}: unbalanced '$$' display math delimiters")
         return
-    # Extract $$...$$ blocks and check brace balance
+    # Extract $$...$$ blocks and check brace balance & unescaped & inside \text{}
     for idx, block in enumerate(re.findall(r"\$\$(.*?)\$\$", cleaned, flags=re.S)):
         if block.replace(r"\{", "").replace(r"\}", "").count("{") != block.replace(r"\{", "").replace(r"\}", "").count("}"):
             errors.append(f"{ctx}: unbalanced braces in display math block #{idx + 1}")
+        if re.search(r"\\text\{[^{}]*?(?<!\\)&[^{}]*?\}", block):
+            errors.append(f"{ctx}: unescaped '&' inside \\text{{...}} in display math block #{idx + 1} (breaks KaTeX aligned)")
     # Remove $$...$$ and check single $
     rem = re.sub(r"\$\$.*?\$\$", "", cleaned, flags=re.S)
     if rem.count("$") % 2 != 0:

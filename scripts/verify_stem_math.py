@@ -2146,6 +2146,76 @@ def run_all_checks() -> list[tuple[str, bool, str]]:
           and sp.expand((s_c * sp.eye(2) - (A_b27 - b_b27 * K_b27)).det() - (s_c**2 + sp.Rational(1414, 100) * s_c + 100)) == 0
           and sp.expand((s_c * sp.eye(2) - (A_b27 - H_b27 * c_b27)).det() - (s_c + 10)**2) == 0)
 
+    # --- Ch09 Full Textbook Edition (Main Ex 9-1..9-15, Guide Ex 9-1..9-16, A9-4..A9-19, B9-7..B9-16) ---
+    # 1. Main Ex 9-4, 9-5, 9-6 (MAJOR erratum on Main 9-6: exact w=14.524, A=0.657 vs book 7.24/1.24!)
+    def _g96(wv):
+        z = 15.0 * (math.cos(0.1 * wv) - 1j * math.sin(0.1 * wv)) / (1.0 + 2j * wv)
+        return z
+    lo96, hi96 = 14.0, 16.0
+    tgt96 = -math.pi * 0.1 / 4.0
+    for _ in range(50):
+        mid96 = (lo96 + hi96) / 2.0
+        if _g96(mid96).imag < tgt96:
+            lo96 = mid96
+        else:
+            hi96 = mid96
+    w96_ex = (lo96 + hi96) / 2.0
+    g96_ex = _g96(w96_ex)
+    A96_ex = math.sqrt((4.0 * abs(g96_ex.real) / math.pi)**2 + 0.01)
+    check("ch09_main_ex9_1_to_9_6",
+          abs(math.sqrt(50) - 7.0711) < 0.001
+          and abs(-1.0 / 22.5 - (-0.04444)) < 0.0001
+          and abs(w96_ex - 14.5243) < 0.002 and abs(A96_ex - 0.6571) < 0.002
+          and abs(g96_ex.real - (-0.5101)) < 0.002,
+          "Confirmed Main 9-6 EXACT w=14.524 rad/min, A=0.657 C at P(-0.510,-0.0785) (book P.408-409 typo w=7.24, A=1.24 -> 2x off!)")
+
+    # 2. Guide Ex 9-4 (parabolic sign typos!) & Guide Ex 9-10 (PR=2 RHP poles!)
+    r910 = [complex(r.evalf()) for r in sp.nroots(sp.Poly(sp.expand(s_c * (sp.Rational(1, 10) * s_c + 1) * (s_c + 1) + 20), s_c))]
+    pr910 = sum(1 for r in r910 if r.real > 0)
+    w910_sq = [float(r.evalf()) for r in sp.solve(21 - sp.Rational(101, 100) * s_c - sp.Rational(1, 100) * s_c**2, s_c) if float(r.evalf()) > 0][0]
+    w910_v = math.sqrt(w910_sq)
+    g910_v = ((0.1j * w910_v + 1) * (1j * w910_v + 1)) / (1j * w910_v * (0.1j * w910_v + 1) * (1j * w910_v + 1) + 20)
+    check("ch09_guide_ex9_4_and_9_10",
+          (4 + 6 + 2) == 12
+          and (-( (-2)**2 ) + 6) == 2 and (( (-2)**2 ) - 2) == 2 and ((1**2) - 2) == -1
+          and pr910 == 2 and g910_v.real < -1.42,
+          "Confirmed Guide 9-4 parabolic signs e=-e'^2+6 & e=+e'^2-2 (P.229 flipped!) and Guide 9-10 PR=2 RHP poles")
+
+    # 3. Exercises A9-4 ~ A9-13 (phase plane singular points, describing function A9-10..A9-13)
+    w_s = sp.Symbol("w_s", positive=True)
+    g910_e = sp.simplify(((1 - sp.I * w_s) / (sp.I * w_s * (1 + sp.I * w_s))).subs(w_s, 1))
+    g911_e = sp.simplify((10 / (sp.I * w_s * (1 + sp.I * w_s) * (2 + sp.I * w_s))).subs(w_s, sp.sqrt(2)))
+    check("ch09_ex_a9_4_to_13",
+          g910_e == -1 and abs(4 / math.pi - 1.2732) < 0.001 and abs(2 * math.sqrt(2) / math.pi - 0.9003) < 0.001
+          and g911_e == sp.Rational(-5, 3) and abs(20 / (3 * math.pi) - 2.1221) < 0.001
+          and abs(3 * math.pi / 4 - 2.3562) < 0.001)
+
+    # 4. Exercises A9-14 ~ A9-19 (captures Guide P.238 A9-15(2) dropped coeff 3 & A9-19 discrete unstable!)
+    a9, b9, c9 = sp.symbols("a9 b9 c9", real=True)
+    P915_1 = sp.Matrix([[a9, 1, -1], [1, b9, -2], [-1, -2, c9]])
+    P915_2_m = sp.Matrix([[1, 1, -1], [1, 3, 1], [-1, 1, a9]])
+    P915_2_g = sp.Matrix([[1, 1, -1], [1, 1, 1], [-1, 1, a9]])
+    A916_1 = sp.Matrix([[0, 1], [-2, -3]])
+    P916_1 = sp.Matrix([[sp.Rational(5, 4), sp.Rational(1, 4)], [sp.Rational(1, 4), sp.Rational(1, 4)]])
+    Az919 = sp.Matrix([[1, 3, 0], [-3, -2, -3], [1, 0, 0]])
+    check("ch09_ex_a9_14_to_19",
+          sp.expand(P915_1.det() - (a9 * b9 * c9 - 4 * a9 - b9 - c9 + 4)) == 0
+          and P915_2_m[:2, :2].det() == 2 and sp.expand(P915_2_m.det() - (2 * a9 - 6)) == 0
+          and P915_2_g[:2, :2].det() == 0
+          and A916_1.T * P916_1 + P916_1 * A916_1 == -sp.eye(2)
+          and any(abs(complex(r.evalf())) > 2.5 for r in Az919.eigenvals().keys()),
+          "Confirmed A9-15(2) main 3*x2^2 -> a>3 vs Guide P.238 typo x2^2 -> Delta2=0 never PD!")
+
+    # 5. Self-tests B9-7 ~ B9-16 (captures Appendix P.263 B9-15 MAJOR erratum: lambda=+1 strictly UNSTABLE!)
+    c_b10 = [sp.simplify((1 / (sp.pi * A_amp)) * sp.integrate((A_amp * sp.sin(th))**n_p * sp.sin(th), (th, 0, 2 * sp.pi))) for n_p in (1, 3, 5, 7)]
+    Az_b16 = sp.Matrix([[sp.Rational(4, 5), sp.Rational(-2, 5)], [sp.Rational(6, 5), sp.Rational(1, 5)]])
+    P_b16 = sp.Matrix([[sp.Rational(4775, 792), sp.Rational(-1675, 1584)], [sp.Rational(-1675, 1584), sp.Rational(21125, 9504)]])
+    check("ch09_selftest_b9_7_to_16",
+          c_b10 == [1, sp.Rational(3, 4) * A_amp**2, sp.Rational(5, 8) * A_amp**4, sp.Rational(35, 64) * A_amp**6]
+          and set(sp.Matrix([[0, 1], [2, -1]]).eigenvals().keys()) == {1, -2}
+          and Az_b16.T * P_b16 * Az_b16 - P_b16 == -sp.eye(2) and P_b16[0, 0] > 0 and P_b16.det() > 0,
+          "Confirmed B9-15 eigs={+1,-2} STRICTLY UNSTABLE (Appendix P.263 erroneously called it Lyapunov stable!)")
+
     return results
 
 
