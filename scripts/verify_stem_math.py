@@ -2042,6 +2042,110 @@ def run_all_checks() -> list[tuple[str, bool, str]]:
           and abs(r21_7[0] - (-1.5159)) < 0.002 and abs(r21_7[1] - (-0.0517)) < 0.002,
           "Confirmed B7-21 unstable zero z=-1.516 absorbed into Phi(z) -> 2-beat deadbeat!")
 
+    # --- Ch08 Full Textbook Edition (Main Ex 8-1..8-39, Guide Ex 8-19, A8-1..A8-29, B8-17..B8-27) ---
+    # 1. Main Ex 8-19, 8-26, 8-27, 8-29 (captures P.353 Apcl[2,2]=+191/36 erratum!)
+    Ap829 = sp.Matrix([[1, 6, -3], [-1, -1, 1], [-2, 2, 0]])
+    bp829 = sp.Matrix([[1], [1], [1]])
+    K829 = sp.Matrix([[175, 232, -191]]) / 36
+    cl829 = sp.expand((s_c * sp.eye(3) - (Ap829 - bp829 * K829)).det())
+    check("ch08_main_ex8_19_to_8_29",
+          sp.simplify(cl829 - (s_c + 4) * ((s_c + 1)**2 + 1)) == 0
+          and 36 * (Ap829 - bp829 * K829)[2, 2] == 191,
+          "Confirmed Main 8-29 P.353 Apcl[2,2]=+191/36 (book typo -191/36!)")
+
+    # 2. Main Ex 8-33, 8-34 (MAJOR erratum A11-hA21!), 8-35, 8-36, Guide Ex 8-19
+    A834_11 = sp.Matrix([[0, 0], [1, 0]])
+    A834_21 = sp.Matrix([[1, 1]])
+    h834 = sp.Matrix([[12], [-5]])
+    Az836 = sp.Matrix([[1, 0, 0], [0, 2, -2], [-1, 1, 0]])
+    Bz836 = sp.Matrix([[1], [0], [1]])
+    u836 = sp.Matrix.hstack(Az836**2 * Bz836, Az836 * Bz836, Bz836).inv() * (-Az836**3 * sp.Matrix([[2], [1], [0]]))
+    G819_g = sp.Matrix([[-2, 2, -1], [0, -2, 0], [1, -4, 0]])
+    H819_g = sp.Matrix([[0, 0], [0, 1], [1, 0]])
+    check("ch08_main_ex8_33_to_8_39",
+          sp.expand((s_c * sp.eye(2) - (A834_11 - h834 * A834_21)).det() - (s_c + 3) * (s_c + 4)) == 0
+          and (A834_11 - h834 * A834_21) == sp.Matrix([[-12, -12], [6, 5]])
+          and u836 == sp.Matrix([[-5], [11], [-8]])
+          and (-G819_g.inv() * H819_g) == sp.Matrix([[-1, 2], [0, sp.Rational(1, 2)], [2, -3]]),
+          "Confirmed Main 8-34 TRUE A11-hA21=[[-12,-12],[6,5]] (book P.369-370 swapped h1/h2 -> unstable [[5,5],[-11,-12]]!)")
+
+    # 3. Exercises A8-1 ~ A8-10 (controllability/observability/discretization)
+    A89_m = sp.Matrix([[0, sp.pi], [-sp.pi, 0]])
+    b89_m = sp.Matrix([[0], [1]])
+    G89_1 = sp.simplify(sp.exp(A89_m * 1))
+    H89_1 = sp.simplify(sp.integrate(sp.exp(A89_m * t_r) * b89_m, (t_r, 0, 1)))
+    G89_2 = sp.simplify(sp.exp(A89_m * 2))
+    H89_2 = sp.simplify(sp.integrate(sp.exp(A89_m * t_r) * b89_m, (t_r, 0, 2)))
+    check("ch08_ex_a8_1_to_10",
+          sp.factor(s_c**3 + 7 * s_c**2 + 14 * s_c + 8) == (s_c + 1) * (s_c + 2) * (s_c + 4)
+          and ctrl_mat(G89_1, H89_1).rank() == 1 and ctrl_mat(G89_2, H89_2).rank() == 0
+          and H89_1 == sp.Matrix([[2 / sp.pi], [0]]) and H89_2 == sp.zeros(2, 1))
+
+    # 4. Exercises A8-11 ~ A8-19 (canonical/decomp/pole placement; captures A8-17/18 sign convention!)
+    A815_m = sp.Matrix([[-2, -3], [4, -9]])
+    b815_m = sp.Matrix([[3], [1]])
+    K815_m = sp.Matrix([[sp.Rational(-101, 18), sp.Rational(47, 6)]])
+    A818_m = sp.Matrix([[0, 1, 0], [0, -1, 1], [0, -1, -10]])
+    b818_m = sp.Matrix([[0], [0], [10]])
+    K818_m = sp.Matrix([[4, sp.Rational(6, 5), sp.Rational(1, 10)]])
+    A819_m = sp.Matrix([[-1, 0, 0], [0, -2, -2], [-1, 0, -3]])
+    b819_m = sp.Matrix([[1], [1], [1]])
+    K819_m = sp.Matrix([[7, 0, -1]])
+    check("ch08_ex_a8_11_to_19",
+          sp.expand((s_c * sp.eye(2) - (A815_m - b815_m * K815_m)).det() - ((s_c + 1)**2 + 4)) == 0
+          and sp.expand((s_c * sp.eye(3) - (A818_m - b818_m * K818_m)).det() - (s_c + 10) * ((s_c + 1)**2 + 3)) == 0
+          and sp.expand((s_c * sp.eye(3) - (A819_m - b819_m * K819_m)).det() - (s_c + 2) * (s_c + 4) * (s_c + 6)) == 0)
+
+    # 5. Exercises A8-20 ~ A8-25 (design, LQR A8-22, observers A8-23..25)
+    A822_m = sp.Matrix([[0, 0], [1, 0]])
+    B822_m = sp.Matrix([[1], [0]])
+    P822_m = sp.Matrix([[1, 1], [1, 2]])
+    are822 = -P822_m * A822_m - A822_m.T * P822_m + P822_m * B822_m * sp.Matrix([[2]]) * B822_m.T * P822_m - sp.Matrix([[0, 0], [0, 2]])
+    A825_2 = sp.Matrix([[1, 0, 1], [1, 0, 0], [0, 1, 0]])
+    C825_2 = sp.Matrix([[1, 0, 0], [0, 1, 0]])
+    H825_2 = sp.Matrix([[0, 37], [0, 10], [0, 28]])
+    check("ch08_ex_a8_20_to_25",
+          are822 == sp.zeros(2, 2)
+          and sp.expand((s_c * sp.eye(3) - (A825_2 - H825_2 * C825_2)).det() - (s_c + 3)**3) == 0)
+
+    # 6. Exercises A8-26 ~ A8-29 (captures A8-27 H_P=[11,6,-5] & A8-28 K=[2.2,-1.6] MAJOR errata!)
+    A826_m = sp.Matrix([[1, 0, 0], [0, 2, 1], [0, 0, 2]])
+    c826_m = sp.Matrix([[1, 1, 0]])
+    H826_m = sp.Matrix([[120], [-103], [210]])
+    A827_m = sp.Matrix([[1, 2, 0], [3, -1, 1], [0, 2, 0]])
+    c827_m = sp.Matrix([[1, 1, 1]])
+    H827_m = sp.Matrix([[11], [6], [-5]])
+    A828_m = sp.Matrix([[-2, 1], [1, -3]])
+    b828_m = sp.Matrix([[1], [2]])
+    K828_m = sp.Matrix([[sp.Rational(11, 5), sp.Rational(-8, 5)]])
+    A829_aug = sp.Matrix([[0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1], [0, 0, -2, -2]])
+    b829_aug = sp.Matrix([[0], [0], [1], [2]])
+    K829_im = sp.Matrix([[50, sp.Rational(95, 2), sp.Rational(45, 2), sp.Rational(-5, 4)]])
+    check("ch08_ex_a8_26_to_29",
+          sp.expand((s_c * sp.eye(3) - (A826_m - H826_m * c826_m)).det() - (s_c + 3) * (s_c + 4) * (s_c + 5)) == 0
+          and sp.expand((s_c * sp.eye(3) - (A827_m - H827_m * c827_m)).det() - (s_c + 4)**3) == 0
+          and sp.expand((s_c * sp.eye(2) - (A828_m - b828_m * K828_m)).det() - ((s_c + 2)**2 + 4)) == 0
+          and sp.expand((s_c * sp.eye(4) - (A829_aug - b829_aug * K829_im)).det() - ((s_c + 1)**2 + 1) * (s_c + 10)**2) == 0,
+          "Confirmed A8-27 TRUE H=[11,6,-5]^T (Appendix [36.2,31.8,16.4]^T unstable!) & A8-28 TRUE K=[2.2,-1.6] (Appendix [2.5,-0.5] wrong!)")
+
+    # 7. Self-tests B8-17 ~ B8-27
+    A_b27 = sp.Matrix([[0, 1], [0, -5]])
+    b_b27 = sp.Matrix([[0], [1]])
+    c_b27 = sp.Matrix([[100, 0]])
+    K_b27 = sp.Matrix([[100, sp.Rational(914, 100)]])
+    H_b27 = sp.Matrix([[sp.Rational(15, 100)], [sp.Rational(25, 100)]])
+    r_b26 = sp.Symbol("r_b26", positive=True)
+    P_b26 = sp.Matrix([[sp.sqrt(2) * r_b26**sp.Rational(1, 4), sp.sqrt(r_b26)], [sp.sqrt(r_b26), sp.sqrt(2) * r_b26**sp.Rational(3, 4)]])
+    are_b26 = sp.simplify(-P_b26 * sp.Matrix([[0, 1], [0, 0]]) - sp.Matrix([[0, 0], [1, 0]]) * P_b26
+                          + P_b26 * sp.Matrix([[0], [1]]) * (1 / r_b26) * sp.Matrix([[0, 1]]) * P_b26 - sp.Matrix([[1, 0], [0, 0]]))
+    check("ch08_selftest_b8_17_to_27",
+          sp.Matrix([[1, 2], [0, 1]])**100 == sp.Matrix([[1, 200], [0, 1]])
+          and ctrl_mat(sp.Matrix([[1, 2, -1], [0, 1, 0], [1, 0, 3]]), sp.Matrix([[1, 0], [0, 1], [0, 0]])).rank() == 3
+          and ctrl_mat(sp.Matrix([[1, 2, -1], [0, 1, 0], [1, -4, 3]]), sp.Matrix([[0], [0], [1]])).rank() == 2
+          and are_b26 == sp.zeros(2, 2)
+          and sp.expand((s_c * sp.eye(2) - (A_b27 - b_b27 * K_b27)).det() - (s_c**2 + sp.Rational(1414, 100) * s_c + 100)) == 0
+          and sp.expand((s_c * sp.eye(2) - (A_b27 - H_b27 * c_b27)).det() - (s_c + 10)**2) == 0)
+
     return results
 
 
