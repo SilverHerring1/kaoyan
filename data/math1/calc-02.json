@@ -80,7 +80,7 @@
       "title": "收敛数列唯一性、全局有界性、保号性（脱帽/戴帽法）与四则运算规则",
       "examWeight": "core",
       "prompt": "默写收敛数列三大定理（唯一性、全局有界性、保号性）、脱帽/戴帽不等号变换铁律及极限四则运算法则：",
-      "formulaLatex": "$$\\begin{aligned}&\\text{① 定理 2（唯一性）：}\\; \\text{若 }\\lim_{n\\to\\infty}x_n = a\\text{ 存在，则 }a\\text{ 唯一。} \\\\&\\text{② 定理 3（全局有界性）：}\\; \\text{若 }\\{x_n\\}\\text{ 收敛，则 }\\exists M>0,\\;\\forall n\\in\\mathbb{N}_+,\\;|x_n|\\le M\\text{。} \\\\&\\text{③ 定理 4（保号性 · 脱帽/戴帽法）：} \\\\&\\qquad \\text{脱帽（严}\\to\\text{严）：}\\; \\lim_{n\\to\\infty}x_n = a > b\\;(<b) \\implies \\exists N>0,\\;n>N\\text{ 时 }x_n > b\\;(<b) \\\\&\\qquad \\text{戴帽（非严}\\to\\text{非严）：}\\; n>N\\text{ 时 }x_n\\ge b\\;(\\le b)\\text{ 且 }\\lim_{n\\to\\infty}x_n=a\\text{ 存在} \\implies a\\ge b\\;(\\le b) \\\\&\\text{④ 四则运算（}\\lim x_n=a,\\;\\lim y_n=b\\text{）：}\\; \\lim(x_n\\pm y_n)=a\\pm b,\\quad \\lim(x_n y_n)=ab,\\quad \\lim\\frac{x_n}{y_n}=\\frac{a}{b}\\;(b\\ne 0)\\end{aligned}$$",
+      "formulaLatex": "$$\\begin{aligned}&\\text{① 定理 2（唯一性）：}\\; \\text{若 }\\lim_{n\\to\\infty}x_n = a\\text{ 存在，则 }a\\text{ 唯一。} \\\\&\\text{② 定理 3（全局有界性）：}\\; \\text{若 }\\{x_n\\}\\text{ 收敛，则 }\\exists M>0,\\;\\forall n\\in\\mathbb{N}_+,\\;|x_n|\\le M\\text{。} \\\\&\\text{③ 定理 4（保号性 / 脱帽戴帽法）：} \\\\&\\qquad \\text{脱帽（严}\\to\\text{严）：}\\; \\lim_{n\\to\\infty}x_n = a > b\\;(<b) \\implies \\exists N>0,\\;n>N\\text{ 时 }x_n > b\\;(<b) \\\\&\\qquad \\text{戴帽（非严}\\to\\text{非严）：}\\; n>N\\text{ 时 }x_n\\ge b\\;(\\le b)\\text{ 且 }\\lim_{n\\to\\infty}x_n=a\\text{ 存在} \\implies a\\ge b\\;(\\le b) \\\\&\\text{④ 四则运算（}\\lim x_n=a,\\;\\lim y_n=b\\text{）：}\\; \\lim(x_n\\pm y_n)=a\\pm b,\\quad \\lim(x_n y_n)=ab,\\quad \\lim\\frac{x_n}{y_n}=\\frac{a}{b}\\;(b\\ne 0)\\end{aligned}$$",
       "symbols": [
         {
           "sym": "逆否命题（定理 3）",

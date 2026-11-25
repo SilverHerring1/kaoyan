@@ -478,7 +478,14 @@ function getSharedRefDrawer() {
 
 function extractSvgTitle(svgStr, fallback) {
   const m = String(svgStr || '').match(/<title>([\s\S]*?)<\/title>/i);
-  return m ? m[1].trim() : fallback;
+  if (!m) return fallback;
+  return m[1]
+    .trim()
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;|&apos;/g, "'")
+    .replace(/&amp;/g, '&');
 }
 
 function renderFigureBlock(item, { inDrawer = false } = {}) {

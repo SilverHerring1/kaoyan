@@ -38,12 +38,14 @@ def check_latex_delimiters(text: str, ctx: str, errors: list[str]) -> None:
     if dd_count % 2 != 0:
         errors.append(f"{ctx}: unbalanced '$$' display math delimiters")
         return
-    # Extract $$...$$ blocks and check brace balance & unescaped & inside \text{}
+    # Extract $$...$$ blocks and check brace balance, unescaped & and Unicode middle dot inside \text{}
     for idx, block in enumerate(re.findall(r"\$\$(.*?)\$\$", cleaned, flags=re.S)):
         if block.replace(r"\{", "").replace(r"\}", "").count("{") != block.replace(r"\{", "").replace(r"\}", "").count("}"):
             errors.append(f"{ctx}: unbalanced braces in display math block #{idx + 1}")
         if re.search(r"\\text\{[^{}]*?(?<!\\)&[^{}]*?\}", block):
             errors.append(f"{ctx}: unescaped '&' inside \\text{{...}} in display math block #{idx + 1} (breaks KaTeX aligned)")
+        if re.search(r"\\text\{[^{}]*·[^{}]*\}", block):
+            errors.append(f"{ctx}: Unicode middle dot '·' inside \\text{{...}} in display math block #{idx + 1} (renders red \\cdotp in KaTeX)")
     # Remove $$...$$ and check single $
     rem = re.sub(r"\$\$.*?\$\$", "", cleaned, flags=re.S)
     if rem.count("$") % 2 != 0:
@@ -53,6 +55,8 @@ def check_latex_delimiters(text: str, ctx: str, errors: list[str]) -> None:
         b = block.replace(r"\{", "").replace(r"\}", "")
         if b.count("{") != b.count("}"):
             errors.append(f"{ctx}: unbalanced braces in inline math #{idx + 1}: {block[:40]}")
+        if re.search(r"\\text\{[^{}]*·[^{}]*\}", block):
+            errors.append(f"{ctx}: Unicode middle dot '·' inside \\text{{...}} in inline math #{idx + 1} (renders red \\cdotp in KaTeX)")
 
 
 def validate_subject(subj: str) -> tuple[int, int, list[str]]:

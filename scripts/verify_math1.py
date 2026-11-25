@@ -528,6 +528,82 @@ def run_all_checks() -> list[tuple[str, bool, str]]:
           d4_i46 == 0 and v47i == -2 and v48i == 8 * sp.E and v49i == sp.Rational(-1, 27),
           f"Ex4.7 y''(0)={v47i}, Ex4.8={v48i}, Ex4.9={v49i}")
 
+    # ==================== Calculus Lecture 5: Geometric Applications of Differentiation ====================
+    a_c5 = sp.Symbol("a_c5", real=True)
+
+    # 32. zy30 Ex 5.3 & Ex 5.4 (implicit extremum + n-th deriv extremum, P.144-145)
+    F53 = y**3 + x * y**2 + x**2 * y + 6
+    y1_53 = sp.simplify(-sp.diff(F53, x) / sp.diff(F53, y))
+    y2_53 = sp.simplify(sp.diff(y1_53, x) + sp.diff(y1_53, y) * y1_53)
+    f54 = (4 + x) * sp.exp(x)
+    stat54 = sp.solve(sp.diff(f54, x), x)[0]
+    check("m1_c05_ex_zy30_03_04",
+          y1_53.subs({x: 1, y: -2}) == 0 and y2_53.subs({x: 1, y: -2}) == sp.Rational(4, 9)
+          and stat54 == -5 and sp.diff(f54, x, 2).subs(x, stat54) == sp.exp(-5)
+          and f54.subs(x, stat54) == -sp.exp(-5))
+
+    # 33. zy30 Ex 5.6 - Ex 5.8 (inflection & extrema counts, P.149-151)
+    y57 = (x - 1) * (x - 2)**2 * (x - 3)**3 * (x - 4)**4
+    y57_d2 = sp.diff(y57, x, 2)
+    r57_d2 = sp.real_roots(y57_d2, x)
+    sign_chg_57 = len([r for r in set(r57_d2) if y57_d2.subs(x, r + sp.Rational(1, 1000)) * y57_d2.subs(x, r - sp.Rational(1, 1000)) < 0])
+    r58_d2 = sp.real_roots(sp.diff((x - 1)**2 * (x - 3)**3, x, 2), x)
+    r58b_d1 = sp.real_roots(sp.diff((x - 1)**2 * (x - 3)**2, x), x)
+    r58b_d2 = sp.real_roots(sp.diff((x - 1)**2 * (x - 3)**2, x, 2), x)
+    check("m1_c05_ex_zy30_06_08",
+          y57_d2.subs(x, 3) == 0 and sp.diff(y57, x, 3).subs(x, 3) != 0
+          and sign_chg_57 == 6 and len(r58_d2) == 3 and len(r58b_d1) == 3 and len(r58b_d2) == 2,
+          f"Ex5.7 inflections={sign_chg_57}, Ex5.8={len(r58_d2)}, Ex5.8(2) ext/inf={len(r58b_d1)}/{len(r58b_d2)}")
+
+    # 34. zy30 Ex 5.9 & Ex 5.10 (3 asymptotes + max of n^(1/n), P.153-156)
+    f59 = 1 / x + sp.log(1 + sp.exp(x))
+    check("m1_c05_ex_zy30_09_10",
+          sp.limit(f59, x, 0, "+") == sp.oo and sp.limit(f59, x, -sp.oo) == 0
+          and sp.limit(f59 / x, x, sp.oo) == 1 and sp.limit(f59 - x, x, sp.oo) == 0
+          and sp.Integer(3)**2 > sp.Integer(2)**3)
+
+    # 35. zy30 Ex 5.11 - Ex 5.15 (curve sketching & astroid curvature, P.156-160)
+    d2_511 = sp.simplify(sp.diff((1 - x**2)**sp.Rational(3, 2), x, 2) - 3 * (2 * x**2 - 1) / sp.sqrt(1 - x**2))
+    l512_0 = sp.limit(xp**xp, xp, 0, "+")
+    d2_512 = sp.simplify(sp.diff(xp**xp, xp, 2) - xp**xp * ((1 + sp.log(xp))**2 + 1 / xp))
+    d2_513 = sp.simplify(sp.diff(sp.exp(x) / x, x, 2) - sp.exp(x) * (x**2 - 2 * x + 2) / x**3)
+    dy515 = sp.simplify(sp.diff(sp.sin(t)**3, t) / sp.diff(sp.cos(t)**3, t))
+    d2y515 = sp.simplify(sp.diff(dy515, t) / sp.diff(sp.cos(t)**3, t))
+    k515 = sp.simplify((sp.Abs(d2y515) / (1 + dy515**2)**sp.Rational(3, 2)).subs(t, sp.pi / 4))
+    check("m1_c05_ex_zy30_11_15",
+          d2_511 == 0 and l512_0 == 1 and d2_512 == 0 and d2_513 == 0 and k515 == sp.Rational(2, 3),
+          f"astroid k(pi/4)={k515}")
+
+    # 36. zy18 Intensive Ex 5.1 - Ex 5.3 (P.42-44)
+    f_i51 = sp.sin(x) + x**2
+    u_i51 = x - f_i51 / sp.diff(f_i51, x)
+    l_i51 = sp.limit(x * f_i51.subs(x, u_i51) / (u_i51 * f_i51), x, 0)
+    u_i51_lin = sp.simplify(x - x / sp.diff(x, x))
+    f_i52 = (x**2 + a_c5) * sp.exp(x)
+    C53 = (x - 1)**2 + y**2 - 2
+    y1_c53 = -sp.diff(C53, x) / sp.diff(C53, y)
+    y2_c53 = sp.diff(y1_c53, x) + sp.diff(y1_c53, y) * y1_c53
+    check("m1_c05_ex_zy18_01_03",
+          l_i51 == 1 and u_i51_lin == 0
+          and sp.simplify(sp.diff(f_i52, x) / sp.exp(x) - (x**2 + 2 * x + a_c5)) == 0
+          and sp.simplify(sp.diff(f_i52, x, 2) / sp.exp(x) - (x**2 + 4 * x + a_c5 + 2)) == 0
+          and y1_c53.subs({x: 0, y: 1}) == 1 and y2_c53.subs({x: 0, y: 1}) == -2,
+          "Ex5.1 u(f=x)=0 (u!=0 implicit); Ex5.3 y'(0)=1, y''(0)=-2")
+
+    # 37. zy18 Intensive Ex 5.5 - Ex 5.9 (P.45-47)
+    f_i55 = x * sp.log(sp.E + 1 / (x - 1))
+    f_i56 = (1 + xp)**sp.Rational(3, 2) / sp.sqrt(xp)
+    g_i57 = 3 - 6 / (sp.exp(2 * x) + 1)
+    v_i58 = sp.integrate(t / (t**2 + 2 * t + 2), (t, 0, 1))
+    exp_i58 = sp.Rational(1, 2) * sp.log(sp.Rational(5, 2)) - sp.atan(2) + sp.pi / 4
+    check("m1_c05_ex_zy18_05_09",
+          sp.limit(f_i55 / x, x, sp.oo) == 1 and sp.simplify(sp.limit(f_i55 - x, x, sp.oo) - 1 / sp.E) == 0
+          and sp.limit(f_i56 / xp, xp, sp.oo) == 1 and sp.limit(f_i56 - xp, xp, sp.oo) == sp.Rational(3, 2)
+          and sp.simplify(sp.Rational(1, 2) * sp.log((3 + g_i57) / (3 - g_i57)) - x) == 0
+          and sp.limit(g_i57, x, sp.oo) == 3 and sp.limit(g_i57, x, -sp.oo) == -3
+          and sp.simplify(v_i58 - exp_i58) == 0,
+          f"Ex5.5-5.9 all exact; Ex5.8={sp.N(v_i58, 6)}")
+
     return results
 
 
