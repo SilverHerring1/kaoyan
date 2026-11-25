@@ -1,0 +1,1495 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "calc-10",
+  "chapterNum": "高数 · 第 10 讲",
+  "chapterTitle": "一元函数积分学的应用（一）——几何应用",
+  "syllabusRef": "2027 考研数学一大纲 · 高等数学第 10 讲（27 张宇《基础30讲·高数》P.263-277上 + 《高数18讲》强化 P.105-119 全量合编）",
+  "items": [
+    {
+      "id": "m1-c10-f-01",
+      "stage": "both",
+      "section": "一、平面图形的面积（直角、参数与极坐标三大公式）",
+      "kind": "formula",
+      "title": "平面图形面积三大坐标系公式（直角坐标、参数方程与极坐标扇形微元）",
+      "examWeight": "core",
+      "prompt": "默写直角坐标系、参数方程与极坐标系下计算平面图形面积的定积分公式（注意绝对值与上下限对应）：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{① 直角坐标：}S=\\int_a^b\\bigl|y_1(x)-y_2(x)\\bigr|\\,\\mathrm{d}x\\quad(a<b)\\\\\n&\\text{② 参数方程}\\begin{cases}x=x(t)\\\\y=y(t)\\end{cases}(\\alpha\\le t\\le\\beta):\\;S=\\int_a^b|y|\\,\\mathrm{d}x=\\int_\\alpha^\\beta\\bigl|y(t)\\cdot x'(t)\\bigr|\\,\\mathrm{d}t\\;\\bigl(x(\\alpha)=a,\\;x(\\beta)=b\\bigr)\\\\\n&\\text{③ 极坐标}\\;r=r_1(\\theta),\\,r_2(\\theta)\\;(\\alpha\\le\\theta\\le\\beta):\\;S=\\frac{1}{2}\\int_\\alpha^\\beta\\bigl|r_2^2(\\theta)-r_1^2(\\theta)\\bigr|\\,\\mathrm{d}\\theta\\quad(0<\\beta-\\alpha\\le 2\\pi)\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "参数方程面积本质（基础 P.266 方法总结）",
+          "desc": "参数方程面积本质就是直角坐标公式 $S=\\int_a^b y(x)\\,\\mathrm{d}x$ 作换元 $x=x(t)$！若 $x(\\alpha)=b,\\;x(\\beta)=a$ 反向（如星形线 $x=a\\cos^3 t$ 在第一象限 $x:0\\to a$ 对应 $t:\\frac{\\pi}{2}\\to 0$），**务必保持上下限一一对应**，切勿机械套 $\\int_0^{\\frac{\\pi}{2}}$ 算成负数！"
+        },
+        {
+          "sym": "广义推广（无界区域面积）",
+          "desc": "当图形向坐标轴无穷远处延伸时（如例10.4、例10.7），上述公式直接推广为收敛的反常积分。"
+        }
+      ],
+      "figureSvg": "<svg viewBox=\"0 0 600 185\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">\n  <title>定积分微元法三大几何模型：直角/极坐标面积微元与圆盘/柱壳旋转体微元（仿基础30讲P.264-268）</title>\n  <defs>\n    <marker id=\"m1c10_arr1\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#334155\"/>\n    </marker>\n  </defs>\n  <!-- Panel 1: Polar sector -->\n  <rect x=\"6\" y=\"6\" width=\"186\" height=\"173\" rx=\"8\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"99\" y=\"24\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1e3a8a\">① 极坐标扇形微元</text>\n  <line x1=\"26\" y1=\"126\" x2=\"176\" y2=\"126\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1c10_arr1)\"/>\n  <path d=\"M 42 126 L 144 68 A 118 118 0 0 1 154 88 Z\" fill=\"#bfdbfe\" stroke=\"#2563eb\" stroke-width=\"1.6\"/>\n  <path d=\"M 42 126 L 96 95 A 62 62 0 0 1 102 106 Z\" fill=\"#ffffff\" stroke=\"#64748b\" stroke-width=\"1.2\"/>\n  <path d=\"M 118 52 Q 160 80 156 122\" fill=\"none\" stroke=\"#1d4ed8\" stroke-width=\"1.8\"/>\n  <path d=\"M 80 80 Q 108 98 106 124\" fill=\"none\" stroke=\"#475569\" stroke-width=\"1.4\" stroke-dasharray=\"3,2\"/>\n  <text x=\"34\" y=\"138\" font-size=\"10\" fill=\"#334155\">O</text>\n  <text x=\"155\" y=\"68\" font-size=\"9.5\" fill=\"#1d4ed8\">r₂(θ)</text>\n  <text x=\"108\" y=\"114\" font-size=\"9.5\" fill=\"#475569\">r₁(θ)</text>\n  <text x=\"72\" y=\"116\" font-size=\"9\" fill=\"#dc2626\">dθ</text>\n  <text x=\"99\" y=\"154\" text-anchor=\"middle\" font-size=\"10.2\" font-weight=\"700\" fill=\"#1e3a8a\">dS = ½|r₂²−r₁²| dθ</text>\n  <text x=\"99\" y=\"169\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#475569\">极轴旋转：dV = ⅔π r³ sinθ dθ</text>\n\n  <!-- Panel 2: Washer / Disk around x-axis -->\n  <rect x=\"207\" y=\"6\" width=\"186\" height=\"173\" rx=\"8\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"300\" y=\"24\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#065f46\">② 绕 x 轴：圆盘法</text>\n  <line x1=\"222\" y1=\"98\" x2=\"378\" y2=\"98\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1c10_arr1)\"/>\n  <line x1=\"236\" y1=\"138\" x2=\"236\" y2=\"42\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1c10_arr1)\"/>\n  <path d=\"M 252 72 Q 300 50 356 64\" fill=\"none\" stroke=\"#059669\" stroke-width=\"2\"/>\n  <path d=\"M 252 124 Q 300 146 356 132\" fill=\"none\" stroke=\"#059669\" stroke-width=\"1.4\" stroke-dasharray=\"3,2\"/>\n  <ellipse cx=\"304\" cy=\"98\" rx=\"8\" ry=\"38\" fill=\"#a7f3d0\" stroke=\"#059669\" stroke-width=\"1.6\" opacity=\"0.85\"/>\n  <line x1=\"304\" y1=\"98\" x2=\"304\" y2=\"60\" stroke=\"#dc2626\" stroke-width=\"1.5\"/>\n  <text x=\"316\" y=\"80\" font-size=\"9.5\" font-weight=\"700\" fill=\"#dc2626\">y(x)</text>\n  <text x=\"304\" y=\"147\" text-anchor=\"middle\" font-size=\"9\" fill=\"#065f46\">薄硬币厚 dx</text>\n  <text x=\"300\" y=\"164\" text-anchor=\"middle\" font-size=\"10.2\" font-weight=\"700\" fill=\"#065f46\">Vₓ = π∫ₐᵇ y²(x) dx</text>\n\n  <!-- Panel 3: Cylindrical Shell around y-axis -->\n  <rect x=\"408\" y=\"6\" width=\"186\" height=\"173\" rx=\"8\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"501\" y=\"24\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#9a3412\">③ 绕 y 轴：柱壳法</text>\n  <line x1=\"422\" y1=\"126\" x2=\"580\" y2=\"126\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1c10_arr1)\"/>\n  <line x1=\"476\" y1=\"138\" x2=\"476\" y2=\"38\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1c10_arr1)\"/>\n  <path d=\"M 488 76 Q 524 48 564 74\" fill=\"none\" stroke=\"#ea580c\" stroke-width=\"2\"/>\n  <rect x=\"520\" y=\"62\" width=\"12\" height=\"64\" fill=\"#fed7aa\" stroke=\"#ea580c\" stroke-width=\"1.5\"/>\n  <ellipse cx=\"476\" cy=\"62\" rx=\"48\" ry=\"10\" fill=\"none\" stroke=\"#ea580c\" stroke-width=\"1.3\" stroke-dasharray=\"3,2\"/>\n  <ellipse cx=\"476\" cy=\"126\" rx=\"48\" ry=\"8\" fill=\"none\" stroke=\"#ea580c\" stroke-width=\"1.1\" stroke-dasharray=\"3,2\"/>\n  <line x1=\"476\" y1=\"98\" x2=\"520\" y2=\"98\" stroke=\"#dc2626\" stroke-width=\"1.4\"/>\n  <text x=\"498\" y=\"94\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#dc2626\">半径 x</text>\n  <text x=\"546\" y=\"96\" font-size=\"9\" fill=\"#9a3412\">|y(x)|</text>\n  <text x=\"501\" y=\"152\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">展开长方体：2πx · |y| · dx</text>\n  <text x=\"501\" y=\"168\" text-anchor=\"middle\" font-size=\"10.2\" font-weight=\"700\" fill=\"#9a3412\">Vᵧ = 2π∫ₐᵇ x|y(x)| dx</text>\n</svg>",
+      "conditions": "① 曲线需分段光滑；求面积前应先**求交点、画草图**确定上下（或内外）边界与对称性。\n② 极坐标面积微元为小三角形 $\\mathrm{d}S=\\frac{1}{2}r(\\theta)\\cdot r(\\theta)\\mathrm{d}\\theta=\\frac{1}{2}r^2(\\theta)\\,\\mathrm{d}\\theta$，外侧系数 $\\frac{1}{2}$ 切莫漏掉！",
+      "pitfalls": "极坐标求双纽线或玫瑰线面积时，**绝对不可盲目在 $[0,2\\pi]$ 上直接积分**！例如伯努利双纽线 $r^2=a^2\\cos 2\\theta$ 仅在 $\\cos 2\\theta\\ge 0$ 时有定义，应利用对称性取单瓣/四分之一瓣 $\\theta\\in[0,\\frac{\\pi}{4}]$ 再乘以 $4$（例10.3）！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.264-266",
+        "pdfPage": 269,
+        "itemRef": "1 用定积分表达和计算平面图形的面积 (1)~(2)",
+        "crossRef": "27张宇《高数18讲》(强化) P.105 一·1 面积 (1)~(3)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy30_01_07",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-f-02",
+      "stage": "both",
+      "section": "二、旋转体的体积（圆盘法、柱壳法、斜直线通式与极坐标绕极轴）",
+      "kind": "formula",
+      "title": "旋转体体积四大王牌公式（绕 $x$ 轴、绕 $y$ 轴柱壳法、绕斜直线 (10-1) 与极坐标绕极轴）",
+      "examWeight": "core",
+      "prompt": "默写绕 $x$ 轴圆盘法、绕 $y$ 轴柱壳法、绕一般直线 $Ax+By+C=0$ 通式 (10-1) 及强化极坐标绕极轴旋转体体积公式：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{① 绕 }x\\text{ 轴（圆盘法）：}V_x=\\pi\\int_a^b y^2(x)\\,\\mathrm{d}x\\quad(a<b)\\\\\n&\\text{② 绕 }y\\text{ 轴（柱壳法）：}V_y=2\\pi\\int_a^b x|y(x)|\\,\\mathrm{d}x\\quad(0\\le a<b)\\\\\n&\\text{③ 绕定直线 }L_0:\\;Ax+By+C=0\\text{ 通式 (10-1)：}\\\\\n&\\qquad V=\\frac{\\pi}{(A^2+B^2)^{\\frac{3}{2}}}\\int_a^b\\bigl[Ax+Bf(x)+C\\bigr]^2\\bigl|Af'(x)-B\\bigr|\\,\\mathrm{d}x\\\\\n&\\text{④ 极坐标 }0\\le r\\le r(\\theta)\\;([\\alpha,\\beta]\\subset[0,\\pi])\\text{ 绕极轴（强化 P.107）：}V=\\frac{2}{3}\\pi\\int_\\alpha^\\beta r^3(\\theta)\\sin\\theta\\,\\mathrm{d}\\theta\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "轴线平移通用口诀（基础 P.268 总结 & 强化例10.12）",
+          "desc": "绕水平线 $y=c$ 旋转：$V=\\pi\\int_a^b\\bigl[(y_{\\text{远}}-c)^2-(y_{\\text{近}}-c)^2\\bigr]\\,\\mathrm{d}x$；绕竖直线 $x=c$ 旋转：$V=2\\pi\\int_a^b|x-c|\\cdot|y_{\\text{上}}-y_{\\text{下}}|\\,\\mathrm{d}x$（或把 $x,y$ 互换用 $y$ 作积分变量，如例10.6、例10.7）！"
+        },
+        {
+          "sym": "极坐标绕极轴体积（古鲁金/球壳推导）",
+          "desc": "扇形微元面积 $\\mathrm{d}S=\\frac{1}{2}r^2\\mathrm{d}\\theta$，其三角形形心距极轴高 $\\bar{y}=\\frac{2}{3}r\\sin\\theta$，故 $\\mathrm{d}V=2\\pi\\bar{y}\\,\\mathrm{d}S=\\frac{2}{3}\\pi r^3\\sin\\theta\\,\\mathrm{d}\\theta$，考前必背（强化例10.1 算心形线一步出 $\\frac{8}{3}\\pi a^3$）！"
+        }
+      ],
+      "conditions": "① 柱壳法公式 $V_y=2\\pi\\int_a^b x|y(x)|\\,\\mathrm{d}x$ 要求图形位于 $y$ 轴同侧（如 $0\\le a<b$）；若跨越 $y$ 轴需分左右或以旋转轴一侧为准（防重复旋转！）。\n② 斜直线公式 (10-1) 成立的前提是**过 $L_0$ 的任一条垂线与曲线 $L$ 至多只有一个交点**（见基础 P.269 旁注，否则须先按垂线切点拆分曲线！）。",
+      "pitfalls": "① 绕 $x$ 轴旋转两曲线 $y_1\\ge y_2\\ge 0$ 围成区域时，体积是 $\\pi\\int_a^b(y_1^2-y_2^2)\\,\\mathrm{d}x$，**绝不是** $\\pi\\int_a^b(y_1-y_2)^2\\,\\mathrm{d}x$（「大圆盘减同心小圆盘」，不是差的平方！）。\n② 极坐标公式 ④ 要求 $[\\alpha,\\beta]\\subset[0,\\pi]$（只取上半平面旋转一周，因为极轴上下对称的图形如心形线取 $[0,\\pi]$ 绕极轴旋转一周就已扫遍整个立体，切勿积到 $2\\pi$ 算成 0 或双倍！）。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.267-269",
+        "pdfPage": 272,
+        "itemRef": "2 用定积分表达和计算旋转体的体积 (1)~(3) 式(10-1)",
+        "crossRef": "27张宇《高数18讲》(强化) P.106-107 一·2 (1)~(4)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy30_01_07",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-f-03",
+      "stage": "both",
+      "section": "三~四、函数的平均值与平面曲边梯形形心坐标公式",
+      "kind": "formula",
+      "title": "连续函数平均值公式与曲边梯形形心坐标 $(\\bar{x},\\bar{y})$ 公式（形心仅数一、数二）",
+      "examWeight": "core",
+      "prompt": "默写连续函数 $f(x)$ 在 $[a,b]$ 上的平均值公式，以及平面曲边梯形 $D=\\{(x,y)\\mid 0\\le y\\le f(x),\\;a\\le x\\le b\\}$ 的形心坐标 $(\\bar{x},\\bar{y})$ 定积分公式：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{① 函数平均值（数一/二/三公共）：}\\;\\bar{y}=\\frac{1}{b-a}\\int_a^b y(x)\\,\\mathrm{d}x\\quad\\bigl(\\text{由积分中值定理知 }\\bar{y}=y(\\xi),\\;\\xi\\in[a,b]\\bigr)\\\\\n&\\text{② 均匀曲边梯形形心（仅数一、数二）：}\\;\\bar{x}=\\frac{\\displaystyle\\iint_D x\\,\\mathrm{d}\\sigma}{\\displaystyle\\iint_D\\mathrm{d}\\sigma}=\\frac{\\displaystyle\\int_a^b x f(x)\\,\\mathrm{d}x}{\\displaystyle\\int_a^b f(x)\\,\\mathrm{d}x},\\qquad \\bar{y}=\\frac{\\displaystyle\\iint_D y\\,\\mathrm{d}\\sigma}{\\displaystyle\\iint_D\\mathrm{d}\\sigma}=\\frac{\\displaystyle\\frac{1}{2}\\int_a^b f^2(x)\\,\\mathrm{d}x}{\\displaystyle\\int_a^b f(x)\\,\\mathrm{d}x}\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "一般上下双曲线区域形心推广",
+          "desc": "若 $D=\\{(x,y)\\mid g(x)\\le y\\le f(x),\\;a\\le x\\le b\\}$，则 $\\bar{x}=\\frac{\\int_a^b x[f(x)-g(x)]\\,\\mathrm{d}x}{\\int_a^b[f(x)-g(x)]\\,\\mathrm{d}x}$，$\\bar{y}=\\frac{\\frac{1}{2}\\int_a^b[f^2(x)-g^2(x)]\\,\\mathrm{d}x}{\\int_a^b[f(x)-g(x)]\\,\\mathrm{d}x}$。"
+        }
+      ],
+      "conditions": "上述形心公式假设平面薄片密度均匀（$\\rho\\equiv\\text{常数}$），此时形心与质心、重心完全重合；若薄片对称于某条直线，形心必落在该对称轴上！",
+      "pitfalls": "$\\bar{y}$ 的分子前面有系数 **$\\frac{1}{2}$**（来自对 $y$ 积分 $\\int_0^{f(x)} y\\,\\mathrm{d}y=\\frac{1}{2}f^2(x)$，或理解成竖条微元中心纵坐标为 $\\frac{1}{2}f(x)$），考场切勿漏掉 $\\frac{1}{2}$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.271-272",
+        "pdfPage": 276,
+        "itemRef": "3 函数的平均值 & 4(1) 形心坐标公式",
+        "crossRef": "27张宇《高数18讲》(强化) P.107 一·3 平均值"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy30_08_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-f-04",
+      "stage": "both",
+      "section": "四、其他几何应用 · 平面曲线的弧长（仅数一、数二）",
+      "kind": "formula",
+      "title": "平面光滑曲线弧长三大坐标系公式（直角、参数与极坐标；仅数一、数二）",
+      "examWeight": "core",
+      "prompt": "从统一弧微分 $\\mathrm{d}s=\\sqrt{(\\mathrm{d}x)^2+(\\mathrm{d}y)^2}$ 出发，默写直角坐标、参数方程与极坐标下的三大弧长公式：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{统一微元：}\\;\\mathrm{d}s=\\sqrt{(\\mathrm{d}x)^2+(\\mathrm{d}y)^2}\\\\\n&\\text{① 直角坐标 }y=y(x)\\;(a\\le x\\le b):\\;s=\\int_a^b\\sqrt{1+[y'(x)]^2}\\,\\mathrm{d}x\\quad\\Bigl(\\text{以 }y\\text{ 为参则 }\\int_c^d\\sqrt{1+[x'(y)]^2}\\,\\mathrm{d}y\\Bigr)\\\\\n&\\text{② 参数方程 }\\begin{cases}x=x(t)\\\\y=y(t)\\end{cases}(\\alpha\\le t\\le\\beta):\\;s=\\int_\\alpha^\\beta\\sqrt{[x'(t)]^2+[y'(t)]^2}\\,\\mathrm{d}t\\\\\n&\\text{③ 极坐标 }r=r(\\theta)\\;(\\alpha\\le\\theta\\le\\beta):\\;s=\\int_\\alpha^\\beta\\sqrt{[r(\\theta)]^2+[r'(\\theta)]^2}\\,\\mathrm{d}\\theta\n\\end{aligned}$$",
+      "conditions": "曲线需在对应区间上分段光滑，且下限小于上限（$\\alpha<\\beta,\\;a<b$），保证弧微分 $\\mathrm{d}s>0$ 恒正。",
+      "pitfalls": "极坐标弧长根号内是 **$r^2+(r')^2$**（绝不是 $1+(r')^2$！）；当方程给成 $x=x(y)$ 形式（如强化例10.11(2) $\\ln y+2x-\\frac{1}{2}y^2=0$）时，直接视 $y$ 为自变量用 $\\int\\sqrt{1+[x'(y)]^2}\\,\\mathrm{d}y$，一步配出完全平方！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.273",
+        "pdfPage": 278,
+        "itemRef": "4(2) 平面曲线的弧长 ①~③",
+        "crossRef": "27张宇《高数18讲》(强化) P.107 一·4 平面曲线的弧长"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy30_08_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-f-05",
+      "stage": "both",
+      "section": "四、其他几何应用 · 旋转曲面的侧面积（仅数一、数二）",
+      "kind": "formula",
+      "title": "旋转曲面侧面积三大坐标系公式（$S=2\\pi\\int|y|\\,\\mathrm{d}s$；仅数一、数二）",
+      "examWeight": "core",
+      "prompt": "从统一圆台带微元 $\\mathrm{d}S=2\\pi|y|\\,\\mathrm{d}s$ 出发，默写曲线绕 $x$ 轴旋转一周所得旋转曲面侧面积的三大坐标系公式：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{统一微元（绕 }x\\text{ 轴）：}\\;\\mathrm{d}S=2\\pi|y|\\,\\mathrm{d}s\\qquad\\bigl(\\text{若绕 }y\\text{ 轴则 }\\mathrm{d}S=2\\pi|x|\\,\\mathrm{d}s\\bigr)\\\\\n&\\text{① 直角坐标 }y=f(x)\\;(a\\le x\\le b):\\;S=2\\pi\\int_a^b|y|\\sqrt{1+(y'_x)^2}\\,\\mathrm{d}x\\\\\n&\\text{② 参数方程 }\\begin{cases}x=x(t)\\\\y=y(t)\\end{cases}(\\alpha\\le t\\le\\beta):\\;S=2\\pi\\int_\\alpha^\\beta|y(t)|\\sqrt{(x'_t)^2+(y'_t)^2}\\,\\mathrm{d}t\\\\\n&\\text{③ 极坐标 }r=r(\\theta)\\;([\\alpha,\\beta]\\subset[0,\\pi]):\\;S=2\\pi\\int_\\alpha^\\beta|r(\\theta)\\sin\\theta|\\sqrt{[r(\\theta)]^2+[r'(\\theta)]^2}\\,\\mathrm{d}\\theta\n\\end{aligned}$$",
+      "figureSvg": "<svg viewBox=\"0 0 600 180\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">\n  <title>弧微分直角三角形、旋转曲面侧面积微元与绕一般斜直线旋转垂距公式图解（仿基础30讲P.269,273-274）</title>\n  <defs>\n    <marker id=\"m1c10_arr2\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#334155\"/>\n    </marker>\n  </defs>\n  <!-- Panel 1: ds triangle & Surface band -->\n  <rect x=\"6\" y=\"6\" width=\"286\" height=\"168\" rx=\"8\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"149\" y=\"24\" text-anchor=\"middle\" font-size=\"11.8\" font-weight=\"700\" fill=\"#1e3a8a\">① 弧微分 ds 与侧面积圆台带（数一/数二）</text>\n  <!-- Triangle -->\n  <polygon points=\"28,116 112,116 112,62\" fill=\"#dbeafe\" stroke=\"#2563eb\" stroke-width=\"1.8\"/>\n  <polyline points=\"103,116 103,107 112,107\" fill=\"none\" stroke=\"#2563eb\" stroke-width=\"1.1\"/>\n  <text x=\"70\" y=\"130\" text-anchor=\"middle\" font-size=\"10\" fill=\"#1e3a8a\">dx</text>\n  <text x=\"122\" y=\"92\" font-size=\"10\" fill=\"#1e3a8a\">dy</text>\n  <text x=\"60\" y=\"84\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#dc2626\">ds</text>\n  <!-- Surface frustum -->\n  <line x1=\"148\" y1=\"100\" x2=\"278\" y2=\"100\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1c10_arr2)\"/>\n  <path d=\"M 164 68 Q 214 50 264 62\" fill=\"none\" stroke=\"#059669\" stroke-width=\"2\"/>\n  <path d=\"M 164 132 Q 214 150 264 138\" fill=\"none\" stroke=\"#059669\" stroke-width=\"1.3\" stroke-dasharray=\"3,2\"/>\n  <path d=\"M 206 58 L 222 57 L 222 143 L 206 142 Z\" fill=\"#a7f3d0\" opacity=\"0.7\" stroke=\"#059669\" stroke-width=\"1.3\"/>\n  <text x=\"214\" y=\"49\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#dc2626\">母线 ds</text>\n  <text x=\"242\" y=\"85\" font-size=\"9.5\" fill=\"#065f46\">|y|</text>\n  <text x=\"149\" y=\"150\" text-anchor=\"middle\" font-size=\"9.8\" font-weight=\"700\" fill=\"#1e3a8a\">ds = √((dx)²+(dy)²)　|　dS侧 = 2π|y| ds</text>\n  <text x=\"149\" y=\"165\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#dc2626\">红线：算体积用 dx，算侧面积必用弧微分 ds！</text>\n\n  <!-- Panel 2: Slant line rotation (10-1) -->\n  <rect x=\"304\" y=\"6\" width=\"290\" height=\"168\" rx=\"8\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"449\" y=\"24\" text-anchor=\"middle\" font-size=\"11.8\" font-weight=\"700\" fill=\"#9a3412\">② 绕一般斜直线 L₀ 旋转体积通式 (10-1)</text>\n  <line x1=\"322\" y1=\"126\" x2=\"574\" y2=\"126\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1c10_arr2)\"/>\n  <line x1=\"340\" y1=\"138\" x2=\"340\" y2=\"38\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1c10_arr2)\"/>\n  <!-- Slant axis L0 -->\n  <line x1=\"330\" y1=\"122\" x2=\"554\" y2=\"44\" stroke=\"#ea580c\" stroke-width=\"2\"/>\n  <text x=\"546\" y=\"42\" font-size=\"10\" font-weight=\"700\" fill=\"#ea580c\">L₀: Ax+By+C=0</text>\n  <!-- Curve L -->\n  <path d=\"M 380 105 C 400 50 460 40 510 60\" fill=\"#fed7aa\" fill-opacity=\"0.45\" stroke=\"#2563eb\" stroke-width=\"2\"/>\n  <text x=\"446\" y=\"44\" font-size=\"10\" font-weight=\"700\" fill=\"#1d4ed8\">L: y = f(x)</text>\n  <!-- Perpendicular r(x) -->\n  <line x1=\"444\" y1=\"50\" x2=\"455\" y2=\"79\" stroke=\"#dc2626\" stroke-width=\"1.6\"/>\n  <text x=\"466\" y=\"69\" font-size=\"9.5\" font-weight=\"700\" fill=\"#dc2626\">r(x)</text>\n  <text x=\"449\" y=\"147\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#9a3412\">V = π/(A²+B²)^(3/2) ∫ₐᵇ [Ax+Bf(x)+C]² |Af′(x)−B| dx</text>\n  <text x=\"449\" y=\"164\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#475569\">前提：过 L₀ 任一垂线与曲线 L 至多 1 个交点</text>\n</svg>",
+      "conditions": "母线曲线须不自交且不跨越旋转轴造成重叠（例如整条星形线关于 $x$ 轴上下对称，绕 $x$ 轴旋转时只需取上半支 $t\\in[0,\\pi]$，再利用左右对称取 $2\\times\\int_0^{\\frac{\\pi}{2}}$，见例10.13！）。",
+      "pitfalls": "最高频低级错误：**把侧面积公式里的弧微分 $\\mathrm{d}s=\\sqrt{1+(y')^2}\\,\\mathrm{d}x$ 漏写成 $\\mathrm{d}x$**！牢记图 10-2 红线口诀：「算旋转体积用 $\\mathrm{d}x$，算旋转侧面积必用弧微分 $\\mathrm{d}s$」！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.274",
+        "pdfPage": 279,
+        "itemRef": "4(3) 旋转曲面的面积 ①~③",
+        "crossRef": "27张宇《高数18讲》(强化) P.107 一·5 旋转曲面的面积"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy30_08_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-f-06",
+      "stage": "foundation",
+      "section": "四、其他几何应用 · 平行截面面积为已知的立体体积（仅数一、数二）",
+      "kind": "formula",
+      "title": "平行截面面积为已知的立体体积公式（旋转体体积之一般化；仅数一、数二）",
+      "examWeight": "core",
+      "prompt": "给出在区间 $[a,b]$ 上垂直于 $x$ 轴的平行截面面积为连续函数 $A(x)$ 时立体 $\\Omega$ 的体积公式：",
+      "formulaLatex": "$$V=\\int_a^b A(x)\\,\\mathrm{d}x\\qquad\\bigl(\\text{旋转体体积 }V_x=\\int_a^b\\pi f^2(x)\\,\\mathrm{d}x\\text{ 即取 }A(x)=\\pi f^2(x)\\text{ 的特例}\\bigr)$$",
+      "conditions": "截面面积 $A(x)$ 必须是真正**垂直于积分轴 $x$** 的平面截立体 $\\Omega$ 所得的精确截面积，且在 $[a,b]$ 上连续。",
+      "pitfalls": "切勿把垂直于斜轴 $L_0$ 的圆面积 $\\pi r^2(x)$ 直接硬塞进对 $x$ 的积分（斜截面实际上不是圆，只有闭合在 $y=x$ 轴上的区域才因端点相消恰等于 $\\int_a^b\\frac{\\pi}{\\sqrt{2}}(f(x)-x)^2\\,\\mathrm{d}x$，详见例10.14 深度剖析与表 10-4！）。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.275-276",
+        "pdfPage": 280,
+        "itemRef": "4(4) 平行截面面积为已知的立体体积"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy30_08_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-c-01",
+      "stage": "intensive",
+      "section": "强化二、考研基本图形的相关几何量大观（15 条经典曲线全表！）",
+      "kind": "conclusion",
+      "title": "【强化必背大观】心形线、双纽线、螺线、玫瑰线、摆线、星形线与笛卡尔叶形线全表",
+      "examWeight": "core",
+      "summary": "强化 18 讲 P.108-110 完整汇总了考研最常现身的 **15 条经典曲线**的方程、面积、绕轴体积与弧长（标 ★ 者须直接背出结果，选填 1 秒出答案、大题可作终检标尺！见表 10-1 与图 10-3）：\n$$\\text{四大星标速记口诀：心形 }\\!\\left(\\frac{3}{2}\\pi a^2,\\;\\frac{8}{3}\\pi a^3,\\;8a\\right)\\text{；摆线 }\\!\\left(3\\pi a^2,\\;5\\pi^2 a^3,\\;8a\\right)\\text{；星形 }\\!\\left(\\frac{3}{8}\\pi a^2,\\;\\frac{32\\pi}{105}a^3,\\;6a\\right)\\text{；叶形 }\\!\\left(\\frac{3}{2}a^2,\\;x+y+a=0\\right)$$",
+      "tables": [
+        {
+          "caption": "表 10-1 考研数学一 15 条基本图形几何量大观全表（强化 18 讲 P.108-110 全量转录并经 SymPy 验真）",
+          "headers": [
+            "曲线名称与方程（$a>0$）",
+            "所围面积 $S$",
+            "绕轴旋转体积 $V$",
+            "弧长 $s$（数一/数二）"
+          ],
+          "rows": [
+            [
+              "★ 心形线（横）$r=a(1\\mp\\cos\\theta)$",
+              "$\\frac{3}{2}\\pi a^2\\;(0\\le\\theta\\le 2\\pi)$",
+              "$\\frac{8}{3}\\pi a^3$（绕极轴）",
+              "$8a\\;(0\\le\\theta\\le 2\\pi)$"
+            ],
+            [
+              "心形线（竖）$r=a(1\\mp\\sin\\theta)$",
+              "$\\frac{3}{2}\\pi a^2\\;(0\\le\\theta\\le 2\\pi)$",
+              "—",
+              "$8a\\;(0\\le\\theta\\le 2\\pi)$"
+            ],
+            [
+              "伯努利双纽线 $r^2=a^2\\cos 2\\theta$",
+              "$a^2$（双叶全围）",
+              "$\\frac{\\sqrt{2}}{8}\\pi^2 a^3$（绕 $y$ 轴）",
+              "—"
+            ],
+            [
+              "伯努利双纽线 $r^2=a^2\\sin 2\\theta$",
+              "$a^2$（双叶全围）",
+              "$\\frac{\\pi^2}{4}a^3$（双叶绕极轴）",
+              "—"
+            ],
+            [
+              "阿基米德螺线 $r=a\\theta\\;(\\theta\\ge 0)$",
+              "$\\frac{4}{3}a^2\\pi^3$（$(0,2\\pi)$ 与极轴）",
+              "—",
+              "见例10.11（$a=1$ 时）"
+            ],
+            [
+              "对数螺线 $r=\\mathrm{e}^{a\\theta}$",
+              "$\\frac{1}{4a}(\\mathrm{e}^{4a\\pi}-1)$（$(0,2\\pi)$）",
+              "—",
+              "$\\frac{\\sqrt{1+a^2}}{a}(\\mathrm{e}^{2a\\pi}-1)\\;(0\\le\\theta\\le 2\\pi)$"
+            ],
+            [
+              "双曲螺线 $r\\theta=a\\;(1\\le\\theta\\le\\sqrt{3})$",
+              "$\\frac{a^2}{2}\\left(1-\\frac{\\sqrt{3}}{3}\\right)$",
+              "—",
+              "—"
+            ],
+            [
+              "三叶玫瑰线 $r=a\\sin 3\\theta$ 或 $a\\cos 3\\theta$",
+              "$\\frac{\\pi a^2}{4}$（共 3 叶）",
+              "—",
+              "—"
+            ],
+            [
+              "四叶玫瑰线 $r=a\\sin 2\\theta$ 或 $a\\cos 2\\theta$",
+              "$\\frac{\\pi a^2}{2}$（共 4 叶）",
+              "—",
+              "—"
+            ],
+            [
+              "★ 摆线一拱 $x=a(t-\\sin t),\\;y=a(1-\\cos t)$",
+              "$3\\pi a^2\\;(0\\le t\\le 2\\pi)$",
+              "$5\\pi^2 a^3$（绕 $x$ 轴）；$6\\pi^3 a^3$（绕 $y$ 轴）",
+              "$8a\\;(0\\le t\\le 2\\pi)$"
+            ],
+            [
+              "★ 星形线 $x=a\\cos^3 t,\\;y=a\\sin^3 t$（$x^{\\frac{2}{3}}+y^{\\frac{2}{3}}=a^{\\frac{2}{3}}$）",
+              "$\\frac{3}{8}\\pi a^2\\;(0\\le t\\le 2\\pi)$",
+              "$\\frac{32\\pi}{105}a^3$（绕 $x$ 轴）",
+              "$6a\\;(0\\le t\\le 2\\pi)$；侧面积 $\\frac{12}{5}\\pi a^2$"
+            ],
+            [
+              "★ 笛卡尔叶形线 $x^3+y^3-3axy=0$（$x=\\frac{3at}{1+t^3},y=\\frac{3at^2}{1+t^3}$）",
+              "$\\frac{3}{2}a^2$（第一象限叶环）",
+              "—",
+              "斜渐近线：$x+y+a=0$"
+            ]
+          ]
+        }
+      ],
+      "figureSvg": "<svg viewBox=\"0 0 600 185\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">\n  <title>强化必背四大星标考研经典曲线：心形线、摆线、星形线、笛卡尔叶形线几何量速记图（仿强化18讲P.108-110）</title>\n  <defs>\n    <marker id=\"m1c10_arr3\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"5.5\" markerHeight=\"5.5\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#475569\"/>\n    </marker>\n  </defs>\n  <!-- Card 1: Cardioid -->\n  <rect x=\"6\" y=\"6\" width=\"141\" height=\"173\" rx=\"7\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.1\"/>\n  <text x=\"76\" y=\"23\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1e3a8a\">★ 心形线</text>\n  <text x=\"76\" y=\"37\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">r = a(1 − cosθ)</text>\n  <line x1=\"18\" y1=\"88\" x2=\"132\" y2=\"88\" stroke=\"#64748b\" stroke-width=\"1\" marker-end=\"url(#m1c10_arr3)\"/>\n  <path d=\"M 94 88 C 110 66 86 48 62 56 C 34 66 34 110 62 120 C 86 128 110 110 94 88 Z\" fill=\"#dbeafe\" stroke=\"#2563eb\" stroke-width=\"1.8\"/>\n  <text x=\"98\" y=\"98\" font-size=\"8.5\" fill=\"#334155\">O</text>\n  <text x=\"76\" y=\"142\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#1e3a8a\">S = 3/2 πa²</text>\n  <text x=\"76\" y=\"156\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#059669\">Vₓ = 8/3 πa³</text>\n  <text x=\"76\" y=\"170\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#dc2626\">弧长 s = 8a</text>\n\n  <!-- Card 2: Cycloid -->\n  <rect x=\"155\" y=\"6\" width=\"141\" height=\"173\" rx=\"7\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.1\"/>\n  <text x=\"225\" y=\"23\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#065f46\">★ 摆线一拱</text>\n  <text x=\"225\" y=\"37\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#475569\">x=a(t−sin t), y=a(1−cos t)</text>\n  <line x1=\"166\" y1=\"112\" x2=\"284\" y2=\"112\" stroke=\"#64748b\" stroke-width=\"1\" marker-end=\"url(#m1c10_arr3)\"/>\n  <line x1=\"176\" y1=\"120\" x2=\"176\" y2=\"54\" stroke=\"#64748b\" stroke-width=\"1\" marker-end=\"url(#m1c10_arr3)\"/>\n  <path d=\"M 176 112 C 184 64 266 64 274 112 Z\" fill=\"#d1fae5\" stroke=\"#059669\" stroke-width=\"1.8\"/>\n  <text x=\"225\" y=\"63\" text-anchor=\"middle\" font-size=\"8.5\" fill=\"#065f46\">(πa, 2a)</text>\n  <text x=\"274\" y=\"123\" text-anchor=\"middle\" font-size=\"8.5\" fill=\"#334155\">2πa</text>\n  <text x=\"225\" y=\"142\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#1e3a8a\">S = 3πa²</text>\n  <text x=\"225\" y=\"156\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#059669\">Vₓ = 5π²a³</text>\n  <text x=\"225\" y=\"170\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#dc2626\">弧长 s = 8a</text>\n\n  <!-- Card 3: Astroid -->\n  <rect x=\"304\" y=\"6\" width=\"141\" height=\"173\" rx=\"7\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.1\"/>\n  <text x=\"374\" y=\"23\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#9a3412\">★ 星形线</text>\n  <text x=\"374\" y=\"37\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#475569\">x^(2/3) + y^(2/3) = a^(2/3)</text>\n  <line x1=\"318\" y1=\"88\" x2=\"430\" y2=\"88\" stroke=\"#64748b\" stroke-width=\"1\" marker-end=\"url(#m1c10_arr3)\"/>\n  <line x1=\"374\" y1=\"126\" x2=\"374\" y2=\"48\" stroke=\"#64748b\" stroke-width=\"1\" marker-end=\"url(#m1c10_arr3)\"/>\n  <path d=\"M 412 88 Q 374 88 374 54 Q 374 88 336 88 Q 374 88 374 122 Q 374 88 412 88 Z\" fill=\"#ffedd5\" stroke=\"#ea580c\" stroke-width=\"1.8\"/>\n  <text x=\"414\" y=\"99\" font-size=\"8.5\" fill=\"#9a3412\">a</text>\n  <text x=\"374\" y=\"142\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#1e3a8a\">S = 3/8 πa²</text>\n  <text x=\"374\" y=\"156\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#059669\">Vₓ = 32π/105 a³</text>\n  <text x=\"374\" y=\"170\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#dc2626\">弧长 s = 6a</text>\n\n  <!-- Card 4: Folium of Descartes -->\n  <rect x=\"453\" y=\"6\" width=\"141\" height=\"173\" rx=\"7\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.1\"/>\n  <text x=\"523\" y=\"23\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#7e22ce\">★ 笛卡尔叶形线</text>\n  <text x=\"523\" y=\"37\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#475569\">x³ + y³ − 3axy = 0</text>\n  <line x1=\"466\" y1=\"98\" x2=\"580\" y2=\"98\" stroke=\"#64748b\" stroke-width=\"1\" marker-end=\"url(#m1c10_arr3)\"/>\n  <line x1=\"514\" y1=\"126\" x2=\"514\" y2=\"48\" stroke=\"#64748b\" stroke-width=\"1\" marker-end=\"url(#m1c10_arr3)\"/>\n  <line x1=\"472\" y1=\"74\" x2=\"546\" y2=\"128\" stroke=\"#94a3b8\" stroke-width=\"1.2\" stroke-dasharray=\"3,2\"/>\n  <path d=\"M 514 98 C 546 98 564 60 546 56 C 534 52 514 68 514 98\" fill=\"#f3e8ff\" stroke=\"#7e22ce\" stroke-width=\"1.8\"/>\n  <path d=\"M 476 80 Q 496 96 514 98 Q 518 112 538 124\" fill=\"none\" stroke=\"#7e22ce\" stroke-width=\"1.5\"/>\n  <text x=\"523\" y=\"142\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#1e3a8a\">叶环面积 S = 3/2 a²</text>\n  <text x=\"523\" y=\"156\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#7e22ce\">渐近线：x + y + a = 0</text>\n  <text x=\"523\" y=\"170\" text-anchor=\"middle\" font-size=\"8.8\" fill=\"#475569\">参方程 3at/(1+t³)</text>\n</svg>",
+      "conditions": "注意玫瑰线叶数规律：**$r=a\\sin(k\\theta)$ 或 $a\\cos(k\\theta)$ 当 $k$ 为奇数时有 $k$ 叶（总面积 $\\frac{\\pi a^2}{4}$），当 $k$ 为偶数时有 $2k$ 叶（总面积 $\\frac{\\pi a^2}{2}$）**！",
+      "pitfalls": "双纽线 $r^2=a^2\\cos 2\\theta$ 绕 $y$ 轴旋转时，左右两瓣关于 $y$ 轴对称，绕 $y$ 轴旋转一周**单瓣即已扫出整个旋转体**，切勿再乘 $2$！而 $r^2=a^2\\sin 2\\theta$ 一、三象限两瓣绕极轴旋转互不重叠，体积为双瓣之和 $\\frac{\\pi^2}{4}a^3$（已由 SymPy 高精度实测确认）！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.108-110",
+        "pdfPage": 121,
+        "itemRef": "二、基本图形的相关几何量大观（全表）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy18_01_06",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-c-02",
+      "stage": "both",
+      "section": "二、旋转体体积选型攻略与绕斜直线 (10-1) 闭合退化定理",
+      "kind": "conclusion",
+      "title": "圆盘法 vs 柱壳法 vs 反函数互换选型法则，及绕 $y=x$ 旋转体积的闭合退化定理",
+      "examWeight": "core",
+      "summary": "面对旋转体体积题，**先挑对积分变量与方法能省下 70% 计算量**：\n1. 绕 $x$ 轴：给 $y=f(x)$ 用圆盘法 $\\pi\\int y^2\\mathrm{d}x$；若区域夹在两水平线 $y=c,y=d$ 与 $y$ 轴间（例10.6），反解 $x=\\varphi(y)$ 立刻把绕 $x$ 轴变成「$y$ 轴角色上的柱壳法」$2\\pi\\int_c^d y\\varphi(y)\\,\\mathrm{d}y$！\n2. 绕斜直线 $y=x$（公式 (10-1) 深度结论，例10.14）：对 $y=f(x)$ 与 $y=x$ 在 $[a,b]$ 围成的图形，若满足**两端点闭合在轴上（$f(a)=a,\\;f(b)=b$）且 $f'(x)\\ge -1$**，则精确公式 (10-1) 恒等退化为：\n$$V=\\frac{\\pi}{2\\sqrt{2}}\\int_a^b\\bigl(f(x)-x\\bigr)^2\\bigl(1+f'(x)\\bigr)\\,\\mathrm{d}x=\\frac{\\pi}{\\sqrt{2}}\\int_a^b\\bigl(f(x)-x\\bigr)^2\\,\\mathrm{d}x+\\underbrace{\\left.\\frac{\\pi}{6\\sqrt{2}}\\bigl(f(x)-x\\bigr)^3\\right|_a^b}_{=\\,0}$$",
+      "conditions": "上述绕 $y=x$ 的简化退化式 $\\frac{\\pi}{\\sqrt{2}}\\int_a^b(f(x)-x)^2\\,\\mathrm{d}x$ **严格依赖两端点闭合 $f(a)=a,\\;f(b)=b$**！若区间未闭合（例如仅截 $[0,\\frac{1}{2}]$），尾项 $\\frac{\\pi}{6\\sqrt{2}}(f(x)-x)^3|_a^b\\ne 0$，简化式立即失效，必须老老实实用完整公式 (10-1)！",
+      "pitfalls": "遇到像例10.7（$y=\\mathrm{e}^x$ 与切线 $y=\\mathrm{e}x$ 及 $x$ 轴负半轴）这类左端延伸至 $-\\infty$ 的区域，取水平条 $\\mathrm{d}y$ 只需算一个 $[0,\\mathrm{e}]$ 积分，远比取竖条分 $(-\\infty,0]$ 和 $[0,1]$ 两段痛快！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.268-271, P.276-277",
+        "pdfPage": 273,
+        "itemRef": "例10.6~10.7 & 例10.14 注 ② 机理剖析",
+        "crossRef": "27张宇《高数18讲》(强化) P.106 一·2(3)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy30_08_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-c-03",
+      "stage": "foundation",
+      "section": "三~四、区间平均值变限联想与古鲁金（Pappus）形心旋转关联",
+      "kind": "conclusion",
+      "title": "函数平均值变限构造法（$f(x+T)-f(x)$ 型）与古鲁金第二定理（选填秒杀）",
+      "examWeight": "core",
+      "summary": "1. **定长区间平均值破题联想（例10.8）**：题设给出差分方程 $f(x+T)-f(x)=g(x)$ 且要求长为 $T$ 的区间 $[a,a+T]$ 上的平均值 $\\bar{f}=\\frac{1}{T}\\int_a^{a+T}f(x)\\,\\mathrm{d}x$ 时，立刻构造滑窗变限积分：\n$$F(x)=\\int_x^{x+T}f(t)\\,\\mathrm{d}t \\implies F'(x)=f(x+T)-f(x)=g(x)$$\n由初值 $F(0)=\\int_0^T f(t)\\,\\mathrm{d}t$ 定常数，即可直接读出 $F(a)$ 与平均值 $\\bar{f}=\\frac{1}{T}F(a)$！\n2. **古鲁金（Pappus）定理与形心联动**：平面区域 $D$（面积 $S$，形心到不相交旋转轴 $L_0$ 距离为 $d$）绕 $L_0$ 旋转一周的体积恒为 **$V=2\\pi d\\cdot S$**（例如圆盘 $x^2+(y-b)^2\\le k^2$ 绕 $x$ 轴旋转成环面体积 $=2\\pi b\\cdot\\pi k^2=2\\pi^2 k^2 b$）！",
+      "conditions": "古鲁金定理要求旋转轴 $L_0$ 不穿过平面区域 $D$ 的内部（可相切或相离）；考研解答题仍建议写定积分公式，选填题可 3 秒秒杀并互相验算！",
+      "pitfalls": "在例10.8 中见到 $f(x+2)-f(x)=x$ 切勿误以为 $f(x)$ 是周期函数（右端是 $x\\ne 0$，它不是周期函数！），只是借周期性积分联想到了滑窗变限函数 $F(x)=\\int_x^{x+2} f(t)\\,\\mathrm{d}t$。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.271-272",
+        "pdfPage": 276,
+        "itemRef": "例10.8 方法总结 & 4(1) 形心"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy30_08_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-c-04",
+      "stage": "intensive",
+      "section": "强化三、弧长与侧面积的「完全平方配方法」高频母题识别",
+      "kind": "conclusion",
+      "title": "【强化必杀技】弧长与侧面积根号 $\\sqrt{1+(y')^2}$ 去根号 4 大标准母题",
+      "examWeight": "core",
+      "summary": "考研凡考弧长 $\\int\\sqrt{1+(y')^2}\\,\\mathrm{d}x$ 或侧面积 $2\\pi\\int|y|\\sqrt{1+(y')^2}\\,\\mathrm{d}x$，命题人几乎必用以下 4 类「刚好能配成完全平方去根号」或「化为 $\\sec x$」的黄金曲线：\n$$\\begin{aligned}\n&\\text{① 倒数幂对数型：}y=\\frac{1}{4}x^2-\\frac{1}{2}\\ln x\\text{（或 }f(x)=\\frac{1}{3}x^{\\frac{3}{2}}-\\sqrt{x}\\text{）}\\Rightarrow 1+\\left(A-\\frac{1}{4A}\\right)^2=\\left(A+\\frac{1}{4A}\\right)^2\\\\\n&\\text{② 悬链线型：}y=\\frac{\\mathrm{e}^x+\\mathrm{e}^{-x}}{2}=\\cosh x\\Rightarrow 1+\\sinh^2 x=\\cosh^2 x\\\\\n&\\text{③ 对数余弦型：}y=\\ln\\cos x\\Rightarrow\\sqrt{1+\\tan^2 x}=\\sec x\\;\\bigl(\\text{强化例10.11(1)}\\bigr)\\\\\n&\\text{④ 极/参半角型：心形线 }1-\\cos\\theta=2\\sin^2\\frac{\\theta}{2}\\text{；摆线 }(1-\\cos t)^2+\\sin^2 t=4\\sin^2\\frac{t}{2}\\text{；星形线 }\\sin^2 t+\\cos^2 t=1\n\\end{aligned}$$",
+      "conditions": "脱去根号 $\\sqrt{(\\cdots)^2}=|\\cdots|$ 时务必核对积分区间上的正负号（例如强化例10.10 $y=\\int_0^x\\sqrt{\\cos t}\\,\\mathrm{d}t$ 的定义域为 $[-\\frac{\\pi}{2},\\frac{\\pi}{2}]$，因 $\\cos\\frac{x}{2}\\ge 0$ 才可直接脱绝对值）。",
+      "pitfalls": "遇到像例10.10 $y=\\ln(1-x^2)$ 求弧长时，$1+(y')^2=1+\\frac{4x^2}{(1-x^2)^2}=\\left(\\frac{1+x^2}{1-x^2}\\right)^2$ 同样是完全平方，千万别展开分母后吓住不敢配！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.111-118",
+        "pdfPage": 124,
+        "itemRef": "强化例10.1, 10.4, 10.5, 10.8, 10.10, 10.11, 10.14"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy18_07_15",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-01",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（平面图形面积，例10.1~10.4）",
+      "kind": "example",
+      "title": "【基础例 10.1】两幂曲线所围面积裂项求和 + $1^\\infty$ 重要极限",
+      "examWeight": "core",
+      "problem": "设 $A_n$ 是曲线 $y=x^n$ 与 $y=x^{n+1}\\;(n=1,2,\\dots)$ 所围区域的面积，则 $\\displaystyle\\lim_{n\\to\\infty}\\left(2\\sum_{k=1}^n A_k\\right)^n=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 求交点并计算通项面积 $A_n$",
+          "detail": "联立 $x^n=x^{n+1}\\Rightarrow x^n(x-1)=0$ 得交点 $(0,0),(1,1)$，且在 $[0,1]$ 上 $x^n\\ge x^{n+1}$，故 $$A_n=\\int_0^1(x^n-x^{n+1})\\,\\mathrm{d}x=\\left.\\left(\\frac{1}{n+1}x^{n+1}-\\frac{1}{n+2}x^{n+2}\\right)\\right|_0^1=\\frac{1}{n+1}-\\frac{1}{n+2}.$$"
+        },
+        {
+          "stepTitle": "2. 裂项相消求和并求 $1^\\infty$ 型极限",
+          "detail": "$$2\\sum_{k=1}^n A_k=\\sum_{k=1}^n\\left(\\frac{2}{k+1}-\\frac{2}{k+2}\\right)=1-\\frac{2}{n+2}.$$ 故 $$\\lim_{n\\to\\infty}\\left(2\\sum_{k=1}^n A_k\\right)^n=\\lim_{n\\to\\infty}\\left(1-\\frac{2}{n+2}\\right)^n=\\mathrm{e}^{\\lim_{n\\to\\infty} n\\left(-\\frac{2}{n+2}\\right)}=\\mathrm{e}^{-2}.$$"
+        }
+      ],
+      "finalAnswer": "$\\mathrm{e}^{-2}$。",
+      "takeaway": "几何应用与数列极限跨章联动经典套路：先画图求交点算出裂项型面积通项 $A_n$，再凑 $(1+\\alpha)^\\beta$ 化为 $\\mathrm{e}^{\\lim\\alpha\\beta}$ 秒杀！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.264-265",
+        "pdfPage": 269,
+        "itemRef": "例10.1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy30_01_07",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-02",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（平面图形面积，例10.1~10.4）",
+      "kind": "example",
+      "title": "【基础例 10.2】摆线一拱与 $x$ 轴所围面积（参数方程面积核心模板）",
+      "examWeight": "core",
+      "problem": "求由摆线 $\\begin{cases}x=a(t-\\sin t),\\\\ y=a(1-\\cos t)\\end{cases}\\;(a>0)$ 的一拱与 $x$ 轴所围平面图形的面积。",
+      "steps": [
+        {
+          "stepTitle": "1. 确定一拱参数范围并换元为参数定积分",
+          "detail": "当 $t=0$ 与 $t=2\\pi$ 时 $y=0$（对应 $x$ 从 $0$ 单调增至 $2\\pi a$），正好成一拱。把直角坐标面积公式 $\\int_0^{2\\pi a} y(x)\\,\\mathrm{d}x$ 作换元 $x=a(t-\\sin t)$：$$S=\\int_0^{2\\pi} a(1-\\cos t)\\cdot a(1-\\cos t)\\,\\mathrm{d}t=a^2\\int_0^{2\\pi}(1-2\\cos t+\\cos^2 t)\\,\\mathrm{d}t.$$"
+        },
+        {
+          "stepTitle": "2. 利用周期归零与华里士公式快速出值",
+          "detail": "因 $\\int_0^{2\\pi}\\cos t\\,\\mathrm{d}t=0$，且由表 9-3 得 $\\int_0^{2\\pi}\\cos^2 t\\,\\mathrm{d}t=4\\cdot\\frac{1}{2}\\cdot\\frac{\\pi}{2}=\\pi$：$$S=a^2(2\\pi-0+\\pi)=3\\pi a^2.$$"
+        }
+      ],
+      "finalAnswer": "$3\\pi a^2$。",
+      "takeaway": "考试绝不会给摆线图形！必须亲手熟记摆线一拱 $t\\in[0,2\\pi]$ 的三大星标几何量：面积 $3\\pi a^2$、绕 $x$ 轴体积 $5\\pi^2 a^3$、弧长 $8a$（见表 10-1 与图 10-3）！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.265-266",
+        "pdfPage": 270,
+        "itemRef": "例10.2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy30_01_07",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-03",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（平面图形面积，例10.1~10.4）",
+      "kind": "example",
+      "title": "【基础例 10.3】伯努利双纽线 $r^2=a^2\\cos 2\\theta$ 所围面积（对称取 $\\frac{1}{4}$ 瓣）",
+      "examWeight": "core",
+      "problem": "伯努利双纽线 $r^2=a^2\\cos 2\\theta\\;(a>0)$ 围成的图形的面积为 ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 由 $r^2\\ge 0$ 与双轴对称性锁定第一象限半瓣区间 $[0,\\frac{\\pi}{4}]$",
+          "detail": "图形关于 $x$ 轴、$y$ 轴均对称，第一象限内的 $\\frac{1}{4}$ 瓣由 $\\theta=0$ 到 $\\theta=\\frac{\\pi}{4}$（满足 $\\cos 2\\theta\\ge 0$）扫出。"
+        },
+        {
+          "stepTitle": "2. 套极坐标面积公式并乘 $4$",
+          "detail": "$$S=4\\int_0^{\\frac{\\pi}{4}}\\frac{1}{2}r^2(\\theta)\\,\\mathrm{d}\\theta=2a^2\\int_0^{\\frac{\\pi}{4}}\\cos 2\\theta\\,\\mathrm{d}\\theta=\\left.a^2\\sin 2\\theta\\right|_0^{\\frac{\\pi}{4}}=a^2.$$"
+        }
+      ],
+      "finalAnswer": "$a^2$。",
+      "takeaway": "记住双纽线（无论 $r^2=a^2\\cos 2\\theta$ 还是 $r^2=a^2\\sin 2\\theta$）总面积简洁到惊人——正好是 $a^2$，不含 $\\pi$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.266",
+        "pdfPage": 271,
+        "itemRef": "例10.3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy30_01_07",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-04",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（平面图形面积，例10.1~10.4）",
+      "kind": "example",
+      "title": "【基础例 10.4】衰减振荡曲线 $y=\\mathrm{e}^{-x}\\sin x\\;(x\\ge 0)$ 与 $x$ 轴所围总面积（无穷等比级数）",
+      "examWeight": "core",
+      "problem": "求曲线 $y=\\mathrm{e}^{-x}\\sin x\\;(x\\ge 0)$ 与 $x$ 轴所围平面图形的总面积。",
+      "steps": [
+        {
+          "stepTitle": "1. 面积必加绝对值并按半周期 $[k\\pi,(k+1)\\pi]$ 分段拆成无穷级数",
+          "detail": "$$S=\\int_0^{+\\infty}\\mathrm{e}^{-x}|\\sin x|\\,\\mathrm{d}x=\\lim_{n\\to\\infty}\\sum_{k=0}^n\\left|\\int_{k\\pi}^{(k+1)\\pi}\\mathrm{e}^{-x}\\sin x\\,\\mathrm{d}x\\right|.$$"
+        },
+        {
+          "stepTitle": "2. 用指数三角行列式公式算单拱面积并求公比 $\\mathrm{e}^{-\\pi}$ 的无穷等比和",
+          "detail": "$$\\int_{k\\pi}^{(k+1)\\pi}\\mathrm{e}^{-x}\\sin x\\,\\mathrm{d}x=\\left.-\\frac{1}{2}\\mathrm{e}^{-x}(\\cos x+\\sin x)\\right|_{k\\pi}^{(k+1)\\pi}=\\frac{(-1)^k}{2}\\mathrm{e}^{-k\\pi}(\\mathrm{e}^{-\\pi}+1).$$ 取绝对值后对 $k=0,1,\\dots$ 求等比级数和：$$S=\\frac{\\mathrm{e}^{-\\pi}+1}{2}\\sum_{k=0}^\\infty(\\mathrm{e}^{-\\pi})^k=\\frac{\\mathrm{e}^{-\\pi}+1}{2(1-\\mathrm{e}^{-\\pi})}=\\frac{\\mathrm{e}^\\pi+1}{2(\\mathrm{e}^\\pi-1)}.$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{\\mathrm{e}^{-\\pi}+1}{2(1-\\mathrm{e}^{-\\pi})}$（即 $\\dfrac{\\mathrm{e}^\\pi+1}{2(\\mathrm{e}^\\pi-1)}$）。",
+      "takeaway": "「所围平面图形的面积」恒指各拱正面积之和，**必须先对被积函数套绝对值**再分段积分，绝不能直接算 $\\int_0^{+\\infty}\\mathrm{e}^{-x}\\sin x\\,\\mathrm{d}x=\\frac{1}{2}$ 造成正负抵消！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.266-267",
+        "pdfPage": 271,
+        "itemRef": "例10.4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy30_01_07",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-05",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（旋转体体积，例10.5~10.7）",
+      "kind": "example",
+      "title": "【基础例 10.5】隐蔽定义域陷阱：$y=\\mathrm{e}^{-\\frac{x}{2}}\\sqrt{\\sin x}$ 在 $[0,2\\pi]$ 绕 $x$ 轴旋转体积",
+      "examWeight": "core",
+      "problem": "求曲线 $y=\\mathrm{e}^{-\\frac{x}{2}}\\sqrt{\\sin x}$ 在 $[0,2\\pi]$ 部分与 $x$ 轴围成的平面图形绕 $x$ 轴旋转一周所成旋转体的体积。",
+      "steps": [
+        {
+          "stepTitle": "1. 第一步先查定义域，砍掉无意义的 $(\\pi,2\\pi)$！",
+          "detail": "由根式定义域 $\\sin x\\ge 0$ 知，在 $[0,2\\pi]$ 上曲线仅在 **$[0,\\pi]$** 存在，在 $(\\pi,2\\pi)$ 上根本不存在！"
+        },
+        {
+          "stepTitle": "2. 在 $[0,\\pi]$ 上套绕 $x$ 轴圆盘公式并计算",
+          "detail": "$$V_x=\\pi\\int_0^\\pi y^2(x)\\,\\mathrm{d}x=\\pi\\int_0^\\pi\\mathrm{e}^{-x}\\sin x\\,\\mathrm{d}x=\\left.-\\frac{\\pi}{2}\\mathrm{e}^{-x}(\\cos x+\\sin x)\\right|_0^\\pi=\\frac{\\pi}{2}(1+\\mathrm{e}^{-\\pi}).$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{\\pi}{2}(1+\\mathrm{e}^{-\\pi})$。",
+      "takeaway": "超级经典的命题陷阱！若不查定义域直接平方写 $\\pi\\int_0^{2\\pi}\\mathrm{e}^{-x}\\sin x\\,\\mathrm{d}x$，不仅算进了不存在的负半周，还会把答案算错成 $\\frac{\\pi}{2}(1-\\mathrm{e}^{-2\\pi})$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.267-268",
+        "pdfPage": 272,
+        "itemRef": "例10.5 & 注"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy30_01_07",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-06",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（旋转体体积，例10.5~10.7）",
+      "kind": "example",
+      "title": "【基础例 10.6】函数方程求 $f(x)$ + 反解 $x=\\varphi(y)$ 借 $y$ 柱壳法求绕 $x$ 轴体积",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)$ 的定义域为 $(0,+\\infty)$，且满足 $2f(x)+x^2 f\\!\\left(\\dfrac{1}{x}\\right)=\\dfrac{x^2+2x}{\\sqrt{1+x^2}}$。求 $f(x)$，并求曲线 $y=f(x)$、直线 $y=\\dfrac{1}{2}$、$y=\\dfrac{\\sqrt{3}}{2}$ 及 $y$ 轴所围图形绕 $x$ 轴旋转一周所成旋转体的体积。",
+      "steps": [
+        {
+          "stepTitle": "1. 用倒数代换联立解出 $f(x)$ 并反解 $x=\\varphi(y)$",
+          "detail": "用 $\\frac{1}{x}$ 代 $x$ 联立消去 $f(\\frac{1}{x})$（同第 1 讲例 1.2），解得 $f(x)=\\dfrac{x}{\\sqrt{1+x^2}}\\;(x>0)$。令 $y=\\frac{x}{\\sqrt{1+x^2}}$ 平方反解得 $x=\\varphi(y)=\\dfrac{y}{\\sqrt{1-y^2}}\\;(0<y<1)$。"
+        },
+        {
+          "stepTitle": "2. 互换 $x,y$ 角色，以 $y$ 为积分变量套柱壳法求绕 $x$ 轴体积",
+          "detail": "$$V=2\\pi\\int_{\\frac{1}{2}}^{\\frac{\\sqrt{3}}{2}} y\\cdot\\varphi(y)\\,\\mathrm{d}y=2\\pi\\int_{\\frac{1}{2}}^{\\frac{\\sqrt{3}}{2}}\\frac{y^2}{\\sqrt{1-y^2}}\\,\\mathrm{d}y\\xlongequal{y=\\sin t}2\\pi\\int_{\\frac{\\pi}{6}}^{\\frac{\\pi}{3}}\\sin^2 t\\,\\mathrm{d}t=\\pi\\left.\\left(t-\\frac{\\sin 2t}{2}\\right)\\right|_{\\frac{\\pi}{6}}^{\\frac{\\pi}{3}}=\\frac{\\pi^2}{6}.$$"
+        }
+      ],
+      "finalAnswer": "$f(x)=\\dfrac{x}{\\sqrt{1+x^2}}\\;(x>0)$；旋转体体积 $V=\\dfrac{\\pi^2}{6}$。",
+      "takeaway": "绕 $x$ 轴并不只能用圆盘法！当区域夹在两水平线与 $y$ 轴之间时，把 $y$ 当自变量反解 $x=\\varphi(y)$ 后用柱壳法 $2\\pi\\int_c^d y\\varphi(y)\\,\\mathrm{d}y$ 简直降维打击！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.268-269",
+        "pdfPage": 273,
+        "itemRef": "例10.6 & 方法总结"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy30_01_07",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-07",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（旋转体体积，例10.5~10.7）",
+      "kind": "example",
+      "title": "【基础例 10.7】无界区域 $D$（$y=\\mathrm{e}^x$ 与过原点切线）的面积与绕 $x=1$ 旋转体积双解法",
+      "examWeight": "core",
+      "problem": "过坐标原点作曲线 $y=\\mathrm{e}^x$ 的切线，该切线与曲线 $y=\\mathrm{e}^x$ 以及 $x$ 轴围成的向 $x$ 轴负向无限伸展的平面图形记为 $D$。求：\n(1) $D$ 的面积 $A$；　(2) $D$ 绕直线 $x=1$ 旋转一周所成的旋转体体积 $V$。",
+      "steps": [
+        {
+          "stepTitle": "1. 求出唯一切点与切线方程",
+          "detail": "设切点 $(x_0,\\mathrm{e}^{x_0})$，切线 $y-\\mathrm{e}^{x_0}=\\mathrm{e}^{x_0}(x-x_0)$ 过 $(0,0)\\Rightarrow x_0=1$，故切点为 $(1,\\mathrm{e})$，切线为 $y=\\mathrm{e}x$。"
+        },
+        {
+          "stepTitle": "2. 第 (1) 问：取水平条 $\\mathrm{d}y$（$y\\in(0,\\mathrm{e}]$）一步算出无界区域面积",
+          "detail": "右边界 $x=\\frac{y}{\\mathrm{e}}$，左边界 $x=\\ln y$，故 $$A=\\int_0^{\\mathrm{e}}\\left(\\frac{y}{\\mathrm{e}}-\\ln y\\right)\\mathrm{d}y=\\left.\\frac{y^2}{2\\mathrm{e}}\\right|_0^{\\mathrm{e}}-\\left.(y\\ln y-y)\\right|_{0^+}^{\\mathrm{e}}=\\frac{\\mathrm{e}}{2}-0=\\frac{\\mathrm{e}}{2}.$$"
+        },
+        {
+          "stepTitle": "3. 第 (2) 问：水平圆环法（大体积减小体积）或套公式 (10-1)",
+          "detail": "**法一（水平圆环法，推荐）**：对 $y\\in(0,\\mathrm{e}]$，到旋转轴 $x=1$ 的外半径为 $1-\\ln y$、内半径为 $1-\\frac{y}{\\mathrm{e}}$：$$V=\\pi\\int_0^{\\mathrm{e}}\\left[(1-\\ln y)^2-\\left(1-\\frac{y}{\\mathrm{e}}\\right)^2\\right]\\mathrm{d}y=\\pi\\left.\\left(y\\ln^2 y-4y\\ln y+4y+\\frac{y^2}{\\mathrm{e}}-\\frac{y^3}{3\\mathrm{e}^2}\\right)\\right|_{0^+}^{\\mathrm{e}}=\\frac{5}{3}\\pi\\mathrm{e}.$$ **法二（公式 (10-1)，P.271 注）**：取 $A=1,B=0,C=-1$ 得 $V=V_{\\text{大}}-V_{\\text{小}}=\\pi\\int_{-\\infty}^1(x-1)^2\\mathrm{e}^x\\,\\mathrm{d}x-\\pi\\int_0^1(x-1)^2\\mathrm{e}\\,\\mathrm{d}x=2\\pi\\mathrm{e}-\\frac{\\pi\\mathrm{e}}{3}=\\frac{5}{3}\\pi\\mathrm{e}$。"
+        }
+      ],
+      "finalAnswer": "(1) $A=\\dfrac{\\mathrm{e}}{2}$；(2) $V=\\dfrac{5}{3}\\pi\\mathrm{e}$。",
+      "takeaway": "牢记高频反常极限 $\\lim_{y\\to 0^+} y\\ln y=0$ 与 $\\lim_{y\\to 0^+} y\\ln^2 y=0$；对绕竖直线 $x=1$ 旋转且区域单调的图形，**取水平圆环 $\\mathrm{d}y$** 往往比竖条更爽快！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.270-271",
+        "pdfPage": 275,
+        "itemRef": "例10.7 & 注"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy30_01_07",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-08",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（平均值、形心、弧长、侧面积与平行截面，例10.8~10.14）",
+      "kind": "example",
+      "title": "【基础例 10.8】构造滑窗变限函数 $F(x)=\\int_x^{x+2} f(t)\\,\\mathrm{d}t$ 求区间平均值",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 连续，且 $f(x+2)-f(x)=x$，$\\displaystyle\\int_0^2 f(x)\\,\\mathrm{d}x=0$，则 $f(x)$ 在 $[1,3]$ 上的平均值为 ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 观察区间长度均为 $2$，构造滑窗变限积分 $F(x)$",
+          "detail": "记 $F(x)=\\int_x^{x+2} f(t)\\,\\mathrm{d}t$，求导立得 $F'(x)=f(x+2)-f(x)=x$，故 $F(x)=\\frac{1}{2}x^2+C$。"
+        },
+        {
+          "stepTitle": "2. 用 $F(0)=0$ 定常数并算出 $[1,3]$ 上的平均值",
+          "detail": "由 $F(0)=\\int_0^2 f(t)\\,\\mathrm{d}t=0$ 得 $C=0$，即 $F(x)=\\frac{1}{2}x^2$。于是 $\\int_1^3 f(x)\\,\\mathrm{d}x=F(1)=\\frac{1}{2}$，故平均值 $$\\bar{f}=\\frac{1}{3-1}\\int_1^3 f(x)\\,\\mathrm{d}x=\\frac{1}{2}\\cdot\\frac{1}{2}=\\frac{1}{4}.$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{1}{4}$。",
+      "takeaway": "见到 $f(x+T)-f(x)=g(x)$ 立刻条件反射构造 $F(x)=\\int_x^{x+T}f(t)\\,\\mathrm{d}t$，导数瞬间消去抽象函数 $f$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.271-272",
+        "pdfPage": 276,
+        "itemRef": "例10.8"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy30_08_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-09",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（平均值、形心、弧长、侧面积与平行截面，例10.8~10.14）",
+      "kind": "example",
+      "title": "【基础例 10.9】曲边梯形形心横坐标 $\\bar{x}$ 精确化简计算（仅数一、数二）",
+      "examWeight": "core",
+      "problem": "设曲线 $L$ 的方程为 $y=\\dfrac{1}{4}x^2-\\dfrac{1}{2}\\ln x\\;(1\\le x\\le\\mathrm{e})$，$D$ 是由曲线 $L$ 和直线 $x=1,\\;x=\\mathrm{e}$ 及 $x$ 轴围成的平面图形，则 $D$ 的形心的横坐标为 ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 分别计算分子 $\\int_1^{\\mathrm{e}} xy\\,\\mathrm{d}x$ 与分母 $\\int_1^{\\mathrm{e}} y\\,\\mathrm{d}x$",
+          "detail": "$$\\int_1^{\\mathrm{e}} x\\left(\\frac{1}{4}x^2-\\frac{1}{2}\\ln x\\right)\\mathrm{d}x=\\left.\\left(\\frac{1}{16}x^4-\\frac{1}{4}x^2\\ln x+\\frac{1}{8}x^2\\right)\\right|_1^{\\mathrm{e}}=\\frac{1}{16}(\\mathrm{e}^4-2\\mathrm{e}^2-3)=\\frac{1}{16}(\\mathrm{e}^2+1)(\\mathrm{e}^2-3),$$ $$\\int_1^{\\mathrm{e}}\\left(\\frac{1}{4}x^2-\\frac{1}{2}\\ln x\\right)\\mathrm{d}x=\\left.\\left(\\frac{1}{12}x^3-\\frac{1}{2}x\\ln x+\\frac{1}{2}x\\right)\\right|_1^{\\mathrm{e}}=\\frac{1}{12}\\mathrm{e}^3-\\frac{7}{12}.$$"
+        },
+        {
+          "stepTitle": "2. 相除并因式分解化至最简",
+          "detail": "$$\\bar{x}=\\frac{\\frac{1}{16}(\\mathrm{e}^2+1)(\\mathrm{e}^2-3)}{\\frac{1}{12}(\\mathrm{e}^3-7)}=\\frac{3(\\mathrm{e}^2+1)(\\mathrm{e}^2-3)}{4(\\mathrm{e}^3-7)}.$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{3(\\mathrm{e}^2+1)(\\mathrm{e}^2-3)}{4(\\mathrm{e}^3-7)}$。",
+      "takeaway": "分部积分算 $\\int x\\ln x\\,\\mathrm{d}x=\\frac{1}{2}x^2\\ln x-\\frac{1}{4}x^2$ 与 $\\int\\ln x\\,\\mathrm{d}x=x\\ln x-x$ 务必零算错，考研填空题分数结果须通分约分至最简！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.272-273",
+        "pdfPage": 277,
+        "itemRef": "例10.9"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy30_08_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-10",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（平均值、形心、弧长、侧面积与平行截面，例10.8~10.14）",
+      "kind": "example",
+      "title": "【基础例 10.10】直角坐标弧长配完全平方 $y=\\ln(1-x^2)$（仅数一、数二）",
+      "examWeight": "core",
+      "problem": "曲线 $y=\\ln(1-x^2)$ 上相应于 $0\\le x\\le\\dfrac{1}{2}$ 的一段弧的长度为 ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 求导代入弧长公式并配完全平方去根号",
+          "detail": "$y'=\\dfrac{-2x}{1-x^2}$，代入得 $1+(y')^2=\\dfrac{(1-x^2)^2+4x^2}{(1-x^2)^2}=\\left(\\dfrac{1+x^2}{1-x^2}\\right)^2$，因 $0\\le x\\le\\frac{1}{2}$ 分母为正，故 $$s=\\int_0^{\\frac{1}{2}}\\frac{1+x^2}{1-x^2}\\,\\mathrm{d}x.$$"
+        },
+        {
+          "stepTitle": "2. 拆真分式直接积分",
+          "detail": "$$s=\\int_0^{\\frac{1}{2}}\\left(\\frac{2}{1-x^2}-1\\right)\\mathrm{d}x=\\int_0^{\\frac{1}{2}}\\left(\\frac{1}{1+x}+\\frac{1}{1-x}-1\\right)\\mathrm{d}x=\\left.\\left(\\ln\\frac{1+x}{1-x}-x\\right)\\right|_0^{\\frac{1}{2}}=\\ln 3-\\frac{1}{2}.$$"
+        }
+      ],
+      "finalAnswer": "$\\ln 3-\\dfrac{1}{2}$。",
+      "takeaway": "记住恒等式 $(1-x^2)^2+4x^2=(1+x^2)^2$，求弧长不用画图，直接套公式 + 拆项即可！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.273-274",
+        "pdfPage": 278,
+        "itemRef": "例10.10"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy30_08_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-11",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（平均值、形心、弧长、侧面积与平行截面，例10.8~10.14）",
+      "kind": "example",
+      "title": "【基础例 10.11】阿基米德螺线 $r=\\theta\\;(0\\le\\theta\\le 2\\pi)$ 极坐标弧长（复用 $\\int\\sqrt{1+\\theta^2}$）",
+      "examWeight": "core",
+      "problem": "阿基米德螺线 $r=\\theta$ 上相应于 $\\theta$ 从 $0$ 到 $2\\pi$ 一段的弧长为 ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 套极坐标弧长公式化为 $\\int_0^{2\\pi}\\sqrt{1+\\theta^2}\\,\\mathrm{d}\\theta$",
+          "detail": "因 $r(\\theta)=\\theta,\\;r'(\\theta)=1$，故 $$s=\\int_0^{2\\pi}\\sqrt{[r(\\theta)]^2+[r'(\\theta)]^2}\\,\\mathrm{d}\\theta=\\int_0^{2\\pi}\\sqrt{1+\\theta^2}\\,\\mathrm{d}\\theta.$$"
+        },
+        {
+          "stepTitle": "2. 直接调用第 9 讲必背根式闭式（或三角代换 $\\int\\sec^3 t$）求值",
+          "detail": "由 $\\int\\sqrt{1+\\theta^2}\\,\\mathrm{d}\\theta=\\frac{\\theta}{2}\\sqrt{1+\\theta^2}+\\frac{1}{2}\\ln(\\theta+\\sqrt{1+\\theta^2})+C$，代入上下限 $0\\to 2\\pi$ 得 $$s=\\pi\\sqrt{1+4\\pi^2}+\\frac{1}{2}\\ln\\!\\left(2\\pi+\\sqrt{1+4\\pi^2}\\right).$$"
+        }
+      ],
+      "finalAnswer": "$\\pi\\sqrt{1+4\\pi^2}+\\dfrac{1}{2}\\ln\\!\\left(2\\pi+\\sqrt{1+4\\pi^2}\\right)$。",
+      "takeaway": "第 9 讲强记的三大根式公式与 $\\int\\sec^3 t\\,\\mathrm{d}t$ 在这里直接派上大用场，背熟一步出答案！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.274",
+        "pdfPage": 279,
+        "itemRef": "例10.11"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy30_08_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-12",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（平均值、形心、弧长、侧面积与平行截面，例10.8~10.14）",
+      "kind": "example",
+      "title": "【基础例 10.12】根式曲线 $y=\\sqrt{x-1}$ 绕 $x$ 轴旋转侧面积（约去奇异分母）",
+      "examWeight": "core",
+      "problem": "曲线 $y=\\sqrt{x-1}\\;(1\\le x\\le 2)$ 绕 $x$ 轴旋转一周所得到的旋转体的表面积（侧面积）为 ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 代入侧面积公式 $2\\pi\\int y\\sqrt{1+(y')^2}\\,\\mathrm{d}x$ 合并根号",
+          "detail": "$y'=\\dfrac{1}{2\\sqrt{x-1}}$，乘上外部的 $y=\\sqrt{x-1}$ 恰好把奇异分母完全约掉：$$S=\\int_1^2 2\\pi\\sqrt{x-1}\\sqrt{1+\\frac{1}{4(x-1)}}\\,\\mathrm{d}x=\\pi\\int_1^2\\sqrt{4x-3}\\,\\mathrm{d}x.$$"
+        },
+        {
+          "stepTitle": "2. 凑微分直接积分",
+          "detail": "$$S=\\left.\\frac{\\pi}{4}\\cdot\\frac{2}{3}(4x-3)^{\\frac{3}{2}}\\right|_1^2=\\frac{\\pi}{6}(5\\sqrt{5}-1).$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{\\pi}{6}(5\\sqrt{5}-1)$。",
+      "takeaway": "算旋转侧面积结果经常带 $\\sqrt{5}-1$ 类根式，不要因为长得「不整洁」就怀疑自己，自信复核系数即可！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.274-275",
+        "pdfPage": 279,
+        "itemRef": "例10.12"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy30_08_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-13",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（平均值、形心、弧长、侧面积与平行截面，例10.8~10.14）",
+      "kind": "example",
+      "title": "【基础例 10.13】星形线绕 $x$ 轴旋转的旋转体表面积（参数方程侧面积经典例）",
+      "examWeight": "core",
+      "problem": "已知星形线的方程为 $\\begin{cases}x=2\\cos^3 t,\\\\ y=2\\sin^3 t,\\end{cases}$ 则它绕 $x$ 轴旋转一周而成的旋转体的表面积为 ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 利用对称性取第一象限弧 $t\\in[0,\\frac{\\pi}{2}]$ 再乘 $2$",
+          "detail": "绕 $x$ 轴旋转一周只需上半支 $t\\in[0,\\pi]$，再由左右对称取 $2$ 倍第一象限弧。先算弧微分：$$\\sqrt{(x'_t)^2+(y'_t)^2}=\\sqrt{(-6\\cos^2 t\\sin t)^2+(6\\sin^2 t\\cos t)^2}=6\\sin t\\cos t\\quad\\left(t\\in\\left[0,\\frac{\\pi}{2}\\right]\\right).$$"
+        },
+        {
+          "stepTitle": "2. 代入参数侧面积公式凑 $\\mathrm{d}(\\sin t)$ 出值",
+          "detail": "$$S=2\\int_0^{\\frac{\\pi}{2}} 2\\pi(2\\sin^3 t)\\cdot 6\\sin t\\cos t\\,\\mathrm{d}t=48\\pi\\int_0^{\\frac{\\pi}{2}}\\sin^4 t\\,\\mathrm{d}(\\sin t)=\\left.48\\pi\\cdot\\frac{\\sin^5 t}{5}\\right|_0^{\\frac{\\pi}{2}}=\\frac{48}{5}\\pi.$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{48}{5}\\pi$（一般星形线 $a$ 时侧面积为 $\\dfrac{12}{5}\\pi a^2$）。",
+      "takeaway": "切记只乘 $2$（左右对称）而不是乘 $4$！因为星形线上半弧绕 $x$ 轴转 $360^\\circ$ 已自然覆盖下半弧位置，乘 $4$ 会算成双层重叠表面积！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.275",
+        "pdfPage": 280,
+        "itemRef": "例10.13"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy30_08_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-14",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（平均值、形心、弧长、侧面积与平行截面，例10.8~10.14）",
+      "kind": "example",
+      "title": "【基础例 10.14】$y=\\sqrt{x}$ 与 $y=x$ 绕斜直线 $y=x$ 旋转体积（精确通式 vs 等价变换深度剖析）",
+      "examWeight": "core",
+      "problem": "曲线 $y=\\sqrt{x}$ 与 $y=x$ 所围平面有界区域绕直线 $y=x$ 旋转一周所得旋转体的体积为 ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 考场通杀严密解法：直接套绕斜直线公式 (10-1)（强烈推荐！）",
+          "detail": "交点为 $(0,0)$ 与 $(1,1)$，旋转轴 $L_0:\\;x-y=0$（$A=1,B=-1,C=0$），$f(x)=\\sqrt{x}$ 且 $f'(x)=\\frac{1}{2\\sqrt{x}}>0$，故过 $L_0$ 垂线与曲线至多 1 交点。代入式 (10-1)：$$V=\\frac{\\pi}{(1+1)^{\\frac{3}{2}}}\\int_0^1(x-\\sqrt{x})^2\\left(1+\\frac{1}{2\\sqrt{x}}\\right)\\mathrm{d}x\\xlongequal{x=t^2}\\frac{\\pi}{2\\sqrt{2}}\\int_0^1 t^2(t-1)^2(2t+1)\\,\\mathrm{d}t=\\frac{\\pi}{2\\sqrt{2}}\\cdot\\frac{1}{15}=\\frac{\\sqrt{2}}{60}\\pi.$$"
+        },
+        {
+          "stepTitle": "2. 原书「等价变换巧算」及为何仅在闭合区域才成立的严格证明",
+          "detail": "原书取 $\\mathrm{d}u=\\sqrt{2}\\,\\mathrm{d}x,\\;r(x)=\\frac{\\sqrt{x}-x}{\\sqrt{2}}$ 得 $V=\\int_0^1\\frac{\\pi}{\\sqrt{2}}(\\sqrt{x}-x)^2\\,\\mathrm{d}x=\\frac{\\sqrt{2}}{60}\\pi$。其严格数学机理在于把精确被积式改写为 $(f-x)^2(1+f')=2(f-x)^2+(f-x)^2(f'-1)$，其中后项积分 $\\left.\\frac{1}{3}(f(x)-x)^3\\right|_0^1=0$ **恰好因两端点都闭合在旋转轴 $y=x$ 上而消失**！若区域未闭合（如截断在 $[0,\\frac{1}{2}]$），巧算将给出错误数值 $0.05608\\ne 0.05937$（详见表 10-4）！"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{\\sqrt{2}}{60}\\pi$。",
+      "takeaway": "绕斜直线旋转一律优先用**公式 (10-1)** 或 **古鲁金定理 $V=2\\pi d S$**，既严格无争议又不依赖特殊端点抵消！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.275-277",
+        "pdfPage": 280,
+        "itemRef": "例10.14 & 注①②（含闭合退化机理剖析）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy30_08_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-15",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（基本图形几何量实战，强化例10.1~10.6）",
+      "kind": "example",
+      "title": "【强化例 10.1】心形线 $r=a(1-\\cos\\theta)$ 弧长、面积与绕极轴体积三合一（含 $1+\\cos\\theta$ 注）",
+      "examWeight": "core",
+      "problem": "求心形线 $r=a(1-\\cos\\theta)\\;(a>0,\\;0\\le\\theta\\le 2\\pi)$ 的弧长（仅数一、数二）、所围图形的面积以及绕 $Ox$ 轴旋转得到的旋转体体积。",
+      "steps": [
+        {
+          "stepTitle": "1. 弧长（对称取 $2\\times[0,\\pi]$ + 半角公式去根号）",
+          "detail": "$$s=2\\int_0^\\pi\\sqrt{a^2(1-\\cos\\theta)^2+a^2\\sin^2\\theta}\\,\\mathrm{d}\\theta=2\\sqrt{2}a\\int_0^\\pi\\sqrt{1-\\cos\\theta}\\,\\mathrm{d}\\theta=4a\\int_0^\\pi\\sin\\frac{\\theta}{2}\\,\\mathrm{d}\\theta=8a.$$"
+        },
+        {
+          "stepTitle": "2. 所围面积（半角降幂 + 华里士公式）",
+          "detail": "$$S=2\\int_0^\\pi\\frac{1}{2}a^2(1-\\cos\\theta)^2\\,\\mathrm{d}\\theta=a^2\\int_0^\\pi 4\\sin^4\\frac{\\theta}{2}\\,\\mathrm{d}\\theta=8a^2\\int_0^{\\frac{\\pi}{2}}\\sin^4 t\\,\\mathrm{d}t=8a^2\\cdot\\frac{3}{4}\\cdot\\frac{1}{2}\\cdot\\frac{\\pi}{2}=\\frac{3}{2}\\pi a^2.$$"
+        },
+        {
+          "stepTitle": "3. 绕极轴旋转体体积（套极坐标体积公式 ④）",
+          "detail": "$$V=\\frac{2\\pi}{3}\\int_0^\\pi a^3(1-\\cos\\theta)^3\\sin\\theta\\,\\mathrm{d}\\theta=-\\frac{2\\pi}{3}a^3\\int_0^\\pi(1-\\cos\\theta)^3\\,\\mathrm{d}(\\cos\\theta)=\\frac{2\\pi}{3}a^3\\int_0^2 u^3\\,\\mathrm{d}u=\\frac{8}{3}\\pi a^3.$$ 同理注：对 $r=a(1+\\cos\\theta)$ 三大几何量完全相同（$8a,\\;\\frac{3}{2}\\pi a^2,\\;\\frac{8}{3}\\pi a^3$）。"
+        }
+      ],
+      "finalAnswer": "弧长 $s=8a$；面积 $S=\\dfrac{3}{2}\\pi a^2$；绕极轴体积 $V=\\dfrac{8}{3}\\pi a^3$。",
+      "takeaway": "心形线三件套（$8a,\\;\\frac{3}{2}\\pi a^2,\\;\\frac{8}{3}\\pi a^3$）是考研极坐标第一明星曲线，大题会推、选填秒背！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.110-112",
+        "pdfPage": 123,
+        "itemRef": "强化例10.1 & 注"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy18_01_06",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-16",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（基本图形几何量实战，强化例10.1~10.6）",
+      "kind": "example",
+      "title": "【强化例 10.2】阿基米德螺线 $r=a\\theta\\;(0\\le\\theta\\le 2\\pi)$ 与极轴所围面积",
+      "examWeight": "core",
+      "problem": "求阿基米德螺线 $r=a\\theta\\;(a>0,\\;0\\le\\theta\\le 2\\pi)$ 与 $Ox$ 轴所围图形的面积。",
+      "steps": [
+        {
+          "stepTitle": "1. 写出极坐标扇形面积微元并积分",
+          "detail": "面积微元 $\\mathrm{d}S=\\frac{1}{2}(a\\theta)^2\\,\\mathrm{d}\\theta$，故 $$S=\\int_0^{2\\pi}\\frac{a^2}{2}\\theta^2\\,\\mathrm{d}\\theta=\\left.\\frac{a^2}{2}\\cdot\\frac{\\theta^3}{3}\\right|_0^{2\\pi}=\\frac{4}{3}a^2\\pi^3.$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{4}{3}a^2\\pi^3$。",
+      "takeaway": "注意阿基米德螺线不是周期封闭曲线，每多转一圈半径就变大 $2\\pi a$，题目必须指明 $\\theta$ 的起止范围！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.112",
+        "pdfPage": 125,
+        "itemRef": "强化例10.2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy18_01_06",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-17",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（基本图形几何量实战，强化例10.1~10.6）",
+      "kind": "example",
+      "title": "【强化例 10.3】三叶玫瑰线 $r=a\\sin 3\\theta$（与 $r=a\\cos 3\\theta$）所围面积",
+      "examWeight": "core",
+      "problem": "求三叶玫瑰线 $r=a\\sin 3\\theta\\;(a>0)$ 所围图形的面积（并对照 $r=a\\cos 3\\theta$）。",
+      "steps": [
+        {
+          "stepTitle": "1. 锁定一叶极角范围 $[0,\\frac{\\pi}{3}]$ 并乘 $3$ 积分",
+          "detail": "由 $r\\ge 0$ 知第一叶对应 $3\\theta\\in[0,\\pi]\\Rightarrow\\theta\\in[0,\\frac{\\pi}{3}]$，三叶全等：$$S=3\\int_0^{\\frac{\\pi}{3}}\\frac{1}{2}a^2\\sin^2 3\\theta\\,\\mathrm{d}\\theta\\xlongequal{t=3\\theta}\\frac{a^2}{2}\\int_0^\\pi\\sin^2 t\\,\\mathrm{d}t=\\frac{a^2}{2}\\cdot 2\\cdot\\frac{1}{2}\\cdot\\frac{\\pi}{2}=\\frac{\\pi}{4}a^2.$$ 注：对 $r=a\\cos 3\\theta$，一叶为 $[-\\frac{\\pi}{6},\\frac{\\pi}{6}]$，面积同样为 $3\\cdot\\frac{1}{2}a^2\\int_{-\\frac{\\pi}{6}}^{\\frac{\\pi}{6}}\\cos^2 3\\theta\\,\\mathrm{d}\\theta=\\frac{\\pi}{4}a^2$。"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{\\pi}{4}a^2$。",
+      "takeaway": "玫瑰线极角范围速判：令 $r=0$ 找相邻两个零点即可锁定一叶，**奇数倍角 $k\\theta$ 共 $k$ 叶总面积恒为 $\\frac{\\pi a^2}{4}$，偶数倍角 $k\\theta$ 共 $2k$ 叶总面积恒为 $\\frac{\\pi a^2}{2}$**！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.112-113",
+        "pdfPage": 125,
+        "itemRef": "强化例10.3 & 注"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy18_01_06",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-18",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（基本图形几何量实战，强化例10.1~10.6）",
+      "kind": "example",
+      "title": "【强化例 10.4】摆线一拱的弧长、面积与绕 $x$ 轴旋转体体积全推导",
+      "examWeight": "core",
+      "problem": "求摆线 $\\begin{cases}x=a(t-\\sin t),\\\\ y=a(1-\\cos t)\\end{cases}\\;(a>0)$ 一拱的弧长（仅数一、数二）、与 $x$ 轴所围面积及绕 $x$ 轴旋转一周所得体积。",
+      "steps": [
+        {
+          "stepTitle": "1. 弧长（半角化简）",
+          "detail": "$$s=\\int_0^{2\\pi} a\\sqrt{(1-\\cos t)^2+\\sin^2 t}\\,\\mathrm{d}t=2a\\int_0^{2\\pi}\\sin\\frac{t}{2}\\,\\mathrm{d}t=\\left.-4a\\cos\\frac{t}{2}\\right|_0^{2\\pi}=8a.$$"
+        },
+        {
+          "stepTitle": "2. 面积与绕 $x$ 轴体积（利用 $[0,2\\pi]$ 上奇次 $\\cos$ 归零 + 点火公式）",
+          "detail": "$$S=a^2\\int_0^{2\\pi}(1-\\cos t)^2\\,\\mathrm{d}t=a^2(2\\pi+0+\\pi)=3\\pi a^2,$$ $$V_x=\\pi\\int_0^{2\\pi a} y^2\\,\\mathrm{d}x=\\pi a^3\\int_0^{2\\pi}(1-\\cos t)^3\\,\\mathrm{d}t=\\pi a^3\\int_0^{2\\pi}(1-3\\cos t+3\\cos^2 t-\\cos^3 t)\\,\\mathrm{d}t=\\pi a^3(2\\pi+3\\pi)=5\\pi^2 a^3.$$"
+        }
+      ],
+      "finalAnswer": "弧长 $s=8a$；面积 $S=3\\pi a^2$；绕 $x$ 轴体积 $V_x=5\\pi^2 a^3$。",
+      "takeaway": "摆线 $y^2\\mathrm{d}x=a^3(1-\\cos t)^3\\mathrm{d}t$ 在 $[0,2\\pi]$ 上展开后，奇数次 $\\cos t,\\;\\cos^3 t$ 积分瞬间归零，剩 $1+3\\cos^2 t$ 一步秒出 $5\\pi^2 a^3$！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.113-114",
+        "pdfPage": 126,
+        "itemRef": "强化例10.4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy18_01_06",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-19",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（基本图形几何量实战，强化例10.1~10.6）",
+      "kind": "example",
+      "title": "【强化例 10.5】星形线 $x^{\\frac{2}{3}}+y^{\\frac{2}{3}}=a^{\\frac{2}{3}}$ 弧长、面积与绕 $x$ 轴体积全推导",
+      "examWeight": "core",
+      "problem": "求星形线 $x^{\\frac{2}{3}}+y^{\\frac{2}{3}}=a^{\\frac{2}{3}}\\;(a>0)$ 的弧长（仅数一、数二）、所围面积及绕 $x$ 轴旋转一周所得体积。",
+      "steps": [
+        {
+          "stepTitle": "1. 参数化 $x=a\\cos^3 t,\\;y=a\\sin^3 t$ 并求全弧长（$4\\times$ 第一象限）",
+          "detail": "$$s=4a\\int_0^{\\frac{\\pi}{2}}\\sqrt{9\\cos^4 t\\sin^2 t+9\\sin^4 t\\cos^2 t}\\,\\mathrm{d}t=12a\\int_0^{\\frac{\\pi}{2}}\\sin t\\cos t\\,\\mathrm{d}t=\\left.6a\\sin^2 t\\right|_0^{\\frac{\\pi}{2}}=6a.$$"
+        },
+        {
+          "stepTitle": "2. 所围面积（注意 $x:0\\to a$ 对应 $t:\\frac{\\pi}{2}\\to 0$！）",
+          "detail": "$$S=4\\int_0^a y\\,\\mathrm{d}x=4a^2\\int_{\\frac{\\pi}{2}}^0\\sin^3 t\\,\\mathrm{d}(\\cos^3 t)=12a^2\\int_0^{\\frac{\\pi}{2}}(\\sin^4 t-\\sin^6 t)\\,\\mathrm{d}t=12a^2\\left(\\frac{3}{16}\\pi-\\frac{5}{32}\\pi\\right)=\\frac{3}{8}\\pi a^2.$$"
+        },
+        {
+          "stepTitle": "3. 绕 $x$ 轴体积（对称取 $2\\times[0,a]$ + 点火公式）",
+          "detail": "$$V_x=2\\pi\\int_0^a y^2\\,\\mathrm{d}x=6\\pi a^3\\int_0^{\\frac{\\pi}{2}}(\\sin^7 t-\\sin^9 t)\\,\\mathrm{d}t=6\\pi a^3\\left(\\frac{16}{35}-\\frac{128}{315}\\right)=\\frac{32\\pi}{105}a^3.$$"
+        }
+      ],
+      "finalAnswer": "弧长 $s=6a$；面积 $S=\\dfrac{3}{8}\\pi a^2$；绕 $x$ 轴体积 $V_x=\\dfrac{32\\pi}{105}a^3$。",
+      "takeaway": "星形线参数换元时 $x=0\\Rightarrow t=\\frac{\\pi}{2},\\;x=a\\Rightarrow t=0$，恰好与 $\\mathrm{d}(\\cos^3 t)=-3\\cos^2 t\\sin t\\,\\mathrm{d}t$ 的负号相抵变成正号！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.114-115",
+        "pdfPage": 127,
+        "itemRef": "强化例10.5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy18_01_06",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-20",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（基本图形几何量实战，强化例10.1~10.6）",
+      "kind": "example",
+      "title": "【强化例 10.6】笛卡尔叶形线 $x^3+y^3-3axy=0$ 叶环面积（极坐标凑 $\\mathrm{d}(\\tan\\theta)$）与斜渐近线",
+      "examWeight": "core",
+      "problem": "求笛卡尔叶形线 $x^3+y^3-3axy=0\\;(a>0$，参数方程 $x=\\dfrac{3at}{1+t^3},\\;y=\\dfrac{3at^2}{1+t^3})$ 所围叶环的面积及斜渐近线方程。",
+      "steps": [
+        {
+          "stepTitle": "1. 转极坐标求第一象限叶环面积（$\\theta\\in[0,\\frac{\\pi}{2}]$）",
+          "detail": "令 $x=r\\cos\\theta,\\;y=r\\sin\\theta$ 得 $r=\\dfrac{3a\\sin\\theta\\cos\\theta}{\\sin^3\\theta+\\cos^3\\theta}$。分子分母同除 $\\cos^6\\theta$ 凑 $u=\\tan\\theta$：$$S=\\frac{1}{2}\\int_0^{\\frac{\\pi}{2}} r^2\\,\\mathrm{d}\\theta=\\frac{9}{2}a^2\\int_0^{\\frac{\\pi}{2}}\\frac{\\tan^2\\theta}{(1+\\tan^3\\theta)^2}\\,\\mathrm{d}(\\tan\\theta)=\\frac{3}{2}a^2\\left.\\left(-\\frac{1}{1+u^3}\\right)\\right|_0^{+\\infty}=\\frac{3}{2}a^2.$$"
+        },
+        {
+          "stepTitle": "2. 由参数方程令 $t\\to -1$（对应 $x,y\\to\\infty$）求斜渐近线",
+          "detail": "$$k=\\lim_{t\\to -1}\\frac{y}{x}=\\lim_{t\\to -1} t=-1,\\qquad b=\\lim_{t\\to -1}(y+x)=\\lim_{t\\to -1}\\frac{3at(1+t)}{(1+t)(t^2-t+1)}=\\lim_{t\\to -1}\\frac{3at}{t^2-t+1}=-a.$$ 故渐近线为 $y=-x-a$，即 $x+y+a=0$。"
+        }
+      ],
+      "finalAnswer": "叶环面积 $S=\\dfrac{3}{2}a^2$；斜渐近线方程为 $x+y+a=0$。",
+      "takeaway": "笛卡尔叶形线完美串联极坐标面积凑 $\\tan\\theta$ 与第 5 讲参数方程斜渐近线（因式分解 $1+t^3=(1+t)(t^2-t+1)$ 约去零因子）！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.115",
+        "pdfPage": 128,
+        "itemRef": "强化例10.6"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy18_01_06",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-21",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（各类函数表达式的几何量计算，强化例10.7~10.15）",
+      "kind": "example",
+      "title": "【强化例 10.7】极限定义的分段函数所围面积（分 $|x|<1$ 与 $|x|\\ge 1$ 讨论）",
+      "examWeight": "core",
+      "problem": "设 $y=\\displaystyle\\lim_{n\\to\\infty}\\frac{1+x}{1+n x^{2n}}$，则曲线 $y=y(x)$ 与 $x$ 轴及 $x=1$ 所围图形的面积为 ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 求含 $x^{2n}$ 极限的分段表达式",
+          "detail": "当 $|x|<1$ 时 $n x^{2n}\\to 0\\Rightarrow y=1+x$；当 $|x|\\ge 1$ 时 $n x^{2n}\\to+\\infty\\Rightarrow y=0$。即 $y=\\begin{cases}0,&|x|\\ge 1\\\\ 1+x,&|x|<1\\end{cases}$。"
+        },
+        {
+          "stepTitle": "2. 计算 $[-1,1]$ 上直角三角形面积",
+          "detail": "$$S=\\int_{-1}^1(1+x)\\,\\mathrm{d}x=\\left.\\left(x+\\frac{x^2}{2}\\right)\\right|_{-1}^1=2\\quad\\left(\\text{或底 }2\\text{ 高 }2\\text{ 三角形 }\\frac{1}{2}\\times 2\\times 2=2\\right).$$"
+        }
+      ],
+      "finalAnswer": "$2$。",
+      "takeaway": "记住极限函数 $x^{2n}$ 的黄金分界点 $|x|=1$（注意 $x=\\pm 1$ 时分母 $1+n\\to+\\infty\\Rightarrow y=0$，不影响定积分值）！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.115-116",
+        "pdfPage": 128,
+        "itemRef": "强化例10.7"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy18_07_15",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-22",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（各类函数表达式的几何量计算，强化例10.7~10.15）",
+      "kind": "example",
+      "title": "【强化例 10.8】两边求导反解 $f(x)$ + 绕 $x$ 轴旋转曲面侧面积（仅数一、数二）",
+      "examWeight": "core",
+      "problem": "（仅数学一、数学二）设函数 $f(x)$ 满足 $\\displaystyle\\int\\frac{f(x)}{\\sqrt{x}}\\,\\mathrm{d}x=\\frac{1}{6}x^2-x+C$，$L$ 为曲线 $y=f(x)\\;(4\\le x\\le 9)$，求 $L$ 绕 $x$ 轴旋转所成旋转曲面的面积。",
+      "steps": [
+        {
+          "stepTitle": "1. 两边求导得 $f(x)$ 并配完全平方化简 $\\sqrt{1+[f'(x)]^2}$",
+          "detail": "求导得 $\\frac{f(x)}{\\sqrt{x}}=\\frac{1}{3}x-1\\Rightarrow f(x)=\\frac{1}{3}x^{\\frac{3}{2}}-\\sqrt{x}$，进而 $f'(x)=\\frac{1}{2}\\left(\\sqrt{x}-\\frac{1}{\\sqrt{x}}\\right)$，故 $$\\sqrt{1+[f'(x)]^2}=\\sqrt{1+\\frac{1}{4}\\left(\\sqrt{x}-\\frac{1}{\\sqrt{x}}\\right)^2}=\\frac{1}{2}\\left(\\sqrt{x}+\\frac{1}{\\sqrt{x}}\\right).$$"
+        },
+        {
+          "stepTitle": "2. 代入侧面积公式展开积分",
+          "detail": "在 $[4,9]$ 上 $f(x)=\\sqrt{x}(\\frac{1}{3}x-1)>0$，故 $$A=2\\pi\\int_4^9\\left(\\frac{1}{3}x\\sqrt{x}-\\sqrt{x}\\right)\\cdot\\frac{1}{2}\\left(\\sqrt{x}+\\frac{1}{\\sqrt{x}}\\right)\\mathrm{d}x=\\pi\\int_4^9\\left(\\frac{1}{3}x^2-\\frac{2}{3}x-1\\right)\\mathrm{d}x=\\frac{425}{9}\\pi.$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{425}{9}\\pi$。",
+      "takeaway": "看到 $f'(x)=\\frac{1}{2}(\\sqrt{x}-\\frac{1}{\\sqrt{x}})$ 立马识别「$1+(A-\\frac{1}{4A})^2=(A+\\frac{1}{4A})^2$」黄金配方母题！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.116",
+        "pdfPage": 129,
+        "itemRef": "强化例10.8"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy18_07_15",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-23",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（各类函数表达式的几何量计算，强化例10.7~10.15）",
+      "kind": "example",
+      "title": "【强化例 10.9】无界区域绕 $x$ 轴旋转体积反求底数 $a$（用 $\\frac{a}{\\ln a}\\ge\\mathrm{e}$ 锁定唯一解）",
+      "examWeight": "core",
+      "problem": "已知 $y=\\sqrt{x}\\,a^{-\\frac{x}{2a}}\\;(a>1,\\;0\\le x<+\\infty)$ 与 $x$ 轴中间部分区域绕 $x$ 轴旋转一周生成的旋转体的体积为 $\\pi\\mathrm{e}^2$，则 $a=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 计算无界旋转体体积 $V(a)$",
+          "detail": "$$V(a)=\\pi\\int_0^{+\\infty} x a^{-\\frac{x}{a}}\\,\\mathrm{d}x=-\\frac{a\\pi}{\\ln a}\\int_0^{+\\infty} x\\,\\mathrm{d}\\!\\left(a^{-\\frac{x}{a}}\\right)=\\frac{a\\pi}{\\ln a}\\int_0^{+\\infty} a^{-\\frac{x}{a}}\\,\\mathrm{d}x=\\pi\\left(\\frac{a}{\\ln a}\\right)^2.$$"
+        },
+        {
+          "stepTitle": "2. 由 $\\frac{a}{\\ln a}=\\mathrm{e}$ 及单调极值唯一性解得 $a=\\mathrm{e}$",
+          "detail": "因 $a>1\\Rightarrow\\ln a>0$，故 $\\frac{a}{\\ln a}=\\mathrm{e}$。考察 $h(a)=\\frac{a}{\\ln a}$ 在 $(1,+\\infty)$ 上有 $h'(a)=\\frac{\\ln a-1}{\\ln^2 a}$，在 $a=\\mathrm{e}$ 处取得唯一最小值 $h(\\mathrm{e})=\\mathrm{e}$，故方程唯一解为 $a=\\mathrm{e}$！"
+        }
+      ],
+      "finalAnswer": "$\\mathrm{e}$。",
+      "takeaway": "利用 $\\int_0^{+\\infty} x\\mathrm{e}^{-kx}\\,\\mathrm{d}x=\\frac{1}{k^2}$（$\\Gamma(2)/k^2$，此处 $k=\\frac{\\ln a}{a}$）可 3 秒直接秒出 $V(a)=\\pi(\\frac{a}{\\ln a})^2$！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.116",
+        "pdfPage": 129,
+        "itemRef": "强化例10.9"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy18_07_15",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-24",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（各类函数表达式的几何量计算，强化例10.7~10.15）",
+      "kind": "example",
+      "title": "【强化例 10.10】变限积分曲线 $y=\\int_0^x\\sqrt{\\cos t}\\,\\mathrm{d}t$ 全长（先定隐蔽定义域 $[-\\frac{\\pi}{2},\\frac{\\pi}{2}]$！）",
+      "examWeight": "core",
+      "problem": "（仅数学一、数学二）曲线 $y=\\displaystyle\\int_0^x\\sqrt{\\cos t}\\,\\mathrm{d}t$ 的全长为 ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 由被积函数连续性确定曲线最大定义域 $[-\\frac{\\pi}{2},\\frac{\\pi}{2}]$",
+          "detail": "曲线过 $(0,0)$ 且被积函数 $\\sqrt{\\cos t}$ 要求从 $0$ 到 $x$ 间处处满足 $\\cos t\\ge 0$，故曲线仅存在于 $[-\\frac{\\pi}{2},\\frac{\\pi}{2}]$！"
+        },
+        {
+          "stepTitle": "2. 变限求导代入弧长公式，半角公式出全长",
+          "detail": "$y'=\\sqrt{\\cos x}$，故 $\\mathrm{d}s=\\sqrt{1+\\cos x}\\,\\mathrm{d}x=\\sqrt{2}\\cos\\frac{x}{2}\\,\\mathrm{d}x$（因 $\\frac{x}{2}\\in[-\\frac{\\pi}{4},\\frac{\\pi}{4}]$ 余弦非负）。由偶倍得 $$s=2\\sqrt{2}\\int_0^{\\frac{\\pi}{2}}\\cos\\frac{x}{2}\\,\\mathrm{d}x=\\left.4\\sqrt{2}\\sin\\frac{x}{2}\\right|_0^{\\frac{\\pi}{2}}=4.$$"
+        }
+      ],
+      "finalAnswer": "$4$。",
+      "takeaway": "求「全长」却没给区间时，**必由被积函数或方程的自然定义域反推起止端点**（本题即 $[-\\frac{\\pi}{2},\\frac{\\pi}{2}]$）！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.116-117",
+        "pdfPage": 129,
+        "itemRef": "强化例10.10"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy18_07_15",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-25",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（各类函数表达式的几何量计算，强化例10.7~10.15）",
+      "kind": "example",
+      "title": "【强化例 10.11】对数曲线弧长双经典（$y=\\ln\\cos x$ 出 $\\sec x$ 与 $x=\\frac{1}{4}y^2-\\frac{1}{2}\\ln y$ 视 $y$ 为参）",
+      "examWeight": "core",
+      "problem": "（仅数学一、数学二）计算下列曲线的弧长：\n(1) $y=\\ln\\cos x\\;(0\\le x\\le\\dfrac{\\pi}{6})$；　(2) $\\ln y+2x-\\dfrac{1}{2}y^2=0\\;(1\\le y\\le\\mathrm{e})$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 题：化为 $\\int_0^{\\frac{\\pi}{6}}\\sec x\\,\\mathrm{d}x$",
+          "detail": "$y'=-\\tan x$，故 $$s=\\int_0^{\\frac{\\pi}{6}}\\sqrt{1+\\tan^2 x}\\,\\mathrm{d}x=\\int_0^{\\frac{\\pi}{6}}\\sec x\\,\\mathrm{d}x=\\left.\\ln|\\sec x+\\tan x|\\right|_0^{\\frac{\\pi}{6}}=\\ln\\!\\left(\\frac{2}{\\sqrt{3}}+\\frac{1}{\\sqrt{3}}\\right)=\\ln\\sqrt{3}=\\frac{1}{2}\\ln 3.$$"
+        },
+        {
+          "stepTitle": "2. 第 (2) 题：反解 $x(y)$ 视 $y$ 为自变量配完全平方",
+          "detail": "由题解出 $x=\\frac{1}{4}y^2-\\frac{1}{2}\\ln y$，$x'_y=\\frac{y}{2}-\\frac{1}{2y}$，故 $$s=\\int_1^{\\mathrm{e}}\\sqrt{1+\\left(\\frac{y}{2}-\\frac{1}{2y}\\right)^2}\\,\\mathrm{d}y=\\int_1^{\\mathrm{e}}\\frac{1}{2}\\left(y+\\frac{1}{y}\\right)\\mathrm{d}y=\\left.\\left(\\frac{1}{4}y^2+\\frac{1}{2}\\ln y\\right)\\right|_1^{\\mathrm{e}}=\\frac{1}{4}(\\mathrm{e}^2+1).$$"
+        }
+      ],
+      "finalAnswer": "(1) $\\dfrac{1}{2}\\ln 3$；(2) $\\dfrac{1}{4}(\\mathrm{e}^2+1)$。",
+      "takeaway": "牢记 $\\frac{2}{\\sqrt{3}}+\\frac{1}{\\sqrt{3}}=\\frac{3}{\\sqrt{3}}=\\sqrt{3}\\Rightarrow\\ln\\sqrt{3}=\\frac{1}{2}\\ln 3$；给 $y$ 的区间就果断视 $y$ 为自变量！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.117",
+        "pdfPage": 130,
+        "itemRef": "强化例10.11 (1)~(2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy18_07_15",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-26",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（各类函数表达式的几何量计算，强化例10.7~10.15）",
+      "kind": "example",
+      "title": "【强化例 10.12】平移坐标轴秒算 $(y+1)^2=(2-x)\\ln x$ 绕对称轴 $y=-1$ 旋转体体积",
+      "examWeight": "core",
+      "problem": "求曲线 $(y+1)^2=(2-x)\\ln x$ 在区间 $[1,2]$ 上所围成的平面图形绕直线 $y=-1$ 旋转一周所生成的旋转体的体积。",
+      "steps": [
+        {
+          "stepTitle": "1. 识别图形关于旋转轴 $y=-1$ 对称，平移化为绕 $x$ 轴标准圆盘",
+          "detail": "在 $x\\in[1,2]$ 上 $(2-x)\\ln x\\ge 0$，曲线关于直线 $y=-1$ 上下对称，到旋转轴 $y=-1$ 的半径平方即为 $[y-(-1)]^2=(y+1)^2=(2-x)\\ln x$（等价于上移 $1$ 单位化为 $Y^2=(2-x)\\ln x$ 绕 $x$ 轴旋转）。"
+        },
+        {
+          "stepTitle": "2. 分部积分计算体积",
+          "detail": "$$V=\\pi\\int_1^2(y+1)^2\\,\\mathrm{d}x=\\pi\\int_1^2(2-x)\\ln x\\,\\mathrm{d}x=\\pi\\left.\\left[\\left(2x-\\frac{1}{2}x^2\\right)\\ln x-2x+\\frac{1}{4}x^2\\right]\\right|_1^2=\\left(2\\ln 2-\\frac{5}{4}\\right)\\pi.$$"
+        }
+      ],
+      "finalAnswer": "$\\left(2\\ln 2-\\dfrac{5}{4}\\right)\\pi$。",
+      "takeaway": "绕平行于坐标轴的直线 $y=c$ 旋转时，**直接平移坐标系令 $Y=y-c$ 变成绕新 $x$ 轴旋转**，思维零负担！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.117",
+        "pdfPage": 130,
+        "itemRef": "强化例10.12 法一 & 法二"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy18_07_15",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-27",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（各类函数表达式的几何量计算，强化例10.7~10.15）",
+      "kind": "example",
+      "title": "【强化例 10.13】指数无界区域绕 $x$ 轴旋转体积（实锤捕获原书漏平方印刷错误！）",
+      "examWeight": "core",
+      "problem": "求曲线 $y=x\\mathrm{e}^{-\\frac{3}{2}x}\\;(x\\ge 0)$ 下方及 $x$ 轴上方的无界区域绕 $x$ 轴旋转一周所生成的旋转体的体积。",
+      "steps": [
+        {
+          "stepTitle": "1. 严格按题干 $y=x\\mathrm{e}^{-\\frac{3}{2}x}$ 平方求真实体积（SymPy 实锤！）",
+          "detail": "由 $y=x\\mathrm{e}^{-\\frac{3}{2}x}$ 得 $y^2=x^2\\mathrm{e}^{-3x}$（切莫漏平方 $x$！），结合 $\\Gamma(3)=2!=2$：$$V=\\pi\\int_0^{+\\infty} y^2\\,\\mathrm{d}x=\\pi\\int_0^{+\\infty} x^2\\mathrm{e}^{-3x}\\,\\mathrm{d}x=\\pi\\cdot\\frac{\\Gamma(3)}{3^3}=\\frac{2\\pi}{27}.$$"
+        },
+        {
+          "stepTitle": "2. 【原书勘误警示（P.118，见表 10-4）】原书误漏 $x$ 的平方算成 $\\frac{\\pi}{9}$",
+          "detail": "原书 P.118 解答首行误印为 $V=\\pi\\int_0^{+\\infty} x\\mathrm{e}^{-3x}\\,\\mathrm{d}x=\\frac{\\pi}{9}$（对 $\\mathrm{e}^{-\\frac{3}{2}x}$ 做了平方，却漏了对 $x$ 做平方；实为按前页强化例10.9 同款 $y=\\sqrt{x}\\mathrm{e}^{-\\frac{3}{2}x}$ 算出的结果）。若考场原题印为 $y=\\sqrt{x}\\mathrm{e}^{-\\frac{3}{2}x}$ 答案为 $\\frac{\\pi}{9}$，若印为 $y=x\\mathrm{e}^{-\\frac{3}{2}x}$ 则精确答案必为 **$\\frac{2\\pi}{27}$**！"
+        }
+      ],
+      "finalAnswer": "按原题干 $y=x\\mathrm{e}^{-\\frac{3}{2}x}$ 精确答案为 $\\dfrac{2\\pi}{27}$（原书 P.118 解答漏平方 $x$ 误印为 $\\dfrac{\\pi}{9}$，已双列勘误）。",
+      "takeaway": "利用 $\\Gamma$ 函数公式 $\\int_0^{+\\infty} x^n\\mathrm{e}^{-kx}\\,\\mathrm{d}x=\\frac{n!}{k^{n+1}}$，算完立刻一眼核对 $y^2$ 每一项因子的次数是否全部翻倍！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.118",
+        "pdfPage": 131,
+        "itemRef": "强化例10.13（含漏平方印刷错误勘误）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy18_07_15",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-28",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（各类函数表达式的几何量计算，强化例10.7~10.15）",
+      "kind": "example",
+      "title": "【强化例 10.14】悬链线 $y=\\frac{\\mathrm{e}^x+\\mathrm{e}^{-x}}{2}$ 绕 $x$ 轴旋转体侧面积（仅数一、数二）",
+      "examWeight": "core",
+      "problem": "（仅数学一、数学二）求曲线 $y=\\dfrac{\\mathrm{e}^x+\\mathrm{e}^{-x}}{2}$，$x=0,\\;x=t\\;(t>0),\\;y=0$ 所围成的曲边梯形绕 $x$ 轴旋转一周所得旋转体的侧面积。",
+      "steps": [
+        {
+          "stepTitle": "1. 利用双曲恒等式 $1+\\sinh^2 x=\\cosh^2 x$ 脱去根号",
+          "detail": "$y'=\\dfrac{\\mathrm{e}^x-\\mathrm{e}^{-x}}{2}$，故 $\\sqrt{1+(y')^2}=\\sqrt{1+\\frac{\\mathrm{e}^{2x}-2+\\mathrm{e}^{-2x}}{4}}=\\dfrac{\\mathrm{e}^x+\\mathrm{e}^{-x}}{2}$。"
+        },
+        {
+          "stepTitle": "2. 代入侧面积公式展开积分",
+          "detail": "$$S(t)=2\\pi\\int_0^t\\left(\\frac{\\mathrm{e}^x+\\mathrm{e}^{-x}}{2}\\right)^2\\mathrm{d}x=\\frac{\\pi}{2}\\int_0^t(\\mathrm{e}^{2x}+2+\\mathrm{e}^{-2x})\\,\\mathrm{d}x=\\frac{\\pi}{4}(\\mathrm{e}^{2t}-\\mathrm{e}^{-2t}+4t).$$"
+        }
+      ],
+      "finalAnswer": "$S(t)=\\dfrac{\\pi}{4}(\\mathrm{e}^{2t}-\\mathrm{e}^{-2t}+4t)$。",
+      "takeaway": "悬链线 $y=\\cosh x$ 堪称侧面积/弧长题宠儿：$\\mathrm{d}s=\\cosh x\\,\\mathrm{d}x$，弧长 $=\\sinh t$，侧面积 $=2\\pi\\int_0^t\\cosh^2 x\\,\\mathrm{d}x$！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.118",
+        "pdfPage": 131,
+        "itemRef": "强化例10.14"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy18_07_15",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-e-29",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（综合题举例，强化例10.15）",
+      "kind": "example",
+      "title": "【强化例 10.15】拐点 + 圆锥体 + 无界反常旋转体体积综合压轴",
+      "examWeight": "core",
+      "problem": "已知 $M(x_0,y_0)$ 是曲线 $y=\\dfrac{1}{1+x^2}\\;(x\\ge 0)$ 的拐点，$O$ 为坐标原点。记 $D$ 是第一象限中以曲线 $y=\\dfrac{1}{1+x^2}\\;(x\\ge x_0)$、线段 $OM$ 及 $x$ 正半轴为边界的无界区域，求 $D$ 绕 $x$ 轴旋转所成旋转体的体积。",
+      "steps": [
+        {
+          "stepTitle": "1. 求二阶导锁定拐点 $M(\\frac{\\sqrt{3}}{3},\\frac{3}{4})$",
+          "detail": "$$y'=\\frac{-2x}{(1+x^2)^2},\\qquad y''=\\frac{6x^2-2}{(1+x^2)^3}.$$ 令 $y''=0\\;(x\\ge 0)$ 得唯一变号零点 $x_0=\\frac{\\sqrt{3}}{3}$，代入得 $y_0=\\frac{3}{4}$，故 $M\\!\\left(\\frac{\\sqrt{3}}{3},\\frac{3}{4}\\right)$。"
+        },
+        {
+          "stepTitle": "2. 分成 $[0,x_0]$ 圆锥体积 + $[x_0,+\\infty)$ 旋转体反常积分求和",
+          "detail": "左段线段 $OM$ 绕 $x$ 轴为圆锥：$V_1=\\frac{\\pi}{3}y_0^2 x_0=\\frac{\\pi}{3}\\left(\\frac{3}{4}\\right)^2\\frac{\\sqrt{3}}{3}=\\frac{\\sqrt{3}}{16}\\pi$。右段令 $x=\\tan t$：$$V_2=\\pi\\int_{\\frac{\\sqrt{3}}{3}}^{+\\infty}\\frac{\\mathrm{d}x}{(1+x^2)^2}=\\pi\\int_{\\frac{\\pi}{6}}^{\\frac{\\pi}{2}}\\cos^2 t\\,\\mathrm{d}t=\\pi\\left.\\left(\\frac{t}{2}+\\frac{\\sin 2t}{4}\\right)\\right|_{\\frac{\\pi}{6}}^{\\frac{\\pi}{2}}=\\pi\\left(\\frac{\\pi}{6}-\\frac{\\sqrt{3}}{8}\\right).$$ 相加得 $V=V_1+V_2=\\dfrac{\\pi^2}{6}-\\dfrac{\\sqrt{3}}{16}\\pi$。"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{\\pi^2}{6}-\\dfrac{\\sqrt{3}}{16}\\pi$。",
+      "takeaway": "直线段绕 $x$ 轴旋转的体积直接用中学圆锥/圆台公式 $\\frac{1}{3}\\pi r^2 h$ 算，省去写直线方程再积分的麻烦！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.118-119",
+        "pdfPage": 131,
+        "itemRef": "强化例10.15"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy18_07_15",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-s-01",
+      "stage": "both",
+      "section": "第 10 讲题型总结 · 一、平面图形面积与旋转体体积全题型速查表",
+      "kind": "summary",
+      "title": "【面积与体积总表】直角/参数/极坐标面积及圆盘/柱壳/斜直线旋转体积落刀表",
+      "examWeight": "core",
+      "overview": "积分学几何应用的核心就是「**画草图定边界 $\\to$ 选对坐标系与积分变量 $\\to$ 吃尽对称性与表 10-1 结论红利**」！下表汇总面积与旋转体体积 5 大高频题型路由。",
+      "tables": [
+        {
+          "caption": "表 10-2 平面图形面积与旋转体体积 5 大高频题型落刀路线速查表（基础 P.264-271 & 强化 P.105-119）",
+          "headers": [
+            "题型类别",
+            "首选落刀公式与策略",
+            "头号易错红线",
+            "代表例题"
+          ],
+          "rows": [
+            [
+              "直角/极限分段/无界区域面积",
+              "先求交点画图；向无穷远延伸用反常积分，衰减振荡加绝对值拆等比级数",
+              "不加绝对值导致正负抵消；忽略 $y(x)$ 隐蔽定义域",
+              "例10.1, 例10.4, 例10.7, 强化例10.7"
+            ],
+            [
+              "参数方程曲线（摆线/星形线/叶形线）",
+              "把 $\\int y\\,\\mathrm{d}x$ 换元 $x=x(t)$，背熟表 10-1 四大星标曲线面积/体积",
+              "上下限未按 $x(\\alpha)=a,\\;x(\\beta)=b$ 对应导致算成负面积（星形线！）",
+              "例10.2, 强化例10.4~10.6"
+            ],
+            [
+              "极坐标面积与绕极轴体积",
+              "$S=\\frac{1}{2}\\int|r_2^2-r_1^2|\\,\\mathrm{d}\\theta$；绕极轴 $V=\\frac{2}{3}\\pi\\int_\\alpha^\\beta r^3\\sin\\theta\\,\\mathrm{d}\\theta$",
+              "双纽线/玫瑰线忘查 $r\\ge 0$ 范围；绕极轴体积错积到 $2\\pi$ 造成重叠",
+              "例10.3, 强化例10.1~10.3"
+            ],
+            [
+              "绕坐标轴或平行轴（$y=c,\\;x=c$）旋转",
+              "圆盘法 $\\pi\\int(y_1^2-y_2^2)\\,\\mathrm{d}x$ vs 柱壳法 $2\\pi\\int x|y|\\,\\mathrm{d}x$；夹在水平线间优先反解 $x=\\varphi(y)$",
+              "把圆盘差误写成 $(y_1-y_2)^2$；忘检 $\\sqrt{\\sin x}$ 定义域；漏平方 $y^2$ 项",
+              "例10.5~10.7, 强化例10.9, 10.12, 10.13, 10.15"
+            ],
+            [
+              "绕斜直线 $Ax+By+C=0$ 旋转",
+              "考场通杀公式 (10-1)，选填可用古鲁金定理 $V=2\\pi d S$ 秒验",
+              "未验证「垂线至多 1 交点」；对非闭合区域乱套 $y=x$ 简化式",
+              "例10.14"
+            ]
+          ]
+        }
+      ],
+      "patterns": [
+        {
+          "typeName": "旋转体体积选变量黄金原则：「哪边不拆段就对谁积分」",
+          "triggers": "平面区域由多条曲线或切线围成，既可竖条 $\\mathrm{d}x$ 又可横条 $\\mathrm{d}y$ 切分时。",
+          "method": "分别画竖直线与水平线穿过区域：如果竖线要穿过两段不同下边界（如例10.7），而水平线始终左 $x=\\ln y$、右 $x=\\frac{y}{\\mathrm{e}}$ 一贯到底，立刻选对 $y$ 积分！",
+          "pitfall": "绕水平轴 $y=c$ 且取 $\\mathrm{d}y$ 对应柱壳法；绕竖直轴 $x=c$ 且取 $\\mathrm{d}y$ 对应圆环法，画清微元半径即可零出错！",
+          "relatedRefs": "例10.6, 例10.7, 强化例10.12"
+        }
+      ],
+      "takeaway": "面积体积先看图，表 10-1 四大星标曲线倒背如流，圆盘柱壳随区域形状灵活切换！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.264-271",
+        "pdfPage": 269,
+        "itemRef": "第10讲 面积与旋转体体积总括",
+        "crossRef": "27张宇《高数18讲》(强化) P.105-119"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-s-02",
+      "stage": "both",
+      "section": "第 10 讲题型总结 · 二、弧长、侧面积、形心与平均值速查表（数一核心）",
+      "kind": "summary",
+      "title": "【数一专属几何量总表】弧长、侧面积、形心坐标、平均值与平行截面速查表",
+      "examWeight": "core",
+      "overview": "弧长、旋转曲面侧面积、形心坐标与平行截面体积均为**数一/数二专属高频考点**（数三不考），只要公式背准、认出「完全平方配方法」，几乎属于白给的送分题！",
+      "tables": [
+        {
+          "caption": "表 10-3 弧长、侧面积、形心、平均值与平行截面 5 大题型落刀速查表（基础 P.271-277 & 强化 P.107-118）",
+          "headers": [
+            "几何量",
+            "核心公式与化简关键",
+            "头号易错红线",
+            "代表例题"
+          ],
+          "rows": [
+            [
+              "直角/对数/变限曲线弧长",
+              "$\\int\\sqrt{1+(y')^2}\\,\\mathrm{d}x$（或视 $y$ 为参）；重点配 $1+(A-\\frac{1}{4A})^2=(A+\\frac{1}{4A})^2$ 与 $\\sec x$",
+              "求「全长」漏找自然定义域（强化例10.10）；$\\ln|\\sec x+\\tan x|$ 化简出错",
+              "例10.10, 强化例10.10, 10.11"
+            ],
+            [
+              "参数/极坐标弧长",
+              "$\\int\\sqrt{(x')^2+(y')^2}\\,\\mathrm{d}t$ 或 $\\int\\sqrt{r^2+(r')^2}\\,\\mathrm{d}\\theta$；巧用半角降幂去根号",
+              "极坐标弧长误把 $r^2+(r')^2$ 写成 $1+(r')^2$；忘用 $\\int\\sqrt{1+\\theta^2}$ 闭式",
+              "例10.11, 强化例10.1, 10.4, 10.5"
+            ],
+            [
+              "旋转曲面侧面积（绕 $x$ 轴）",
+              "$S=2\\pi\\int|y|\\,\\mathrm{d}s$；悬链线 $1+\\sinh^2=\\cosh^2$、星形线取 $2\\times[0,\\frac{\\pi}{2}]$",
+              "漏写弧微分 $\\mathrm{d}s$ 误写 $\\mathrm{d}x$；对称全闭曲线乘 $4$ 算成双层重叠面",
+              "例10.12, 例10.13, 强化例10.8, 10.14"
+            ],
+            [
+              "曲边梯形形心 $(\\bar{x},\\bar{y})$",
+              "$\\bar{x}=\\frac{\\int_a^b x f\\,\\mathrm{d}x}{\\int_a^b f\\,\\mathrm{d}x}$，$\\bar{y}=\\frac{\\frac{1}{2}\\int_a^b f^2\\,\\mathrm{d}x}{\\int_a^b f\\,\\mathrm{d}x}$；有对称轴先用对称性",
+              "$\\bar{y}$ 分子漏写系数 $\\frac{1}{2}$；分式结果未通分约分至最简",
+              "例10.9"
+            ],
+            [
+              "函数平均值与平行截面体积",
+              "$\\bar{f}=\\frac{1}{b-a}\\int_a^b f(x)\\,\\mathrm{d}x$（差分方程构造 $\\int_x^{x+T}f$）；$V=\\int_a^b A(x)\\,\\mathrm{d}x$",
+              "平均值忘除以区间长度 $b-a$；误把斜截面圆直接塞进 $\\mathrm{d}x$ 积分",
+              "例10.8, 例10.14"
+            ]
+          ]
+        }
+      ],
+      "patterns": [
+        {
+          "typeName": "体积 vs 侧面积防混口诀",
+          "triggers": "考场同时出现旋转体体积与旋转曲面侧面积两问时。",
+          "method": "牢记三差：**体积是 $\\pi y^2\\mathrm{d}x$（系数 $\\pi$、二次 $y^2$、投影 $\\mathrm{d}x$）**，**侧面积是 $2\\pi|y|\\mathrm{d}s$（系数 $2\\pi$、一次 $|y|$、弧微分 $\\mathrm{d}s$）**！",
+          "pitfall": "绝对不要在算侧面积时顺手把 $|y|$ 写成了 $y^2$ 或把 $\\mathrm{d}s$ 写丢成 $\\mathrm{d}x$！",
+          "relatedRefs": "例10.12, 例10.13, 强化例10.8, 强化例10.14"
+        }
+      ],
+      "takeaway": "数一几何应用送分秘诀：**弧微分 $\\mathrm{d}s$ 统领弧长与侧面积，形心 $\\bar{y}$ 紧盯 $\\frac{1}{2}$，平均值紧盯 $\\frac{1}{b-a}$！**",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.271-277",
+        "pdfPage": 276,
+        "itemRef": "第10讲 弧长/侧面积/形心/平均值总括",
+        "crossRef": "27张宇《高数18讲》(强化) P.107-118"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c10-s-03",
+      "stage": "both",
+      "section": "第 10 讲题型总结 · 三、原书勘误与严谨性核验台账",
+      "kind": "summary",
+      "title": "【避坑 & 勘误台账】第 10 讲原书重大漏平方错误与斜轴旋转严谨性核验汇总",
+      "examWeight": "core",
+      "overview": "经逐页视觉直读与 SymPy 全量符号/数值核验，本讲精准捕获 **1 处重大漏平方印刷错误** 与 **2 处几何严谨性深度补注**，对应总台账 #32~#34。",
+      "tables": [
+        {
+          "caption": "表 10-4 第 10 讲原书印刷错误与严谨性核验台账（对应总台账 #32~#34）",
+          "headers": [
+            "编号",
+            "出处与例题",
+            "原书内容 / 隐患",
+            "SymPy 核验与严谨修正"
+          ],
+          "rows": [
+            [
+              "#32",
+              "高数18讲 P.118 强化例10.13",
+              "题干为 $y=x\\mathrm{e}^{-\\frac{3}{2}x}\\;(x\\ge 0)$，但解答写 $V=\\pi\\int_0^{+\\infty} x\\mathrm{e}^{-3x}\\,\\mathrm{d}x=\\frac{\\pi}{9}$",
+              "**重大漏平方印刷错误实锤！**$y^2=x^2\\mathrm{e}^{-3x}$，SymPy 精确验算 $V=\\pi\\int_0^{+\\infty} x^2\\mathrm{e}^{-3x}\\,\\mathrm{d}x=\\frac{2\\pi}{27}$；原书解答系漏平方 $x$（按 $y=\\sqrt{x}\\mathrm{e}^{-\\frac{3}{2}x}$ 算出）。"
+            ],
+            [
+              "#33",
+              "基础30讲 P.276-277 例10.14",
+              "写「垂直于 $x$ 轴截面积 $A(x)=\\sqrt{2}\\pi(\\frac{\\sqrt{x}-x}{\\sqrt{2}})^2$」称作等价变换巧算",
+              "精确通式 (10-1) 拆出尾项 $\\left.\\frac{\\pi}{6\\sqrt{2}}(f(x)-x)^3\\right|_a^b$，**仅当两端闭合在 $y=x$ 上且 $f'\\ge -1$ 时尾项归零**才与巧算巧合相等；SymPy 实测截断区间 $[0,\\frac{1}{2}]$ 时精确值 $0.05937\\ne$ 巧算值 $0.05608$，考场通杀一律用公式 (10-1)！"
+            ],
+            [
+              "#34",
+              "高数18讲 P.108 基本图形表（双纽线体积）",
+              "表列 $r^2=a^2\\cos 2\\theta$ 绕 $y$ 轴 $\\frac{\\sqrt{2}}{8}\\pi^2 a^3$，$r^2=a^2\\sin 2\\theta$ 绕极轴 $\\frac{\\pi^2}{4}a^3$",
+              "SymPy/mpmath 实测双项均 **100% 精确**：前者左右双瓣关于 $y$ 轴对称仅算单瓣即扫遍立体（$1.744716=\\frac{\\sqrt{2}}{8}\\pi^2$），后者一、三象限双瓣绕极轴互不重叠需合算双瓣（$2\\times 1.233701=2.467401=\\frac{\\pi^2}{4}$）。"
+            ]
+          ]
+        }
+      ],
+      "patterns": [
+        {
+          "typeName": "旋转体体积计算「三必查」终检习惯",
+          "triggers": "算完任意一道旋转体体积大题或填空题准备落笔交卷前。",
+          "method": "① **查定义域**：根号/对数是否排除了区间内无意义段（例10.5）；② **查 $y^2$ 每项平方**：系数、幂次、指数是否全部翻倍（强化例10.13）；③ **查旋转重叠**：对称图形是否只取了单侧以免算重（双纽线/心形线/星形线）！",
+          "pitfall": "这三处占了考研旋转体体积失分原因的 90% 以上！",
+          "relatedRefs": "例10.5, 例10.13, 例10.14, 强化例10.13"
+        }
+      ],
+      "takeaway": "牢记本讲两大铁律：**套 $V_x=\\pi\\int y^2\\mathrm{d}x$ 绝不漏平方，绕斜线旋转绝不盲猜截面一律用公式 (10-1)！**",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》&《高数18讲》(强化)",
+        "printedPage": "基础 P.276-277 · 强化 P.108, 118",
+        "pdfPage": 281,
+        "itemRef": "第10讲 勘误与严谨性核验台账"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c10_ex_zy18_07_15",
+        "verified": true
+      }
+    }
+  ]
+}

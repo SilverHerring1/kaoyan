@@ -1,0 +1,1444 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "calc-11",
+  "chapterNum": "高数 · 第 11 讲",
+  "chapterTitle": "一元函数积分学的应用（二）——积分等式与积分不等式",
+  "syllabusRef": "2027 考研数学一大纲 · 高等数学第 11 讲（27 张宇《基础30讲·高数》P.282-290上 + 《高数18讲》强化 P.120-137 全量合编）",
+  "items": [
+    {
+      "id": "m1-c11-f-01",
+      "stage": "both",
+      "section": "一、推广的积分中值定理与定积分四大基础恒等性质",
+      "kind": "formula",
+      "title": "第一（推广）积分中值定理（开区间版）与定积分字母无关/线性/方向/可拆性",
+      "examWeight": "core",
+      "prompt": "默写推广的积分中值定理（$g(x)$ 不变号，开区间 $\\xi\\in(a,b)$）以及强化定积分等式的四大基础性质（字母无关、线性、方向、可加可拆）：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{推广积分中值定理：}f,g\\in C[a,b]\\text{ 且 }g(x)\\text{ 在 }[a,b]\\text{ 上不变号}\\Rightarrow\\exists\\xi\\in(a,b),\\;\\int_a^b f(x)g(x)\\,\\mathrm{d}x=f(\\xi)\\int_a^b g(x)\\,\\mathrm{d}x\\\\\n&\\text{特例 }(g\\equiv 1):\\;\\exists\\xi\\in(a,b),\\;\\int_a^b f(x)\\,\\mathrm{d}x=f(\\xi)(b-a)\\\\\n&\\text{基础恒等四性：}\\int_a^b f(x)\\,\\mathrm{d}x=\\int_a^b f(t)\\,\\mathrm{d}t,\\quad \\int_a^b f=-\\int_b^a f,\\quad \\int_a^b f=\\int_a^c f+\\int_c^b f\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "考试可直接使用（基础 P.283 注(1)）",
+          "desc": "定理中值点 $\\xi$ 可以严格取在**开区间 $(a,b)$** 内（故闭区间 $[a,b]$ 更成立），与第 6 讲罗尔/拉格朗日联动时往往需要开区间性质避开端点！"
+        },
+        {
+          "sym": "函数值 $\\leftrightarrow$ 定积分互译（强化 P.127 注(1)）",
+          "desc": "既可用中值定理把积分值变成某点函数值，也常逆向把常数写成定积分（如 $\\frac{\\pi}{4}=\\int_1^{+\\infty}\\frac{\\mathrm{d}x}{1+x^2}$、$1=\\int_0^{\\frac{\\pi}{2}}\\sin x\\,\\mathrm{d}x$）。"
+        }
+      ],
+      "conditions": "推广积分中值定理**绝对要求 $g(x)$ 在 $[a,b]$ 上不变号**（恒非负或恒非正）；若 $g(x)$ 变号（如 $\\sin x$ 在 $[0,2\\pi]$），定理立即失效！",
+      "pitfalls": "**重大陷阱（基础 P.284 注(2)）**：若被积函数含参数 $n$（如 $\\int_1^2 f(x)\\mathrm{e}^{-x^n}\\,\\mathrm{d}x=f(\\xi_n)\\int_1^2\\mathrm{e}^{-x^n}\\,\\mathrm{d}x$），中值点 $\\xi_n$ 随 $n$ 变化；同理若把 $\\int_1^2\\mathrm{e}^{-x^n}\\,\\mathrm{d}x$ 写成 $\\mathrm{e}^{-\\eta_n^n}\\;(\\eta_n\\in(1,2))$，**绝不可直接写 $\\lim_{n\\to\\infty}\\mathrm{e}^{-\\eta_n^n}=0$**（因为若 $\\eta_n\\to 1^+$ 有可能 $\\eta_n^n\\not\\to+\\infty$！见例11.1(2) 正确放缩法）！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.283-284",
+        "pdfPage": 288,
+        "itemRef": "一·1 用中值定理 例11.1 & 注(1)(2)",
+        "crossRef": "27张宇《高数18讲》(强化) P.121 一~四 & P.126-127 九、积分中值定理"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy30_and_sym",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-f-02",
+      "stage": "both",
+      "section": "五~六、「祖孙三代」奇偶性/周期性链条与对称配对公式",
+      "kind": "formula",
+      "title": "「祖孙三代」$\\left(\\int_a^x f(t)\\,\\mathrm{d}t,\\;f(x),\\;f'(x)\\right)$ 奇偶/周期链与对称配对神式",
+      "examWeight": "core",
+      "prompt": "默写「祖孙三代」奇偶性（4 条）、周期性（3 条）及处理非奇非偶被积函数的对称配对公式 ⑥：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{奇偶链：}f\\text{ 奇}\\Rightarrow f'\\text{ 偶、}\\int_0^x f\\text{ 偶（任何下限均偶）};\\quad f\\text{ 偶}\\Rightarrow f'\\text{ 奇、}\\int_0^x f\\text{ 奇（须下限为 }0\\text{！）}\\\\\n&\\text{对称配对神式（强化 ⑥）：}\\int_{-a}^a f(x)\\,\\mathrm{d}x=\\frac{1}{2}\\int_{-a}^a\\bigl[f(x)+f(-x)\\bigr]\\,\\mathrm{d}x=\\int_0^a\\bigl[f(x)+f(-x)\\bigr]\\,\\mathrm{d}x\\\\\n&\\text{周期链（周期 }T\\text{）：}f'\\text{ 必以 }T\\text{ 为周期；}\\int_a^x f\\text{ 以 }T\\text{ 为周期}\\iff\\int_0^T f=0\\text{；}\\int_a^{a+nT}f=n\\int_0^T f\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "对称配对神式专杀目标（强化 P.123）",
+          "desc": "专门秒杀本身非奇非偶、但分母含 $1+\\mathrm{e}^x$、$1+\\mathrm{e}^{-x}$、$1+\\mathrm{e}^{\\frac{1}{x}}$ 或 $1+a^x$ 的对称区间积分！因 $\\frac{1}{1+\\mathrm{e}^x}+\\frac{1}{1+\\mathrm{e}^{-x}}\\equiv 1$，相加瞬间把讨厌的指数分母消灭干净（强化例11.4、11.5）！"
+        }
+      ],
+      "conditions": "使用对称配对神式 $\\int_{-a}^a f(x)\\,\\mathrm{d}x=\\int_0^a[f(x)+f(-x)]\\,\\mathrm{d}x$ 时，只要求 $f(x)$ 在 $[-a,a]$ 上可积（允许有限个第一类间断点，如强化例11.4 在 $x=0$ 为跳跃间断点仍成立！）。",
+      "pitfalls": "千万注意「**偶函数求导变奇、连续周期函数积分不自动周期**」：若 $f$ 为偶函数且可导，则 $f'(0)=0$、$f'''(0)=0$（所有奇数阶导数在 $0$ 点必为 $0$，强化例11.2）；而周期函数定积分 $\\int_a^{a+L} f$ 仅当区间长度 $L$ 是**周期 $T$ 的整数倍**时才与起点 $a$ 无关（强化例11.6(2)）！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.122-123",
+        "pdfPage": 135,
+        "itemRef": "五、祖孙三代奇偶性 ①~⑥ & 六、周期性 ①~③"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy18_eq_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-f-03",
+      "stage": "intensive",
+      "section": "强化七~八、区间再现七大变形公式与华里士公式",
+      "kind": "formula",
+      "title": "【强化】区间再现七大变形公式（含半区间对称折叠与 $\\int_0^{\\frac{\\pi}{2}}\\sqrt{\\cot x}$ 典例）",
+      "examWeight": "core",
+      "prompt": "默写强化 18 讲归纳的区间再现全部 7 个变形公式，以及注中 4 个高频区间再现秒杀结果：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{① }\\int_a^b f(x)\\,\\mathrm{d}x=\\int_a^b f(a+b-x)\\,\\mathrm{d}x\\qquad\\text{② }\\int_a^b f(x)\\,\\mathrm{d}x=\\frac{1}{2}\\int_a^b\\bigl[f(x)+f(a+b-x)\\bigr]\\,\\mathrm{d}x\\\\\n&\\text{③ 半区间折叠：}\\int_a^b f(x)\\,\\mathrm{d}x=\\int_a^{\\frac{a+b}{2}}\\bigl[f(x)+f(a+b-x)\\bigr]\\,\\mathrm{d}x\\\\\n&\\text{④ }\\int_0^\\pi x f(\\sin x)\\,\\mathrm{d}x=\\frac{\\pi}{2}\\int_0^\\pi f(\\sin x)\\,\\mathrm{d}x\\qquad\\text{⑤ }\\int_0^\\pi x f(\\sin x)\\,\\mathrm{d}x=\\pi\\int_0^{\\frac{\\pi}{2}} f(\\sin x)\\,\\mathrm{d}x\\\\\n&\\text{⑥ }\\int_0^{\\frac{\\pi}{2}} f(\\sin x)\\,\\mathrm{d}x=\\int_0^{\\frac{\\pi}{2}} f(\\cos x)\\,\\mathrm{d}x\\qquad\\text{⑦ }\\int_0^{\\frac{\\pi}{2}} f(\\sin x,\\cos x)\\,\\mathrm{d}x=\\int_0^{\\frac{\\pi}{2}} f(\\cos x,\\sin x)\\,\\mathrm{d}x\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "强化 P.124-125 必背五大区间再现典例（SymPy 全核验）",
+          "desc": "① $\\int_0^{\\frac{\\pi}{2}}\\sqrt{\\cot x}\\,\\mathrm{d}x=\\frac{1}{2}\\int_0^{\\frac{\\pi}{2}}(\\sqrt{\\cot x}+\\sqrt{\\tan x})\\,\\mathrm{d}x\\xlongequal{t=\\sqrt{\\tan x}}\\int_0^{+\\infty}\\frac{1+t^2}{1+t^4}\\,\\mathrm{d}t=\\frac{\\sqrt{2}}{2}\\pi$；\n② $\\int_0^1\\frac{x}{\\mathrm{e}^x+\\mathrm{e}^{1-x}}\\,\\mathrm{d}x=\\frac{1}{2\\sqrt{\\mathrm{e}}}\\left(\\arctan\\sqrt{\\mathrm{e}}-\\arctan\\frac{1}{\\sqrt{\\mathrm{e}}}\\right)$；\n③ $\\int_0^{n\\pi} x|\\sin x|\\,\\mathrm{d}x=n^2\\pi$；④ $\\int_0^2\\frac{\\sqrt{4-x}}{\\sqrt{4-x}+\\sqrt{x+2}}\\,\\mathrm{d}x=1$；⑤ $\\int_0^a\\frac{\\mathrm{d}x}{x+\\sqrt{a^2-x^2}}=\\frac{\\pi}{4}$！"
+        }
+      ],
+      "conditions": "公式 ③ 成立的几何直觉是 $F(x)=f(x)+f(a+b-x)$ 的图像关于区间中点 $x=\\frac{a+b}{2}$ 轴对称，故取左半区间即可省去因子 $\\frac{1}{2}$！",
+      "pitfalls": "遇到 $\\int_0^1\\frac{\\ln(1+x)}{1+x^2}\\,\\mathrm{d}x$（强化例11.7）或 $\\int_0^a\\frac{\\mathrm{d}x}{x+\\sqrt{a^2-x^2}}$ 时，**直接用区间再现看不出对称，必须先作一次三角换元**（$x=\\tan t$ 或 $x=a\\sin t$）变成 $[0,\\frac{\\pi}{4}]$ 或 $[0,\\frac{\\pi}{2}]$ 再套区间再现！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.124-126",
+        "pdfPage": 137,
+        "itemRef": "七、区间再现下的积分公式 ①~⑦ & 注 & 八、华里士公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy18_eq_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-f-04",
+      "stage": "both",
+      "section": "强化十~十二、定积分换元/分部（「升降阶」）与牛顿-莱布尼茨差值放缩",
+      "kind": "formula",
+      "title": "定积分换元与分部（「联系两积分与升降阶」）及牛顿-莱布尼茨构造差值四典范",
+      "examWeight": "core",
+      "prompt": "理解定积分换元法与分部积分法在证明题中的核心定位，并默写牛顿-莱布尼茨公式构造差值 $f(x)-f(a)=\\int_a^x f'(t)\\,\\mathrm{d}t$ 的 4 个高频不等式示范：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{分部升降阶链：}\\int f(x)\\,\\mathrm{d}x\\;\\xleftrightarrow[\\text{降阶}]{\\text{升阶}}\\;f(x)\\;\\xleftrightarrow[\\text{降阶}]{\\text{升阶}}\\;f'(x)\\;\\xleftrightarrow[\\text{降阶}]{\\text{升阶}}\\;f''(x)\\\\\n&\\text{N-L 差值放缩 4 典范（强化 P.133 注）：}\\\\\n&\\quad\\text{① }\\ln\\!\\left(1+\\frac{1}{x}\\right)=\\int_x^{x+1}\\frac{\\mathrm{d}t}{t}>\\frac{1}{1+x}\\;(x>0)\\qquad\\text{② }f'(x)=\\frac{1}{x^2+1},\\,f(1)=1\\Rightarrow f(x)<1+\\frac{\\pi}{4}\\;(x\\ge 1)\\\\\n&\\quad\\text{③ }\\ln(1+n)=\\int_1^{n+1}\\frac{\\mathrm{d}x}{x}<1+\\frac{1}{2}+\\cdots+\\frac{1}{n}\\qquad\\text{④ }\\ln n=\\int_1^n\\frac{\\mathrm{d}x}{x}>\\frac{1}{2}+\\frac{1}{3}+\\cdots+\\frac{1}{n}\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "定积分换元 vs 分部的深层区分（强化 P.128 注(2)）",
+          "desc": "处理抽象积分等式/不等式时：**只要两端积分区间发生了变化，一定先用换元积分法**；若前后积分区间相同、且涉及 $f,f',f''$ 阶数转换，一般用**分部积分法**（区间再现是不改区间的特殊换元）！"
+        }
+      ],
+      "conditions": "看到积分区间为 $[0,2\\pi]$ 配三角有理式时，因区间太大难以保证三角函数定号，常先按 $x=\\pi$ 拆成 $[0,\\pi]$ 与 $[\\pi,2\\pi]$ 再把后段平移换元 $t=x-\\pi$ 叠回 $[0,\\pi]$ 比较（如 $\\int_0^{2\\pi}\\frac{\\sin x}{x}\\,\\mathrm{d}x>0$，强化 P.128-129 注）！",
+      "pitfalls": "使用 $\\int_a^b f'(x)\\,\\mathrm{d}x=f(b)-f(a)$ 放缩时，别忘了当已知 $f(a)=f(b)=0$ 时，**同时从左端点 $a$ 和右端点 $b$ 各写一条牛顿-莱布尼茨式相加**，瞬间把区间拆成 $[a,x]$ 与 $[x,b]$ 得到最强系数 $\\frac{1}{2}$（基础例11.11）！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.127-133",
+        "pdfPage": 140,
+        "itemRef": "十~十二、换元/分部升降阶 & N-L 注 ①~④",
+        "crossRef": "27张宇《基础30讲·高等数学分册》P.289-290 例11.11"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy18_11_19",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-f-05",
+      "stage": "both",
+      "section": "强化第二部分、定积分不等式四大基石定理",
+      "kind": "formula",
+      "title": "定积分不等式四大基石定理（比较保号、估值、绝对值及严格不等式零点推论）",
+      "examWeight": "core",
+      "prompt": "默写定积分比较定理、估值定理、绝对值不等式，以及由绝对值严格不等式反推区间内必有零点的重要定理：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{① 比较定理（保号性）：}f(x)\\le g(x)\\;(x\\in[a,b],\\;a<b)\\Rightarrow\\int_a^b f(x)\\,\\mathrm{d}x\\le\\int_a^b g(x)\\,\\mathrm{d}x\\\\\n&\\text{② 估值定理：}m\\le f(x)\\le M\\;(x\\in[a,b],\\;a<b)\\Rightarrow m(b-a)\\le\\int_a^b f(x)\\,\\mathrm{d}x\\le M(b-a)\\\\\n&\\text{③ 绝对值不等式：}\\left|\\int_a^b f(x)\\,\\mathrm{d}x\\right|\\le\\int_a^b|f(x)|\\,\\mathrm{d}x\\quad(a<b)\\\\\n&\\text{④ 严格绝对值零点定理（强化 P.135 注）：}f\\in C[a,b]\\text{ 且 }\\left|\\int_a^b f(x)\\,\\mathrm{d}x\\right|<\\int_a^b|f(x)|\\,\\mathrm{d}x\\Rightarrow\\exists c\\in(a,b),\\;f(c)=0\n\\end{aligned}$$",
+      "figureSvg": "<svg viewBox=\"0 0 600 185\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">\n  <title>积分等式与积分不等式证明武器库全景路由图（仿基础P.282与强化P.120,134）</title>\n  <defs>\n    <marker id=\"m1c11_arr1\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#334155\"/>\n    </marker>\n  </defs>\n  <!-- Left: Integral Equations -->\n  <rect x=\"6\" y=\"6\" width=\"286\" height=\"173\" rx=\"8\" fill=\"#eff6ff\" stroke=\"#3b82f6\" stroke-width=\"1.3\"/>\n  <text x=\"149\" y=\"25\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#1e3a8a\">① 积分等式与积分极限 5 大核心武器</text>\n  <rect x=\"18\" y=\"36\" width=\"262\" height=\"24\" rx=\"4\" fill=\"#ffffff\" stroke=\"#93c5fd\"/>\n  <text x=\"149\" y=\"52\" text-anchor=\"middle\" font-size=\"10\" fill=\"#0f172a\">对称配对 / 祖孙三代奇偶周期 / 区间再现 7 式</text>\n  <rect x=\"18\" y=\"65\" width=\"262\" height=\"24\" rx=\"4\" fill=\"#ffffff\" stroke=\"#93c5fd\"/>\n  <text x=\"149\" y=\"81\" text-anchor=\"middle\" font-size=\"10\" fill=\"#0f172a\">推广积分中值定理（配罗尔/拉格朗日定高阶导）</text>\n  <rect x=\"18\" y=\"94\" width=\"262\" height=\"24\" rx=\"4\" fill=\"#ffffff\" stroke=\"#93c5fd\"/>\n  <text x=\"149\" y=\"110\" text-anchor=\"middle\" font-size=\"10\" fill=\"#0f172a\">夹逼准则（放缩 + ∫₀¹ xⁿf(x)→0；跳跃点禁洛必达）</text>\n  <rect x=\"18\" y=\"123\" width=\"262\" height=\"24\" rx=\"4\" fill=\"#ffffff\" stroke=\"#93c5fd\"/>\n  <text x=\"149\" y=\"139\" text-anchor=\"middle\" font-size=\"10\" fill=\"#0f172a\">分部升降阶（∫f ↔ f ↔ f′ ↔ f″）与换元联立</text>\n  <rect x=\"18\" y=\"152\" width=\"262\" height=\"21\" rx=\"4\" fill=\"#dbeafe\" stroke=\"#60a5fa\"/>\n  <text x=\"149\" y=\"166\" text-anchor=\"middle\" font-size=\"9.6\" font-weight=\"700\" fill=\"#1d4ed8\">可拆区极限（强化例11.1：−√h 与 +√h 劈三段！）</text>\n\n  <!-- Right: Integral Inequalities -->\n  <rect x=\"308\" y=\"6\" width=\"286\" height=\"173\" rx=\"8\" fill=\"#fff7ed\" stroke=\"#f97316\" stroke-width=\"1.3\"/>\n  <text x=\"451\" y=\"25\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#9a3412\">② 积分不等式 6 大压轴武器（按题设秒选）</text>\n  <rect x=\"320\" y=\"36\" width=\"262\" height=\"24\" rx=\"4\" fill=\"#ffffff\" stroke=\"#fdba74\"/>\n  <text x=\"451\" y=\"52\" text-anchor=\"middle\" font-size=\"10\" fill=\"#0f172a\">仅连续 → 变上限单调性 / 比较保号（配完全平方）</text>\n  <rect x=\"320\" y=\"65\" width=\"262\" height=\"24\" rx=\"4\" fill=\"#ffffff\" stroke=\"#fdba74\"/>\n  <text x=\"451\" y=\"81\" text-anchor=\"middle\" font-size=\"10\" fill=\"#0f172a\">一阶导 + 端点零 → 拉格朗日拆双段 / N-L 绝对值</text>\n  <rect x=\"320\" y=\"94\" width=\"262\" height=\"24\" rx=\"4\" fill=\"#ffffff\" stroke=\"#fdba74\"/>\n  <text x=\"451\" y=\"110\" text-anchor=\"middle\" font-size=\"10\" fill=\"#0f172a\">二阶导 + 中点/双端点 → 泰勒展开消一次项放余项</text>\n  <rect x=\"320\" y=\"123\" width=\"262\" height=\"24\" rx=\"4\" fill=\"#ffffff\" stroke=\"#fdba74\"/>\n  <text x=\"451\" y=\"139\" text-anchor=\"middle\" font-size=\"10\" fill=\"#0f172a\">含 sin nx 振荡 → 分部积分提出 1/n + 绝对值放缩</text>\n  <rect x=\"320\" y=\"152\" width=\"262\" height=\"21\" rx=\"4\" fill=\"#ffedd5\" stroke=\"#fb923c\"/>\n  <text x=\"451\" y=\"166\" text-anchor=\"middle\" font-size=\"9.6\" font-weight=\"700\" fill=\"#c2410c\">大区间难证 → 黎曼拆区间（最大点 x₀ 或周期配对）</text>\n</svg>",
+      "conditions": "全部四个不等式都严格要求 **下限 $a < b$ 上限**！若 $a>b$ 全部不等号反向！且应用「严格保号」推 $f(x)\\equiv 0$（如强化例11.17 由 $\\int_0^1[f(x)-x^2]^2\\,\\mathrm{d}x\\le 0$ 推 $f(x)\\equiv x^2$）要求被积函数**连续且非负**。",
+      "pitfalls": "反证法证 ④ 时注意：若 $f$ 在 $[a,b]$ 恒大于 $0$ 或恒小于 $0$（甚至仅保号 $\\ge 0$ 或 $\\le 0$），恒有 $\\left|\\int_a^b f\\right|=\\int_a^b|f|$，与严格小于号矛盾，故 $f$ 在 $[a,b]$ 必有正有负，从而由零点定理存在内点 $c\\in(a,b)$ 使 $f(c)=0$！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.134-136",
+        "pdfPage": 147,
+        "itemRef": "第二部分 一~四、定积分不等式四大工具 & P.135 注"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-c-01",
+      "stage": "foundation",
+      "section": "基础一、积分等式与积分极限三大必背通用结论",
+      "kind": "conclusion",
+      "title": "基础积分极限三大王牌结论（$\\lim\\int_0^1 x^n f(x)=0$、跳跃点禁洛必达、分部恒等式）",
+      "examWeight": "core",
+      "summary": "基础 30 讲 P.283-287 针对「积分等式与积分极限」提炼出三条高频通杀结论：\n1. **多项式权重归零定理（P.285-286 注）**：若 $f(x)$ 在 $[0,1]$ 上连续（设 $m\\le f(x)\\le M$），则由 $\\frac{m}{n+1}\\le\\int_0^1 x^n f(x)\\,\\mathrm{d}x\\le\\frac{M}{n+1}$ 夹逼立得：\n$$\\lim_{n\\to\\infty}\\int_0^1 x^n f(x)\\,\\mathrm{d}x=0\\qquad\\Bigl(\\text{更一般地，}\\lim_{n\\to\\infty}\\int_0^1(n+1)x^n f(x)\\,\\mathrm{d}x=f(1)\\text{，见例11.3}\\Bigr)$$\n2. **含跳跃间断点周期函数积分极限禁用洛必达（例11.5）**：如 $f(x)=x-[x]$ 含无穷多个跳跃间断点，无原函数，算 $\\lim_{x\\to+\\infty}\\frac{1}{x}\\int_0^x f(t)\\,\\mathrm{d}t$ 严禁用洛必达，必须借 $n\\le x<n+1$ 夹逼得单周期平均值 $\\frac{1}{T}\\int_0^T f(t)\\,\\mathrm{d}t$！\n3. **积分等式遇高阶导优先分部（例11.6）**：见到 $f$ 与 $f''$ 同时出现且 $f(0)=f(1)=0$，从含 $f''$ 一侧连续两次分部即得 $\\int_0^1 f(x)\\,\\mathrm{d}x=\\frac{1}{2}\\int_0^1 x(x-1)f''(x)\\,\\mathrm{d}x$！",
+      "conditions": "上述 $\\lim_{n\\to\\infty}\\int_0^1 x^n f(x)\\,\\mathrm{d}x=0$ 甚至可放宽到 $f(x)$ 在 $[0,1]$ 上有界可积（如例11.4 补定义 $x|\\ln x|$ 在 $x=0$ 为 $0$ 即连续，瞬间秒证 $\\lim\\int_0^1 t^n|\\ln t|\\,\\mathrm{d}t=0$）！",
+      "pitfalls": "千万不要看到 $\\frac{\\int_0^x f(t)\\,\\mathrm{d}t}{x}$ 为 $\\frac{\\infty}{\\infty}$ 就无脑洛必达！只要 $f(t)$ 不连续（如取整锯齿波 $x-[x]$），$\\int_0^x f(t)\\,\\mathrm{d}t$ 在整数点处不可导，洛必达直接扣光过程分！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.285-287",
+        "pdfPage": 290,
+        "itemRef": "一·2 例11.3~11.5 & 注 & 一·3 例11.6"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy30_and_sym",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-c-02",
+      "stage": "foundation",
+      "section": "基础二、积分不等式五大证明工具全景对照表",
+      "kind": "conclusion",
+      "title": "积分不等式五大证明方法（单调性/拉格朗日/泰勒/分部/N-L）触发条件速查表",
+      "examWeight": "core",
+      "summary": "证明积分不等式的最大痛点是「不知选哪种工具」。基础 30 讲 P.287-290 按**题设光滑阶数（连续 / 一阶导 / 二阶导）**直接把 5 大方法一一锁死（见表 11-1）：\n$$\\text{连续}\\to\\text{变上限单调性}\\quad|\\quad\\text{一阶导}\\to\\text{拉格朗日 / N-L / 分部}\\quad|\\quad\\text{二阶导}\\to\\text{中点或双端点泰勒}$$",
+      "tables": [
+        {
+          "caption": "表 11-1 积分不等式五大基础证明方法触发特征与经典代表作对照表（基础 30 讲 P.287-290）",
+          "headers": [
+            "方法",
+            "核心题设信号",
+            "标准落刀动作",
+            "基础代表例题"
+          ],
+          "rows": [
+            [
+              "① 函数单调性",
+              "$f,g$ 仅连续、含单调性或有界条件 $0\\le g\\le 1$",
+              "将积分上限常量 $b$ 改为变量 $x$，移项造 $F(x)$ 求导判单调",
+              "例11.7"
+            ],
+            [
+              "② 拉格朗日中值定理",
+              "$f$ 一阶可导（$f'$ 连续），且一端或两端函数值为 $0$",
+              "在 $[0,x]$ 与 $[x,1]$ 分别拉格朗日估出 $|f(x)|\\le Mx,M(1-x)$ 再拆段积分",
+              "例11.8"
+            ],
+            [
+              "③ 泰勒公式",
+              "$f$ 二阶可导，且在中点 $x_0$（或双端点）函数值简单",
+              "在区间中点 $x_0=\\frac{a+b}{2}$ 二阶泰勒展开，利用 $\\int_a^b(x-x_0)\\,\\mathrm{d}x=0$ 自动消掉 $f'(x_0)$！",
+              "例11.9, 强化例11.18"
+            ],
+            [
+              "④ 分部积分法",
+              "被积函数是两项乘积（如 $f(x)\\sin nx$），且知 $f'$ 符号",
+              "分部提出 $\\frac{1}{n}$，用 $|\\int_a^b u\\,\\mathrm{d}v|\\le|uv|_a^b|+\\int_a^b|v\\,\\mathrm{d}u|$ 放缩",
+              "例11.10"
+            ],
+            [
+              "⑤ 牛顿-莱布尼茨公式",
+              "直接联系点值 $|f(x)|$ 与导数绝对值积分 $\\int_a^b|f'(t)|\\,\\mathrm{d}t$",
+              "双写 $f(x)=\\int_a^x f'=-\\int_x^b f'$ 取绝对值相加除以 $2$",
+              "例11.11"
+            ]
+          ]
+        }
+      ],
+      "conditions": "凡遇二阶导且无 $f'(x_0)$ 信息时，**在区间中点 $x_0=\\frac{a+b}{2}$ 展开泰勒公式**能白白消掉一次项积分 $\\int_a^b(x-x_0)\\,\\mathrm{d}x=0$，堪称神来之笔（例11.9）！",
+      "pitfalls": "例11.8 拆成 $\\int_0^x+\\int_x^1$ 得到 $M\\left[\\frac{x^2}{2}+\\frac{(1-x)^2}{2}\\right]$ 后，注意这里对**任意 $x\\in[0,1]$ 都成立**，取最紧上界即 $x=\\frac{1}{2}$ 处最小值 $\\frac{1}{4}M$（切勿误取成最大值 $\\frac{1}{2}M$！）！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.287-290",
+        "pdfPage": 292,
+        "itemRef": "二、积分不等式 1~5 例11.7~11.11"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy30_and_sym",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-c-03",
+      "stage": "intensive",
+      "section": "强化十一 (1)~(2)、平移还原对称性与交错积分拆段判正负",
+      "kind": "conclusion",
+      "title": "【强化数形结合】平移换元还原对称中心，及交错衰减定积分拆段配对判正负",
+      "examWeight": "core",
+      "summary": "强化 18 讲 P.129-131 揭示了两类极高区分度的命题包装手法（见图 11-2）：\n1. **平移还原对称性（命题反伪装术！）**：命题人故意把 $[-a,a]$ 上的奇/偶函数向右平移成 $[0,2a]$ 制造陌生感（如 $\\int_0^2 x(x-1)(x-2)\\,\\mathrm{d}x$、$\\int_0^4 x\\sqrt{4x-x^2}\\,\\mathrm{d}x$）。**只要见到区间 $[0,2a]$ 或 $[c-a,c+a]$，立刻令 $t=x-a$（或 $t=x-c$）把对称中心拉回原点 $O$**，奇项秒零、偶项直出半圆面积 $\\frac{\\pi a^2}{2}$！\n2. **交错定积分判正负（如 $\\int_0^{2\\pi}\\frac{\\sin x}{x}\\,\\mathrm{d}x>0$、$\\int_0^{\\frac{3}{2}\\pi}\\frac{\\cos x}{2x-3\\pi}\\,\\mathrm{d}x>0$）**：先用换元化简分母，再按 $\\sin t$ 正负半周拆段，**把负段通过平移 $t=u+\\pi$ 叠回正段区间合并成一个恒正积分**，由保号性一锤定音！",
+      "figureSvg": "<svg viewBox=\"0 0 600 176\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">\n  <title>强化平移还原对称性（[0,2]平移至[-1,1]奇零）与交错定积分拆段配对判正负示意图（仿强化18讲P.129-131）</title>\n  <defs>\n    <marker id=\"m1c11_arr2\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#334155\"/>\n    </marker>\n  </defs>\n  <!-- Left: Shift symmetry -->\n  <rect x=\"6\" y=\"6\" width=\"286\" height=\"164\" rx=\"8\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"149\" y=\"24\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1e3a8a\">① 平移换元还原对称性（强化例 11.11）</text>\n  <!-- Original [0,2] -->\n  <line x1=\"20\" y1=\"92\" x2=\"128\" y2=\"92\" stroke=\"#334155\" stroke-width=\"1.1\" marker-end=\"url(#m1c11_arr2)\"/>\n  <line x1=\"34\" y1=\"126\" x2=\"34\" y2=\"44\" stroke=\"#334155\" stroke-width=\"1.1\" marker-end=\"url(#m1c11_arr2)\"/>\n  <path d=\"M 34 92 C 44 58 64 62 76 92 C 88 122 108 126 118 92\" fill=\"none\" stroke=\"#2563eb\" stroke-width=\"2\"/>\n  <circle cx=\"76\" cy=\"92\" r=\"2.8\" fill=\"#dc2626\"/>\n  <text x=\"76\" y=\"106\" text-anchor=\"middle\" font-size=\"9\" fill=\"#dc2626\">1</text>\n  <text x=\"118\" y=\"106\" text-anchor=\"middle\" font-size=\"9\" fill=\"#334155\">2</text>\n  <text x=\"76\" y=\"48\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#1e3a8a\">y = x(x−1)(x−2)</text>\n\n  <!-- Arrow x-1=t -->\n  <line x1=\"134\" y1=\"86\" x2=\"164\" y2=\"86\" stroke=\"#dc2626\" stroke-width=\"1.8\" marker-end=\"url(#m1c11_arr2)\"/>\n  <text x=\"149\" y=\"79\" text-anchor=\"middle\" font-size=\"9\" font-weight=\"700\" fill=\"#dc2626\">t=x−1</text>\n\n  <!-- Shifted [-1,1] -->\n  <line x1=\"172\" y1=\"92\" x2=\"280\" y2=\"92\" stroke=\"#334155\" stroke-width=\"1.1\" marker-end=\"url(#m1c11_arr2)\"/>\n  <line x1=\"226\" y1=\"126\" x2=\"226\" y2=\"44\" stroke=\"#334155\" stroke-width=\"1.1\" marker-end=\"url(#m1c11_arr2)\"/>\n  <path d=\"M 184 92 C 194 58 214 62 226 92 C 238 122 258 126 268 92\" fill=\"none\" stroke=\"#059669\" stroke-width=\"2\"/>\n  <text x=\"184\" y=\"106\" text-anchor=\"middle\" font-size=\"9\" fill=\"#334155\">−1</text>\n  <text x=\"268\" y=\"106\" text-anchor=\"middle\" font-size=\"9\" fill=\"#334155\">1</text>\n  <text x=\"226\" y=\"48\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#065f46\">y = (t²−1)t（奇函数！）</text>\n  <text x=\"149\" y=\"144\" text-anchor=\"middle\" font-size=\"9.6\" fill=\"#334155\">见 [0, 2a] 立刻令 t = x−a，把对称中心拉回原点 O</text>\n  <text x=\"149\" y=\"159\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#059669\">奇项归零、偶项直套半圆面积 πR²/2（强化例 11.12）</text>\n\n  <!-- Right: Alternating integral sign -->\n  <rect x=\"308\" y=\"6\" width=\"286\" height=\"164\" rx=\"8\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"451\" y=\"24\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#9a3412\">② 交错积分拆段配对判正负（强化例 11.13）</text>\n  <line x1=\"322\" y1=\"98\" x2=\"582\" y2=\"98\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1c11_arr2)\"/>\n  <line x1=\"336\" y1=\"124\" x2=\"336\" y2=\"40\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1c11_arr2)\"/>\n  <!-- sin t / t waves -->\n  <path d=\"M 336 52 Q 376 54 416 98 L 336 98 Z\" fill=\"#bbf7d0\" opacity=\"0.75\"/>\n  <path d=\"M 416 98 Q 456 98 496 98\" fill=\"none\"/>\n  <path d=\"M 336 52 C 366 52 396 76 416 98 C 436 114 466 114 496 98\" fill=\"none\" stroke=\"#ea580c\" stroke-width=\"2\"/>\n  <path d=\"M 416 98 C 436 114 466 114 496 98 Z\" fill=\"#fecaca\" opacity=\"0.8\"/>\n  <line x1=\"376\" y1=\"56\" x2=\"376\" y2=\"98\" stroke=\"#059669\" stroke-width=\"1.2\" stroke-dasharray=\"3,2\"/>\n  <text x=\"356\" y=\"84\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#065f46\">+S₁</text>\n  <text x=\"396\" y=\"88\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#065f46\">+S₂</text>\n  <text x=\"456\" y=\"109\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#dc2626\">−S₃</text>\n  <text x=\"376\" y=\"111\" text-anchor=\"middle\" font-size=\"8.8\" fill=\"#334155\">π/2</text>\n  <text x=\"416\" y=\"111\" text-anchor=\"middle\" font-size=\"8.8\" fill=\"#334155\">π</text>\n  <text x=\"496\" y=\"111\" text-anchor=\"middle\" font-size=\"8.8\" fill=\"#334155\">3π/2</text>\n  <text x=\"536\" y=\"72\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#9a3412\">y = (sin t)/t</text>\n  <text x=\"451\" y=\"138\" text-anchor=\"middle\" font-size=\"9.6\" fill=\"#0f172a\">换元 t = u + π 将负段 [π, 3π/2] 叠回 [0, π/2]：</text>\n  <text x=\"451\" y=\"155\" text-anchor=\"middle\" font-size=\"9.6\" font-weight=\"700\" fill=\"#059669\">S₁ − S₃ = ∫₀^(π/2) (1/t − 1/(π+t)) sin t dt &gt; 0 ⇒ 整体 &gt; 0！</text>\n</svg>",
+      "conditions": "配对合并交错半周时，须保证单调递减权重满足 $\\frac{1}{t}>\\frac{1}{t+\\pi}$ 对一切 $t>0$ 恒成立，且 $\\sin t>0$ 在 $(0,\\pi)$ 上恒正。",
+      "pitfalls": "在强化例11.13 $\\int_0^{\\frac{3}{2}\\pi}\\frac{\\cos x}{2x-3\\pi}\\,\\mathrm{d}x$ 中，切勿直接硬令 $t=2x-3\\pi$（会使三角函数变复杂且区间拉长）；优先令 **$t=\\frac{3}{2}\\pi-x$**（区间再现！），瞬间化为简洁的 $\\frac{1}{2}\\int_0^{\\frac{3}{2}\\pi}\\frac{\\sin t}{t}\\,\\mathrm{d}t$！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.129-131",
+        "pdfPage": 142,
+        "itemRef": "十一、(1) 还原对称性 例11.11~11.12 & (2) 判正负 例11.13"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy18_11_19",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-c-04",
+      "stage": "intensive",
+      "section": "强化十一 (3) & 第二部分三、分部「升降阶」选型与严格绝对值零点推论",
+      "kind": "conclusion",
+      "title": "【强化】分部积分「降阶 vs 升阶」方向速判与严格绝对值零点定理",
+      "examWeight": "core",
+      "summary": "1. **分部积分双向调阶法则（强化 P.131-132）**：\n   - **降阶方向**（$g'\\to g\\to\\int g$，强化例11.14）：已知 $g(x)$ 的原函数却求含 $g'(2x)$ 的积分 $\\Rightarrow$ 先换元 $2x=t$，再分部把 $g'(t)\\,\\mathrm{d}t$ 凑进 $\\mathrm{d}[g(t)]$ 降成 $g(t)$ 与 $\\int g(t)\\,\\mathrm{d}t$！\n   - **升阶方向**（$\\int\\to f\\to f'$，强化例11.15）：已知不可积变限积分 $f(x)=\\int_0^x\\mathrm{e}^{-t^2+2t}\\,\\mathrm{d}t$，求 $\\int_0^1(x-1)^2 f(x)\\,\\mathrm{d}x$ $\\Rightarrow$ 把多项式 $(x-1)^2$ 凑进 $\\mathrm{d}[\\frac{1}{3}(x-1)^3]$ 分部，把 $f(x)$ 升阶成显式可积的 $f'(x)$！\n2. **严格绝对值零点定理**：若连续函数满足 $\\left|\\int_a^b f(x)\\,\\mathrm{d}x\\right|<\\int_a^b|f(x)|\\,\\mathrm{d}x$，则 $f(x)$ 在 $(a,b)$ 内必变号且至少存在一点 $c\\in(a,b)$ 使 $f(c)=0$！",
+      "conditions": "升阶处理不可积变限积分 $f(x)=\\int_a^x g(t)\\,\\mathrm{d}t$ 时，凑进 $\\mathrm{d}(\\cdot)$ 的多项式原函数**可自由加减常数**以消去边界项（如强化例11.15 刻意选 $\\frac{1}{3}(x-1)^3$，在 $x=1$ 为 $0$、在 $x=0$ 又恰逢 $f(0)=0$，两端边界项同时清零！）。",
+      "pitfalls": "在强化例11.14 中已知 $g(x)$ 的一个原函数为 $\\ln(x+1)$，意味着 $g(x)=\\frac{1}{1+x}$ 且 $\\int g(x)\\,\\mathrm{d}x=\\ln(x+1)+C$，千万别把「原函数」和「导数」看反！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.131-132, P.135",
+        "pdfPage": 144,
+        "itemRef": "十一、(3) 升降阶 例11.14~11.15 & 第二部分三 注"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy18_11_19",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-c-05",
+      "stage": "intensive",
+      "section": "强化第二部分三~四、双端点泰勒余项配权与黎曼拆区间压轴思想",
+      "kind": "conclusion",
+      "title": "【强化压轴】双端点泰勒消一阶导（梯形公式误差 $\\frac{1}{12}$）与黎曼拆区间思想",
+      "examWeight": "core",
+      "summary": "面对最硬核的考研积分不等式压轴证明，掌握两大强化必杀招：\n1. **双端点泰勒配权消一阶导（强化例11.18，数值积分梯形公式误差精髓！）**：已知 $f'(0)=f'(1)$ 与 $|f''(x)|\\le 1$，在 $0$ 与 $1$ 两端分别做二阶泰勒展开，**分别乘以 $(1-x)$ 与 $x$ 相加（或乘 $(x-1)$ 与 $x$ 相减）**，自动把 $f'(0)=f'(1)$ 完美消去，直得：\n$$\\bigl|f(x)-f(0)(1-x)-f(1)x\\bigr|\\le\\frac{x(1-x)}{2}\\implies\\left|\\int_0^1 f(x)\\,\\mathrm{d}x-\\frac{f(0)+f(1)}{2}\\right|\\le\\int_0^1\\frac{x(1-x)}{2}\\,\\mathrm{d}x=\\frac{1}{12}$$\n2. **黎曼拆区间思想（强化例11.19）**：整个区间 $[0,1]$ 直接放缩吃不住时，**在区间内找最值点 $x_0\\in(0,1)$ 把 $[0,1]$ 劈成 $[0,x_0]$ 与 $[x_0,1]$**，左右各用拉格朗日得 $\\xi_1\\in(0,x_0),\\;\\xi_2\\in(x_0,1)$，再把积分缩小到 $[\\xi_1,\\xi_2]$ 用牛顿-莱布尼茨串联 $f''\\to f'(\\xi_2)-f'(\\xi_1)$，一举攻克压轴题！",
+      "conditions": "双端点泰勒配权中权重 $(1-x)+x\\equiv 1$ 且在 $(0,1)$ 上非负，正好形成凸组合 $\\bigl|x f''(\\xi_1)+(1-x)f''(\\xi_2)\\bigr|\\le x|f''(\\xi_1)|+(1-x)|f''(\\xi_2)|\\le 1$！",
+      "pitfalls": "在强化例11.19 中，**最后一步把 $\\int_0^1|f''(x)|\\,\\mathrm{d}x$ 缩小为 $\\int_{\\xi_1}^{\\xi_2}|f''(x)|\\,\\mathrm{d}x$** 是神来之笔（由被积函数非负与 $[\\xi_1,\\xi_2]\\subset[0,1]$ 保证），再用 $x_0(1-x_0)\\le\\frac{1}{4}$ 即得下界 $4$！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.135-137",
+        "pdfPage": 148,
+        "itemRef": "强化例11.18 & 四、黎曼思想 例11.19"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-01",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（积分等式与积分极限，例11.1~11.6）",
+      "kind": "example",
+      "title": "【基础例 11.1】推广积分中值定理的开区间证明 + 含参积分极限（防 $\\eta_n$ 坑！）",
+      "examWeight": "core",
+      "problem": "(1) 设 $f(x),g(x)$ 在 $[a,b]$ 上连续，且 $g(x)$ 在 $[a,b]$ 上不变号，证明：存在 $\\xi\\in(a,b)$，使得 $\\displaystyle\\int_a^b f(x)g(x)\\,\\mathrm{d}x=f(\\xi)\\int_a^b g(x)\\,\\mathrm{d}x$；\n(2) 设 $f(x)$ 在 $[1,2]$ 上连续，计算 $\\displaystyle\\lim_{n\\to\\infty}\\int_1^2 f(x)\\mathrm{e}^{-x^n}\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：构造双变限函数用柯西中值定理（并附 $g$ 含零点严谨说明）",
+          "detail": "若 $g(x)\\equiv 0$，任取 $\\xi\\in(a,b)$ 结论显然成立。若 $g(x)\\not\\equiv 0$ 且不变号，先看严格 $g(x)>0$ 情形：令 $F(x)=\\int_a^x f(t)g(t)\\,\\mathrm{d}t,\\;G(x)=\\int_a^x g(t)\\,\\mathrm{d}t$，在 $[a,b]$ 上用柯西中值定理得 $\\exists\\xi\\in(a,b)$ 使 $$\\frac{F(b)-F(a)}{G(b)-G(a)}=\\frac{F'(\\xi)}{G'(\\xi)}=\\frac{f(\\xi)g(\\xi)}{g(\\xi)}=f(\\xi)\\implies\\int_a^b f(x)g(x)\\,\\mathrm{d}x=f(\\xi)\\int_a^b g(x)\\,\\mathrm{d}x.$$ （严谨补注见表 11-4：若仅 $g(x)\\ge 0$ 在某些点取零，则 $\\int_a^b g>0$ 且若 $f$ 不为常数必有严格不等式 $m\\int_a^b g<\\int_a^b fg<M\\int_a^b g$，由连续介值定理仍存在开区间内点 $\\xi\\in(a,b)$ 使等式成立！）"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：用 (1) 提出有界量 $f(\\xi_n)$，再用 $\\mathrm{e}^{x^n}>x^n+1>x^n$ 夹逼！",
+          "detail": "由 (1) 知 $\\int_1^2 f(x)\\mathrm{e}^{-x^n}\\,\\mathrm{d}x=f(\\xi_n)\\int_1^2\\mathrm{e}^{-x^n}\\,\\mathrm{d}x\\;(1<\\xi_n<2)$，因 $f$ 在 $[1,2]$ 连续有界，故 $f(\\xi_n)$ 有界。对后项在 $(1,2)$ 上放缩 $\\mathrm{e}^{-x^n}<\\frac{1}{x^n}$：$$0<\\int_1^2\\mathrm{e}^{-x^n}\\,\\mathrm{d}x<\\int_1^2 x^{-n}\\,\\mathrm{d}x=\\frac{1-2^{1-n}}{n-1}\\xrightarrow{n\\to\\infty}0.$$ 由夹逼准则及「有界 $\\times$ 无穷小 $=0$」得原极限 $=0$。"
+        }
+      ],
+      "finalAnswer": "(1) 证毕；(2) $0$。",
+      "takeaway": "第 (2) 问切勿对 $\\int_1^2\\mathrm{e}^{-x^n}\\,\\mathrm{d}x$ 再套积分中值定理写 $\\mathrm{e}^{-\\eta_n^n}\\to 0$（因 $\\eta_n$ 随 $n$ 变可能逼近 $1^+$！），放缩成 $\\int_1^2 x^{-n}\\,\\mathrm{d}x$ 才是满分严密写法！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.283-284",
+        "pdfPage": 288,
+        "itemRef": "例11.1 (1)~(2) & 注(1)(2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy30_and_sym",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-02",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（积分等式与积分极限，例11.1~11.6）",
+      "kind": "example",
+      "title": "【基础例 11.2】推广积分中值定理锁定内点 $f(\\eta)=2$ + 罗尔/两次拉格朗日证 $f''(\\xi)<0$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $\\left[0,\\dfrac{\\pi}{2}\\right]$ 上有二阶导数，且 $f(0)=2,\\;f\\!\\left(\\dfrac{\\pi}{2}\\right)=1$，$\\displaystyle\\int_0^{\\frac{\\pi}{2}} f(x)\\mathrm{e}^{\\sin x}\\cos x\\,\\mathrm{d}x=2(\\mathrm{e}-1)$。证明：存在 $\\xi\\in\\left(0,\\dfrac{\\pi}{2}\\right)$，使 $f''(\\xi)<0$。",
+      "steps": [
+        {
+          "stepTitle": "1. 对积分套用推广积分中值定理，解出内点值 $f(\\eta)=2$",
+          "detail": "因 $g(x)=\\mathrm{e}^{\\sin x}\\cos x\\ge 0$ 在 $[0,\\frac{\\pi}{2}]$ 不变号且 $\\int_0^{\\frac{\\pi}{2}}\\mathrm{e}^{\\sin x}\\cos x\\,\\mathrm{d}x=\\left.\\mathrm{e}^{\\sin x}\\right|_0^{\\frac{\\pi}{2}}=\\mathrm{e}-1$，由推广积分中值定理存在 $\\eta\\in(0,\\frac{\\pi}{2})$ 使 $$f(\\eta)(\\mathrm{e}-1)=2(\\mathrm{e}-1)\\implies f(\\eta)=2.$$"
+        },
+        {
+          "stepTitle": "2. 在 $[0,\\eta]$ 用罗尔、在 $[\\eta,\\frac{\\pi}{2}]$ 用拉格朗日，再对 $f'$ 用拉格朗日",
+          "detail": "因 $f(0)=f(\\eta)=2$，由罗尔定理 $\\exists\\xi_1\\in(0,\\eta)$ 使 $f'(\\xi_1)=0$；在 $[\\eta,\\frac{\\pi}{2}]$ 由拉格朗日 $\\exists\\xi_2\\in(\\eta,\\frac{\\pi}{2})$ 使 $f'(\\xi_2)=\\dfrac{1-2}{\\frac{\\pi}{2}-\\eta}<0$。最后在 $[\\xi_1,\\xi_2]$ 对 $f'$ 用拉格朗日得 $\\exists\\xi\\in(\\xi_1,\\xi_2)\\subset(0,\\frac{\\pi}{2})$ 使 $$f''(\\xi)=\\frac{f'(\\xi_2)-f'(\\xi_1)}{\\xi_2-\\xi_1}<0.$$"
+        }
+      ],
+      "finalAnswer": "证毕：存在 $\\xi\\in\\left(0,\\dfrac{\\pi}{2}\\right)$ 使 $f''(\\xi)<0$。",
+      "takeaway": "记住三点值判二阶导符号的黄金节奏：先用积分中值定理把积分条件「翻译」成第三点函数值 $f(\\eta)$，再用「罗尔/拉格朗日 $\\to$ 再拉格朗日」两步拿下 $f''(\\xi)$ 符号！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.284",
+        "pdfPage": 289,
+        "itemRef": "例11.2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy30_and_sym",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-03",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（积分等式与积分极限，例11.1~11.6）",
+      "kind": "example",
+      "title": "【基础例 11.3】凑 $\\mathrm{d}(x^{n+1})$ 分部 + 夹逼准则秒算 $\\lim_{n\\to\\infty}\\int_0^1(n+1)x^n\\ln(1+x)\\,\\mathrm{d}x$",
+      "examWeight": "core",
+      "problem": "$\\displaystyle\\lim_{n\\to\\infty}\\int_0^1(n+1)x^n\\ln(1+x)\\,\\mathrm{d}x=$（　）。\n(A) $\\ln 2$　　(B) $1$　　(C) $\\mathrm{e}^2$　　(D) $+\\infty$",
+      "steps": [
+        {
+          "stepTitle": "1. 凑 $(n+1)x^n\\,\\mathrm{d}x=\\mathrm{d}(x^{n+1})$ 分部剥离常数项 $\\ln 2$",
+          "detail": "$$\\int_0^1(n+1)x^n\\ln(1+x)\\,\\mathrm{d}x=\\left.x^{n+1}\\ln(1+x)\\right|_0^1-\\int_0^1\\frac{x^{n+1}}{1+x}\\,\\mathrm{d}x=\\ln 2-\\int_0^1\\frac{x^{n+1}}{1+x}\\,\\mathrm{d}x.$$"
+        },
+        {
+          "stepTitle": "2. 对剩余积分放缩夹逼归零",
+          "detail": "因 $0\\le x\\le 1\\Rightarrow 0\\le\\frac{x^{n+1}}{1+x}\\le x^{n+1}$，故 $0\\le\\int_0^1\\frac{x^{n+1}}{1+x}\\,\\mathrm{d}x\\le\\int_0^1 x^{n+1}\\,\\mathrm{d}x=\\frac{1}{n+2}\\to 0$，从而原极限 $=\\ln 2$，选 (A)。"
+        }
+      ],
+      "finalAnswer": "选 (A) $\\ln 2$。",
+      "takeaway": "牢记超级秒杀规律：对任意 $f\\in C[0,1]$，恒有 $\\lim_{n\\to\\infty}\\int_0^1(n+1)x^n f(x)\\,\\mathrm{d}x=f(1)$（选填 1 秒直出 $f(1)=\\ln 2$）！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.285",
+        "pdfPage": 290,
+        "itemRef": "例11.3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy30_and_sym",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-04",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（积分等式与积分极限，例11.1~11.6）",
+      "kind": "example",
+      "title": "【基础例 11.4】利用 $\\ln(1+t)\\le t$ 放缩比较 + 夹逼求反常积分数列极限",
+      "examWeight": "core",
+      "problem": "(1) 比较 $\\displaystyle\\int_0^1|\\ln t|[\\ln(1+t)]^n\\,\\mathrm{d}t$ 与 $\\displaystyle\\int_0^1 t^n|\\ln t|\\,\\mathrm{d}t\\;(n=1,2,\\dots)$ 的大小，说明理由；\n(2) 记 $u_n=\\displaystyle\\int_0^1|\\ln t|[\\ln(1+t)]^n\\,\\mathrm{d}t$，求 $\\displaystyle\\lim_{n\\to\\infty} u_n$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：由 $0\\le\\ln(1+t)\\le t$ 同乘非负因式 $|\\ln t|$ 保号积分",
+          "detail": "当 $0<t\\le 1$ 时有 $0\\le\\ln(1+t)\\le t\\Rightarrow 0\\le[\\ln(1+t)]^n\\le t^n$，乘以 $|\\ln t|\\ge 0$ 后积分立得 $$\\int_0^1|\\ln t|[\\ln(1+t)]^n\\,\\mathrm{d}t\\le\\int_0^1 t^n|\\ln t|\\,\\mathrm{d}t.$$"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：算出右端上界 $\\frac{1}{(n+1)^2}$ 夹逼得 $0$",
+          "detail": "在 $(0,1]$ 上 $|\\ln t|=-\\ln t$，分部积分得 $$\\int_0^1 t^n|\\ln t|\\,\\mathrm{d}t=-\\int_0^1\\ln t\\,\\mathrm{d}\\!\\left(\\frac{t^{n+1}}{n+1}\\right)=\\left.-\\frac{t^{n+1}\\ln t}{n+1}\\right|_{0^+}^1+\\frac{1}{n+1}\\int_0^1 t^n\\,\\mathrm{d}t=\\frac{1}{(n+1)^2}\\to 0.$$ 又 $u_n\\ge 0$，由夹逼准则得 $\\lim_{n\\to\\infty} u_n=0$。"
+        }
+      ],
+      "finalAnswer": "(1) $\\int_0^1|\\ln t|[\\ln(1+t)]^n\\,\\mathrm{d}t\\le\\int_0^1 t^n|\\ln t|\\,\\mathrm{d}t$；(2) $\\lim_{n\\to\\infty} u_n=0$。",
+      "takeaway": "考研大题典型「(1) 为 (2) 铺路」结构！也可用 P.286 注一般结论（把 $f(t)=t|\\ln t|$ 视作 $[0,1]$ 连续函数）一步得出 $\\int_0^1 t^{n-1}(t|\\ln t|)\\,\\mathrm{d}t\\to 0$。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.285-286",
+        "pdfPage": 290,
+        "itemRef": "例11.4 & 注"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy30_and_sym",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-05",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（积分等式与积分极限，例11.1~11.6）",
+      "kind": "example",
+      "title": "【基础例 11.5】含跳跃间断周期函数 $x-[x]$ 的变上限均值极限（禁用洛必达！）",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)=x-[x]$（$[x]$ 为取整函数），则 $\\displaystyle\\lim_{x\\to+\\infty}\\frac{1}{x}\\int_0^x f(t)\\,\\mathrm{d}t=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 识别周期 $1$ 与非负性，以 $n\\le x<n+1$ 夹住分子分母",
+          "detail": "$f(x)=x-[x]\\ge 0$ 以 $1$ 为周期，每段 $[k,k+1)$ 是面积为 $\\frac{1}{2}$ 的直角三角形，故 $\\int_0^n f(t)\\,\\mathrm{d}t=\\frac{n}{2}$。设 $n=[x]$，则 $n\\le x<n+1$ 且 $$\\frac{n}{2}=\\int_0^n f(t)\\,\\mathrm{d}t\\le\\int_0^x f(t)\\,\\mathrm{d}t<\\int_0^{n+1} f(t)\\,\\mathrm{d}t=\\frac{n+1}{2}.$$"
+        },
+        {
+          "stepTitle": "2. 同除分母边界用夹逼准则得 $\\frac{1}{2}$",
+          "detail": "结合 $\\frac{1}{n+1}<\\frac{1}{x}\\le\\frac{1}{n}$ 得 $$\\frac{n}{2(n+1)}<\\frac{1}{x}\\int_0^x f(t)\\,\\mathrm{d}t<\\frac{n+1}{2n}.$$ 令 $x\\to+\\infty$（$n\\to\\infty$），左右均趋于 $\\frac{1}{2}$，由夹逼准则原极限 $=\\frac{1}{2}$。"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{1}{2}$。",
+      "takeaway": "切记：**含跳跃间断点的函数无原函数，$\\int_0^x f$ 在整数点不可导，绝不可用洛必达法则**！记住通用秒杀结果：任意非负/有界周期可积函数 $\\lim_{x\\to+\\infty}\\frac{1}{x}\\int_0^x f(t)\\,\\mathrm{d}t=\\frac{1}{T}\\int_0^T f(t)\\,\\mathrm{d}t$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.286",
+        "pdfPage": 291,
+        "itemRef": "例11.5"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-06",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（积分等式与积分极限，例11.1~11.6）",
+      "kind": "example",
+      "title": "【基础例 11.6】两次分部积分证明 $\\int_0^1 f=\\frac{1}{2}\\int_0^1 x(x-1)f''$ 并推 $\\frac{1}{12}M$ 估值",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 的二阶导数 $f''(x)$ 在 $[0,1]$ 上连续，且 $f(0)=f(1)=0$，证明：\n(1) $\\displaystyle\\int_0^1 f(x)\\,\\mathrm{d}x=\\frac{1}{2}\\int_0^1 x(x-1)f''(x)\\,\\mathrm{d}x$；\n(2) $\\displaystyle\\left|\\int_0^1 f(x)\\,\\mathrm{d}x\\right|\\le\\frac{1}{12}\\max_{0\\le x\\le 1}|f''(x)|$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：从右端含 $f''$ 出发连续两次分部积分降阶",
+          "detail": "$$\\begin{aligned}\n\\frac{1}{2}\\int_0^1 x(x-1)f''(x)\\,\\mathrm{d}x\n&=\\left.\\frac{1}{2}x(x-1)f'(x)\\right|_0^1-\\frac{1}{2}\\int_0^1(2x-1)f'(x)\\,\\mathrm{d}x\\\\\n&=0-\\left.\\frac{1}{2}(2x-1)f(x)\\right|_0^1+\\int_0^1 f(x)\\,\\mathrm{d}x=\\int_0^1 f(x)\\,\\mathrm{d}x,\n\\end{aligned}$$ 其中第二步边界项由 $f(0)=f(1)=0$ 恰好归零！"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：对 (1) 式取绝对值放缩出 $\\frac{1}{12}M$",
+          "detail": "记 $M=\\max_{[0,1]}|f''(x)|$，因在 $[0,1]$ 上 $|x(x-1)|=x(1-x)$：$$\\left|\\int_0^1 f(x)\\,\\mathrm{d}x\\right|\\le\\frac{1}{2}\\int_0^1 x(1-x)|f''(x)|\\,\\mathrm{d}x\\le\\frac{M}{2}\\int_0^1(x-x^2)\\,\\mathrm{d}x=\\frac{M}{2}\\cdot\\frac{1}{6}=\\frac{M}{12}.$$"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "记住两个超级高频定积分常数：$\\int_0^1 x(1-x)\\,\\mathrm{d}x=\\frac{1}{6}$，乘 $\\frac{1}{2}$ 即得梯形误差黄金常数 **$\\frac{1}{12}$**（对比强化例11.18）！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.286-287",
+        "pdfPage": 291,
+        "itemRef": "例11.6 (1)~(2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy30_and_sym",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-07",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（积分不等式五大武器，例11.7~11.11）",
+      "kind": "example",
+      "title": "【基础例 11.7】考研史上最复杂变上限构造 $F(x)=\\int_a^{a+\\int_a^x g(u)\\,\\mathrm{d}u} f(t)\\,\\mathrm{d}t-\\int_a^x f(t)g(t)\\,\\mathrm{d}t$",
+      "examWeight": "core",
+      "problem": "设函数 $f(x),g(x)$ 在 $[a,b]$ 上连续，且 $f(x)$ 单调增加，$0\\le g(x)\\le 1$。证明：\n(1) $0\\le\\displaystyle\\int_a^x g(t)\\,\\mathrm{d}t\\le x-a,\\;x\\in[a,b]$；\n(2) $\\displaystyle\\int_a^{a+\\int_a^b g(t)\\,\\mathrm{d}t} f(x)\\,\\mathrm{d}x\\le\\int_a^b f(x)g(x)\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：由 $0\\le g(t)\\le 1$ 直接保号积分",
+          "detail": "对 $x\\in[a,b]$，$\\int_a^x 0\\,\\mathrm{d}t\\le\\int_a^x g(t)\\,\\mathrm{d}t\\le\\int_a^x 1\\,\\mathrm{d}t\\Rightarrow 0\\le\\int_a^x g(t)\\,\\mathrm{d}t\\le x-a$。"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：将常数 $b$ 变为变量 $x$，移项造变上限辅助函数求导判单调",
+          "detail": "令 $F(x)=\\int_a^{a+\\int_a^x g(u)\\,\\mathrm{d}u} f(t)\\,\\mathrm{d}t-\\int_a^x f(t)g(t)\\,\\mathrm{d}t\\;(x\\in[a,b])$（注意区分三个字母 $x,t,u$！）。求导得 $$F'(x)=f\\!\\left[a+\\int_a^x g(u)\\,\\mathrm{d}u\\right]g(x)-f(x)g(x)=\\left\\{f\\!\\left[a+\\int_a^x g(u)\\,\\mathrm{d}u\\right]-f(x)\\right\\}g(x).$$ 由 (1) 知 $a+\\int_a^x g(u)\\,\\mathrm{d}u\\le x$，结合 $f$ 单调增与 $g\\ge 0$ 得 $F'(x)\\le 0$，故 $F(x)$ 单调减少，从而 $F(b)\\le F(a)=0$，不等式得证！"
+        }
+      ],
+      "finalAnswer": "证毕（史蒂芬森 Steffensen 经典积分不等式）。",
+      "takeaway": "遇到两侧都是定积分且仅知函数连续/单调的不等式，**大胆把上限 $b$ 全部同步替换成变量 $x$**（含嵌套积分里的 $b$ 也要一起换成 $x$！），移项求导必见柳暗花明！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.287-288",
+        "pdfPage": 292,
+        "itemRef": "例11.7 (1)~(2)"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-08",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（积分不等式五大武器，例11.7~11.11）",
+      "kind": "example",
+      "title": "【基础例 11.8】双端点拉格朗日 + 拆分 $[0,x],[x,1]$ 证明 $\\left|\\int_0^1 f(x)\\,\\mathrm{d}x\\right|\\le\\frac{1}{4}M$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[0,1]$ 上有一阶连续导数，且 $f(0)=f(1)=0$，记 $M=\\max_{x\\in[0,1]}|f'(x)|$。证明：$\\displaystyle\\left|\\int_0^1 f(x)\\,\\mathrm{d}x\\right|\\le\\frac{1}{4}M$。",
+      "steps": [
+        {
+          "stepTitle": "1. 分别在 $[0,x]$ 与 $[x,1]$ 用拉格朗日中值定理估出 $|f(x)|$ 双上界",
+          "detail": "由 $f(0)=0$ 得 $|f(x)|=|f'(\\xi_1)|x\\le Mx$；由 $f(1)=0$ 得 $|f(x)|=|f'(\\xi_2)|(1-x)\\le M(1-x)$。"
+        },
+        {
+          "stepTitle": "2. 在分界点 $x=\\frac{1}{2}$ 劈开区间积分得最紧系数 $\\frac{1}{4}$",
+          "detail": "对任意分割点 $x\\in[0,1]$ 均有 $$\\left|\\int_0^1 f(t)\\,\\mathrm{d}t\\right|\\le\\int_0^x|f(t)|\\,\\mathrm{d}t+\\int_x^1|f(t)|\\,\\mathrm{d}t\\le M\\int_0^x t\\,\\mathrm{d}t+M\\int_x^1(1-t)\\,\\mathrm{d}t=M\\left[\\frac{x^2}{2}+\\frac{(1-x)^2}{2}\\right].$$ 取最优分割点 $x=\\frac{1}{2}$（使 $\\left(x-\\frac{1}{2}\\right)^2+\\frac{1}{4}$ 取最小值 $\\frac{1}{4}$），即证 $\\left|\\int_0^1 f(x)\\,\\mathrm{d}x\\right|\\le\\frac{1}{4}M$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "也可直接画几何三角形：$|f(x)|\\le M\\min(x,1-x)$ 是底 $1$ 高 $\\frac{M}{2}$ 的等腰三角形，面积一目了然等于 $\\frac{1}{2}\\cdot 1\\cdot\\frac{M}{2}=\\frac{M}{4}$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.288",
+        "pdfPage": 293,
+        "itemRef": "例11.8"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy30_and_sym",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-09",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（积分不等式五大武器，例11.7~11.11）",
+      "kind": "example",
+      "title": "【基础例 11.9】在区间中点 $x_0=1$ 二阶泰勒展开消一次项，证 $\\left|\\int_0^2 f\\right|\\le\\frac{1}{3}M$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[0,2]$ 上二阶导数连续，且 $f(1)=0$。记 $M=\\max_{x\\in[0,2]}|f''(x)|$，证明：$\\displaystyle\\left|\\int_0^2 f(x)\\,\\mathrm{d}x\\right|\\le\\frac{1}{3}M$。",
+      "steps": [
+        {
+          "stepTitle": "1. 在区间中点 $x_0=1$ 处写出带拉格朗日余项的泰勒公式",
+          "detail": "因 $f(1)=0$，有 $f(x)=f'(1)(x-1)+\\dfrac{f''(\\xi)}{2}(x-1)^2$（$\\xi$ 介于 $x$ 与 $1$ 之间）。"
+        },
+        {
+          "stepTitle": "2. 两边在 $[0,2]$ 积分，一次项对称归零，直接估余项",
+          "detail": "因 $\\int_0^2(x-1)\\,\\mathrm{d}x=0$，两边积分得 $\\int_0^2 f(x)\\,\\mathrm{d}x=\\frac{1}{2}\\int_0^2 f''(\\xi)(x-1)^2\\,\\mathrm{d}x$，从而 $$\\left|\\int_0^2 f(x)\\,\\mathrm{d}x\\right|\\le\\frac{M}{2}\\int_0^2(x-1)^2\\,\\mathrm{d}x=\\frac{M}{2}\\cdot\\frac{2}{3}=\\frac{1}{3}M.$$"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "条件给中点 $f(1)=0$ 与二阶导 $f''$、却完全不提 $f'(1)$，这是**中点泰勒展开消一次项**（利用 $\\int_a^b(x-\\frac{a+b}{2})\\,\\mathrm{d}x=0$）的最强信号！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.288-289",
+        "pdfPage": 293,
+        "itemRef": "例11.9"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy30_and_sym",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-10",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（积分不等式五大武器，例11.7~11.11）",
+      "kind": "example",
+      "title": "【基础例 11.10】分部积分提出 $\\frac{1}{n}$ 证明振荡积分界 $\\left|\\int_0^{2\\pi} f(x)\\sin nx\\,\\mathrm{d}x\\right|\\le\\frac{2}{n}[f(2\\pi)-f(0)]$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[0,2\\pi]$ 上具有一阶连续导数，且 $f'(x)\\ge 0$，证明：对任意正整数 $n$ 有 $\\displaystyle\\left|\\int_0^{2\\pi} f(x)\\sin nx\\,\\mathrm{d}x\\right|\\le\\frac{2}{n}\\bigl[f(2\\pi)-f(0)\\bigr]$。",
+      "steps": [
+        {
+          "stepTitle": "1. 凑 $\\sin nx\\,\\mathrm{d}x=-\\frac{1}{n}\\,\\mathrm{d}(\\cos nx)$ 分部积分",
+          "detail": "$$\\left|\\int_0^{2\\pi} f(x)\\sin nx\\,\\mathrm{d}x\\right|=\\left|\\frac{1}{n}\\left.f(x)\\cos nx\\right|_0^{2\\pi}-\\frac{1}{n}\\int_0^{2\\pi} f'(x)\\cos nx\\,\\mathrm{d}x\\right|.$$"
+        },
+        {
+          "stepTitle": "2. 三角不等式 + $|\\cos nx|\\le 1$ 与 $f'\\ge 0$ 合并出 $\\frac{2}{n}[f(2\\pi)-f(0)]$",
+          "detail": "因 $\\cos 2n\\pi=\\cos 0=1$ 且 $f'\\ge 0\\Rightarrow f(2\\pi)-f(0)\\ge 0$：$$\\text{左端}\\le\\frac{1}{n}\\bigl[f(2\\pi)-f(0)\\bigr]+\\frac{1}{n}\\int_0^{2\\pi} f'(x)|\\cos nx|\\,\\mathrm{d}x\\le\\frac{1}{n}\\bigl[f(2\\pi)-f(0)\\bigr]+\\frac{1}{n}\\int_0^{2\\pi} f'(x)\\,\\mathrm{d}x=\\frac{2}{n}\\bigl[f(2\\pi)-f(0)\\bigr].$$"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "傅里叶系数衰减速度的标准证法：遇到 $\\int f(x)\\sin nx\\,\\mathrm{d}x$ 且结论带 $\\frac{1}{n}$，第一时间分部积分把 $\\frac{1}{n}$ 提出来！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.289",
+        "pdfPage": 294,
+        "itemRef": "例11.10"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-11",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（积分不等式五大武器，例11.7~11.11）",
+      "kind": "example",
+      "title": "【基础例 11.11】双端点牛顿-莱布尼茨相加证 $|f(x)|\\le\\frac{1}{2}\\int_a^b|f'(x)|\\,\\mathrm{d}x$",
+      "examWeight": "core",
+      "problem": "设 $f'(x)$ 在 $[a,b]$ 上连续，且 $f(a)=f(b)=0$。证明：对任意 $x\\in[a,b]$，有 $|f(x)|\\le\\dfrac{1}{2}\\displaystyle\\int_a^b|f'(x)|\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 分别从左端点 $a$ 与右端点 $b$ 写出两条牛顿-莱布尼茨表达式",
+          "detail": "因 $f(a)=0$，$|f(x)|=\\left|\\int_a^x f'(t)\\,\\mathrm{d}t\\right|\\le\\int_a^x|f'(t)|\\,\\mathrm{d}t$ ①；因 $f(b)=0$，$|f(x)|=\\left|-\\int_x^b f'(t)\\,\\mathrm{d}t\\right|\\le\\int_x^b|f'(t)|\\,\\mathrm{d}t$ ②。"
+        },
+        {
+          "stepTitle": "2. 两式相加拼接成完整区间 $[a,b]$ 再除以 $2$",
+          "detail": "① $+$ ② 得 $2|f(x)|\\le\\int_a^x|f'(t)|\\,\\mathrm{d}t+\\int_x^b|f'(t)|\\,\\mathrm{d}t=\\int_a^b|f'(t)|\\,\\mathrm{d}t$，除以 $2$ 即证！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "超级经典的「**双端点牛顿-莱布尼茨对冲拼整区间**」技巧！记住特征：给双端点零值 $f(a)=f(b)=0$ 且结论出现系数 $\\frac{1}{2}$ 配全区间积分 $\\int_a^b|f'|$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.289-290",
+        "pdfPage": 294,
+        "itemRef": "例11.11"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-12",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（积分等式 12 大工具，强化例11.1~11.10）",
+      "kind": "example",
+      "title": "【强化例 11.1】可拆性劈三段 $(-\\sqrt{h},\\sqrt{h})$ 破泊松核极限 $\\lim_{h\\to 0^+}\\int_{-1}^1\\frac{h}{h^2+x^2}f(x)\\,\\mathrm{d}x$",
+      "examWeight": "core",
+      "problem": "求极限 $\\displaystyle\\lim_{h\\to 0^+}\\int_{-1}^1\\frac{h}{h^2+x^2}f(x)\\,\\mathrm{d}x$，其中函数 $f(x)$ 在 $[-1,1]$ 上连续。",
+      "steps": [
+        {
+          "stepTitle": "1. 为何不能直接套一次积分中值定理？用 $\\pm\\sqrt{h}$ 拆成三段！",
+          "detail": "若直接在 $[-1,1]$ 用中值定理得 $f(\\xi)\\cdot 2\\arctan\\frac{1}{h}$，只知 $\\xi\\in(-1,1)$ 无法把 $\\xi$ 逼向 $0$！巧妙选取中间点 $-\\sqrt{h},\\;\\sqrt{h}$（满足 $\\sqrt{h}\\to 0$ 且 $\\frac{\\sqrt{h}}{h}=\\frac{1}{\\sqrt{h}}\\to+\\infty$！）把积分劈成 $[-1,-\\sqrt{h}]$、$[-\\sqrt{h},\\sqrt{h}]$、$[\\sqrt{h},1]$ 三段。"
+        },
+        {
+          "stepTitle": "2. 三段分别用推广积分中值定理取极限",
+          "detail": "各段对应 $\\xi_1\\in(-1,-\\sqrt{h}),\\;\\xi_2\\in(-\\sqrt{h},\\sqrt{h}),\\;\\xi_3\\in(\\sqrt{h},1)$，计算权重积分 $\\int\\frac{h}{h^2+x^2}\\,\\mathrm{d}x=\\arctan\\frac{x}{h}$：$$\\text{原极限}=\\lim_{h\\to 0^+}\\left[f(\\xi_1)\\left(\\arctan\\!\\left(-\\frac{1}{\\sqrt{h}}\\right)-\\arctan\\!\\left(-\\frac{1}{h}\\right)\\right)+f(\\xi_2)\\cdot 2\\arctan\\frac{1}{\\sqrt{h}}+f(\\xi_3)\\left(\\arctan\\frac{1}{h}-\\arctan\\frac{1}{\\sqrt{h}}\\right)\\right].$$ 因 $f$ 有界且首末两段括号极限均为 $(-\\frac{\\pi}{2})-(-\\frac{\\pi}{2})=0$ 与 $\\frac{\\pi}{2}-\\frac{\\pi}{2}=0$，而中段 $\\xi_2\\to 0$ 且 $2\\arctan\\frac{1}{\\sqrt{h}}\\to\\pi$，故原极限 $=0+\\pi f(0)+0=\\pi f(0)$！"
+        }
+      ],
+      "finalAnswer": "$\\pi f(0)$。",
+      "takeaway": "殿堂级压轴拆分技巧！记住分割点 $\\delta=\\sqrt{h}$ 必须同时满足「$\\delta\\to 0$（锁死 $\\xi_2\\to 0$）且 $\\frac{\\delta}{h}\\to+\\infty$（吸干全部权重 $\\pi$）」！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.121",
+        "pdfPage": 134,
+        "itemRef": "强化例11.1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy18_eq_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-13",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（积分等式 12 大工具，强化例11.1~11.10）",
+      "kind": "example",
+      "title": "【强化例 11.2】利用偶函数高阶奇导在原点为零 + 周期性秒杀 $f'''(2\\pi)$",
+      "examWeight": "core",
+      "problem": "已知函数 $f(x)=\\mathrm{e}^{\\sin x}+\\mathrm{e}^{-\\sin x}$，则 $f'''(2\\pi)=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 判定奇偶性与周期性，零计算 2 秒直出 $0$",
+          "detail": "因 $f(-x)=\\mathrm{e}^{-\\sin x}+\\mathrm{e}^{\\sin x}=f(x)$，$f(x)$ 为偶函数，故三阶导数 $f'''(x)$ 为奇函数，从而 $f'''(0)=0$；又 $f(x)$ 以 $2\\pi$ 为周期，故 $f'''(x)$ 亦以 $2\\pi$ 为周期，立得 $f'''(2\\pi)=f'''(0)=0$！"
+        }
+      ],
+      "finalAnswer": "$0$。",
+      "takeaway": "看到高阶导数求 $0$ 点或周期整数倍点的值，**千万别硬求三阶导**，先看一眼是不是偶/奇函数配周期性！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.122",
+        "pdfPage": 135,
+        "itemRef": "强化例11.2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy18_eq_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-14",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（积分等式 12 大工具，强化例11.1~11.10）",
+      "kind": "example",
+      "title": "【强化例 11.3】变限积分与复合函数奇偶性辨析（「内偶则偶，内奇同外」）",
+      "examWeight": "core",
+      "problem": "已知函数 $f(x)=\\displaystyle\\int_0^x\\mathrm{e}^{\\cos t}\\,\\mathrm{d}t$，$g(x)=\\displaystyle\\int_0^{\\sin x}\\mathrm{e}^{t^2}\\,\\mathrm{d}t$，则（　）。\n(A) $f(x)$ 是奇函数，$g(x)$ 是偶函数　　(B) $f(x)$ 是偶函数，$g(x)$ 是奇函数\n(C) $f(x),g(x)$ 均是奇函数　　(D) $f(x),g(x)$ 均是周期函数",
+      "steps": [
+        {
+          "stepTitle": "1. 依次判定 $f(x)$ 与 $g(x)$ 的奇偶性（排除周期干扰项）",
+          "detail": "① $\\mathrm{e}^{\\cos t}$ 为偶函数 $\\Rightarrow f(x)=\\int_0^x\\mathrm{e}^{\\cos t}\\,\\mathrm{d}t$ 为**奇函数**（且 $\\int_0^{2\\pi}\\mathrm{e}^{\\cos t}\\,\\mathrm{d}t>0\\ne 0$，故 $f$ 非周期！）；② 令 $y(u)=\\int_0^u\\mathrm{e}^{t^2}\\,\\mathrm{d}t$（偶函数积分 $\\Rightarrow$ 奇函数），复合内层 $u=\\sin x$ 为奇函数，由「内奇同外」知 $g(x)=y(\\sin x)$ 亦为**奇函数**！故选 (C)。"
+        }
+      ],
+      "finalAnswer": "选 (C)。",
+      "takeaway": "附带复核 (D) 为何错：$f(x)$ 被积函数 $\\mathrm{e}^{\\cos t}>0$ 恒正，整周期积分绝不可能为 $0$，所以 $f(x)$ 绝不是周期函数！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.122",
+        "pdfPage": 135,
+        "itemRef": "强化例11.3 & 注"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-15",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（积分等式 12 大工具，强化例11.1~11.10）",
+      "kind": "example",
+      "title": "【强化例 11.4】对称配对神式秒杀 $\\int_{-1}^1\\frac{\\mathrm{d}x}{1+\\mathrm{e}^{1/x}}$（含 $x=0$ 跳跃间断可积注）",
+      "examWeight": "core",
+      "problem": "计算 $I=\\displaystyle\\int_{-1}^1\\frac{\\mathrm{d}x}{1+\\mathrm{e}^{\\frac{1}{x}}}=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 确认有界仅 1 个跳跃间断点可积，套用对称配对神式 ⑥",
+          "detail": "被积函数 $f(x)=\\frac{1}{1+\\mathrm{e}^{\\frac{1}{x}}}\\in(0,1)$ 在 $x=0$ 处为跳跃间断点（左极限 $1$、右极限 $0$），有界且仅 1 个间断点故常义黎曼可积。对一切 $x\\in(0,1]$ 有 $$f(x)+f(-x)=\\frac{1}{1+\\mathrm{e}^{\\frac{1}{x}}}+\\frac{1}{1+\\mathrm{e}^{-\\frac{1}{x}}}=1\\implies I=\\int_0^1[f(x)+f(-x)]\\,\\mathrm{d}x=\\int_0^1 1\\,\\mathrm{d}x=1.$$"
+        }
+      ],
+      "finalAnswer": "$1$。",
+      "takeaway": "记住配对恒等式 $\\frac{1}{1+\\mathrm{e}^{g(x)}}+\\frac{1}{1+\\mathrm{e}^{-g(x)}}\\equiv 1$（只要 $g(x)$ 为奇函数！），看到对称区间配这种分母 3 秒口算！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.123",
+        "pdfPage": 136,
+        "itemRef": "强化例11.4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy18_eq_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-16",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（积分等式 12 大工具，强化例11.1~11.10）",
+      "kind": "example",
+      "title": "【强化例 11.5】对称配对神式 + 华里士公式秒算 $\\int_{-\\frac{\\pi}{2}}^{\\frac{\\pi}{2}}\\frac{\\sin^4 x}{1+\\mathrm{e}^{-x}}\\,\\mathrm{d}x$",
+      "examWeight": "core",
+      "problem": "计算 $I=\\displaystyle\\int_{-\\frac{\\pi}{2}}^{\\frac{\\pi}{2}}\\frac{\\sin^4 x}{1+\\mathrm{e}^{-x}}\\,\\mathrm{d}x=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 偶函数乘 $\\frac{1}{1+\\mathrm{e}^{-x}}$ 套对称配对消去分母，再点火出值",
+          "detail": "因 $\\sin^4(-x)=\\sin^4 x$，套公式 ⑥ 得 $$I=\\int_0^{\\frac{\\pi}{2}}\\left[\\frac{\\sin^4 x}{1+\\mathrm{e}^{-x}}+\\frac{\\sin^4 x}{1+\\mathrm{e}^x}\\right]\\mathrm{d}x=\\int_0^{\\frac{\\pi}{2}}\\sin^4 x\\,\\mathrm{d}x=\\frac{3}{4}\\cdot\\frac{1}{2}\\cdot\\frac{\\pi}{2}=\\frac{3\\pi}{16}.$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{3\\pi}{16}$。",
+      "takeaway": "记住口诀：「**对称区间上，偶函数除以 $(1+a^{\\text{奇函数}})$，直接砍掉分母并把积分区间折半取 $[0,a]$！**」",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.123",
+        "pdfPage": 136,
+        "itemRef": "强化例11.5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy18_eq_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-17",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（积分等式 12 大工具，强化例11.1~11.10）",
+      "kind": "example",
+      "title": "【强化例 11.6】周期函数整周期 vs 半周期定积分与参数依赖关系双选",
+      "examWeight": "core",
+      "problem": "(1) 设 $I=\\displaystyle\\int_a^{a+\\pi}|\\sin nx|\\,\\mathrm{d}x\\;(n=1,2,\\dots$，$a$ 为任意常数)，则 $I$ 与 $a,n$ 的关系是（　）；\n(2) 设 $I=\\displaystyle\\int_a^{a+\\frac{k\\pi}{2}}\\sqrt{1-\\sin^2 x}\\,\\mathrm{d}x$（$k$ 为正整数，$a$ 为任意实数），则 $I$ 与 $a,k$ 的关系是（　）。\n(A) 只与 $a$ 有关　(B) 只与 $n$（或 $k$）有关　(C) 与两者均有关　(D) 与两者均无关",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 题：$|\\sin nx|$ 周期为 $\\frac{\\pi}{n}$，区间长 $\\pi$ 恰好是 $n$ 个整周期！",
+          "detail": "故与 $a$ 无关：$$I=\\int_0^\\pi|\\sin nx|\\,\\mathrm{d}x\\xlongequal{t=nx}\\frac{1}{n}\\int_0^{n\\pi}|\\sin t|\\,\\mathrm{d}t=\\frac{1}{n}\\cdot n\\int_0^\\pi\\sin t\\,\\mathrm{d}t=2.$$ 常数 $2$ 与 $a,n$ 均无关，选 **(D)**！"
+        },
+        {
+          "stepTitle": "2. 第 (2) 题：$\\sqrt{1-\\sin^2 x}=|\\cos x|$ 周期为 $\\pi$，而区间长 $\\frac{k}{2}\\pi$ 视 $k$ 奇偶而定",
+          "detail": "当 $k$ 取正奇数时，区间长度不是 $\\pi$ 的整数倍（多出半个周期 $\\frac{\\pi}{2}$），积分值随起点 $a$ 变化（例如 $k=1$ 时 $a=0$ 得 $1$，而 $a=-\\frac{\\pi}{4}$ 得 $\\sqrt{2}$！）；同时显然随 $k$ 增大而增大，故与 $a,k$ 均有关，选 **(C)**！"
+        }
+      ],
+      "finalAnswer": "(1) 选 (D)；(2) 选 (C)。",
+      "takeaway": "切勿把 $\\sqrt{1-\\sin^2 x}$ 漏绝对值误写成 $\\cos x$，也切勿忘记 $|\\cos x|$ 的最小正周期是 $\\pi$（而非 $\\frac{\\pi}{2}$）！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.123-124",
+        "pdfPage": 136,
+        "itemRef": "强化例11.6 (1)~(2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy18_eq_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-18",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（积分等式 12 大工具，强化例11.1~11.10）",
+      "kind": "example",
+      "title": "【强化例 11.7】先三角换元再区间再现秒杀 $\\int_0^1\\frac{\\ln(1+x)}{1+x^2}\\,\\mathrm{d}x$",
+      "examWeight": "core",
+      "problem": "计算 $I=\\displaystyle\\int_0^1\\frac{\\ln(1+x)}{1+x^2}\\,\\mathrm{d}x=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 令 $x=\\tan t$ 化为 $[0,\\frac{\\pi}{4}]$ 上经典对数正切积分",
+          "detail": "令 $x=\\tan t$（$\\mathrm{d}x=\\sec^2 t\\,\\mathrm{d}t$），则 $I=\\int_0^{\\frac{\\pi}{4}}\\ln(1+\\tan t)\\,\\mathrm{d}t$。"
+        },
+        {
+          "stepTitle": "2. 对 $[0,\\frac{\\pi}{4}]$ 用区间再现 $u=\\frac{\\pi}{4}-t$ 建方程求解",
+          "detail": "$$I=\\int_0^{\\frac{\\pi}{4}}\\ln\\!\\left[1+\\tan\\!\\left(\\frac{\\pi}{4}-u\\right)\\right]\\mathrm{d}u=\\int_0^{\\frac{\\pi}{4}}\\ln\\frac{2}{1+\\tan u}\\,\\mathrm{d}u=\\frac{\\pi}{4}\\ln 2-I\\implies I=\\frac{\\pi}{8}\\ln 2.$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{\\pi}{8}\\ln 2$。",
+      "takeaway": "考研超级名题：$\\int_0^1\\frac{\\ln(1+x)}{1+x^2}\\,\\mathrm{d}x=\\int_0^{\\frac{\\pi}{4}}\\ln(1+\\tan t)\\,\\mathrm{d}t=\\frac{\\pi}{8}\\ln 2$，值得直接刻进脑海！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.125",
+        "pdfPage": 138,
+        "itemRef": "强化例11.7"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy18_eq_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-19",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（积分等式 12 大工具，强化例11.1~11.10）",
+      "kind": "example",
+      "title": "【强化例 11.8】化为 $x f(\\sin x)$ 套区间再现 ⑤ 秒算 $\\int_0^\\pi x\\sqrt{\\cos^2 x-\\cos^4 x}\\,\\mathrm{d}x$",
+      "examWeight": "core",
+      "problem": "计算 $\\displaystyle\\int_0^\\pi x\\sqrt{\\cos^2 x-\\cos^4 x}\\,\\mathrm{d}x=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 化成 $\\sin x$ 表达，套公式 ⑤ 折半到 $[0,\\frac{\\pi}{2}]$ 直接脱绝对值！",
+          "detail": "因 $\\cos^2 x-\\cos^4 x=\\cos^2 x\\sin^2 x=(1-\\sin^2 x)\\sin^2 x$ 恰是 $\\sin x$ 的函数，直接套区间再现公式 ⑤：$$\\int_0^\\pi x\\sqrt{(1-\\sin^2 x)\\sin^2 x}\\,\\mathrm{d}x=\\pi\\int_0^{\\frac{\\pi}{2}}\\sqrt{(1-\\sin^2 x)\\sin^2 x}\\,\\mathrm{d}x=\\pi\\int_0^{\\frac{\\pi}{2}}\\cos x\\sin x\\,\\mathrm{d}x=\\left.\\frac{\\pi}{2}\\sin^2 x\\right|_0^{\\frac{\\pi}{2}}=\\frac{\\pi}{2}.$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{\\pi}{2}$。",
+      "takeaway": "绝妙避坑：在 $[0,\\pi]$ 上 $\\sqrt{\\cos^2 x}=|\\cos x|$ 会变号，先用公式 ⑤ 折半到 $[0,\\frac{\\pi}{2}]$ 后 $\\cos x\\ge 0$ 直接去绝对值，一步封神！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.125",
+        "pdfPage": 138,
+        "itemRef": "强化例11.8"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy18_eq_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-20",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（积分等式 12 大工具，强化例11.1~11.10）",
+      "kind": "example",
+      "title": "【强化例 11.9】反常积分三角化华里士比值 + $1^\\infty$ 极限计算",
+      "examWeight": "core",
+      "problem": "设数列 $\\{a_n\\}$ 的通项 $a_n=\\displaystyle\\int_0^{+\\infty}\\frac{\\mathrm{d}x}{(1+x^2)^n}\\;(n=2,3,\\dots)$，计算 $\\displaystyle\\lim_{n\\to\\infty}\\left(\\frac{a_{n+1}}{a_n}\\right)^{\\ln(1+\\mathrm{e}^{2n})}$。",
+      "steps": [
+        {
+          "stepTitle": "1. 令 $x=\\tan t$ 将 $a_n$ 化为华里士积分并约出相邻比值",
+          "detail": "$$a_n=\\int_0^{\\frac{\\pi}{2}}\\frac{\\sec^2 t}{\\sec^{2n} t}\\,\\mathrm{d}t=\\int_0^{\\frac{\\pi}{2}}\\cos^{2n-2} t\\,\\mathrm{d}t\\implies\\frac{a_{n+1}}{a_n}=\\frac{\\int_0^{\\frac{\\pi}{2}}\\cos^{2n} t\\,\\mathrm{d}t}{\\int_0^{\\frac{\\pi}{2}}\\cos^{2n-2} t\\,\\mathrm{d}t}=\\frac{2n-1}{2n}=1-\\frac{1}{2n}.$$"
+        },
+        {
+          "stepTitle": "2. 利用 $\\ln(1+\\mathrm{e}^{2n})\\sim 2n$ 计算 $1^\\infty$ 型极限",
+          "detail": "$$\\lim_{n\\to\\infty}\\left(1-\\frac{1}{2n}\\right)^{\\ln(1+\\mathrm{e}^{2n})}=\\mathrm{e}^{\\lim_{n\\to\\infty}\\left(-\\frac{1}{2n}\\right)\\cdot[2n+\\ln(1+\\mathrm{e}^{-2n})]}=\\mathrm{e}^{-1}.$$"
+        }
+      ],
+      "finalAnswer": "$\\mathrm{e}^{-1}$。",
+      "takeaway": "记住华里士相邻偶数幂递推比 $\\frac{I_{2n}}{I_{2n-2}}=\\frac{2n-1}{2n}$；遇到 $\\ln(1+\\mathrm{e}^{2n})$ 立刻提大头 $\\mathrm{e}^{2n}$ 写成 $2n+\\ln(1+\\mathrm{e}^{-2n})$！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.126",
+        "pdfPage": 139,
+        "itemRef": "强化例11.9"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy18_eq_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-21",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（积分等式 12 大工具，强化例11.1~11.10）",
+      "kind": "example",
+      "title": "【强化例 11.10】构造 $F(x)=f(x)\\cos x$ 联动积分中值定理与罗尔定理",
+      "examWeight": "core",
+      "problem": "已知函数 $f(x)$ 在 $\\left[0,\\dfrac{\\pi}{2}\\right]$ 上可导，且 $\\displaystyle\\int_0^{\\frac{\\pi}{2}} f(x)\\cos x\\,\\mathrm{d}x=0$，证明存在 $\\xi\\in\\left(0,\\dfrac{\\pi}{2}\\right)$，使得 $f'(\\xi)=f(\\xi)\\tan\\xi$。",
+      "steps": [
+        {
+          "stepTitle": "1. 改写目标式逆推出辅助函数 $F(x)=f(x)\\cos x$",
+          "detail": "目标 $f'(\\xi)=f(\\xi)\\tan\\xi\\iff f'(\\xi)\\cos\\xi-f(\\xi)\\sin\\xi=0\\iff[f(\\xi)\\cos\\xi]'=0$，故令 $F(x)=f(x)\\cos x$。"
+        },
+        {
+          "stepTitle": "2. 用开区间积分中值定理找内点零点 $F(\\eta)=0$，配合 $F(\\frac{\\pi}{2})=0$ 用罗尔定理",
+          "detail": "由开区间积分中值定理，存在 $\\eta\\in(0,\\frac{\\pi}{2})$ 使 $\\frac{\\pi}{2}F(\\eta)=\\int_0^{\\frac{\\pi}{2}} F(x)\\,\\mathrm{d}x=0\\Rightarrow F(\\eta)=0$（或用推广积分中值定理得 $f(\\eta)=0\\Rightarrow F(\\eta)=0$）。又 $F(\\frac{\\pi}{2})=0$，在 $[\\eta,\\frac{\\pi}{2}]$ 对 $F$ 用罗尔定理得 $\\exists\\xi\\in(\\eta,\\frac{\\pi}{2})\\subset(0,\\frac{\\pi}{2})$ 使 $F'(\\xi)=f'(\\xi)\\cos\\xi-f(\\xi)\\sin\\xi=0$，因 $\\cos\\xi\\ne 0$ 即得 $f'(\\xi)=f(\\xi)\\tan\\xi$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "第 6 讲原函数逆构造法 + 第 11 讲开区间积分中值定理的黄金联手！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.127",
+        "pdfPage": 140,
+        "itemRef": "强化例11.10"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-22",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（平移对称、交错判号、升降阶与不等式压轴，强化例11.11~11.19）",
+      "kind": "example",
+      "title": "【强化例 11.11】平移换元 $t=x-1$ 还原对称性秒算 $[0,2]$ 上奇对称多项式积分",
+      "examWeight": "core",
+      "problem": "计算下列积分：(1) $\\displaystyle\\int_0^2(x-1)\\,\\mathrm{d}x$；　(2) $\\displaystyle\\int_0^2 x(x-1)(x-2)\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 令 $t=x-1$ 把 $[0,2]$ 平移到 $[-1,1]$，奇函数立得 $0$",
+          "detail": "(1) $\\int_0^2(x-1)\\,\\mathrm{d}x\\xlongequal{t=x-1}\\int_{-1}^1 t\\,\\mathrm{d}t=0$；\n(2) $\\int_0^2 x(x-1)(x-2)\\,\\mathrm{d}x\\xlongequal{t=x-1}\\int_{-1}^1(t+1)t(t-1)\\,\\mathrm{d}t=\\int_{-1}^1(t^2-1)t\\,\\mathrm{d}t=0$。"
+        }
+      ],
+      "finalAnswer": "(1) $0$；(2) $0$。",
+      "takeaway": "看到积分区间关于 $x=c$ 对称、多项式根也关于 $c$ 对称分布（如 $0,1,2$），立刻平移 $t=x-c$ 验奇偶！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.129-130",
+        "pdfPage": 142,
+        "itemRef": "强化例11.11 (1)~(2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy18_11_19",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-23",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（平移对称、交错判号、升降阶与不等式压轴，强化例11.11~11.19）",
+      "kind": "example",
+      "title": "【强化例 11.12】平移换元 + 奇零 + 半圆几何法 10 秒口算二次根式定积分",
+      "examWeight": "core",
+      "problem": "计算下列积分：(1) $\\displaystyle\\int_0^4 x\\sqrt{4x-x^2}\\,\\mathrm{d}x$；　(2) $\\displaystyle\\int_0^2(2x+1)\\sqrt{2x-x^2}\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 题：配方 $4-(x-2)^2$，令 $t=x-2$ 拆出奇零 + 半径 $2$ 半圆",
+          "detail": "$$\\int_0^4(x-2+2)\\sqrt{2^2-(x-2)^2}\\,\\mathrm{d}x\\xlongequal{t=x-2}\\int_{-2}^2 t\\sqrt{4-t^2}\\,\\mathrm{d}t+2\\int_{-2}^2\\sqrt{4-t^2}\\,\\mathrm{d}t=0+2\\cdot\\frac{\\pi\\cdot 2^2}{2}=4\\pi.$$"
+        },
+        {
+          "stepTitle": "2. 第 (2) 题：配方 $1-(x-1)^2$，令 $t=x-1$ 拆出奇零 + 半径 $1$ 半圆",
+          "detail": "$$\\int_0^2[2(x-1)+3]\\sqrt{1-(x-1)^2}\\,\\mathrm{d}x\\xlongequal{t=x-1}2\\int_{-1}^1 t\\sqrt{1-t^2}\\,\\mathrm{d}t+3\\int_{-1}^1\\sqrt{1-t^2}\\,\\mathrm{d}t=0+3\\cdot\\frac{\\pi\\cdot 1^2}{2}=\\frac{3}{2}\\pi.$$"
+        }
+      ],
+      "finalAnswer": "(1) $4\\pi$；(2) $\\dfrac{3}{2}\\pi$。",
+      "takeaway": "记住这个组合拳：**配方 $\\to$ 平移拉回 $[-R,R]$ $\\to$ 线性项奇零 $\\to$ 常数项直乘半圆面积 $\\frac{\\pi R^2}{2}$**，连三角换元都不用碰！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.130-131",
+        "pdfPage": 143,
+        "itemRef": "强化例11.12 (1)~(2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy18_11_19",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-24",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（平移对称、交错判号、升降阶与不等式压轴，强化例11.11~11.19）",
+      "kind": "example",
+      "title": "【强化例 11.13】区间再现化简 + 拆段叠回配对判别 $\\int_0^{\\frac{3}{2}\\pi}\\frac{\\cos x}{2x-3\\pi}\\,\\mathrm{d}x$ 正负",
+      "examWeight": "core",
+      "problem": "设 $I=\\displaystyle\\int_0^{\\frac{3}{2}\\pi}\\frac{\\cos x}{2x-3\\pi}\\,\\mathrm{d}x$，则 $I$（　）。\n(A) 为正　　(B) 为负　　(C) 为零　　(D) 发散",
+      "steps": [
+        {
+          "stepTitle": "1. 区间再现 $t=\\frac{3}{2}\\pi-x$ 化为简洁正弦分式（并确认 $t=0$ 可去收敛！）",
+          "detail": "令 $t=\\frac{3}{2}\\pi-x$，则 $2x-3\\pi=-2t$、$\\cos(\\frac{3}{2}\\pi-t)=-\\sin t$，负负得正：$$I=\\frac{1}{2}\\int_0^{\\frac{3}{2}\\pi}\\frac{\\sin t}{t}\\,\\mathrm{d}t.$$ 因 $\\lim_{t\\to 0^+}\\frac{\\sin t}{t}=1$，端点 $t=0$ 为可去间断点，积分收敛（排除 D）。"
+        },
+        {
+          "stepTitle": "2. 劈成三段，将负段 $[\\pi,\\frac{3}{2}\\pi]$ 平移 $t=u+\\pi$ 叠回 $[0,\\frac{\\pi}{2}]$",
+          "detail": "$$I=\\frac{1}{2}\\int_0^{\\frac{\\pi}{2}}\\frac{\\sin t}{t}\\,\\mathrm{d}t+\\frac{1}{2}\\int_{\\frac{\\pi}{2}}^\\pi\\frac{\\sin t}{t}\\,\\mathrm{d}t-\\frac{1}{2}\\int_0^{\\frac{\\pi}{2}}\\frac{\\sin u}{\\pi+u}\\,\\mathrm{d}u=\\frac{1}{2}\\int_0^{\\frac{\\pi}{2}}\\left(\\frac{1}{t}-\\frac{1}{\\pi+t}\\right)\\sin t\\,\\mathrm{d}t+\\frac{1}{2}\\int_{\\frac{\\pi}{2}}^\\pi\\frac{\\sin t}{t}\\,\\mathrm{d}t>0.$$ 故选 (A)。"
+        }
+      ],
+      "finalAnswer": "选 (A) 为正。",
+      "takeaway": "记住规律：$\\int_0^b\\frac{\\sin t}{t}\\,\\mathrm{d}t$ 对一切 $b>0$ 恒严格为正（正波峰永远压过后面的负波谷）！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.131",
+        "pdfPage": 144,
+        "itemRef": "强化例11.13"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy18_11_19",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-25",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（平移对称、交错判号、升降阶与不等式压轴，强化例11.11~11.19）",
+      "kind": "example",
+      "title": "【强化例 11.14】换元 + 分部「降阶」求抽象导函数积分",
+      "examWeight": "core",
+      "problem": "设 $f(x)=x g'(2x)$，且 $g(x)$ 的一个原函数为 $\\ln(x+1)$，则 $\\displaystyle\\int_0^1 f(x)\\,\\mathrm{d}x=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 换元 $t=2x$ 去括号内系数，再分部把 $g'$ 降阶成 $g$ 与 $\\int g$",
+          "detail": "由题知 $\\int g(x)\\,\\mathrm{d}x=\\ln(x+1)+C$，且 $g(x)=\\frac{1}{1+x}$。换元 $2x=t$ 后分部积分：$$\\int_0^1 x g'(2x)\\,\\mathrm{d}x=\\frac{1}{4}\\int_0^2 t\\,\\mathrm{d}[g(t)]=\\frac{1}{4}\\left[\\left.t g(t)\\right|_0^2-\\int_0^2 g(t)\\,\\mathrm{d}t\\right]=\\frac{1}{4}\\left.\\left[\\frac{t}{1+t}-\\ln(1+t)\\right]\\right|_0^2=\\frac{1}{6}-\\frac{1}{4}\\ln 3.$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{1}{6}-\\dfrac{1}{4}\\ln 3$。",
+      "takeaway": "换元 $t=2x$ 时系数是 $\\frac{t}{2}\\cdot\\frac{1}{2}=\\frac{1}{4}$，千万别漏掉两个 $\\frac{1}{2}$ 相乘！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.132",
+        "pdfPage": 145,
+        "itemRef": "强化例11.14 & 注"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy18_11_19",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-26",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（平移对称、交错判号、升降阶与不等式压轴，强化例11.11~11.19）",
+      "kind": "example",
+      "title": "【强化例 11.15】分部「升阶」把不可积变限积分 $f(x)$ 升为 $f'(x)$",
+      "examWeight": "core",
+      "problem": "设 $f(x)=\\displaystyle\\int_0^x\\mathrm{e}^{-t^2+2t}\\,\\mathrm{d}t$，则 $\\displaystyle\\int_0^1(x-1)^2 f(x)\\,\\mathrm{d}x=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 选 $\\frac{1}{3}(x-1)^3$ 凑微分分部，令两端边界项同时清零！",
+          "detail": "因 $f(0)=0,\\;f'(x)=\\mathrm{e}^{-x^2+2x}=\\mathrm{e}^{1-(x-1)^2}$：$$\\int_0^1(x-1)^2 f(x)\\,\\mathrm{d}x=\\left.\\frac{1}{3}(x-1)^3 f(x)\\right|_0^1-\\frac{1}{3}\\int_0^1(x-1)^3\\mathrm{e}^{1-(x-1)^2}\\,\\mathrm{d}x=-\\frac{\\mathrm{e}}{6}\\int_0^1(x-1)^2\\mathrm{e}^{-(x-1)^2}\\,\\mathrm{d}[(x-1)^2].$$"
+        },
+        {
+          "stepTitle": "2. 令 $t=(x-1)^2$ 分部出值",
+          "detail": "$$\\text{原式}=-\\frac{\\mathrm{e}}{6}\\int_1^0 t\\mathrm{e}^{-t}\\,\\mathrm{d}t=\\frac{\\mathrm{e}}{6}\\left.\\left[-(t+1)\\mathrm{e}^{-t}\\right]\\right|_0^1=\\frac{\\mathrm{e}}{6}(1-2\\mathrm{e}^{-1})=\\frac{1}{6}(\\mathrm{e}-2).$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{1}{6}(\\mathrm{e}-2)$。",
+      "takeaway": "与基础例9.19 遥相呼应：遇到不可积变限积分，刻意挑选在非零端点取零的原函数（本题 $(x-1)^3$ 在 $1$ 为零，恰好互补 $f(0)=0$），边界项瞬间清零！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.132",
+        "pdfPage": 145,
+        "itemRef": "强化例11.15 & 注"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy18_11_19",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-27",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（平移对称、交错判号、升降阶与不等式压轴，强化例11.11~11.19）",
+      "kind": "example",
+      "title": "【强化例 11.16】牛顿-莱布尼茨公式 + 对数换元 $t=\\ln x$ 求 $f(1)$",
+      "examWeight": "core",
+      "problem": "已知 $f'(\\ln x)=\\begin{cases}1,&x\\in(0,1),\\\\ x,&x\\in(1,+\\infty),\\end{cases}\\;f(0)=0$，则 $f(1)=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 写 $f(1)-f(0)=\\int_0^1 f'(t)\\,\\mathrm{d}t$，换元 $t=\\ln x$ 对接已知条件",
+          "detail": "当 $t\\in(0,1]$ 时 $x=\\mathrm{e}^t\\in(1,\\mathrm{e}]$，落入 $f'(\\ln x)=x$ 分支：$$f(1)=f(1)-f(0)=\\int_0^1 f'(t)\\,\\mathrm{d}t\\xlongequal{t=\\ln x}\\int_1^{\\mathrm{e}} f'(\\ln x)\\frac{\\mathrm{d}x}{x}=\\int_1^{\\mathrm{e}} 1\\,\\mathrm{d}x=\\mathrm{e}-1.$$"
+        }
+      ],
+      "finalAnswer": "$\\mathrm{e}-1$。",
+      "takeaway": "不求 $f'(t)$ 分段表达式、直接对 $\\int_0^1 f'(t)\\,\\mathrm{d}t$ 作换元 $t=\\ln x$，一行解决！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.133",
+        "pdfPage": 146,
+        "itemRef": "强化例11.16"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy18_11_19",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-28",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（平移对称、交错判号、升降阶与不等式压轴，强化例11.11~11.19）",
+      "kind": "example",
+      "title": "【强化例 11.17】配完全平方 + 严格保号性从积分不等式反解唯一函数 $f(x)$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[0,1]$ 上连续，且 $\\displaystyle\\int_0^1 2x^2 f(x)\\,\\mathrm{d}x\\ge\\int_0^1 f^2(x)\\,\\mathrm{d}x+\\frac{1}{5}$，则 $f(x)=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 认出 $\\frac{1}{5}=\\int_0^1 x^4\\,\\mathrm{d}x$，配完全平方用非负连续保号性锁死 $f(x)\\equiv x^2$",
+          "detail": "$$\\int_0^1\\bigl[f(x)-x^2\\bigr]^2\\,\\mathrm{d}x=\\int_0^1 f^2(x)\\,\\mathrm{d}x-\\int_0^1 2x^2 f(x)\\,\\mathrm{d}x+\\frac{1}{5}\\le 0.$$ 因被积函数 $[f(x)-x^2]^2\\ge 0$ 且连续，由严格保号性必有 $[f(x)-x^2]^2\\equiv 0$，即 $f(x)=x^2$！"
+        }
+      ],
+      "finalAnswer": "$x^2$。",
+      "takeaway": "考研填空绝活：见到不等式却让你填唯一的 $f(x)$，**99% 是把常数改写成定积分（$\\frac{1}{5}=\\int_0^1 x^4\\,\\mathrm{d}x$）凑出非负完全平方 $\\int[f(x)-g(x)]^2\\,\\mathrm{d}x\\le 0$**！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.134-135",
+        "pdfPage": 147,
+        "itemRef": "强化例11.17"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy18_11_19",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-29",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（平移对称、交错判号、升降阶与不等式压轴，强化例11.11~11.19）",
+      "kind": "example",
+      "title": "【强化例 11.18】双端点二阶泰勒配权消一阶导，证明数值梯形公式误差 $\\le\\frac{1}{12}$",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)$ 在 $[0,1]$ 具有二阶导数，且 $f'(0)=f'(1)$，$|f''(x)|\\le 1$。证明：\n(1) 当 $x\\in(0,1)$ 时，$|f(x)-f(0)(1-x)-f(1)x|\\le\\dfrac{x(1-x)}{2}$；\n(2) $\\displaystyle\\left|\\int_0^1 f(x)\\,\\mathrm{d}x-\\frac{f(0)+f(1)}{2}\\right|\\le\\frac{1}{12}$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：在 $0$ 与 $1$ 处各做二阶泰勒展开，乘 $(x-1)$ 与 $x$ 相减消掉 $f'(0)=f'(1)$",
+          "detail": "存在 $\\xi_1,\\xi_2\\in(0,1)$ 使 $f(x)=f(0)+f'(0)x+\\frac{1}{2}f''(\\xi_1)x^2$ 与 $f(x)=f(1)+f'(1)(x-1)+\\frac{1}{2}f''(\\xi_2)(x-1)^2$。分别乘 $(x-1)$ 与 $x$ 后下式减上式，因 $f'(0)=f'(1)$ 一次项全消：$$f(x)=f(0)(1-x)+f(1)x+\\frac{x(1-x)}{2}\\bigl[x f''(\\xi_1)+(1-x)f''(\\xi_2)\\bigr].$$ 由 $|f''|\\le 1$ 及 $x>0,1-x>0$ 立得 $|f(x)-f(0)(1-x)-f(1)x|\\le\\frac{x(1-x)}{2}$！"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：对 (1) 式两边在 $[0,1]$ 积分并用绝对值不等式",
+          "detail": "注意到 $\\int_0^1[f(0)(1-x)+f(1)x]\\,\\mathrm{d}x=\\frac{f(0)+f(1)}{2}$，故 $$\\left|\\int_0^1 f(x)\\,\\mathrm{d}x-\\frac{f(0)+f(1)}{2}\\right|\\le\\int_0^1|f(x)-f(0)(1-x)-f(1)x|\\,\\mathrm{d}x\\le\\int_0^1\\frac{x(1-x)}{2}\\,\\mathrm{d}x=\\frac{1}{12}.$$"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "深刻几何背景：即使不知道 $\\int_0^1 f(x)\\,\\mathrm{d}x$ 的精确值，用端点弦线梯形面积 $\\frac{f(0)+f(1)}{2}$ 近似它的误差绝对不超过 $\\frac{1}{12}$！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.135-136",
+        "pdfPage": 148,
+        "itemRef": "强化例11.18 (1)~(2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy18_11_19",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-e-30",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（平移对称、交错判号、升降阶与不等式压轴，强化例11.11~11.19）",
+      "kind": "example",
+      "title": "【强化例 11.19】黎曼拆区间压轴难题：由最大值点 $x_0$ 证 $\\int_0^1\\left|\\frac{f''(x)}{f(x)}\\right|\\,\\mathrm{d}x\\ge 4$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[0,1]$ 上具有二阶连续导数，$f(0)=f(1)=0$，$f''(x)<0$，证明：$\\displaystyle\\int_0^1\\left|\\frac{f''(x)}{f(x)}\\right|\\,\\mathrm{d}x\\ge 4$（难度较大）。",
+      "steps": [
+        {
+          "stepTitle": "1. 定位内点最大值 $f(x_0)>0$ 放缩分母，再拆 $[0,x_0]$ 与 $[x_0,1]$ 用拉格朗日",
+          "detail": "因 $f''<0$ 且 $f(0)=f(1)=0$，$f$ 严格上凸，故 $f(x)>0\\;(x\\in(0,1))$，且最大值 $f(x_0)=\\max_{[0,1]} f(x)>0$ 必在某内点 $x_0\\in(0,1)$ 取得。放大分母得 $\\int_0^1\\left|\\frac{f''(x)}{f(x)}\\right|\\,\\mathrm{d}x\\ge\\frac{1}{f(x_0)}\\int_0^1|f''(x)|\\,\\mathrm{d}x$。分别在 $[0,x_0]$ 与 $[x_0,1]$ 用拉格朗日得 $\\xi_1\\in(0,x_0),\\;\\xi_2\\in(x_0,1)$ 使 $$f'(\\xi_1)=\\frac{f(x_0)}{x_0},\\qquad f'(\\xi_2)=\\frac{-f(x_0)}{1-x_0}.$$"
+        },
+        {
+          "stepTitle": "2. 缩小积分区间至 $[\\xi_1,\\xi_2]$ 用 N-L 串联二阶导与一阶导差，再用均值界 $x_0(1-x_0)\\le\\frac{1}{4}$",
+          "detail": "$$\\int_0^1|f''(x)|\\,\\mathrm{d}x\\ge\\int_{\\xi_1}^{\\xi_2}|f''(x)|\\,\\mathrm{d}x\\ge\\left|\\int_{\\xi_1}^{\\xi_2} f''(x)\\,\\mathrm{d}x\\right|=|f'(\\xi_2)-f'(\\xi_1)|=\\frac{f(x_0)}{x_0(1-x_0)}\\ge 4f(x_0),$$ 代回即证 $\\int_0^1\\left|\\frac{f''(x)}{f(x)}\\right|\\,\\mathrm{d}x\\ge 4$！（严谨补注见表 11-4：原题干多写了冗余的「对于任意 $x\\in(0,1)$」，$x$ 实为积分哑变量；且当 $f''(0)<0$ 时该反常积分实为 $+\\infty$，不等式自然严格成立！）"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "这是考研不等式「**黎曼拆区间 + 拉格朗日双桥 + N-L 降阶 + $x_0(1-x_0)\\le\\frac{1}{4}$**」的巅峰组合，务必独立默写一遍！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.136-137",
+        "pdfPage": 149,
+        "itemRef": "强化例11.19（含措辞与端点瑕点补注）"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-s-01",
+      "stage": "both",
+      "section": "第 11 讲题型总结 · 一、积分等式与积分极限全题型速查表",
+      "kind": "summary",
+      "title": "【积分等式与极限总表】对称/再现、平移还原、中值联动、夹逼与升降阶速查表",
+      "examWeight": "core",
+      "overview": "积分等式与极限题拼的是「**变换工具的精准配对**」：区间不变看对称/再现/分部升降阶，区间移动看换元/平移还原，含 $n\\to\\infty$ 或 $h\\to 0^+$ 看夹逼与三段拆分！",
+      "tables": [
+        {
+          "caption": "表 11-2 积分等式与积分极限 5 大核心题型落刀路线表（基础 P.283-287 & 强化 P.121-133）",
+          "headers": [
+            "题型特征",
+            "核心落刀动作",
+            "头号易错红线",
+            "代表例题"
+          ],
+          "rows": [
+            [
+              "对称区间配 $1+\\mathrm{e}^{\\pm x}$ 或高阶导/周期",
+              "对称配对神式 $\\int_0^a[f(x)+f(-x)]$；祖孙三代奇偶周期链",
+              "忘查区间长是否为最小正周期整数倍；误以为偶函数积分全奇",
+              "强化例11.2~11.6"
+            ],
+            [
+              "区间再现与平移还原对称性",
+              "先看是否需三角换元再区间再现；见 $[0,2a]$ 令 $t=x-a$ 拉回 $[-a,a]$",
+              "不折半 $[0,\\frac{\\pi}{2}]$ 直接脱 $\\sqrt{\\cos^2 x}$ 搞丢绝对值",
+              "强化例11.7~11.8, 11.11~11.12"
+            ],
+            [
+              "积分中值定理 + 微分中值定理联动",
+              "推广积分中值定理译出内点值 $f(\\eta)$，配罗尔/拉格朗日定 $f',f''$",
+              "被积含 $n$ 时误对 $\\eta_n$ 直接取极限；忽略 $g(x)$ 不变号前提",
+              "例11.1, 例11.2, 强化例11.10"
+            ],
+            [
+              "含 $n\\to\\infty$ / $h\\to 0^+$ / 周期取整积分极限",
+              "放缩夹逼（$\\int_0^1 x^n f\\to 0$）；泊松核用 $\\pm\\sqrt{h}$ 劈三段；华里士比值",
+              "对含跳跃间断点的 $x-[x]$ 变限积分乱用洛必达法则",
+              "例11.3~11.5, 强化例11.1, 11.9"
+            ],
+            [
+              "抽象/不可积变限积分等式（升降阶）",
+              "由 $g'\\to g$ 降阶、由不可积 $f\\to f'$ 升阶；$f(1)-f(0)=\\int_0^1 f'$ 配换元",
+              "分部凑多项式原函数未挑好常数导致边界项消不掉",
+              "例11.6, 强化例11.14~11.16"
+            ]
+          ]
+        }
+      ],
+      "patterns": [
+        {
+          "typeName": "定积分等式/计算「区间变化侦察法」",
+          "triggers": "要将一个抽象定积分化为另一个定积分或证明两积分相等时。",
+          "method": "① **上下限变了** $\\implies$ 99% 是**换元积分法**（含平移还原对称性）；② **上下限没变但 $f$ 变成 $f'/f''$** $\\implies$ **分部积分升降阶**；③ **上下限没变且同阶对称** $\\implies$ **区间再现**！",
+          "pitfall": "绝对不要在抽象函数积分题里企图把原函数求出来再代上下限！",
+          "relatedRefs": "例11.6, 强化例11.7, 强化例11.14, 强化例11.15"
+        }
+      ],
+      "takeaway": "积分等式抓核心：**看区间定换元，看阶数定分部，看对称定配对/再现，看奇异核定三段拆！**",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.283-287",
+        "pdfPage": 288,
+        "itemRef": "第11讲 积分等式与极限总括",
+        "crossRef": "27张宇《高数18讲》(强化) P.121-133"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-s-02",
+      "stage": "both",
+      "section": "第 11 讲题型总结 · 二、积分不等式 6 大压轴题型速查表",
+      "kind": "summary",
+      "title": "【积分不等式压轴总表】从条件光滑度一秒锁定 6 大证明工具",
+      "examWeight": "core",
+      "overview": "积分不等式是考研数一大题的「分水岭」。按题设给出的**最高导数阶数与区间结构**直接查表 11-3，彻底告别考场盲试！",
+      "tables": [
+        {
+          "caption": "表 11-3 积分不等式 6 大核心题型按题设条件路由速查表（基础 P.287-290 & 强化 P.131-137）",
+          "headers": [
+            "题设最高光滑度 / 结构",
+            "首选核心工具",
+            "关键技巧点",
+            "代表例题"
+          ],
+          "rows": [
+            [
+              "仅连续 + 单调/有界或反求函数",
+              "变上限单调性 / 比较定理配完全平方",
+              "上限 $b\\to x$ 求导判单调；常数改积分凑 $\\int(f-g)^2\\le 0$",
+              "例11.7, 强化例11.17"
+            ],
+            [
+              "交错衰减积分判正负",
+              "换元化简 + 拆正负半周叠回合并",
+              "令 $t=u+\\pi$ 把负半周叠到正半周上用单调性比较",
+              "强化例11.13"
+            ],
+            [
+              "一阶导 + 双端点零 $f(a)=f(b)=0$",
+              "拉格朗日双段拆 / 双端点 N-L 相加",
+              "求 $\\int|f|\\le\\frac{M}{4}$ 用拉格朗日；求 $|f|\\le\\frac{1}{2}\\int|f'|$ 用双 N-L",
+              "例11.8, 例11.11"
+            ],
+            [
+              "一阶导 + 振荡因子 $\\sin nx$",
+              "分部积分提出 $\\frac{1}{n}$ + 绝对值不等式",
+              "用 $|\\int u\\mathrm{d}v|\\le|uv|_a^b|+\\int|v\\mathrm{d}u|$ 配 $f'\\ge 0$",
+              "例11.10"
+            ],
+            [
+              "二阶导 + 中点/双端点条件",
+              "中点泰勒展开 / 双端点泰勒配权消 $f'$",
+              "中点展开消 $\\int(x-x_0)=0$；双端点乘 $(x-1)$ 与 $x$ 消 $f'(0)=f'(1)$",
+              "例11.6, 例11.9, 强化例11.18"
+            ],
+            [
+              "大区间难直证（如凹函数比值积分 $\\ge 4$）",
+              "黎曼拆区间思想（最大值点 $x_0$ 劈两段）",
+              "放缩分母取 $f(x_0)$，左右拉格朗日得 $\\xi_1,\\xi_2$，再缩区间用 N-L",
+              "强化例11.19"
+            ]
+          ]
+        }
+      ],
+      "patterns": [
+        {
+          "typeName": "考场压轴不等式「一阶看 N-L/拉氏，二阶看泰勒/分部」口诀",
+          "triggers": "考研解答题给出抽象函数导数界（$|f'|\\le M$ 或 $|f''|\\le M$）要求证明积分不等式。",
+          "method": "① 看到 $|f'|\\le M$：优先双端点拉格朗日或双端点 N-L；② 看到 $|f''|\\le M$：若给中点值则在**中点泰勒展开**，若给双端点值且 $f'(a)=f'(b)$ 则用**双端点泰勒配权**，若 $f(a)=f(b)=0$ 则两次分部转成 $\\frac{1}{2}\\int x(x-1)f''$！",
+          "pitfall": "绝对不要忘记检查不等式方向是否要求 $a<b$，也不要漏写被积函数非负/连续的放缩依据！",
+          "relatedRefs": "例11.6, 例11.8, 例11.9, 例11.11, 强化例11.18, 强化例11.19"
+        }
+      ],
+      "takeaway": "积分不等式有章可循：**连续靠单调/平方，一阶靠拉氏/N-L，二阶靠泰勒/分部，硬骨头靠黎曼拆区间！**",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.287-290",
+        "pdfPage": 292,
+        "itemRef": "第11讲 积分不等式总括",
+        "crossRef": "27张宇《高数18讲》(强化) P.134-137"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c11-s-03",
+      "stage": "both",
+      "section": "第 11 讲题型总结 · 三、严谨性细节与命题陷阱核验台账",
+      "kind": "summary",
+      "title": "【避坑 & 核验台账】第 11 讲 4 处严谨性补注与经典陷阱汇总",
+      "examWeight": "core",
+      "overview": "本讲全部 30 道例题（11 基础 + 19 强化）均已逐页核对并完成计算项 SymPy 验真，特整理 4 处关键严谨性补注（对应总台账 #35~#38）防止考场失分。",
+      "tables": [
+        {
+          "caption": "表 11-4 第 11 讲严谨性细节与陷阱核验台账（对应总台账 #35~#38）",
+          "headers": [
+            "编号",
+            "出处与例题",
+            "原书写法 / 常见误区",
+            "精确核验与严谨补注"
+          ],
+          "rows": [
+            [
+              "#35",
+              "基础30讲 P.283 例11.1(1)",
+              "写「若 $g\\not\\equiv 0$ 且不变号，不妨设 $g(x)>0$」，随后用柯西中值定理除以 $G'(\\xi)=g(\\xi)$",
+              "$g$ 不变号且 $g\\not\\equiv 0$ 仅说明 $g\\ge 0$，仍可能在个别点取 $0$（如 $x^2$ 在 $[-1,1]$）。严格证法：若 $g>0$ 直接柯西；若 $g\\ge 0$ 有零点，用 $m\\int g<\\int fg<M\\int g$ 配连续介值定理仍得内点 $\\xi\\in(a,b)$。"
+            ],
+            [
+              "#36",
+              "基础30讲 P.284 注(2) & 例11.1(2)",
+              "将 $\\int_1^2\\mathrm{e}^{-x^n}\\,\\mathrm{d}x$ 写成 $\\mathrm{e}^{-\\eta_n^n}\\;(\\eta_n\\in(1,2))$ 后误直接令 $n\\to\\infty$ 得 $0$",
+              "中值点 $\\eta_n$ 依赖于 $n$（若 $\\eta_n=1+\\frac{1}{n}$ 则 $\\eta_n^n\\to\\mathrm{e}$ 并不趋于 $+\\infty$！）。必须用 $\\mathrm{e}^{-x^n}<\\frac{1}{x^n}$ 放缩夹逼才是严密证法。"
+            ],
+            [
+              "#37",
+              "高数18讲 P.123 强化例11.4",
+              "对 $I=\\int_{-1}^1\\frac{\\mathrm{d}x}{1+\\mathrm{e}^{1/x}}$ 直接套对称配对公式，未显式说明 $x=0$ 间断性",
+              "被积函数在 $x=0$ 处为第一类**跳跃间断点**（左极限 $1$、右极限 $0$），因有界且仅 1 个间断点故仍为常义黎曼可积，对称配对 $f(x)+f(-x)=1$ 在 $(0,1]$ 上成立，积分精确为 $1$。"
+            ],
+            [
+              "#38",
+              "高数18讲 P.136-137 强化例11.19",
+              "题干写「证明：对于任意 $x\\in(0,1)$，$\\int_0^1\\left|\\frac{f''(x)}{f(x)}\\right|\\,\\mathrm{d}x\\ge 4$」",
+              "$x$ 为定积分哑变量而非自由变量，句首「对于任意 $x\\in(0,1)$」属措辞冗余；且因 $f(0)=f(1)=0$，该积分为正项反常积分（当 $f''(0)<0,f'(0)>0$ 时甚至发散为 $+\\infty$，不等式 $\\ge 4$ 自然严格成立）。"
+            ]
+          ]
+        }
+      ],
+      "patterns": [
+        {
+          "typeName": "积分证明题「中值点依赖性与间断性」双检习惯",
+          "triggers": "在积分极限或不等式证明中使用积分中值定理或洛必达法则前。",
+          "method": "① 只要被积函数含 $n$ 或上限含 $x$，立刻把中值点标成 **$\\xi_n$ 或 $\\xi(x)$** 提醒自己它不是定点！② 动用洛必达前先扫一眼被积函数有没有跳跃间断点（如 $x-[x]$）！",
+          "pitfall": "这两条正是考研数学一大题扣过程分最隐蔽的「暗雷」！",
+          "relatedRefs": "例11.1, 例11.5, 强化例11.1, 强化例11.4"
+        }
+      ],
+      "takeaway": "证明题的严谨性决定了大题是拿 6 分还是拿满分：**盯紧 $\\xi_n$ 依赖性、查清 $g$ 零点与被积间断点！**",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》&《高数18讲》(强化)",
+        "printedPage": "基础 P.283-284 · 强化 P.123, 136-137",
+        "pdfPage": 288,
+        "itemRef": "第11讲 严谨性细节核验台账"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c11_zy18_eq_01_10",
+        "verified": true
+      }
+    }
+  ]
+}

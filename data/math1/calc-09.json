@@ -1,0 +1,2334 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "calc-09",
+  "chapterNum": "高数 · 第 9 讲",
+  "chapterTitle": "一元函数积分学的计算",
+  "syllabusRef": "2027 考研数学一大纲 · 高等数学第 9 讲（27 张宇《基础30讲·高数》P.230-255上 + 《高数18讲》强化 P.90-104 全量合编）",
+  "items": [
+    {
+      "id": "m1-c09-f-01",
+      "stage": "both",
+      "section": "一、基本积分公式（10 组必背核心公式）",
+      "kind": "formula",
+      "title": "基本积分公式 10 组全表（含 sec/csc、平方和差根式与三角二次式）",
+      "examWeight": "core",
+      "prompt": "默写全部 10 组基本积分公式，重点盯牢 $\\int\\sec x\\,\\mathrm{d}x$、$\\int\\frac{1}{a^2+x^2}\\,\\mathrm{d}x$、$\\int\\frac{1}{\\sqrt{x^2\\pm a^2}}\\,\\mathrm{d}x$、$\\int\\frac{1}{x^2-a^2}\\,\\mathrm{d}x$ 与 $\\int\\sqrt{a^2-x^2}\\,\\mathrm{d}x$ 的系数与绝对值：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{核心根式与分式：}\\int\\frac{\\mathrm{d}x}{a^2+x^2}=\\frac{1}{a}\\arctan\\frac{x}{a}+C\\;(a>0),\\quad \\int\\frac{\\mathrm{d}x}{\\sqrt{a^2-x^2}}=\\arcsin\\frac{x}{a}+C\\;(a>0)\\\\\n&\\int\\frac{\\mathrm{d}x}{\\sqrt{x^2+a^2}}=\\ln\\!\\bigl(x+\\sqrt{x^2+a^2}\\bigr)+C,\\quad \\int\\frac{\\mathrm{d}x}{\\sqrt{x^2-a^2}}=\\ln\\!\\left|x+\\sqrt{x^2-a^2}\\right|+C\\;(|x|>|a|)\\\\\n&\\int\\frac{\\mathrm{d}x}{x^2-a^2}=\\frac{1}{2a}\\ln\\!\\left|\\frac{x-a}{x+a}\\right|+C,\\quad \\int\\frac{\\mathrm{d}x}{a^2-x^2}=\\frac{1}{2a}\\ln\\!\\left|\\frac{x+a}{x-a}\\right|+C\\\\\n&\\int\\sqrt{a^2-x^2}\\,\\mathrm{d}x=\\frac{a^2}{2}\\arcsin\\frac{x}{a}+\\frac{x}{2}\\sqrt{a^2-x^2}+C\\;(a>|x|\\ge 0)\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "恒等变形法（强化 P.90）",
+          "desc": "强化 18 讲将「三向解题法」第 1 路单列为**恒等变形法**：通过拆项、加减常数、倍角降幂、$\\sec^2 x=1+\\tan^2 x$ 等代数恒等变形直接化归表 9-1 基本公式。"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 9-1 第 9 讲 10 组基本积分公式全表（基础 30 讲 P.231-232 逐项核对）",
+          "headers": [
+            "组别",
+            "标准积分公式",
+            "高频衍生式 / 成立前提"
+          ],
+          "rows": [
+            [
+              "① 幂函数",
+              "$\\int x^k\\,\\mathrm{d}x=\\frac{1}{k+1}x^{k+1}+C\\;(k\\ne -1)$",
+              "$\\int\\frac{1}{x^2}\\,\\mathrm{d}x=-\\frac{1}{x}+C$；$\\int\\frac{1}{\\sqrt{x}}\\,\\mathrm{d}x=2\\sqrt{x}+C$"
+            ],
+            [
+              "② 对数型",
+              "$\\int\\frac{1}{x}\\,\\mathrm{d}x=\\ln|x|+C$",
+              "必加绝对值 $|x|$（$x\\ne 0$ 两侧同成立）"
+            ],
+            [
+              "③ 指数型",
+              "$\\int\\mathrm{e}^x\\,\\mathrm{d}x=\\mathrm{e}^x+C$；$\\int a^x\\,\\mathrm{d}x=\\frac{a^x}{\\ln a}+C$",
+              "$a>0$ 且 $a\\ne 1$"
+            ],
+            [
+              "④ 三角 10 式",
+              "$\\int\\tan x\\,\\mathrm{d}x=-\\ln|\\cos x|+C$；$\\int\\cot x\\,\\mathrm{d}x=\\ln|\\sin x|+C$\n$\\int\\sec x\\,\\mathrm{d}x=\\ln|\\sec x+\\tan x|+C$；$\\int\\csc x\\,\\mathrm{d}x=\\ln|\\csc x-\\cot x|+C$",
+              "另含 $\\sin/\\cos/\\sec^2/\\csc^2/\\sec x\\tan x/\\csc x\\cot x$ 共 6 基础式；$\\int\\sec x$ 必星标牢记！"
+            ],
+            [
+              "⑤ 反正切型",
+              "$\\int\\frac{1}{a^2+x^2}\\,\\mathrm{d}x=\\frac{1}{a}\\arctan\\frac{x}{a}+C$",
+              "$a>0$（勿漏最前面的 $\\frac{1}{a}$！）"
+            ],
+            [
+              "⑥ 反正弦型",
+              "$\\int\\frac{1}{\\sqrt{a^2-x^2}}\\,\\mathrm{d}x=\\arcsin\\frac{x}{a}+C$",
+              "$a>0$（注意前面**没有** $\\frac{1}{a}$！）"
+            ],
+            [
+              "⑦ 无理对数型",
+              "$\\int\\frac{\\mathrm{d}x}{\\sqrt{x^2+a^2}}=\\ln(x+\\sqrt{x^2+a^2})+C$；$\\int\\frac{\\mathrm{d}x}{\\sqrt{x^2-a^2}}=\\ln|x+\\sqrt{x^2-a^2}|+C$",
+              "前式恒正可去绝对值；后式 $|x|>|a|$ 须带绝对值"
+            ],
+            [
+              "⑧ 平方差型",
+              "$\\int\\frac{\\mathrm{d}x}{x^2-a^2}=\\frac{1}{2a}\\ln\\left|\\frac{x-a}{x+a}\\right|+C$；$\\int\\frac{\\mathrm{d}x}{a^2-x^2}=\\frac{1}{2a}\\ln\\left|\\frac{x+a}{x-a}\\right|+C$",
+              "分子减号紧跟被积式首项：$x^2-a^2\\Rightarrow\\frac{x-a}{x+a}$"
+            ],
+            [
+              "⑨ 圆弧根式",
+              "$\\int\\sqrt{a^2-x^2}\\,\\mathrm{d}x=\\frac{a^2}{2}\\arcsin\\frac{x}{a}+\\frac{x}{2}\\sqrt{a^2-x^2}+C$",
+              "$a\\ge|x|\\ge 0$；与强化例9.2(2)(3)并记"
+            ],
+            [
+              "⑩ 三角二次式",
+              "$\\int\\sin^2 x\\,\\mathrm{d}x=\\frac{x}{2}-\\frac{\\sin 2x}{4}+C$；$\\int\\cos^2 x\\,\\mathrm{d}x=\\frac{x}{2}+\\frac{\\sin 2x}{4}+C$\n$\\int\\tan^2 x\\,\\mathrm{d}x=\\tan x-x+C$；$\\int\\cot^2 x\\,\\mathrm{d}x=-\\cot x-x+C$",
+              "降幂 $\\sin^2 x=\\frac{1-\\cos 2x}{2}$、恒等式 $\\tan^2 x=\\sec^2 x-1$，只背二次方即可"
+            ]
+          ]
+        }
+      ],
+      "conditions": "① 一切不定积分计算（凑微分、换元、分部、有理函数拆分）最终全部归结为这 10 组基本积分公式；强化 18 讲把直接代数变形化归基本公式称为「一、恒等变形法」。\n② 凡带常数 $a>0$ 的公式，请成对对比系数：$\\int\\frac{\\mathrm{d}x}{a^2+x^2}$ 有前置 $\\frac{1}{a}$，$\\int\\frac{\\mathrm{d}x}{\\sqrt{a^2-x^2}}$ **无**前置 $\\frac{1}{a}$！",
+      "pitfalls": "① 最易混淆的两对负号：$\\int\\frac{\\mathrm{d}x}{x^2-a^2}=\\frac{1}{2a}\\ln\\left|\\frac{x-a}{x+a}\\right|+C$（$x-a$ 在上），而 $\\int\\frac{\\mathrm{d}x}{a^2-x^2}=\\frac{1}{2a}\\ln\\left|\\frac{x+a}{x-a}\\right|+C$（$x+a$ 在上），求导即可秒验！\n② 求不定积分结果绝不可漏写任意常数 $+C$；且某些初等函数（如 $\\mathrm{e}^{-x^2},\\;\\frac{\\sin x}{x},\\;\\frac{1}{\\ln x}$）的原函数存在但**无法用初等函数表示**，遇到切勿死算（见例9.19）。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.230-232",
+        "pdfPage": 235,
+        "itemRef": "一、基本积分公式 ①~⑩",
+        "crossRef": "27张宇《高数18讲》(强化) P.90 一、恒等变形法"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_f_core_formulas"
+      }
+    },
+    {
+      "id": "m1-c09-f-02",
+      "stage": "foundation",
+      "section": "二、不定积分的积分法 · 1. 凑微分法（第一类换元法）",
+      "kind": "formula",
+      "title": "凑微分法（第一类换元法）核心原理与 13 个高频凑微分公式全表",
+      "examWeight": "core",
+      "prompt": "默写第一类换元法（凑微分法）的统一格式，并熟记注 2 中全部 13 个高频凑微分变形：",
+      "formulaLatex": "$$\\int f[g(x)]\\,g'(x)\\,\\mathrm{d}x=\\int f[g(x)]\\,\\mathrm{d}[g(x)]\\xlongequal{u=g(x)}\\int f(u)\\,\\mathrm{d}u$$",
+      "tables": [
+        {
+          "caption": "表 9-2 常用的 13 个高频凑微分公式速查表（基础 30 讲 P.232-233 注 2 ①~⑬）",
+          "headers": [
+            "序号",
+            "凑微分恒等式",
+            "对应的标准积分模式"
+          ],
+          "rows": [
+            [
+              "① ②",
+              "$x\\,\\mathrm{d}x=\\frac{1}{2}\\,\\mathrm{d}(x^2)$；$\\sqrt{x}\\,\\mathrm{d}x=\\frac{2}{3}\\,\\mathrm{d}(x^{\\frac{3}{2}})$",
+              "$\\int x f(x^2)\\,\\mathrm{d}x=\\frac{1}{2}\\int f(u)\\,\\mathrm{d}u$；$\\int\\sqrt{x}f(x^{\\frac{3}{2}})\\,\\mathrm{d}x=\\frac{2}{3}\\int f(u)\\,\\mathrm{d}u$"
+            ],
+            [
+              "③ ④",
+              "$\\frac{\\mathrm{d}x}{\\sqrt{x}}=2\\,\\mathrm{d}(\\sqrt{x})$；$\\frac{\\mathrm{d}x}{x^2}=\\mathrm{d}\\!\\left(-\\frac{1}{x}\\right)$",
+              "$\\int\\frac{f(\\sqrt{x})}{\\sqrt{x}}\\,\\mathrm{d}x=2\\int f(u)\\,\\mathrm{d}u$；$\\int\\frac{f(-1/x)}{x^2}\\,\\mathrm{d}x=\\int f(u)\\,\\mathrm{d}u$"
+            ],
+            [
+              "⑤",
+              "$\\frac{1}{x}\\,\\mathrm{d}x=\\mathrm{d}(\\ln x)\\;(x>0)$",
+              "$\\int\\frac{f(\\ln x)}{x}\\,\\mathrm{d}x=\\int f(u)\\,\\mathrm{d}u$（如 $\\int\\frac{\\ln^5 x}{x}\\,\\mathrm{d}x=\\frac{1}{6}\\ln^6 x+C$）"
+            ],
+            [
+              "⑥ ⑦",
+              "$\\mathrm{e}^x\\,\\mathrm{d}x=\\mathrm{d}(\\mathrm{e}^x)$；$a^x\\,\\mathrm{d}x=\\frac{1}{\\ln a}\\,\\mathrm{d}(a^x)$",
+              "$\\int\\mathrm{e}^x f(\\mathrm{e}^x)\\,\\mathrm{d}x=\\int f(u)\\,\\mathrm{d}u$；$a>0,a\\ne 1$"
+            ],
+            [
+              "⑧ ⑨",
+              "$\\sin x\\,\\mathrm{d}x=\\mathrm{d}(-\\cos x)$；$\\cos x\\,\\mathrm{d}x=\\mathrm{d}(\\sin x)$",
+              "$\\int\\sin x\\cdot f(-\\cos x)\\,\\mathrm{d}x$；$\\int\\cos x\\cdot f(\\sin x)\\,\\mathrm{d}x$"
+            ],
+            [
+              "⑩ ⑪",
+              "$\\frac{\\mathrm{d}x}{\\cos^2 x}=\\sec^2 x\\,\\mathrm{d}x=\\mathrm{d}(\\tan x)$；$\\frac{\\mathrm{d}x}{\\sin^2 x}=\\csc^2 x\\,\\mathrm{d}x=\\mathrm{d}(-\\cot x)$",
+              "$\\int\\frac{f(\\tan x)}{\\cos^2 x}\\,\\mathrm{d}x$；$\\int\\frac{f(-\\cot x)}{\\sin^2 x}\\,\\mathrm{d}x$"
+            ],
+            [
+              "⑫ ⑬",
+              "$\\frac{\\mathrm{d}x}{1+x^2}=\\mathrm{d}(\\arctan x)$；$\\frac{\\mathrm{d}x}{\\sqrt{1-x^2}}=\\mathrm{d}(\\arcsin x)$",
+              "如 $\\int\\frac{(\\arcsin x)^2}{\\sqrt{1-x^2}}\\,\\mathrm{d}x=\\frac{1}{3}\\arcsin^3 x+C$"
+            ]
+          ]
+        }
+      ],
+      "conditions": "① 凑微分本质是复合函数链式求导法则的逆用：把被积函数中的一部分放到 $\\mathrm{d}$ 后面，只要能凑成 $\\int f(\\text{狗})\\,\\mathrm{d}(\\text{狗})$（强化 P.91 形象记法），即可直接套基本公式。\n② 若不是表 9-2 中的常见凑微分，**立刻对被积函数最复杂的复合内核 $g(x)$ 求导**（见例9.2）：若 $g'(x)$ 恰好等于其余因式（或差常数倍），则凑微分瞬间成功！",
+      "pitfalls": "① 凑微分把常数放进 $\\mathrm{d}(\\cdot)$ 时**外侧必乘导数的倒数**：如 $\\mathrm{d}(ax+b)=a\\,\\mathrm{d}x\\Rightarrow \\mathrm{d}x=\\frac{1}{a}\\,\\mathrm{d}(ax+b)$、$\\sin x\\,\\mathrm{d}x=-\\mathrm{d}(\\cos x)$，千万勿丢负号或系数！\n② 切勿盲目死背表 9-2：对如 $\\int\\frac{x}{x^2+2x+2}\\,\\mathrm{d}x$（强化例9.1）这类分式，分子须主动配成「常数 $\\times$ 分母导数 + 常数」再拆分凑 $\\mathrm{d}(\\text{分母})$。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.232-233",
+        "pdfPage": 237,
+        "itemRef": "二·1 凑微分法 注1~注2 ①~⑬",
+        "crossRef": "27张宇《高数18讲》(强化) P.91 二、第一类换元法"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_f_core_formulas"
+      }
+    },
+    {
+      "id": "m1-c09-f-03",
+      "stage": "both",
+      "section": "二、不定积分的积分法 · 2. 第二类换元法（五大代换）",
+      "kind": "formula",
+      "title": "第二类换元法（三角代换、配方三角、根式代换、倒代换与复杂直接代换）",
+      "examWeight": "core",
+      "prompt": "默写第二类换元法基本公式与五大常用代换类型，牢记三种三角代换的 $t$ 取值范围与回代法则：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\int f(x)\\,\\mathrm{d}x\\xlongequal{x=g(u)}\\int f[g(u)]\\,g'(u)\\,\\mathrm{d}u\\quad\\bigl(x=g(u)\\text{ 单调可导，末了用 }u=g^{-1}(x)\\text{ 回代}\\bigr)\\\\\n&\\text{① 三角代换}(a>0):\\;\\begin{cases}\n\\sqrt{a^2-x^2}\\to x=a\\sin t,\\;|t|<\\frac{\\pi}{2}\\;(\\cos t>0)\\\\\n\\sqrt{a^2+x^2}\\to x=a\\tan t,\\;|t|<\\frac{\\pi}{2}\\;(\\sec t>0)\\\\\n\\sqrt{x^2-a^2}\\to x=a\\sec t,\\;\\bigl(x>a\\text{ 取 }0<t<\\frac{\\pi}{2};\\;x<-a\\text{ 取 }\\frac{\\pi}{2}<t<\\pi\\bigr)\n\\end{cases}\\\\\n&\\text{② 配方三角：}\\sqrt{ax^2+bx+c}\\to\\sqrt{\\varphi^2(x)+k^2},\\;\\sqrt{\\varphi^2(x)-k^2},\\;\\sqrt{k^2-\\varphi^2(x)}\\\\\n&\\text{③ 根式代换（解题利器）：}\\sqrt[n]{ax+b},\\;\\sqrt[n]{\\frac{ax+b}{cx+d}},\\;\\sqrt{a\\mathrm{e}^{bx}+c}\\to\\text{令整个根式}=t\\\\\n&\\text{④ 倒代换：分母幂次比分子高两次及以上时令 }x=\\frac{1}{t}\\quad\\text{⑤ 复杂直接代换：令 }a^x,\\mathrm{e}^x,\\ln x,\\arcsin x,\\arctan x=t\n\\end{aligned}$$",
+      "figureSvg": "<svg viewBox=\"0 0 600 185\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">\n  <title>三大三角代换辅助直角三角形与单调换元区间速查图（仿基础30讲P.235-236）</title>\n  <defs>\n    <marker id=\"m1c9_arr1\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#334155\"/>\n    </marker>\n  </defs>\n  <rect x=\"6\" y=\"6\" width=\"186\" height=\"173\" rx=\"8\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"99\" y=\"25\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#1e3a8a\">① √(a²−x²) → x = a sin t</text>\n  <polygon points=\"36,122 146,122 146,56\" fill=\"#dbeafe\" stroke=\"#2563eb\" stroke-width=\"1.8\"/>\n  <polyline points=\"136,122 136,112 146,112\" fill=\"none\" stroke=\"#2563eb\" stroke-width=\"1.2\"/>\n  <path d=\"M 58 122 A 22 22 0 0 0 54 111\" fill=\"none\" stroke=\"#dc2626\" stroke-width=\"1.5\"/>\n  <text x=\"64\" y=\"116\" font-size=\"11\" font-weight=\"700\" fill=\"#dc2626\">t</text>\n  <text x=\"86\" y=\"80\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1e40af\">a</text>\n  <text x=\"158\" y=\"92\" font-size=\"11\" font-weight=\"700\" fill=\"#1e40af\">x</text>\n  <text x=\"92\" y=\"138\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#0f172a\">√(a²−x²)</text>\n  <text x=\"99\" y=\"156\" text-anchor=\"middle\" font-size=\"10\" fill=\"#475569\">|t| &lt; π/2 (cos t &gt; 0)</text>\n  <text x=\"99\" y=\"170\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#059669\">dx = a cos t dt</text>\n\n  <rect x=\"207\" y=\"6\" width=\"186\" height=\"173\" rx=\"8\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"300\" y=\"25\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#065f46\">② √(a²+x²) → x = a tan t</text>\n  <polygon points=\"237,122 347,122 347,56\" fill=\"#d1fae5\" stroke=\"#059669\" stroke-width=\"1.8\"/>\n  <polyline points=\"337,122 337,112 347,112\" fill=\"none\" stroke=\"#059669\" stroke-width=\"1.2\"/>\n  <path d=\"M 259 122 A 22 22 0 0 0 255 111\" fill=\"none\" stroke=\"#dc2626\" stroke-width=\"1.5\"/>\n  <text x=\"265\" y=\"116\" font-size=\"11\" font-weight=\"700\" fill=\"#dc2626\">t</text>\n  <text x=\"278\" y=\"76\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#065f46\">√(a²+x²)</text>\n  <text x=\"359\" y=\"92\" font-size=\"11\" font-weight=\"700\" fill=\"#065f46\">x</text>\n  <text x=\"292\" y=\"138\" text-anchor=\"middle\" font-size=\"11\" fill=\"#0f172a\">a</text>\n  <text x=\"300\" y=\"156\" text-anchor=\"middle\" font-size=\"10\" fill=\"#475569\">|t| &lt; π/2 (sec t &gt; 0)</text>\n  <text x=\"300\" y=\"170\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#059669\">dx = a sec² t dt</text>\n\n  <rect x=\"408\" y=\"6\" width=\"186\" height=\"173\" rx=\"8\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"501\" y=\"25\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#9a3412\">③ √(x²−a²) → x = a sec t</text>\n  <polygon points=\"438,122 548,122 548,56\" fill=\"#ffedd5\" stroke=\"#ea580c\" stroke-width=\"1.8\"/>\n  <polyline points=\"538,122 538,112 548,112\" fill=\"none\" stroke=\"#ea580c\" stroke-width=\"1.2\"/>\n  <path d=\"M 460 122 A 22 22 0 0 0 456 111\" fill=\"none\" stroke=\"#dc2626\" stroke-width=\"1.5\"/>\n  <text x=\"466\" y=\"116\" font-size=\"11\" font-weight=\"700\" fill=\"#dc2626\">t</text>\n  <text x=\"486\" y=\"80\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#9a3412\">x</text>\n  <text x=\"556\" y=\"92\" font-size=\"9.8\" font-weight=\"700\" fill=\"#9a3412\">√(x²−a²)</text>\n  <text x=\"493\" y=\"138\" text-anchor=\"middle\" font-size=\"11\" fill=\"#0f172a\">a</text>\n  <text x=\"501\" y=\"155\" text-anchor=\"middle\" font-size=\"9.6\" fill=\"#475569\">x&gt;a: 0&lt;t&lt;π/2；x&lt;−a: π/2&lt;t&lt;π</text>\n  <text x=\"501\" y=\"170\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#dc2626\">注意 x&lt;−a 时 tan t &lt; 0！</text>\n</svg>",
+      "conditions": "① $x=g(u)$ 必须在对应区间上**单调可导**（保证存在反函数 $u=g^{-1}(x)$ 可以回代）；不定积分算完后**必须回代原变量 $x$**。\n② 若被积函数同时含 $\\sqrt[n]{ax+b}$ 与 $\\sqrt[m]{ax+b}$，取 $m,n$ 最小公倍数 $l$，令 $\\sqrt[l]{ax+b}=t$（如同时含平方根与立方根则令 $t=\\sqrt[6]{ax+b}$）。",
+      "pitfalls": "① 三角代换去根号时必须警惕正负号：尤其 $x=a\\sec t$ 在 $x<-a$ 分支上 $\\frac{\\pi}{2}<t<\\pi\\Rightarrow\\tan t<0$，此时 $\\sqrt{x^2-a^2}=-a\\tan t$ 而非 $+a\\tan t$（详见强化例9.2(3)与表 9-6）！\n② 倒代换并非逢高次必用：如 $\\int\\frac{\\mathrm{d}x}{x(x^3+1)}=\\frac{1}{3}\\int\\frac{\\mathrm{d}(x^3)}{x^3(x^3+1)}$ 凑 $x^3$ 比倒代换快得多（基础 P.235 手写注）；又如 $\\ln x,\\arcsin x,\\arctan x$ 乘多项式 $P_n(x)$ 时应**优先分部积分**而非硬代换！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.234-235",
+        "pdfPage": 239,
+        "itemRef": "二·2 换元法 (1)~(2) ①~⑤",
+        "crossRef": "27张宇《高数18讲》(强化) P.91-93 三、第二类换元法"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy18_01_05"
+      }
+    },
+    {
+      "id": "m1-c09-f-04",
+      "stage": "both",
+      "section": "二、不定积分的积分法 · 3. 分部积分法、表格法与常用快捷公式",
+      "kind": "formula",
+      "title": "分部积分法、「反对幂指三」、推广表格法及指数三角行列式公式",
+      "examWeight": "core",
+      "prompt": "默写基本分部积分、$n+1$ 阶推广表格法公式、$\\int\\mathrm{e}^{ax}\\sin bx/\\cos bx\\,\\mathrm{d}x$ 行列式公式及强化常用 $\\int_0^\\pi x\\cos nx,\\,\\int_0^\\pi x^2\\cos nx\\,\\mathrm{d}x$ 公式：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\int u\\,\\mathrm{d}v=uv-\\int v\\,\\mathrm{d}u\\quad\\bigl(\\text{口诀「反对幂指三」：左作 }u\\text{ 求导，右作 }v'\\text{ 积分}\\bigr)\\\\\n&\\text{推广（表格法）：}\\int u\\,v^{(n+1)}\\,\\mathrm{d}x=uv^{(n)}-u'v^{(n-1)}+u''v^{(n-2)}-\\cdots+(-1)^n u^{(n)}v+(-1)^{n+1}\\int u^{(n+1)}v\\,\\mathrm{d}x\\\\\n&\\int\\mathrm{e}^{ax}\\sin bx\\,\\mathrm{d}x=\\frac{\\begin{vmatrix}(\\mathrm{e}^{ax})' & (\\sin bx)'\\\\ \\mathrm{e}^{ax} & \\sin bx\\end{vmatrix}}{a^2+b^2}+C=\\frac{a\\mathrm{e}^{ax}\\sin bx-b\\mathrm{e}^{ax}\\cos bx}{a^2+b^2}+C\\\\\n&\\int\\mathrm{e}^{ax}\\cos bx\\,\\mathrm{d}x=\\frac{\\begin{vmatrix}(\\mathrm{e}^{ax})' & (\\cos bx)'\\\\ \\mathrm{e}^{ax} & \\cos bx\\end{vmatrix}}{a^2+b^2}+C=\\frac{a\\mathrm{e}^{ax}\\cos bx+b\\mathrm{e}^{ax}\\sin bx}{a^2+b^2}+C\\\\\n&\\text{强化常用（P.96 注，}n\\in\\mathbb{Z}^+\\text{）：}\\int_0^\\pi x\\cos nx\\,\\mathrm{d}x=\\frac{(-1)^n-1}{n^2},\\quad \\int_0^\\pi x^2\\cos nx\\,\\mathrm{d}x=\\frac{(-1)^n\\cdot 2\\pi}{n^2}\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "基础 P.237 表格法范例（SymPy 已核验）",
+          "desc": "求 $\\int(x^3+2x+6)\\mathrm{e}^{2x}\\,\\mathrm{d}x$：求导链 $x^3+2x+6 \\to 3x^2+2 \\to 6x \\to 6 \\to 0$；积分链 $\\mathrm{e}^{2x} \\to \\frac{1}{2}\\mathrm{e}^{2x} \\to \\frac{1}{4}\\mathrm{e}^{2x} \\to \\frac{1}{8}\\mathrm{e}^{2x} \\to \\frac{1}{16}\\mathrm{e}^{2x}$，斜乘交替得 $\\left(\\frac{1}{2}x^3-\\frac{3}{4}x^2+\\frac{7}{4}x+\\frac{17}{8}\\right)\\mathrm{e}^{2x}+C$。"
+        }
+      ],
+      "figureSvg": "<svg viewBox=\"0 0 600 175\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">\n  <title>推广分部积分表格法（斜向相乘正负交替，末项保留积分号）图解（仿基础30讲P.237）</title>\n  <defs>\n    <marker id=\"m1c9_arr2\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#2563eb\"/>\n    </marker>\n  </defs>\n  <rect x=\"8\" y=\"8\" width=\"584\" height=\"159\" rx=\"8\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"300\" y=\"28\" text-anchor=\"middle\" font-size=\"12.5\" font-weight=\"700\" fill=\"#1e3a8a\">表格法口诀：上行逐次求导 u^(k)，下行逐次求原函数 v^(n-k)，左上→右下斜乘，符号 + − + − 交替</text>\n\n  <!-- Grid -->\n  <rect x=\"22\" y=\"40\" width=\"556\" height=\"84\" fill=\"#ffffff\" stroke=\"#94a3b8\" stroke-width=\"1.1\" rx=\"4\"/>\n  <line x1=\"22\" y1=\"82\" x2=\"578\" y2=\"82\" stroke=\"#94a3b8\" stroke-width=\"1.1\"/>\n  <line x1=\"120\" y1=\"40\" x2=\"120\" y2=\"124\" stroke=\"#94a3b8\" stroke-width=\"1.1\"/>\n  <line x1=\"212\" y1=\"40\" x2=\"212\" y2=\"124\" stroke=\"#cbd5e1\" stroke-width=\"0.9\"/>\n  <line x1=\"304\" y1=\"40\" x2=\"304\" y2=\"124\" stroke=\"#cbd5e1\" stroke-width=\"0.9\"/>\n  <line x1=\"396\" y1=\"40\" x2=\"396\" y2=\"124\" stroke=\"#cbd5e1\" stroke-width=\"0.9\"/>\n  <line x1=\"488\" y1=\"40\" x2=\"488\" y2=\"124\" stroke=\"#cbd5e1\" stroke-width=\"0.9\"/>\n\n  <!-- Row headers -->\n  <text x=\"71\" y=\"65\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#0f172a\">u 求导链</text>\n  <text x=\"71\" y=\"107\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#065f46\">v^(4) 积分链</text>\n\n  <!-- Top row cells -->\n  <text x=\"166\" y=\"65\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#1e3a8a\">u</text>\n  <text x=\"258\" y=\"65\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#1e3a8a\">u′</text>\n  <text x=\"350\" y=\"65\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#1e3a8a\">u″</text>\n  <text x=\"442\" y=\"65\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#1e3a8a\">u^(3)</text>\n  <text x=\"533\" y=\"65\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#dc2626\">u^(4)</text>\n\n  <!-- Bottom row cells -->\n  <text x=\"166\" y=\"107\" text-anchor=\"middle\" font-size=\"11.5\" fill=\"#64748b\">v^(4)</text>\n  <text x=\"258\" y=\"107\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#065f46\">v^(3)</text>\n  <text x=\"350\" y=\"107\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#065f46\">v″</text>\n  <text x=\"442\" y=\"107\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#065f46\">v′</text>\n  <text x=\"533\" y=\"107\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#dc2626\">v</text>\n\n  <!-- Diagonal arrows -->\n  <line x1=\"176\" y1=\"68\" x2=\"246\" y2=\"98\" stroke=\"#2563eb\" stroke-width=\"1.6\" marker-end=\"url(#m1c9_arr2)\"/>\n  <circle cx=\"212\" cy=\"79\" r=\"8\" fill=\"#dbeafe\" stroke=\"#2563eb\" stroke-width=\"1\"/>\n  <text x=\"212\" y=\"83\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1d4ed8\">+</text>\n\n  <line x1=\"268\" y1=\"68\" x2=\"338\" y2=\"98\" stroke=\"#2563eb\" stroke-width=\"1.6\" marker-end=\"url(#m1c9_arr2)\"/>\n  <circle cx=\"304\" cy=\"79\" r=\"8\" fill=\"#fee2e2\" stroke=\"#dc2626\" stroke-width=\"1\"/>\n  <text x=\"304\" y=\"83\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#dc2626\">−</text>\n\n  <line x1=\"360\" y1=\"68\" x2=\"430\" y2=\"98\" stroke=\"#2563eb\" stroke-width=\"1.6\" marker-end=\"url(#m1c9_arr2)\"/>\n  <circle cx=\"396\" cy=\"79\" r=\"8\" fill=\"#dbeafe\" stroke=\"#2563eb\" stroke-width=\"1\"/>\n  <text x=\"396\" y=\"83\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1d4ed8\">+</text>\n\n  <line x1=\"452\" y1=\"68\" x2=\"522\" y2=\"98\" stroke=\"#2563eb\" stroke-width=\"1.6\" marker-end=\"url(#m1c9_arr2)\"/>\n  <circle cx=\"488\" cy=\"79\" r=\"8\" fill=\"#fee2e2\" stroke=\"#dc2626\" stroke-width=\"1\"/>\n  <text x=\"488\" y=\"83\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#dc2626\">−</text>\n\n  <!-- Vertical last integral arrow -->\n  <line x1=\"533\" y1=\"71\" x2=\"533\" y2=\"93\" stroke=\"#dc2626\" stroke-width=\"1.6\" stroke-dasharray=\"3,2\"/>\n  <circle cx=\"556\" cy=\"82\" r=\"8\" fill=\"#fef3c7\" stroke=\"#d97706\" stroke-width=\"1\"/>\n  <text x=\"556\" y=\"86\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#b45309\">∫+</text>\n\n  <text x=\"300\" y=\"145\" text-anchor=\"middle\" font-size=\"11\" fill=\"#334155\">结果：∫ u·v^(4) dx = +u·v^(3) − u′·v″ + u″·v′ − u^(3)·v + ∫ u^(4)·v dx</text>\n  <text x=\"300\" y=\"160\" text-anchor=\"middle\" font-size=\"10\" fill=\"#059669\">若 u 为多项式 P_n(x)，求导至 0 即自动终止，末项积分恒为 0（如基础 P.237 例）</text>\n</svg>",
+      "conditions": "① 推广表格法最适合 $\\int P_n(x)\\mathrm{e}^{kx}\\,\\mathrm{d}x$、$\\int P_n(x)\\sin ax\\,\\mathrm{d}x$、$\\int P_n(x)\\cos bx\\,\\mathrm{d}x$：取 $u=P_n(x)$ 逐次求导至 $0$，另一因子逐次积分，斜乘正负交替即可一步出解。\n② 指数-三角行列式公式要求 $a^2+b^2\\ne 0$，记忆法：**上行写导数、下行写原函数，主对角减副对角，除以 $a^2+b^2$**（如 $\\int\\mathrm{e}^{-x}\\sin nx\\,\\mathrm{d}x=\\frac{-\\mathrm{e}^{-x}\\sin nx-n\\mathrm{e}^{-x}\\cos nx}{1+n^2}+C$）。",
+      "pitfalls": "① 连续两次分部积分求 $\\int\\mathrm{e}^{ax}\\sin bx\\,\\mathrm{d}x$ 时，**两次必须保持同一类函数作 $u$**（如都取 $\\mathrm{e}^{ax}$ 作 $u$），若中途调换会恒等还原成 $I=I$ 白忙一场！\n② 不要把表格法硬套到 $\\int P_n(x)\\ln x\\,\\mathrm{d}x$ 上：$\\ln x$ 越求导越有分母不会变 $0$，只需普通分部一次令 $u=\\ln x$ 即可！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.236-238",
+        "pdfPage": 241,
+        "itemRef": "二·3 分部积分法 注1~注2 & 推广表格法 & P.238 注",
+        "crossRef": "27张宇《高数18讲》(强化) P.94-96 四、分部积分法"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_f_core_formulas"
+      }
+    },
+    {
+      "id": "m1-c09-f-05",
+      "stage": "both",
+      "section": "二、不定积分的积分法 · 4. 有理函数与三角有理式积分",
+      "kind": "formula",
+      "title": "有理函数部分分式拆分 4 法则、$\\int\\frac{\\mathrm{d}x}{(1+x^2)^2}$ 递推与三角有理式代换公式",
+      "examWeight": "core",
+      "prompt": "默写有理真分式 $\\frac{P_n(x)}{Q_m(x)}\\;(n<m)$ 的 4 条分母拆分规则、$\\int\\frac{\\mathrm{d}x}{(1+x^2)^2}$ 结论，以及三角有理式 3 条全角换元与半角万能公式：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{有理函数拆分（先确保真分式 }n<m\\text{，否则先多项式除法）：}\\\\\n&\\quad\\text{① }(ax+b)\\to\\frac{A}{ax+b}\\qquad\\text{② }(ax+b)^k\\to\\sum_{j=1}^k\\frac{A_j}{(ax+b)^j}\\\\\n&\\quad\\text{③ }(px^2+qx+r)\\;(q^2-4pr<0)\\to\\frac{Ax+B}{px^2+qx+r}\\qquad\\text{④ }(px^2+qx+r)^k\\to\\sum_{j=1}^k\\frac{A_jx+B_j}{(px^2+qx+r)^j}\\\\\n&\\text{必背高次二次式逆推：}\\int\\frac{\\mathrm{d}x}{(1+x^2)^2}=\\frac{x}{2(1+x^2)}+\\frac{1}{2}\\arctan x+C\\\\\n&\\text{三角有理式 }R(\\sin x,\\cos x)\\text{ 全角优先：}\\begin{cases}\nR(-\\sin x,\\cos x)=-R\\Rightarrow t=\\cos x\\\\\nR(\\sin x,-\\cos x)=-R\\Rightarrow t=\\sin x\\\\\nR(-\\sin x,-\\cos x)=+R\\Rightarrow t=\\tan x\n\\end{cases}\\\\\n&\\text{半角万能公式（兜底）：}t=\\tan\\frac{x}{2}\\Rightarrow \\sin x=\\frac{2t}{1+t^2},\\;\\cos x=\\frac{1-t^2}{1+t^2},\\;\\mathrm{d}x=\\frac{2}{1+t^2}\\,\\mathrm{d}t\n\\end{aligned}$$",
+      "conditions": "① 有理函数拆分前**必须先判断真假分式**：若分子次数 $n\\ge m$，必须先做多项式除法（或凑分母拆项）化为「多项式 + 真分式」。\n② 定待定系数优先采用**赋值法 + 高次项系数比较法**联合（例9.8、例9.9），比全部展开解方程组快一倍！\n③ 对最简二次分式 $\\int\\frac{Bx+C}{px^2+qx+r}\\,\\mathrm{d}x\\;(q^2-4pr<0)$，标准两步：① 分子配成「$k(\\text{分母})' + \\text{常数}$」出 $\\ln$；② 剩余常数项把分母配方出 $\\arctan$（见例9.10）。",
+      "pitfalls": "① 重因式 $(ax+b)^k$ 拆分时**必须从 $1$ 次到 $k$ 次逐次写齐**（共 $k$ 项），切忌只写最高次一项！\n② 万能代换 $t=\\tan\\frac{x}{2}$ 会使分母次数翻倍，计算量往往最大，因此**能用全角换元或「凑分母+分母导数」法（强化例9.13）时绝不先上万能公式**！且用于定积分时要检查区间内是否跨过 $x=\\pi+2k\\pi$ 断点。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.239-242",
+        "pdfPage": 244,
+        "itemRef": "二·4 有理函数的积分 & P.242 注 ①~②",
+        "crossRef": "27张宇《高数18讲》(强化) P.96-99 五、有理函数 & 六、三角有理式"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_f_core_formulas"
+      }
+    },
+    {
+      "id": "m1-c09-f-06",
+      "stage": "both",
+      "section": "三、定积分与反常积分的计算 · 牛顿-莱布尼茨公式、换元与分部",
+      "kind": "formula",
+      "title": "牛顿-莱布尼茨公式（常义、分段推广与反常积分）及定积分换元/分部公式",
+      "examWeight": "core",
+      "prompt": "默写牛顿-莱布尼茨公式、分段原函数推广式、反常积分收敛时的牛顿-莱布尼茨公式，以及定积分换元「三换」与分部积分公式：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{常义 N-L：}\\int_a^b f(x)\\,\\mathrm{d}x=F(x)\\Big|_a^b=F(b)-F(a)\\quad\\bigl(F\\text{ 是 }f\\text{ 在 }[a,b]\\text{ 上的原函数}\\bigr)\\\\\n&\\text{分段推广：若 }[a,c)\\text{ 原函数 }F_1,\\;(c,b]\\text{ 原函数 }F_2\\text{，则 }\\int_a^b f(x)\\,\\mathrm{d}x=F_1(c^-)-F_1(a)+F_2(b)-F_2(c^+)\\\\\n&\\text{反常 N-L（收敛时）：}\\int_a^{+\\infty}f(x)\\,\\mathrm{d}x=\\lim_{x\\to+\\infty}F(x)-F(a),\\quad \\int_a^b f(x)\\,\\mathrm{d}x=F(b)-\\lim_{x\\to a^+}F(x)\\;(a\\text{ 为唯一瑕点})\\\\\n&\\text{定积分换元：}\\int_a^b f(x)\\,\\mathrm{d}x=\\int_\\alpha^\\beta f[\\varphi(t)]\\,\\varphi'(t)\\,\\mathrm{d}t\\quad\\bigl(\\text{换元三换：被积函数、}\\mathrm{d}x\\text{、上下限}\\bigr)\\\\\n&\\text{定积分分部：}\\int_a^b u(x)v'(x)\\,\\mathrm{d}x=u(x)v(x)\\Big|_a^b-\\int_a^b v(x)u'(x)\\,\\mathrm{d}x\n\\end{aligned}$$",
+      "conditions": "① 定积分换元要求 $f$ 在 $[a,b]$（或 $\\varphi$ 的值域 $R_\\varphi$）上连续，$\\varphi(\\alpha)=a,\\;\\varphi(\\beta)=b$，且 $\\varphi'$ 连续；注意**不要求 $\\varphi$ 严格单调**，只要 $f$ 在值域 $R_\\varphi$ 上连续即可（基础 P.244 注）！\n② 反常积分若在区间内部 $c\\in(a,b)$ 有瑕点或原函数断裂点，必须拆成 $\\int_a^c+\\int_c^b$，仅当两侧单侧极限 $F_1(c^-),F_2(c^+)$ **各自独立存在**时反常积分才收敛。",
+      "pitfalls": "① 误用牛顿-莱布尼茨第一杀手：求出不定积分原函数 $F(x)$ 后不检查区间内是否有断裂点就直接代入 $F(b)-F(a)$！典型反例：$\\int_0^{\\frac{3}{4}\\pi}\\frac{\\mathrm{d}x}{1+\\cos^2 x}$ 若直接代 $F(x)=\\frac{1}{\\sqrt{2}}\\arctan\\frac{\\tan x}{\\sqrt{2}}$ 会算出负数，因 $F(x)$ 在 $x=\\frac{\\pi}{2}$ 处跳跃断开（基础 P.243 注2 特指习题 9.10）！\n② 定积分换元**绝不能忘记同步换上下限**，且三角换元去绝对值应选取最省心的单调区间（如 $\\sqrt{1-x^2}$ 令 $x=\\sin t$ 时取 $t\\in[0,\\frac{\\pi}{2}]$ 使 $\\cos t\\ge 0$，避免自找绝对值麻烦，见例9.13 注）。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.243-244",
+        "pdfPage": 248,
+        "itemRef": "三、定积分的计算 注1~注2 & (1)(2)",
+        "crossRef": "27张宇《高数18讲》(强化) P.99 七、求出原函数并计算积分值"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_f_core_formulas"
+      }
+    },
+    {
+      "id": "m1-c09-f-07",
+      "stage": "foundation",
+      "section": "三、定积分的计算 · 区间再现与华里士公式（点火公式）",
+      "kind": "formula",
+      "title": "区间再现公式与华里士公式（「点火公式」三大区间全版本）",
+      "examWeight": "core",
+      "prompt": "默写区间再现公式，并精准背诵华里士（点火）公式在 $[0,\\frac{\\pi}{2}]$、$[0,\\pi]$、$[0,2\\pi]$ 上的奇偶幂全部结论：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{区间再现：}\\int_a^b f(x)\\,\\mathrm{d}x=\\int_a^b f(a+b-x)\\,\\mathrm{d}x=\\int_a^b \\frac{f(x)+f(a+b-x)}{2}\\,\\mathrm{d}x\\\\\n&\\text{华里士公式（点火公式）：}\\int_0^{\\frac{\\pi}{2}}\\sin^n x\\,\\mathrm{d}x=\\int_0^{\\frac{\\pi}{2}}\\cos^n x\\,\\mathrm{d}x=\\begin{cases}\n\\dfrac{n-1}{n}\\cdot\\dfrac{n-3}{n-2}\\cdots\\dfrac{2}{3}\\cdot 1, & n\\text{ 为大于 }1\\text{ 的奇数}\\\\[8pt]\n\\dfrac{n-1}{n}\\cdot\\dfrac{n-3}{n-2}\\cdots\\dfrac{1}{2}\\cdot\\dfrac{\\pi}{2}, & n\\text{ 为正偶数}\n\\end{cases}\n\\end{aligned}$$",
+      "tables": [
+        {
+          "caption": "表 9-3 华里士公式（「点火公式」）全三区间奇偶幂对照表（基础 30 讲 P.245 注 (5)~(7)）",
+          "headers": [
+            "积分区间",
+            "被积函数",
+            "$n$ 为正奇数（$n>1$；$n=1$ 另算）",
+            "$n$ 为正偶数（记 $W_n=\\frac{n-1}{n}\\cdots\\frac{1}{2}\\cdot\\frac{\\pi}{2}$）"
+          ],
+          "rows": [
+            [
+              "$[0,\\frac{\\pi}{2}]$",
+              "$\\sin^n x$ 或 $\\cos^n x$",
+              "$\\frac{n-1}{n}\\cdot\\frac{n-3}{n-2}\\cdots\\frac{2}{3}\\cdot 1$（$n=1$ 时为 $1$）",
+              "$W_n=\\frac{n-1}{n}\\cdot\\frac{n-3}{n-2}\\cdots\\frac{1}{2}\\cdot\\frac{\\pi}{2}$"
+            ],
+            [
+              "$[0,\\pi]$",
+              "$\\sin^n x$",
+              "$2\\cdot\\frac{n-1}{n}\\cdot\\frac{n-3}{n-2}\\cdots\\frac{2}{3}\\cdot 1$（$n=1$ 时为 $2$）",
+              "$2W_n$"
+            ],
+            [
+              "$[0,\\pi]$",
+              "$\\cos^n x$",
+              "**$0$**（关于 $x=\\frac{\\pi}{2}$ 奇对称！）",
+              "$2W_n$"
+            ],
+            [
+              "$[0,2\\pi]$",
+              "$\\sin^n x$ 或 $\\cos^n x$",
+              "**$0$**（正负半周抵消！）",
+              "$4W_n$"
+            ]
+          ]
+        }
+      ],
+      "conditions": "① 区间再现由代换 $x=a+b-t$ 一步证得（见例9.17），特别适合：$f(x)+f(a+b-x)$ 能约成常数/简单式（如 $\\ln(1+\\tan x)$ 在 $[0,\\frac{\\pi}{4}]$ 上），或消去 $x f(\\sin x)$ 中的因子 $x$（例9.18、强化例9.5）。\n② 「点火公式」口诀：从 $n$ 往下减 $1$ 做分子、隔 $2$ 连乘；**偶次尾乘 $\\frac{\\pi}{2}$、奇次尾乘 $1$**（例：$\\int_0^{\\frac{\\pi}{2}}\\sin^8 x\\,\\mathrm{d}x=\\frac{7\\cdot 5\\cdot 3\\cdot 1}{8\\cdot 6\\cdot 4\\cdot 2}\\cdot\\frac{\\pi}{2}=\\frac{35\\pi}{256}$；$\\int_0^\\pi\\sin^9 x\\,\\mathrm{d}x=2\\cdot\\frac{8\\cdot 6\\cdot 4\\cdot 2}{9\\cdot 7\\cdot 5\\cdot 3}\\cdot 1=\\frac{256}{315}$）。",
+      "pitfalls": "① 使用点火公式**必须先核对区间是否为 $[0,\\frac{\\pi}{2}]$**！在 $[0,\\pi]$ 上 $\\int_0^\\pi\\cos^n x\\,\\mathrm{d}x$ 奇数次为 **$0$**（而 $\\sin^n x$ 奇数次是 $2$ 倍，不可混为一谈！）\n② 遇到 $\\int_0^{\\frac{\\pi}{2}}\\sin^2 x\\cos^2 x\\,\\mathrm{d}x$ 等乘积，立刻化为 $\\sin^2 x-\\sin^4 x$（例9.13）或用 $\\frac{1}{4}\\sin^2 2x$，即可直接点火秒出！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.245, P.248",
+        "pdfPage": 250,
+        "itemRef": "三、注 (4)~(7) 区间再现与华里士公式",
+        "crossRef": "27张宇《高数18讲》(强化) P.93 强化例9.5"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_f_core_formulas"
+      }
+    },
+    {
+      "id": "m1-c09-f-08",
+      "stage": "both",
+      "section": "四~五、变限积分求导、反常积分 Γ 函数与几何法圆弧公式",
+      "kind": "formula",
+      "title": "变限积分求导公式、$\\Gamma$ 函数双定义与递推、几何法半圆/四分之一圆速算式",
+      "examWeight": "core",
+      "prompt": "默写变限积分一般求导公式、$\\Gamma(\\alpha)$ 的双形式与递推值，以及强化几何法圆弧定积分速算公式：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{变限求导：}\\frac{\\mathrm{d}}{\\mathrm{d}x}\\!\\left[\\int_{\\varphi_1(x)}^{\\varphi_2(x)} f(t)\\,\\mathrm{d}t\\right]=f[\\varphi_2(x)]\\varphi_2'(x)-f[\\varphi_1(x)]\\varphi_1'(x)\\\\\n&\\Gamma\\text{ 函数}(\\alpha>0):\\;\\Gamma(\\alpha)=\\int_0^{+\\infty}x^{\\alpha-1}\\mathrm{e}^{-x}\\,\\mathrm{d}x\\xlongequal{x=t^2}2\\int_0^{+\\infty}t^{2\\alpha-1}\\mathrm{e}^{-t^2}\\,\\mathrm{d}t\\\\\n&\\quad\\Gamma(\\alpha+1)=\\alpha\\Gamma(\\alpha),\\quad \\Gamma(1)=1,\\quad \\Gamma(n+1)=n!,\\quad \\Gamma\\!\\left(\\frac{1}{2}\\right)=\\sqrt{\\pi},\\quad \\Gamma\\!\\left(\\frac{5}{2}\\right)=\\frac{3}{4}\\sqrt{\\pi}\\\\\n&\\text{几何法}(a>0):\\;\\int_{-a}^a\\sqrt{a^2-x^2}\\,\\mathrm{d}x=\\frac{\\pi a^2}{2},\\quad \\int_0^a\\sqrt{x(2a-x)}\\,\\mathrm{d}x=\\int_a^{2a}\\sqrt{x(2a-x)}\\,\\mathrm{d}x=\\frac{\\pi a^2}{4}\n\\end{aligned}$$",
+      "figureSvg": "<svg viewBox=\"0 0 600 178\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">\n  <title>Gamma 函数基准面积（e^-x 与 e^-t^2）及几何法半圆/四分之一圆定积分速算图（仿基础P.254与强化P.103）</title>\n  <defs>\n    <marker id=\"m1c9_arr3\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#334155\"/>\n    </marker>\n  </defs>\n  <!-- Left panel: Gamma function -->\n  <rect x=\"6\" y=\"6\" width=\"288\" height=\"166\" rx=\"8\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"150\" y=\"24\" text-anchor=\"middle\" font-size=\"11.8\" font-weight=\"700\" fill=\"#1e3a8a\">① Γ 函数两大基准面积（基础 P.254）</text>\n  <!-- Sub-left: e^-x -->\n  <line x1=\"22\" y1=\"122\" x2=\"132\" y2=\"122\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1c9_arr3)\"/>\n  <line x1=\"34\" y1=\"130\" x2=\"34\" y2=\"42\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1c9_arr3)\"/>\n  <path d=\"M 34 54 Q 58 104 124 120 L 124 122 L 34 122 Z\" fill=\"#bfdbfe\" opacity=\"0.7\"/>\n  <path d=\"M 34 54 Q 58 104 124 120\" fill=\"none\" stroke=\"#2563eb\" stroke-width=\"2\"/>\n  <text x=\"64\" y=\"68\" font-size=\"10.5\" font-weight=\"700\" fill=\"#1d4ed8\">y = e^(−x)</text>\n  <text x=\"76\" y=\"114\" text-anchor=\"middle\" font-size=\"9.8\" fill=\"#1e3a8a\">面积 = 1</text>\n  <text x=\"76\" y=\"143\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#1e3a8a\">Γ(1) = ∫₀^∞ e^(−x)dx = 1</text>\n\n  <!-- Sub-right: e^-t^2 -->\n  <line x1=\"150\" y1=\"122\" x2=\"282\" y2=\"122\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1c9_arr3)\"/>\n  <line x1=\"214\" y1=\"130\" x2=\"214\" y2=\"42\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1c9_arr3)\"/>\n  <path d=\"M 214 56 C 234 56 244 114 274 121 L 274 122 L 214 122 Z\" fill=\"#a7f3d0\" opacity=\"0.8\"/>\n  <path d=\"M 156 121 C 186 114 194 56 214 56 C 234 56 244 114 274 121\" fill=\"none\" stroke=\"#059669\" stroke-width=\"2\"/>\n  <text x=\"252\" y=\"68\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#065f46\">e^(−t²)</text>\n  <text x=\"242\" y=\"114\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#065f46\">√π / 2</text>\n  <text x=\"218\" y=\"143\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#065f46\">Γ(1/2) = 2∫₀^∞ e^(−t²)dt = √π</text>\n  <text x=\"150\" y=\"162\" text-anchor=\"middle\" font-size=\"9.8\" fill=\"#475569\">递推：Γ(α+1) = αΓ(α)，故 Γ(n+1) = n!，Γ(5/2) = 3√π/4</text>\n\n  <!-- Right panel: Geometric semicircle & shifted circle -->\n  <rect x=\"306\" y=\"6\" width=\"288\" height=\"166\" rx=\"8\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"450\" y=\"24\" text-anchor=\"middle\" font-size=\"11.8\" font-weight=\"700\" fill=\"#9a3412\">② 几何法秒算圆弧定积分（强化 P.103）</text>\n  <!-- Semicircle center O -->\n  <line x1=\"316\" y1=\"120\" x2=\"438\" y2=\"120\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1c9_arr3)\"/>\n  <line x1=\"376\" y1=\"128\" x2=\"376\" y2=\"42\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1c9_arr3)\"/>\n  <path d=\"M 332 120 A 44 44 0 0 1 420 120 Z\" fill=\"#fed7aa\" stroke=\"#ea580c\" stroke-width=\"2\"/>\n  <text x=\"332\" y=\"133\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#334155\">−a</text>\n  <text x=\"420\" y=\"133\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#334155\">a</text>\n  <text x=\"376\" y=\"102\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#9a3412\">πa² / 2</text>\n  <text x=\"376\" y=\"148\" text-anchor=\"middle\" font-size=\"9.6\" fill=\"#0f172a\">∫₋ₐᵃ √(a²−x²)dx = πa²/2</text>\n\n  <!-- Shifted semicircle [0, 2a] -->\n  <line x1=\"454\" y1=\"120\" x2=\"584\" y2=\"120\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1c9_arr3)\"/>\n  <line x1=\"468\" y1=\"128\" x2=\"468\" y2=\"42\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1c9_arr3)\"/>\n  <path d=\"M 468 120 A 44 44 0 0 1 512 76 L 512 120 Z\" fill=\"#fde68a\" stroke=\"#d97706\" stroke-width=\"1.8\"/>\n  <path d=\"M 512 76 A 44 44 0 0 1 556 120\" fill=\"none\" stroke=\"#ea580c\" stroke-width=\"2\" stroke-dasharray=\"4,2\"/>\n  <line x1=\"512\" y1=\"76\" x2=\"512\" y2=\"120\" stroke=\"#d97706\" stroke-width=\"1.2\" stroke-dasharray=\"3,2\"/>\n  <text x=\"468\" y=\"133\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#334155\">0</text>\n  <text x=\"512\" y=\"133\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#334155\">a</text>\n  <text x=\"556\" y=\"133\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#334155\">2a</text>\n  <text x=\"492\" y=\"106\" text-anchor=\"middle\" font-size=\"9.8\" font-weight=\"700\" fill=\"#b45309\">πa²/4</text>\n  <text x=\"518\" y=\"148\" text-anchor=\"middle\" font-size=\"9.6\" fill=\"#0f172a\">∫₀ᵃ √(x(2a−x))dx = πa²/4</text>\n  <text x=\"450\" y=\"164\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">圆方程 (x−a)² + y² = a²（半圆 πa²/2，左右半各 πa²/4）</text>\n</svg>",
+      "conditions": "① 变限求导公式成立的铁律：**被积函数 $f(t)$ 中只能含积分变量 $t$，绝不能含求导变量 $x$**！若含 $x$（如 $f(xt)$、$f(x^2-t^2)$、$|t-x|$），必须先换元或拆分将 $x$ 移出积分号外！\n② $\\Gamma(\\alpha)$ 收敛域为 **$\\alpha>0$**（基础 P.255 注已分 $\\alpha\\ge 1$ 与 $0<\\alpha<1$ 严格证明）；特别地 $\\int_0^{+\\infty}\\mathrm{e}^{-t^2}\\,\\mathrm{d}t=\\frac{\\sqrt{\\pi}}{2}$ 堪称概率统计与反常积分的必背神式！",
+      "pitfalls": "① 遇到 $\\int_0^{+\\infty}x^{2k}\\mathrm{e}^{-x^2/a^2}\\,\\mathrm{d}x$（如例9.29），别忘令 $u=\\frac{x}{a}$ 把系数 $2$ 和幂次配成 $2\\int_0^{+\\infty}u^{2\\alpha-1}\\mathrm{e}^{-u^2}\\,\\mathrm{d}u=\\Gamma(\\alpha)$，差一个系数 $2$ 就会整题折半！\n② 几何法中 $\\sqrt{x(2a-x)}=\\sqrt{a^2-(x-a)^2}$ 是圆心在 $(a,0)$、半径为 $a$ 的上半圆：在 $[0,2a]$ 上积分是半圆面积 $\\frac{\\pi a^2}{2}$，在 $[0,a]$ 或 $[a,2a]$ 上均是四分之一圆 $\\frac{\\pi a^2}{4}$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.249, P.254-255",
+        "pdfPage": 254,
+        "itemRef": "四·1 求导公式 & 五、注 Γ 函数",
+        "crossRef": "27张宇《高数18讲》(强化) P.100 八 & P.103 十、几何法"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_f_core_formulas"
+      }
+    },
+    {
+      "id": "m1-c09-c-01",
+      "stage": "foundation",
+      "section": "三、定积分计算的对称性与周期性结论",
+      "kind": "conclusion",
+      "title": "定积分的「偶倍奇零」对称法则与周期函数整周期积分不变性",
+      "examWeight": "core",
+      "summary": "给出连续函数在对称区间 $[-a,a]$ 上的奇偶积分结论，以及以 $T$ 为周期的连续函数在任意长度为 $T$ 的区间上的定积分结论：\n$$\\begin{aligned}\n&\\text{① 偶倍：}f\\text{ 连续偶函数}\\Rightarrow\\int_{-a}^a f(x)\\,\\mathrm{d}x=2\\int_0^a f(x)\\,\\mathrm{d}x\\\\\n&\\text{② 奇零：}f\\text{ 连续奇函数}\\Rightarrow\\int_{-a}^a f(x)\\,\\mathrm{d}x=0\\\\\n&\\text{③ 周期不变：}f\\text{ 连续且以 }T\\text{ 为周期}\\Rightarrow\\forall a\\in\\mathbb{R},\\;\\int_a^{a+T} f(x)\\,\\mathrm{d}x=\\int_0^T f(x)\\,\\mathrm{d}x\\\\\n&\\text{推论（P.247 注）：}f\\text{ 连续且以 }T\\text{ 为周期的奇函数}\\Rightarrow\\int_0^T f(x)\\,\\mathrm{d}x=\\int_{-\\frac{T}{2}}^{\\frac{T}{2}}f(x)\\,\\mathrm{d}x=0\n\\end{aligned}$$",
+      "conditions": "① 「偶倍奇零」不仅适用于原区间本身对称（如 $[-1,1]$），更常通过**平移换元**把一般区间 $[a,b]$ 移成对称区间 $[-\\frac{b-a}{2},\\frac{b-a}{2}]$（见例9.12 与例9.15）！\n② 周期不变性的核心威力：遇到 $\\int_0^{nT} f(x)\\,\\mathrm{d}x$ 立得 $n\\int_0^T f(x)\\,\\mathrm{d}x$；遇到周期奇函数在 $[0,T]$ 上积分立刻归零！",
+      "pitfalls": "用对称区间「奇零」前必须确认被积函数**确实在 $[-a,a]$ 上可积（或反常积分收敛）**！如 $\\int_{-1}^1\\frac{1}{x}\\,\\mathrm{d}x$ 虽然被积函数是奇函数，但 $\\int_0^1\\frac{1}{x}\\,\\mathrm{d}x=+\\infty$ 发散，**绝不可**写成 $0$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.244-245, P.247",
+        "pdfPage": 249,
+        "itemRef": "三、注 (1)~(3) & 例9.16 注"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c09-c-02",
+      "stage": "foundation",
+      "section": "四、变限积分的重要结论（奇偶性与周期性）",
+      "kind": "conclusion",
+      "title": "变限积分的奇偶性与周期性三大定理（附「可积 vs 连续原函数」辨析）",
+      "examWeight": "core",
+      "summary": "默写可积奇函数、可积偶函数与可积周期函数之变限积分 $F(x)=\\int_a^x f(t)\\,\\mathrm{d}t$ 的奇偶性与周期性完整结论：\n$$\\begin{aligned}\n&\\text{(1) }f\\text{ 可积奇函数}\\Rightarrow\\forall a\\in\\mathbb{R},\\;\\int_a^x f(t)\\,\\mathrm{d}t\\text{ 恒为偶函数}\\;\\bigl(\\text{连续时全体原函数均为偶函数}\\bigr)\\\\\n&\\text{(2) }f\\text{ 可积偶函数}\\Rightarrow\\begin{cases}\n\\int_0^x f(t)\\,\\mathrm{d}t\\text{ 必为奇函数}\\\\\n\\int_a^x f(t)\\,\\mathrm{d}t\\;(a\\ne 0)\\text{ 为奇函数}\\iff \\int_a^0 f(t)\\,\\mathrm{d}t=0\\;\\bigl(\\text{连续时仅 }\\int_0^x f\\text{ 唯一奇}\\bigr)\n\\end{cases}\\\\\n&\\text{(3) }f\\text{ 可积且以 }T\\text{ 为周期}\\Rightarrow\\int_a^x f(t)\\,\\mathrm{d}t\\text{ 以 }T\\text{ 为周期}\\iff \\int_0^T f(x)\\,\\mathrm{d}x=0\\\\\n&\\text{推广（例9.25）：}\\varphi(x)=\\int_a^x f(t)\\,\\mathrm{d}t-\\frac{\\int_0^T f(t)\\,\\mathrm{d}t}{T}\\,x\\text{ 恒以 }T\\text{ 为周期！}\n\\end{aligned}$$",
+      "conditions": "① **细粒度前提区分（基础 P.251 注）**：讨论**变限积分** $\\int_a^x f(t)\\,\\mathrm{d}t$ 的奇偶/周期性，只需被积函数 $f$ **可积**即可；只有讨论「**全体原函数**」性质时，才要求 $f$ 连续（确保原函数存在且相差常数 $C$）。\n② 复合函数奇偶口诀「**内偶则偶，内奇同外**」（例9.24）：如 $f$ 奇 $\\Rightarrow \\cos f(t)$ 偶、$f'(t)$ 偶 $\\Rightarrow \\int_0^x[\\cos f(t)+f'(t)]\\,\\mathrm{d}t$ 必奇！",
+      "pitfalls": "① **不要把连续偶函数的变限积分一律当成奇函数**！只有下限为 $0$（或恰好满足 $\\int_0^a f=0$，如 $f(x)=\\cos x,\\;a=\\pi$）时才是奇函数；否则多出的常数项 $-\\int_0^a f(t)\\,\\mathrm{d}t\\ne 0$ 会破坏奇函数必须过原点的性质（成为非奇非偶函数）！\n② 证明「连续奇/偶函数的**一切原函数**」时，切勿漏写常数 $+C$（即须表为 $F(x)=\\int_0^x f(t)\\,\\mathrm{d}t+C$，详见例9.23 与表 9-6 严谨补注）。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.251-253",
+        "pdfPage": 256,
+        "itemRef": "四·2 重要结论 (1)~(3) & 例9.23~9.25"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c09-c-03",
+      "stage": "both",
+      "section": "三、定积分区间再现推论 & 强化三大根式闭式积分",
+      "kind": "conclusion",
+      "title": "区间再现消 $x$ 公式、对数配对经典例与三大根式/$\\int\\sec^3 t$ 必背闭式",
+      "examWeight": "core",
+      "summary": "熟记区间再现的两个王牌推论（消去 $x$ 与 $\\ln(1+\\tan x)$），以及强化必背的 $\\int\\sec^3 t\\,\\mathrm{d}t$ 和三大平方根式不定积分闭式：\n$$\\begin{aligned}\n&\\text{区间再现消 }x:\\;\\int_0^\\pi x\\,f(\\sin x)\\,\\mathrm{d}x=\\frac{\\pi}{2}\\int_0^\\pi f(\\sin x)\\,\\mathrm{d}x\\quad\\text{与}\\quad\\int_0^{\\frac{\\pi}{4}}\\ln(1+\\tan x)\\,\\mathrm{d}x=\\frac{\\pi}{8}\\ln 2\\\\\n&\\text{强化必背 }\\sec^3:\\;\\int\\sec^3 t\\,\\mathrm{d}t=\\frac{1}{2}\\sec t\\tan t+\\frac{1}{2}\\ln|\\sec t+\\tan t|+C\\\\\n&\\text{三大根式闭式}(a>0):\\\\\n&\\quad\\int\\sqrt{a^2-x^2}\\,\\mathrm{d}x=\\frac{x}{2}\\sqrt{a^2-x^2}+\\frac{a^2}{2}\\arcsin\\frac{x}{a}+C\\\\\n&\\quad\\int\\sqrt{a^2+x^2}\\,\\mathrm{d}x=\\frac{x}{2}\\sqrt{a^2+x^2}+\\frac{a^2}{2}\\ln\\!\\left(x+\\sqrt{a^2+x^2}\\right)+C\\\\\n&\\quad\\int\\sqrt{x^2-a^2}\\,\\mathrm{d}x=\\frac{x}{2}\\sqrt{x^2-a^2}-\\frac{a^2}{2}\\ln\\!\\left|x+\\sqrt{x^2-a^2}\\right|+C\n\\end{aligned}$$",
+      "conditions": "① 三个根式闭式拥有高度统一的**结构对称美**：第一项清一色是 $\\frac{x}{2}\\sqrt{\\text{原根式}}$；第二项系数按根式里常数项符号定（$+a^2\\Rightarrow +\\frac{a^2}{2}$，$-a^2\\Rightarrow -\\frac{a^2}{2}$），再乘以对应的 $\\int\\frac{\\mathrm{d}x}{\\sqrt{\\cdots}}$ 基本公式！\n② 推导 $\\int\\sqrt{a^2\\pm x^2}$ 既可用三角代换（强化例9.2），也可用**分部积分再现法**（强化例9.7(2)），两者殊途同归。",
+      "pitfalls": "① 注意 $\\ln\\frac{x+\\sqrt{a^2+x^2}}{a}=\\ln(x+\\sqrt{a^2+x^2})-\\ln a$，因 $-\\ln a$ 是常数可吸收进 $+C$，两种写法完全等价；但定积分代入上下限时若取不定积分原函数，同一常数自会相消。\n② $\\int_0^\\pi x f(\\sin x)\\,\\mathrm{d}x=\\frac{\\pi}{2}\\int_0^\\pi f(\\sin x)\\,\\mathrm{d}x$ 仅在 $f$ 关于 $x=\\frac{\\pi}{2}$ 偶对称（即 $f(\\pi-x)=f(x)$，如 $f(\\sin x)$、$f(|\\sin x|)$、$f(\\cos^2 x)$）时成立；若换作 $f(\\cos x)$（奇对称）则失效！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.91-92",
+        "pdfPage": 104,
+        "itemRef": "三、强化例9.2 三大根式 & ∫sec³t",
+        "crossRef": "27张宇《基础30讲·高等数学分册》P.248 注(2) & 例9.18"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy18_01_05"
+      }
+    },
+    {
+      "id": "m1-c09-c-04",
+      "stage": "intensive",
+      "section": "四 & 六、强化分部积分五大武器与三角有理式可分性/配导法",
+      "kind": "conclusion",
+      "title": "强化分部积分 5 大策略与三角有理式 $R=R_1+R_2+R_3$ / 配分母导数速算法",
+      "examWeight": "core",
+      "summary": "总结强化 18 讲分部积分法的 5 大实战触发场景，以及三角有理式线性分式 $\\int\\frac{a\\sin x+b\\cos x}{c\\sin x+d\\cos x}\\,\\mathrm{d}x$ 的秒杀配导法：\n$$\\begin{aligned}\n&\\text{分部积分 5 大武器（强化 P.94-95）：}\\\\\n&\\quad\\text{(1) 不同类型乘积（反对幂指三）}\\quad\\text{(2) 同类/混合但一眼见 }v'(x)\\text{（强化例9.6）}\\\\\n&\\quad\\text{(3) 积分再现建方程 }I=\\cdots-I\\text{（强化例9.7）}\\quad\\text{(4) 积分抵消消难项（例9.7、强化例9.8）}\\\\\n&\\quad\\text{(5) 积分递推求通式 }I_n=f(I_{n-1})\\text{（例9.28、强化例9.9）}\\\\\n&\\text{三角线性分式秒杀配导法（强化例9.13 法二）：}\\\\\n&\\quad a\\sin x+b\\cos x=A(c\\sin x+d\\cos x)+B(c\\sin x+d\\cos x)'\\Rightarrow \\int\\frac{a\\sin x+b\\cos x}{c\\sin x+d\\cos x}\\,\\mathrm{d}x=Ax+B\\ln|c\\sin x+d\\cos x|+C\n\\end{aligned}$$",
+      "conditions": "① **积分抵消法特征**：被积函数呈 $\\int\\mathrm{e}^{kx}[f(x)+g(x)]\\,\\mathrm{d}x$ 形态，拆成两项后仅对其中**容易凑 $\\mathrm{d}(\\cdot)$ 的那一项**分部一次，另一难积项自动正负抵消（记住口诀：**只拆不贪，分部一半，另一半留着等抵消**）！\n② **理论补注（强化 P.98 注）**：任意三角有理式 $R(\\sin x,\\cos x)$ 均可恒等分解为 $R_1+R_2+R_3$（分别满足 $t=\\cos x,\\;\\sin x,\\;\\tan x$ 的奇偶条件），故理论上总能用全角换元解决，只是实操中遇 $1/(1+2\\cos x)$ 类式子仍以半角万能换元最省事。",
+      "pitfalls": "① 使用抵消法时千万别把两项同时都做分部积分，否则会两边互相打转抵消不掉！\n② 使用配导法 $\\frac{A(\\text{分母})+B(\\text{分母})'}{\\text{分母}}$ 时，求导符号要极仔细：$(c\\sin x+d\\cos x)'=c\\cos x-d\\sin x$（$\\cos x$ 导数带负号！）。",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.94-95, P.98",
+        "pdfPage": 107,
+        "itemRef": "四、分部积分法 (1)~(5) & 六·注 & 强化例9.13 法二"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy18_06_14"
+      }
+    },
+    {
+      "id": "m1-c09-c-05",
+      "stage": "intensive",
+      "section": "八~九、强化变限积分求导 4 大题型与分段函数积分 3 大考法",
+      "kind": "conclusion",
+      "title": "强化变限积分求导 4 大题型（直接/换元/拆分/换序）与分段函数积分 3 大考法",
+      "examWeight": "core",
+      "summary": "梳理强化 18 讲变限积分求导的 4 种标准题型路线（重点掌握拆分求导的区间对比与换序型二重积分转换），以及分段函数积分 3 大考法的衔接要点：\n$$\\begin{aligned}\n&\\text{变限求导 4 路：直接型}\\;\\to\\;\\text{换元型}(t-x=u)\\;\\to\\;\\text{拆分型}(|t-x|,\\;|t^2-x^2|)\\;\\to\\;\\text{换序型}\\!\\left(\\int_0^t\\mathrm{d}y\\int_y^t\\right)\\\\\n&\\text{分段函数积分 3 大考法（强化 P.102）：}\\\\\n&\\quad\\text{① 分段不定积分：分段求原函数后，用分段点}\\mathbf{\\text{连续性}}\\text{锁定各段常数差（保留唯一总常数 }C\\text{）}\\\\\n&\\quad\\text{② 分段定积分：按被积函数（或换元后）分段点劈开区间分别积分再相加}\\\\\n&\\quad\\text{③ 分段变限积分：按上限 }x\\text{ 所在区间分类讨论，务必记得 }F(x)=\\int_a^x f(t)\\,\\mathrm{d}t\\text{ 是}\\mathbf{\\text{累加函数}}\\text{！}\n\\end{aligned}$$",
+      "figureSvg": "<svg viewBox=\"0 0 600 185\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">\n  <title>强化变限积分求导四大题型（直接/换元/拆分/换序）路由与换序三角区域图（仿强化18讲P.100-102）</title>\n  <defs>\n    <marker id=\"m1c9_arr4\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#2563eb\"/>\n    </marker>\n  </defs>\n  <rect x=\"6\" y=\"6\" width=\"386\" height=\"173\" rx=\"8\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"199\" y=\"25\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#1e3a8a\">变限积分求导 4 大核心题型分流路由</text>\n\n  <!-- 4 cards -->\n  <rect x=\"18\" y=\"36\" width=\"174\" height=\"60\" rx=\"6\" fill=\"#eff6ff\" stroke=\"#3b82f6\" stroke-width=\"1.2\"/>\n  <text x=\"105\" y=\"53\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1d4ed8\">1. 直接求导型</text>\n  <text x=\"105\" y=\"69\" text-anchor=\"middle\" font-size=\"9.6\" fill=\"#334155\">被积函数仅含积分变量 t</text>\n  <text x=\"105\" y=\"84\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#059669\">→ 直接套 f(φ₂)φ₂′ − f(φ₁)φ₁′</text>\n\n  <rect x=\"206\" y=\"36\" width=\"174\" height=\"60\" rx=\"6\" fill=\"#ecfdf5\" stroke=\"#10b981\" stroke-width=\"1.2\"/>\n  <text x=\"293\" y=\"53\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#065f46\">2. 换元求导型</text>\n  <text x=\"293\" y=\"69\" text-anchor=\"middle\" font-size=\"9.6\" fill=\"#334155\">被积函数含 x：f(x−t), f(xt)</text>\n  <text x=\"293\" y=\"84\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#065f46\">→ 令 u = 复合体把 x 移出积分号</text>\n\n  <rect x=\"18\" y=\"108\" width=\"174\" height=\"60\" rx=\"6\" fill=\"#fff7ed\" stroke=\"#f97316\" stroke-width=\"1.2\"/>\n  <text x=\"105\" y=\"125\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#c2410c\">3. 拆分求导型</text>\n  <text x=\"105\" y=\"141\" text-anchor=\"middle\" font-size=\"9.6\" fill=\"#334155\">含 |t−x|、|t²−x²| 或分段</text>\n  <text x=\"105\" y=\"156\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#c2410c\">→ 比 x 与 t 区间范围，分段去绝对值</text>\n\n  <rect x=\"206\" y=\"108\" width=\"174\" height=\"60\" rx=\"6\" fill=\"#fef2f2\" stroke=\"#ef4444\" stroke-width=\"1.2\"/>\n  <text x=\"293\" y=\"125\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#b91c1c\">4. 换序型（累次积分）</text>\n  <text x=\"293\" y=\"141\" text-anchor=\"middle\" font-size=\"9.6\" fill=\"#334155\">内层难积：∫₀ᵗ dy ∫_yᵗ sin(xy)²/x dx</text>\n  <text x=\"293\" y=\"156\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#b91c1c\">→ 化二重积分交换次序后洛必达</text>\n\n  <!-- Right panel: Exchange order triangle (Ex 9.19) -->\n  <rect x=\"404\" y=\"6\" width=\"190\" height=\"173\" rx=\"8\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"499\" y=\"25\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#b91c1c\">强化例 9.19 换序区域 D</text>\n  <line x1=\"426\" y1=\"142\" x2=\"574\" y2=\"142\" stroke=\"#334155\" stroke-width=\"1.3\" marker-end=\"url(#m1c9_arr4)\"/>\n  <line x1=\"440\" y1=\"154\" x2=\"440\" y2=\"38\" stroke=\"#334155\" stroke-width=\"1.3\" marker-end=\"url(#m1c9_arr4)\"/>\n  <polygon points=\"440,142 544,142 544,58\" fill=\"#bfdbfe\" stroke=\"#2563eb\" stroke-width=\"1.8\" opacity=\"0.8\"/>\n  <line x1=\"440\" y1=\"142\" x2=\"554\" y2=\"50\" stroke=\"#1d4ed8\" stroke-width=\"1.6\"/>\n  <line x1=\"544\" y1=\"58\" x2=\"544\" y2=\"142\" stroke=\"#2563eb\" stroke-width=\"1.4\" stroke-dasharray=\"3,2\"/>\n  <text x=\"568\" y=\"154\" font-size=\"10.5\" fill=\"#334155\">x</text>\n  <text x=\"448\" y=\"46\" font-size=\"10.5\" fill=\"#334155\">y</text>\n  <text x=\"431\" y=\"153\" font-size=\"10\" fill=\"#334155\">O</text>\n  <text x=\"544\" y=\"154\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#1d4ed8\">t</text>\n  <text x=\"524\" y=\"55\" font-size=\"10.5\" font-weight=\"700\" fill=\"#1d4ed8\">y = x</text>\n  <text x=\"506\" y=\"118\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#1e3a8a\">0 ≤ y ≤ x ≤ t</text>\n  <text x=\"499\" y=\"170\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">∫₀ᵗ dy ∫_yᵗ → ∫₀ᵗ dx ∫₀ˣ dy</text>\n</svg>",
+      "conditions": "① **拆分求导黄金对比图（强化 P.101 旁注）**：先画两条数轴分别标出积分变量 $t$ 的范围与求导变量 $x$ 的范围！若 $x$ 始终落在 $t$ 的积分区间内（如 $|x|\\le 1,\\;t\\in[-1,1]$，强化例9.17），只需按 $x$ 劈成 $[-1,x]$ 与 $[x,1]$ **无需分类讨论**；若 $x$ 能跑出 $t$ 的范围（如 $x>0,\\;t\\in[0,1]$，强化例9.18），则必须按 $0<x\\le 1$ 与 $x>1$ 分情况讨论！\n② **换序型触发信号**：看到 $\\int_0^t\\mathrm{d}y\\int_y^t g(x,y)\\,\\mathrm{d}x$ 或 $\\int_0^1\\mathrm{d}y\\int_{\\sqrt{y}}^1\\sin\\frac{y}{x}\\,\\mathrm{d}x$，内层对 $x$ 积不出初等函数时，立刻画平面区域 $D$ 交换积分次序（强化 P.102 旁例 $\\int_0^1\\mathrm{d}y\\int_{\\sqrt{y}}^1\\sin\\frac{y}{x}\\,\\mathrm{d}x=\\frac{3}{2}-\\sin 1-\\cos 1$，与强化例9.19）。",
+      "pitfalls": "① 求分段变限积分 $F(x)=\\int_a^x f(t)\\,\\mathrm{d}t$ 当 $x$ 跨入第二段时，**最常忘加前一段的定积分常数值**（忘记「累加函数」本质）！\n② 求分段函数 $f(x)$ 的导数 $f'(x)$ 时，分段点处**必须用导数定义（左右导数）单独检验**（强化例9.18 显式验证了 $f'_-(1)=f'_+(1)=2$）！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.100-103",
+        "pdfPage": 113,
+        "itemRef": "八、变限积分函数的求导 1~4 & 九、分段函数的积分"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy18_15_22"
+      }
+    },
+    {
+      "id": "m1-c09-e-01",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（凑微分与第二类换元）",
+      "kind": "example",
+      "title": "【基础例 9.1】凑 $\\mathrm{d}(x^{3/2})$ 化归 $\\arcsin$ 标准公式",
+      "examWeight": "core",
+      "problem": "求不定积分 $\\displaystyle\\int\\frac{\\sqrt{x}}{\\sqrt{4-x^3}}\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 核心解答过程",
+          "detail": "观察到根号内 $x^3=(x^{\\frac{3}{2}})^2$，且分子恰为 $\\sqrt{x}\\,\\mathrm{d}x=\\frac{2}{3}\\,\\mathrm{d}(x^{\\frac{3}{2}})$（表 9-2 凑微分 ②）：\n$$\\begin{aligned}\n\\int\\frac{\\sqrt{x}}{\\sqrt{4-x^3}}\\,\\mathrm{d}x\n&=\\frac{2}{3}\\int\\frac{\\mathrm{d}(x^{\\frac{3}{2}})}{\\sqrt{4-(x^{\\frac{3}{2}})^2}}\n=\\frac{2}{3}\\int\\frac{\\mathrm{d}\\!\\left(\\frac{1}{2}x^{\\frac{3}{2}}\\right)}{\\sqrt{1-\\left(\\frac{1}{2}x^{\\frac{3}{2}}\\right)^2}}\\\\\n&=\\frac{2}{3}\\arcsin\\!\\left(\\frac{1}{2}x^{\\frac{3}{2}}\\right)+C.\n\\end{aligned}$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{2}{3}\\arcsin\\!\\left(\\dfrac{1}{2}x^{\\frac{3}{2}}\\right)+C$。",
+      "takeaway": "① $\\sqrt{x}\\,\\mathrm{d}x=\\frac{2}{3}\\,\\mathrm{d}(x^{\\frac{3}{2}})$ 是高频凑微分公式，可一眼把 $x^3$ 配成完全平方 $(x^{\\frac{3}{2}})^2$。\n② 也可直接套 $\\int\\frac{\\mathrm{d}u}{\\sqrt{a^2-u^2}}=\\arcsin\\frac{u}{a}+C\\;(a=2)$，一步出 $\\frac{2}{3}\\arcsin(\\frac{1}{2}x^{\\frac{3}{2}})+C$，注意 $\\arcsin$ 前**没有** $\\frac{1}{a}$。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.233-234",
+        "pdfPage": 238,
+        "itemRef": "例9.1"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy30_01_10"
+      }
+    },
+    {
+      "id": "m1-c09-e-02",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（凑微分与第二类换元）",
+      "kind": "example",
+      "title": "【基础例 9.2】非常规凑微分「对复杂部分求导」真题压轴步",
+      "examWeight": "core",
+      "problem": "求不定积分 $\\displaystyle\\int\\mathrm{e}^{\\frac{\\sin\\theta}{\\cos\\theta+\\sin\\theta}}\\cdot\\frac{1}{(\\cos\\theta+\\sin\\theta)^2}\\,\\mathrm{d}\\theta$（真题大题最后一步）。",
+      "steps": [
+        {
+          "stepTitle": "1. 破题分析",
+          "detail": "若不是常用凑微分公式，立刻**对被积函数最复杂的指数内核 $g(\\theta)$ 求导**试凑！"
+        },
+        {
+          "stepTitle": "2. 推导与计算过程",
+          "detail": "令 $g(\\theta)=\\frac{\\sin\\theta}{\\cos\\theta+\\sin\\theta}$，对其求导：\n$$\\left(\\frac{\\sin\\theta}{\\cos\\theta+\\sin\\theta}\\right)'=\\frac{\\cos\\theta(\\cos\\theta+\\sin\\theta)-\\sin\\theta(-\\sin\\theta+\\cos\\theta)}{(\\cos\\theta+\\sin\\theta)^2}=\\frac{\\cos^2\\theta+\\sin^2\\theta}{(\\cos\\theta+\\sin\\theta)^2}=\\frac{1}{(\\cos\\theta+\\sin\\theta)^2}.$$\n故 $\\mathrm{d}\\!\\left(\\frac{\\sin\\theta}{\\cos\\theta+\\sin\\theta}\\right)=\\frac{1}{(\\cos\\theta+\\sin\\theta)^2}\\,\\mathrm{d}\\theta$，于是\n$$\\text{原式}=\\int\\mathrm{e}^{\\frac{\\sin\\theta}{\\cos\\theta+\\sin\\theta}}\\,\\mathrm{d}\\!\\left(\\frac{\\sin\\theta}{\\cos\\theta+\\sin\\theta}\\right)=\\mathrm{e}^{\\frac{\\sin\\theta}{\\cos\\theta+\\sin\\theta}}+C.$$"
+        }
+      ],
+      "finalAnswer": "$\\mathrm{e}^{\\frac{\\sin\\theta}{\\cos\\theta+\\sin\\theta}}+C$。",
+      "takeaway": "遇到 $\\int f[g(x)]h(x)\\,\\mathrm{d}x$ 外形吓人时，**千万别硬展开或盲目万能代换**，先花 5 秒算 $g'(x)$，真题往往暗藏 $g'(x)=h(x)$ 的精准设计！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.234",
+        "pdfPage": 239,
+        "itemRef": "例9.2"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy30_01_10"
+      }
+    },
+    {
+      "id": "m1-c09-e-03",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（凑微分与第二类换元）",
+      "kind": "example",
+      "title": "【基础例 9.3】三角代换推导必背公式 $\\int\\sqrt{a^2-x^2}\\,\\mathrm{d}x\\;(a>0)$",
+      "examWeight": "core",
+      "problem": "求不定积分 $\\displaystyle\\int\\sqrt{a^2-x^2}\\,\\mathrm{d}x\\;(a>0)$。",
+      "steps": [
+        {
+          "stepTitle": "1. 核心解答过程",
+          "detail": "设 $x=a\\sin t\\;(-\\frac{\\pi}{2}\\le t\\le\\frac{\\pi}{2})$，则 $\\mathrm{d}x=a\\cos t\\,\\mathrm{d}t$，$\\cos t=\\frac{\\sqrt{a^2-x^2}}{a}\\ge 0$，$t=\\arcsin\\frac{x}{a}$：\n$$\\begin{aligned}\n\\int\\sqrt{a^2-x^2}\\,\\mathrm{d}x\n&=\\int\\sqrt{a^2-a^2\\sin^2 t}\\cdot a\\cos t\\,\\mathrm{d}t\n=a^2\\int\\cos^2 t\\,\\mathrm{d}t\n=\\frac{a^2}{2}\\int(1+\\cos 2t)\\,\\mathrm{d}t\\\\\n&=\\frac{a^2}{2}t+\\frac{a^2}{4}\\sin 2t+C\n=\\frac{a^2}{2}t+\\frac{a^2}{2}\\sin t\\cos t+C\\\\\n&=\\frac{a^2}{2}\\arcsin\\frac{x}{a}+\\frac{x}{2}\\sqrt{a^2-x^2}+C.\n\\end{aligned}$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{a^2}{2}\\arcsin\\dfrac{x}{a}+\\dfrac{x}{2}\\sqrt{a^2-x^2}+C\\;(a>0)$。",
+      "takeaway": "① 回代时借助直角三角形（斜边 $a$、对边 $x$、邻边 $\\sqrt{a^2-x^2}$），直接把 $\\sin t\\cos t$ 写回 $\\frac{x}{a}\\cdot\\frac{\\sqrt{a^2-x^2}}{a}$。\n② 本式已列入表 9-1 第 ⑨ 组基本积分公式，考场遇 $\\int\\sqrt{a^2-x^2}\\,\\mathrm{d}x$ 应直接秒写（若为对称/半圆定积分更可用几何法一步秒算）。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.235-236",
+        "pdfPage": 240,
+        "itemRef": "例9.3",
+        "crossRef": "27张宇《高数18讲》(强化) P.91 强化例9.2(1)"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy30_01_10"
+      }
+    },
+    {
+      "id": "m1-c09-e-04",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（分部积分与抵消法）",
+      "kind": "example",
+      "title": "【基础例 9.4】无平方项根式整体代换 + 分部积分",
+      "examWeight": "core",
+      "problem": "求不定积分 $\\displaystyle\\int\\frac{x\\mathrm{e}^x}{\\sqrt{\\mathrm{e}^x-1}}\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 破题分析",
+          "detail": "带根号且根号内不是二次平方项 $\\Rightarrow$ 整体根式代换令 $u=\\sqrt{\\mathrm{e}^x-1}$，再接分部积分。"
+        },
+        {
+          "stepTitle": "2. 推导与计算过程",
+          "detail": "令 $u=\\sqrt{\\mathrm{e}^x-1}\\;(u>0)$，则 $\\mathrm{e}^x=1+u^2$，$x=\\ln(1+u^2)$，$\\mathrm{d}x=\\frac{2u}{1+u^2}\\,\\mathrm{d}u$，从而\n$$\\begin{aligned}\n\\int\\frac{x\\mathrm{e}^x}{\\sqrt{\\mathrm{e}^x-1}}\\,\\mathrm{d}x\n&=\\int\\frac{(1+u^2)\\ln(1+u^2)}{u}\\cdot\\frac{2u}{1+u^2}\\,\\mathrm{d}u\n=2\\int\\ln(1+u^2)\\,\\mathrm{d}u\\\\\n&=2u\\ln(1+u^2)-\\int\\frac{4u^2}{1+u^2}\\,\\mathrm{d}u\n=2u\\ln(1+u^2)-4\\int\\!\\left(1-\\frac{1}{1+u^2}\\right)\\mathrm{d}u\\\\\n&=2u\\ln(1+u^2)-4u+4\\arctan u+C\\\\\n&=2x\\sqrt{\\mathrm{e}^x-1}-4\\sqrt{\\mathrm{e}^x-1}+4\\arctan\\sqrt{\\mathrm{e}^x-1}+C.\n\\end{aligned}$$"
+        }
+      ],
+      "finalAnswer": "$2x\\sqrt{\\mathrm{e}^x-1}-4\\sqrt{\\mathrm{e}^x-1}+4\\arctan\\sqrt{\\mathrm{e}^x-1}+C$。",
+      "takeaway": "① 也可先直接分部积分：$\\int x\\,\\mathrm{d}(2\\sqrt{\\mathrm{e}^x-1})=2x\\sqrt{\\mathrm{e}^x-1}-2\\int\\sqrt{\\mathrm{e}^x-1}\\,\\mathrm{d}x$，再令 $u=\\sqrt{\\mathrm{e}^x-1}$（对比强化例9.6 的 $\\sqrt{\\mathrm{e}^x+1}$）。\n② 末行回代时记得把 $\\ln(1+u^2)$ 直接化简回原变量 $x$，切勿留在结果里不化简！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.238",
+        "pdfPage": 243,
+        "itemRef": "例9.4"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy30_01_10"
+      }
+    },
+    {
+      "id": "m1-c09-e-05",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（分部积分与抵消法）",
+      "kind": "example",
+      "title": "【基础例 9.5】三角代换 $x=\\tan t$ 化为 $\\int\\mathrm{e}^t\\sin t\\,\\mathrm{d}t$ 再现/行列式秒算",
+      "examWeight": "core",
+      "problem": "求不定积分 $\\displaystyle\\int\\frac{x\\mathrm{e}^{\\arctan x}}{(1+x^2)^{\\frac{3}{2}}}\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 破题分析",
+          "detail": "含 $\\arctan x$ 与 $(1+x^2)^{\\frac{3}{2}}$，令 $x=\\tan t$ 同时消去反三角函数与根号！"
+        },
+        {
+          "stepTitle": "2. 推导与计算过程",
+          "detail": "设 $x=\\tan t\\;(|t|<\\frac{\\pi}{2})$，则 $\\mathrm{d}x=\\sec^2 t\\,\\mathrm{d}t$，$(1+x^2)^{\\frac{3}{2}}=\\sec^3 t$：\n$$\\int\\frac{x\\mathrm{e}^{\\arctan x}}{(1+x^2)^{\\frac{3}{2}}}\\,\\mathrm{d}x=\\int\\frac{\\mathrm{e}^t\\tan t}{\\sec^3 t}\\cdot\\sec^2 t\\,\\mathrm{d}t=\\int\\mathrm{e}^t\\sin t\\,\\mathrm{d}t.$$\n**法一（分部积分建方程）**：\n$$\\int\\mathrm{e}^t\\sin t\\,\\mathrm{d}t=-\\int\\mathrm{e}^t\\,\\mathrm{d}(\\cos t)=-\\mathrm{e}^t\\cos t+\\int\\mathrm{e}^t\\cos t\\,\\mathrm{d}t=-\\mathrm{e}^t\\cos t+\\mathrm{e}^t\\sin t-\\int\\mathrm{e}^t\\sin t\\,\\mathrm{d}t,$$\n移项除以 $2$ 得 $\\int\\mathrm{e}^t\\sin t\\,\\mathrm{d}t=\\frac{1}{2}\\mathrm{e}^t(\\sin t-\\cos t)+C$。"
+        },
+        {
+          "stepTitle": "3. 法二（行列式公式秒算，P.238 注）",
+          "detail": "直接套 $\\frac{a\\mathrm{e}^{at}\\sin bt-b\\mathrm{e}^{at}\\cos bt}{a^2+b^2}\\;(a=b=1)$ 立即得 $\\frac{1}{2}\\mathrm{e}^t(\\sin t-\\cos t)+C$。"
+        },
+        {
+          "stepTitle": "4. 步进推导",
+          "detail": "回代 $\\sin t=\\frac{x}{\\sqrt{1+x^2}},\\;\\cos t=\\frac{1}{\\sqrt{1+x^2}}$，得：\n$$\\text{原式}=\\frac{(x-1)\\mathrm{e}^{\\arctan x}}{2\\sqrt{1+x^2}}+C.$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{(x-1)\\mathrm{e}^{\\arctan x}}{2\\sqrt{1+x^2}}+C$。",
+      "takeaway": "遇到 $\\mathrm{e}^{\\arctan x}$ 与 $1+x^2$ 的幂次组合，优先令 $x=\\tan t$（等价于 $t=\\arctan x$），一举把指数与根式全部消灭！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.238",
+        "pdfPage": 243,
+        "itemRef": "例9.5"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy30_01_10"
+      }
+    },
+    {
+      "id": "m1-c09-e-06",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（分部积分与抵消法）",
+      "kind": "example",
+      "title": "【基础例 9.6】先求函数表达式，再凑 $\\mathrm{d}(\\mathrm{e}^{-x})$ 分部积分",
+      "examWeight": "core",
+      "problem": "设 $f(\\ln x)=\\dfrac{\\ln(1+x)}{x}$，计算 $\\displaystyle\\int f(x)\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "先求 $f(x)$：令 $\\ln x=t$，则 $x=\\mathrm{e}^t$，故 $f(t)=\\dfrac{\\ln(1+\\mathrm{e}^t)}{\\mathrm{e}^t}$，即 $f(x)=\\dfrac{\\ln(1+\\mathrm{e}^x)}{\\mathrm{e}^x}$。"
+        },
+        {
+          "stepTitle": "2. 步进推导",
+          "detail": "再凑微分后分部积分：\n$$\\begin{aligned}\n\\int f(x)\\,\\mathrm{d}x\n&=\\int\\frac{\\ln(1+\\mathrm{e}^x)}{\\mathrm{e}^x}\\,\\mathrm{d}x\n=-\\int\\ln(1+\\mathrm{e}^x)\\,\\mathrm{d}(\\mathrm{e}^{-x})\\\\\n&=-\\mathrm{e}^{-x}\\ln(1+\\mathrm{e}^x)+\\int\\mathrm{e}^{-x}\\cdot\\frac{\\mathrm{e}^x}{1+\\mathrm{e}^x}\\,\\mathrm{d}x\n=-\\mathrm{e}^{-x}\\ln(1+\\mathrm{e}^x)+\\int\\frac{1}{1+\\mathrm{e}^x}\\,\\mathrm{d}x\\\\\n&=-\\mathrm{e}^{-x}\\ln(1+\\mathrm{e}^x)+\\int\\!\\left(1-\\frac{\\mathrm{e}^x}{1+\\mathrm{e}^x}\\right)\\mathrm{d}x\\\\\n&=-\\mathrm{e}^{-x}\\ln(1+\\mathrm{e}^x)+x-\\ln(1+\\mathrm{e}^x)+C\\\\\n&=x-(1+\\mathrm{e}^{-x})\\ln(1+\\mathrm{e}^x)+C.\n\\end{aligned}$$"
+        }
+      ],
+      "finalAnswer": "$x-(1+\\mathrm{e}^{-x})\\ln(1+\\mathrm{e}^x)+C$。",
+      "takeaway": "牢记高频变形：$\\frac{1}{1+\\mathrm{e}^x}=1-\\frac{\\mathrm{e}^x}{1+\\mathrm{e}^x}=\\frac{\\mathrm{e}^{-x}}{\\mathrm{e}^{-x}+1}$，两种拆法都只需一步即出 $-\\ln(1+\\mathrm{e}^{-x})=x-\\ln(1+\\mathrm{e}^x)$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.239",
+        "pdfPage": 244,
+        "itemRef": "例9.6"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy30_01_10"
+      }
+    },
+    {
+      "id": "m1-c09-e-07",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（分部积分与抵消法）",
+      "kind": "example",
+      "title": "【基础例 9.7】展开凑 $\\sec^2 x$ + 分部积分正负抵消法经典模板",
+      "examWeight": "core",
+      "problem": "计算不定积分 $\\displaystyle\\int\\mathrm{e}^{2x}(\\tan x+1)^2\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 核心解答过程",
+          "detail": "展开完全平方并利用 $1+\\tan^2 x=\\sec^2 x$：\n$$\\begin{aligned}\n\\int\\mathrm{e}^{2x}(\\tan x+1)^2\\,\\mathrm{d}x\n&=\\int\\mathrm{e}^{2x}(\\sec^2 x+2\\tan x)\\,\\mathrm{d}x\n=\\int\\mathrm{e}^{2x}\\,\\mathrm{d}(\\tan x)+2\\int\\mathrm{e}^{2x}\\tan x\\,\\mathrm{d}x\\\\\n&=\\mathrm{e}^{2x}\\tan x-2\\int\\mathrm{e}^{2x}\\tan x\\,\\mathrm{d}x+2\\int\\mathrm{e}^{2x}\\tan x\\,\\mathrm{d}x\\\\\n&=\\mathrm{e}^{2x}\\tan x+C.\n\\end{aligned}$$"
+        }
+      ],
+      "finalAnswer": "$\\mathrm{e}^{2x}\\tan x+C$。",
+      "takeaway": "① 识别模式：$\\int\\mathrm{e}^{kx}[f'(x)+k f(x)]\\,\\mathrm{d}x=\\mathrm{e}^{kx}f(x)+C$！本题中 $k=2,\\;f(x)=\\tan x$，展开后恰好是 $\\mathrm{e}^{2x}(\\tan' x+2\\tan x)$。\n② 操作铁律：**只对好凑微分的 $\\mathrm{e}^{2x}\\sec^2 x$ 做分部积分，难积项 $2\\int\\mathrm{e}^{2x}\\tan x\\,\\mathrm{d}x$ 纹丝不动等着自动抵消**（对比强化例9.8）。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.239",
+        "pdfPage": 244,
+        "itemRef": "例9.7",
+        "crossRef": "27张宇《高数18讲》(强化) P.95 强化例9.8"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy30_01_10"
+      }
+    },
+    {
+      "id": "m1-c09-e-08",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（有理函数积分）",
+      "kind": "example",
+      "title": "【基础例 9.8】含二重线性因式的有理函数拆分（比较系数法 vs 赋值法）",
+      "examWeight": "core",
+      "problem": "求 $\\displaystyle\\int\\frac{4x^2-6x-1}{(x+1)(2x-1)^2}\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "先拆分真分式（注意二重因式 $(2x-1)^2$ 产生两项）：\n$$\\frac{4x^2-6x-1}{(x+1)(2x-1)^2}=\\frac{A}{x+1}+\\frac{B}{2x-1}+\\frac{C}{(2x-1)^2}.$$\n通分比较分子恒等式：$4x^2-6x-1\\equiv A(2x-1)^2+B(x+1)(2x-1)+C(x+1)$。"
+        },
+        {
+          "stepTitle": "2. 定系数法一（比较同次幂系数）",
+          "detail": "展开得 $\\begin{cases}4A+2B=4\\\\-4A+B+C=-6\\\\A-B+C=-1\\end{cases}$，解得 $A=1,\\;B=0,\\;C=-2$。"
+        },
+        {
+          "stepTitle": "3. 定系数法二（赋值法，推荐！）",
+          "detail": "- 令 $x=-1 \\Rightarrow 9=9A \\Rightarrow A=1$；\n- 令 $x=\\frac{1}{2} \\Rightarrow -3=\\frac{3}{2}C \\Rightarrow C=-2$；\n- 令 $x=0 \\Rightarrow -1=A-B+C=1-B-2 \\Rightarrow B=0$。"
+        },
+        {
+          "stepTitle": "4. 步进推导",
+          "detail": "于是\n$$\\int\\frac{4x^2-6x-1}{(x+1)(2x-1)^2}\\,\\mathrm{d}x=\\int\\frac{\\mathrm{d}x}{x+1}-\\int\\frac{2}{(2x-1)^2}\\,\\mathrm{d}x=\\ln|x+1|+\\frac{1}{2x-1}+C_1.$$"
+        }
+      ],
+      "finalAnswer": "$\\ln|x+1|+\\dfrac{1}{2x-1}+C_1$。",
+      "takeaway": "① 注意 $\\int\\frac{2}{(2x-1)^2}\\,\\mathrm{d}x=\\int\\frac{\\mathrm{d}(2x-1)}{(2x-1)^2}=-\\frac{1}{2x-1}+C$，外侧负号抵消得 $+\\frac{1}{2x-1}$。\n② 赋值法优先代入使各分母为零的根（$x=-1,\\;\\frac{1}{2}$），剩余系数代 $x=0$ 或比较最高次系数，速度极快且不易算错！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.240-241",
+        "pdfPage": 245,
+        "itemRef": "例9.8"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy30_01_10"
+      }
+    },
+    {
+      "id": "m1-c09-e-09",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（有理函数积分）",
+      "kind": "example",
+      "title": "【基础例 9.9】三次分母先因式分解，再拆线性+不可约二次分式",
+      "examWeight": "core",
+      "problem": "求 $\\displaystyle\\int\\frac{x}{x^3-x^2+x-1}\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "先分组因式分解分母：$x^3-x^2+x-1=x^2(x-1)+(x-1)=(x-1)(x^2+1)$。"
+        },
+        {
+          "stepTitle": "2. 步进推导",
+          "detail": "设 $\\dfrac{x}{(x-1)(x^2+1)}=\\dfrac{A}{x-1}+\\dfrac{Bx+C}{x^2+1}$，通分得恒等式\n$$x\\equiv A(x^2+1)+(Bx+C)(x-1).$$\n- 令 $x=1 \\Rightarrow 1=2A \\Rightarrow A=\\frac{1}{2}$；\n- 令 $x=0 \\Rightarrow 0=A-C \\Rightarrow C=\\frac{1}{2}$；\n- 比较 $x^2$ 项系数：$0=A+B \\Rightarrow B=-\\frac{1}{2}$。"
+        },
+        {
+          "stepTitle": "3. 步进推导",
+          "detail": "于是\n$$\\begin{aligned}\n\\int\\frac{x}{x^3-x^2+x-1}\\,\\mathrm{d}x\n&=\\frac{1}{2}\\int\\frac{\\mathrm{d}x}{x-1}-\\frac{1}{2}\\int\\frac{x-1}{x^2+1}\\,\\mathrm{d}x\\\\\n&=\\frac{1}{2}\\ln|x-1|-\\frac{1}{4}\\ln(x^2+1)+\\frac{1}{2}\\arctan x+C_1\\\\\n&=\\frac{1}{4}\\ln\\frac{(x-1)^2}{x^2+1}+\\frac{1}{2}\\arctan x+C_1.\n\\end{aligned}$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{1}{4}\\ln\\dfrac{(x-1)^2}{x^2+1}+\\dfrac{1}{2}\\arctan x+C_1$。",
+      "takeaway": "拆出 $-\\frac{1}{2}\\int\\frac{x-1}{x^2+1}\\,\\mathrm{d}x=-\\frac{1}{4}\\int\\frac{\\mathrm{d}(x^2+1)}{x^2+1}+\\frac{1}{2}\\int\\frac{\\mathrm{d}x}{x^2+1}$，两项正负号切勿看错！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.241-242",
+        "pdfPage": 246,
+        "itemRef": "例9.9"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy30_01_10"
+      }
+    },
+    {
+      "id": "m1-c09-e-10",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（有理函数积分）",
+      "kind": "example",
+      "title": "【基础例 9.10】最简二次分式标准两步：分子凑分母导数 + 分母配方出 $\\arctan$",
+      "examWeight": "core",
+      "problem": "计算 $\\displaystyle\\int\\frac{2x+3}{x^2-x+1}\\,\\mathrm{d}x=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "应填 $\\ln(x^2-x+1)+\\dfrac{8\\sqrt{3}}{3}\\arctan\\dfrac{2x-1}{\\sqrt{3}}+C$。"
+        },
+        {
+          "stepTitle": "2. 步进推导",
+          "detail": "分母 $\\Delta=(-1)^2-4=-3<0$ 不可约，已是**最简有理分式**。分子配成「$k(\\text{分母})'+\\text{常数}$」，因 $(x^2-x+1)'=2x-1$，写 $2x+3=(2x-1)+4$：\n$$\\begin{aligned}\n\\int\\frac{2x+3}{x^2-x+1}\\,\\mathrm{d}x\n&=\\int\\frac{2x-1+4}{x^2-x+1}\\,\\mathrm{d}x\n=\\int\\frac{\\mathrm{d}(x^2-x+1)}{x^2-x+1}+4\\int\\frac{\\mathrm{d}x}{x^2-x+1}\\\\\n&=\\ln(x^2-x+1)+4\\int\\frac{\\mathrm{d}\\!\\left(x-\\frac{1}{2}\\right)}{\\left(x-\\frac{1}{2}\\right)^2+\\left(\\frac{\\sqrt{3}}{2}\\right)^2}\\\\\n&=\\ln(x^2-x+1)+4\\cdot\\frac{2}{\\sqrt{3}}\\arctan\\frac{x-\\frac{1}{2}}{\\frac{\\sqrt{3}}{2}}+C\\\\\n&=\\ln(x^2-x+1)+\\frac{8\\sqrt{3}}{3}\\arctan\\frac{2x-1}{\\sqrt{3}}+C.\n\\end{aligned}$$"
+        }
+      ],
+      "finalAnswer": "$\\ln(x^2-x+1)+\\dfrac{8\\sqrt{3}}{3}\\arctan\\dfrac{2x-1}{\\sqrt{3}}+C$。",
+      "takeaway": "① 由于 $x^2-x+1=(x-\\frac{1}{2})^2+\\frac{3}{4}>0$ 恒正，$\\ln(x^2-x+1)$ 无需绝对值。\n② 这是所有不可约二次真分式积分的**终极收官模板**（如强化例9.10 最后一步即完全同款）！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.242-243",
+        "pdfPage": 247,
+        "itemRef": "例9.10"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy30_01_10"
+      }
+    },
+    {
+      "id": "m1-c09-e-11",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（定积分计算与对称/再现/点火）",
+      "kind": "example",
+      "title": "【基础例 9.11】先凑 $x+\\frac{1}{x}$ 求 $f(x)$，再用牛顿-莱布尼茨公式",
+      "examWeight": "core",
+      "problem": "设 $f\\!\\left(x+\\dfrac{1}{x}\\right)=\\dfrac{x+x^3}{1+x^4}$，则 $\\displaystyle\\int_2^{2\\sqrt{2}} f(x)\\,\\mathrm{d}x=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "应填 $\\dfrac{1}{2}\\ln 3$。"
+        },
+        {
+          "stepTitle": "2. 步进推导",
+          "detail": "分子分母同除以 $x^2$ 配出 $u=x+\\frac{1}{x}$：\n$$f\\!\\left(x+\\frac{1}{x}\\right)=\\frac{\\frac{1}{x}+x}{\\frac{1}{x^2}+x^2}=\\frac{x+\\frac{1}{x}}{\\left(x+\\frac{1}{x}\\right)^2-2},$$\n由均值不等式，当 $x>0$ 时 $x+\\frac{1}{x}\\ge 2$，故对 $u\\ge 2$ 有 $f(u)=\\dfrac{u}{u^2-2}$（即基础第 1 讲例 1.1）。"
+        },
+        {
+          "stepTitle": "3. 步进推导",
+          "detail": "在区间 $[2,2\\sqrt{2}]$ 上 $x^2-2\\in[2,6]$ 恒正连续，直接用牛顿-莱布尼茨公式：\n$$\\int_2^{2\\sqrt{2}} f(x)\\,\\mathrm{d}x=\\int_2^{2\\sqrt{2}}\\frac{x}{x^2-2}\\,\\mathrm{d}x=\\left.\\frac{1}{2}\\ln(x^2-2)\\right|_2^{2\\sqrt{2}}=\\frac{1}{2}(\\ln 6-\\ln 2)=\\frac{1}{2}\\ln 3.$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{1}{2}\\ln 3$。",
+      "takeaway": "先验积分区间 $[2,2\\sqrt{2}]$ 恰落在 $f$ 的定义域 $|x|\\ge 2$ 内且避开了奇点 $x=\\sqrt{2}$，确保牛顿-莱布尼茨公式合法。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.243-244",
+        "pdfPage": 248,
+        "itemRef": "例9.11"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy30_11_19"
+      }
+    },
+    {
+      "id": "m1-c09-e-12",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（定积分计算与对称/再现/点火）",
+      "kind": "example",
+      "title": "【基础例 9.12】定积分定义化连和极限 + 平移换元化对称区间「奇零」秒杀",
+      "examWeight": "core",
+      "problem": "计算 $\\displaystyle\\lim_{n\\to\\infty}\\frac{1}{n}\\sum_{i=1}^n[\\ln(3n-2i)-\\ln(n+2i)]=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "应填 $0$。"
+        },
+        {
+          "stepTitle": "2. 步进推导",
+          "detail": "先合并对数并提公因子 $n$ 凑出 $\\frac{i}{n}$：\n$$\\ln(3n-2i)-\\ln(n+2i)=\\ln\\frac{3n-2i}{n+2i}=\\ln\\frac{3-2\\frac{i}{n}}{1+2\\frac{i}{n}}.$$\n由定积分精准定义：\n$$\\text{原式}=\\lim_{n\\to\\infty}\\frac{1}{n}\\sum_{i=1}^n\\ln\\frac{3-2\\frac{i}{n}}{1+2\\frac{i}{n}}=\\int_0^1\\ln\\frac{3-2x}{1+2x}\\,\\mathrm{d}x=\\int_0^1\\ln\\frac{\\frac{3}{2}-x}{\\frac{1}{2}+x}\\,\\mathrm{d}x.$$\n作平移换元 $t=x-\\frac{1}{2}$ 把 $[0,1]$ 移到对称区间 $[-\\frac{1}{2},\\frac{1}{2}]$：\n$$\\text{原式}=\\int_{-\\frac{1}{2}}^{\\frac{1}{2}}\\ln\\frac{1-t}{1+t}\\,\\mathrm{d}t.$$\n因 $\\ln\\frac{1-t}{1+t}=\\ln(1-t)-\\ln(1+t)$ 在 $[-\\frac{1}{2},\\frac{1}{2}]$ 上是连续**奇函数**，故由「奇零」立得原式 $=0$！"
+        }
+      ],
+      "finalAnswer": "$0$。",
+      "takeaway": "**高分捷径**：区间 $[0,1]$ 也可直接用**区间再现** $x=1-u$，得 $I=\\int_0^1\\ln\\frac{1+2u}{3-2u}\\,\\mathrm{d}u=-I\\Rightarrow I=0$，连平移都省了！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.245-246",
+        "pdfPage": 250,
+        "itemRef": "例9.12"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy30_11_19"
+      }
+    },
+    {
+      "id": "m1-c09-e-13",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（定积分计算与对称/再现/点火）",
+      "kind": "example",
+      "title": "【基础例 9.13】偶倍 + 三角换元（选无绝对值区间）+ 华里士公式秒算",
+      "examWeight": "core",
+      "problem": "求 $\\displaystyle\\int_{-1}^1 x^2\\sqrt{1-x^2}\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 核心解答过程",
+          "detail": "被积函数 $x^2\\sqrt{1-x^2}$ 为连续偶函数，先用「偶倍」缩半区间：\n$$\\int_{-1}^1 x^2\\sqrt{1-x^2}\\,\\mathrm{d}x=2\\int_0^1 x^2\\sqrt{1-x^2}\\,\\mathrm{d}x.$$\n令 $x=\\sin t$，选 $t\\in[0,\\frac{\\pi}{2}]$（此时 $\\cos t\\ge 0$ 无需绝对值，且 $x=0\\Rightarrow t=0,\\;x=1\\Rightarrow t=\\frac{\\pi}{2}$）：\n$$\\begin{aligned}\n\\text{原式}&=2\\int_0^{\\frac{\\pi}{2}}\\sin^2 t\\cos^2 t\\,\\mathrm{d}t\n=2\\int_0^{\\frac{\\pi}{2}}(\\sin^2 t-\\sin^4 t)\\,\\mathrm{d}t\\\\\n&=2\\left(\\frac{1}{2}\\cdot\\frac{\\pi}{2}-\\frac{3}{4}\\cdot\\frac{1}{2}\\cdot\\frac{\\pi}{2}\\right)=\\frac{\\pi}{8}.\n\\end{aligned}$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{\\pi}{8}$。",
+      "takeaway": "① **换元上下限避坑（P.246 注）**：令 $x=\\sin t$ 时，$x=0$ 理论上可取 $0,\\pm\\pi,\\dots$，但选取 $[0,\\frac{\\pi}{2}]$ 让 $\\sqrt{1-\\sin^2 t}=|\\cos t|=\\cos t$ 直接去绝对值，切忌选出跨象限的区间自找麻烦！\n② 也可把 $\\sin^2 t\\cos^2 t=\\frac{1}{4}\\sin^2 2t$，再令 $u=2t$ 化为 $\\frac{1}{4}\\int_0^\\pi\\sin^2 u\\,\\mathrm{d}u=\\frac{\\pi}{8}$。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.246",
+        "pdfPage": 251,
+        "itemRef": "例9.13 & 注"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy30_11_19"
+      }
+    },
+    {
+      "id": "m1-c09-e-14",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（定积分计算与对称/再现/点火）",
+      "kind": "example",
+      "title": "【基础例 9.14】$\\int_0^1\\arcsin\\sqrt{1-x^2}\\,\\mathrm{d}x$ 双解法（含原书方法二双符号勘误纠偏！）",
+      "examWeight": "core",
+      "problem": "计算 $\\displaystyle\\int_0^1\\arcsin\\sqrt{1-x^2}\\,\\mathrm{d}x=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "应填 $1$。"
+        },
+        {
+          "stepTitle": "2. 方法一（分部积分法，最干净！）",
+          "detail": "$$\\begin{aligned}\n\\int_0^1\\arcsin\\sqrt{1-x^2}\\,\\mathrm{d}x\n&=\\left.x\\arcsin\\sqrt{1-x^2}\\right|_0^1-\\int_0^1 x\\,\\mathrm{d}(\\arcsin\\sqrt{1-x^2})\\\\\n&=0-\\int_0^1 x\\cdot\\frac{1}{\\sqrt{1-(1-x^2)}}\\cdot\\frac{-x}{\\sqrt{1-x^2}}\\,\\mathrm{d}x\n=\\int_0^1\\frac{x}{\\sqrt{1-x^2}}\\,\\mathrm{d}x\\\\\n&=-\\frac{1}{2}\\int_0^1\\frac{\\mathrm{d}(1-x^2)}{\\sqrt{1-x^2}}\n=\\left.-\\sqrt{1-x^2}\\right|_0^1=1.\n\\end{aligned}$$"
+        },
+        {
+          "stepTitle": "3. 方法二（三角换元法，严格修正版）",
+          "detail": "令 $x=\\cos t\\;(\\frac{\\pi}{2}\\ge t\\ge 0)$，当 $x=0$ 时 $t=\\frac{\\pi}{2}$，当 $x=1$ 时 $t=0$，$\\mathrm{d}x=-\\sin t\\,\\mathrm{d}t$，且在 $t\\in[0,\\frac{\\pi}{2}]$ 上 $\\sqrt{1-\\cos^2 t}=+\\sin t\\ge 0$，故 $\\arcsin\\sqrt{1-x^2}=\\arcsin(\\sin t)=t$！从而\n$$\\begin{aligned}\n\\int_0^1\\arcsin\\sqrt{1-x^2}\\,\\mathrm{d}x\n&=\\int_{\\frac{\\pi}{2}}^0 t\\cdot(-\\sin t)\\,\\mathrm{d}t\n=\\int_0^{\\frac{\\pi}{2}} t\\sin t\\,\\mathrm{d}t\\\\\n&=\\left.-t\\cos t\\right|_0^{\\frac{\\pi}{2}}+\\left.\\sin t\\right|_0^{\\frac{\\pi}{2}}=0+1=1.\n\\end{aligned}$$"
+        },
+        {
+          "stepTitle": "4. 【原书勘误警示（P.247 顶部，SymPy 已实锤）】",
+          "detail": "原书方法二首行误印为 $\\int_{\\frac{\\pi}{2}}^0\\arcsin(-\\sin t)\\cdot(-\\sin t)\\,\\mathrm{d}t=\\int_{\\frac{\\pi}{2}}^0 t\\sin t\\,\\mathrm{d}t$（在 $[0,\\frac{\\pi}{2}]$ 上 $\\sqrt{1-\\cos^2 t}=+\\sin t$ 而非 $-\\sin t$！），紧接着又把 $\\left[-t\\cos t+\\sin t\\right]_{\\frac{\\pi}{2}}^0=-1$ 误算成 $+1$，两处负号错误恰好相抵才蒙出正确结果 $1$！务必按上面修正版书写，避免考场丢分（详见表 9-6）。"
+        }
+      ],
+      "finalAnswer": "$1$（同时已修正原书 P.247 方法二双符号印刷笔误）。",
+      "takeaway": "① 更有秒杀观察：对 $x\\in[0,1]$，$\\arcsin\\sqrt{1-x^2}=\\arccos x$，直接分部积分或对称互换得 $\\int_0^1\\arccos x\\,\\mathrm{d}x=\\int_0^{\\frac{\\pi}{2}} t\\sin t\\,\\mathrm{d}t=1$！\n② 记住结论 $\\int_0^1\\arcsin\\sqrt{1-x^2}\\,\\mathrm{d}x=1$，紧接着例9.15 立马复用！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.246-247",
+        "pdfPage": 251,
+        "itemRef": "例9.14（含P.247方法二勘误纠偏）"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy30_11_19"
+      }
+    },
+    {
+      "id": "m1-c09-e-15",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（定积分计算与对称/再现/点火）",
+      "kind": "example",
+      "title": "【基础例 9.15】配方平移对称化归例 9.14（重要题源）",
+      "examWeight": "core",
+      "problem": "计算 $\\displaystyle\\int_0^1 x\\arcsin\\sqrt{4x-4x^2}\\,\\mathrm{d}x=$ ______（重要题源）。",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "应填 $\\dfrac{1}{2}$。"
+        },
+        {
+          "stepTitle": "2. 步进推导",
+          "detail": "先对根号内配方：$4x-4x^2=1-(1-2x)^2$。令 $1-2x=t$，则 $x=\\frac{1-t}{2},\\;\\mathrm{d}x=-\\frac{1}{2}\\,\\mathrm{d}t$，$x=0\\Rightarrow t=1,\\;x=1\\Rightarrow t=-1$：\n$$\\begin{aligned}\n\\int_0^1 x\\arcsin\\sqrt{4x-4x^2}\\,\\mathrm{d}x\n&=\\int_1^{-1}\\frac{1-t}{2}\\arcsin\\sqrt{1-t^2}\\cdot\\left(-\\frac{1}{2}\\,\\mathrm{d}t\\right)\\\\\n&=\\frac{1}{4}\\int_{-1}^1(1-t)\\arcsin\\sqrt{1-t^2}\\,\\mathrm{d}t\\\\\n&=\\frac{1}{4}\\int_{-1}^1\\arcsin\\sqrt{1-t^2}\\,\\mathrm{d}t-\\frac{1}{4}\\int_{-1}^1 t\\arcsin\\sqrt{1-t^2}\\,\\mathrm{d}t.\n\\end{aligned}$$\n利用对称区间「偶倍奇零」：后项为奇函数积分为 $0$，前项为偶函数化为 $2\\cdot\\frac{1}{4}=\\frac{1}{2}$ 倍，再利用例9.14 结论 $\\int_0^1\\arcsin\\sqrt{1-t^2}\\,\\mathrm{d}t=1$：\n$$\\text{原式}=\\frac{1}{2}\\int_0^1\\arcsin\\sqrt{1-t^2}\\,\\mathrm{d}t=\\frac{1}{2}.$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{1}{2}$。",
+      "takeaway": "见到 $\\sqrt{2ax-x^2}$ 或 $\\sqrt{4x-4x^2}$ 这类二次无理式，第一反应永远是**先配方化出对称中心**，再平移到 $[-a,a]$ 吃尽「偶倍奇零」红利！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.247",
+        "pdfPage": 252,
+        "itemRef": "例9.15"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy30_11_19"
+      }
+    },
+    {
+      "id": "m1-c09-e-16",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（定积分计算与对称/再现/点火）",
+      "kind": "example",
+      "title": "【基础例 9.16】证明周期连续函数整周期定积分与起点无关",
+      "examWeight": "core",
+      "problem": "证明：若函数 $f(x)$ 是以 $T$ 为周期的连续函数，则对任意实数 $a$，都有 $\\displaystyle\\int_a^{a+T} f(x)\\,\\mathrm{d}x=\\int_0^T f(x)\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 核心解答过程",
+          "detail": "由定积分的区间可加性拆成三段：\n$$\\int_a^{a+T} f(x)\\,\\mathrm{d}x=\\int_a^0 f(x)\\,\\mathrm{d}x+\\int_0^T f(x)\\,\\mathrm{d}x+\\int_T^{a+T} f(x)\\,\\mathrm{d}x.$$\n对末项作换元 $t=x-T$（则 $x=t+T,\\;\\mathrm{d}x=\\mathrm{d}t$），结合周期性 $f(t+T)=f(t)$：\n$$\\int_T^{a+T} f(x)\\,\\mathrm{d}x=\\int_0^a f(t+T)\\,\\mathrm{d}t=\\int_0^a f(t)\\,\\mathrm{d}t=\\int_0^a f(x)\\,\\mathrm{d}x.$$\n代回原式，首尾两项恰好相反抵消：\n$$\\int_a^{a+T} f(x)\\,\\mathrm{d}x=\\int_a^0 f(x)\\,\\mathrm{d}x+\\int_0^T f(x)\\,\\mathrm{d}x+\\int_0^a f(x)\\,\\mathrm{d}x=\\int_0^T f(x)\\,\\mathrm{d}x.$$"
+        }
+      ],
+      "finalAnswer": "证毕：$\\int_a^{a+T} f(x)\\,\\mathrm{d}x=\\int_0^T f(x)\\,\\mathrm{d}x$（推论：周期奇函数整周期积分为 $0$）。",
+      "takeaway": "① **推论（P.247 注）**：若 $f(x)$ 连续、以 $T$ 为周期且为奇函数，取 $a=-\\frac{T}{2}$ 立得 $\\int_0^T f(x)\\,\\mathrm{d}x=\\int_{-T/2}^{T/2} f(x)\\,\\mathrm{d}x=0$！\n② 也可令 $F(a)=\\int_a^{a+T} f(x)\\,\\mathrm{d}x$，求导得 $F'(a)=f(a+T)-f(a)\\equiv 0\\Rightarrow F(a)\\equiv F(0)=\\int_0^T f(x)\\,\\mathrm{d}x$，两行证毕！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.247",
+        "pdfPage": 252,
+        "itemRef": "例9.16 & 注"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c09-e-17",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（定积分计算与对称/再现/点火）",
+      "kind": "example",
+      "title": "【基础例 9.17】证明区间再现公式并速算 $\\int_0^{\\frac{\\pi}{4}}\\ln(1+\\tan x)\\,\\mathrm{d}x$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 为连续函数，证明 $\\displaystyle\\int_a^b f(x)\\,\\mathrm{d}x=\\int_a^b f(a+b-x)\\,\\mathrm{d}x$，并据此计算经典附例 $\\displaystyle\\int_0^{\\frac{\\pi}{4}}\\ln(1+\\tan x)\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "令 $x=a+b-t$，则 $\\mathrm{d}x=-\\mathrm{d}t$；当 $x=a$ 时 $t=b$，当 $x=b$ 时 $t=a$：\n$$\\int_a^b f(x)\\,\\mathrm{d}x=\\int_b^a f(a+b-t)(-\\mathrm{d}t)=\\int_a^b f(a+b-t)\\,\\mathrm{d}t=\\int_a^b f(a+b-x)\\,\\mathrm{d}x.$$\n证毕。由此立得平均配对形式 $\\int_a^b f(x)\\,\\mathrm{d}x=\\int_a^b\\frac{f(x)+f(a+b-x)}{2}\\,\\mathrm{d}x$。"
+        },
+        {
+          "stepTitle": "2. 附例（P.248 注(2)）",
+          "detail": "利用 $\\tan(\\frac{\\pi}{4}-x)=\\frac{1-\\tan x}{1+\\tan x}$，得 $1+\\tan(\\frac{\\pi}{4}-x)=\\frac{2}{1+\\tan x}$，故\n$$\\int_0^{\\frac{\\pi}{4}}\\ln(1+\\tan x)\\,\\mathrm{d}x=\\int_0^{\\frac{\\pi}{4}}\\ln\\frac{2}{1+\\tan x}\\,\\mathrm{d}x=\\int_0^{\\frac{\\pi}{4}}\\frac{\\ln(1+\\tan x)+\\ln\\frac{2}{1+\\tan x}}{2}\\,\\mathrm{d}x=\\int_0^{\\frac{\\pi}{4}}\\frac{\\ln 2}{2}\\,\\mathrm{d}x=\\frac{\\pi}{8}\\ln 2.$$"
+        }
+      ],
+      "finalAnswer": "证毕：$\\int_a^b f(x)\\,\\mathrm{d}x=\\int_a^b f(a+b-x)\\,\\mathrm{d}x$；附例 $\\int_0^{\\frac{\\pi}{4}}\\ln(1+\\tan x)\\,\\mathrm{d}x=\\dfrac{\\pi}{8}\\ln 2$。",
+      "takeaway": "区间再现适用标志：当 $f(x)$ 单独难算，但 $f(x)+f(a+b-x)$ 能化简成常数或易积函数（常见 $\\frac{1}{1+g(x)}$ 配 $g(a+b-x)=\\frac{1}{g(x)}$、$\\ln(1+\\tan x)$、$x f(\\sin x)$）时立即出手！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.247-248",
+        "pdfPage": 252,
+        "itemRef": "例9.17 & 注(1)(2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy30_11_19"
+      }
+    },
+    {
+      "id": "m1-c09-e-18",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（定积分计算与对称/再现/点火）",
+      "kind": "example",
+      "title": "【基础例 9.18】区间再现消去 $x$ 公式证明与点火公式连用",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[0,1]$ 上连续，证明 $\\displaystyle\\int_0^\\pi x f(\\sin x)\\,\\mathrm{d}x=\\frac{\\pi}{2}\\int_0^\\pi f(\\sin x)\\,\\mathrm{d}x$，并计算 $\\displaystyle\\int_0^\\pi x\\sin^9 x\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 核心解答过程",
+          "detail": "令 $x=\\pi-t$ 作区间再现换元，利用 $\\sin(\\pi-t)=\\sin t$：\n$$\\begin{aligned}\n\\int_0^\\pi x f(\\sin x)\\,\\mathrm{d}x\n&=\\int_\\pi^0(\\pi-t)f(\\sin(\\pi-t))(-\\mathrm{d}t)\n=\\int_0^\\pi(\\pi-t)f(\\sin t)\\,\\mathrm{d}t\\\\\n&=\\pi\\int_0^\\pi f(\\sin x)\\,\\mathrm{d}x-\\int_0^\\pi x f(\\sin x)\\,\\mathrm{d}x.\n\\end{aligned}$$\n移项合并除以 $2$，即得\n$$\\int_0^\\pi x f(\\sin x)\\,\\mathrm{d}x=\\frac{\\pi}{2}\\int_0^\\pi f(\\sin x)\\,\\mathrm{d}x.$$\n据此结合华里士公式（表 9-3 $[0,\\pi]$ 上 $\\sin^9 x$ 奇数次 $=2\\cdot\\frac{8\\cdot 6\\cdot 4\\cdot 2}{9\\cdot 7\\cdot 5\\cdot 3}\\cdot 1$）：\n$$\\int_0^\\pi x\\sin^9 x\\,\\mathrm{d}x=\\frac{\\pi}{2}\\int_0^\\pi\\sin^9 x\\,\\mathrm{d}x=\\frac{\\pi}{2}\\cdot 2\\cdot\\frac{8}{9}\\cdot\\frac{6}{7}\\cdot\\frac{4}{5}\\cdot\\frac{2}{3}\\cdot 1=\\frac{128\\pi}{315}.$$"
+        }
+      ],
+      "finalAnswer": "证毕；$\\int_0^\\pi x\\sin^9 x\\,\\mathrm{d}x=\\dfrac{128\\pi}{315}$。",
+      "takeaway": "本式在 $[0,\\pi]$ 上只要被积函数写成 $x g(x)$ 且满足 $g(\\pi-x)=g(x)$ 皆可通用（如强化例9.5 的 $\\int_0^{n\\pi} x|\\sin x|\\,\\mathrm{d}x$ 亦是同款区间再现消 $x$）！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.248",
+        "pdfPage": 253,
+        "itemRef": "例9.18"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy30_11_19"
+      }
+    },
+    {
+      "id": "m1-c09-e-19",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（定积分计算与对称/再现/点火）",
+      "kind": "example",
+      "title": "【基础例 9.19】不可求积变限积分「先分部再求导」经典选填",
+      "examWeight": "core",
+      "problem": "设 $f(x)=\\displaystyle\\int_1^{x^2}\\mathrm{e}^{-t^2}\\,\\mathrm{d}t$，则 $\\displaystyle\\int_0^1 x f(x)\\,\\mathrm{d}x=$（　）。\n(A) $\\frac{1}{4}(\\mathrm{e}^{-1}+1)$　　(B) $\\frac{1}{4}(\\mathrm{e}^{-1}-1)$　　(C) $\\frac{1}{4}(\\mathrm{e}+1)$　　(D) $\\frac{1}{4}(\\mathrm{e}-1)$",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "应选 **(B)**。"
+        },
+        {
+          "stepTitle": "2. 步进推导",
+          "detail": "由于 $f(x)=\\int_1^{x^2}\\mathrm{e}^{-t^2}\\,\\mathrm{d}t$ 积不出初等函数，立刻**用分部积分把 $f(x)$ 变成导数 $f'(x)$**：\n$$\\int_0^1 x f(x)\\,\\mathrm{d}x=\\left.\\frac{x^2}{2}f(x)\\right|_0^1-\\int_0^1\\frac{x^2}{2}f'(x)\\,\\mathrm{d}x.$$\n由表达式知 $f(1)=\\int_1^1\\mathrm{e}^{-t^2}\\,\\mathrm{d}t=0$，且 $f'(x)=\\mathrm{e}^{-x^4}\\cdot(x^2)'=2x\\mathrm{e}^{-x^4}$，故边界项恰为 $0$：\n$$\\int_0^1 x f(x)\\,\\mathrm{d}x=-\\int_0^1\\frac{x^2}{2}\\cdot 2x\\mathrm{e}^{-x^4}\\,\\mathrm{d}x=-\\int_0^1 x^3\\mathrm{e}^{-x^4}\\,\\mathrm{d}x=\\frac{1}{4}\\int_0^1\\mathrm{e}^{-x^4}\\,\\mathrm{d}(-x^4)=\\left.\\frac{1}{4}\\mathrm{e}^{-x^4}\\right|_0^1=\\frac{1}{4}(\\mathrm{e}^{-1}-1).$$"
+        }
+      ],
+      "finalAnswer": "选 (B) $\\dfrac{1}{4}(\\mathrm{e}^{-1}-1)$。",
+      "takeaway": "① **秒杀条件反射**：凡在定积分里遇到「积不出来的变限积分 $f(x)$」（如 $\\int\\mathrm{e}^{-t^2}$、$\\int\\frac{\\sin t}{t}$），**绝不去算 $f(x)$，直接分部积分求 $f'(x)$**（也可化作二重积分交换次序，结果相同）！\n② 注意把边界项 $\\left.\\frac{x^2}{2}f(x)\\right|_0^1$ 算准：下限 $x=0$ 为 $0$，上限 $x=1$ 恰因 $f(1)=0$ 为 $0$。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.248-249",
+        "pdfPage": 253,
+        "itemRef": "例9.19"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy30_11_19"
+      }
+    },
+    {
+      "id": "m1-c09-e-20",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（变限积分求导与性质）",
+      "kind": "example",
+      "title": "【基础例 9.20】变限积分曲线在定点处的法线方程",
+      "examWeight": "core",
+      "problem": "曲线 $y=\\displaystyle\\int_0^{\\sin x}\\mathrm{e}^{t^2}\\,\\mathrm{d}t$ 在点 $(0,0)$ 处的法线方程为（　）。\n(A) $y=\\frac{1}{2}x$　　(B) $y=-\\frac{1}{2}x$　　(C) $y=x$　　(D) $y=-x$",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "应选 **(D)**。"
+        },
+        {
+          "stepTitle": "2. 步进推导",
+          "detail": "首先检验点 $(0,0)$ 在曲线上：当 $x=0$ 时 $y=\\int_0^0\\mathrm{e}^{t^2}\\,\\mathrm{d}t=0$。"
+        },
+        {
+          "stepTitle": "3. 步进推导",
+          "detail": "由变限积分求导公式得\n$$y'=\\mathrm{e}^{\\sin^2 x}\\cdot(\\sin x)'=\\mathrm{e}^{\\sin^2 x}\\cos x \\implies \\left.y'\\right|_{x=0}=\\mathrm{e}^0\\cdot 1=1.$$\n切线斜率 $k=1$，故法线斜率为 $-\\frac{1}{k}=-1$，法线方程为 $y=-x$，选 (D)。"
+        }
+      ],
+      "finalAnswer": "选 (D) 法线方程为 $y=-x$。",
+      "takeaway": "变限求导切忌漏乘上限的导数 $(\\sin x)'=\\cos x$；审题务必看清问的是**法线**而非切线！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.249",
+        "pdfPage": 254,
+        "itemRef": "例9.20"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy30_20_29"
+      }
+    },
+    {
+      "id": "m1-c09-e-21",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（变限积分求导与性质）",
+      "kind": "example",
+      "title": "【基础例 9.21】含绝对值参数积分 $F(x)=\\int_0^{\\frac{\\pi}{2}}|\\sin x-\\sin t|\\,\\mathrm{d}t$ 的二次泰勒展开",
+      "examWeight": "core",
+      "problem": "设 $F(x)=\\displaystyle\\int_0^{\\frac{\\pi}{2}}|\\sin x-\\sin t|\\,\\mathrm{d}t\\;(x\\ge 0)$ 在 $x\\to 0^+$ 处的二次泰勒多项式为 $a+bx+cx^2$，则 $abc=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "应填 $-\\dfrac{\\pi}{2}$。"
+        },
+        {
+          "stepTitle": "2. 步进推导",
+          "detail": "当 $x\\to 0^+$ 时有 $0<x<\\frac{\\pi}{2}$，由于 $\\sin t$ 在 $[0,\\frac{\\pi}{2}]$ 上单调递增，按分界点 $t=x$ 拆去绝对值：\n$$\\begin{aligned}\nF(x)&=\\int_0^x(\\sin x-\\sin t)\\,\\mathrm{d}t+\\int_x^{\\frac{\\pi}{2}}(\\sin t-\\sin x)\\,\\mathrm{d}t\\\\\n&=x\\sin x+(\\cos x-1)+\\cos x-\\sin x\\cdot\\left(\\frac{\\pi}{2}-x\\right)\\\\\n&=\\left(2x-\\frac{\\pi}{2}\\right)\\sin x+2\\cos x-1.\n\\end{aligned}$$\n**方法一（直接代入泰勒展开，推荐）**：$\\sin x=x+o(x^2),\\;\\cos x=1-\\frac{1}{2}x^2+o(x^2)$：\n$$F(x)=\\left(2x-\\frac{\\pi}{2}\\right)[x+o(x^2)]+2\\!\\left[1-\\frac{1}{2}x^2+o(x^2)\\right]-1=1-\\frac{\\pi}{2}x+x^2+o(x^2).$$\n故 $a=1,\\;b=-\\frac{\\pi}{2},\\;c=1$，$abc=-\\frac{\\pi}{2}$。"
+        },
+        {
+          "stepTitle": "3. 方法二（直接求导用定义法）",
+          "detail": "$F'(x)=2\\sin x+(2x-\\frac{\\pi}{2})\\cos x-2\\sin x=(2x-\\frac{\\pi}{2})\\cos x$，$F''(x)=2\\cos x-(2x-\\frac{\\pi}{2})\\sin x$，得 $F(0)=1,\\;F'_+(0)=-\\frac{\\pi}{2},\\;F''_+(0)=2$，同样得 $1-\\frac{\\pi}{2}x+x^2$。"
+        }
+      ],
+      "finalAnswer": "$a=1,\\;b=-\\dfrac{\\pi}{2},\\;c=1$，故 $abc=-\\dfrac{\\pi}{2}$。",
+      "takeaway": "注意 $\\int_a^b f(x,t)\\,\\mathrm{d}t$ 是关于 $x$ 的函数，不是常数；遇到绝对值 $|f(x)-f(t)|$，第一时间找 $t=x$ 拆分去绝对值！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.249-250",
+        "pdfPage": 254,
+        "itemRef": "例9.21"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy30_20_29"
+      }
+    },
+    {
+      "id": "m1-c09-e-22",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（变限积分求导与性质）",
+      "kind": "example",
+      "title": "【基础例 9.22】含参变限积分 $F(x)=\\int_0^x t f(x^2-t^2)\\,\\mathrm{d}t$ 先换元再判极值",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)$ 可导，且 $f(x)<-2x f'(x)$，则曲线 $F(x)=\\displaystyle\\int_0^x t f(x^2-t^2)\\,\\mathrm{d}t$（　）。\n(A) 在 $x=0$ 处取极大值　(B) 在 $x=0$ 处取极小值　(C) 拐点是 $(0,0)$　(D) 在 $(0,0)$ 处既非极值点也非拐点",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "应选 **(A)**。"
+        },
+        {
+          "stepTitle": "2. 步进推导",
+          "detail": "被积函数含求导变量 $x$，先令 $u=x^2-t^2$（视 $x$ 为常数，则 $\\mathrm{d}u=-2t\\,\\mathrm{d}t \\Rightarrow t\\,\\mathrm{d}t=-\\frac{1}{2}\\,\\mathrm{d}u$；$t=0\\Rightarrow u=x^2,\\;t=x\\Rightarrow u=0$）：\n$$F(x)=\\int_{x^2}^0 f(u)\\left(-\\frac{1}{2}\\,\\mathrm{d}u\\right)=\\frac{1}{2}\\int_0^{x^2} f(u)\\,\\mathrm{d}u.$$\n连续求导两次：\n$$F'(x)=\\frac{1}{2}\\cdot 2x f(x^2)=x f(x^2),\\qquad F''(x)=f(x^2)+2x^2 f'(x^2).$$\n由题设 $f(u)+2u f'(u)<0$ 对一切实数 $u$ 成立，代入 $u=x^2$ 知 $F''(x)<0$ 恒成立（特别地 $F''(0)=f(0)<0$）！又 $F'(0)=0$，由极值第二充分条件知 $F(x)$ 在 $x=0$ 处取得极大值，选 (A)。"
+        }
+      ],
+      "finalAnswer": "选 (A) 在 $x=0$ 处取极大值。",
+      "takeaway": "对 $f(x^2-t^2)$ 乘 $t$ 的经典结构，令 $u=x^2-t^2$ 不仅把 $x$ 移到了上限，还顺手消掉了外面的 $t$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.250-251",
+        "pdfPage": 255,
+        "itemRef": "例9.22"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy30_20_29"
+      }
+    },
+    {
+      "id": "m1-c09-e-23",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（变限积分求导与性质）",
+      "kind": "example",
+      "title": "【基础例 9.23】证明连续奇/偶函数原函数的奇偶定理（含一般原函数 $+C$ 严谨补注）",
+      "examWeight": "core",
+      "problem": "证明：连续的奇函数的一切原函数都是偶函数；连续的偶函数的原函数中仅有一个原函数是奇函数。",
+      "steps": [
+        {
+          "stepTitle": "1. 证（严谨补全一般原函数 $+C$ 版）",
+          "detail": "设 $f(x)$ 在对称区间上连续，则 $f(x)$ 的**任意一个原函数**总可唯一表示为\n$$F(x)=\\int_0^x f(t)\\,\\mathrm{d}t+C\\quad(C\\text{ 为任意常数}).$$\n1. **若 $f(x)$ 为连续奇函数**（$f(-u)=-f(u)$）：作换元 $t=-u$ 得\n$$F(-x)=\\int_0^{-x} f(t)\\,\\mathrm{d}t+C\\xlongequal{t=-u}-\\int_0^x f(-u)\\,\\mathrm{d}u+C=\\int_0^x f(u)\\,\\mathrm{d}u+C=F(x).$$\n对任意常数 $C$ 均成立，故连续奇函数的**一切原函数都是偶函数**。\n2. **若 $f(x)$ 为连续偶函数**（$f(-u)=f(u)$）：同理得\n$$F(-x)=\\int_0^{-x} f(t)\\,\\mathrm{d}t+C\\xlongequal{t=-u}-\\int_0^x f(u)\\,\\mathrm{d}u+C=-(F(x)-C)+C=-F(x)+2C.$$\n因此 $F(-x)=-F(x)\\iff 2C=0\\iff C=0$，即连续偶函数的原函数中**仅有 $F(x)=\\int_0^x f(t)\\,\\mathrm{d}t$ 这唯一一个原函数是奇函数**。"
+        },
+        {
+          "stepTitle": "2. 【严谨性补注（基础 P.252，见表 9-6）】",
+          "detail": "原书首行直接把「一个原函数」写成 $F(x)=\\int_a^x f(t)\\,\\mathrm{d}t$（漏掉了常数 $+C$），但变限积分 $\\int_a^x f(t)\\,\\mathrm{d}t$ 必有零点 $F(a)=0$，无法表示无实零点的原函数（如奇函数 $f(x)=\\sin x$ 的原函数 $-\\cos x+5$ 绝不能写成 $\\int_a^x\\sin t\\,\\mathrm{d}t$）。改用一般原函数 $F(x)=\\int_0^x f(t)\\,\\mathrm{d}t+C$（与同书 P.251 注(1)一致）即彻底严密无懈可击！"
+        }
+      ],
+      "finalAnswer": "证毕（按一般原函数 $F(x)=\\int_0^x f(t)\\,\\mathrm{d}t+C$ 严密证明：奇函数全偶，偶函数仅 $C=0$ 唯一奇）。",
+      "takeaway": "牢记区别：**奇函数的全体原函数全偶；偶函数的全体原函数中仅过原点的那唯一一条 $\\int_0^x f(t)\\,\\mathrm{d}t$ 是奇函数**（因为奇函数若在 $0$ 有定义必满足 $F(0)=0$）！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.252",
+        "pdfPage": 257,
+        "itemRef": "例9.23（含一般原函数+C严谨补注）"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c09-e-24",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（变限积分求导与性质）",
+      "kind": "example",
+      "title": "【基础例 9.24】复合奇偶判别与变限积分奇偶选填（附「一题一练」）",
+      "examWeight": "core",
+      "problem": "设奇函数 $f(x)$ 在 $(-\\infty,+\\infty)$ 上具有连续导数，则（　）。\n(A) $\\int_0^x[\\cos f(t)+f'(t)]\\,\\mathrm{d}t$ 是奇函数　　(B) $\\int_0^x[\\cos f(t)+f'(t)]\\,\\mathrm{d}t$ 是偶函数\n(C) $\\int_0^x[\\cos f'(t)+f(t)]\\,\\mathrm{d}t$ 是奇函数　　(D) $\\int_0^x[\\cos f'(t)+f(t)]\\,\\mathrm{d}t$ 是偶函数\n附原书「一题一练」：判别函数 $F(x)=\\int_0^{\\sin x}\\cos t^2\\,\\mathrm{d}t$ 的奇偶性。",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "应选 **(A)**。"
+        },
+        {
+          "stepTitle": "2. 步进推导",
+          "detail": "用复合奇偶口诀「**内偶则偶，内奇同外**」及「**奇函数的导数是偶函数**」：\n- $f(t)$ 为奇函数 $\\implies \\cos f(t)$ 为偶函数，$f'(t)$ 为偶函数；\n- 偶 + 偶 = 偶：$\\cos f(t)+f'(t)$ 为连续偶函数，由重要结论 (2) 知下限为 $0$ 的变限积分 $\\int_0^x[\\cos f(t)+f'(t)]\\,\\mathrm{d}t$ 必为**奇函数**，故选 (A)！\n- 而 $\\cos f'(t)$ 偶、$f(t)$ 奇，偶 + 奇非奇非偶，故 (C)(D) 均错。"
+        },
+        {
+          "stepTitle": "3. 附「一题一练」解",
+          "detail": "令 $h(u)=\\int_0^u\\cos t^2\\,\\mathrm{d}t$。因 $\\cos t^2$ 为偶函数，故 $h(u)$ 为奇函数；又内层 $g(x)=\\sin x$ 为奇函数，由「内奇同外」知 $F(x)=h(\\sin x)$ 为**奇函数**！"
+        }
+      ],
+      "finalAnswer": "选 (A)；附「一题一练」$\\int_0^{\\sin x}\\cos t^2\\,\\mathrm{d}t$ 为奇函数。",
+      "takeaway": "求导与下限为 $0$ 的变限积分都会**翻转奇偶性**（奇 $\\leftrightarrow$ 偶）；下限非 $0$ 时，偶函数变限积分一般破坏奇性，务必先看清下限是不是 $0$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.252",
+        "pdfPage": 257,
+        "itemRef": "例9.24 & 一题一练"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c09-e-25",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（变限积分求导与性质）",
+      "kind": "example",
+      "title": "【基础例 9.25】周期函数变限积分的周期充要条件与去均值周期构造",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 连续且以 $T$ 为周期，$F(x)=\\displaystyle\\int_a^x f(t)\\,\\mathrm{d}t$。证明：\n(1) 当且仅当 $\\displaystyle\\int_0^T f(x)\\,\\mathrm{d}x=0$ 时，$F(x)$ 以 $T$ 为周期；\n(2) $\\varphi(x)=F(x)-\\dfrac{\\int_0^T f(x)\\,\\mathrm{d}x}{T}\\,x$ 恒以 $T$ 为周期。",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "**(1)** 由定积分区间可加性与例9.16 周期积分性质：\n$$F(x+T)-F(x)=\\int_a^{x+T} f(t)\\,\\mathrm{d}t-\\int_a^x f(t)\\,\\mathrm{d}t=\\int_x^{x+T} f(t)\\,\\mathrm{d}t=\\int_0^T f(t)\\,\\mathrm{d}t.$$\n因此对一切 $x\\in\\mathbb{R}$ 有 $F(x+T)=F(x)\\iff\\int_0^T f(x)\\,\\mathrm{d}x=0$。"
+        },
+        {
+          "stepTitle": "2. 步进推导",
+          "detail": "**(2)** 直接计算 $\\varphi(x+T)-\\varphi(x)$：\n$$\\begin{aligned}\n\\varphi(x+T)-\\varphi(x)\n&=\\bigl[F(x+T)-F(x)\\bigr]-\\frac{\\int_0^T f(x)\\,\\mathrm{d}x}{T}\\bigl[(x+T)-x\\bigr]\\\\\n&=\\int_x^{x+T} f(t)\\,\\mathrm{d}t-\\int_0^T f(x)\\,\\mathrm{d}x\n=\\int_0^T f(t)\\,\\mathrm{d}t-\\int_0^T f(x)\\,\\mathrm{d}x=0.\n\\end{aligned}$$\n故 $\\varphi(x)=F(x)-\\frac{\\int_0^T f(x)\\,\\mathrm{d}x}{T}x$ 恒以 $T$ 为周期！"
+        }
+      ],
+      "finalAnswer": "证毕：(1) 充要条件 $\\int_0^T f(x)\\,\\mathrm{d}x=0$；(2) 减去均斜项 $\\frac{\\int_0^T f}{T}x$ 恒以 $T$ 为周期。",
+      "takeaway": "**几何直觉**：周期函数 $f$ 每次跨过一个周期 $T$，其积分 $F(x)$ 都净增一个常数 $\\int_0^T f$；因此把 $F(x)$ 减去线性斜坡 $\\bar{f}\\cdot x$（其中 $\\bar{f}=\\frac{1}{T}\\int_0^T f$ 是单周期平均值），剩下的波动部分必然严格以 $T$ 为周期！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.252-253",
+        "pdfPage": 257,
+        "itemRef": "例9.25"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c09-e-26",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（反常积分计算与 Γ 函数）",
+      "kind": "example",
+      "title": "【基础例 9.26】识别内部瑕点 $x=1$ 拆分去绝对值的无界反常积分计算",
+      "examWeight": "core",
+      "problem": "计算反常积分 $\\displaystyle\\int_{\\frac{1}{2}}^{\\frac{3}{2}}\\frac{\\mathrm{d}x}{\\sqrt{|x-x^2|}}$。",
+      "steps": [
+        {
+          "stepTitle": "1. 核心解答过程",
+          "detail": "先找齐奇点并去绝对值——分母在区间内部 **$x=1$** 处为零，故 $x=1$ 为内部无界瑕点！按 $x=1$ 拆成两段独立计算：\n$$\\int_{\\frac{1}{2}}^{\\frac{3}{2}}\\frac{\\mathrm{d}x}{\\sqrt{|x-x^2|}}=\\int_{\\frac{1}{2}}^1\\frac{\\mathrm{d}x}{\\sqrt{x-x^2}}+\\int_1^{\\frac{3}{2}}\\frac{\\mathrm{d}x}{\\sqrt{x^2-x}}.$$\n分别配方套表 9-1 公式 ⑥ 与 ⑦（注意在瑕点 $1^-$ 与 $1^+$ 处取单侧极限）：\n$$\\begin{aligned}\n\\int_{\\frac{1}{2}}^1\\frac{\\mathrm{d}x}{\\sqrt{x-x^2}}\n&=\\int_{\\frac{1}{2}}^1\\frac{\\mathrm{d}x}{\\sqrt{\\frac{1}{4}-\\left(x-\\frac{1}{2}\\right)^2}}\n=\\left.\\arcsin(2x-1)\\right|_{\\frac{1}{2}}^{1^-}=\\arcsin 1-\\arcsin 0=\\frac{\\pi}{2},\\\\[6pt]\n\\int_1^{\\frac{3}{2}}\\frac{\\mathrm{d}x}{\\sqrt{x^2-x}}\n&=\\int_1^{\\frac{3}{2}}\\frac{\\mathrm{d}x}{\\sqrt{\\left(x-\\frac{1}{2}\\right)^2-\\frac{1}{4}}}\n=\\left.\\ln\\!\\left[\\left(x-\\frac{1}{2}\\right)+\\sqrt{\\left(x-\\frac{1}{2}\\right)^2-\\frac{1}{4}}\\right]\\right|_{1^+}^{\\frac{3}{2}}\\\\\n&=\\ln\\!\\left(1+\\frac{\\sqrt{3}}{2}\\right)-\\ln\\frac{1}{2}=\\ln(2+\\sqrt{3}).\n\\end{aligned}$$\n两段均收敛，相加得原式 $=\\dfrac{\\pi}{2}+\\ln(2+\\sqrt{3})$。"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{\\pi}{2}+\\ln(2+\\sqrt{3})$。",
+      "takeaway": "计算反常积分第一条戒律：**先扫描端点与区间内部全部瑕点**！本题 $x=1$ 既是绝对值变号点又是无界瑕点，一刀劈开两件事同时解决。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.253",
+        "pdfPage": 258,
+        "itemRef": "例9.26"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy30_20_29"
+      }
+    },
+    {
+      "id": "m1-c09-e-27",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（反常积分计算与 Γ 函数）",
+      "kind": "example",
+      "title": "【基础例 9.27】三角换元 $x-1=\\sec\\theta$ 将无穷反常积分化为常义定积分",
+      "examWeight": "core",
+      "problem": "求 $\\displaystyle\\int_3^{+\\infty}\\frac{\\mathrm{d}x}{(x-1)^4\\sqrt{x^2-2x}}$。",
+      "steps": [
+        {
+          "stepTitle": "1. 核心解答过程",
+          "detail": "先配方 $x^2-2x=(x-1)^2-1$。令 $x-1=\\sec\\theta\\;(\\theta\\in[\\frac{\\pi}{3},\\frac{\\pi}{2}))$，则 $\\mathrm{d}x=\\sec\\theta\\tan\\theta\\,\\mathrm{d}\\theta$，$\\sqrt{(x-1)^2-1}=\\tan\\theta>0$；当 $x=3$ 时 $\\sec\\theta=2\\Rightarrow\\theta=\\frac{\\pi}{3}$，当 $x\\to+\\infty$ 时 $\\theta\\to\\frac{\\pi}{2}^-$：\n$$\\begin{aligned}\n\\int_3^{+\\infty}\\frac{\\mathrm{d}x}{(x-1)^4\\sqrt{(x-1)^2-1}}\n&=\\int_{\\frac{\\pi}{3}}^{\\frac{\\pi}{2}}\\frac{\\sec\\theta\\tan\\theta}{\\sec^4\\theta\\tan\\theta}\\,\\mathrm{d}\\theta\n=\\int_{\\frac{\\pi}{3}}^{\\frac{\\pi}{2}}\\cos^3\\theta\\,\\mathrm{d}\\theta\\\\\n&=\\int_{\\frac{\\pi}{3}}^{\\frac{\\pi}{2}}(1-\\sin^2\\theta)\\,\\mathrm{d}(\\sin\\theta)\n=\\left.\\left(\\sin\\theta-\\frac{1}{3}\\sin^3\\theta\\right)\\right|_{\\frac{\\pi}{3}}^{\\frac{\\pi}{2}}\\\\\n&=\\left(1-\\frac{1}{3}\\right)-\\left(\\frac{\\sqrt{3}}{2}-\\frac{1}{3}\\cdot\\frac{3\\sqrt{3}}{8}\\right)\n=\\frac{2}{3}-\\frac{3\\sqrt{3}}{8}.\n\\end{aligned}$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{2}{3}-\\dfrac{3\\sqrt{3}}{8}$。",
+      "takeaway": "**绝妙转化（P.254 注）**：在收敛前提下，通过 $x-1=\\sec\\theta$（或倒代换 $x-1=\\frac{1}{t}$）能把无穷区间反常积分直接压成有限区间常义定积分，一步规避复杂极限！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.253-254",
+        "pdfPage": 258,
+        "itemRef": "例9.27 & 注"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy30_20_29"
+      }
+    },
+    {
+      "id": "m1-c09-e-28",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（反常积分计算与 Γ 函数）",
+      "kind": "example",
+      "title": "【基础例 9.28】分部递推导出 $\\int_0^{+\\infty} x^n\\mathrm{e}^{-x}\\,\\mathrm{d}x=n!$（$\\Gamma$ 函数之母）",
+      "examWeight": "core",
+      "problem": "计算 $I_n=\\displaystyle\\int_0^{+\\infty} x^n\\mathrm{e}^{-x}\\,\\mathrm{d}x$（$n$ 为非负整数）。",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "对 $n\\ge 1$，用分部积分法建立递推式：\n$$I_n=-\\int_0^{+\\infty} x^n\\,\\mathrm{d}(\\mathrm{e}^{-x})=\\left.(-x^n\\mathrm{e}^{-x})\\right|_0^{+\\infty}+n\\int_0^{+\\infty} x^{n-1}\\mathrm{e}^{-x}\\,\\mathrm{d}x=n I_{n-1},$$\n其中用到了指数完胜幂函数的极限 $\\lim_{x\\to+\\infty}x^n\\mathrm{e}^{-x}=0$。"
+        },
+        {
+          "stepTitle": "2. 步进推导",
+          "detail": "又初值 $I_0=\\int_0^{+\\infty}\\mathrm{e}^{-x}\\,\\mathrm{d}x=\\left.-\\mathrm{e}^{-x}\\right|_0^{+\\infty}=1$，故逐级递推得\n$$I_n=n I_{n-1}=n(n-1)I_{n-2}=\\cdots=n(n-1)\\cdots 1\\cdot I_0=n!\\quad(\\text{特别地 }0!=1).$$"
+        }
+      ],
+      "finalAnswer": "$I_n=n!$（$n$ 为非负整数；$0!=1$）。",
+      "takeaway": "① 由此直接引出 **$\\Gamma$ 函数** $\\Gamma(\\alpha)=\\int_0^{+\\infty} x^{\\alpha-1}\\mathrm{e}^{-x}\\,\\mathrm{d}x\\;(\\alpha>0)$，满足 $\\Gamma(n+1)=n!$（如 $\\int_0^{+\\infty} x^3\\mathrm{e}^{-x}\\,\\mathrm{d}x=\\Gamma(4)=3!=6$）。\n② **趣味拓宽（P.254 费曼积分号下求导法）**：对 $\\int_0^{+\\infty}\\mathrm{e}^{-ax}\\,\\mathrm{d}x=\\frac{1}{a}\\;(a>0)$ 两边关于 $a$ 连续求导 $n$ 次，得 $(-1)^n\\int_0^{+\\infty} x^n\\mathrm{e}^{-ax}\\,\\mathrm{d}x=(-1)^n\\frac{n!}{a^{n+1}}$，取 $a=1$ 亦秒得 $n!$（考研大题须写分部递推，选填可秒算）。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.254",
+        "pdfPage": 259,
+        "itemRef": "例9.28 & Γ函数注"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy30_20_29"
+      }
+    },
+    {
+      "id": "m1-c09-e-29",
+      "stage": "foundation",
+      "section": "经典例题 · 基础 30 讲（反常积分计算与 Γ 函数）",
+      "kind": "example",
+      "title": "【基础例 9.29】配凑 $\\Gamma(\\frac{5}{2})$ 秒杀高斯型反常积分（概率密度高频模型）",
+      "examWeight": "core",
+      "problem": "设 $f(x)=\\begin{cases}\\dfrac{4x^2}{a^3\\sqrt{\\pi}}\\mathrm{e}^{-\\frac{x^2}{a^2}}, & x>0\\\\ 0, & x\\le 0\\end{cases}$（$a$ 为正常数），则 $\\displaystyle\\int_0^{+\\infty} x^2 f(x)\\,\\mathrm{d}x=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "应填 $\\dfrac{3}{2}a^2$。"
+        },
+        {
+          "stepTitle": "2. 步进推导",
+          "detail": "代入表达式后令 $t=\\frac{x}{a}$（凑出 $\\Gamma$ 函数平方形式 $2\\int_0^{+\\infty} t^{2\\alpha-1}\\mathrm{e}^{-t^2}\\,\\mathrm{d}t=\\Gamma(\\alpha)$，此处 $2\\alpha-1=4\\Rightarrow \\alpha=\\frac{5}{2}$）：\n$$\\begin{aligned}\n\\int_0^{+\\infty} x^2 f(x)\\,\\mathrm{d}x\n&=\\int_0^{+\\infty}\\frac{4x^4}{a^3\\sqrt{\\pi}}\\mathrm{e}^{-\\frac{x^2}{a^2}}\\,\\mathrm{d}x\n=\\frac{2a^2}{\\sqrt{\\pi}}\\cdot 2\\int_0^{+\\infty}\\!\\left(\\frac{x}{a}\\right)^{2\\cdot\\frac{5}{2}-1}\\mathrm{e}^{-\\left(\\frac{x}{a}\\right)^2}\\,\\mathrm{d}\\!\\left(\\frac{x}{a}\\right)\\\\\n&=\\frac{2a^2}{\\sqrt{\\pi}}\\cdot\\Gamma\\!\\left(\\frac{5}{2}\\right)\n=\\frac{2a^2}{\\sqrt{\\pi}}\\cdot\\frac{3}{2}\\cdot\\frac{1}{2}\\cdot\\Gamma\\!\\left(\\frac{1}{2}\\right)\n=\\frac{2a^2}{\\sqrt{\\pi}}\\cdot\\frac{3}{4}\\sqrt{\\pi}\n=\\frac{3}{2}a^2.\n\\end{aligned}$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{3}{2}a^2$。",
+      "takeaway": "这是**概率论求高阶矩 $E(X^2)$ 的绝对高频算式**！记牢 $2\\int_0^{+\\infty} t^{2\\alpha-1}\\mathrm{e}^{-t^2}\\,\\mathrm{d}t=\\Gamma(\\alpha)$ 与 $\\Gamma(\\frac{1}{2})=\\sqrt{\\pi}$，10 秒零失误秒杀！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.255",
+        "pdfPage": 260,
+        "itemRef": "例9.29 & Γ函数收敛注"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy30_20_29"
+      }
+    },
+    {
+      "id": "m1-c09-e-30",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（凑微分与第二类换元）",
+      "kind": "example",
+      "title": "【强化例 9.1】第一类换元配分母导数法 $\\int\\frac{x}{x^2+2x+2}\\,\\mathrm{d}x$",
+      "examWeight": "core",
+      "problem": "求 $\\displaystyle\\int\\frac{x}{x^2+2x+2}\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 核心解答过程",
+          "detail": "注意到 $(x^2+2x+2)'=2x+2$，把分子拆配成「$\\frac{1}{2}(2x+2)-1$」：\n$$\\begin{aligned}\n\\int\\frac{x}{x^2+2x+2}\\,\\mathrm{d}x\n&=\\frac{1}{2}\\int\\frac{2x+2}{x^2+2x+2}\\,\\mathrm{d}x-\\int\\frac{1}{x^2+2x+2}\\,\\mathrm{d}x\\\\\n&=\\frac{1}{2}\\ln(x^2+2x+2)-\\int\\frac{1}{1+(x+1)^2}\\,\\mathrm{d}x\\\\\n&=\\frac{1}{2}\\ln(x^2+2x+2)-\\arctan(x+1)+C.\n\\end{aligned}$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{1}{2}\\ln(x^2+2x+2)-\\arctan(x+1)+C$。",
+      "takeaway": "与基础例9.10 完全同脉：不可约二次分母 + 一次分子，**先凑分母导数出 $\\ln$，余常数配方出 $\\arctan$**，十秒内拿下！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.91",
+        "pdfPage": 104,
+        "itemRef": "强化例9.1"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy18_01_05"
+      }
+    },
+    {
+      "id": "m1-c09-e-31",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（凑微分与第二类换元）",
+      "kind": "example",
+      "title": "【强化例 9.2】三大平方根式全推导（含 $\\int\\sec^3 t$ 与 $x<-a$ 分支说明）",
+      "examWeight": "core",
+      "problem": "求下列三大经典不定积分（$a>0$）：\n(1) $\\displaystyle\\int\\sqrt{a^2-x^2}\\,\\mathrm{d}x$；　(2) $\\displaystyle\\int\\sqrt{a^2+x^2}\\,\\mathrm{d}x$；　(3) $\\displaystyle\\int\\sqrt{x^2-a^2}\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "**(1)** 令 $x=a\\sin u\\;(|u|\\le\\frac{\\pi}{2})$，$\\mathrm{d}x=a\\cos u\\,\\mathrm{d}u$：\n$$\\int\\sqrt{a^2-x^2}\\,\\mathrm{d}x=\\frac{a^2}{2}\\int(1+\\cos 2u)\\,\\mathrm{d}u=\\frac{a^2}{2}\\left(u+\\sin u\\cos u\\right)+C=\\frac{a^2}{2}\\arcsin\\frac{x}{a}+\\frac{x}{2}\\sqrt{a^2-x^2}+C.$$\n（旁例速算：$\\int_0^{\\frac{1}{2}}\\sqrt{1-x^2}\\,\\mathrm{d}x=\\frac{\\pi}{12}+\\frac{\\sqrt{3}}{8}$；$\\int_0^1\\sqrt{1-x^2}\\,\\mathrm{d}x=\\frac{\\pi}{4}$。）"
+        },
+        {
+          "stepTitle": "2. 步进推导",
+          "detail": "**(2)** 令 $x=a\\tan t\\;(|t|<\\frac{\\pi}{2})$，$\\mathrm{d}x=a\\sec^2 t\\,\\mathrm{d}t$，则 $\\int\\sqrt{a^2+x^2}\\,\\mathrm{d}x=a^2\\int\\sec^3 t\\,\\mathrm{d}t$。先由分部积分建方程求出必背式：\n$$\\int\\sec^3 t\\,\\mathrm{d}t=\\int\\sec t\\,\\mathrm{d}(\\tan t)=\\sec t\\tan t-\\int\\sec t(\\sec^2 t-1)\\,\\mathrm{d}t \\implies \\int\\sec^3 t\\,\\mathrm{d}t=\\frac{1}{2}\\sec t\\tan t+\\frac{1}{2}\\ln|\\sec t+\\tan t|+C.$$\n代回 $\\tan t=\\frac{x}{a},\\;\\sec t=\\frac{\\sqrt{a^2+x^2}}{a}$，吸收 $-\\frac{a^2}{2}\\ln a$ 进 $+C$（或保留分母 $a$）得：\n$$\\int\\sqrt{a^2+x^2}\\,\\mathrm{d}x=\\frac{x}{2}\\sqrt{a^2+x^2}+\\frac{a^2}{2}\\ln\\!\\left(\\frac{x+\\sqrt{a^2+x^2}}{a}\\right)+C.$$"
+        },
+        {
+          "stepTitle": "3. 步进推导",
+          "detail": "**(3)** 对 $x>a$，令 $x=a\\sec t\\;(0<t<\\frac{\\pi}{2})$，$\\sqrt{x^2-a^2}=a\\tan t$，$\\mathrm{d}x=a\\sec t\\tan t\\,\\mathrm{d}t$：\n$$\\begin{aligned}\n\\int\\sqrt{x^2-a^2}\\,\\mathrm{d}x\n&=a^2\\int\\sec t\\tan^2 t\\,\\mathrm{d}t=a^2\\int\\sec^3 t\\,\\mathrm{d}t-a^2\\int\\sec t\\,\\mathrm{d}t\\\\\n&=\\frac{a^2}{2}\\bigl(\\sec t\\tan t-\\ln|\\sec t+\\tan t|\\bigr)+C\n=\\frac{x\\sqrt{x^2-a^2}}{2}-\\frac{a^2}{2}\\ln\\!\\left|\\frac{x+\\sqrt{x^2-a^2}}{a}\\right|+C.\n\\end{aligned}$$\n**【分支严谨补注（见表 9-6）】**：当 $x<-a$ 时，$t\\in(\\frac{\\pi}{2},\\pi)$ 有 $\\tan t<0$，故 $\\sqrt{x^2-a^2}=-a\\tan t$（推导中会多负号）；但直接对最终表达式求导可验得：$\\frac{x\\sqrt{x^2-a^2}}{2}-\\frac{a^2}{2}\\ln\\left|x+\\sqrt{x^2-a^2}\\right|+C$ 在 $x>a$ 与 $x<-a$ 两侧**均严格满足导数等于 $\\sqrt{x^2-a^2}$**！"
+        }
+      ],
+      "finalAnswer": "(1) $\\frac{a^2}{2}\\arcsin\\frac{x}{a}+\\frac{x}{2}\\sqrt{a^2-x^2}+C$；(2) $\\frac{x}{2}\\sqrt{a^2+x^2}+\\frac{a^2}{2}\\ln\\frac{x+\\sqrt{a^2+x^2}}{a}+C$；(3) $\\frac{x\\sqrt{x^2-a^2}}{2}-\\frac{a^2}{2}\\ln\\left|\\frac{x+\\sqrt{x^2-a^2}}{a}\\right|+C$。",
+      "takeaway": "$\\int\\sec^3 t\\,\\mathrm{d}t=\\frac{1}{2}\\sec t\\tan t+\\frac{1}{2}\\ln|\\sec t+\\tan t|+C$ 在第 10 讲求抛物线/对数曲线**弧长**时反复出现，务必背死！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.91-92",
+        "pdfPage": 104,
+        "itemRef": "强化例9.2 (1)~(3)"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy18_01_05"
+      }
+    },
+    {
+      "id": "m1-c09-e-32",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（凑微分与第二类换元）",
+      "kind": "example",
+      "title": "【强化例 9.3】三角/倒代换、指数根式代换与二次配方根式组合三连",
+      "examWeight": "core",
+      "problem": "求下列不定积分：\n(1) $\\displaystyle\\int\\frac{1}{x^2\\sqrt{1+x^2}}\\,\\mathrm{d}x$；　(2) $\\displaystyle\\int\\frac{1}{\\sqrt{\\mathrm{e}^x+1}}\\,\\mathrm{d}x$；　(3) $\\displaystyle\\int x\\sqrt{x^2+2x+2}\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "**(1) 法一（三角代换 $x=\\tan t,\\;|t|<\\frac{\\pi}{2}$，全定义域 $x\\ne 0$ 通用）**：\n$$\\int\\frac{1}{x^2\\sqrt{1+x^2}}\\,\\mathrm{d}x=\\int\\frac{\\sec^2 t}{\\tan^2 t\\sec t}\\,\\mathrm{d}t=\\int\\frac{\\cos t}{\\sin^2 t}\\,\\mathrm{d}t=-\\frac{1}{\\sin t}+C=-\\frac{\\sqrt{1+x^2}}{x}+C.$$\n**法二（倒代换 $x=\\frac{1}{t},\\;\\mathrm{d}x=-\\frac{1}{t^2}\\,\\mathrm{d}t$）**：先在 $x>0\\;(t>0)$ 分支上计算：\n$$\\int\\frac{t^2}{\\sqrt{1+\\frac{1}{t^2}}}\\left(-\\frac{1}{t^2}\\right)\\mathrm{d}t=-\\int\\frac{t}{\\sqrt{1+t^2}}\\,\\mathrm{d}t=-\\sqrt{1+t^2}+C=-\\frac{\\sqrt{1+x^2}}{x}+C.$$\n（严谨注：当 $x<0$ 时 $\\sqrt{1+\\frac{1}{t^2}}=-\\frac{\\sqrt{1+t^2}}{t}$ 且 $\\sqrt{1+t^2}=-\\frac{\\sqrt{1+x^2}}{x}$，两处缺绝对值的负号恰好抵消，最终结果 $-\\frac{\\sqrt{1+x^2}}{x}+C$ 在 $x<0$ 上同样成立，见表 9-6！）"
+        },
+        {
+          "stepTitle": "2. 步进推导",
+          "detail": "**(2)** 令复杂根式 $t=\\sqrt{\\mathrm{e}^x+1}\\;(t>1)$，则 $x=\\ln(t^2-1),\\;\\mathrm{d}x=\\frac{2t}{t^2-1}\\,\\mathrm{d}t$：\n$$\\int\\frac{1}{\\sqrt{\\mathrm{e}^x+1}}\\,\\mathrm{d}x=\\int\\frac{1}{t}\\cdot\\frac{2t}{t^2-1}\\,\\mathrm{d}t=\\ln\\frac{t-1}{t+1}+C=\\ln\\frac{\\sqrt{\\mathrm{e}^x+1}-1}{\\sqrt{\\mathrm{e}^x+1}+1}+C.$$"
+        },
+        {
+          "stepTitle": "3. 步进推导",
+          "detail": "**(3)** 先对 $x$ 凑根号内导数 $(x^2+2x+2)'=2x+2$，拆出余项后配方套强化例9.2(2)：\n$$\\begin{aligned}\n\\int x\\sqrt{x^2+2x+2}\\,\\mathrm{d}x\n&=\\frac{1}{2}\\int(2x+2)\\sqrt{x^2+2x+2}\\,\\mathrm{d}x-\\int\\sqrt{1+(x+1)^2}\\,\\mathrm{d}x\\\\\n&=\\frac{1}{3}(x^2+2x+2)^{\\frac{3}{2}}-\\frac{1}{2}\\left[\\ln\\!\\left(x+1+\\sqrt{x^2+2x+2}\\right)+(x+1)\\sqrt{x^2+2x+2}\\right]+C.\n\\end{aligned}$$"
+        }
+      ],
+      "finalAnswer": "(1) $-\\dfrac{\\sqrt{1+x^2}}{x}+C$；(2) $\\ln\\dfrac{\\sqrt{\\mathrm{e}^x+1}-1}{\\sqrt{\\mathrm{e}^x+1}+1}+C$；(3) $\\dfrac{1}{3}(x^2+2x+2)^{\\frac{3}{2}}-\\dfrac{1}{2}\\bigl[\\ln(x+1+\\sqrt{x^2+2x+2})+(x+1)\\sqrt{x^2+2x+2}\\bigr]+C$。",
+      "takeaway": "(3) 是考场高频招数：遇到 $\\int (ax+b)\\sqrt{px^2+qx+r}\\,\\mathrm{d}x$，永远先配出 $(px^2+qx+r)'$ 直接幂函数出解，剩常数倍 $\\int\\sqrt{\\cdots}$ 直接套强化例9.2 公式！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.92-93",
+        "pdfPage": 105,
+        "itemRef": "强化例9.3 (1)~(3)"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy18_01_05"
+      }
+    },
+    {
+      "id": "m1-c09-e-33",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（凑微分与第二类换元）",
+      "kind": "example",
+      "title": "【强化例 9.4】分式无理根式整体代换 $t=\\sqrt{\\frac{2x+1}{x+1}}$ + 部分分式（含双分支补注）",
+      "examWeight": "core",
+      "problem": "求 $\\displaystyle\\int\\sqrt{\\frac{2x+1}{x+1}}\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "令 $t=\\sqrt{\\dfrac{2x+1}{x+1}}\\;(t>0,\\;t\\ne\\sqrt{2})$，解出 $x=\\dfrac{1-t^2}{t^2-2}=-1-\\dfrac{1}{t^2-2}$，故 $\\mathrm{d}x=\\dfrac{2t}{(t^2-2)^2}\\,\\mathrm{d}t$：\n$$\\begin{aligned}\n\\int\\sqrt{\\frac{2x+1}{x+1}}\\,\\mathrm{d}x\n&=\\int\\frac{2t^2}{(t^2-2)^2}\\,\\mathrm{d}t\n=\\int\\!\\left[\\frac{\\frac{\\sqrt{2}}{4}}{t-\\sqrt{2}}-\\frac{\\frac{\\sqrt{2}}{4}}{t+\\sqrt{2}}+\\frac{\\frac{1}{2}}{(t-\\sqrt{2})^2}+\\frac{\\frac{1}{2}}{(t+\\sqrt{2})^2}\\right]\\mathrm{d}t\\\\\n&=\\frac{\\sqrt{2}}{4}\\ln\\left|\\frac{t-\\sqrt{2}}{t+\\sqrt{2}}\\right|-\\frac{1}{2(t-\\sqrt{2})}-\\frac{1}{2(t+\\sqrt{2})}+C\n=\\frac{\\sqrt{2}}{4}\\ln\\left|\\frac{t-\\sqrt{2}}{t+\\sqrt{2}}\\right|-\\frac{t}{t^2-2}+C.\n\\end{aligned}$$\n注意 $t^2-2=-\\dfrac{1}{x+1}$，故 $-\\dfrac{t}{t^2-2}=(x+1)\\sqrt{\\dfrac{2x+1}{x+1}}$。在右侧实分支 **$x>-\\frac{1}{2}$**（此时 $2x+1>0,\\;x+1>0$）上化简得原书形式：\n$$\\int\\sqrt{\\frac{2x+1}{x+1}}\\,\\mathrm{d}x=\\frac{\\sqrt{2}}{4}\\ln\\left|\\frac{\\sqrt{2x+1}-\\sqrt{2x+2}}{\\sqrt{2x+1}+\\sqrt{2x+2}}\\right|+\\sqrt{(2x+1)(x+1)}+C.$$"
+        },
+        {
+          "stepTitle": "2. 【定义域分支补注（见表 9-6）】",
+          "detail": "被积函数定义域为 $(-\\infty,-1)\\cup[-\\frac{1}{2},+\\infty)$。原书末行化简隐含取右支 $x>-\\frac{1}{2}$；在左支 $x<-1$ 上 $x+1<0$，不能把 $\\sqrt{\\frac{2x+1}{x+1}}$ 拆成虚根 $\\frac{\\sqrt{2x+1}}{\\sqrt{x+1}}$，此时 $-\\frac{t}{t^2-2}=-\\sqrt{(2x+1)(x+1)}$（带负号！），而用变量 $t=\\sqrt{\\frac{2x+1}{x+1}}$ 表达的 $\\frac{\\sqrt{2}}{4}\\ln\\left|\\frac{t-\\sqrt{2}}{t+\\sqrt{2}}\\right|+(x+1)t+C$ 则在两支上同时成立！"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{\\sqrt{2}}{4}\\ln\\left|\\dfrac{\\sqrt{2x+1}-\\sqrt{2x+2}}{\\sqrt{2x+1}+\\sqrt{2x+2}}\\right|+\\sqrt{(2x+1)(x+1)}+C$（右支 $x>-\\frac{1}{2}$；全定义域写作 $\\frac{\\sqrt{2}}{4}\\ln\\left|\\frac{t-\\sqrt{2}}{t+\\sqrt{2}}\\right|+(x+1)t+C$）。",
+      "takeaway": "求 $\\int\\frac{2t^2}{(t^2-2)^2}\\,\\mathrm{d}t$ 的快捷分部法：写 $\\int t\\cdot\\frac{2t}{(t^2-2)^2}\\,\\mathrm{d}t=-\\int t\\,\\mathrm{d}\\!\\left(\\frac{1}{t^2-2}\\right)=-\\frac{t}{t^2-2}+\\int\\frac{\\mathrm{d}t}{t^2-2}$，比拆四项部分分式快 3 倍！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.93",
+        "pdfPage": 106,
+        "itemRef": "强化例9.4（含双分支补注）"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy18_01_05"
+      }
+    },
+    {
+      "id": "m1-c09-e-34",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（凑微分与第二类换元）",
+      "kind": "example",
+      "title": "【强化例 9.5】区间再现 + $|\\sin x|$ 周期性秒算 $a_n=\\int_0^{n\\pi} x|\\sin x|\\,\\mathrm{d}x$",
+      "examWeight": "core",
+      "problem": "设 $a_n=\\displaystyle\\int_0^{n\\pi} x|\\sin x|\\,\\mathrm{d}x\\;(n=1,2,\\dots)$，求 $a_n$ 的表达式。",
+      "steps": [
+        {
+          "stepTitle": "1. 核心解答过程",
+          "detail": "先对 $[0,n\\pi]$ 作区间再现换元 $x=n\\pi-t$，利用 $|\\sin(n\\pi-t)|=|\\sin t|$：\n$$\\int_0^{n\\pi} x|\\sin x|\\,\\mathrm{d}x=n\\pi\\int_0^{n\\pi}|\\sin t|\\,\\mathrm{d}t-\\int_0^{n\\pi} t|\\sin t|\\,\\mathrm{d}t \\implies a_n=\\frac{n\\pi}{2}\\int_0^{n\\pi}|\\sin x|\\,\\mathrm{d}x.$$\n再由 $|\\sin x|$ 以 $\\pi$ 为周期，知 $\\int_0^{n\\pi}|\\sin x|\\,\\mathrm{d}x=n\\int_0^\\pi\\sin x\\,\\mathrm{d}x=2n$，故\n$$a_n=\\frac{n\\pi}{2}\\cdot 2n=n^2\\pi\\quad(n=1,2,\\dots).$$"
+        }
+      ],
+      "finalAnswer": "$a_n=n^2\\pi\\;(n=1,2,\\dots)$。",
+      "takeaway": "**区间再现 + 周期性黄金连招**：千万别傻傻拆成 $n$ 段再分部积分！先用 $x=n\\pi-t$ 一刀砍掉因子 $x$，再借周期 $\\pi$ 秒出 $n^2\\pi$！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.93-94",
+        "pdfPage": 106,
+        "itemRef": "强化例9.5"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy18_01_05"
+      }
+    },
+    {
+      "id": "m1-c09-e-35",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（分部积分五大策略）",
+      "kind": "example",
+      "title": "【强化例 9.6】一眼凑出 $v'(x)$ 的分部积分 $\\int\\frac{x\\mathrm{e}^x}{\\sqrt{\\mathrm{e}^x+1}}\\,\\mathrm{d}x$",
+      "examWeight": "core",
+      "problem": "求 $\\displaystyle\\int\\frac{x\\mathrm{e}^x}{\\sqrt{\\mathrm{e}^x+1}}\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 核心解答过程",
+          "detail": "一眼识别 $\\dfrac{\\mathrm{e}^x}{\\sqrt{\\mathrm{e}^x+1}}\\,\\mathrm{d}x=\\mathrm{d}\\!\\left(2\\sqrt{\\mathrm{e}^x+1}\\right)$，先直接分部积分把 $x$ 降为 $1$：\n$$\\int\\frac{x\\mathrm{e}^x}{\\sqrt{\\mathrm{e}^x+1}}\\,\\mathrm{d}x=\\int x\\,\\mathrm{d}\\!\\left(2\\sqrt{\\mathrm{e}^x+1}\\right)=2x\\sqrt{\\mathrm{e}^x+1}-2\\int\\sqrt{\\mathrm{e}^x+1}\\,\\mathrm{d}x.$$\n对剩余积分令 $t=\\sqrt{\\mathrm{e}^x+1}\\;(t>1)$，则 $x=\\ln(t^2-1),\\;\\mathrm{d}x=\\frac{2t}{t^2-1}\\,\\mathrm{d}t$：\n$$\\int\\sqrt{\\mathrm{e}^x+1}\\,\\mathrm{d}x=\\int\\frac{2t^2}{t^2-1}\\,\\mathrm{d}t=\\int\\!\\left(2+\\frac{2}{t^2-1}\\right)\\mathrm{d}t=2t+\\ln\\frac{t-1}{t+1}+C_1=2\\sqrt{\\mathrm{e}^x+1}+\\ln\\frac{\\sqrt{\\mathrm{e}^x+1}-1}{\\sqrt{\\mathrm{e}^x+1}+1}+C_1.$$\n代回即得\n$$\\text{原式}=2x\\sqrt{\\mathrm{e}^x+1}-4\\sqrt{\\mathrm{e}^x+1}-2\\ln\\frac{\\sqrt{\\mathrm{e}^x+1}-1}{\\sqrt{\\mathrm{e}^x+1}+1}+C.$$"
+        }
+      ],
+      "finalAnswer": "$2x\\sqrt{\\mathrm{e}^x+1}-4\\sqrt{\\mathrm{e}^x+1}-2\\ln\\dfrac{\\sqrt{\\mathrm{e}^x+1}-1}{\\sqrt{\\mathrm{e}^x+1}+1}+C$。",
+      "takeaway": "对比基础例9.4（$\\sqrt{\\mathrm{e}^x-1}$ 先换元再分部）与本题（$\\sqrt{\\mathrm{e}^x+1}$ 先分部再换元），体会两种顺序的丝滑衔接！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.94",
+        "pdfPage": 107,
+        "itemRef": "强化例9.6"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy18_06_14"
+      }
+    },
+    {
+      "id": "m1-c09-e-36",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（分部积分五大策略）",
+      "kind": "example",
+      "title": "【强化例 9.7】分部积分「积分再现建方程」双经典（$\\int\\mathrm{e}^x\\sin x$ 与 $\\int\\sqrt{1+x^2}$）",
+      "examWeight": "core",
+      "problem": "用分部积分再现法求下列不定积分：\n(1) $\\displaystyle\\int\\mathrm{e}^x\\sin x\\,\\mathrm{d}x$；　(2) $\\displaystyle\\int\\sqrt{1+x^2}\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "**(1)** 两次分部积分（保持 $\\mathrm{e}^x$ 作 $u$）：\n$$I=\\int\\mathrm{e}^x\\,\\mathrm{d}(-\\cos x)=-\\mathrm{e}^x\\cos x+\\int\\mathrm{e}^x\\,\\mathrm{d}(\\sin x)=-\\mathrm{e}^x\\cos x+\\mathrm{e}^x\\sin x-I,$$\n移项除以 $2$ 得 $I=\\dfrac{1}{2}\\mathrm{e}^x(\\sin x-\\cos x)+C$（亦可用 P.95 注行列式公式一步写出）。"
+        },
+        {
+          "stepTitle": "2. 步进推导",
+          "detail": "**(2)** 令 $u=\\sqrt{1+x^2},\\;\\mathrm{d}v=\\mathrm{d}x$ 分部一次，再拆分子 $x^2=(1+x^2)-1$ 造出原积分 $I$：\n$$\\begin{aligned}\nI&=\\int\\sqrt{1+x^2}\\,\\mathrm{d}x=x\\sqrt{1+x^2}-\\int\\frac{x^2}{\\sqrt{1+x^2}}\\,\\mathrm{d}x\\\\\n&=x\\sqrt{1+x^2}-\\int\\sqrt{1+x^2}\\,\\mathrm{d}x+\\int\\frac{1}{\\sqrt{1+x^2}}\\,\\mathrm{d}x\\\\\n&=x\\sqrt{1+x^2}-I+\\ln\\!\\left(x+\\sqrt{1+x^2}\\right)+C_1.\n\\end{aligned}$$\n移项除以 $2$ 立得 $I=\\dfrac{x}{2}\\sqrt{1+x^2}+\\dfrac{1}{2}\\ln\\!\\left(x+\\sqrt{1+x^2}\\right)+C$！"
+        }
+      ],
+      "finalAnswer": "(1) $\\dfrac{1}{2}\\mathrm{e}^x(\\sin x-\\cos x)+C$；(2) $\\dfrac{x}{2}\\sqrt{1+x^2}+\\dfrac{1}{2}\\ln(x+\\sqrt{1+x^2})+C$。",
+      "takeaway": "(2) 不靠任何三角代换、3 行直接推出 $\\int\\sqrt{1+x^2}\\,\\mathrm{d}x$，考场若忘公式可用此法 15 秒现场重推！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.94-95",
+        "pdfPage": 107,
+        "itemRef": "强化例9.7 (1)~(2) & 注"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy18_06_14"
+      }
+    },
+    {
+      "id": "m1-c09-e-37",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（分部积分五大策略）",
+      "kind": "example",
+      "title": "【强化例 9.8】分部积分「积分抵消法」$\\int\\mathrm{e}^x\\left(\\frac{1-x}{1+x^2}\\right)^2\\,\\mathrm{d}x$",
+      "examWeight": "core",
+      "problem": "计算 $\\displaystyle\\int\\mathrm{e}^x\\left(\\frac{1-x}{1+x^2}\\right)^2\\,\\mathrm{d}x=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "应填 $\\dfrac{\\mathrm{e}^x}{1+x^2}+C$。"
+        },
+        {
+          "stepTitle": "2. 步进推导",
+          "detail": "展开分子 $(1-x)^2=(1+x^2)-2x$ 拆分两项，观察到 $-\\dfrac{2x}{(1+x^2)^2}\\,\\mathrm{d}x=\\mathrm{d}\\!\\left(\\dfrac{1}{1+x^2}\\right)$，**只对第二项做分部积分**，第一项留着等抵消：\n$$\\begin{aligned}\n\\text{原式}&=\\int\\mathrm{e}^x\\frac{1+x^2-2x}{(1+x^2)^2}\\,\\mathrm{d}x\n=\\int\\mathrm{e}^x\\frac{1}{1+x^2}\\,\\mathrm{d}x+\\int\\mathrm{e}^x\\,\\mathrm{d}\\!\\left(\\frac{1}{1+x^2}\\right)\\\\\n&=\\int\\mathrm{e}^x\\frac{1}{1+x^2}\\,\\mathrm{d}x+\\frac{\\mathrm{e}^x}{1+x^2}-\\int\\frac{1}{1+x^2}\\mathrm{e}^x\\,\\mathrm{d}x\n=\\frac{\\mathrm{e}^x}{1+x^2}+C.\n\\end{aligned}$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{\\mathrm{e}^x}{1+x^2}+C$。",
+      "takeaway": "经典模式 $\\int\\mathrm{e}^x[f(x)+f'(x)]\\,\\mathrm{d}x=\\mathrm{e}^x f(x)+C$，此处 $f(x)=\\frac{1}{1+x^2},\\;f'(x)=-\\frac{2x}{(1+x^2)^2}$！考场一见 $\\mathrm{e}^x\\times$ 复杂分式就往 $f+f'$ 上靠！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.95",
+        "pdfPage": 108,
+        "itemRef": "强化例9.8"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy18_06_14"
+      }
+    },
+    {
+      "id": "m1-c09-e-38",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（分部积分五大策略）",
+      "kind": "example",
+      "title": "【强化例 9.9】分部积分「递推法」求 $a_n=\\int_0^1 x^2\\ln^n x\\,\\mathrm{d}x$",
+      "examWeight": "core",
+      "problem": "设 $n$ 为非负整数，则 $\\displaystyle\\int_0^1 x^2\\ln^n x\\,\\mathrm{d}x=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "应填 $\\dfrac{(-1)^n}{3^{n+1}}n!$。"
+        },
+        {
+          "stepTitle": "2. 步进推导",
+          "detail": "记 $a_n=\\int_0^1 x^2\\ln^n x\\,\\mathrm{d}x$。对 $n\\ge 1$，凑 $\\mathrm{d}(\\frac{1}{3}x^3)$ 分部积分（注意下限 $0^+$ 处由幂函数完胜对数 $\\lim_{x\\to 0^+} x^\\alpha\\ln^\\beta x=0\\;\\forall\\alpha,\\beta>0$，故边界项为 $0$）：\n$$\\begin{aligned}\na_n&=\\int_0^1\\ln^n x\\,\\mathrm{d}\\!\\left(\\frac{1}{3}x^3\\right)\n=\\left.\\frac{1}{3}x^3\\ln^n x\\right|_{0^+}^1-\\int_0^1\\frac{1}{3}x^3\\cdot n\\ln^{n-1}x\\cdot\\frac{1}{x}\\,\\mathrm{d}x\\\\\n&=-\\frac{n}{3}\\int_0^1 x^2\\ln^{n-1}x\\,\\mathrm{d}x=-\\frac{n}{3}a_{n-1}\\quad(n=1,2,\\dots).\n\\end{aligned}$$\n又 $a_0=\\int_0^1 x^2\\,\\mathrm{d}x=\\frac{1}{3}$，故逐级递推得\n$$a_n=\\left(-\\frac{n}{3}\\right)\\left(-\\frac{n-1}{3}\\right)\\cdots\\left(-\\frac{1}{3}\\right)a_0=\\frac{(-1)^n}{3^{n+1}}n!.$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{(-1)^n}{3^{n+1}}n!$。",
+      "takeaway": "**通用秒杀结论**：用同样递推（或令 $t=-(\\alpha+1)\\ln x$ 化为 $\\Gamma$ 函数）立得 $\\int_0^1 x^\\alpha\\ln^n x\\,\\mathrm{d}x=\\frac{(-1)^n n!}{(\\alpha+1)^{n+1}}\\;(\\alpha>-1)$！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.95-96",
+        "pdfPage": 108,
+        "itemRef": "强化例9.9"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy18_06_14"
+      }
+    },
+    {
+      "id": "m1-c09-e-39",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（有理函数与三角有理式积分）",
+      "kind": "example",
+      "title": "【强化例 9.10】有理函数定积分 $\\int_0^1\\frac{1}{(x+1)(x^2-2x+2)}\\,\\mathrm{d}x$",
+      "examWeight": "core",
+      "problem": "计算 $\\displaystyle\\int_0^1\\frac{1}{(x+1)(x^2-2x+2)}\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "因 $x^2-2x+2=(x-1)^2+1$ 不可约，设\n$$\\frac{1}{(x+1)(x^2-2x+2)}=\\frac{A}{x+1}+\\frac{Bx+C}{x^2-2x+2}.$$\n通分得 $A(x^2-2x+2)+(Bx+C)(x+1)=1$，比较系数（或令 $x=-1$ 得 $5A=1\\Rightarrow A=\\frac{1}{5}$）解得 $A=\\frac{1}{5},\\;B=-\\frac{1}{5},\\;C=\\frac{3}{5}$。"
+        },
+        {
+          "stepTitle": "2. 步进推导",
+          "detail": "对第二项分子配 $(x^2-2x+2)'=2x-2$：\n$$-\\frac{1}{5}x+\\frac{3}{5}=-\\frac{1}{10}(2x-2)+\\frac{2}{5}.$$\n于是逐项积分：\n$$\\begin{aligned}\n\\int_0^1\\frac{\\mathrm{d}x}{(x+1)(x^2-2x+2)}\n&=\\int_0^1\\left(\\frac{1}{5}\\cdot\\frac{1}{x+1}-\\frac{1}{10}\\cdot\\frac{2x-2}{x^2-2x+2}+\\frac{2}{5}\\cdot\\frac{1}{(x-1)^2+1}\\right)\\mathrm{d}x\\\\\n&=\\left.\\frac{1}{5}\\ln|1+x|\\right|_0^1-\\left.\\frac{1}{10}\\ln(x^2-2x+2)\\right|_0^1+\\left.\\frac{2}{5}\\arctan(x-1)\\right|_0^1\\\\\n&=\\frac{1}{5}\\ln 2-\\left(0-\\frac{1}{10}\\ln 2\\right)+\\frac{2}{5}\\left(0-\\left(-\\frac{\\pi}{4}\\right)\\right)\n=\\frac{3}{10}\\ln 2+\\frac{\\pi}{10}.\n\\end{aligned}$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{3}{10}\\ln 2+\\dfrac{\\pi}{10}$。",
+      "takeaway": "代入下限 $x=0$ 时极易漏掉 $\\ln(0^2-0+2)=\\ln 2$ 与 $\\arctan(-1)=-\\frac{\\pi}{4}$ 两项，千万别误以为下限代入 $0$ 统统等于 $0$！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.96-97",
+        "pdfPage": 109,
+        "itemRef": "强化例9.10"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy18_06_14"
+      }
+    },
+    {
+      "id": "m1-c09-e-40",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（有理函数与三角有理式积分）",
+      "kind": "example",
+      "title": "【强化例 9.11】三角有理式全角换元 $t=\\cos x$ 双题（奇次 $\\sin x$ 信号）",
+      "examWeight": "core",
+      "problem": "求下列不定积分：\n(1) $\\displaystyle\\int\\frac{\\sin^5 x}{\\cos^4 x}\\,\\mathrm{d}x$；　(2) $\\displaystyle\\int\\frac{1}{\\sin x+\\sin^3 x}\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "两题均满足 $R(-\\sin x,\\cos x)=-R(\\sin x,\\cos x)$（关于 $\\sin x$ 奇次），**统统凑 $\\mathrm{d}(\\cos x)$ 令 $t=\\cos x$**！"
+        },
+        {
+          "stepTitle": "2. 步进推导",
+          "detail": "**(1)** 拆出一个 $\\sin x\\,\\mathrm{d}x=-\\mathrm{d}(\\cos x)$，其余 $\\sin^4 x=(1-\\cos^2 x)^2$：\n$$\\int\\frac{\\sin^5 x}{\\cos^4 x}\\,\\mathrm{d}x=-\\int\\frac{(1-\\cos^2 x)^2}{\\cos^4 x}\\,\\mathrm{d}(\\cos x)\\xlongequal{t=\\cos x}-\\int\\!\\left(1-\\frac{2}{t^2}+\\frac{1}{t^4}\\right)\\mathrm{d}t=-t-\\frac{2}{t}+\\frac{1}{3t^3}+C=-\\cos x-2\\sec x+\\frac{1}{3}\\sec^3 x+C.$$"
+        },
+        {
+          "stepTitle": "3. 步进推导",
+          "detail": "**(2)** 分子分母同乘 $\\sin x$ 制造 $\\sin x\\,\\mathrm{d}x=-\\mathrm{d}(\\cos x)$，再令 $t=\\cos x$ 化为有理分式拆分：\n$$\\begin{aligned}\n\\int\\frac{1}{\\sin x+\\sin^3 x}\\,\\mathrm{d}x\n&=\\int\\frac{\\sin x}{\\sin^2 x(1+\\sin^2 x)}\\,\\mathrm{d}x\n\\xlongequal{t=\\cos x}-\\int\\frac{\\mathrm{d}t}{(1-t^2)(2-t^2)}\\\\\n&=-\\int\\!\\left(\\frac{1}{1-t^2}-\\frac{1}{2-t^2}\\right)\\mathrm{d}t\n=-\\frac{1}{2}\\ln\\left|\\frac{1+t}{1-t}\\right|+\\frac{1}{2\\sqrt{2}}\\ln\\left|\\frac{\\sqrt{2}+t}{\\sqrt{2}-t}\\right|+C\\\\\n&=\\frac{1}{2}\\ln\\frac{1-\\cos x}{\\cos x+1}+\\frac{1}{2\\sqrt{2}}\\ln\\frac{\\cos x+\\sqrt{2}}{\\sqrt{2}-\\cos x}+C.\n\\end{aligned}$$"
+        }
+      ],
+      "finalAnswer": "(1) $-\\cos x-2\\sec x+\\dfrac{1}{3}\\sec^3 x+C$；(2) $\\dfrac{1}{2}\\ln\\dfrac{1-\\cos x}{\\cos x+1}+\\dfrac{1}{2\\sqrt{2}}\\ln\\dfrac{\\cos x+\\sqrt{2}}{\\sqrt{2}-\\cos x}+C$。",
+      "takeaway": "(2) 中因 $|\\cos x|\\le 1<\\sqrt{2}$，故 $\\frac{1-\\cos x}{1+\\cos x}>0$（$\\cos x\\ne\\pm 1$）且 $\\frac{\\sqrt{2}+\\cos x}{\\sqrt{2}-\\cos x}>0$，绝对值均可直接去掉。",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.97",
+        "pdfPage": 110,
+        "itemRef": "强化例9.11 (1)~(2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy18_06_14"
+      }
+    },
+    {
+      "id": "m1-c09-e-41",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（有理函数与三角有理式积分）",
+      "kind": "example",
+      "title": "【强化例 9.12】三角有理式全角换元 $t=\\sin x$（奇次 $\\cos x$ 信号）",
+      "examWeight": "core",
+      "problem": "求不定积分 $\\displaystyle\\int\\sin^2 x\\cos^3 x\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 核心解答过程",
+          "detail": "满足 $R(\\sin x,-\\cos x)=-R(\\sin x,\\cos x)$（$\\cos x$ 呈奇数次），拆一个 $\\cos x\\,\\mathrm{d}x=\\mathrm{d}(\\sin x)$，令 $t=\\sin x$：\n$$\\int\\sin^2 x\\cos^3 x\\,\\mathrm{d}x=\\int\\sin^2 x(1-\\sin^2 x)\\,\\mathrm{d}(\\sin x)\\xlongequal{t=\\sin x}\\int(t^2-t^4)\\,\\mathrm{d}t=\\frac{t^3}{3}-\\frac{t^5}{5}+C=\\frac{\\sin^3 x}{3}-\\frac{\\sin^5 x}{5}+C.$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{\\sin^3 x}{3}-\\dfrac{\\sin^5 x}{5}+C$。",
+      "takeaway": "口诀：「**谁奇留谁进 $\\mathrm{d}$，余偶换同伴**」；若 $\\sin x$ 与 $\\cos x$ 同为偶数次（如 $\\sin^2 x\\cos^2 x$），则用倍角降幂公式！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.97-98",
+        "pdfPage": 110,
+        "itemRef": "强化例9.12"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy18_06_14"
+      }
+    },
+    {
+      "id": "m1-c09-e-42",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（有理函数与三角有理式积分）",
+      "kind": "example",
+      "title": "【强化例 9.13】$\\int\\frac{2\\sin x+\\cos x}{\\sin x+2\\cos x}\\,\\mathrm{d}x$（全角 $t=\\tan x$ vs 配分母导数秒杀！）",
+      "examWeight": "core",
+      "problem": "求不定积分 $\\displaystyle\\int\\frac{2\\sin x+\\cos x}{\\sin x+2\\cos x}\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "**法一（全角换元 $t=\\tan x$）**：因 $R(-\\sin x,-\\cos x)=R(\\sin x,\\cos x)$，分子分母同除 $\\cos x$ 后令 $t=\\tan x\\;(\\mathrm{d}x=\\frac{\\mathrm{d}t}{1+t^2})$：\n$$\\begin{aligned}\n\\int\\frac{2\\sin x+\\cos x}{\\sin x+2\\cos x}\\,\\mathrm{d}x\n&=\\int\\frac{2\\tan x+1}{\\tan x+2}\\,\\mathrm{d}x=\\int\\frac{2t+1}{(t+2)(1+t^2)}\\,\\mathrm{d}t\\\\\n&=2\\int\\frac{\\mathrm{d}t}{1+t^2}-3\\int\\frac{\\mathrm{d}t}{(t+2)(1+t^2)}\n=2\\arctan t-\\frac{3}{5}\\int\\frac{\\mathrm{d}t}{t+2}+\\frac{3}{5}\\int\\frac{t-2}{1+t^2}\\,\\mathrm{d}t\\\\\n&=\\frac{4}{5}x-\\frac{3}{5}\\ln|\\sin x+2\\cos x|+C.\n\\end{aligned}$$"
+        },
+        {
+          "stepTitle": "2. 法二（配分母 + 分母导数，考场绝对首选！）",
+          "detail": "设 $2\\sin x+\\cos x=A(\\sin x+2\\cos x)+B(\\sin x+2\\cos x)'=A(\\sin x+2\\cos x)+B(\\cos x-2\\sin x)$。比较系数：\n$$\\begin{cases}A-2B=2\\\\2A+B=1\\end{cases}\\implies A=\\frac{4}{5},\\quad B=-\\frac{3}{5}.$$\n代入两行秒杀：\n$$\\int\\frac{2\\sin x+\\cos x}{\\sin x+2\\cos x}\\,\\mathrm{d}x=\\int\\left[\\frac{4}{5}-\\frac{3}{5}\\cdot\\frac{(\\sin x+2\\cos x)'}{\\sin x+2\\cos x}\\right]\\mathrm{d}x=\\frac{4}{5}x-\\frac{3}{5}\\ln|\\sin x+2\\cos x|+C.$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{4}{5}x-\\dfrac{3}{5}\\ln|\\sin x+2\\cos x|+C$。",
+      "takeaway": "**法二不仅快 5 倍，还完美避开了 $t=\\tan x$ 在 $x=\\frac{\\pi}{2}+k\\pi$ 处的断点隐患**（见表 9-6）！凡遇 $\\frac{a\\sin x+b\\cos x}{c\\sin x+d\\cos x}$ 一律首选法二！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.98",
+        "pdfPage": 111,
+        "itemRef": "强化例9.13 法一 & 法二"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy18_06_14"
+      }
+    },
+    {
+      "id": "m1-c09-e-43",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（有理函数与三角有理式积分）",
+      "kind": "example",
+      "title": "【强化例 9.14】半角万能换元兜底 $\\int\\frac{1}{1+2\\cos x}\\,\\mathrm{d}x$",
+      "examWeight": "core",
+      "problem": "求不定积分 $\\displaystyle\\int\\frac{1}{1+2\\cos x}\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 核心解答过程",
+          "detail": "检查三种全角奇偶条件均不满足，启用兜底大招——半角万能公式：令 $t=\\tan\\frac{x}{2}$，则 $\\mathrm{d}x=\\dfrac{2}{1+t^2}\\,\\mathrm{d}t$，$\\cos x=\\dfrac{1-t^2}{1+t^2}$：\n$$\\begin{aligned}\n\\int\\frac{1}{1+2\\cos x}\\,\\mathrm{d}x\n&=\\int\\frac{1}{1+2\\cdot\\frac{1-t^2}{1+t^2}}\\cdot\\frac{2}{1+t^2}\\,\\mathrm{d}t\n=\\int\\frac{2}{3-t^2}\\,\\mathrm{d}t\\\\\n&=\\frac{1}{\\sqrt{3}}\\ln\\left|\\frac{\\sqrt{3}+t}{\\sqrt{3}-t}\\right|+C\n=\\frac{\\sqrt{3}}{3}\\ln\\left|\\frac{\\sqrt{3}+\\tan\\frac{x}{2}}{\\sqrt{3}-\\tan\\frac{x}{2}}\\right|+C.\n\\end{aligned}$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{\\sqrt{3}}{3}\\ln\\left|\\dfrac{\\sqrt{3}+\\tan\\frac{x}{2}}{\\sqrt{3}-\\tan\\frac{x}{2}}\\right|+C$。",
+      "takeaway": "注意系数核对：$\\int\\frac{2}{3-t^2}\\,\\mathrm{d}t=2\\cdot\\frac{1}{2\\sqrt{3}}\\ln\\left|\\frac{\\sqrt{3}+t}{\\sqrt{3}-t}\\right|+C=\\frac{\\sqrt{3}}{3}\\ln\\left|\\frac{\\sqrt{3}+t}{\\sqrt{3}-t}\\right|+C$，别忘分子原有的 $2$ 恰好约掉 $\\frac{1}{2\\sqrt{3}}$ 的 $2$！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.98-99",
+        "pdfPage": 111,
+        "itemRef": "强化例9.14 & 注"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy18_06_14"
+      }
+    },
+    {
+      "id": "m1-c09-e-44",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（反常积分计算与变限求导四大题型）",
+      "kind": "example",
+      "title": "【强化例 9.15】反常积分反求参数（必须剔除导致区间内发散瑕点的伪根！）",
+      "examWeight": "core",
+      "problem": "设 $\\displaystyle\\int_1^{+\\infty}\\frac{a}{x(2x+a)}\\,\\mathrm{d}x=\\ln 2$，则 $a=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "应填 $2$。"
+        },
+        {
+          "stepTitle": "2. 步进推导",
+          "detail": "裂项 $\\dfrac{a}{x(2x+a)}=\\dfrac{1}{x}-\\dfrac{2}{2x+a}$，先形式计算牛顿-莱布尼茨公式：\n$$\\int_1^{+\\infty}\\frac{a}{x(2x+a)}\\,\\mathrm{d}x=\\left.\\ln\\left|\\frac{x}{2x+a}\\right|\\right|_1^{+\\infty}=\\ln\\frac{1}{2}-\\ln\\left|\\frac{1}{2+a}\\right|=-\\ln 2+\\ln|2+a|=\\ln 2.$$\n得 $|2+a|=4 \\implies a=2$ 或 $a=-6$。"
+        },
+        {
+          "stepTitle": "3. 关键验根（必查内部瑕点！）",
+          "detail": "当 $a=-6$ 时，被积函数分母 $2x-6$ 在积分区间内部 **$x=3\\in(1,+\\infty)$** 处出现 $1$ 阶发散瑕点，原反常积分发散，故排除 $a=-6$！当 $a=2$ 时分母在 $[1,+\\infty)$ 上恒正无瑕点，收敛且恰等于 $\\ln 2$，故 $a=2$。"
+        }
+      ],
+      "finalAnswer": "$a=2$（排除导致内部发散瑕点 $x=3$ 的伪根 $a=-6$）。",
+      "takeaway": "**绝杀防坑**：带参数的反常积分反求参数解出多解后，**100% 必须代回检查积分区间内是否跑出新瑕点**！本题 $a=-6$ 是最经典的增根陷阱！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.99-100",
+        "pdfPage": 112,
+        "itemRef": "强化例9.15"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy18_15_22"
+      }
+    },
+    {
+      "id": "m1-c09-e-45",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（反常积分计算与变限求导四大题型）",
+      "kind": "example",
+      "title": "【强化例 9.16】换元求导型 + 反函数恒等式 $g[f(x)]=x$ 求解函数 $f(x)$",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)$ 在 $[0,+\\infty)$ 内可导，$f(0)=0$，其反函数为 $g(x)$。若 $\\displaystyle\\int_x^{x+f(x)} g(t-x)\\,\\mathrm{d}t=x^2\\ln(1+x)$，求 $f(x)$。",
+      "steps": [
+        {
+          "stepTitle": "1. 核心解答过程",
+          "detail": "先对变限积分作换元 $u=t-x$（$\\mathrm{d}u=\\mathrm{d}t$，$t=x\\Rightarrow u=0,\\;t=x+f(x)\\Rightarrow u=f(x)$）将 $x$ 移出被积函数：\n$$\\int_0^{f(x)} g(u)\\,\\mathrm{d}u=x^2\\ln(1+x).$$\n两边对 $x$ 求导，并巧用反函数恒等式 **$g[f(x)]=x$**：\n$$g[f(x)]\\cdot f'(x)=2x\\ln(1+x)+\\frac{x^2}{1+x} \\implies x f'(x)=2x\\ln(1+x)+\\frac{x^2}{1+x}.$$\n当 $x>0$ 时两边同除以 $x$ 得 $f'(x)=2\\ln(1+x)+\\dfrac{x}{1+x}$，两边积分：\n$$\\begin{aligned}\nf(x)&=\\int\\!\\left[2\\ln(1+x)+1-\\frac{1}{1+x}\\right]\\mathrm{d}x\\\\\n&=2[(1+x)\\ln(1+x)-x]+x-\\ln(1+x)+C\\\\\n&=\\ln(1+x)+2x\\ln(1+x)-x+C.\n\\end{aligned}$$\n由 $f(x)$ 在 $x=0$ 处右连续且 $f(0)=0$，令 $x\\to 0^+$ 得 $C=0$，故\n$$f(x)=\\ln(1+x)+2x\\ln(1+x)-x\\quad(x\\ge 0).$$"
+        }
+      ],
+      "finalAnswer": "$f(x)=\\ln(1+x)+2x\\ln(1+x)-x\\;(x\\ge 0)$。",
+      "takeaway": "$\\int\\ln(1+x)\\,\\mathrm{d}x=(1+x)\\ln(1+x)-x+C$ 值得顺手记牢；求导后发现 $x f'(x)=\\cdots$ 时，用 $g[f(x)]=x$ 化简是整题画龙点睛之笔！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.100",
+        "pdfPage": 113,
+        "itemRef": "强化例9.16"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy18_15_22"
+      }
+    },
+    {
+      "id": "m1-c09-e-46",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（反常积分计算与变限求导四大题型）",
+      "kind": "example",
+      "title": "【强化例 9.17】拆分求导型（$x$ 落在 $t$ 区间内无需分类）求闭区间最大值",
+      "examWeight": "core",
+      "problem": "设 $|x|\\le 1$，求函数 $f(x)=\\displaystyle\\int_{-1}^1|t-x|\\mathrm{e}^{2t}\\,\\mathrm{d}t$ 的最大值。",
+      "steps": [
+        {
+          "stepTitle": "1. 核心解答过程",
+          "detail": "积分变量 $t\\in[-1,1]$ 与求导变量 $x\\in[-1,1]$ 处于**同一区间**，直接按 $t=x$ 拆分去绝对值（**无需分类讨论**）：\n$$\\begin{aligned}\nf(x)&=\\int_{-1}^x(x-t)\\mathrm{e}^{2t}\\,\\mathrm{d}t+\\int_x^1(t-x)\\mathrm{e}^{2t}\\,\\mathrm{d}t\\\\\n&=x\\int_{-1}^x\\mathrm{e}^{2t}\\,\\mathrm{d}t-\\int_{-1}^x t\\mathrm{e}^{2t}\\,\\mathrm{d}t+\\int_x^1 t\\mathrm{e}^{2t}\\,\\mathrm{d}t-x\\int_x^1\\mathrm{e}^{2t}\\,\\mathrm{d}t.\n\\end{aligned}$$\n对 $x$ 求导（含 $x\\mathrm{e}^{2x}$ 的边界项两两正负抵消！）：\n$$f'(x)=\\int_{-1}^x\\mathrm{e}^{2t}\\,\\mathrm{d}t-\\int_x^1\\mathrm{e}^{2t}\\,\\mathrm{d}t=\\frac{1}{2}(\\mathrm{e}^{2x}-\\mathrm{e}^{-2})-\\frac{1}{2}(\\mathrm{e}^2-\\mathrm{e}^{2x})=\\mathrm{e}^{2x}-\\frac{1}{2}(\\mathrm{e}^2+\\mathrm{e}^{-2}).$$\n令 $f'(x)=0$ 得唯一驻点 $x_0=\\frac{1}{2}\\ln\\frac{\\mathrm{e}^2+\\mathrm{e}^{-2}}{2}\\in(-1,1)$，且 $f''(x)=2\\mathrm{e}^{2x}>0$ 恒正，故 $x_0$ 为**极小（最小）值点**！因此**最大值必在闭区间端点 $x=-1$ 或 $x=1$ 处取得**：\n$$f(-1)=\\int_{-1}^1(t+1)\\mathrm{e}^{2t}\\,\\mathrm{d}t=\\frac{3}{4}\\mathrm{e}^2+\\frac{1}{4}\\mathrm{e}^{-2},\\qquad f(1)=\\int_{-1}^1(1-t)\\mathrm{e}^{2t}\\,\\mathrm{d}t=\\frac{1}{4}\\mathrm{e}^2-\\frac{5}{4}\\mathrm{e}^{-2}.$$\n显然 $f(-1)>f(1)$，故 $f_{\\max}=f(-1)=\\dfrac{3}{4}\\mathrm{e}^2+\\dfrac{1}{4}\\mathrm{e}^{-2}$。"
+        }
+      ],
+      "finalAnswer": "$f_{\\max}=f(-1)=\\dfrac{3}{4}\\mathrm{e}^2+\\dfrac{1}{4}\\mathrm{e}^{-2}$。",
+      "takeaway": "**通用快算性质**：对 $f(x)=\\int_a^b|t-x|g(t)\\,\\mathrm{d}t\\;(g\\ge 0)$，恒有 $f'(x)=\\int_a^x g(t)\\,\\mathrm{d}t-\\int_x^b g(t)\\,\\mathrm{d}t$ 且 $f''(x)=2g(x)\\ge 0$（必为下凸函数！），因此闭区间上的**最大值一定在端点取得**！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.101",
+        "pdfPage": 114,
+        "itemRef": "强化例9.17"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy18_15_22"
+      }
+    },
+    {
+      "id": "m1-c09-e-47",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（反常积分计算与变限求导四大题型）",
+      "kind": "example",
+      "title": "【强化例 9.18】拆分求导型（$x$ 超出 $t$ 区间须分类讨论）+ 分段点左右导数检验",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)=\\displaystyle\\int_0^1|t^2-x^2|\\,\\mathrm{d}t\\;(x>0)$，求 $f'(x)$，并求 $f(x)$ 的最小值。",
+      "steps": [
+        {
+          "stepTitle": "1. 核心解答过程",
+          "detail": "积分变量 $t\\in[0,1]$，而求导变量 $x\\in(0,+\\infty)$ **不在同一区间**，必须按 $0<x\\le 1$ 与 $x>1$ 分两类讨论去绝对值：\n- **当 $0<x\\le 1$ 时**：$t=x$ 落在 $[0,1]$ 内，拆分得\n$$f(x)=\\int_0^x(x^2-t^2)\\,\\mathrm{d}t+\\int_x^1(t^2-x^2)\\,\\mathrm{d}t=\\frac{4}{3}x^3-x^2+\\frac{1}{3}.$$\n- **当 $x>1$ 时**：恒有 $x^2>t^2$，直接去掉绝对值：\n$$f(x)=\\int_0^1(x^2-t^2)\\,\\mathrm{d}t=x^2-\\frac{1}{3}.$$\n**检验分段点 $x=1$ 处可导性（必须用左右导数定义！）**：\n$$f'_-(1)=\\lim_{x\\to 1^-}\\frac{\\frac{4}{3}x^3-x^2+\\frac{1}{3}-\\frac{2}{3}}{x-1}=2,\\qquad f'_+(1)=\\lim_{x\\to 1^+}\\frac{x^2-\\frac{1}{3}-\\frac{2}{3}}{x-1}=2.$$\n左右导数相等，故 $f'(1)=2$，于是\n$$f'(x)=\\begin{cases}4x^2-2x, & 0<x\\le 1\\\\ 2x, & x>1.\\end{cases}$$\n由 $f'(x)=0$ 得 $(0,+\\infty)$ 内唯一驻点 $x=\\frac{1}{2}$，且 $f''(\\frac{1}{2})=8(\\frac{1}{2})-2=2>0$（在 $(0,\\frac{1}{2})$ 递减、在 $(\\frac{1}{2},+\\infty)$ 递增），故 $f_{\\min}=f\\!\\left(\\frac{1}{2}\\right)=\\dfrac{1}{4}$。"
+        }
+      ],
+      "finalAnswer": "$f'(x)=\\begin{cases}4x^2-2x,&0<x\\le 1\\\\2x,&x>1\\end{cases}$（已验 $f'_-(1)=f'_+(1)=2$）；最小值 $f\\!\\left(\\dfrac{1}{2}\\right)=\\dfrac{1}{4}$。",
+      "takeaway": "与强化例9.17 强烈对照：**先画 $t$ 与 $x$ 两条数轴**决定是否分类；求出分段函数表达式后，分段点 $x=1$ 的导数绝不可偷懒直接代公式，必须用导数定义严检！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.101-102",
+        "pdfPage": 114,
+        "itemRef": "强化例9.18"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy18_15_22"
+      }
+    },
+    {
+      "id": "m1-c09-e-48",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（反常积分计算与变限求导四大题型）",
+      "kind": "example",
+      "title": "【强化例 9.19】换序型累次变限积分求极限 $\\lim_{t\\to 0^+}\\frac{1}{t^5}\\int_0^t\\mathrm{d}y\\int_y^t\\frac{\\sin(xy)^2}{x}\\,\\mathrm{d}x$",
+      "examWeight": "core",
+      "problem": "极限 $\\displaystyle\\lim_{t\\to 0^+}\\frac{1}{t^5}\\int_0^t\\mathrm{d}y\\int_y^t\\frac{\\sin(xy)^2}{x}\\,\\mathrm{d}x=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "应填 $\\dfrac{1}{15}$。"
+        },
+        {
+          "stepTitle": "2. 步进推导",
+          "detail": "内层积分 $\\int_y^t\\frac{\\sin(x^2y^2)}{x}\\,\\mathrm{d}x$ 对 $x$ 难以处理，画积分区域 $D=\\{(x,y)\\mid 0\\le y\\le x\\le t\\}$（见图 9-4），**交换二次积分次序**：\n$$\\int_0^t\\mathrm{d}y\\int_y^t\\frac{\\sin(xy)^2}{x}\\,\\mathrm{d}x=\\int_0^t\\frac{1}{x}\\,\\mathrm{d}x\\int_0^x\\sin(xy)^2\\,\\mathrm{d}y.$$\n记 $f(x)=\\int_0^x\\sin(xy)^2\\,\\mathrm{d}y$，对原 $\\frac{0}{0}$ 型极限用一次洛必达法则，随后令 $u=ty$（视 $t$ 为常数）再洛必达一次：\n$$\\begin{aligned}\n\\text{原极限}&=\\lim_{t\\to 0^+}\\frac{\\int_0^t\\frac{1}{x}f(x)\\,\\mathrm{d}x}{t^5}\n=\\lim_{t\\to 0^+}\\frac{\\frac{1}{t}f(t)}{5t^4}\n=\\lim_{t\\to 0^+}\\frac{\\int_0^t\\sin(ty)^2\\,\\mathrm{d}y}{5t^5}\\\\\n&\\xlongequal{u=ty}\\lim_{t\\to 0^+}\\frac{\\frac{1}{t}\\int_0^{t^2}\\sin u^2\\,\\mathrm{d}u}{5t^5}\n=\\lim_{t\\to 0^+}\\frac{\\int_0^{t^2}\\sin u^2\\,\\mathrm{d}u}{5t^6}\n=\\lim_{t\\to 0^+}\\frac{\\sin(t^4)\\cdot 2t}{30t^5}=\\frac{2}{30}=\\frac{1}{15}.\n\\end{aligned}$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{1}{15}$。",
+      "takeaway": "① **同页旁例补充（强化 P.102）**：$\\int_0^1\\mathrm{d}y\\int_{\\sqrt{y}}^1\\sin\\frac{y}{x}\\,\\mathrm{d}x=\\int_0^1\\mathrm{d}x\\int_0^{x^2}\\sin\\frac{y}{x}\\,\\mathrm{d}y=\\int_0^1 x(1-\\cos x)\\,\\mathrm{d}x=\\frac{3}{2}-\\sin 1-\\cos 1$，同样是「内层死活积不出 $\\Rightarrow$ 立刻交换积分次序」！\n② 也可用等价无穷小直估：当 $0\\le y\\le x\\le t\\to 0^+$ 时 $\\sin(xy)^2\\sim x^2y^2$，双积分得 $\\int_0^t x\\,\\mathrm{d}x\\int_0^x y^2\\,\\mathrm{d}y=\\int_0^t\\frac{x^4}{3}\\,\\mathrm{d}x=\\frac{t^5}{15}$，选填 5 秒验算！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.102",
+        "pdfPage": 115,
+        "itemRef": "强化例9.19 & 旁例"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy18_15_22"
+      }
+    },
+    {
+      "id": "m1-c09-e-49",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（分段函数积分与几何法）",
+      "kind": "example",
+      "title": "【强化例 9.20】分段函数求原函数（分段求导 + 分段点连续拼接常数）",
+      "examWeight": "core",
+      "problem": "函数 $f(x)=\\begin{cases}\\dfrac{1}{\\sqrt{1+x^2}}, & x\\le 0\\\\ (x+1)\\cos x, & x>0\\end{cases}$ 的一个原函数为（　）。\n(A) $\\begin{cases}\\ln(\\sqrt{1+x^2}-x),&x\\le 0\\\\(x+1)\\cos x-\\sin x,&x>0\\end{cases}$　(B) $\\begin{cases}\\ln(\\sqrt{1+x^2}-x)+1,&x\\le 0\\\\(x+1)\\cos x-\\sin x,&x>0\\end{cases}$\n(C) $\\begin{cases}\\ln(\\sqrt{1+x^2}+x),&x\\le 0\\\\(x+1)\\sin x+\\cos x,&x>0\\end{cases}$　(D) $\\begin{cases}\\ln(\\sqrt{1+x^2}+x)+1,&x\\le 0\\\\(x+1)\\sin x+\\cos x,&x>0\\end{cases}$",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "应选 **(D)**。"
+        },
+        {
+          "stepTitle": "2. 步进推导",
+          "detail": "分段求不定积分：\n- 当 $x>0$ 时，$F(x)=\\int(x+1)\\cos x\\,\\mathrm{d}x=(x+1)\\sin x-\\int\\sin x\\,\\mathrm{d}x=(x+1)\\sin x+\\cos x+C_1$；\n- 当 $x\\le 0$ 时，$F(x)=\\int\\frac{1}{\\sqrt{1+x^2}}\\,\\mathrm{d}x=\\ln(\\sqrt{1+x^2}+x)+C_2$。"
+        },
+        {
+          "stepTitle": "3. 步进推导",
+          "detail": "**核心铁律——原函数必处处连续**！令 $\\lim_{x\\to 0^+}F(x)=\\lim_{x\\to 0^-}F(x)$ 得 $1+C_1=C_2$。取 $C_1=0$，则 $C_2=1$，即得 (D)！"
+        }
+      ],
+      "finalAnswer": "选 (D)。",
+      "takeaway": "与第 8 讲基础例 8.2 为同一真题母题：选填可直接先验分段点 $x=0$ 的连续性——(C) 左极限 $0\\ne$ 右极限 $1$ 秒排，再验 $x>0$ 求导得 $(x+1)\\cos x$ 秒锁 (D)！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.103",
+        "pdfPage": 116,
+        "itemRef": "强化例9.20"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy18_15_22"
+      }
+    },
+    {
+      "id": "m1-c09-e-50",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（分段函数积分与几何法）",
+      "kind": "example",
+      "title": "【强化例 9.21】分段函数复合定积分 $\\int_{-2}^2 f(x-1)\\,\\mathrm{d}x$ 先换元再分段",
+      "examWeight": "core",
+      "problem": "设 $f(x)=\\begin{cases}\\mathrm{e}^{-x}, & x\\ge 0\\\\ 1+x^2, & x<0\\end{cases}$，则 $\\displaystyle\\int_{-2}^2 f(x-1)\\,\\mathrm{d}x=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "应填 $13-\\mathrm{e}^{-1}$。"
+        },
+        {
+          "stepTitle": "2. 步进推导",
+          "detail": "先作平移换元 $t=x-1$（$x=-2\\Rightarrow t=-3,\\;x=2\\Rightarrow t=1$），再按分段点 $t=0$ 劈开计算：\n$$\\begin{aligned}\n\\int_{-2}^2 f(x-1)\\,\\mathrm{d}x\n&=\\int_{-3}^1 f(t)\\,\\mathrm{d}t\n=\\int_{-3}^0(1+t^2)\\,\\mathrm{d}t+\\int_0^1\\mathrm{e}^{-t}\\,\\mathrm{d}t\\\\\n&=\\left.\\left(t+\\frac{t^3}{3}\\right)\\right|_{-3}^0+\\left.(-\\mathrm{e}^{-t})\\right|_0^1\n=(0-(-3-9))+(-\\mathrm{e}^{-1}+1)=13-\\mathrm{e}^{-1}.\n\\end{aligned}$$"
+        }
+      ],
+      "finalAnswer": "$13-\\mathrm{e}^{-1}$。",
+      "takeaway": "遇到 $f(ax+b)$ 为分段函数的定积分，**先换元把括号里化回单字母 $t$** 再看分段点 $t=0$，比直接解不等式 $x-1\\ge 0$ 更直观、更不易算错上下限！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.103",
+        "pdfPage": 116,
+        "itemRef": "强化例9.21"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy18_15_22"
+      }
+    },
+    {
+      "id": "m1-c09-e-51",
+      "stage": "intensive",
+      "section": "经典例题 · 强化 18 讲（分段函数积分与几何法）",
+      "kind": "example",
+      "title": "【强化例 9.22】几何法四分之一圆面积 1 秒口算 $\\int_0^1\\sqrt{2x-x^2}\\,\\mathrm{d}x$",
+      "examWeight": "core",
+      "problem": "计算 $\\displaystyle\\int_0^1\\sqrt{2x-x^2}\\,\\mathrm{d}x=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "1. 推导与计算过程",
+          "detail": "应填 $\\dfrac{\\pi}{4}$。"
+        },
+        {
+          "stepTitle": "2. 步进推导",
+          "detail": "配方改写：$\\sqrt{2x-x^2}=\\sqrt{x(2-x)}=\\sqrt{1-(x-1)^2}$，表示圆心在 $(1,0)$、半径 $a=1$ 的上半圆弧。积分区间 $[0,1]$ 恰为其左半个（即**四分之一圆**，见图 9-3），面积立得：\n$$\\int_0^1\\sqrt{2x-x^2}\\,\\mathrm{d}x=\\frac{\\pi\\cdot 1^2}{4}=\\frac{\\pi}{4}.$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{\\pi}{4}$。",
+      "takeaway": "记牢几何法公式：$\\int_0^a\\sqrt{x(2a-x)}\\,\\mathrm{d}x=\\frac{\\pi a^2}{4}$，$\\int_0^{2a}\\sqrt{x(2a-x)}\\,\\mathrm{d}x=\\frac{\\pi a^2}{2}$，完全省去三角换元！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.104",
+        "pdfPage": 117,
+        "itemRef": "强化例9.22"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy18_15_22"
+      }
+    },
+    {
+      "id": "m1-c09-s-01",
+      "stage": "both",
+      "section": "第 9 讲题型总结 · 一、不定积分计算 6 大核心题型总路由",
+      "kind": "summary",
+      "title": "【不定积分总路由】凑微分、换元、分部五大武器、有理与三角有理式速查表",
+      "examWeight": "core",
+      "overview": "不定积分计算是全套微积分的运算底座！遵循强化「三向解题法」优先级：**① 恒等变形/凑微分（优先扫表 9-1/表 9-2 及复杂内核求导）$\\to$ ② 分部积分（反对幂指三/表格法/再现/抵消）$\\to$ ③ 第二类换元（三角/根式/倒代换）$\\to$ ④ 有理与三角有理式拆分！**",
+      "tables": [
+        {
+          "caption": "表 9-4 不定积分计算 6 大高频题型落刀路线与避坑总表（基础 P.231-243 & 强化 P.90-99）",
+          "headers": [
+            "题型特征",
+            "首选落刀动作",
+            "头号易错红线",
+            "代表例题"
+          ],
+          "rows": [
+            [
+              "复杂复合函数乘积 $f[g(x)]h(x)$",
+              "查表 9-2 13 式，或**直接对复杂内核 $g(x)$ 求导**试凑 $\\mathrm{d}[g(x)]$",
+              "把常数放进 $\\mathrm{d}(\\cdot)$ 漏乘导数倒数，或没先试求导就硬换元",
+              "例9.1, 例9.2, 强化例9.1"
+            ],
+            [
+              "含 $\\sqrt{a^2\\pm x^2},\\;\\sqrt{x^2-a^2}$ 或二次配方根式",
+              "背熟三大根式闭式（含 $\\int\\sec^3 t$）；复杂分母用三角代换或倒代换",
+              "$x=a\\sec t$ 在 $x<-a$ 分支上 $\\tan t<0$；倒代换 $x=\\frac{1}{t}$ 漏绝对值 $|t|$",
+              "例9.3, 强化例9.2, 强化例9.3"
+            ],
+            [
+              "无平方项根式 $\\sqrt[n]{ax+b},\\;\\sqrt{\\frac{ax+b}{cx+d}},\\;\\sqrt{\\mathrm{e}^x\\pm 1}$",
+              "直接「令复杂根式 $=t$」整体有理化，再拆部分分式或分部积分",
+              "回代忘记把 $\\ln(1+u^2)$ 还原成 $x$，或拆分 $\\sqrt{\\frac{2x+1}{x+1}}$ 忽略左支定义域",
+              "例9.4, 强化例9.4, 强化例9.6"
+            ],
+            [
+              "跨类乘积、$P_n\\mathrm{e}^{kx}$、$\\mathrm{e}^{ax}\\sin bx$ 与 $\\mathrm{e}^{kx}(f+f')$",
+              "多项式乘指数/三角用**表格法**；指数乘三角用**行列式**；$\\mathrm{e}^{kx}(f+f')$ **只分部一项等抵消**",
+              "再现法中途换 $u$ 绕回 $I=I$；抵消法把两项同时分部抵消失败",
+              "例9.5~9.7, 强化例9.7~9.8"
+            ],
+            [
+              "有理函数 $\\frac{P_n(x)}{Q_m(x)}$",
+              "假分式先除法；真分式因式分解后按 4 法则拆（赋值+比系数）；二次最简分式先凑导再配方",
+              "重因式 $(ax+b)^k$ 漏写低次项；漏背 $\\int\\frac{\\mathrm{d}x}{(1+x^2)^2}$",
+              "例9.8~9.10, 强化例9.10"
+            ],
+            [
+              "三角有理式 $R(\\sin x,\\cos x)$",
+              "优先全角（谁奇凑谁进 $\\mathrm{d}$）；线性分式首选**配分母+分母导**；都不满足再用 $t=\\tan\\frac{x}{2}$",
+              "一上来就用半角万能公式导致分母四次算崩，或忽略 $t=\\tan x$ 断点",
+              "强化例9.11~9.14"
+            ]
+          ]
+        }
+      ],
+      "patterns": [
+        {
+          "typeName": "不定积分验算铁律：「求导一秒捉虫」",
+          "triggers": "任何不定积分大题/填空算完原函数 $F(x)+C$，怀疑系数、负号或绝对值是否有误时。",
+          "method": "花 10 秒对结果 $F(x)$ 直接求导（至少检查最高次项系数与特值点导数），只要 $F'(x)=f(x)$ 即 100% 锁定满分，零失误！",
+          "pitfall": "绝对不要忘记检查最后结果有没有加任意常数 **$+C$**，且换元中间变量 $t,u$ 必须全部回代为原变量 $x$！",
+          "relatedRefs": "例9.4, 例9.8, 强化例9.3, 强化例9.13"
+        }
+      ],
+      "takeaway": "不定积分抓四根主轴：**先凑导、巧分部（表格/再现/抵消）、遇根式令整体 $=t$、有理三角按级分流！**",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.230-243",
+        "pdfPage": 235,
+        "itemRef": "第9讲 不定积分计算方法总括",
+        "crossRef": "27张宇《高数18讲》(强化) P.90-99"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c09-s-02",
+      "stage": "both",
+      "section": "第 9 讲题型总结 · 二、定积分、变限积分与反常积分计算总表",
+      "kind": "summary",
+      "title": "【定/变限/反常积分总表】对称、区间再现、点火、4 类变限求导与 $\\Gamma$ 函数全覆盖",
+      "examWeight": "core",
+      "overview": "算定积分绝不要一上来就硬求原函数！先过一遍「**几何法 $\\to$ 奇偶对称/周期性 $\\to$ 区间再现/华里士点火 $\\to$ 换元分部**」四连滤网；遇变限积分按「直接/换元/拆分/换序」四路分流；遇反常积分先查齐全部奇点再用 $\\Gamma$ 函数或换元化常义！",
+      "tables": [
+        {
+          "caption": "表 9-5 定积分、变限积分与反常积分 6 大高频题型速查表（基础 P.243-255 & 强化 P.99-104）",
+          "headers": [
+            "题型类别",
+            "标准秒杀路线",
+            "头号易错红线",
+            "代表例题"
+          ],
+          "rows": [
+            [
+              "对称/周期/几何法速算",
+              "对称区间（或平移对称后）偶倍奇零；周期积分起点无关；$\\sqrt{a^2-x^2},\\sqrt{x(2a-x)}$ 走圆面积",
+              "反常发散积分（如 $\\int_{-1}^1\\frac{\\mathrm{d}x}{x}$）乱套奇零；未确认区间对称中心",
+              "例9.12, 例9.13, 例9.15, 例9.16, 强化例9.22"
+            ],
+            [
+              "区间再现 + 华里士点火",
+              "令 $x=a+b-t$ 配对相加或消去因子 $x$；再看清 $[0,\\frac{\\pi}{2}]/[0,\\pi]/[0,2\\pi]$ 套表 9-3 点火",
+              "$[0,\\pi]$ 上 $\\int_0^\\pi\\cos^{2k+1}x=0$ 却误乘 2 倍；套 $\\int_0^\\pi x f(\\sin x)$ 忘验偶对称",
+              "例9.17, 例9.18, 强化例9.5"
+            ],
+            [
+              "不可求积/递推型定积分",
+              "含 $\\int\\mathrm{e}^{-t^2}$ 等先分部求导消积分号；含 $\\ln^n x$ 或 $x^n\\mathrm{e}^{-x}$ 分部建递推式",
+              "硬求 $\\mathrm{e}^{-t^2}$ 原函数卡死；$\\int_0^1 x^2\\ln^n x$ 下限 $0^+$ 极限未验证",
+              "例9.19, 例9.28, 强化例9.9"
+            ],
+            [
+              "变限积分求导 4 大题型",
+              "直接求导；被积含 $x$ 先换元；含 $|t-x|$ 先画双数轴对比再拆分；内层难积则画区换序",
+              "含 $x$ 项直接求导；拆分后分段点导数漏用左右导数定义检验",
+              "例9.20~9.22, 强化例9.16~9.19"
+            ],
+            [
+              "变限积分奇偶/周期与分段拼接",
+              "奇积全偶、偶积仅下限 $0$ 唯一奇、周期 $\\iff\\int_0^T f=0$；分段原函数必用分段点连续定常数",
+              "偶函数下限非 $0$ 误判为奇；分段变限积分忘累加前段定积分常数值",
+              "例9.23~9.25, 强化例9.20~9.21"
+            ],
+            [
+              "反常积分精确计算与 $\\Gamma$ 函数",
+              "先找齐全部瑕点拆分；能换元压成有限区间就换元；高斯型配 $2\\int_0^{+\\infty}t^{2\\alpha-1}\\mathrm{e}^{-t^2}=\\Gamma(\\alpha)$",
+              "反求参数漏验区间内部跑出的新发散瑕点（强化例9.15）；漏配系数 $2$",
+              "例9.26~9.29, 强化例9.15"
+            ]
+          ]
+        }
+      ],
+      "patterns": [
+        {
+          "typeName": "含绝对值变限积分「双数轴判定法」",
+          "triggers": "求 $f(x)=\\int_a^b |g(t)-g(x)|h(t)\\,\\mathrm{d}t$ 的导数、泰勒展开或最值。",
+          "method": "① 画出 $t\\in[a,b]$ 与 $x$ 定义域两条平行数轴；② 若 $x$ 恒在 $[a,b]$ 内（例9.21、强化例9.17），直接按 $t=x$ 劈两段无需分类；③ 若 $x$ 能跑出 $[a,b]$（强化例9.18），按 $x<a,\\;a\\le x\\le b,\\;x>b$ 分类并在端点 $a,b$ 用左右导数定义核验！",
+          "pitfall": "绝对不能直接把绝对值符号带进积分号里面求导！",
+          "relatedRefs": "例9.21, 强化例9.17, 强化例9.18"
+        }
+      ],
+      "takeaway": "定积分讲效率：**能几何不换元，能对称/再现/点火不硬积，变限见 $x$ 先移出，反常见瑕点先劈开！**",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.243-255",
+        "pdfPage": 248,
+        "itemRef": "第9讲 定积分、变限积分与反常积分计算总括",
+        "crossRef": "27张宇《高数18讲》(强化) P.99-104"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c09-s-03",
+      "stage": "both",
+      "section": "第 9 讲题型总结 · 三、原书勘误、分支定义域与严谨性核验台账",
+      "kind": "summary",
+      "title": "【避坑 & 勘误台账】第 9 讲 5 处印刷笔误、分支定义域与严谨性核验汇总",
+      "examWeight": "core",
+      "overview": "在逐页视觉直读两书第 9 讲正文并完成全部 51 道例题 SymPy 符号/数值核验的过程中，共精准捕获 **1 处实质双符号印刷笔误** 与 **4 处原函数常数/根式分支/断点严谨性补注**，汇总如下表供考场避坑。",
+      "tables": [
+        {
+          "caption": "表 9-6 第 9 讲原书印刷笔误与严谨性核验台账（5 处全量核验，对应总台账 #27~#31）",
+          "headers": [
+            "编号",
+            "出处与例题",
+            "原书写法 / 隐患",
+            "SymPy 核验与严谨修正"
+          ],
+          "rows": [
+            [
+              "#27",
+              "基础30讲 P.247 例9.14 方法二",
+              "令 $x=\\cos t$ 误印为 $\\int_{\\frac{\\pi}{2}}^0\\arcsin(-\\sin t)(-\\sin t)\\,\\mathrm{d}t=\\int_{\\frac{\\pi}{2}}^0 t\\sin t\\,\\mathrm{d}t$，并把 $\\left[-t\\cos t+\\sin t\\right]_{\\frac{\\pi}{2}}^0$ 写为 $1$",
+              "**双符号印刷笔误实锤！**在 $t\\in[0,\\frac{\\pi}{2}]$ 上 $\\sqrt{1-\\cos^2 t}=+\\sin t\\ge 0$；SymPy 实算 $\\int_{\\frac{\\pi}{2}}^0 t\\sin t\\,\\mathrm{d}t=-1$。正确过程为 $\\int_{\\frac{\\pi}{2}}^0 t(-\\sin t)\\,\\mathrm{d}t=\\int_0^{\\frac{\\pi}{2}} t\\sin t\\,\\mathrm{d}t=1$。"
+            ],
+            [
+              "#28",
+              "基础30讲 P.252 例9.23 证明首行",
+              "直接设连续函数 $f(x)$ 的「一个原函数」为 $F(x)=\\int_a^x f(t)\\,\\mathrm{d}t$（漏常数 $+C$）",
+              "$\\int_a^x f(t)\\,\\mathrm{d}t$ 必过零点 $F(a)=0$，无法覆盖无实零点的原函数（如 $\\sin x$ 之原函数 $-\\cos x+5$）。严格证明须设一般原函数 $F(x)=\\int_0^x f(t)\\,\\mathrm{d}t+C$（同书 P.251 注(1)即带 $+C$）。"
+            ],
+            [
+              "#29",
+              "高数18讲 P.92 强化例9.2(3) & P.93 强化例9.3(1) 法二",
+              "$x=a\\sec t$ 直接去根号作 $a\\tan t$；倒代换 $x=\\frac{1}{t}$ 直接把 $\\sqrt{1+\\frac{1}{t^2}}$ 写作 $\\frac{\\sqrt{1+t^2}}{t}$",
+              "均隐含正支 $x>0$（$x<-a$ 时 $\\tan t<0$；$x<0$ 时 $|t|=-t$ 与 $|x|=-x$ 两次反号相抵）。SymPy 求导实测两题最终闭式在负支上依然成立，推导时注明分支讨论即可无懈可击。"
+            ],
+            [
+              "#30",
+              "高数18讲 P.93 强化例9.4 末行",
+              "将 $-\\frac{t}{t^2-2}=(x+1)\\sqrt{\\frac{2x+1}{x+1}}$ 化作 $+\\sqrt{(2x+1)(x+1)}$，且把根式拆为 $\\frac{\\sqrt{2x+1}}{\\sqrt{x+1}}$",
+              "原式定义域含两支 $(-\\infty,-1)\\cup[-\\frac{1}{2},+\\infty)$，原书末行仅适用于右支 $x>-\\frac{1}{2}$；在左支 $x<-1$ 上须保留 $(x+1)t=-\\sqrt{(2x+1)(x+1)}$ 且不能把负被开方数硬拆成虚根。"
+            ],
+            [
+              "#31",
+              "基础30讲 P.243 注2 & 高数18讲 P.98 强化例9.13",
+              "含 $\\tan x$ 或 $\\tan\\frac{x}{2}$ 的原函数用于定积分时若区间跨过 $\\frac{\\pi}{2}$ 或 $\\pi$ 会出现断裂跳变",
+              "如基础 P.243 注2 特指 $\\int_0^{\\frac{3}{4}\\pi}\\frac{\\mathrm{d}x}{1+\\cos^2 x}$ 若直接代 $\\frac{1}{\\sqrt{2}}\\arctan\\frac{\\tan x}{\\sqrt{2}}$ 会算成负值！必须按断点分段取单侧极限；强化例9.13 法二配分母导数则直接绕过断点隐患。"
+            ]
+          ]
+        }
+      ],
+      "patterns": [
+        {
+          "typeName": "定积分换元与牛顿-莱布尼茨防错「三查清单」",
+          "triggers": "在定积分中使用三角换元、倒代换或直接代入不定积分原函数时。",
+          "method": "① **查根号正负**：换元后 $\\sqrt{u^2}=|u|$ 必看新区间符号；② **查上下限方向**：写 $\\left.F(t)\\right|_a^b$ 时核对上减下符号；③ **查原函数连续性**：确认 $F(x)$ 在整个闭区间 $[a,b]$ 上无分母为零或 $\\tan x$ 断点！",
+          "pitfall": "绝对不要凭直觉跳过根号正负与断点检验——例9.14 与 $\\int_0^{\\frac{3}{4}\\pi}\\frac{\\mathrm{d}x}{1+\\cos^2 x}$ 正是两面经典照妖镜！",
+          "relatedRefs": "例9.13, 例9.14, 例9.23, 强化例9.4, 强化例9.13"
+        }
+      ],
+      "takeaway": "计算讲拼的不仅是套路，更是**符号、绝对值、常数 $+C$ 与定义域分支的零失误基本功**！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》&《高数18讲》(强化)",
+        "printedPage": "基础 P.243, 247, 252 · 强化 P.92-93, 98",
+        "pdfPage": 252,
+        "itemRef": "第9讲 勘误与严谨性核验台账"
+      },
+      "verification": {
+        "method": "sympy",
+        "verified": true,
+        "testId": "m1_c09_ex_zy30_11_19"
+      }
+    }
+  ]
+}
