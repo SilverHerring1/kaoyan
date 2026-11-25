@@ -604,6 +604,112 @@ def run_all_checks() -> list[tuple[str, bool, str]]:
           and sp.simplify(v_i58 - exp_i58) == 0,
           f"Ex5.5-5.9 all exact; Ex5.8={sp.N(v_i58, 6)}")
 
+    # ==================== Calculus Lecture 6: MVT, Differential Equations/Roots & Inequalities ====================
+    a_c6, b_c6, k_c6 = sp.symbols("a_c6 b_c6 k_c6", real=True)
+    bp_c6 = sp.Symbol("bp_c6", positive=True)
+    f_c6 = sp.Function("f_c6")(xp)
+    phi_c6 = sp.Function("phi_c6")(xp)
+    Fint_c6 = sp.Function("Fint_c6")(xp)
+    n_c6 = sp.Symbol("n_c6", real=True)
+
+    # 38. Auxiliary-function derivative identities & zy18 Ex 6.3 e^(1-x) check (P.168-169, P.49-52)
+    id6_1 = sp.simplify(sp.diff(f_c6 * xp**n_c6, xp) - xp**(n_c6 - 1) * (xp * sp.diff(f_c6, xp) + n_c6 * f_c6))
+    id6_2 = sp.simplify(sp.diff(f_c6 * sp.exp(phi_c6), xp) - sp.exp(phi_c6) * (sp.diff(f_c6, xp) + f_c6 * sp.diff(phi_c6, xp)))
+    id6_3 = sp.simplify(sp.diff(f_c6 * sp.exp(xp), xp, 2) - sp.exp(xp) * (sp.diff(f_c6, xp, 2) + 2 * sp.diff(f_c6, xp) + f_c6))
+    id6_4 = sp.simplify(sp.diff(sp.diff(f_c6, xp) / f_c6, xp) - (sp.diff(f_c6, xp, 2) * f_c6 - sp.diff(f_c6, xp)**2) / f_c6**2)
+    id6_5 = sp.simplify(sp.diff(sp.log(f_c6), xp, 2) - (sp.diff(f_c6, xp, 2) * f_c6 - sp.diff(f_c6, xp)**2) / f_c6**2)
+    id6_63 = sp.simplify(sp.diff(xp * sp.exp(1 - xp) * f_c6, xp) - sp.exp(1 - xp) * (f_c6 - xp * f_c6 + xp * sp.diff(f_c6, xp)))
+    id6_61 = sp.simplify(sp.diff(f_c6 * sp.exp(Fint_c6), xp).subs(sp.diff(Fint_c6, xp), f_c6) - sp.exp(Fint_c6) * (sp.diff(f_c6, xp) + f_c6**2))
+    check("m1_c06_f_aux_derivs",
+          id6_1 == 0 and id6_2 == 0 and id6_3 == 0 and id6_4 == 0 and id6_5 == 0 and id6_63 == 0 and id6_61 == 0,
+          "All aux-func identities & zy18 Ex6.3 e^(1-x) exact")
+
+    # 39. zy18 P.61-62 22 Taylor/formal expansions & margin limits
+    t6_1 = sp.series(sp.sqrt(1 + x), x, 0, 3).removeO() == 1 + x / 2 - x**2 / 8
+    t6_2 = sp.series(1 / sp.sqrt(1 + x), x, 0, 3).removeO() == 1 - x / 2 + sp.Rational(3, 8) * x**2
+    t6_3 = sp.series(1 / (1 - x)**2, x, 0, 4).removeO() == 1 + 2 * x + 3 * x**2 + 4 * x**3
+    t6_4 = sp.series(sp.tan(x), x, 0, 6).removeO() == x + x**3 / 3 + sp.Rational(2, 15) * x**5
+    t6_5 = sp.series(sp.asin(x), x, 0, 6).removeO() == x + x**3 / 6 + sp.Rational(3, 40) * x**5
+    t6_6 = sp.series(sp.atan(x), x, 0, 6).removeO() == x - x**3 / 3 + x**5 / 5
+    t6_7 = sp.series(sp.log((1 + x) / (1 - x)), x, 0, 6).removeO() == 2 * (x + x**3 / 3 + x**5 / 5)
+    t6_8 = sp.series(sp.log(x + sp.sqrt(x**2 + 1)), x, 0, 6).removeO() == x - x**3 / 6 + sp.Rational(3, 40) * x**5
+    ml6_1 = sp.limit((sp.sqrt(1 + x**2) + sp.sqrt(1 - x**2) - 2) / (x**2 * (1 - sp.cos(x))), x, 0)
+    ml6_2 = sp.limit((sp.tan(x) - x - x**3 / 3) / (x * (sp.exp(x**4) - 1)), x, 0)
+    check("m1_c06_f_taylor_22",
+          t6_1 and t6_2 and t6_3 and t6_4 and t6_5 and t6_6 and t6_7 and t6_8
+          and ml6_1 == sp.Rational(-1, 2) and ml6_2 == sp.Rational(2, 15),
+          f"margin lims={ml6_1}, {ml6_2}")
+
+    # 40. zy30 Ex 6.5, 6.10, 6.12, 6.13 (MVT & Taylor, P.169-175)
+    # Substitute u = b - x > 0 to verify Ex 6.5 auxiliary derivative cleanly
+    d65 = sp.simplify(sp.powsimp(sp.expand(sp.diff(f_c6 * xp**ap, xp) - xp**(ap - 1) * (sp.diff(f_c6, xp) * xp + ap * f_c6)), force=True))
+    f610 = sp.exp(-x) - 1
+    v610_ok = all(
+        float(sp.N(xv * f610.subs(x, bv))) > float(sp.N(bv * f610.subs(x, xv)))
+        for av, xv, bv in [(sp.Rational(1, 2), sp.Integer(1), sp.Integer(2)), (sp.Integer(1), sp.Integer(2), sp.Integer(4))]
+    )
+    f612 = (x - sp.Rational(1, 2))**2 - sp.Rational(1, 12)
+    f613 = sp.Rational(1, 2) * (x**3 + 1)
+    check("m1_c06_ex_zy30_05_13",
+          d65 == 0 and v610_ok
+          and sp.integrate(f612, (x, 0, 1)) == 0 and sp.diff(f612, x, 2) > 0 and f612.subs(x, sp.Rational(1, 2)) < 0
+          and f613.subs(x, -1) == 0 and f613.subs(x, 1) == 1 and sp.diff(f613, x).subs(x, 0) == 0 and sp.diff(f613, x, 3) == 3)
+
+    # 41. zy30 Ex 6.14 - Ex 6.18 (Roots, P.176-178)
+    r614 = float(sp.nsolve(xp**sp.Rational(1, 4) + xp**sp.Rational(1, 2) - sp.cos(xp), 0.3))
+    disc615 = sp.factor(sp.discriminant(5 * t**2 + 6 * a_c6 * t + 3 * b_c6, t))
+    f616 = 2**x - x**2 - 1
+    r616_3 = float(sp.nsolve(f616, 4.2))
+    r618 = sp.real_roots(x**3 + 3 * x - 1, x)
+    check("m1_c06_ex_zy30_14_18",
+          0 < r614 < 1 and sp.simplify(disc615 - 12 * (3 * a_c6**2 - 5 * b_c6)) == 0
+          and f616.subs(x, 0) == 0 and f616.subs(x, 1) == 0 and 2 < r616_3 < 5
+          and len(r618) == 1 and 0 < float(r618[0].evalf()) < 1,
+          f"Ex6.14=+-{r614:.4f}, Ex6.16 3rd={r616_3:.4f}")
+
+    # 42. zy30 Ex 6.19 - Ex 6.21 (Inequalities, P.179-181)
+    f620 = sp.log((1 + xp) / xp) - 1 / (1 + xp)
+    df620 = sp.simplify(sp.diff(f620, xp) + 1 / (xp * (1 + xp)**2))
+    g620 = f620 - 1 / (sp.sqrt(xp) * (1 + xp))
+    dg620 = sp.simplify(sp.diff(g620, xp) - (1 + 3 * xp - 2 * sp.sqrt(xp)) / (2 * xp**sp.Rational(3, 2) * (1 + xp)**2))
+    h620_min = (1 + 3 * xp - 2 * sp.sqrt(xp)).subs(xp, sp.Rational(1, 9))
+    phi621 = sp.log(xp) - sp.log(ap) - (xp - ap) / sp.sqrt(ap * xp)
+    dphi621 = sp.simplify(sp.diff(phi621, xp) + (sp.sqrt(xp) - sp.sqrt(ap))**2 / (2 * xp * sp.sqrt(ap * xp)))
+    check("m1_c06_ex_zy30_19_21",
+          df620 == 0 and dg620 == 0 and h620_min == sp.Rational(2, 3) and dphi621 == 0)
+
+    # 43. zy18 Intensive Ex 6.13, 6.15, 6.17, 6.18 (P.59-66)
+    l613 = sp.limit(sp.log((sp.exp(xp) - 1) / xp) / xp, xp, 0, "+")
+    g615_1 = sp.integrate(-t * sp.sin(t**2), (t, 0, 1))
+    f617 = ap * xp - bp_c6 * sp.log(xp)
+    stat617 = sp.solve(sp.diff(f617, xp), xp)[0]
+    min617 = sp.simplify(f617.subs(xp, stat617) - bp_c6 * (1 - sp.log(bp_c6 / ap)))
+    v618_int = float(sp.N(sp.Si(-3 * sp.pi / 2) - sp.Si(1), 8))
+    v618_F = v618_int - float(sp.N(2 * sp.log(3 * sp.pi / 2), 8))
+    check("m1_c06_ex_zy18_09_18",
+          l613 == sp.Rational(1, 2) and sp.simplify(g615_1 - (sp.cos(1) - 1) / 2) == 0
+          and stat617 == bp_c6 / ap and min617 == 0 and v618_int < 0 and v618_F < 0,
+          f"Ex6.13={l613}, Ex6.18 int={v618_int:.4f}, F(-3pi/2)={v618_F:.4f}")
+
+    # 44. zy18 Intensive Ex 6.20, 6.21, 6.22 (P.70-71)
+    g620i = xp - 2 * sp.log(xp) + 2 * k_c6
+    stat620i = sp.solve(sp.diff(g620i, xp), xp)[0]
+    x621 = sp.Rational(1, 3) * t**3 + t + sp.Rational(1, 3)
+    y621 = sp.Rational(1, 3) * t**3 - t + sp.Rational(1, 3)
+    dy621 = sp.simplify(sp.diff(y621, t) / sp.diff(x621, t))
+    d2y621 = sp.simplify(sp.diff(dy621, t) / sp.diff(x621, t))
+    pts621 = ((x621.subs(t, -1), y621.subs(t, -1)), (x621.subs(t, 1), y621.subs(t, 1)))
+    f622 = t**3 + t
+    a622 = sp.integrate(f622, (t, 0, 1))
+    F622 = a622 * (1 - x**2) + sp.integrate(f622, (t, 1, x))
+    check("m1_c06_ex_zy18_20_22",
+          stat620i == 2 and sp.simplify(g620i.subs(xp, 2) - (2 - 2 * sp.log(2) + 2 * k_c6)) == 0
+          and sp.simplify(dy621 - (t**2 - 1) / (t**2 + 1)) == 0
+          and sp.simplify(d2y621 - 4 * t / (t**2 + 1)**3) == 0
+          and pts621 == ((-1, 1), (sp.Rational(5, 3), sp.Rational(-1, 3)))
+          and a622 > 0 and F622.subs(x, -1) == 0 and F622.subs(x, 0) == 0 and F622.subs(x, 1) == 0,
+          f"Ex6.21 A={pts621[0]}, B={pts621[1]}; Ex6.22 a={a622}")
+
     return results
 
 

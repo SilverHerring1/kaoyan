@@ -1,0 +1,2203 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "calc-06",
+  "chapterNum": "高数 · 第 6 讲",
+  "chapterTitle": "一元函数微分学的应用（二）——中值定理、等式与不等式",
+  "syllabusRef": "2027 考研数学一大纲 · 高等数学第 6 讲（27 张宇《基础30讲·高数》P.164-181 + 《高数18讲》强化 P.48-71 全量合编）",
+  "items": [
+    {
+      "id": "m1-c06-f-01",
+      "stage": "foundation",
+      "section": "一·1、涉及函数的四大中值定理（有界最值 / 介值 / 平均值 / 零点）",
+      "kind": "formula",
+      "title": "闭区间连续函数四大定理（有界最值、介值、平均值定理、零点定理及开区间推广版）",
+      "examWeight": "core",
+      "prompt": "设 $f(x)\\in C[a,b]$，默写有界最值定理、介值定理、离散/连续平均值定理，以及零点定理及其开区间/无穷区间推广形式：",
+      "formulaLatex": "$$\\begin{aligned}&\\text{① 定理 1（有界与最值）：}m \\le f(x) \\le M\\quad(m,M\\text{ 为 }[a,b]\\text{ 上最小、最大值}) \\\\&\\text{② 定理 2（介值定理）：}\\forall\\mu\\in[m,M],\\;\\exists\\xi\\in[a,b]\\text{ 使 }f(\\xi)=\\mu \\\\&\\text{③ 定理 3（平均值定理，高频必考！）：}a<x_1<x_2<\\dots<x_n<b \\implies \\exists\\xi\\in[x_1,x_n]\\text{ 使 }f(\\xi)=\\frac{1}{n}\\sum_{i=1}^n f(x_i) \\\\&\\qquad\\text{（连续推广：积分中值定理 }f(\\xi)=\\frac{1}{b-a}\\int_a^b f(x)\\,\\mathrm{d}x\\text{）} \\\\&\\text{④ 定理 4（零点定理）：}f(a)\\cdot f(b)<0 \\implies \\exists\\xi\\in(a,b)\\text{ 使 }f(\\xi)=0 \\\\&\\text{⑤ 推广的零点定理：}f\\in C(a,b),\\;\\lim_{x\\to a^+}f(x)=\\alpha,\\;\\lim_{x\\to b^-}f(x)=\\beta,\\;\\alpha\\beta<0 \\implies \\exists\\xi\\in(a,b)\\text{ 使 }f(\\xi)=0\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "推广零点定理的 $a,b,\\alpha,\\beta$",
+          "desc": "既可以是**有限数**，也可以是**无穷大**（$\\pm\\infty$）！遇到 $(0,+\\infty)$ 或 $(-\\infty,+\\infty)$ 或无定义端点直接套用，无需手动凑闭区间！"
+        },
+        {
+          "sym": "平均值定理权重加权推广",
+          "desc": "若 $c_i>0$，则同样存在 $\\xi\\in[x_1,x_n]$ 使 $f(\\xi)=\\frac{\\sum c_i f(x_i)}{\\sum c_i}$；典型考法是先用平均值定理造出一个点的值等于端点值，再衔接罗尔定理（见例6.4）！"
+        }
+      ],
+      "conditions": "定理 1~4 严格要求在**闭区间 $[a,b]$ 上连续**（缺闭区间或有间断点均可能失效）；推广零点定理只需在**开区间 $(a,b)$ 内连续**且两端点极限异号！",
+      "pitfalls": "高频忽略点：零点定理只能保证「**至少存在一个根**」（存在性），绝不能单独说明唯一性；且反过来，函数在 $(a,b)$ 内有零点并不要求 $f(a)f(b)<0$（如 $f(x)=x^2$ 在 $[-1,1]$）。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.165-166",
+        "pdfPage": 170,
+        "itemRef": "一·1 定理1-4 & 注",
+        "crossRef": "27张宇《高数18讲》(强化) P.64 第二部分(1)"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-f-02",
+      "stage": "both",
+      "section": "一·2、费马定理、罗尔定理（含推广）与罗尔推论",
+      "kind": "formula",
+      "title": "费马定理、罗尔定理（标准版 + 广义极限推广版）与罗尔推论「阶数换个数」",
+      "examWeight": "core",
+      "prompt": "默写费马定理、罗尔定理三条件、广义罗尔定理及罗尔推论（由 $f^{(n)}(x)=0$ 根个数反推 $f(x)=0$ 根个数）：",
+      "formulaLatex": "$$\\begin{aligned}&\\text{① 定理 5（费马定理）：}f(x)\\text{ 在 }x_0\\text{ 处可导且取极值} \\implies f'(x_0)=0 \\\\&\\text{② 定理 6（罗尔定理）：}f\\in C[a,b],\\;\\text{在 }(a,b)\\text{ 可导},\\;f(a)=f(b) \\implies \\exists\\xi\\in(a,b)\\text{ 使 }f'(\\xi)=0 \\\\&\\text{③ 推广的罗尔定理：}f\\text{ 在 }(a,b)\\text{ 内可导，}\\lim_{x\\to a^+}f(x)=\\lim_{x\\to b^-}f(x)=A \\implies \\exists\\xi\\in(a,b)\\text{ 使 }f'(\\xi)=0 \\\\&\\qquad\\text{（区间 }(a,b)\\text{ 可有限可无穷，极限 }A\\text{ 可有限也可同为 }+\\infty\\text{ 或同为 }-\\infty\\text{！）} \\\\&\\text{④ 罗尔推论（阶数换个数）：若 }f^{(n)}(x)=0\\text{ 在区间 }I\\text{ 上至多有 }k\\text{ 个实根} \\implies f(x)=0\\text{ 在 }I\\text{ 上至多有 }k+n\\text{ 个实根！}\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "罗尔定理是全章引擎",
+          "desc": "拉格朗日、柯西、拉格朗日余项泰勒公式全由罗尔定理推导；遇到证明 $f^{(n)}(\\xi)=0$（尤其是 $n=2$），优先找 3 个函数值相等的点连续用两次罗尔（见例6.6、例6.7、强化例6.22）！"
+        },
+        {
+          "sym": "「阶数换个数」口诀",
+          "desc": "**阶数降几个，根个数最多加几个**：特别当 $f^{(n)}(x)\\ne 0$（$k=0$）时，$f(x)=0$ 至多有 $n$ 个实根（见例6.16 证 $2^x-x^2-1=0$ 至多 3 根）！"
+        }
+      ],
+      "conditions": "罗尔定理三条件「闭区间连续、开区间可导、端点值相等」缺一不可；使用推广罗尔定理且 $A=\\infty$ 时，两端必须**同号无穷**（同为 $+\\infty$ 或同为 $-\\infty$），一正一负无穷不适用！",
+      "pitfalls": "高频混淆：罗尔推论给出的是实根个数的**上界**（「至多有 $k+n$ 个」），而非精确个数；完整证明「恰有 $m$ 个根」必须配合零点定理证「至少 $m$ 个」再夹逼成「有且仅有 $m$ 个」！",
+      "figureSvg": "<svg role='img' viewBox='0 0 460 154' xmlns='http://www.w3.org/2000/svg'><title>微分中值定理十大家族推导脉络图：从闭区间连续到费马、罗尔、拉格朗日、柯西与泰勒（仿基础30讲 P.164）</title><defs><marker id='m1c6_arr1' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='4.5' markerHeight='4.5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><rect x='8' y='10' width='126' height='134' rx='7' fill='#eff6ff' stroke='#2563eb' stroke-width='1.2'/><text x='71' y='26' text-anchor='middle' font-size='8.6' fill='#1e3a8a' font-weight='700'>涉及函数 f(x)（连续）</text><rect x='16' y='34' width='110' height='20' rx='4' fill='#ffffff' stroke='#93c5fd'/><text x='71' y='47' text-anchor='middle' font-size='7.8' fill='#1e40af'>① 有界与最值定理</text><rect x='16' y='60' width='110' height='20' rx='4' fill='#ffffff' stroke='#93c5fd'/><text x='71' y='73' text-anchor='middle' font-size='7.8' fill='#1e40af'>② 介值定理</text><rect x='16' y='86' width='110' height='20' rx='4' fill='#ffffff' stroke='#93c5fd'/><text x='71' y='99' text-anchor='middle' font-size='7.8' fill='#1e40af'>③ 平均值定理（常考！）</text><rect x='16' y='112' width='110' height='20' rx='4' fill='#ffffff' stroke='#93c5fd'/><text x='71' y='125' text-anchor='middle' font-size='7.8' fill='#1e40af'>④ 零点定理及推广</text><line x1='134' y1='44' x2='156' y2='44' stroke='#334155' stroke-width='1.2' marker-end='url(#m1c6_arr1)'/><rect x='160' y='10' width='140' height='134' rx='7' fill='#ecfdf5' stroke='#059669' stroke-width='1.2'/><text x='230' y='26' text-anchor='middle' font-size='8.6' fill='#065f46' font-weight='700'>涉及一阶导 f'(x)</text><rect x='172' y='34' width='116' height='20' rx='4' fill='#ffffff' stroke='#6ee7b7'/><text x='230' y='47' text-anchor='middle' font-size='7.8' fill='#065f46'>⑤ 费马定理 f'(x₀)=0</text><line x1='230' y1='54' x2='230' y2='62' stroke='#059669' stroke-width='1.1' marker-end='url(#m1c6_arr1)'/><rect x='172' y='64' width='116' height='20' rx='4' fill='#fef3c7' stroke='#d97706'/><text x='230' y='77' text-anchor='middle' font-size='7.8' fill='#92400e' font-weight='700'>⑥ 罗尔定理（核心引擎）</text><line x1='230' y1='84' x2='230' y2='92' stroke='#059669' stroke-width='1.1' marker-end='url(#m1c6_arr1)'/><rect x='172' y='94' width='116' height='18' rx='4' fill='#ffffff' stroke='#6ee7b7'/><text x='230' y='106' text-anchor='middle' font-size='7.6' fill='#065f46'>⑦ 拉格朗日（差值↔导数）</text><rect x='172' y='118' width='116' height='18' rx='4' fill='#ffffff' stroke='#6ee7b7'/><text x='230' y='130' text-anchor='middle' font-size='7.6' fill='#065f46'>⑧ 柯西（双函数比值）</text><line x1='300' y1='74' x2='322' y2='52' stroke='#334155' stroke-width='1.2' marker-end='url(#m1c6_arr1)'/><line x1='300' y1='103' x2='322' y2='108' stroke='#334155' stroke-width='1.2' marker-end='url(#m1c6_arr1)'/><rect x='326' y='10' width='126' height='68' rx='7' fill='#fdf2f8' stroke='#be123c' stroke-width='1.2'/><text x='389' y='26' text-anchor='middle' font-size='8.4' fill='#9f1239' font-weight='700'>涉及高阶导 f⁽ⁿ⁾(n≥2)</text><text x='389' y='43' text-anchor='middle' font-size='7.8' fill='#334155'>⑨ 泰勒公式（拉氏余项）</text><text x='389' y='58' text-anchor='middle' font-size='7.5' fill='#9f1239'>证 f⁽ⁿ⁾≠0 或导数界</text><text x='389' y='71' text-anchor='middle' font-size='7.5' fill='#475569'>证 f⁽ⁿ⁾=0 优先多次罗尔</text><rect x='326' y='86' width='126' height='58' rx='7' fill='#f5f3ff' stroke='#7c3aed' stroke-width='1.2'/><text x='389' y='103' text-anchor='middle' font-size='8.4' fill='#5b21b6' font-weight='700'>涉及定积分 ∫f(t)dt</text><text x='389' y='120' text-anchor='middle' font-size='7.8' fill='#334155'>⑩ 推广积分中值定理</text><text x='389' y='134' text-anchor='middle' font-size='7.4' fill='#5b21b6'>变限积分 F(x) 接罗尔/柯西</text></svg>",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.167-170, 176",
+        "pdfPage": 172,
+        "itemRef": "定理5-6 & 注1-2 & 二·3 罗尔推论",
+        "crossRef": "27张宇《高数18讲》(强化) P.54, 64"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-f-03",
+      "stage": "both",
+      "section": "一·2 & 强化三、拉格朗日与柯西中值定理及六大实战变式",
+      "kind": "formula",
+      "title": "拉格朗日中值定理（含强化 6 大实战变式）与柯西中值定理（含参/变限积分凑法）",
+      "examWeight": "core",
+      "prompt": "默写拉格朗日中值定理及其强化 6 大常用改写形式，以及柯西中值定理的三条件与公式：",
+      "formulaLatex": "$$\\begin{aligned}&\\text{① 定理 7（拉格朗日）：}f\\in C[a,b],\\;(a,b)\\text{ 可导} \\implies \\exists\\xi\\in(a,b),\\;f(b)-f(a)=f'(\\xi)(b-a) \\\\&\\text{② 拉格朗日 6 大强化变式（强化 P.57-59）：} \\\\&\\qquad (1)\\;f'(x)\\equiv 0\\iff f(x)\\equiv C;\\quad (2)\\;f(x)-f(a)=f'(\\xi)(x-a)\\text{（出现 }f-f\\text{ 或 }f-0\\text{）}; \\\\&\\qquad (3)\\;\\frac{f(b)-f(a)}{b-a}=f'(\\xi)\\text{（切线斜率）};\\quad (4)\\;f(x)-f(0)=f'(\\theta x)x\\;(0<\\theta<1\\text{，求 }\\lim\\theta\\text{）}; \\\\&\\qquad (5)\\;\\int_a^x f(t)\\,\\mathrm{d}t=f(\\xi)(x-a)\\text{（推广积分中值定理，}\\xi\\text{ 严格介于 }a,x\\text{ 之间！）} \\\\&\\text{③ 定理 8（柯西）：}f,g\\in C[a,b],\\;(a,b)\\text{ 可导且 }g'(x)\\ne 0 \\implies \\exists\\xi\\in(a,b),\\;\\frac{f(b)-f(a)}{g(b)-g(a)}=\\frac{f'(\\xi)}{g'(\\xi)}\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "柯西中值定理两大凑项心法（强化 P.59）",
+          "desc": "① 一抽象一具体：$f(\\xi)$ 写成 $\\big[\\int_a^x f(t)\\,\\mathrm{d}t\\big]'_{x=\\xi}$，具体因子如 $2\\xi,\\frac{1}{\\xi},\\mathrm{e}^\\xi$ 反推 $x^2,\\ln x,\\mathrm{e}^x$（例6.11、强化例6.14、强化例6.15）；② 借 $0$ 或 $1$ 凑差：$f(b)=f(b)-f(a)$（$f(a)=0$）、$\\int_a^b=\\int_a^b-\\int_a^a$、$\\mathrm{e}-1=\\mathrm{e}^1-\\mathrm{e}^0$！"
+        }
+      ],
+      "conditions": "柯西中值定理严防漏查第三条件：**$(a,b)$ 内 $g'(x)\\ne 0$**（既保证了右侧分母 $g'(\\xi)\\ne 0$，又由罗尔定理自动保证了左侧分母 $g(b)-g(a)\\ne 0$！）；拉格朗日推「$f'(x)\\equiv 0\\Rightarrow f\\equiv C$」要求在**同一个连通区间**上成立（分段区间常数可不同！）。",
+      "pitfalls": "高频失分点：证明 $\\frac{f(b)-f(a)}{g(b)-g(a)}=\\frac{f'(\\xi)}{g'(\\xi)}$ 时错把分子分母**分别用两次拉格朗日**——那样会得到**两个不同中值** $\\frac{f'(\\xi_1)}{g'(\\xi_2)}$，无法保证 $\\xi_1=\\xi_2$！单中值比值必须用柯西中值定理！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.171-172",
+        "pdfPage": 176,
+        "itemRef": "定理7-8 & 注",
+        "crossRef": "27张宇《高数18讲》(强化) P.57-60 三·2~3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c06_ex_zy18_09_18",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-f-04",
+      "stage": "both",
+      "section": "一·2 & 强化四、泰勒公式双余项与展开点选取法则",
+      "kind": "formula",
+      "title": "带拉格朗日余项（定量/证明）与带佩亚诺余项（定性/极限）泰勒公式及 $x,x_0$ 选点铁律",
+      "examWeight": "core",
+      "prompt": "默写两种余项的 $n$ 阶泰勒公式（及麦克劳林特例），并默写证明题中展开点 $x_0$ 与被展开点 $x$ 的选取规则：",
+      "formulaLatex": "$$\\begin{aligned}&\\text{① 泰勒公式统一结构：}\\; f(x)=\\sum_{k=0}^n\\frac{f^{(k)}(x_0)}{k!}(x-x_0)^k + R_n(x) \\\\&\\qquad\\text{拉格朗日余项（区间定量、证高阶等式/不等式）：}\\; R_n(x)=\\frac{f^{(n+1)}(\\xi)}{(n+1)!}(x-x_0)^{n+1}\\quad(\\xi\\text{ 介于 }x,x_0\\text{ 之间}) \\\\&\\qquad\\text{佩亚诺余项（局部定性、求极限/比阶/判极值）：}\\; R_n(x)=o\\big((x-x_0)^n\\big)\\quad(x\\to x_0) \\\\&\\text{② 证明题 }x_0\\text{ 与 }x\\text{ 选取铁律（强化 P.63 与基础 P.175 注）：} \\\\&\\qquad \\text{展开点 }x_0\\text{：取已知多阶导数值（尤其 }f'(x_0)=0\\text{）的点、中点或泛指点 }x\\text{；} \\\\&\\qquad \\text{被展开点 }x\\text{：取已知函数值的点（两端点 }a,b\\text{ 或对称点 }x_0\\pm h\\text{），展开后加减消未知项！}\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "两大高阶导证明选型口诀（基础 P.170 注）",
+          "desc": "遇到 $n\\ge 2$ 阶导数：**证 $f^{(n)}(\\xi)=0$ 优先考虑多次罗尔定理；证 $f^{(n)}(\\xi)\\ne 0$（常数等式或不等式、导数有界估计）优先考虑带拉格朗日余项的泰勒公式！**"
+        }
+      ],
+      "conditions": "拉格朗日余项版要求 $f(x)$ 在含 $x,x_0$ 的闭区间上 $n$ 阶连续可导、开区间内 $n+1$ 阶可导（强化常直接给邻域内 $n+1$ 阶导存在）；佩亚诺余项版只需在单点 $x_0$ 处 $n$ 阶可导！",
+      "pitfalls": "高频大错：把带拉格朗日余项的 $f^{(n+1)}(\\xi)$ 当常数提出积分号外（例6.12 蓝批警告：**$\\xi=\\xi(x)$ 是 $x$ 的函数，绝不能直接提出来！**）！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.173-175",
+        "pdfPage": 178,
+        "itemRef": "定理9 & 注1-2 & P.175注",
+        "crossRef": "27张宇《高数18讲》(强化) P.62-63 四·2~4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c06_ex_zy30_05_13",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-f-05",
+      "stage": "intensive",
+      "section": "强化一、寻找原函数（辅助函数构造）15 大黄金公式全景",
+      "kind": "formula",
+      "title": "【强化】寻找原函数（逆构辅助函数 $F(x)$）全 15 式：一阶乘积 9 式 + 二阶乘积 + 商 3 式 + 祖孙三代",
+      "examWeight": "core",
+      "prompt": "默写强化 18 讲 P.49-51 全部一阶/二阶乘积求导逆用、一阶商求导逆用及「祖孙三代传承法」辅助函数公式：",
+      "formulaLatex": "$$\\begin{aligned}&\\text{【一阶乘积逆用 9 式】}\\;①\\;[f(x)x^n]'=x^{n-1}[xf'+nf];\\quad ②\\;[f(x)\\mathrm{e}^{nx}]'=\\mathrm{e}^{nx}[f'+nf];\\quad ③\\;[f(x)\\mathrm{e}^{x^n}]'=\\mathrm{e}^{x^n}[f'+nx^{n-1}f]; \\\\&\\qquad ④\\;[f(x)\\mathrm{e}^{\\varphi(x)}]'=\\mathrm{e}^{\\varphi(x)}[f'+f\\varphi'];\\qquad ⑤\\;\\Big[f(x)\\mathrm{e}^{\\int_0^x [f(t)]^{n-1}\\mathrm{d}t}\\Big]'=\\mathrm{e}^{\\int_0^x [f(t)]^{n-1}\\mathrm{d}t}\\big(f'+f^n\\big); \\\\&\\qquad ⑥\\;[ff']'=(f')^2+ff'';\\quad ⑦\\;[fg]'=f'g+fg';\\quad ⑧\\;[f\\arctan x]'=f'\\arctan x+\\frac{f}{1+x^2};\\quad ⑨\\;[f\\sin x]'=(f'\\tan x+f)\\cos x \\\\&\\text{【二阶乘积逆用】}\\;[f(x)\\mathrm{e}^x]''=\\mathrm{e}^x(f''+2f'+f) \\\\&\\text{【一阶商逆用 3 式】}\\;①\\;\\Big[\\frac{f}{x}\\Big]'=\\frac{xf'-f}{x^2};\\quad ②\\;\\Big[\\frac{f'}{f}\\Big]'=\\frac{f''f-(f')^2}{f^2};\\quad ③\\;[\\ln f]''=\\frac{f''f-(f')^2}{f^2}\\;(f>0) \\\\&\\text{【祖孙三代传承法（补齐差辈分）】}\\;f''-f=(f''-f')+(f'-f)\\implies F=(f'-f)\\mathrm{e}^x;\\quad f'-\\int_0^x f\\implies F=\\Big(f-\\int_0^x f\\Big)\\mathrm{e}^x\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "强化 P.49 蓝笔例题（⑤ 实战典例）",
+          "desc": "设 $f$ 在 $[0,1]$ 可导，$f'(x)+f^2(x)\\ge 0$ 且 $f(0)>0$，令 $F(x)=f(x)\\mathrm{e}^{\\int_0^x f(t)\\,\\mathrm{d}t}$，则 $F'(x)\\ge 0\\Rightarrow F(1)\\ge F(0)>0 \\Rightarrow f(1)\\mathrm{e}^{\\int_0^1 f\\,\\mathrm{d}x}\\ge f(0)\\Rightarrow \\int_0^1 f(x)\\,\\mathrm{d}x \\ge \\ln\\frac{f(0)}{f(1)}$！"
+        },
+        {
+          "sym": "对数凹性推几何平均不等式（P.50 蓝批）",
+          "desc": "当 $f>0$ 且 $f''f-(f')^2\\ge 0$ 时，$[\\ln f]''\\ge 0$（$\\ln f$ 凹），立即推出 $\\frac{\\ln f(a)+\\ln f(b)}{2}\\ge\\ln f(\\frac{a+b}{2}) \\iff \\sqrt{f(a)f(b)}\\ge f(\\frac{a+b}{2})$！"
+        }
+      ],
+      "conditions": "套用一阶商逆用时务必核查**分母非零**（$x\\ne 0$ 或 $f(x)\\ne 0$）；套用 $\\ln f(x)$ 必须确保 **$f(x)>0$**；对一般形式 $f'(\\xi)+P(\\xi)f(\\xi)=0$，万能解法是解一阶齐次 ODE 乘积分因子 $\\mathrm{e}^{\\int P(x)\\,\\mathrm{d}x}$！",
+      "pitfalls": "张宇点睛：**逆构辅助函数难度点到为止，无需过度偏怪**；遇到变式先做「移项、乘除通分、对数化」回归上述 15 个经典母式即可秒出！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.49-51",
+        "pdfPage": 62,
+        "itemRef": "第一部分·一 1-4 & P.49蓝笔例题",
+        "crossRef": "27张宇《基础30讲·高等数学分册》 P.168-169 注2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c06_f_aux_derivs",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-f-06",
+      "stage": "intensive",
+      "section": "强化四·1、22 个常用泰勒与形式展开式全景速查",
+      "kind": "formula",
+      "title": "【强化】四组 22 个常用泰勒 / 形式展开式大观（含展开到 $x^5$ 精度与收敛域，字典式速查）",
+      "examWeight": "core",
+      "prompt": "速查并默写强化 18 讲 P.61-62 四组核心展开式（幂根/有理、指数/双曲、三角/反三角、对数/反双曲），重点背诵标注「必背」及展开到 $x^5$ 的高精度项：",
+      "formulaLatex": "$$\\begin{aligned}&\\text{① 幂根与有理：}\\;\\sqrt{1\\pm x}=1\\pm\\frac{1}{2}x-\\frac{1}{8}x^2+\\cdots,\\qquad \\frac{1}{\\sqrt{1\\pm x}}=1\\mp\\frac{1}{2}x+\\frac{3}{8}x^2+\\cdots,\\qquad \\frac{1}{(1\\mp x)^2}=\\sum_{n=0}^\\infty (\\pm 1)^n(n+1)x^n \\\\&\\text{② 三角与反三角（高精度 }x^5\\text{）：}\\;\\tan x=x+\\frac{1}{3}x^3+\\frac{2}{15}x^5+\\cdots,\\quad \\arcsin x=x+\\frac{1}{6}x^3+\\frac{3}{40}x^5+\\cdots,\\quad \\arctan x=x-\\frac{1}{3}x^3+\\frac{1}{5}x^5+\\cdots \\\\&\\text{③ 对数族与反双曲：}\\;\\ln\\frac{1+x}{1-x}=2\\sum_{n=0}^\\infty\\frac{x^{2n+1}}{2n+1}\\;(|x|<1),\\qquad \\ln(x+\\sqrt{x^2+1})=x-\\frac{1}{6}x^3+\\frac{3}{40}x^5+\\cdots\\;(|x|<1)\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "强化 P.61-62 边注两大极限秒杀",
+          "desc": "① $\\lim_{x\\to 0}\\frac{\\sqrt{1+x^2}+\\sqrt{1-x^2}-2}{x^2(1-\\cos x)}=\\lim_{x\\to 0}\\frac{-\\frac{1}{4}x^4}{x^2\\cdot\\frac{1}{2}x^2}=-\\frac{1}{2}$；② $\\lim_{x\\to 0}\\frac{\\tan x-x-\\frac{1}{3}x^3}{x(\\mathrm{e}^{x^4}-1)}=\\lim_{x\\to 0}\\frac{\\frac{2}{15}x^5}{x^5}=\\frac{2}{15}$！"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 6-1 强化 18 讲 P.61-62 四组 22 个常用泰勒与形式展开式完整速查表（经 SymPy 全量验算）",
+          "headers": [
+            "分组",
+            "函数表达式",
+            "泰勒 / 形式展开式",
+            "收敛范围"
+          ],
+          "rows": [
+            [
+              "第一组（幂/分式）",
+              "$\\sqrt{1\\pm x}$；$\\frac{1}{\\sqrt{1\\pm x}}$",
+              "$1\\pm\\frac{1}{2}x-\\frac{1}{8}x^2+\\cdots$；$1\\mp\\frac{1}{2}x+\\frac{3}{8}x^2+\\cdots$",
+              "$|x|<1$"
+            ],
+            [
+              "第一组（必背）",
+              "$\\frac{1}{1+x}$；$\\frac{1}{1-x}$",
+              "$\\sum_{n=0}^\\infty(-1)^n x^n$；$\\sum_{n=0}^\\infty x^n$",
+              "$|x|<1$"
+            ],
+            [
+              "第一组（求导得）",
+              "$\\frac{1}{(1-x)^2}$；$\\frac{1}{(1+x)^2}$",
+              "$\\sum_{n=0}^\\infty(n+1)x^n$；$\\sum_{n=0}^\\infty(-1)^n(n+1)x^n$",
+              "$|x|<1$"
+            ],
+            [
+              "第二组（指数/双曲）",
+              "$\\mathrm{e}^x$（必背）；$a^x$（必背）",
+              "$\\sum_{n=0}^\\infty\\frac{x^n}{n!}$；$\\sum_{n=0}^\\infty(\\ln a)^n\\frac{x^n}{n!}$",
+              "$x\\in\\mathbb{R}$"
+            ],
+            [
+              "第二组（双曲）",
+              "$\\sinh x=\\frac{\\mathrm{e}^x-\\mathrm{e}^{-x}}{2}$；$\\cosh x=\\frac{\\mathrm{e}^x+\\mathrm{e}^{-x}}{2}$",
+              "$\\sum_{n=0}^\\infty\\frac{x^{2n+1}}{(2n+1)!}$；$\\sum_{n=0}^\\infty\\frac{x^{2n}}{(2n)!}$",
+              "$x\\in\\mathbb{R}$"
+            ],
+            [
+              "第三组（三角必背）",
+              "$\\sin x$；$\\cos x$",
+              "$\\sum_{n=0}^\\infty(-1)^n\\frac{x^{2n+1}}{(2n+1)!}$；$\\sum_{n=0}^\\infty(-1)^n\\frac{x^{2n}}{(2n)!}$",
+              "$x\\in\\mathbb{R}$"
+            ],
+            [
+              "第三组（高精度）",
+              "$\\tan x$；$\\arcsin x$；$\\arctan x$",
+              "$x+\\frac{1}{3}x^3+\\frac{2}{15}x^5+\\cdots$；$x+\\frac{1}{6}x^3+\\frac{3}{40}x^5+\\cdots$；$\\sum_{n=0}^\\infty(-1)^n\\frac{x^{2n+1}}{2n+1}$",
+              "$|x|<\\frac{\\pi}{2}; |x|<1; |x|\\le 1$"
+            ],
+            [
+              "第四组（对数必背）",
+              "$\\ln(1+x)$；$\\ln(1-x)$",
+              "$\\sum_{n=1}^\\infty(-1)^{n-1}\\frac{x^n}{n}$；$-\\sum_{n=1}^\\infty\\frac{x^n}{n}$",
+              "$-1<x\\le 1$；$-1\\le x<1$"
+            ],
+            [
+              "第四组（平移/分式）",
+              "$\\ln x$；$\\ln(a+x)\\;(a>0)$",
+              "$\\sum_{n=1}^\\infty(-1)^{n-1}\\frac{(x-1)^n}{n}$；$\\ln a+\\frac{x}{a}-\\frac{1}{2a^2}x^2+\\cdots$",
+              "$0<x\\le 2$；$-a<x\\le a$"
+            ],
+            [
+              "第四组（对称/反双曲）",
+              "$\\ln\\frac{1+x}{1-x}$；$\\ln\\frac{x+1}{x-1}$；$\\ln(x+\\sqrt{x^2+1})$",
+              "$2\\sum_{n=0}^\\infty\\frac{x^{2n+1}}{2n+1}$；$2\\sum_{n=0}^\\infty\\frac{1}{(2n+1)x^{2n+1}}$；$x-\\frac{1}{6}x^3+\\frac{3}{40}x^5+\\cdots$",
+              "$|x|<1$；$|x|>1$；$|x|<1$"
+            ]
+          ]
+        }
+      ],
+      "conditions": "第 16 讲无穷级数求和与展开时须严格核对收敛区间端点开闭；其中 $\\ln\\frac{x+1}{x-1}$ 为 $|x|>1$ 处的罗朗/形式展开，作极限代换时只需 $x\\to\\infty$！",
+      "pitfalls": "极易错系数对比：**$\\arcsin x$ 与 $\\ln(x+\\sqrt{x^2+1})$ 仅 $x^3$ 项符号相反**（前者 $+\\frac{1}{6}x^3+\\frac{3}{40}x^5$，后者 $-\\frac{1}{6}x^3+\\frac{3}{40}x^5$），因为前者导数 $(1-x^2)^{-1/2}$ 全正，后者导数 $(1+x^2)^{-1/2}$ 交错！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.61-62",
+        "pdfPage": 74,
+        "itemRef": "四·1 常用泰勒展开式或形式展开式大观 & 注"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c06_f_taylor_22",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-f-07",
+      "stage": "both",
+      "section": "二 & 强化二/第二部分、导数介值定理（达布定理）与方程根六大工具",
+      "kind": "formula",
+      "title": "导数零点定理 / 导数介值定理（达布定理，不需 $f'$ 连续！）与方程 $f(x)=0$ 实根六大工具",
+      "examWeight": "core",
+      "prompt": "默写导数零点定理、导数介值定理（达布定理）及讨论 $f(x)=0$ 实根个数的 6 大核心工具：",
+      "formulaLatex": "$$\\begin{aligned}&\\text{① 导数零点定理（例 6.3）：}f\\text{ 在 }[a,b]\\text{ 可导，}f'_+(a)\\cdot f'_-(b)<0 \\implies \\exists\\xi\\in(a,b)\\text{ 使 }f'(\\xi)=0 \\\\&\\text{② 导数介值定理（达布定理，强化例 6.8）：}f\\text{ 在 }[a,b]\\text{ 可导，}f'_+(a)\\ne f'_-(b) \\\\&\\qquad \\implies \\forall\\mu\\text{ 介于 }f'_+(a)\\text{ 与 }f'_-(b)\\text{ 之间，}\\exists\\xi\\in(a,b)\\text{ 使 }f'(\\xi)=\\mu\\quad\\text{（完全不需要 }f'\\text{ 连续！）} \\\\&\\text{③ 方程 }f(x)=0\\text{ 实根个数六大工具（强化 P.64-65）：} \\\\&\\qquad (1)\\text{ 零点定理及推广（存在性）；}\\quad (2)\\text{ 单调性（唯一性）；}\\quad (3)\\text{ 罗尔推论（至多 }k+n\\text{ 根）；} \\\\&\\qquad (4)\\text{ 实系数奇次多项式必至少一实根；}\\quad (5)\\text{ 反证法；}\\quad (6)\\text{ 渐近性态与极值草图分离法}\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "实系数奇次方程必有实根证明（基础 P.176 注）",
+          "desc": "$f(x)=x^{2n+1}+a_1x^{2n}+\\dots+a_{2n+1}$ 满足 $\\lim_{x\\to+\\infty}f=+\\infty$、$\\lim_{x\\to-\\infty}f=-\\infty$，由连续性与推广零点定理立得至少一实根（例6.15 直接用）！"
+        }
+      ],
+      "conditions": "导数介值定理（达布定理）**不需要导函数 $f'(x)$ 连续**，只需 $f(x)$ 在 $[a,b]$ 上处处可导（端点为单侧导数）即可！证明时构造 $F(x)=f(x)-\\mu x$ 证端点非最值，再用费马定理！",
+      "pitfalls": "高频误判：在强化例 6.8(2) 中题干只说「$f$ 在 $[0,2]$ 上具有二阶导数」而**未说 $f''$ 连续**——此时对 $\\frac{1}{2}[f''(x_1)+f''(x_2)]=f''(\\xi)$ **不能用连续函数介值定理**，必须用二阶导 $f''=(f')'$ 的**达布介值定理**！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.167, 176",
+        "pdfPage": 172,
+        "itemRef": "例6.3 & 二 微分等式1-4",
+        "crossRef": "27张宇《高数18讲》(强化) P.54-56 例6.8 & P.64-65 第二部分"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-f-08",
+      "stage": "both",
+      "section": "三 & 强化第三部分、微分不等式六大证明工具公式集",
+      "kind": "formula",
+      "title": "微分不等式六大证明工具公式集（单调性 / 最值 / 凹凸性 / 拉格朗日 / 柯西 / 泰勒）",
+      "examWeight": "core",
+      "prompt": "默写证明函数/常数不等式的六大微分学工具标准判定式（含区间端点单侧极限放宽条件）：",
+      "formulaLatex": "$$\\begin{aligned}&\\text{① 单调性：}\\lim_{x\\to a^+}F(x)\\ge 0\\text{ 且 }F'(x)\\ge 0\\;(>0) \\implies (a,b)\\text{ 内 }F(x)\\ge 0\\;(>0)\\text{（右端 }b^-\\text{ 且 }F'\\le 0\\text{ 对称）} \\\\&\\text{② 最值法：若 }F\\text{ 在 }I\\text{ 连续且有唯一极小（大）值点 }x_0 \\implies F(x)\\ge F(x_0)\\;\\big(\\le F(x_0)\\big) \\\\&\\text{③ 凹凸性（}I\\text{ 上 }F''>0\\text{ 凹；}F''<0\\text{ 反向）：} \\\\&\\qquad \\text{端点零点法（极好用！）：}F(a)=F(b)=0,\\;F''>0 \\implies (a,b)\\text{ 内 }F(x)<0\\text{（}F''<0\\implies F>0\\text{）} \\\\&\\qquad \\text{琴生 / 切线法：}\\lambda_1 F(x_1)+\\lambda_2 F(x_2)\\ge F(\\lambda_1 x_1+\\lambda_2 x_2);\\qquad F(x)>F(x_0)+F'(x_0)(x-x_0)\\;(x\\ne x_0) \\\\&\\text{④ 拉格朗日 / 柯西：}(a,b)\\text{ 上 }F'(x)\\ge A\\implies F(b)-F(a)\\ge A(b-a);\\quad \\frac{F'(x)}{G'(x)}\\ge A\\implies \\frac{F(b)-F(a)}{G(b)-G(a)}\\ge A \\\\&\\text{⑤ 拉格朗日余项泰勒：}F''>0 \\implies F(x)=F(x_0)+F'(x_0)(x-x_0)+\\frac{1}{2}F''(\\xi)(x-x_0)^2 \\ge F(x_0)+F'(x_0)(x-x_0)\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "常用高频对数界（基础 P.180 蓝批必背！）",
+          "desc": "由拉格朗日对 $\\ln t$ 在 $[x,x+1]$ 作用立得 **$\\frac{1}{1+x}<\\ln\\left(1+\\frac{1}{x}\\right)<\\frac{1}{x}\\;(x>0)$**，等价于 **$\\frac{x}{1+x}<\\ln(1+x)<x\\;(x>0)$**！"
+        }
+      ],
+      "conditions": "套用柯西不等式 ④ 时须同时注意 $G(b)-G(a)$ 的正负号（若 $G$ 单减，$G(b)-G(a)<0$ 去分母须变号！）；单调性 ① 若右连续则 $\\lim_{x\\to a^+}F(x)$ 直接换 $F(a)$。",
+      "pitfalls": "高频丢步骤：证明全是常数的不等式（如 $\\frac{\\ln b-\\ln a}{b-a}<\\frac{1}{\\sqrt{ab}}$）不能直接求导，必须先**常数变量化**（如固定 $a$ 把 $b$ 改为变量 $x>a$，见例6.21）！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.66-68",
+        "pdfPage": 79,
+        "itemRef": "第三部分 证明不等式 1-6",
+        "crossRef": "27张宇《基础30讲·高等数学分册》 P.179-181 三 微分不等式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c06_ex_zy30_19_21",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-c-01",
+      "stage": "foundation",
+      "section": "一 · 微分中值定理六大核心定理条件与应用场景全景对比",
+      "kind": "conclusion",
+      "title": "六大核心中值定理条件、结论与选型触发信号全景对照表（零点/罗尔/拉格朗日/柯西/泰勒/达布）",
+      "examWeight": "core",
+      "summary": "证明中值等式或不等式绝不是乱猜辅助函数，而是**「先看最高导数阶数、再看中值个数、最后看是否出现端点差值」**：\n1. **0 阶（仅函数值）**：优先用零点定理、介值定理、平均值定理（例6.1、例6.2、例6.4）；\n2. **1 阶单中值**：结论形如 $F'(\\xi)=0$ 用**罗尔定理**（逆构原函数）；出现 $f(b)-f(a)$ 用**拉格朗日**；出现双函数比值 $\\frac{f(b)-f(a)}{g(b)-g(a)}=\\frac{f'(\\xi)}{g'(\\xi)}$ 用**柯西**；\n3. **1 阶双中值 $\\xi,\\eta$**：同区间无约束可分别用拉格朗日+柯西，或先用零点/介值拆分区间 $[a,c],[c,b]$ 再分别用拉格朗日；\n4. **$n\\ge 2$ 阶导数**：证 **$f^{(n)}(\\xi)=0$** 优先找 $n+1$ 个等值点用**多次罗尔**（例6.6、例6.7、强化例6.22）；证 **$f^{(n)}(\\xi)=C\\ne 0$ 或不等式** 优先用**带拉格朗日余项的泰勒公式**（例6.12、例6.13、强化例6.7、强化例6.16）！",
+      "figureSvg": "<svg role='img' viewBox='0 0 460 148' xmlns='http://www.w3.org/2000/svg'><title>中值定理证明题四路选型决策流程图（仿强化18讲 P.48 三向解题法）</title><defs><marker id='m1c6_arr2' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='4.5' markerHeight='4.5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><rect x='145' y='6' width='170' height='24' rx='6' fill='#1e3a8a'/><text x='230' y='21' text-anchor='middle' font-size='9' fill='#ffffff' font-weight='700'>盯住欲证结论形式（含 ξ, η）</text><line x1='175' y1='30' x2='58' y2='48' stroke='#334155' stroke-width='1.1' marker-end='url(#m1c6_arr2)'/><line x1='210' y1='30' x2='172' y2='48' stroke='#334155' stroke-width='1.1' marker-end='url(#m1c6_arr2)'/><line x1='250' y1='30' x2='288' y2='48' stroke='#334155' stroke-width='1.1' marker-end='url(#m1c6_arr2)'/><line x1='285' y1='30' x2='402' y2='48' stroke='#334155' stroke-width='1.1' marker-end='url(#m1c6_arr2)'/><rect x='8' y='50' width='102' height='90' rx='5' fill='#fffbeb' stroke='#d97706' stroke-width='1.2'/><text x='59' y='66' text-anchor='middle' font-size='8' fill='#92400e' font-weight='700'>① 只含单中值 ξ</text><text x='59' y='81' text-anchor='middle' font-size='7.4' fill='#334155'>含 f,f' 线性组合</text><text x='59' y='96' text-anchor='middle' font-size='7.4' fill='#92400e' font-weight='700'>→ 逆构原函数 F</text><text x='59' y='111' text-anchor='middle' font-size='7.2' fill='#475569'>乘积/商/祖孙三代</text><text x='59' y='126' text-anchor='middle' font-size='7.2' fill='#475569'>再用罗尔定理</text><rect x='120' y='50' width='104' height='90' rx='5' fill='#ecfdf5' stroke='#059669' stroke-width='1.2'/><text x='172' y='66' text-anchor='middle' font-size='8' fill='#065f46' font-weight='700'>② 证 f'(ξ)=0</text><text x='172' y='81' text-anchor='middle' font-size='7.4' fill='#334155'>三路并查：</text><text x='172' y='96' text-anchor='middle' font-size='7.3' fill='#065f46'>• 内部最值→费马</text><text x='172' y='111' text-anchor='middle' font-size='7.3' fill='#065f46'>• 端点等值→罗尔</text><text x='172' y='126' text-anchor='middle' font-size='7.3' fill='#065f46'>• 导数异号→达布</text><rect x='234' y='50' width='108' height='90' rx='5' fill='#eef2ff' stroke='#2563eb' stroke-width='1.2'/><text x='288' y='66' text-anchor='middle' font-size='8' fill='#1e3a8a' font-weight='700'>③ 含 f(b)-f(a) 或双中值</text><text x='288' y='81' text-anchor='middle' font-size='7.4' fill='#334155'>同导异点/比值型</text><text x='288' y='96' text-anchor='middle' font-size='7.3' fill='#1e40af'>• 单函数→拉格朗日</text><text x='288' y='111' text-anchor='middle' font-size='7.3' fill='#1e40af'>• 双函数→柯西定理</text><text x='288' y='126' text-anchor='middle' font-size='7.3' fill='#1e40af'>• 分区间/两用中值</text><rect x='352' y='50' width='100' height='90' rx='5' fill='#fdf2f8' stroke='#be123c' stroke-width='1.2'/><text x='402' y='66' text-anchor='middle' font-size='8' fill='#9f1239' font-weight='700'>④ 含高阶导 f⁽ⁿ⁾</text><text x='402' y='81' text-anchor='middle' font-size='7.4' fill='#334155'>n≥2 阶等式/不等式</text><text x='402' y='96' text-anchor='middle' font-size='7.3' fill='#9f1239' font-weight='700'>→ 拉氏余项泰勒！</text><text x='402' y='111' text-anchor='middle' font-size='7.2' fill='#475569'>展开点取 f'=0 或中点</text><text x='402' y='126' text-anchor='middle' font-size='7.2' fill='#475569'>向两端点展开消项</text></svg>",
+      "tables": [
+        {
+          "caption": "表 6-2 考研六大中值定理成立前提、核心特征与第一触发信号对照表（基础 P.165-175 & 强化 P.48-63）",
+          "headers": [
+            "定理名称",
+            "核心前提",
+            "典型触发信号",
+            "代表例题"
+          ],
+          "rows": [
+            [
+              "零点 / 平均值定理",
+              "$f\\in C[a,b]$（推广只需 $(a,b)$ 连续）",
+              "证 $f(\\xi)=c$、端点异号、多点之和 $f(0)+f(1)+f(2)$",
+              "例6.1, 例6.2, 例6.4"
+            ],
+            [
+              "费马 / 达布定理",
+              "内部极值可导 / $[a,b]$ 可导（不需 $f'$ 连续）",
+              "证 $f'(\\xi)=0$ 或 $f'(\\xi)=\\mu$（端点导数异号）",
+              "例6.3, 强化例6.7, 强化例6.8"
+            ],
+            [
+              "罗尔定理（含多次）",
+              "$C[a,b]$、$(a,b)$ 可导、$f(a)=f(b)$",
+              "证 $f^{(n)}(\\xi)=0$ 或 $F'(\\xi)=0$ 线性组合",
+              "例6.5~6.7, 强化例6.1~6.4"
+            ],
+            [
+              "拉格朗日中值定理",
+              "$C[a,b]$、$(a,b)$ 可导",
+              "出现 $f(b)-f(a)$、$f(x)-0$、导数有界推函数有界、求 $\\lim\\theta$",
+              "例6.8~6.10, 强化例6.10~6.13"
+            ],
+            [
+              "柯西中值定理",
+              "$f,g\\in C[a,b]$、可导且 $g'(x)\\ne 0$",
+              "双函数比值、$\\xi\\ln\\frac{b}{a}f'(\\xi)$、含 $\\int_a^b f(t)\\,\\mathrm{d}t$ 商式",
+              "例6.11, 强化例6.14, 强化例6.15"
+            ],
+            [
+              "拉氏余项泰勒公式",
+              "$n$ 阶连续可导、$n+1$ 阶可导",
+              "证 $f''(\\xi)\\le -4$、$f'''(\\xi)=3$、$|f''|\\le M\\Rightarrow |f'|$ 界",
+              "例6.12, 例6.13, 强化例6.16"
+            ]
+          ]
+        }
+      ],
+      "conditions": "每次写证明题前先默念一遍定理前提（闭区间连续、开区间可导、柯西 $g'\\ne 0$），写清辅助函数满足的逐条前提，确保解答题满分不扣过程分！",
+      "pitfalls": "切勿把「在 $(a,b)$ 内可导且 $f'$ 有界 $\\Rightarrow f$ 有界」（例6.8）误用到无穷区间——该结论**必须要求区间 $(a,b)$ 有限**（反例：$f(x)=x$ 在 $(0,+\\infty)$ 上 $f'=1$ 有界但 $f$ 无界！）。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.164-175",
+        "pdfPage": 169,
+        "itemRef": "一 中值定理体系总括",
+        "crossRef": "27张宇《高数18讲》(强化) P.48 三向解题法"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-c-02",
+      "stage": "intensive",
+      "section": "强化一·5 & 二 · 寻找原函数五大障眼法与证 f'(ξ)=0 三路通法",
+      "kind": "conclusion",
+      "title": "【强化】辅助函数构造「五大障眼法（小伎俩）」与证 $f'(\\xi)=0$ 三路通法",
+      "examWeight": "core",
+      "summary": "强化 18 讲 P.51-54 揭秘命题人把简单原函数包装成难题的 **5 大障眼法** 与证 $f'(\\xi)=0$ 的 **3 条硬通道**：\n1. **五大障眼法（见招拆招，回归 15 大母式）**：\n   - **① 简单化**：见到 $2\\xi-1\\to x^2-x$、$f'(\\xi)f(\\xi)\\to\\frac{1}{2}f^2(x)$、$\\frac{f'(\\xi)}{f(\\xi)}\\to\\ln f(x)$、$\\frac{1}{\\xi}\\to\\ln x$，别想复杂了；\n   - **② 升辈降辈**：把 $f(x)$ 换 $f'(x)$（降辈：$[f'\\mathrm{e}^x]'=\\mathrm{e}^x(f''+f')$）或换 $\\int_0^x f(t)\\,\\mathrm{d}t$（升辈：$[\\mathrm{e}^x\\int_0^x f]'=\\mathrm{e}^x(f+\\int_0^x f)$）；\n   - **③ 平移**：把 $x$ 换 $x+1$ 或 $x-1$（如 $[f(x)\\mathrm{e}^{(x-1)^2}]'=\\mathrm{e}^{(x-1)^2}[f'+2(x-1)f]$）；\n   - **④ 恒等变形**：移项化右端为 $0$，或交叉相乘化分式回乘积 $[f'g-fg']=0$（如强化例6.2 交叉相乘秒出 $F(x)=[f(x)-f(a)][g(b)-g(x)]$！）；\n   - **⑤ 出现积分 $\\int_a^b,\\int_a^\\xi,\\int_\\xi^b$ 的 5 招**：① 直接令被积函数作辅助函数（强化例6.3）；② 令变限积分作辅助函数（强化例6.4）；③ 推广积分中值定理（强化例6.5）；④ 分部积分法（强化例6.6）；⑤ 泰勒展开再积分（第 11 讲联动）。\n2. **证 $f'(\\xi)=0$ 三条硬通道（强化 P.54）**：\n   - ① **费马定理**（证最值必在内部取得）；② **罗尔定理**（凑两等值点）；③ **导数零点/介值定理**（两端导数异号）。",
+      "conditions": "采用分部积分法处理「$\\int_a^b f(x)\\,\\mathrm{d}x=0$ 与 $\\int_a^b f(x)\\cos x\\,\\mathrm{d}x=0$」型积分条件（强化例6.6）时，令原函数 $F(x)=\\int_a^x f(t)\\,\\mathrm{d}t$，利用 $F(a)=F(b)=0$ 自动消灭分部积分边界项！",
+      "pitfalls": "强化例6.3 特别提醒：用积分中值定理得 $f(1)=\\xi_1\\mathrm{e}^{1-\\xi_1}f(\\xi_1)$ 后，必须确认 $\\xi_1\\in[0,\\frac{1}{k}]\\subset[0,1)$ 严格小于 $1$，才能在非退化闭区间 $[\\xi_1,1]$ 上用罗尔定理！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.51-54",
+        "pdfPage": 64,
+        "itemRef": "一·5 小伎俩们(障眼法) & 二 证明f'(ξ)=0"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-c-03",
+      "stage": "intensive",
+      "section": "强化三·1 · 导数极限定理与三大经典微观反例对照",
+      "kind": "conclusion",
+      "title": "【强化】导数极限定理（单侧连续 + 去心导数极限 $\\Rightarrow$ 单侧导数）与三大经典反例辨析表",
+      "examWeight": "core",
+      "summary": "强化 18 讲 P.56-57（强化例6.9 及注 (1)-(3)）彻底厘清「导数值 $f'(x_0)$」与「导数极限 $\\lim_{x\\to x_0}f'(x)$」的微妙区别：\n1. **导数极限定理（正命题 ✅）**：若 $f(x)$ 在 $[x_0,x_0+\\delta)$ **右连续**，在 $(x_0,x_0+\\delta)$ 内可导，且 $\\lim_{x\\to x_0^+}f'(x)=A$（有限或无穷），则 **$f'_+(x_0)$ 必存在且等于 $A$**（由拉格朗日 $f'_+(x_0)=\\lim_{x\\to x_0^+}\\frac{f(x)-f(x_0)}{x-x_0}=\\lim_{x\\to x_0^+}f'(\\xi)=A$ 一步证出！）。\n2. **三大逆向陷阱（见表 6-3）**：\n   - ❌ 漏掉「在 $x_0$ 处连续（甚至无定义）」：即使 $\\lim_{x\\to x_0}f'(x)=A$ 存在，$f'(x_0)$ 依然可以不存在！\n   - ❌ 已知 $f'(x_0)$ 存在，**推不出** $\\lim_{x\\to x_0}f'(x)$ 存在（导函数可以有第二类振荡间断点，如 $x^2\\sin\\frac{1}{x}$）！\n   - ✅ 但一旦 $f'(x_0)$ 与 $\\lim_{x\\to x_0}f'(x)$ **两者同时存在**，则由导数极限定理**必然相等**（导函数绝无第一类可去/跳跃间断点！与第 3 讲呼应！）。",
+      "tables": [
+        {
+          "caption": "表 6-3 强化例 6.9 注(1)-(3) 导数值与导数极限关系三大经典例证对照表（强化 P.56-57）",
+          "headers": [
+            "经典函数",
+            "$x=0$ 处连续性",
+            "$f'(0)$ 或单侧导数",
+            "导数极限 $\\lim_{x\\to 0}f'(x)$",
+            "核心结论"
+          ],
+          "rows": [
+            [
+              "(1) $f(x)=|x|$",
+              "连续",
+              "$f'_+(0)=1,\\;f'_-(0)=-1$（不可导）",
+              "右极限 $1$，左极限 $-1$",
+              "单侧连续 + 单侧导极限 $\\Rightarrow$ 单侧导数相等！"
+            ],
+            [
+              "(2) $f(x)=x^3\\sin\\frac{1}{x}\\;(x\\ne 0)$",
+              "**$x=0$ 无定义！**",
+              "$f'(0)$ 不存在",
+              "$\\lim_{x\\to 0}f'(x)=0$ 存在",
+              "缺连续性前提，导数极限存在推不出可导！"
+            ],
+            [
+              "(3) $x^2\\sin\\frac{1}{x}\\;(x\\ne 0),\\;0\\;(x=0)$",
+              "连续",
+              "$f'(0)=0$ 存在",
+              "$\\lim_{x\\to 0}(2x\\sin\\frac{1}{x}-\\cos\\frac{1}{x})$ 不存在",
+              "可导推不出导数极限存在（振荡间断点）！"
+            ]
+          ]
+        }
+      ],
+      "conditions": "套用导数极限定理前务必先验 **$f(x)$ 在 $x_0$ 处连续**（做分段函数在分段点求导题时，先验连续性再求导极限，比硬套定义快一倍，但缺连续性直接报错！）。",
+      "pitfalls": "绝不可由「$\\lim_{x\\to x_0}f'(x)$ 不存在」反向断定「$f'(x_0)$ 不存在」——反例 (3) 中 $f'(0)=0$ 实实在在存在！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.56-57",
+        "pdfPage": 69,
+        "itemRef": "三·1 例6.9 & 注(1)-(3)"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-c-04",
+      "stage": "both",
+      "section": "二 & 强化第二/四部分 · 方程实根个数闭环策略与数形结合分离/平移法",
+      "kind": "conclusion",
+      "title": "方程根个数「存在性+唯一性」双保险与含参方程数形结合两大杀招（分离法 / 铅直平移法）",
+      "examWeight": "core",
+      "summary": "讨论 $f(x)=0$（尤其是含参数 $k$ 或变限积分方程）的实根个数，遵循三步黄金闭环：\n1. **存在性（至少几个）**：先**观察特解**（$0,1,-1$）+ **利用偶奇对称性**砍半（例6.14）+ **实系数奇次必有根**（例6.15）+ **零点定理/推广零点定理**（逐段查极值点与两端点极限符号，强化例6.17、强化例6.18）；\n2. **唯一性 / 上界（至多几个）**：一阶导定号直接用**单调性**（例6.14、例6.18）；高阶导才定号立刻用**罗尔推论**（例6.16 $f'''\\ne 0\\Rightarrow$ 至多 3 根）；\n3. **含参方程数形结合双杀招（见图）**：\n   - **分离参数法**：把 $\\mathrm{e}^x=kx$ 拆成 $y=\\frac{\\mathrm{e}^x}{x}$ 与水平线 $y=k$ 交点（例6.17，10 秒秒杀 $k=\\mathrm{e}$ 或 $k<0$）；\n   - **参数方程铅直平移法**：形如 $u=x(t),\\;v=y(t)+k$ 恰有一零点，先求原曲线 $y(x)$ 全部极值点 $A,B$，再上下平移令极小值抬过 $u$ 轴（$>0$）或极大值压过 $u$ 轴（$<0$）（强化例6.21）！",
+      "figureSvg": "<svg role='img' viewBox='0 0 460 138' xmlns='http://www.w3.org/2000/svg'><title>含参方程实根个数数形结合双典例：eˣ=kx 分离法（例6.17）与参数方程竖直平移（强化例6.21）</title><defs><marker id='m1c6_arr3' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='4.5' markerHeight='4.5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><g transform='translate(0,0)'><text x='110' y='15' text-anchor='middle' font-size='8.6' fill='#1e3a8a' font-weight='700'>① 分离法：y = eˣ/x 与 y = k（例6.17）</text><line x1='16' y1='84' x2='208' y2='84' stroke='#334155' stroke-width='1.1' marker-end='url(#m1c6_arr3)'/><line x1='92' y1='124' x2='92' y2='24' stroke='#334155' stroke-width='1.1' marker-end='url(#m1c6_arr3)'/><path d='M22 87 C 56 89, 76 96, 87 122' fill='none' stroke='#2563eb' stroke-width='1.9'/><path d='M98 26 C 106 58, 122 62, 138 58 C 156 53, 174 39, 188 26' fill='none' stroke='#2563eb' stroke-width='1.9'/><line x1='20' y1='60' x2='200' y2='60' stroke='#dc2626' stroke-width='1.2' stroke-dasharray='4 2'/><circle cx='126' cy='60' r='2.5' fill='#dc2626'/><text x='132' y='73' font-size='7.8' fill='#dc2626' font-weight='700'>(1, e) 恰 1 根</text><line x1='20' y1='102' x2='200' y2='102' stroke='#059669' stroke-width='1.2' stroke-dasharray='4 2'/><text x='150' y='113' font-size='7.6' fill='#065f46' font-weight='700'>k&lt;0 恰 1 根</text><text x='110' y='134' text-anchor='middle' font-size='7.6' fill='#475569'>恰一实根 ⇔ k = e 或 k &lt; 0</text></g><g transform='translate(234,0)'><text x='110' y='15' text-anchor='middle' font-size='8.6' fill='#9f1239' font-weight='700'>② 铅直平移 v=y+k（强化例6.21）</text><line x1='16' y1='80' x2='210' y2='80' stroke='#334155' stroke-width='1.1' marker-end='url(#m1c6_arr3)'/><line x1='102' y1='124' x2='102' y2='24' stroke='#334155' stroke-width='1.1' marker-end='url(#m1c6_arr3)'/><path d='M36 112 C 52 72, 60 46, 72 46 C 94 46, 126 92, 150 92 C 170 92, 184 62, 196 36' fill='none' stroke='#be123c' stroke-width='1.9'/><circle cx='72' cy='46' r='2.5' fill='#be123c'/><text x='54' y='39' font-size='7.5' fill='#be123c' font-weight='700'>A(-1,1)</text><circle cx='150' cy='92' r='2.5' fill='#059669'/><text x='152' y='105' font-size='7.5' fill='#065f46' font-weight='700'>B(5/3,-1/3)</text><text x='112' y='121' text-anchor='middle' font-size='7.5' fill='#334155'>上移过 B(-1/3+k&gt;0) 或下移过 A(1+k&lt;0)</text><text x='112' y='134' text-anchor='middle' font-size='7.6' fill='#9f1239' font-weight='700'>恰一零点 ⇔ k &gt; 1/3 或 k &lt; -1</text></g></svg>",
+      "conditions": "用分离参数法拆 $x$ 到分母时（如 $\\mathrm{e}^x=kx \\to \\frac{\\mathrm{e}^x}{x}=k$），必须先单独检验 **$x=0$ 是否为原方程的根**（此处 $\\mathrm{e}^0=1\\ne 0$，故可安全除 $x$！）！",
+      "pitfalls": "高频丢根：讨论含 $\\ln x^2=2\\ln|x|$ 的方程（强化例6.18(2)）时定义域是 $x\\ne 0$ 而非 $x>0$！若忘了查负半轴 $(-\\infty,0)$ 直接漏掉一半实根！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.176-178",
+        "pdfPage": 181,
+        "itemRef": "二 微分等式 & 例6.14-6.18",
+        "crossRef": "27张宇《高数18讲》(强化) P.64-66, 69-71 例6.17-6.18, 6.21"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c06_ex_zy18_20_22",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-c-05",
+      "stage": "foundation",
+      "section": "三 · 微分不等式三大经典策略与约当不等式/四段割线斜率法",
+      "kind": "conclusion",
+      "title": "微分不等式三大破题策略（凹凸端点秒杀 / 常数变量化 / 四段插点保严格不等）",
+      "examWeight": "core",
+      "summary": "证明微分不等式的核心是「把不会比的式子化为会判正负的导数」：\n1. **凹凸端点秒杀法（最省力！）**：欲证 $(a,b)$ 上 $f(x)>0$（或 $<0$），先瞄一眼端点 $f(a)=f(b)=0$！若 $f''(x)<0$（凸弧在弦上），一步立得 $(a,b)$ 内 $f(x)>0$（如例6.19 约当不等式 $\\sin x-\\frac{2x}{\\pi}$ 仅需两行！）；\n2. **常数变量化（专治双字母 $a,b$ 常数不等式）**：固定 $a$ 把 $b$ 换成变量 $x>a$ 构造 $\\varphi(x)$，利用 $\\varphi(a)=0$ 与 $\\varphi'(x)<0$ 得 $\\varphi(b)<0$（例6.21 右半边）；若结构呈 $\\frac{f(b)-f(a)}{b-a}$，更可直接拉格朗日一步到位（例6.21 左半边）；\n3. **「保严格不等号」的四段插点技巧（强化例6.19 殿堂级思想！）**：当直接取极限会使严格 $<$ 退化为 $\\le$ 时，在 $x<y$ 之间**插入一个不动中间点 $c\\in(x,y)$** 并构造四段 $x-h<x<c<y<y+h$，仅对首尾两段取 $h\\to 0^+$，**中间的严格不等号完全不取极限从而永久保留 $<$**！",
+      "figureSvg": "<svg role='img' viewBox='0 0 460 136' xmlns='http://www.w3.org/2000/svg'><title>微分不等式两大几何视角：约当不等式凹凸弦弧图（例6.19）与四段割线斜率单增图（强化例6.19）</title><defs><marker id='m1c6_arr4' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='4.5' markerHeight='4.5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><g transform='translate(0,0)'><text x='110' y='15' text-anchor='middle' font-size='8.5' fill='#1e3a8a' font-weight='700'>① 凸弧在弦上：sin x &gt; 2x/π（例6.19）</text><line x1='22' y1='108' x2='202' y2='108' stroke='#334155' stroke-width='1.1' marker-end='url(#m1c6_arr4)'/><line x1='36' y1='118' x2='36' y2='24' stroke='#334155' stroke-width='1.1' marker-end='url(#m1c6_arr4)'/><path d='M36 108 Q 92 36 172 38' fill='none' stroke='#2563eb' stroke-width='2.1'/><line x1='36' y1='108' x2='172' y2='38' stroke='#dc2626' stroke-width='1.4' stroke-dasharray='4 2'/><line x1='36' y1='108' x2='104' y2='26' stroke='#059669' stroke-width='1.2' stroke-dasharray='2 2'/><circle cx='172' cy='38' r='2.4' fill='#2563eb'/><text x='172' y='121' text-anchor='middle' font-size='7.8' fill='#334155'>π/2</text><text x='118' y='44' font-size='7.6' fill='#2563eb' font-weight='700'>y=sin x</text><text x='132' y='78' font-size='7.6' fill='#dc2626'>弦 y=2x/π</text><text x='86' y='34' font-size='7.4' fill='#059669'>切线 y=x</text><text x='110' y='133' text-anchor='middle' font-size='7.6' fill='#1e40af'>2x/π &lt; sin x &lt; x,  x∈(0, π/2)</text></g><g transform='translate(232,0)'><text x='112' y='15' text-anchor='middle' font-size='8.5' fill='#065f46' font-weight='700'>② 四区间插点保严格不等（强化例6.19）</text><line x1='16' y1='70' x2='212' y2='70' stroke='#334155' stroke-width='1.3' marker-end='url(#m1c6_arr4)'/><line x1='38' y1='64' x2='38' y2='76' stroke='#dc2626' stroke-width='1.5'/><line x1='74' y1='64' x2='74' y2='76' stroke='#1d4ed8' stroke-width='1.5'/><line x1='114' y1='64' x2='114' y2='76' stroke='#059669' stroke-width='1.5'/><line x1='154' y1='64' x2='154' y2='76' stroke='#1d4ed8' stroke-width='1.5'/><line x1='190' y1='64' x2='190' y2='76' stroke='#dc2626' stroke-width='1.5'/><text x='38' y='88' text-anchor='middle' font-size='7.8' fill='#dc2626'>x-h</text><text x='74' y='88' text-anchor='middle' font-size='7.8' fill='#1d4ed8' font-weight='700'>x</text><text x='114' y='88' text-anchor='middle' font-size='7.8' fill='#059669' font-weight='700'>c</text><text x='154' y='88' text-anchor='middle' font-size='7.8' fill='#1d4ed8' font-weight='700'>y</text><text x='190' y='88' text-anchor='middle' font-size='7.8' fill='#dc2626'>y+h</text><text x='56' y='56' text-anchor='middle' font-size='7.2' fill='#dc2626'>→f'(x)</text><text x='114' y='44' text-anchor='middle' font-size='7.6' fill='#065f46' font-weight='700'>中间严格 &lt;（不取极限！）</text><text x='172' y='56' text-anchor='middle' font-size='7.2' fill='#dc2626'>→f'(y)</text><text x='112' y='110' text-anchor='middle' font-size='7.6' fill='#334155'>f'(x) ≤ [f(c)-f(x)]/(c-x) &lt; [f(y)-f(c)]/(y-c) ≤ f'(y)</text><text x='112' y='128' text-anchor='middle' font-size='7.8' fill='#065f46' font-weight='700'>⇒ 严格推出 f'(x) &lt; f'(y)！</text></g></svg>",
+      "conditions": "套用「脱绝对值 / 平方开方」转化不等式（例6.20）前，务必**先证明绝对值内部恒正或恒负**，绝不可带着绝对值直接求导！",
+      "pitfalls": "高频错步：用导数证单调时遇到 $f'(x)$ 分母恒正（如 $\\frac{x\\cos x-\\sin x}{x^2}$），**只需单独抽出分子 $g(x)=x\\cos x-\\sin x$ 再求导**，切忌带着冗长分母直接算 $f''(x)$ 陷入计算泥潭（例6.19 方法一、例6.20、强化例6.20 全用此招）！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.179-181",
+        "pdfPage": 184,
+        "itemRef": "三 微分不等式 & 例6.19-6.21",
+        "crossRef": "27张宇《高数18讲》(强化) P.68-69 例6.19"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c06_ex_zy30_19_21",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-c-06",
+      "stage": "intensive",
+      "section": "强化四 & 第四部分 · 泰勒证明双模板与含参等式/不等式两类分治",
+      "kind": "conclusion",
+      "title": "【强化】泰勒高阶证明「定点展开 vs 泛指点展开」双模板与含参问题两类分治法",
+      "examWeight": "core",
+      "summary": "1. **泰勒证明题两大黄金模板（强化 P.63 & 例6.13, 强化例6.7, 强化例6.16）**：\n   - **模板 A（固定点 $x_0$ 向两端点展开）**：题设给某定点导数（如 $f'(0)=0$ 或极值点 $f'(x_1)=0$），以该定点为 $x_0$，向已知函数值的端点/最值点展开，再相减或移项估出 $f''(\\eta)$、$f'''(\\xi)$（例6.13、强化例6.7、强化例6.8(2)）；\n   - **模板 B（泛指点 $x$ 向两端点 $a,b$ 展开）**：题设给 $|f''(x)|\\le M$ 求 $|f'(x)|$ 在全区间 $[a,b]$ 的统一上界（如强化例6.16），以**任意泛指点 $x$ 为展开点**向 $a,b$ 展开，两式相减消去 $f(x)$，再用经典代数界 **$(x-a)^2+(b-x)^2\\le (b-a)^2\\;(x\\in[a,b])$** 一步封顶！\n2. **含参等式/不等式两类分治（强化 P.69-71）**：\n   - **导数不含参**（$f'(x)$ 不含 $k$）：求导画图阶段**完全不管参数 $k$**，算出极值与单调性后，最后再把 $k$ 当水平线/平移量讨论与 $x$ 轴交点（强化例6.21）；\n   - **导数含参**（$f'(x)$ 含 $k$）：优先提纯含 $k$ 分子 $g(x)$ 再求导（往往再导一次 $k$ 就消失了！如强化例6.20 中 $g(x)=x-2\\ln x+2k$ 求导 $g'(x)=1-\\frac{2}{x}$ 直接脱参！）。",
+      "conditions": "套用模板 B 泛指点展开求 $|f'(x)|$ 界时，记清区间 $[a,b]$ 上抛物线 $q(x)=(x-a)^2+(b-x)^2$ 开口向上且在两端点取最大值 $(b-a)^2$（中点取最小值 $\\frac{1}{2}(b-a)^2$）！",
+      "pitfalls": "高频丢分：用强化例6.20 型「二次求导脱参」时，算完 $g_{\\min}=g(2)\\ge 0$ 后别忘了把 $g(x)\\ge 0 \\Rightarrow f'(x)\\ge 0 \\Rightarrow f$ 单增与 $f(1)=0$ 闭环写全，最后乘上因子 $(x-1)$ 同号得非负！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.63, 69-71",
+        "pdfPage": 76,
+        "itemRef": "四·4 例6.16 & 第四部分 例6.20-6.21"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c06_ex_zy18_20_22",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-01",
+      "stage": "foundation",
+      "section": "基础30讲 · 一、中值定理（例6.1~6.13）",
+      "kind": "example",
+      "title": "【基础例 6.1】移项构造 $F(x)=f(x)-x$ 套零点定理证不动点 $f(\\eta)=\\eta$",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)$ 在 $[0,1]$ 上连续，且 $f(1)=0,\\;f\\left(\\frac{1}{2}\\right)=1$，证明：存在 $\\eta\\in\\left(\\frac{1}{2},1\\right)$，使得 $f(\\eta)=\\eta$。",
+      "steps": [
+        {
+          "stepTitle": "1. 移项构造辅助函数 $F(x)=f(x)-x$ 并检验闭区间连续性",
+          "detail": "欲证 $f(\\eta)-\\eta=0$，令 $F(x)=f(x)-x$，由题设知 $F(x)$ 在 $\\left[\\frac{1}{2},1\\right]$ 上连续。"
+        },
+        {
+          "stepTitle": "2. 计算两端点函数值异号，套零点定理",
+          "detail": "$$F\\!\\left(\\frac{1}{2}\\right)=f\\!\\left(\\frac{1}{2}\\right)-\\frac{1}{2}=1-\\frac{1}{2}=\\frac{1}{2}>0,\\qquad F(1)=f(1)-1=0-1=-1<0$$因 $F\\!\\left(\\frac{1}{2}\\right)\\cdot F(1)<0$，由零点定理知存在 $\\eta\\in\\left(\\frac{1}{2},1\\right)$ 使 $F(\\eta)=0$，即 $f(\\eta)=\\eta$。"
+        }
+      ],
+      "finalAnswer": "证毕（辅助函数 $F(x)=f(x)-x$ 在 $\\left[\\frac{1}{2},1\\right]$ 上用零点定理）。",
+      "takeaway": "证明 $f(\\xi)=g(\\xi)$ 零阶等式的第一反射：全部移到一侧令 $F(x)=f(x)-g(x)$，验两端异号即完赛！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.166",
+        "pdfPage": 171,
+        "itemRef": "例6.1"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-02",
+      "stage": "foundation",
+      "section": "基础30讲 · 一、中值定理（例6.1~6.13）",
+      "kind": "example",
+      "title": "【基础例 6.2】极限保号性脱帽造出异号点 $f(a)<0$，衔接零点定理证零点存在",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)$ 在区间 $[0,1]$ 上连续，且 $f(1)>0,\\;\\lim_{x\\to 0^+}\\frac{f(x)}{x}<0$。证明：方程 $f(x)=0$ 在区间 $(0,1)$ 内至少存在一个实根。",
+      "steps": [
+        {
+          "stepTitle": "1. 由右极限保号性在 $(0,1)$ 内找到使 $f(a)<0$ 的点",
+          "detail": "由 $\\lim_{x\\to 0^+}\\frac{f(x)}{x}<0$ 及极限局部保号性，存在 $a\\in(0,1)$ 使得 $\\frac{f(a)}{a}<0$；又 $a>0$，故 $f(a)<0$。"
+        },
+        {
+          "stepTitle": "2. 在 $[a,1]$ 上套零点定理",
+          "detail": "因 $f(x)$ 在 $[a,1]\\subset[0,1]$ 上连续，且 $f(a)<0,\\;f(1)>0$，由零点定理知存在 $b\\in(a,1)\\subset(0,1)$ 使 $f(b)=0$，即方程在 $(0,1)$ 内至少有一个实根。"
+        }
+      ],
+      "finalAnswer": "证毕（极限保号性得 $f(a)<0$，再与 $f(1)>0$ 联用零点定理）。",
+      "takeaway": "考研解答题第一问经典起手式：**条件只给一个端点正负号 + 另一端点极限符号时，立即用极限保号性脱帽造出第二个异号点！**（例6.7 直接复用本题结论！）",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.166",
+        "pdfPage": 171,
+        "itemRef": "例6.2"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-03",
+      "stage": "foundation",
+      "section": "基础30讲 · 一、中值定理（例6.1~6.13）",
+      "kind": "example",
+      "title": "【基础例 6.3 ★】导数零点定理证明：$f'_+(a)\\cdot f'_-(b)<0 \\implies \\exists\\xi\\in(a,b), f'(\\xi)=0$",
+      "examWeight": "core",
+      "problem": "（导数零点定理）设 $f(x)$ 在 $[a,b]$ 上可导，证明当 $f'_+(a)\\cdot f'_-(b)<0$ 时，存在 $\\xi\\in(a,b)$，使得 $f'(\\xi)=0$。",
+      "steps": [
+        {
+          "stepTitle": "1. 用单侧导数定义与极限保号性排除两端点为最大值点",
+          "detail": "不妨设 $f'_+(a)>0,\\;f'_-(b)<0$（反号时改证最小值，同理）。由单侧导数定义与脱帽保号性：\n- $f'_+(a)=\\lim_{x\\to a^+}\\frac{f(x)-f(a)}{x-a}>0 \\implies \\exists\\delta_1>0$，在 $(a,a+\\delta_1)$ 内 $f(x)>f(a)$；\n- $f'_-(b)=\\lim_{x\\to b^-}\\frac{f(x)-f(b)}{x-b}<0 \\implies \\exists\\delta_2>0$，在 $(b-\\delta_2,b)$ 内 $f(x)>f(b)$。"
+        },
+        {
+          "stepTitle": "2. 由闭区间最值定理锁定内部最大值点，套费马定理",
+          "detail": "因 $f$ 在 $[a,b]$ 可导必连续，必在 $[a,b]$ 取得最大值；又 $f(a),f(b)$ 均非最大值，故最大值必在开区间 $(a,b)$ 内某点 $\\xi$ 处取得。内部最值点必为极值点，由费马定理立得 $f'(\\xi)=0$！"
+        }
+      ],
+      "finalAnswer": "证毕（不需 $f'$ 连续！用保号性排端点 + 闭区间内部最值 + 费马定理）。",
+      "takeaway": "记住这道**压轴级母题**：题目未给 $f'$ 连续时**绝不能对 $f'$ 直接用零点定理**！必须退回原函数 $f(x)$，用「排除两端点最值 $\\to$ 内部最值即极值 $\\to$ 费马定理」！（强化例6.8(1) 是其一般化达布定理！）",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.167",
+        "pdfPage": 172,
+        "itemRef": "例6.3"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-04",
+      "stage": "foundation",
+      "section": "基础30讲 · 一、中值定理（例6.1~6.13）",
+      "kind": "example",
+      "title": "【基础例 6.4】平均值定理造等值点 $f(c)=1=f(3)$，再接罗尔定理证 $f'(\\xi)=0$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[0,3]$ 上连续，在 $(0,3)$ 内可导，且 $f(0)+f(1)+f(2)=3,\\;f(3)=1$。证明：必存在 $\\xi\\in(0,3)$，使得 $f'(\\xi)=0$。",
+      "steps": [
+        {
+          "stepTitle": "1. 在 $[0,2]$ 上用平均值定理（介值定理）找到 $c\\in[0,2]$ 使 $f(c)=1$",
+          "detail": "因 $f(x)$ 在 $[0,2]$ 上连续，设其最小、最大值为 $m,M$，则 $m\\le f(0),f(1),f(2)\\le M$，相加除以 $3$ 得：$$m \\le \\frac{f(0)+f(1)+f(2)}{3} = 1 \\le M$$由介值定理（平均值定理），至少存在一点 $c\\in[0,2]$ 使得 $f(c)=1$。"
+        },
+        {
+          "stepTitle": "2. 在 $[c,3]$ 上应用罗尔定理",
+          "detail": "因 $c\\in[0,2]$，区间 $[c,3]\\subset[0,3]$ 非退化，且 $f(c)=f(3)=1$，由罗尔定理知必存在 $\\xi\\in(c,3)\\subset(0,3)$ 使 $f'(\\xi)=0$。"
+        }
+      ],
+      "finalAnswer": "证毕（平均值定理得 $f(c)=1=f(3)$ + 罗尔定理）。",
+      "takeaway": "遇到「几个点函数值之和 = 常数」搭配「另一点函数值」，立刻套**平均值定理**凑出两等值点，再无缝衔接罗尔定理！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.169",
+        "pdfPage": 174,
+        "itemRef": "例6.4"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-05",
+      "stage": "foundation",
+      "section": "基础30讲 · 一、中值定理（例6.1~6.13）",
+      "kind": "example",
+      "title": "【基础例 6.5】微分方程积分因子构造 $F(x)=f(x)(b-x)^a$ 套罗尔定理",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[a,b]$ 上连续，在 $(a,b)$ 内可导，$f(a)=0,\\;a>0$，证明：存在 $\\xi\\in(a,b)$，使得 $f(\\xi)=\\frac{b-\\xi}{a}f'(\\xi)$。",
+      "steps": [
+        {
+          "stepTitle": "1. 改写结论为 $f'(\\xi)-\\frac{a}{b-\\xi}f(\\xi)=0$，套积分因子反推辅助函数",
+          "detail": "对照 $f'(x)+\\varphi'(x)f(x)=0$，积分因子为 $\\mathrm{e}^{\\int(-\\frac{a}{b-x})\\,\\mathrm{d}x}=\\mathrm{e}^{a\\ln(b-x)}=(b-x)^a$，故构造辅助函数：$$F(x)=f(x)(b-x)^a$$"
+        },
+        {
+          "stepTitle": "2. 验 $F(a)=F(b)=0$（用到 $a>0$！），用罗尔定理得证",
+          "detail": "因 $a>0$，$(b-x)^a$ 在 $[a,b]$ 连续、在 $(a,b)$ 可导，且 $F(a)=f(a)(b-a)^a=0,\\;F(b)=f(b)\\cdot 0^a=0$。由罗尔定理知存在 $\\xi\\in(a,b)$ 使：$$F'(\\xi)=f'(\\xi)(b-\\xi)^a - af(\\xi)(b-\\xi)^{a-1}=0$$因 $b-\\xi>0$ 且 $a>0$，整理即得 $f(\\xi)=\\frac{b-\\xi}{a}f'(\\xi)$。"
+        }
+      ],
+      "finalAnswer": "证毕（构造 $F(x)=f(x)(b-x)^a$ 用罗尔定理）。",
+      "takeaway": "遇 $f'(\\xi)+P(\\xi)f(\\xi)=0$ 无需死猜，直接套万能公式 **$F(x)=f(x)\\mathrm{e}^{\\int P(x)\\,\\mathrm{d}x}$**！本题条件 $a>0$ 正是为了保证 $(b-x)^a$ 在右端点 $x=b$ 处连续取 $0$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.169",
+        "pdfPage": 174,
+        "itemRef": "例6.5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c06_ex_zy30_05_13",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-06",
+      "stage": "foundation",
+      "section": "基础30讲 · 一、中值定理（例6.1~6.13）",
+      "kind": "example",
+      "title": "【基础例 6.6】曲线与弦有第三交点 $C$ $\\Rightarrow$ 减弦方程造 3 零点两次罗尔证 $f''(\\xi)=0$",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)$ 在 $[0,1]$ 上连续，在 $(0,1)$ 内二阶可导，过点 $A(0,f(0))$ 与点 $B(1,f(1))$ 的直线与曲线 $y=f(x)$ 相交于点 $C(c,f(c))$，其中 $0<c<1$。证明：存在 $\\xi\\in(0,1)$，使得 $f''(\\xi)=0$。",
+      "steps": [
+        {
+          "stepTitle": "1. 写出过 $A,B$ 的弦方程 $y_1$，构造差函数 $F(x)=f(x)-y_1$ 得 3 个零点",
+          "detail": "过 $A(0,f(0)),B(1,f(1))$ 的直线为 $y_1=[f(1)-f(0)]x+f(0)$。令 $F(x)=f(x)-y_1$，因曲线过 $A,C,B$ 三点，故 $F(0)=F(c)=F(1)=0$。"
+        },
+        {
+          "stepTitle": "2. 在 $[0,c]$ 与 $[c,1]$ 上各用一次罗尔，再在 $[\\xi_1,\\xi_2]$ 上用一次罗尔",
+          "detail": "由罗尔定理，存在 $\\xi_1\\in(0,c),\\;\\xi_2\\in(c,1)$ 使 $F'(\\xi_1)=F'(\\xi_2)=0$；再对 $F'(x)$ 在 $[\\xi_1,\\xi_2]$ 上用罗尔定理，存在 $\\xi\\in(\\xi_1,\\xi_2)\\subset(0,1)$ 使 $F''(\\xi)=f''(\\xi)=0$！"
+        }
+      ],
+      "finalAnswer": "证毕（减弦方程构造 $F(x)$ 凑 $0,c,1$ 三零点，连续用两次罗尔）。",
+      "takeaway": "证明二阶导 **$f''(\\xi)=0$** 的黄金套路：**减去一次函数（弦方程，其二阶导恒为 $0$！）制造三个相等点**，连续两次罗尔一步到位！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.170",
+        "pdfPage": 175,
+        "itemRef": "例6.6 & 注"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-07",
+      "stage": "foundation",
+      "section": "基础30讲 · 一、中值定理（例6.1~6.13）",
+      "kind": "example",
+      "title": "【基础例 6.7】构造 $F(x)=f(x)f'(x)$ 凑 3 零点 $0,c,b$，证 $ff''+(f')^2=0$ 至少两不同实根",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)$ 在区间 $[0,1]$ 上具有二阶导数，且 $f(1)>0,\\;\\lim_{x\\to 0^+}\\frac{f(x)}{x}<0$。证明：方程 $f(x)f''(x)+[f'(x)]^2=0$ 在区间 $(0,1)$ 内至少存在两个不同实根。",
+      "steps": [
+        {
+          "stepTitle": "1. 识别原函数 $F(x)=f(x)f'(x)$，并先由例 6.2 与罗尔找出 $f(0)=f(b)=0$ 及 $f'(c)=0$",
+          "detail": "因 $f$ 在 $[0,1]$ 连续且 $\\lim_{x\\to 0^+}\\frac{f(x)}{x}$ 存在，必有 $f(0)=\\lim_{x\\to 0^+}f(x)=0$。又由例 6.2 知存在 $b\\in(0,1)$ 使 $f(b)=0$。对 $f(x)$ 在 $[0,b]$ 用罗尔定理，存在 $c\\in(0,b)\\subset(0,1)$ 使 $f'(c)=0$。"
+        },
+        {
+          "stepTitle": "2. 验证 $F(x)=f(x)f'(x)$ 有 3 个零点 $0,c,b$，两段各用罗尔得两不同根",
+          "detail": "令 $F(x)=f(x)f'(x)$，则 $F(x)$ 在 $[0,b]$ 可导（二阶可导 $\\Rightarrow f'$ 连续可导），且 $F(0)=0,\\;F(c)=0,\\;F(b)=0$。在 $[0,c]$ 与 $[c,b]$ 上分别用罗尔定理，得 $\\xi\\in(0,c)$ 与 $\\eta\\in(c,b)$ 使 $F'(\\xi)=F'(\\eta)=0$，即 $f(x)f''(x)+[f'(x)]^2=0$ 在 $(0,1)$ 内至少有 $\\xi<\\eta$ 两个不同实根！"
+        }
+      ],
+      "finalAnswer": "证毕（由 $F(x)=f(x)f'(x)$ 的三零点 $0<c<b$ 分段用罗尔得 $\\xi<\\eta$）。",
+      "takeaway": "看到 $[f'(x)]^2+f(x)f''(x)$ 立刻条件反射 **$[f(x)f'(x)]'$**！要证「至少两个不同实根」，核心是给 $F(x)$ 凑出 **3 个有序零点 $0<c<b$**！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.170",
+        "pdfPage": 175,
+        "itemRef": "例6.7"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-08",
+      "stage": "foundation",
+      "section": "基础30讲 · 一、中值定理（例6.1~6.13）",
+      "kind": "example",
+      "title": "【基础例 6.8】有限开区间 $(a,b)$ 内「导数有界 $\\Rightarrow$ 函数有界」（拉格朗日 + 有限区间补注）",
+      "examWeight": "core",
+      "problem": "若 $f(x)$ 在有限开区间 $(a,b)$ 内可导且 $f'(x)$ 有界，证明：$f(x)$ 在 $(a,b)$ 内有界。",
+      "steps": [
+        {
+          "stepTitle": "1. 固定内点 $x_0\\in(a,b)$，对任意 $x\\in(a,b)$ 在 $x,x_0$ 间用拉格朗日中值定理",
+          "detail": "因 $f'(x)$ 在 $(a,b)$ 有界，存在常数 $k>0$ 使 $\\forall t\\in(a,b)$ 有 $|f'(t)|\\le k$。任取固定点 $x_0\\in(a,b)$，对任意 $x\\in(a,b)$（$x\\ne x_0$），由拉格朗日中值定理存在 $\\xi$ 介于 $x,x_0$ 之间，使：$$f(x)-f(x_0)=f'(\\xi)(x-x_0)$$"
+        },
+        {
+          "stepTitle": "2. 三角不等式放缩并用有限区间长度 $|x-x_0|<b-a$ 封顶",
+          "detail": "$$|f(x)| = |f(x_0)+f'(\\xi)(x-x_0)| \\le |f(x_0)| + |f'(\\xi)|\\cdot|x-x_0| \\le |f(x_0)| + k(b-a) \\triangleq M$$由于 $M$ 与 $x$ 无关，故 $f(x)$ 在 $(a,b)$ 内有界！（$x=x_0$ 时显然亦成立。）"
+        }
+      ],
+      "finalAnswer": "证毕（$|f(x)|\\le |f(x_0)|+k(b-a)$，严格要求区间 $(a,b)$ 有限）。",
+      "takeaway": "**严谨补注（详见表 6-7）**：原书 P.171 题干未显式写出「有限区间」，但证明用到 $|x-x_0|\\le b-a$ 隐含要求 $b-a<+\\infty$！在无穷区间 $(0,+\\infty)$ 上结论不成立（反例 $f(x)=x$ 导数恒为 $1$ 有界，但 $f(x)$ 无界！）。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.171",
+        "pdfPage": 176,
+        "itemRef": "例6.8"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-09",
+      "stage": "foundation",
+      "section": "基础30讲 · 一、中值定理（例6.1~6.13）",
+      "kind": "example",
+      "title": "【基础例 6.9】$f(0)=0$ 不恒零 $\\implies$ 构造 $F=\\frac{1}{2}f^2$ 用拉格朗日证 $f(\\xi)f'(\\xi)>0$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[0,1]$ 上连续，在 $(0,1)$ 内可导，$f(0)=0$，且 $f(x)$ 在 $[0,1]$ 上不恒等于零。证明：存在 $\\xi\\in(0,1)$，使得 $f(\\xi)f'(\\xi)>0$。",
+      "steps": [
+        {
+          "stepTitle": "1. 识别 $f(\\xi)f'(\\xi)=\\left[\\frac{1}{2}f^2(x)\\right]'_{x=\\xi}$，翻译「不恒为零」",
+          "detail": "令 $F(x)=\\frac{1}{2}f^2(x)$，则 $F(0)=0$。由「$f(x)$ 在 $[0,1]$ 不恒等于零」知存在某点 $a\\in(0,1]$ 使 $f(a)\\ne 0$，从而 $F(a)=\\frac{1}{2}f^2(a)>0$。"
+        },
+        {
+          "stepTitle": "2. 对 $F(x)$ 在 $[0,a]$ 上用拉格朗日中值定理",
+          "detail": "由拉格朗日中值定理，存在 $\\xi\\in(0,a)\\subset(0,1)$ 使：$$F'(\\xi)=\\frac{F(a)-F(0)}{a-0}=\\frac{F(a)}{a}>0 \\implies f(\\xi)f'(\\xi)>0$$"
+        }
+      ],
+      "finalAnswer": "证毕（令 $F(x)=\\frac{1}{2}f^2(x)$，在 $[0,a]$ 上用拉格朗日中值定理）。",
+      "takeaway": "记住对比口诀：**欲证 $F'(\\xi)=0$ 用罗尔；欲证 $F'(\\xi)>0$（严格大于 $0$！）立刻换拉格朗日**，并把「不恒为零」精准翻译成「$\\exists a$ 使 $f(a)\\ne 0 \\Rightarrow f^2(a)>0$」！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.171",
+        "pdfPage": 176,
+        "itemRef": "例6.9"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-10",
+      "stage": "foundation",
+      "section": "基础30讲 · 一、中值定理（例6.1~6.13）",
+      "kind": "example",
+      "title": "【基础例 6.10 ★】构造 $g(x)=xf(x)$ 与 $h(x)=\\frac{f(x)}{x}$（配拉格朗日判导号）比较乘积大小",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)$ 满足 $f(0)=0$，且当 $x>0$ 时，$f(x)<0,\\;f'(x)<0,\\;f''(x)>0$，则当 $0<a<x<b$ 时，有（ ）。\n(A) $xf(x)>af(a)$　　(B) $bf(b)>xf(x)$　　(C) $xf(a)>af(x)$　　(D) $xf(b)>bf(x)$",
+      "steps": [
+        {
+          "stepTitle": "1. 构造 $g(x)=xf(x)$ 判单减，排除 (A)(B)",
+          "detail": "当 $x>0$ 时，$g'(x)=f(x)+xf'(x)<0$，故 $g(x)$ 严格单减，当 $0<a<x<b$ 时有 $bf(b)<xf(x)<af(a)$，排除 (A)(B)。"
+        },
+        {
+          "stepTitle": "2. 构造 $h(x)=\\frac{f(x)}{x}$，借助 $f(0)=0$ + 拉格朗日与 $f''>0$ 判 $h'(x)>0$",
+          "detail": "$$h'(x)=\\frac{xf'(x)-f(x)}{x^2}=\\frac{xf'(x)-[f(x)-f(0)]}{x^2}=\\frac{xf'(x)-f'(\\xi)x}{x^2}=\\frac{f'(x)-f'(\\xi)}{x}\\quad(0<\\xi<x)$$因 $f''(x)>0$ 知 $f'$ 严格单增，故 $f'(x)>f'(\\xi)\\implies h'(x)>0$，$h(x)=\\frac{f(x)}{x}$ 严格单增！于是 $\\frac{f(a)}{a}<\\frac{f(x)}{x}<\\frac{f(b)}{b}$，即 $af(x)>xf(a)$ 且 $xf(b)>bf(x)$，排除 (C)，选 (D)！"
+        }
+      ],
+      "finalAnswer": "选 (D) $xf(b)>bf(x)$。",
+      "takeaway": "必背结构翻译与技巧：① 见 $xf(b)>bf(x)$ 立刻两边同除 $xb$ 化为 $\\frac{f(b)}{b}>\\frac{f(x)}{x}$；② 见 $xf'(x)-f(x)$ 判不了符号且题设给 **$f(0)=0$** 时，立刻写成 $f(x)-f(0)=f'(\\xi)x$ 用拉格朗日消去 $f(x)$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.171-172",
+        "pdfPage": 176,
+        "itemRef": "例6.10"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c06_ex_zy30_05_13",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-11",
+      "stage": "foundation",
+      "section": "基础30讲 · 一、中值定理（例6.1~6.13）",
+      "kind": "example",
+      "title": "【基础例 6.11】由 $\\ln\\frac{b}{a}=\\ln b-\\ln a$ 与 $\\frac{1}{\\xi}$ 锁定 $g(x)=\\ln x$ 套柯西中值定理",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[a,b]$ 上连续，在 $(a,b)$ 内可导，$0<a<b$，证明：至少存在一点 $\\xi\\in(a,b)$，使得 $f(b)-f(a)=\\xi\\ln\\frac{b}{a}\\cdot f'(\\xi)$。",
+      "steps": [
+        {
+          "stepTitle": "1. 改写目标等式为双函数比值，识别具体函数 $g(x)=\\ln x$",
+          "detail": "目标等价于 $\\frac{f(b)-f(a)}{\\ln b-\\ln a}=\\frac{f'(\\xi)}{1/\\xi}$。令 $g(x)=\\ln x$，则 $f,g$ 在 $[a,b]$ 连续、在 $(a,b)$ 可导且 $g'(x)=\\frac{1}{x}>0\\ne 0$。"
+        },
+        {
+          "stepTitle": "2. 套柯西中值定理一步得证",
+          "detail": "由柯西中值定理，至少存在一点 $\\xi\\in(a,b)$ 使：$$\\frac{f(b)-f(a)}{\\ln b-\\ln a}=\\frac{f'(\\xi)}{1/\\xi} \\implies f(b)-f(a)=\\xi\\ln\\frac{b}{a}\\cdot f'(\\xi)$$"
+        }
+      ],
+      "finalAnswer": "证毕（对 $f(x)$ 与 $g(x)=\\ln x$ 用柯西中值定理）。",
+      "takeaway": "柯西中值定理核心识别码：见到 $\\ln\\frac{b}{a}$ 配 $\\xi$ 立刻想 $g(x)=\\ln x$；见到 $b^2-a^2$ 配 $2\\xi$ 想 $g(x)=x^2$；见到 $\\frac{1}{a}-\\frac{1}{b}$ 配 $\\xi^2$ 想 $g(x)=\\frac{1}{x}$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.172",
+        "pdfPage": 177,
+        "itemRef": "例6.11"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-12",
+      "stage": "foundation",
+      "section": "基础30讲 · 一、中值定理（例6.1~6.13）",
+      "kind": "example",
+      "title": "【基础例 6.12】中点 $x_0=\\frac{1}{2}$ 泰勒展开 + 积分保号性证 $f''>0,\\;\\int_0^1 f=0 \\Rightarrow f(\\frac{1}{2})<0$",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)$ 在 $[0,1]$ 上二阶可导，且 $\\int_0^1 f(x)\\,\\mathrm{d}x=0$，则（ ）。\n(A) 当 $f'(x)<0$ 时，$f(\\frac{1}{2})<0$　　(B) 当 $f''(x)<0$ 时，$f(\\frac{1}{2})<0$\n(C) 当 $f'(x)>0$ 时，$f(\\frac{1}{2})<0$　　(D) 当 $f''(x)>0$ 时，$f(\\frac{1}{2})<0$",
+      "steps": [
+        {
+          "stepTitle": "1. 在对称中心 $x_0=\\frac{1}{2}$ 处作一阶拉格朗日余项泰勒展开",
+          "detail": "$$f(x)=f\\!\\left(\\frac{1}{2}\\right)+f'\\!\\left(\\frac{1}{2}\\right)\\left(x-\\frac{1}{2}\\right)+\\frac{1}{2}f''(\\xi)\\left(x-\\frac{1}{2}\\right)^2$$其中 $\\xi$ 介于 $x$ 与 $\\frac{1}{2}$ 之间。"
+        },
+        {
+          "stepTitle": "2. 利用 $f''>0$ 严格不等式直接积分（方法二更严谨，完全规避 $\\xi(x)$ 可积性问题！）",
+          "detail": "当 $f''(x)>0$ 时，对一切 $x\\ne\\frac{1}{2}$ 恒有 $\\frac{1}{2}f''(\\xi)(x-\\frac{1}{2})^2>0$，故：$$f(x) \\ge f\\!\\left(\\frac{1}{2}\\right)+f'\\!\\left(\\frac{1}{2}\\right)\\left(x-\\frac{1}{2}\\right)\\quad\\text{（且仅在 }x=\\frac{1}{2}\\text{ 取等号）}$$两端在 $[0,1]$ 上积分，注意到 $\\int_0^1\\left(x-\\frac{1}{2}\\right)\\mathrm{d}x=0$ 且两连续函数不恒等，由定积分严格保号性得：$$0=\\int_0^1 f(x)\\,\\mathrm{d}x > \\int_0^1\\left[f\\!\\left(\\frac{1}{2}\\right)+f'\\!\\left(\\frac{1}{2}\\right)\\left(x-\\frac{1}{2}\\right)\\right]\\mathrm{d}x = f\\!\\left(\\frac{1}{2}\\right) \\implies f\\!\\left(\\frac{1}{2}\\right)<0$$应选 (D)。（注：方法一直接移项写 $f(\\frac{1}{2})=-\\frac{1}{2}\\int_0^1 f''(\\xi)(x-\\frac{1}{2})^2\\,\\mathrm{d}x$ 时，该被积函数等于连续函数 $2[f(x)-f(\\frac{1}{2})-f'(\\frac{1}{2})(x-\\frac{1}{2})]$ 故确可积，但绝不可把 $f''(\\xi)$ 提出积分号外！）"
+        }
+      ],
+      "finalAnswer": "选 (D) 当 $f''(x)>0$ 时，$f\\left(\\frac{1}{2}\\right)<0$。",
+      "takeaway": "超级妙招：**在区间中点 $x_0=\\frac{a+b}{2}$ 泰勒展开后积分，一次项 $\\int_a^b (x-x_0)\\,\\mathrm{d}x=0$ 自动灰飞烟灭！**几何本质就是「凹函数切线在弧下方」直接积分！（详见表 6-7 严谨补注。）",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.174",
+        "pdfPage": 179,
+        "itemRef": "例6.12"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c06_ex_zy30_05_13",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-13",
+      "stage": "foundation",
+      "section": "基础30讲 · 一、中值定理（例6.1~6.13）",
+      "kind": "example",
+      "title": "【基础例 6.13】在 $x_0=0$ 展开二阶泰勒取 $x=\\pm 1$ 相减消 $f(0),f''(0)$，再介值证 $f'''(\\xi)=3$",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)$ 在区间 $[-1,1]$ 上具有三阶连续导数，且 $f(-1)=0,\\;f(1)=1,\\;f'(0)=0$，证明：在区间 $(-1,1)$ 内至少存在一点 $\\xi$，使 $f'''(\\xi)=3$。",
+      "steps": [
+        {
+          "stepTitle": "1. 盯住 $f'(0)=0$，在 $x_0=0$ 展开二阶带拉格朗日余项泰勒公式并代 $x=\\pm 1$",
+          "detail": "$$f(x)=f(0)+f'(0)x+\\frac{1}{2!}f''(0)x^2+\\frac{1}{3!}f'''(\\eta)x^3$$因 $f'(0)=0$，分别令 $x=-1$ 和 $x=1$ 得：$$0=f(-1)=f(0)+\\frac{1}{2}f''(0)-\\frac{1}{6}f'''(\\eta_1)\\;(-1<\\eta_1<0),\\qquad 1=f(1)=f(0)+\\frac{1}{2}f''(0)+\\frac{1}{6}f'''(\\eta_2)\\;(0<\\eta_2<1)$$"
+        },
+        {
+          "stepTitle": "2. 两式相减消去未知项 $f(0),f''(0)$，再用 $f'''$ 连续介值定理得 $3$",
+          "detail": "两式相减得 $1=\\frac{1}{6}[f'''(\\eta_1)+f'''(\\eta_2)]\\implies \\frac{1}{2}[f'''(\\eta_1)+f'''(\\eta_2)]=3$。由 $f'''(x)$ 在 $[\\eta_1,\\eta_2]$ 连续及平均值（介值）定理，存在 $\\xi\\in[\\eta_1,\\eta_2]\\subset(-1,1)$ 使 $f'''(\\xi)=\\frac{1}{2}[f'''(\\eta_1)+f'''(\\eta_2)]=3$！"
+        }
+      ],
+      "finalAnswer": "证毕（在 $0$ 点向 $\\pm 1$ 展开相减得 $f'''(\\eta_1)+f'''(\\eta_2)=6$，再由连续介值定理得 $3$）。",
+      "takeaway": "高阶导常数等式标准两板斧：**① 在已知 $f'(x_0)=0$ 的对称中心向对称端点展开消未知项；② 出现 $\\frac{1}{2}[f^{(n)}(\\eta_1)+f^{(n)}(\\eta_2)]$ 立刻用连续介值（或达布）定理合并为单中值 $f^{(n)}(\\xi)$！**",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.174-175",
+        "pdfPage": 179,
+        "itemRef": "例6.13 & 注"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c06_ex_zy30_05_13",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-14",
+      "stage": "foundation",
+      "section": "基础30讲 · 二、微分等式 / 方程根（例6.14~6.18）",
+      "kind": "example",
+      "title": "【基础例 6.14】偶函数砍半 + 范围排外 + 零点与单调性证 $|x|^{1/4}+|x|^{1/2}-\\cos x=0$ 恰 2 根",
+      "examWeight": "core",
+      "problem": "在区间 $(-\\infty,+\\infty)$ 内，方程 $|x|^{\\frac{1}{4}}+|x|^{\\frac{1}{2}}-\\cos x=0$（ ）。\n(A) 无实根　　(B) 有且仅有一个实根　　(C) 有且仅有两个实根　　(D) 有无穷多个实根",
+      "steps": [
+        {
+          "stepTitle": "1. 借偶对称性砍半至 $[0,+\\infty)$，并用 $x>1$ 时恒正缩域至 $[0,1]$",
+          "detail": "记 $f(x)=|x|^{\\frac{1}{4}}+|x|^{\\frac{1}{2}}-\\cos x$，易知为偶函数且 $f(0)=-1\\ne 0$（零非根），故根成对出现。当 $x>1$ 时 $|x|^{1/4}>1,\\;|x|^{1/2}>1\\ge\\cos x$，恒有 $f(x)>0$ 无实根，只需考察 $[0,1]$。"
+        },
+        {
+          "stepTitle": "2. 在 $(0,1)$ 验单增 + 端点异号得正半轴唯一实根，乘 2 选 (C)",
+          "detail": "当 $x\\in(0,1)$ 时，$f'(x)=\\frac{1}{4}x^{-\\frac{3}{4}}+\\frac{1}{2}x^{-\\frac{1}{2}}+\\sin x>0$ 严格单增，且 $f(0)=-1<0,\\;f(1)=2-\\cos 1>0$，故在 $(0,1)$ 有且仅有一实根；由偶对称性，在 $(-\\infty,+\\infty)$ 有且仅有两个实根，选 (C)。（注：亦可令 $|x|^{1/4}=t$ 化为 $t+t^2-\\cos t^4=0$。）"
+        }
+      ],
+      "finalAnswer": "选 (C) 有且仅有两个实根。",
+      "takeaway": "含 $|x|$ 与 $\\cos x$ 的方程根题黄金减负三连：**① 偶对称先查 $x=0$ 再砍半；② 利用 $|\\cos x|\\le 1$ 砍掉 $x>1$；③ 小区间内单调+零点秒定根数！**",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.176-177",
+        "pdfPage": 181,
+        "itemRef": "例6.14 & 注"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c06_ex_zy30_14_18",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-15",
+      "stage": "foundation",
+      "section": "基础30讲 · 二、微分等式 / 方程根（例6.14~6.18）",
+      "kind": "example",
+      "title": "【基础例 6.15】实系数奇次必有根 + 双二次导数判别式 $\\Delta<0$ 证五次方程唯一实根",
+      "examWeight": "core",
+      "problem": "若 $3a^2-5b<0$，则方程 $x^5+2ax^3+3bx+4c=0$（ ）。\n(A) 无实根　　(B) 有唯一实根　　(C) 有三个不同实根　　(D) 有五个不同实根",
+      "steps": [
+        {
+          "stepTitle": "1. 实系数奇次多项式 $\\Rightarrow$ 至少有一个实根",
+          "detail": "记 $f(x)=x^5+2ax^3+3bx+4c$，为实系数 5 次（奇次）多项式，故至少存在一个实根。"
+        },
+        {
+          "stepTitle": "2. 求导得双二次式 $f'(x)=5x^4+6ax^2+3b$，判别式 $\\Delta<0\\Rightarrow$ 单增至多一实根",
+          "detail": "令 $t=x^2$，双二次式 $5t^2+6at+3b$ 的判别式 $\\Delta=36a^2-60b=12(3a^2-5b)<0$，故 $f'(x)>0$ 恒成立（无实根），$f(x)$ 在 $\\mathbb{R}$ 严格单增，方程有唯一实根，选 (B)。"
+        }
+      ],
+      "finalAnswer": "选 (B) 有唯一实根。",
+      "takeaway": "遇到奇次多项式 $x^5+2ax^3+3bx+4c=0$ 问实根数：**① 奇次自动送「至少 1 根」；② 一阶导恰为双二次式，看 $\\Delta<0$ 秒出「恒正单增 $\\Rightarrow$ 唯一实根」！**",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.177",
+        "pdfPage": 182,
+        "itemRef": "例6.15"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c06_ex_zy30_14_18",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-16",
+      "stage": "foundation",
+      "section": "基础30讲 · 二、微分等式 / 方程根（例6.14~6.18）",
+      "kind": "example",
+      "title": "【基础例 6.16】观察法+零点定理（至少 3 根）配罗尔推论 $f'''\\ne 0$（至多 3 根）证 $2^x-x^2-1=0$ 恰 3 根",
+      "examWeight": "core",
+      "problem": "证明 $2^x-x^2-1=0$ 有且仅有三个根。",
+      "steps": [
+        {
+          "stepTitle": "1. 证至少有 3 个实根（观察 $x=0,1$ + 零点定理锁定第 3 根 in $(2,5)$）",
+          "detail": "令 $f(x)=2^x-x^2-1$，直接观察得 $x_1=0,\\;x_2=1$ 为两个根；又 $f(2)=4-4-1=-1<0,\\;f(5)=32-25-1=6>0$，由零点定理知 $(2,5)$ 内至少有一根 $x_3$，故 $f(x)=0$ 至少有 3 个实根。"
+        },
+        {
+          "stepTitle": "2. 证至多有 3 个实根（连求三阶导用罗尔推论「阶数换个数」）",
+          "detail": "$$f'(x)=2^x\\ln 2-2x,\\qquad f''(x)=2^x\\ln^2 2-2,\\qquad f'''(x)=2^x\\ln^3 2 > 0\\ne 0$$即 $f'''(x)=0$ 无实根（至多 0 根），由罗尔推论「阶数换个数」立得 $f(x)=0$ 至多有 $0+3=3$ 个实根！综上，方程有且仅有 3 个实根！"
+        }
+      ],
+      "finalAnswer": "证毕（存在性：观察 $0,1$ 与 $(2,5)$ 零点 $\\ge 3$；上界：$f'''\\ne 0$ 由罗尔推论 $\\le 3$）。",
+      "takeaway": "指数配多项式（如 $2^x-x^2-1=0$）一阶导不易定号时，**连求导把多项式导没**，立刻用罗尔推论「$f^{(n)}\\ne 0\\Rightarrow$ 至多 $n$ 根」封顶！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.177",
+        "pdfPage": 182,
+        "itemRef": "例6.16"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c06_ex_zy30_14_18",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-17",
+      "stage": "foundation",
+      "section": "基础30讲 · 二、微分等式 / 方程根（例6.14~6.18）",
+      "kind": "example",
+      "title": "【基础例 6.17】含参方程 $\\mathrm{e}^x=kx$ 恰一实根：直接讨论法 vs 分离参数法（$y=\\frac{\\mathrm{e}^x}{x}$ 秒杀）",
+      "examWeight": "core",
+      "problem": "已知方程 $\\mathrm{e}^x=kx$ 有且仅有一个实根，则 $k$ 的取值范围是 ____。",
+      "steps": [
+        {
+          "stepTitle": "1. 方法一（直接法：分 $k<0,\\;k=0,\\;k>0$ 讨论 $F(x)=\\mathrm{e}^x-kx$ 极小值）",
+          "detail": "$F'(x)=\\mathrm{e}^x-k$：① $k<0$ 时 $F'>0$ 严格单增，且 $\\lim_{x\\to-\\infty}F=-\\infty,\\;\\lim_{x\\to+\\infty}F=+\\infty$，恰 1 根；② $k=0$ 时 $F=\\mathrm{e}^x>0$ 无根；③ $k>0$ 时唯一极小/最小值点 $x=\\ln k$，两端极限均为 $+\\infty$，故恰 1 根 $\\iff F(\\ln k)=k-k\\ln k=0\\iff k=\\mathrm{e}$。"
+        },
+        {
+          "stepTitle": "2. 方法二（分离参数法：联立 $y=\\frac{\\mathrm{e}^x}{x}$ 与 $y=k$ 借草图 3 秒秒杀！）",
+          "detail": "因 $x=0$ 不是根，同除 $x$ 得 $\\frac{\\mathrm{e}^x}{x}=k$。复用第 5 讲例 5.13 熟背草图：$y=\\frac{\\mathrm{e}^x}{x}$ 在 $x<0$ 从 $0^-$ 严格递减至 $-\\infty$，在 $x>0$ 于 $(1,\\mathrm{e})$ 取极小值 $\\mathrm{e}$ 且两侧趋 $+\\infty$。水平线 $y=k$ 与之恰有 1 个交点 $\\iff k=\\mathrm{e}$ 或 $k<0$！"
+        }
+      ],
+      "finalAnswer": "$k=\\mathrm{e}$ 或 $k<0$",
+      "takeaway": "含参方程能分离参数优先分离参数！记住 $\\frac{\\mathrm{e}^x}{x}=k$ 完整结论：$k>\\mathrm{e}$ 有 2 根、$k=\\mathrm{e}$ 或 $k<0$ 有 1 根、$0\\le k<\\mathrm{e}$ 无实根！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.177-178",
+        "pdfPage": 182,
+        "itemRef": "例6.17 & 图6-1"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-18",
+      "stage": "foundation",
+      "section": "基础30讲 · 二、微分等式 / 方程根（例6.14~6.18）",
+      "kind": "example",
+      "title": "【基础例 6.18】函数列 $x^n+nx-1=0$ 唯一正实根 $x_n\\in(0,1)$ 存在与唯一性（隐数列压轴母题）",
+      "examWeight": "core",
+      "problem": "已知方程 $x^n+nx-1=0$，其中 $n$ 为正整数。证明此方程存在唯一正实根 $x_n$。",
+      "steps": [
+        {
+          "stepTitle": "1. 证唯一性：$x>0$ 时 $f_n'(x)>0$ 严格单增",
+          "detail": "记 $f_n(x)=x^n+nx-1$。当 $x>0$ 时，$f_n'(x)=nx^{n-1}+n>0$，故 $f_n(x)$ 在 $[0,+\\infty)$ 上严格单调增加，至多有一个正实根。"
+        },
+        {
+          "stepTitle": "2. 证存在性：$f_n(0)=-1<0,\\;f_n(1)=n\\ge 1>0$ 套零点定理",
+          "detail": "由 $f_n(0)=-1<0,\\;f_n(1)=n\\ge 1>0$ 及零点定理，方程在 $(0,1)$ 内至少有一实根；结合严格单调性，存在唯一正实根 $x_n$，且 $0<x_n<1$。"
+        }
+      ],
+      "finalAnswer": "证毕（存在唯一正实根 $x_n\\in(0,1)$）。",
+      "takeaway": "考研大题经典第一问：**方程 $f_n(x)=0$ 定义出隐数列 $\\{x_n\\}$**！后续第二、三问常接「证 $x_n$ 单调有界求极限」（结合第 2 讲）或「求 $\\lim nx_n$」！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.178",
+        "pdfPage": 183,
+        "itemRef": "例6.18 & 注"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c06_ex_zy30_14_18",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-19",
+      "stage": "foundation",
+      "section": "基础30讲 · 三、微分不等式（例6.19~6.21）",
+      "kind": "example",
+      "title": "【基础例 6.19 ★】约当不等式 $\\sin x>\\frac{2x}{\\pi}\\;(0<x<\\frac{\\pi}{2})$ 双解法（单调法 vs 凹凸端点法）",
+      "examWeight": "core",
+      "problem": "证明当 $0<x<\\frac{\\pi}{2}$ 时，有 $\\sin x > \\frac{2x}{\\pi}$。",
+      "steps": [
+        {
+          "stepTitle": "1. 方法一（单调性主流法：令 $f(x)=\\frac{\\sin x}{x}$ 抽分子求导证单减）",
+          "detail": "欲证 $\\frac{\\sin x}{x}>\\frac{2}{\\pi}$，令 $f(x)=\\frac{\\sin x}{x}$，则 $f'(x)=\\frac{x\\cos x-\\sin x}{x^2}$。抽分子设 $g(x)=x\\cos x-\\sin x$，有 $g'(x)=-x\\sin x<0$，故 $g(x)<g(0)=0\\implies f'(x)<0$，从而 $f(x)>f(\\frac{\\pi}{2})=\\frac{2}{\\pi}$，即 $\\sin x>\\frac{2x}{\\pi}$。"
+        },
+        {
+          "stepTitle": "2. 方法二（凹凸端点秒杀法：两行搞定！）",
+          "detail": "设 $f(x)=\\sin x-\\frac{2x}{\\pi}$，则 $f''(x)=-\\sin x<0$（在 $(0,\\frac{\\pi}{2})$ 上严格为凸！），又两端点 $f(0)=f(\\frac{\\pi}{2})=0$，凸弧在弦上方，立得 $(0,\\frac{\\pi}{2})$ 上 $f(x)>0$，即 $\\sin x>\\frac{2x}{\\pi}$！"
+        }
+      ],
+      "finalAnswer": "证毕（记住强力结论：$\\frac{2}{\\pi}x<\\sin x<x$ 对 $x\\in(0,\\frac{\\pi}{2})$ 恒成立！）。",
+      "takeaway": "方法二仅两行就击杀约当不等式：**凡见两端点为 $0$ 且二阶导定号的不等式，直接用凹凸性秒杀！**（约当不等式在后续积分估计与级数判敛中反复出现！）",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.179-180",
+        "pdfPage": 184,
+        "itemRef": "例6.19"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-20",
+      "stage": "foundation",
+      "section": "基础30讲 · 三、微分不等式（例6.19~6.21）",
+      "kind": "example",
+      "title": "【基础例 6.20】开方先证内正脱绝对值 + 抽分子二次求导证对数平方不等式",
+      "examWeight": "core",
+      "problem": "证明：$\\left(\\ln\\frac{1+x}{x}-\\frac{1}{1+x}\\right)^2 < \\frac{1}{x(1+x)^2}\\;(x>0)$。",
+      "steps": [
+        {
+          "stepTitle": "1. 开方并先证绝对值内部 $f(x)=\\ln\\frac{1+x}{x}-\\frac{1}{1+x}>0$（顺利脱去绝对值！）",
+          "detail": "只需证 $\\left|\\ln\\frac{1+x}{x}-\\frac{1}{1+x}\\right|<\\frac{1}{\\sqrt{x}(1+x)}$。令 $f(x)=\\ln(1+x)-\\ln x-\\frac{1}{1+x}\\;(x>0)$，求导得：$$f'(x)=\\frac{1}{1+x}-\\frac{1}{x}+\\frac{1}{(1+x)^2}=\\frac{-1}{x(1+x)^2}<0$$又 $\\lim_{x\\to+\\infty}f(x)=0$，故 $f(x)>0$（亦可直接用拉格朗日 $\\ln(1+\\frac{1}{x})>\\frac{1}{1+x}$ 秒证！）。"
+        },
+        {
+          "stepTitle": "2. 令 $g(x)=f(x)-\\frac{1}{\\sqrt{x}(1+x)}$ 求导，抽分子 $h(x)=1+3x-2\\sqrt{x}$ 证恒正",
+          "detail": "$$g'(x)=\\frac{-1}{x(1+x)^2}+\\frac{\\frac{1}{2\\sqrt{x}}(1+x)+\\sqrt{x}}{x(1+x)^2}=\\frac{1+3x-2\\sqrt{x}}{2x^{\\frac{3}{2}}(1+x)^2}$$抽分子 $h(x)=1+3x-2\\sqrt{x}$，求导 $h'(x)=3-\\frac{1}{\\sqrt{x}}=0\\Rightarrow x=\\frac{1}{9}$ 为唯一极小/最小值点，$h_{\\min}=h(\\frac{1}{9})=\\frac{2}{3}>0$，故 $g'(x)>0$，$g(x)$ 在 $(0,+\\infty)$ 严格单增，又 $\\lim_{x\\to+\\infty}g(x)=0$，故 $g(x)<0$，证毕！"
+        }
+      ],
+      "finalAnswer": "证毕（先证内正脱绝对值，再证 $g(x)<0$ 借助 $h_{\\min}=\\frac{2}{3}>0$）。",
+      "takeaway": "带平方或绝对值的不等式：**切忌带着绝对值直接求导**，第一步先证内部恒正（或借 $\\frac{1}{1+x}<\\ln(1+\\frac{1}{x})<\\frac{1}{x}$ 秒脱绝对值），再通过抽分子求唯一极小值降维击破！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.180",
+        "pdfPage": 185,
+        "itemRef": "例6.20"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c06_ex_zy30_19_21",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-21",
+      "stage": "foundation",
+      "section": "基础30讲 · 三、微分不等式（例6.19~6.21）",
+      "kind": "example",
+      "title": "【基础例 6.21】常数变量化（右端）+ 拉格朗日中值定理（左端）证对数平均双侧不等式",
+      "examWeight": "core",
+      "problem": "设 $0<a<b$，证明不等式：$$\\frac{2a}{a^2+b^2} < \\frac{\\ln b-\\ln a}{b-a} < \\frac{1}{\\sqrt{ab}}$$",
+      "steps": [
+        {
+          "stepTitle": "1. 证右侧：常数变量化设 $\\varphi(x)=\\ln x-\\ln a-\\frac{x-a}{\\sqrt{ax}}\\;(x>a)$ 求导",
+          "detail": "固定 $a$ 将 $b$ 换为变量 $x>a$，求导得：$$\\varphi'(x)=\\frac{1}{x}-\\frac{1}{\\sqrt{a}}\\left(\\frac{1}{2\\sqrt{x}}+\\frac{a}{2x\\sqrt{x}}\\right)=-\\frac{(\\sqrt{x}-\\sqrt{a})^2}{2x\\sqrt{ax}}<0$$故 $\\varphi(x)$ 在 $(a,+\\infty)$ 严格单减，且 $\\varphi(a)=0$，于是 $\\varphi(b)<\\varphi(a)=0$，即 $\\frac{\\ln b-\\ln a}{b-a}<\\frac{1}{\\sqrt{ab}}$！"
+        },
+        {
+          "stepTitle": "2. 证左侧：对 $\\ln x$ 在 $[a,b]$ 用拉格朗日中值定理再结合 $a^2+b^2>2ab$",
+          "detail": "由拉格朗日中值定理，存在 $\\xi\\in(a,b)$ 使 $\\frac{\\ln b-\\ln a}{b-a}=\\frac{1}{\\xi}$。因 $0<a<\\xi<b$ 且 $a^2+b^2>2ab$（$a\\ne b$），有：$$\\frac{\\ln b-\\ln a}{b-a}=\\frac{1}{\\xi}>\\frac{1}{b}=\\frac{2a}{2ab}>\\frac{2a}{a^2+b^2}$$综合得证！"
+        }
+      ],
+      "finalAnswer": "证毕（右侧常数变量化；左侧拉格朗日 $\\frac{1}{\\xi}>\\frac{1}{b}>\\frac{2a}{a^2+b^2}$）。",
+      "takeaway": "记住这道**对数平均界殿堂母题**：$\\frac{1}{b}<\\frac{\\ln b-\\ln a}{b-a}<\\frac{1}{\\sqrt{ab}}<\\frac{1}{a}$；左右双侧不等式不要强求同一招，**左中值 + 右变量化**各取最简解！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.181",
+        "pdfPage": 186,
+        "itemRef": "例6.21"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c06_ex_zy30_19_21",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-22",
+      "stage": "intensive",
+      "section": "强化18讲 · 第一部分 一~二、原函数构造与证 f'(ξ)=0（强化例6.1~6.8）",
+      "kind": "example",
+      "title": "【强化例 6.1】指数变限积分因子 $F(x)=f(x)\\mathrm{e}^{\\int_0^x f(t)\\,\\mathrm{d}t}$ 证 $f'(\\xi)+f^2(\\xi)=0$",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)$ 在 $[0,1]$ 上连续，$(0,1)$ 内可导，$f(0)=f(1),\\;\\int_0^1 f(x)\\,\\mathrm{d}x=0$。证明：存在 $\\xi\\in(0,1)$，使得 $f'(\\xi)+f^2(\\xi)=0$。",
+      "steps": [
+        {
+          "stepTitle": "1. 匹配乘积逆用 ⑤ 构造 $F(x)=f(x)\\mathrm{e}^{\\int_0^x f(t)\\,\\mathrm{d}t}$ 并验 $F(0)=F(1)$",
+          "detail": "令 $F(x)=f(x)\\mathrm{e}^{\\int_0^x f(t)\\,\\mathrm{d}t}$，则 $F(0)=f(0)\\mathrm{e}^0=f(0)$，且由 $\\int_0^1 f(x)\\,\\mathrm{d}x=0$ 得 $F(1)=f(1)\\mathrm{e}^0=f(1)=f(0)=F(0)$。"
+        },
+        {
+          "stepTitle": "2. 应用罗尔定理一步消去正指数因子",
+          "detail": "由罗尔定理知存在 $\\xi\\in(0,1)$ 使 $F'(\\xi)=\\mathrm{e}^{\\int_0^\\xi f(t)\\,\\mathrm{d}t}\\big[f'(\\xi)+f^2(\\xi)\\big]=0$，因指数恒正，故 $f'(\\xi)+f^2(\\xi)=0$。"
+        }
+      ],
+      "finalAnswer": "证毕（构造 $F(x)=f(x)\\mathrm{e}^{\\int_0^x f(t)\\,\\mathrm{d}t}$ 用罗尔定理）。",
+      "takeaway": "一见 **$f'(\\xi)+f^n(\\xi)=0$** 搭配积分条件 $\\int_0^1 f^{n-1}=0$，直接默写母式 ⑤：**$F(x)=f(x)\\mathrm{e}^{\\int_0^x [f(t)]^{n-1}\\,\\mathrm{d}t}$**！（亦见 P.49 蓝笔选择题变式！）",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.49",
+        "pdfPage": 62,
+        "itemRef": "强化例6.1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c06_f_aux_derivs",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-23",
+      "stage": "intensive",
+      "section": "强化18讲 · 第一部分 一~二、原函数构造与证 f'(ξ)=0（强化例6.1~6.8）",
+      "kind": "example",
+      "title": "【强化例 6.2】交叉相乘恒等变形构造 $F(x)=[f(x)-f(a)][g(b)-g(x)]$ 证对称比值等式",
+      "examWeight": "core",
+      "problem": "已知函数 $f(x)$ 和 $g(x)$ 在 $[a,b]$ 上连续，在 $(a,b)$ 内可导，且 $g'(x)\\ne 0$，证明：存在 $\\xi\\in(a,b)$，使得 $$\\frac{f(\\xi)-f(a)}{g(b)-g(\\xi)}=\\frac{f'(\\xi)}{g'(\\xi)}$$",
+      "steps": [
+        {
+          "stepTitle": "1. 交叉相乘化为 $[g(b)-g(\\xi)]f'(\\xi)-[f(\\xi)-f(a)]g'(\\xi)=0$，一眼识出乘积导数！",
+          "detail": "因 $g'(x)\\ne 0$ 知 $g$ 在 $[a,b]$ 严格单调，故 $\\forall\\xi\\in(a,b)$ 有 $g(b)-g(\\xi)\\ne 0$。令 $F(x)=[f(x)-f(a)][g(b)-g(x)]$，则 $F(a)=F(b)=0$。"
+        },
+        {
+          "stepTitle": "2. 套罗尔定理回除整理即得",
+          "detail": "由罗尔定理存在 $\\xi\\in(a,b)$ 使 $F'(\\xi)=f'(\\xi)[g(b)-g(\\xi)]-[f(\\xi)-f(a)]g'(\\xi)=0$，两边同除 $g'(\\xi)[g(b)-g(\\xi)]$ 即得目标等式！"
+        }
+      ],
+      "finalAnswer": "证毕（交叉相乘看出 $F(x)=[f(x)-f(a)][g(b)-g(x)]$）。",
+      "takeaway": "注意陷阱：本题左边是 $\\frac{f(\\xi)-f(a)}{g(b)-g(\\xi)}$ 而非 $\\frac{f(b)-f(a)}{g(b)-g(a)}$，**不是直接柯西中值定理**，把分式交叉相乘变成乘积导数 $[uv]'=0$ 立刻明朗！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.52",
+        "pdfPage": 65,
+        "itemRef": "强化例6.2"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-24",
+      "stage": "intensive",
+      "section": "强化18讲 · 第一部分 一~二、原函数构造与证 f'(ξ)=0（强化例6.1~6.8）",
+      "kind": "example",
+      "title": "【强化例 6.3】直接令被积函数 $F(x)=x\\mathrm{e}^{1-x}f(x)$ 作辅助函数（附 P.52 印刷纠错！）",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[0,1]$ 上连续，在 $(0,1)$ 内可导，且满足 $f(1)=k\\int_0^{\\frac{1}{k}}x\\mathrm{e}^{1-x}f(x)\\,\\mathrm{d}x\\;(k>1)$，证明至少存在一点 $\\xi\\in(0,1)$，使得 $f'(\\xi)=(1-\\xi^{-1})f(\\xi)$。",
+      "steps": [
+        {
+          "stepTitle": "1. 对积分条件用积分中值定理，造出 $F(\\xi_1)=f(1)=F(1)$",
+          "detail": "由积分中值定理，存在 $\\xi_1\\in\\left[0,\\frac{1}{k}\\right]\\subset[0,1)$，使得：$$f(1)=k\\int_0^{\\frac{1}{k}}x\\mathrm{e}^{1-x}f(x)\\,\\mathrm{d}x = k\\cdot\\frac{1}{k}\\cdot\\xi_1\\mathrm{e}^{1-\\xi_1}f(\\xi_1)=\\xi_1\\mathrm{e}^{1-\\xi_1}f(\\xi_1)$$直接令被积函数 $F(x)=x\\mathrm{e}^{1-x}f(x)$，则 $F(\\xi_1)=f(1)=1\\cdot\\mathrm{e}^{1-1}f(1)=F(1)$！"
+        },
+        {
+          "stepTitle": "2. 在 $[\\xi_1,1]$ 上用罗尔定理（修正原书 P.52 漏印指数 `1-`！）",
+          "detail": "因 $\\xi_1\\le\\frac{1}{k}<1$，在 $[\\xi_1,1]$ 上应用罗尔定理，存在 $\\xi\\in(\\xi_1,1)\\subset(0,1)$ 使：$$F'(\\xi)=\\mathrm{e}^{1-\\xi}\\big[f(\\xi)-\\xi f(\\xi)+\\xi f'(\\xi)\\big]=0 \\implies f'(\\xi)=(1-\\xi^{-1})f(\\xi)$$（**纠错补注**：原书 P.52 第 7 行将 $\\mathrm{e}^{1-\\xi}$ 误印作 $\\mathrm{e}^{-\\xi}$，虽因指数恒正不影响 $=0$，实应为 $\\mathrm{e}^{1-\\xi}$；详见表 6-7。）"
+        }
+      ],
+      "finalAnswer": "证毕（直接取被积函数 $F(x)=x\\mathrm{e}^{1-x}f(x)$，积分中值定理 + 罗尔定理）。",
+      "takeaway": "题设给 $f(1)=k\\int_0^{1/k}(\\text{复杂被积式})\\,\\mathrm{d}x$ 时，**最简单最暴力的辅助函数就是被积函数本身！**先用积分中值定理消掉 $k$ 与积分号，端点等值自然天成！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.52-53",
+        "pdfPage": 65,
+        "itemRef": "强化例6.3 & 注"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c06_f_aux_derivs",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-25",
+      "stage": "intensive",
+      "section": "强化18讲 · 第一部分 一~二、原函数构造与证 f'(ξ)=0（强化例6.1~6.8）",
+      "kind": "example",
+      "title": "【强化例 6.4】双变限积分乘积 $F(x)=\\int_a^x f(t)\\,\\mathrm{d}t\\cdot\\int_x^b g(t)\\,\\mathrm{d}t$ 套罗尔定理",
+      "examWeight": "core",
+      "problem": "设正值函数 $f(x),g(x)$ 在 $[a,b]$ 上连续，证明存在 $\\xi\\in(a,b)$，使得 $$\\frac{f(\\xi)}{g(\\xi)}=\\frac{\\int_a^\\xi f(x)\\,\\mathrm{d}x}{\\int_\\xi^b g(x)\\,\\mathrm{d}x}$$",
+      "steps": [
+        {
+          "stepTitle": "1. 交叉相乘看出双变限积分乘积导数，构造 $F(x)$",
+          "detail": "目标交叉相乘为 $f(\\xi)\\int_\\xi^b g(t)\\,\\mathrm{d}t - g(\\xi)\\int_a^\\xi f(t)\\,\\mathrm{d}t = 0$，恰好是 $F(x)=\\left(\\int_a^x f(t)\\,\\mathrm{d}t\\right)\\left(\\int_x^b g(t)\\,\\mathrm{d}t\\right)$ 的导数（注意 $\\frac{\\mathrm{d}}{\\mathrm{d}x}\\int_x^b g=-g(x)$ 自带负号！）。"
+        },
+        {
+          "stepTitle": "2. 验 $F(a)=F(b)=0$，套罗尔定理并由正值性安全除分母",
+          "detail": "由罗尔定理存在 $\\xi\\in(a,b)$ 使 $F'(\\xi)=f(\\xi)\\int_\\xi^b g(t)\\,\\mathrm{d}t-g(\\xi)\\int_a^\\xi f(t)\\,\\mathrm{d}t=0$。因 $f,g>0$ 故 $g(\\xi)>0$ 且 $\\int_\\xi^b g(t)\\,\\mathrm{d}t>0$，相除即得！"
+        }
+      ],
+      "finalAnswer": "证毕（构造 $F(x)=\\int_a^x f(t)\\,\\mathrm{d}t\\int_x^b g(t)\\,\\mathrm{d}t$ 套罗尔定理）。",
+      "takeaway": "记住 $\\frac{\\mathrm{d}}{\\mathrm{d}x}\\int_x^b g(t)\\,\\mathrm{d}t = -g(x)$ 自带负号，所以「$\\int_a^\\xi f$ 与 $\\int_\\xi^b g$ 乘积求导」天然给出**减号**！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.53",
+        "pdfPage": 66,
+        "itemRef": "强化例6.4"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-26",
+      "stage": "intensive",
+      "section": "强化18讲 · 第一部分 一~二、原函数构造与证 f'(ξ)=0（强化例6.1~6.8）",
+      "kind": "example",
+      "title": "【强化例 6.5】推广积分中值定理（$\\xi$ 严格落在开区间 $(0,\\frac{\\pi}{2})$！）证 $f(\\xi)=0$",
+      "examWeight": "core",
+      "problem": "证明：若 $f(x)$ 连续且满足 $\\int_0^{\\frac{\\pi}{2}}f(x)\\cos x\\,\\mathrm{d}x=0$，则存在 $\\xi\\in\\left(0,\\frac{\\pi}{2}\\right)$，使得 $f(\\xi)=0$。",
+      "steps": [
+        {
+          "stepTitle": "1. 对 $f(x)\\cos x$ 在 $\\left[0,\\frac{\\pi}{2}\\right]$ 上用推广的积分中值定理（锁定开区间 $\\xi\\in(0,\\frac{\\pi}{2})$）",
+          "detail": "由推广积分中值定理（对变限积分用拉格朗日即得 $\\xi$ 严格在开区间内！），存在 $\\xi\\in\\left(0,\\frac{\\pi}{2}\\right)$ 使得：$$0=\\int_0^{\\frac{\\pi}{2}}f(x)\\cos x\\,\\mathrm{d}x = f(\\xi)\\cos\\xi\\cdot\\left(\\frac{\\pi}{2}-0\\right)$$"
+        },
+        {
+          "stepTitle": "2. 利用开区间内 $\\cos\\xi>0$ 消去 $\\cos\\xi$",
+          "detail": "因 $\\xi\\in\\left(0,\\frac{\\pi}{2}\\right)$ 严格异于右端点 $\\frac{\\pi}{2}$，故 $\\cos\\xi\\ne 0$，立得 $f(\\xi)=0$！"
+        }
+      ],
+      "finalAnswer": "证毕（推广积分中值定理保证 $\\xi\\in(0,\\frac{\\pi}{2})$ 严格避开 $\\cos\\frac{\\pi}{2}=0$！）。",
+      "takeaway": "本题精髓在于「**推广**」二字：普通积分中值定理只保证 $\\xi\\in[0,\\frac{\\pi}{2}]$，万一取到右端点 $\\frac{\\pi}{2}$ 则 $\\cos\\frac{\\pi}{2}=0$ 推不出 $f(\\xi)=0$；**推广积分中值定理保证 $\\xi\\in(0,\\frac{\\pi}{2})$ 严格避开端点**！（或对加权积分中值定理：$\\cos x\\ge 0$ 且 $\\int_0^{\\pi/2}\\cos x\\,\\mathrm{d}x=1$ 亦可。）",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.53",
+        "pdfPage": 66,
+        "itemRef": "强化例6.5"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-27",
+      "stage": "intensive",
+      "section": "强化18讲 · 第一部分 一~二、原函数构造与证 f'(ξ)=0（强化例6.1~6.8）",
+      "kind": "example",
+      "title": "【强化例 6.6 ★】设原函数 $F(x)=\\int_0^x f$ + 分部积分法证正交条件推至少两零点",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)$ 在 $[0,\\pi]$ 上连续，且 $\\int_0^\\pi f(x)\\,\\mathrm{d}x=0,\\;\\int_0^\\pi f(x)\\cos x\\,\\mathrm{d}x=0$。证明：在 $(0,\\pi)$ 内至少存在两个不同的点 $\\xi_1,\\xi_2$，使得 $f(\\xi_1)=f(\\xi_2)=0$。",
+      "steps": [
+        {
+          "stepTitle": "1. 令变限积分 $F(x)=\\int_0^x f(t)\\,\\mathrm{d}t$，用分部积分把第二个条件变成 $\\int_0^\\pi F(x)\\sin x\\,\\mathrm{d}x=0$",
+          "detail": "显然 $F(0)=0,\\;F(\\pi)=\\int_0^\\pi f(x)\\,\\mathrm{d}x=0$。对第二个积分分部积分：$$0=\\int_0^\\pi \\cos x\\,\\mathrm{d}[F(x)]=\\Big[F(x)\\cos x\\Big]_0^\\pi+\\int_0^\\pi F(x)\\sin x\\,\\mathrm{d}x=\\int_0^\\pi F(x)\\sin x\\,\\mathrm{d}x$$"
+        },
+        {
+          "stepTitle": "2. 由推广积分中值定理得 $F(\\xi)=0$，凑三零点 $0<\\xi<\\pi$ 两段用罗尔",
+          "detail": "由推广积分中值定理，存在 $\\xi\\in(0,\\pi)$ 使 $F(\\xi)\\sin\\xi\\cdot\\pi=0$，因 $\\sin\\xi>0$ 故 $F(\\xi)=0$。于是 $F(0)=F(\\xi)=F(\\pi)=0$，分别在 $[0,\\xi]$ 与 $[\\xi,\\pi]$ 上用罗尔定理，得 $\\xi_1\\in(0,\\xi),\\;\\xi_2\\in(\\xi,\\pi)$ 使 $F'(\\xi_1)=F'(\\xi_2)=0$，即 $f(\\xi_1)=f(\\xi_2)=0$！"
+        }
+      ],
+      "finalAnswer": "证毕（变限积分 + 分部积分造出 $F$ 的中间零点 $\\xi$，再两段罗尔得 $\\xi_1<\\xi_2$）。",
+      "takeaway": "压轴高频母题（亦可反证法做）：见到 $\\int_a^b f=0$ 与 $\\int_a^b f\\cdot g=0$ 证 $f$ 至少两零点，**令 $F=\\int_a^x f$ 分部积分自动消灭边界项**，稳如泰山！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.54",
+        "pdfPage": 67,
+        "itemRef": "强化例6.6"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-28",
+      "stage": "intensive",
+      "section": "强化18讲 · 第一部分 一~二、原函数构造与证 f'(ξ)=0（强化例6.1~6.8）",
+      "kind": "example",
+      "title": "【强化例 6.7】内部最大值 $2$ + 费马 $f'(x_1)=0$ 配拉格朗日与泰勒证 $f'(\\xi)>2$、$f''(\\eta)<-4$",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)$ 在 $[0,1]$ 上二阶可导，$f(0)=0$，且 $f(x)$ 在 $(0,1)$ 内取得最大值 $2$，在 $(0,1)$ 内取得最小值，证明：\n(1) 存在 $\\xi\\in(0,1)$，使得 $f'(\\xi)>2$；\n(2) 存在 $\\eta\\in(0,1)$，使得 $f''(\\eta)<-4$。",
+      "steps": [
+        {
+          "stepTitle": "1. 证 (1)：在 $[0,x_1]$ 用拉格朗日中值定理，利用 $0<x_1<1$",
+          "detail": "设 $f$ 在 $x_1\\in(0,1)$ 取最大值 $f(x_1)=2$。在 $[0,x_1]$ 用拉格朗日，存在 $\\xi\\in(0,x_1)\\subset(0,1)$ 使 $f'(\\xi)=\\frac{f(x_1)-f(0)}{x_1-0}=\\frac{2}{x_1}>2$。"
+        },
+        {
+          "stepTitle": "2. 证 (2)：由费马 $f'(x_1)=0$，在 $x_1$ 处一阶泰勒展开代最小值点 $x_2$",
+          "detail": "因 $x_1\\in(0,1)$ 为内部最大值点，由费马定理 $f'(x_1)=0$；又设 $f$ 在 $x_2\\in(0,1)$ 取最小值 $m$，由 $f(0)=0$ 知 $f(x_2)=m\\le 0$（且显然 $x_2\\ne x_1$）。将 $f$ 在 $x_1$ 处一阶泰勒展开并令 $x=x_2$：$$f(x_2)=f(x_1)+f'(x_1)(x_2-x_1)+\\frac{f''(\\eta)}{2!}(x_2-x_1)^2 = 2+\\frac{f''(\\eta)}{2}(x_2-x_1)^2 \\le 0$$其中 $\\eta$ 介于 $x_1,x_2$ 之间，故 $\\eta\\in(0,1)$，且 $0<(x_2-x_1)^2<1$，立得 $f''(\\eta)\\le\\frac{-4}{(x_2-x_1)^2}<-4$！"
+        }
+      ],
+      "finalAnswer": "证毕（(1) $[0,x_1]$ 拉格朗日；(2) $x_1$ 处费马 $f'=0$ + 泰勒展开至 $x_2$）。",
+      "takeaway": "看到「内部取得最值」，立刻顺手翻译出两条隐藏金矿：**① $f'(x_1)=0$（费马定理）；② $f(x_2)\\le f(0)=0$**！再把 $x_1$ 当泰勒展开点，一次项直接归零！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.54-55",
+        "pdfPage": 67,
+        "itemRef": "强化例6.7"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-29",
+      "stage": "intensive",
+      "section": "强化18讲 · 第一部分 一~二、原函数构造与证 f'(ξ)=0（强化例6.1~6.8）",
+      "kind": "example",
+      "title": "【强化例 6.8 ★】达布导数介值定理证明 + 泰勒联用证 $f(0)+f(2)-2f(1)=f''(\\xi)$（不需 $f''$ 连续！）",
+      "examWeight": "core",
+      "problem": "(1) 设 $f(x)$ 在 $[a,b]$ 上可导，若 $f'_+(a)\\ne f'_-(b)$，证明：对于任意介于 $f'_+(a)$ 与 $f'_-(b)$ 之间的 $\\mu$，存在 $\\xi\\in(a,b)$，使得 $f'(\\xi)=\\mu$；\n(2) 若 $f(x)$ 在 $[0,2]$ 上具有二阶导数，证明：存在 $\\xi\\in(0,2)$，使得 $f(0)+f(2)-2f(1)=f''(\\xi)$。",
+      "steps": [
+        {
+          "stepTitle": "1. 证 (1)（达布定理）：令 $F(x)=f(x)-\\mu x$，用导数零点定理（费马定理）",
+          "detail": "不妨设 $f'_+(a)<\\mu<f'_-(b)$，令 $F(x)=f(x)-\\mu x$，则 $F'_+(a)=f'_+(a)-\\mu<0$，$F'_-(b)=f'_-(b)-\\mu>0$。由保号性知 $a$ 右邻域 $F(x)<F(a)$、$b$ 左邻域 $F(x)<F(b)$，故 $F$ 在 $[a,b]$ 的最小值必在开区间内某点 $\\xi\\in(a,b)$ 取得，由费马定理 $F'(\\xi)=0\\implies f'(\\xi)=\\mu$！"
+        },
+        {
+          "stepTitle": "2. 证 (2)：在 $x_0=1$ 向 $0,2$ 一阶泰勒展开相加，对 $f''=(f')'$ 套 (1) 达布定理！",
+          "detail": "在 $x_0=1$ 处一阶泰勒展开取 $x=0$ 与 $x=2$：$$f(0)=f(1)-f'(1)+\\frac{1}{2}f''(x_1)\\;(0<x_1<1),\\qquad f(2)=f(1)+f'(1)+\\frac{1}{2}f''(x_2)\\;(1<x_2<2)$$两式相加得 $f(0)+f(2)-2f(1)=\\frac{1}{2}[f''(x_1)+f''(x_2)]$。若 $f''(x_1)=f''(x_2)$ 则取 $\\xi=x_1$ 即成立；若不等，则 $\\frac{1}{2}[f''(x_1)+f''(x_2)]$ 严格介于 $f''(x_1),f''(x_2)$ 之间，对 $f'(x)$ 在 $[x_1,x_2]$ 上用 (1) 达布定理，即存在 $\\xi\\in(x_1,x_2)\\subset(0,2)$ 使 $f''(\\xi)=\\frac{1}{2}[f''(x_1)+f''(x_2)]$！"
+        }
+      ],
+      "finalAnswer": "证毕（(1) $F=f-\\mu x$ + 费马；(2) $x_0=1$ 泰勒展开相加 + 二阶导达布介值性）。",
+      "takeaway": "审题神眼神：**题干只说「具有二阶导数」而没说「二阶导数连续」时，合并 $\\frac{1}{2}[f''(x_1)+f''(x_2)]$ 必须亮出「导数介值定理（达布定理）」！**",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.55-56",
+        "pdfPage": 68,
+        "itemRef": "强化例6.8 & 注"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-30",
+      "stage": "intensive",
+      "section": "强化18讲 · 第一部分 三~四、拉格朗日/柯西/泰勒专题（强化例6.9~6.16）",
+      "kind": "example",
+      "title": "【强化例 6.9】导数极限定理证明：右连续且 $\\lim_{x\\to x_0^+}f'(x)=A \\implies f'_+(x_0)=A$",
+      "examWeight": "core",
+      "problem": "已知函数 $f(x)$ 在 $[x_0,x_0+\\delta)$ 上连续，在 $(x_0,x_0+\\delta)$ 内可导，$\\delta>0$，证明：若 $\\lim_{x\\to x_0^+}f'(x)=A$，则 $f'_+(x_0)=A$。",
+      "steps": [
+        {
+          "stepTitle": "1. 写出右导数定义，对 $[x_0,x]$ 应用拉格朗日中值定理",
+          "detail": "对任意 $x\\in(x_0,x_0+\\delta)$，由 $f$ 在 $[x_0,x]$ 连续、在 $(x_0,x)$ 可导，据拉格朗日中值定理存在 $\\xi\\in(x_0,x)$ 使 $\\frac{f(x)-f(x_0)}{x-x_0}=f'(\\xi)$。"
+        },
+        {
+          "stepTitle": "2. 令 $x\\to x_0^+$ 迫使 $\\xi\\to x_0^+$，由极限存在得右导数等于 $A$",
+          "detail": "$$f'_+(x_0)=\\lim_{x\\to x_0^+}\\frac{f(x)-f(x_0)}{x-x_0}=\\lim_{x\\to x_0^+}f'(\\xi)=\\lim_{\\xi\\to x_0^+}f'(\\xi)=A$$（同附三大经典对比反例见表 6-3：$|x|$、$x^3\\sin\\frac{1}{x}$、$x^2\\sin\\frac{1}{x}$。）"
+        }
+      ],
+      "finalAnswer": "证毕（拉格朗日中值定理一步连通右导数定义与右导数极限）。",
+      "takeaway": "拉格朗日中值定理证明分段点导数的底层依据：**连续性绝对不能省**（反例 $x^3\\sin\\frac{1}{x}$ 在 $0$ 无定义时导数极限为 $0$ 但 $f'(0)$ 不存在）！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.56-57",
+        "pdfPage": 69,
+        "itemRef": "强化例6.9 & 注(1)-(3)"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-31",
+      "stage": "intensive",
+      "section": "强化18讲 · 第一部分 三~四、拉格朗日/柯西/泰勒专题（强化例6.9~6.16）",
+      "kind": "example",
+      "title": "【强化例 6.10】赫尔德条件 $|f(x)-f(y)|\\le M|x-y|^\\alpha\\;(\\alpha>1) \\implies f'(x)\\equiv 0 \\implies f\\equiv C$",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)$ 在区间 $[a,b]$ 上满足：对任意 $x,y\\in[a,b]$，有 $|f(x)-f(y)|\\le M|x-y|^\\alpha$，其中 $M>0,\\;\\alpha>1$ 是常数。证明：$f(x)$ 在 $[a,b]$ 上恒为常数。",
+      "steps": [
+        {
+          "stepTitle": "1. 构造差商取极限，利用 $\\alpha-1>0$ 夹逼证出 $f'(x_0)=0$",
+          "detail": "对任意 $x_0\\in[a,b]$ 及 $x\\in[a,b]\\;(x\\ne x_0)$，两边同除 $|x-x_0|$ 得：$$0\\le\\left|\\frac{f(x)-f(x_0)}{x-x_0}\\right|\\le M|x-x_0|^{\\alpha-1}$$因 $\\alpha>1$，$\\lim_{x\\to x_0}|x-x_0|^{\\alpha-1}=0$，由夹逼准则知 $f'(x_0)=\\lim_{x\\to x_0}\\frac{f(x)-f(x_0)}{x-x_0}=0$（端点为单侧导数）。"
+        },
+        {
+          "stepTitle": "2. 由拉格朗日推论「$f'(x)\\equiv 0\\Rightarrow f(x)\\equiv C$」得证",
+          "detail": "因 $f'(x)\\equiv 0$ 在整个区间 $[a,b]$ 上成立，故 $f(x)$ 在 $[a,b]$ 上恒为常数。"
+        }
+      ],
+      "finalAnswer": "证毕（差商夹逼得 $f'(x)\\equiv 0\\implies f(x)\\equiv C$）。",
+      "takeaway": "记住临界指数 **$\\alpha>1$**：若 $\\alpha=1$（利普希茨条件 $|f(x)-f(y)|\\le M|x-y|$），函数可以是 $f(x)=x$ 甚至不可导的 $|x|$，绝非常数；只有 $\\alpha>1$ 才强制把函数压成常数！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.57-58",
+        "pdfPage": 70,
+        "itemRef": "强化例6.10"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-32",
+      "stage": "intensive",
+      "section": "强化18讲 · 第一部分 三~四、拉格朗日/柯西/泰勒专题（强化例6.9~6.16）",
+      "kind": "example",
+      "title": "【强化例 6.11】保号性截取 $f'(x)>\\frac{A}{2}$ + 拉格朗日证 $\\lim_{x\\to-\\infty}f'(x)=A>0 \\implies \\lim_{x\\to-\\infty}f(x)=-\\infty$",
+      "examWeight": "core",
+      "problem": "已知函数 $f(x)$ 在 $(-\\infty,0)$ 上可导，且 $\\lim_{x\\to-\\infty}f'(x)=A>0$，证明 $\\lim_{x\\to-\\infty}f(x)=-\\infty$。",
+      "steps": [
+        {
+          "stepTitle": "1. 由极限保号性定阈值 $X_0<0$，使 $x<X_0$ 时 $f'(x)>\\frac{A}{2}>0$",
+          "detail": "由 $\\lim_{x\\to-\\infty}f'(x)=A>0$，取 $\\varepsilon=\\frac{A}{2}$，存在 $X_0<0$，使得当 $x<X_0$ 时恒有 $f'(x)>\\frac{A}{2}>0$。"
+        },
+        {
+          "stepTitle": "2. 对 $[x,X_0]$ 用拉格朗日中值定理（注意 $x-X_0<0$ 不等号反向！）",
+          "detail": "对任意 $x<X_0$，由拉格朗日中值定理存在 $\\xi\\in(x,X_0)$ 使 $f(x)-f(X_0)=f'(\\xi)(x-X_0)$。因 $x-X_0<0$ 且 $f'(\\xi)>\\frac{A}{2}$，两边同乘负数 $x-X_0$ 得：$$f(x) < f(X_0) + \\frac{A}{2}(x-X_0)$$令 $x\\to-\\infty$，右端趋于 $-\\infty$，故 $\\lim_{x\\to-\\infty}f(x)=-\\infty$！"
+        }
+      ],
+      "finalAnswer": "证毕（保号性 + 拉格朗日放缩得线性上界 $f(X_0)+\\frac{A}{2}(x-X_0)\\to-\\infty$）。",
+      "takeaway": "高频符号防坑：在 $(-\\infty,0)$ 中 $x<X_0$，**$x-X_0$ 是负数**，把 $f'(\\xi)>\\frac{A}{2}$ 乘上 $x-X_0$ 时不等号要翻转成 $<$！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.58",
+        "pdfPage": 71,
+        "itemRef": "强化例6.11"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-33",
+      "stage": "intensive",
+      "section": "强化18讲 · 第一部分 三~四、拉格朗日/柯西/泰勒专题（强化例6.9~6.16）",
+      "kind": "example",
+      "title": "【强化例 6.12 ★】分段拉格朗日证 $|f'(\\xi)|\\ge M$，再借严格不等 + 费马定理证 $|f'|\\le M\\Rightarrow M=0$",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)$ 在区间 $[0,2]$ 上具有连续导数，$f(0)=f(2)=0,\\;M=\\max_{x\\in[0,2]}\\{|f(x)|\\}$。证明：\n(1) 存在 $\\xi\\in(0,2)$，使得 $|f'(\\xi)|\\ge M$；\n(2) 若对任意的 $x\\in(0,2)$，$|f'(x)|\\le M$，则 $M=0$。",
+      "steps": [
+        {
+          "stepTitle": "1. 证 (1)：按最大值点 $x_0$ 落在 $(0,1)$、$(1,2)$、$x_0=1$ 三类就近选短区间用拉格朗日",
+          "detail": "$M=0$ 时 $f\\equiv 0$ 显然成立。设 $M>0$ 且 $|f(x_0)|=M\\;(x_0\\in(0,2))$：\n- 若 $x_0\\in(0,1)$，在 $[0,x_0]$ 用拉格朗日得 $|f'(\\xi_1)|=\\frac{|f(x_0)-f(0)|}{x_0}=\\frac{M}{x_0}>M$；\n- 若 $x_0\\in(1,2)$，在 $[x_0,2]$ 用拉格朗日得 $|f'(\\xi_2)|=\\frac{|f(2)-f(x_0)|}{2-x_0}=\\frac{M}{2-x_0}>M$；\n- 若 $x_0=1$，在 $[0,1]$ 用拉格朗日得 $|f'(\\xi_3)|=\\frac{|f(1)-f(0)|}{1}=M$。综上必存在 $\\xi\\in(0,2)$ 使 $|f'(\\xi)|\\ge M$！"
+        },
+        {
+          "stepTitle": "2. 证 (2)：锁定 $|f(1)|=M$，令 $F(x)=f(x)-Mx$ 推出 $f'_-(1)=M$ 与费马 $f'(1)=0$ 矛盾！",
+          "detail": "由 (1) 知若 $x_0\\ne 1$ 必有某点 $|f'|>M$ 与题设矛盾，故必有 $|f(1)|=M$（不妨设 $f(1)=M$）。令 $F(x)=f(x)-Mx\\;(x\\in[0,1])$，则 $F'(x)=f'(x)-M\\le 0$ 单调不增，又 $F(0)=F(1)=0$，故 $F(x)\\equiv 0$，即 $f(x)=Mx\\;(x\\in[0,1])$，从而 $f'_-(1)=M$。但 $x=1$ 为内部最大值点，由费马定理 $f'(1)=0$，故 $M=0$！"
+        }
+      ],
+      "finalAnswer": "证毕（(1) 分三类就近选短边用拉格朗日；(2) $F=f-Mx\\equiv 0$ 结合费马得 $M=0$）。",
+      "takeaway": "经典压轴神题！第 (2) 问的精妙之处在于：**单调不增函数若两端点值相等，必在全区间恒为常数（$F\\equiv 0$）**，从而强制推出线性斜率 $M$ 与费马零导数冲突！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.58",
+        "pdfPage": 71,
+        "itemRef": "强化例6.12"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-34",
+      "stage": "intensive",
+      "section": "强化18讲 · 第一部分 三~四、拉格朗日/柯西/泰勒专题（强化例6.9~6.16）",
+      "kind": "example",
+      "title": "【强化例 6.13】积分中值点极限位置：$\\int_0^x\\mathrm{e}^t\\,\\mathrm{d}t=x\\mathrm{e}^{\\theta x}\\implies \\lim_{x\\to 0^+}\\theta=\\frac{1}{2}$",
+      "examWeight": "core",
+      "problem": "已知 $\\int_0^x f(t)\\,\\mathrm{d}t = xf(\\theta x),\\;x>0,\\;f(x)=\\mathrm{e}^x$，则 $\\lim_{x\\to 0^+}\\theta=$ ____。",
+      "steps": [
+        {
+          "stepTitle": "1. 代入 $f(x)=\\mathrm{e}^x$ 显式反解出 $\\theta$",
+          "detail": "由 $\\int_0^x\\mathrm{e}^t\\,\\mathrm{d}t=\\mathrm{e}^x-1=x\\mathrm{e}^{\\theta x}$ 两边取对数得：$$\\theta = \\frac{1}{x}\\ln\\frac{\\mathrm{e}^x-1}{x}$$"
+        },
+        {
+          "stepTitle": "2. 利用 $\\ln(1+u)\\sim u$ 与泰勒展开求出极限 $\\frac{1}{2}$",
+          "detail": "$$\\lim_{x\\to 0^+}\\theta = \\lim_{x\\to 0^+}\\frac{1}{x}\\ln\\!\\left(1+\\frac{\\mathrm{e}^x-1}{x}-1\\right) = \\lim_{x\\to 0^+}\\frac{\\mathrm{e}^x-x-1}{x^2} = \\frac{1}{2}$$"
+        }
+      ],
+      "finalAnswer": "$\\frac{1}{2}$",
+      "takeaway": "求中值点 $\\theta$ 极限位置的两条路线：① 具体函数优先直接**反解 $\\theta$ 求极限**；② 抽象函数则用**泰勒展开比较同阶系数**（一般地，若 $f'(0)\\ne 0$ 则积分/拉格朗日中值点 $\\lim_{x\\to 0}\\theta=\\frac{1}{2}$！）。",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.59",
+        "pdfPage": 72,
+        "itemRef": "强化例6.13"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c06_ex_zy18_09_18",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-35",
+      "stage": "intensive",
+      "section": "强化18讲 · 第一部分 三~四、拉格朗日/柯西/泰勒专题（强化例6.9~6.16）",
+      "kind": "example",
+      "title": "【强化例 6.14】变限积分 $g(x)=\\int_a^x f$ 与 $h(x)=x^2$ 套柯西中值定理（含双中值进阶）",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[a,b]$ 上连续，且 $f(x)>0$，证明存在 $\\xi\\in(a,b)$，使得 $$\\frac{b^2-a^2}{\\int_a^b f(x)\\,\\mathrm{d}x}=\\frac{2\\xi}{f(\\xi)}$$",
+      "steps": [
+        {
+          "stepTitle": "1. 从 $2\\xi$ 与 $f(\\xi)$ 逆构具体函数 $h(x)=x^2$ 与变限积分 $g(x)=\\int_a^x f(t)\\,\\mathrm{d}t$",
+          "detail": "显然 $h,g$ 在 $[a,b]$ 连续、在 $(a,b)$ 可导，且 $g'(x)=f(x)>0\\ne 0$，$g(a)=0,\\;g(b)=\\int_a^b f(x)\\,\\mathrm{d}x$。"
+        },
+        {
+          "stepTitle": "2. 套柯西中值定理一步证毕（附强化 P.60 进阶双中值变形）",
+          "detail": "由柯西中值定理，存在 $\\xi\\in(a,b)$ 使：$$\\frac{h(b)-h(a)}{g(b)-g(a)}=\\frac{b^2-a^2}{\\int_a^b f(x)\\,\\mathrm{d}x}=\\frac{h'(\\xi)}{g'(\\xi)}=\\frac{2\\xi}{f(\\xi)}$$（**进阶拓展**：若题设加 $f(a)=0$ 且可导，再对 $f(\\xi)-f(a)=f'(\\eta)(\\xi-a)$ 用拉格朗日代入即得双中值等式 $f'(\\eta)(b^2-a^2)=\\frac{2\\xi}{\\xi-a}\\int_a^b f(x)\\,\\mathrm{d}x$！）"
+        }
+      ],
+      "finalAnswer": "证毕（对 $h(x)=x^2$ 与 $g(x)=\\int_a^x f(t)\\,\\mathrm{d}t$ 用柯西中值定理）。",
+      "takeaway": "看到积分 $\\int_a^b f$ 配 $f(\\xi)$，立刻写成变限积分差 $g(b)-g(a)$ 配 $g'(\\xi)$，套柯西中值定理 1 行完事！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.60",
+        "pdfPage": 73,
+        "itemRef": "强化例6.14"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-36",
+      "stage": "intensive",
+      "section": "强化18讲 · 第一部分 三~四、拉格朗日/柯西/泰勒专题（强化例6.9~6.16）",
+      "kind": "example",
+      "title": "【强化例 6.15】累次积分换序算 $g(1)$ + 与 $h(x)=x^2$ 柯西中值定理证变限积分等式",
+      "examWeight": "core",
+      "problem": "设 $f(x)=\\int_1^x\\sin t^2\\,\\mathrm{d}t,\\;g(x)=\\int_0^x f(t)\\,\\mathrm{d}t$。\n(1) 计算 $g(1)$；　　(2) 证明：存在 $\\xi\\in(0,1)$，使得 $\\int_1^\\xi\\sin t^2\\,\\mathrm{d}t=\\xi(\\cos 1-1)$。",
+      "steps": [
+        {
+          "stepTitle": "1. 算 (1)：交换累次积分次序把不可积的 $\\sin t^2$ 配出因子 $t$！",
+          "detail": "$$g(1)=\\int_0^1\\mathrm{d}x\\int_1^x\\sin t^2\\,\\mathrm{d}t=-\\int_0^1\\mathrm{d}x\\int_x^1\\sin t^2\\,\\mathrm{d}t=-\\int_0^1\\mathrm{d}t\\int_0^t\\sin t^2\\,\\mathrm{d}x=-\\int_0^1 t\\sin t^2\\,\\mathrm{d}t=\\left[\\frac{1}{2}\\cos t^2\\right]_0^1=\\frac{1}{2}(\\cos 1-1)$$"
+        },
+        {
+          "stepTitle": "2. 证 (2)：对 $g(x)$ 与 $h(x)=x^2$ 在 $[0,1]$ 用柯西中值定理",
+          "detail": "因 $g(0)=0,\\;g'(x)=f(x)=\\int_1^x\\sin t^2\\,\\mathrm{d}t$，$h(0)=0,\\;h(1)=1,\\;h'(x)=2x\\ne 0$，由柯西中值定理存在 $\\xi\\in(0,1)$ 使：$$\\frac{g(1)-g(0)}{h(1)-h(0)}=\\frac{\\frac{1}{2}(\\cos 1-1)}{1}=\\frac{\\int_1^\\xi\\sin t^2\\,\\mathrm{d}t}{2\\xi} \\implies \\int_1^\\xi\\sin t^2\\,\\mathrm{d}t=\\xi(\\cos 1-1)$$"
+        }
+      ],
+      "finalAnswer": "(1) $g(1)=\\frac{1}{2}(\\cos 1-1)$；(2) 对 $g(x)$ 与 $x^2$ 用柯西中值定理证毕。",
+      "takeaway": "第 (1) 问为第 (2) 问铺路的典范！看到不可积函数 $\\sin t^2$ 的二重/变限积分，立刻**交换积分次序**（或分部积分）凑出 $t\\sin t^2$！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.60",
+        "pdfPage": 73,
+        "itemRef": "强化例6.15"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c06_ex_zy18_09_18",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-37",
+      "stage": "intensive",
+      "section": "强化18讲 · 第一部分 三~四、拉格朗日/柯西/泰勒专题（强化例6.9~6.16）",
+      "kind": "example",
+      "title": "【强化例 6.16 ★】在泛指点 $x$ 向两端点 $0,1$ 泰勒展开相减，由 $|f''|\\le 2$ 证 $|f'(x)|\\le 1$",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)$ 在 $[0,1]$ 上二阶可导，$f(0)=f(1)$，且 $|f''(x)|\\le 2$，证明：$|f'(x)|\\le 1,\\;x\\in[0,1]$。",
+      "steps": [
+        {
+          "stepTitle": "1. 以泛指点 $x\\in[0,1]$ 为展开点，分别向两端点 $0$ 与 $1$ 作一阶泰勒展开",
+          "detail": "$$f(0)=f(x)+f'(x)(0-x)+\\frac{1}{2}f''(\\xi_1)(0-x)^2,\\qquad f(1)=f(x)+f'(x)(1-x)+\\frac{1}{2}f''(\\xi_2)(1-x)^2$$其中 $\\xi_1$ 介于 $0,x$ 之间，$\\xi_2$ 介于 $x,1$ 之间（端点 $x=0$ 或 $x=1$ 时对应 $0^2$ 项退化为 $0$，仍成立！）。"
+        },
+        {
+          "stepTitle": "2. 两式相减消 $f(x)$ 与 $f(0)=f(1)$，套 $x^2+(1-x)^2\\le 1$ 封顶",
+          "detail": "下式减上式（由 $f(1)-f(0)=0$）解出 $f'(x)$：$$f'(x)=\\frac{1}{2}\\Big[f''(\\xi_1)x^2-f''(\\xi_2)(1-x)^2\\Big]$$故 $|f'(x)|\\le\\frac{1}{2}\\cdot 2\\big[x^2+(1-x)^2\\big]=x^2+(1-x)^2\\le 1$（因 $x\\in[0,1]$ 时 $(x-a)^2+(b-x)^2\\le(b-a)^2$）！"
+        }
+      ],
+      "finalAnswer": "证毕（泛指点 $x$ 向 $0,1$ 泰勒展开相减 + $x^2+(1-x)^2\\le 1$）。",
+      "takeaway": "**压轴高频母题（朗道不等式雏形）！**看到「证全区间 $\\forall x\\in[a,b]$ 的 $|f'(x)|$ 上界」，千万别在固定点展开，必须**以泛指点 $x$ 为展开点向两端点展开相减**！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.63",
+        "pdfPage": 76,
+        "itemRef": "强化例6.16 & 注"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-38",
+      "stage": "intensive",
+      "section": "强化18讲 · 第二~四部分、根个数、不等式与含参综合（强化例6.17~6.22）",
+      "kind": "example",
+      "title": "【强化例 6.17】$f(x)=ax-b\\ln x\\;(a>0)$ 恰 2 零点 $\\iff$ 极小值 $f(\\frac{b}{a})<0 \\iff \\frac{b}{a}>\\mathrm{e}$",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)=ax-b\\ln x\\;(a>0)$ 有 $2$ 个零点，则 $\\frac{b}{a}$ 的取值范围是（ ）。\n(A) $(0,\\mathrm{e})$　　(B) $(\\mathrm{e},+\\infty)$　　(C) $\\left(0,\\frac{1}{\\mathrm{e}}\\right)$　　(D) $\\left(\\frac{1}{\\mathrm{e}},+\\infty\\right)$",
+      "steps": [
+        {
+          "stepTitle": "1. 排除 $b\\le 0$（恒单增至多 1 零点），锁定 $b>0$ 唯一极小值点 $x=\\frac{b}{a}$",
+          "detail": "定义域 $x>0$，$f'(x)=a-\\frac{b}{x}$。当 $b\\le 0$ 时 $f'(x)\\ge a>0$ 严格单增，至多 1 个零点（舍去）。当 $b>0$ 时，在 $(0,\\frac{b}{a})$ 单减、$(\\frac{b}{a},+\\infty)$ 单增。"
+        },
+        {
+          "stepTitle": "2. 查两端点极限均为 $+\\infty$，由 $f(\\frac{b}{a})<0$ 解出 $\\frac{b}{a}>\\mathrm{e}$",
+          "detail": "因 $\\lim_{x\\to 0^+}f(x)=+\\infty,\\;\\lim_{x\\to+\\infty}f(x)=+\\infty$，函数有 2 个零点 $\\iff$ 极小值 $f(\\frac{b}{a})=b\\left(1-\\ln\\frac{b}{a}\\right)<0 \\iff \\ln\\frac{b}{a}>1 \\iff \\frac{b}{a}>\\mathrm{e}$，应选 (B)。"
+        }
+      ],
+      "finalAnswer": "选 (B) $(\\mathrm{e},+\\infty)$。",
+      "takeaway": "单谷函数（两端均趋 $+\\infty$）有 2 个零点的充要条件就是**唯一极小值严格小于 $0$**（等于 $0$ 为 1 零点，大于 $0$ 无零点）！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.65",
+        "pdfPage": 78,
+        "itemRef": "强化例6.17"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c06_ex_zy18_09_18",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-39",
+      "stage": "intensive",
+      "section": "强化18讲 · 第二~四部分、根个数、不等式与含参综合（强化例6.17~6.22）",
+      "kind": "example",
+      "title": "【强化例 6.18 ★】分段换元证 $\\int_0^{3\\pi/2}\\frac{\\sin t}{t}\\,\\mathrm{d}t>0$ + 分正负半轴求 $\\int_1^x\\frac{\\sin t}{t}\\,\\mathrm{d}t=\\ln x^2$ 实根数（附 P.66 纠错！）",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $\\left[0,\\frac{3}{2}\\pi\\right]$ 上连续，在 $\\left(0,\\frac{3}{2}\\pi\\right)$ 内是函数 $\\frac{\\sin x}{x}$ 的一个原函数，$f(0)=0$。\n(1) 证明 $f\\left(\\frac{3}{2}\\pi\\right)>0$；　　(2) 求方程 $\\int_1^x\\frac{\\sin t}{t}\\,\\mathrm{d}t=\\ln x^2$ 的实根个数。",
+      "steps": [
+        {
+          "stepTitle": "1. 证 (1)：拆三段把负半周 $\\left[\\pi,\\frac{3}{2}\\pi\\right]$ 平移 $t=\\pi+u$ 与 $\\left[0,\\frac{\\pi}{2}\\right]$ 合并正定",
+          "detail": "由 $f(0)=0$ 知 $f(x)=\\int_0^x\\frac{\\sin t}{t}\\,\\mathrm{d}t$，拆成 $\\left[0,\\frac{\\pi}{2}\\right]+\\left[\\frac{\\pi}{2},\\pi\\right]+\\left[\\pi,\\frac{3}{2}\\pi\\right]$，后段令 $t=\\pi+u$ 得：$$f\\!\\left(\\frac{3}{2}\\pi\\right)=\\int_0^{\\frac{\\pi}{2}}\\left(\\frac{1}{t}-\\frac{1}{\\pi+t}\\right)\\sin t\\,\\mathrm{d}t+\\int_{\\frac{\\pi}{2}}^\\pi\\frac{\\sin t}{t}\\,\\mathrm{d}t > 0$$"
+        },
+        {
+          "stepTitle": "2. 解 (2)：设 $F(x)=\\int_1^x\\frac{\\sin t}{t}\\,\\mathrm{d}t-2\\ln|x|\\;(x\\ne 0)$，分 $x>0$ 与 $x<0$ 两支定唯一根",
+          "detail": "求导得 $F'(x)=\\frac{\\sin x-2}{x}$（分子恒负！）：\n- **$x>0$**：$F'(x)<0$ 严格单减，且 $F(1)=0$，故在 $(0,+\\infty)$ 恰有 **1 个实根**（$x=1$）；\n- **$x<0$**：$F'(x)>0$ 严格单增，又 $\\lim_{x\\to 0^-}F(x)=+\\infty$；取点 $x=-\\frac{3}{2}\\pi$（**纠错**：原书 P.66 首行上限漏印负号误作 $\\frac{3}{2}\\pi$，实应为 $-\\frac{3}{2}\\pi$！）：$$F\\!\\left(-\\frac{3}{2}\\pi\\right)=\\int_1^{-\\frac{3}{2}\\pi}\\frac{\\sin t}{t}\\,\\mathrm{d}t-2\\ln\\frac{3}{2}\\pi \\xlongequal{t=-v} -\\int_{-1}^{\\frac{3}{2}\\pi}\\frac{\\sin v}{v}\\,\\mathrm{d}v-2\\ln\\frac{3}{2}\\pi = -\\int_0^{\\frac{3}{2}\\pi}\\frac{\\sin v}{v}\\,\\mathrm{d}v-\\int_{-1}^0\\frac{\\sin v}{v}\\,\\mathrm{d}v-2\\ln\\frac{3}{2}\\pi < 0$$（直接用上 (1) 的正定结论！）由零点定理与单增性，在 $(-\\infty,0)$ 恰有 **1 个实根**。综上恰有 **2 个实根**！"
+        }
+      ],
+      "finalAnswer": "(1) 拆段平移合并证毕；(2) 恰有 $2$ 个实根。",
+      "takeaway": "两处极高价值防坑：① **$\\ln x^2=2\\ln|x|$ 的定义域是 $x\\ne 0$**，千万不能漏查负半轴！② 第 (1) 问正是为第 (2) 问构造负半轴异号点 $F(-\\frac{3}{2}\\pi)<0$ 准备的弹药！（已同步勘误原书 P.66 上限漏负号，详见表 6-7。）",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.65-66",
+        "pdfPage": 78,
+        "itemRef": "强化例6.18"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c06_ex_zy18_09_18",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-40",
+      "stage": "intensive",
+      "section": "强化18讲 · 第二~四部分、根个数、不等式与含参综合（强化例6.17~6.22）",
+      "kind": "example",
+      "title": "【强化例 6.19 ★】$f'$ 严格单增 $\\iff$ 割线斜率严格单增（四区间插点 $x-h<x<c<y<y+h$ 神技！）",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)$ 在区间 $(a,b)$ 内可导。证明：导函数 $f'(x)$ 在 $(a,b)$ 内严格单调增加的充分必要条件是对 $(a,b)$ 内任意的 $x_1<x_2<x_3$，有 $$\\frac{f(x_2)-f(x_1)}{x_2-x_1} < \\frac{f(x_3)-f(x_2)}{x_3-x_2}$$",
+      "steps": [
+        {
+          "stepTitle": "1. 必要性（直接两次拉格朗日）：$f'$ 严格单增 $\\Rightarrow$ 割线斜率严格单增",
+          "detail": "对 $[x_1,x_2]$ 与 $[x_2,x_3]$ 分别用拉格朗日中值定理，得 $\\xi_1\\in(x_1,x_2),\\;\\xi_2\\in(x_2,x_3)$ 使 $f'(\\xi_1)=\\frac{f(x_2)-f(x_1)}{x_2-x_1}$、$f'(\\xi_2)=\\frac{f(x_3)-f(x_2)}{x_3-x_2}$。因 $\\xi_1<x_2<\\xi_2$ 且 $f'$ 严格单增，故 $f'(\\xi_1)<f'(\\xi_2)$！"
+        },
+        {
+          "stepTitle": "2. 充分性（难点精髓！）：在 $x<y$ 间插不动点 $c$ 划 4 段，仅首尾取极限保中间严格 $<$",
+          "detail": "任取 $x,y\\in(a,b)\\;(x<y)$，插入中间点 $c\\in(x,y)$，再取充分小 $h>0$ 使 $x-h,y+h\\in(a,b)$，对五点 $x-h<x<c<y<y+h$ 连续套三次题设不等式：$$\\frac{f(x-h)-f(x)}{-h} < \\frac{f(c)-f(x)}{c-x} < \\frac{f(y)-f(c)}{y-c} < \\frac{f(y+h)-f(y)}{h}$$令 $h\\to 0^+$，首尾两端由保号性带等号，**中间不动项完全不取极限从而严格 $<$ 永久保留**：$$f'(x) \\le \\frac{f(c)-f(x)}{c-x} < \\frac{f(y)-f(c)}{y-c} \\le f'(y) \\implies f'(x)<f'(y)$$即 $f'(x)$ 在 $(a,b)$ 内严格单调增加！"
+        }
+      ],
+      "finalAnswer": "证毕（必要性两次拉格朗日；充分性四段插点保严格不等号）。",
+      "takeaway": "**压轴级神来之笔！**如果直接在 $x,y$ 上对 $h\\to 0$ 取极限会退化成 $f'(x)\\le f'(y)$；**在中间插入不动点 $c$ 把区间拆成 4 段**，让中间的严格 $<$ 不参与取极限，完美保住严格单增！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.68-69",
+        "pdfPage": 81,
+        "itemRef": "强化例6.19 & 注"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-41",
+      "stage": "intensive",
+      "section": "强化18讲 · 第二~四部分、根个数、不等式与含参综合（强化例6.17~6.22）",
+      "kind": "example",
+      "title": "【强化例 6.20】含参不等式二次求导脱参证 $(x-1)(x-\\ln^2 x+2k\\ln x-1)\\ge 0$",
+      "examWeight": "core",
+      "problem": "已知常数 $k\\ge\\ln 2-1$。证明：$(x-1)(x-\\ln^2 x+2k\\ln x-1)\\ge 0\\;(x>0)$。",
+      "steps": [
+        {
+          "stepTitle": "1. 设 $f(x)=x-\\ln^2 x+2k\\ln x-1$，求导抽分子 $g(x)=x-2\\ln x+2k$ 再导脱参",
+          "detail": "$f'(x)=1-\\frac{2\\ln x}{x}+\\frac{2k}{x}=\\frac{1}{x}(x-2\\ln x+2k)$。抽分子 $g(x)=x-2\\ln x+2k$，求导得 $g'(x)=1-\\frac{2}{x}=0\\Rightarrow x=2$，又 $g''(x)=\\frac{2}{x^2}>0$，故 $x=2$ 为 $g(x)$ 的唯一极小/最小值点。"
+        },
+        {
+          "stepTitle": "2. 代入 $k\\ge\\ln 2-1$ 证 $f'\\ge 0$，结合 $f(1)=0$ 得与 $(x-1)$ 同号",
+          "detail": "$$g_{\\min}=g(2)=2-2\\ln 2+2k \\ge 0 \\implies g(x)\\ge 0 \\implies f'(x)\\ge 0$$故 $f(x)$ 在 $(0,+\\infty)$ 单调不减。又 $f(1)=0$，于是 $0<x<1$ 时 $f(x)\\le 0$、$x>1$ 时 $f(x)\\ge 0$，恒与 $(x-1)$ 同号，即 $(x-1)f(x)\\ge 0$！"
+        }
+      ],
+      "finalAnswer": "证毕（抽分子二次求导脱去参数 $k$，由 $g(2)\\ge 0\\Rightarrow f$ 单增且 $f(1)=0$）。",
+      "takeaway": "看到形如 $(x-x_0)f(x)\\ge 0$ 且恰好 **$f(x_0)=0$** 的乘积不等式，只需证明 **$f(x)$ 在定义域上单调不减（$f'(x)\\ge 0$）** 即可一步通杀两侧！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.70",
+        "pdfPage": 83,
+        "itemRef": "强化例6.20"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c06_ex_zy18_20_22",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-42",
+      "stage": "intensive",
+      "section": "强化18讲 · 第二~四部分、根个数、不等式与含参综合（强化例6.17~6.22）",
+      "kind": "example",
+      "title": "【强化例 6.21】参数方程极值 + 铅直平移 $v=y+k$ 恰一零点求 $k$ 范围（数形结合）",
+      "examWeight": "core",
+      "problem": "设函数 $y=y(x)$ 由参数方程 $\\begin{cases}x=\\frac{1}{3}t^3+t+\\frac{1}{3},\\\\ y=\\frac{1}{3}t^3-t+\\frac{1}{3}\\end{cases}$ 确定。\n(1) 求 $y(x)$ 的极值；　　(2) 若 $\\begin{cases}u=x,\\\\ v=y+k\\end{cases}$，且 $v=v(u)$ 恰有一个零点，求常数 $k$ 的取值范围。",
+      "steps": [
+        {
+          "stepTitle": "1. 解 (1)：参数求一、二阶导定驻点 $t=\\pm 1$ 与极值点 $A(-1,1),\\;B\\left(\\frac{5}{3},-\\frac{1}{3}\\right)$",
+          "detail": "$$\\frac{\\mathrm{d}y}{\\mathrm{d}x}=\\frac{t^2-1}{t^2+1}=0 \\implies t=\\pm 1,\\qquad \\frac{\\mathrm{d}^2 y}{\\mathrm{d}x^2}=\\frac{4t}{(t^2+1)^3}$$当 $t=-1$ 时，$x=-1,\\;y=1,\\;y''<0$（**极大值 $1$**）；当 $t=1$ 时，$x=\\frac{5}{3},\\;y=-\\frac{1}{3},\\;y''>0$（**极小值 $-\\frac{1}{3}$**）。"
+        },
+        {
+          "stepTitle": "2. 解 (2)：$v(u)$ 由 $y(x)$ 铅直平移 $k$ 单位，恰 1 零点 $\\iff$ 极小抬过轴或极大压过轴",
+          "detail": "因 $x(t)$ 严格递增且 $t\\to\\pm\\infty$ 时 $y\\to\\pm\\infty$，平移后极值点变为 $A'(-1,1+k)$ 与 $B'\\left(\\frac{5}{3},-\\frac{1}{3}+k\\right)$。曲线与 $u$ 轴恰有 1 个交点 $\\iff$ 极小值点在 $u$ 轴上方（$-\\frac{1}{3}+k>0$）或极大值点在 $u$ 轴下方（$1+k<0$），即 $k>\\frac{1}{3}$ 或 $k<-1$！"
+        }
+      ],
+      "finalAnswer": "(1) 极大值为 $1$，极小值为 $-\\frac{1}{3}$；(2) $k>\\frac{1}{3}$ 或 $k<-1$。",
+      "takeaway": "参数方程与零点个数杂交压轴真题！看穿 $\\begin{cases}u=x\\\\ v=y+k\\end{cases}$ 的几何本质就是**整个图像上下平移 $k$ 个单位**，结合草图 5 秒定出开区间边界！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.70-71",
+        "pdfPage": 83,
+        "itemRef": "强化例6.21"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c06_ex_zy18_20_22",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-e-43",
+      "stage": "intensive",
+      "section": "强化18讲 · 第二~四部分、根个数、不等式与含参综合（强化例6.17~6.22）",
+      "kind": "example",
+      "title": "【强化例 6.22 · 综合压轴】平移换元证 $a=\\int_0^1 f>0$ + 验三零点 $F(-1)=F(0)=F(1)=0$ 两次罗尔",
+      "examWeight": "core",
+      "problem": "设可导函数 $f(x)$ 严格单调递增且满足 $\\int_{-1}^1 f(x)\\,\\mathrm{d}x=0$，记 $a=\\int_0^1 f(x)\\,\\mathrm{d}x$。\n(1) 证明 $a>0$；　　(2) 令 $F(x)=a(1-x^2)+\\int_1^x f(t)\\,\\mathrm{d}t$，证明：存在 $\\xi\\in(-1,1)$，使得 $F''(\\xi)=0$。",
+      "steps": [
+        {
+          "stepTitle": "1. 证 (1)：将 $\\int_{-1}^0 f(x)\\,\\mathrm{d}x$ 平移换元为 $\\int_0^1 f(x-1)\\,\\mathrm{d}x$，用严格单增比较",
+          "detail": "因 $f$ 严格单增，对 $x\\in[0,1]$ 恒有 $f(x-1)<f(x)$，积分得：$$\\int_{-1}^0 f(x)\\,\\mathrm{d}x = \\int_0^1 f(x-1)\\,\\mathrm{d}x < \\int_0^1 f(x)\\,\\mathrm{d}x$$两端同加 $\\int_0^1 f(x)\\,\\mathrm{d}x$ 得 $0=\\int_{-1}^1 f(x)\\,\\mathrm{d}x < 2\\int_0^1 f(x)\\,\\mathrm{d}x = 2a \\implies a>0$！"
+        },
+        {
+          "stepTitle": "2. 证 (2)：验证 $F(1)=F(-1)=F(0)=0$ 三个零点，连续用两次罗尔定理",
+          "detail": "因 $f$ 可导，$F(x)=a(1-x^2)+\\int_1^x f(t)\\,\\mathrm{d}t$ 具有二阶导数，且：\n- $F(1)=0+0=0$；\n- $F(-1)=0+\\int_1^{-1}f(t)\\,\\mathrm{d}t=-\\int_{-1}^1 f(x)\\,\\mathrm{d}x=0$；\n- $F(0)=a+\\int_1^0 f(t)\\,\\mathrm{d}t=\\int_0^1 f(x)\\,\\mathrm{d}x-\\int_0^1 f(x)\\,\\mathrm{d}x=0$！\n在 $[-1,0]$ 与 $[0,1]$ 上分别用罗尔得 $F'(\\xi_1)=F'(\\xi_2)=0$（$-1<\\xi_1<0<\\xi_2<1$），再在 $[\\xi_1,\\xi_2]$ 用罗尔即存在 $\\xi\\in(-1,1)$ 使 $F''(\\xi)=0$！"
+        }
+      ],
+      "finalAnswer": "证毕（(1) 平移换元证 $a>0$；(2) $F(-1)=F(0)=F(1)=0$ 两次罗尔；注：本题 $F''(\\xi)=f'(\\xi)-2a=0\\Rightarrow f'(\\xi)=2a$！）。",
+      "takeaway": "看穿 (2) 的深层背景：**$F''(\\xi)=0$ 等价于 $f'(\\xi)=2\\int_0^1 f(x)\\,\\mathrm{d}x$**！遇到这类综合证明题，题干已经贴心给好辅助函数 $F(x)$，直接把**端点与中点 $-1,0,1$ 统统代进去验三零点**就是满分套路！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.71",
+        "pdfPage": 84,
+        "itemRef": "强化例6.22"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c06_ex_zy18_20_22",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-s-01",
+      "stage": "both",
+      "section": "第 6 讲题型总结 · 一、中值定理证明题全题型落刀路线总表",
+      "kind": "summary",
+      "title": "【中值定理证明】辅助函数构造、单/双中值与高阶泰勒证明全题型落刀总表",
+      "examWeight": "core",
+      "overview": "中值定理证明题是数一解答题的王牌压轴阵地！只要按「**最高导数阶数 $\\to$ 等式还是不等式 $\\to$ 辅助函数 15 母式 / 拉格朗日 / 柯西 / 泰勒**」四步过滤，95% 证明题都能在 30 秒内定准唯一主攻路线。",
+      "tables": [
+        {
+          "caption": "表 6-4 中值定理证明题 6 大核心题型触发信号与标准落刀路线速查表（基础 P.165-175 & 强化 P.48-63）",
+          "headers": [
+            "题型类别",
+            "典型触发信号",
+            "标准落刀动作",
+            "代表例题"
+          ],
+          "rows": [
+            [
+              "0 阶等值 / 零点",
+              "证 $f(\\eta)=\\eta$、端点极限异号、多点之和 $f(0)+f(1)+f(2)$",
+              "移项零点定理、保号性脱帽造异号点、平均值定理造等值点",
+              "例6.1, 例6.2, 例6.4"
+            ],
+            [
+              "证 $f'(\\xi)=0$ 或导数介值",
+              "端点导数异号 $f'_+(a)f'_-(b)<0$，或未给 $f',f''$ 连续",
+              "三路并查：内部最值用费马、端点等值用罗尔、导数异号用达布定理",
+              "例6.3, 强化例6.7, 强化例6.8"
+            ],
+            [
+              "单中值 $f,f'$ 组合（找原函数）",
+              "$f'+Pf=0$、$f'+f^n=0$、$ff''+(f')^2=0$、交叉分式",
+              "套 15 大逆构造母式（积分因子 $\\mathrm{e}^{\\int P}$、$\\mathrm{e}^{\\int f^{n-1}}$、交叉相乘），再用罗尔",
+              "例6.5, 例6.7, 强化例6.1~6.4"
+            ],
+            [
+              "含积分条件证零点/中值",
+              "$\\int_a^b f=0$、$\\int_a^b f\\cos x=0$、$f(1)=k\\int_0^{1/k}(\\cdots)$",
+              "直接用被积函数 / 变限积分 $F(x)=\\int_a^x f$ + 推广积分中值或分部积分",
+              "强化例6.3~6.6, 强化例6.22"
+            ],
+            [
+              "差值/比值与单/双中值",
+              "$f(b)-f(a)$、$\\frac{f(b)-f(a)}{g(b)-g(a)}$、$f'$ 界推 $f$ 界、求 $\\lim\\theta$",
+              "单函数用拉格朗日；双函数或含 $\\int_a^b f$ 比值用柯西（严验 $g'\\ne 0$）",
+              "例6.8~6.11, 强化例6.10~6.15"
+            ],
+            [
+              "高阶导 $f^{(n)}\\;(n\\ge 2)$ 证明",
+              "证 $f''(\\xi)=0$ vs 证 $f'''(\\xi)=3,\\;f''(\\eta)<-4,\\;|f'|\\le 1$",
+              "证 $=0$ 找 $n+1$ 等值点多次罗尔；证 $\\ne 0$ 或导数界必用拉格朗日余项泰勒！",
+              "例6.6, 例6.12, 例6.13, 强化例6.16"
+            ]
+          ]
+        }
+      ],
+      "patterns": [
+        {
+          "typeName": "高阶导数证明「多次罗尔 vs 拉格朗日余项泰勒」一秒分流法",
+          "triggers": "结论出现 $f''(\\xi),f'''(\\xi)$ 或条件给定 $|f''(x)|\\le M$。",
+          "method": "① 结论为 **$f''(\\xi)=0$**（无非零常数）：优先构造减弦函数或利用已知 $F(x)$ 凑 **3 个等值点**（如 $0,c,1$ 或 $-1,0,1$），连续用两次罗尔；② 结论为 **$f''(\\eta)<-4$、$f'''(\\xi)=3$ 或 $|f'(x)|\\le 1$**：立刻选带拉格朗日余项泰勒，在 $f'(x_0)=0$ 点（或中点、泛指点 $x$）向两端点展开消去未知项！",
+          "pitfall": "若题干未说 $f''$ 连续，合并 $\\frac{1}{2}[f''(x_1)+f''(x_2)]$ 时必须写「由二阶导数的介值性（达布定理）」而不可直接套连续函数介值定理！",
+          "relatedRefs": "例6.6, 例6.12, 例6.13, 强化例6.7, 强化例6.8, 强化例6.16, 强化例6.22"
+        },
+        {
+          "typeName": "含积分条件 $\\int_a^b f=0$ 的四大标准化处理流水线",
+          "triggers": "题设含 $\\int_0^1 f(x)\\,\\mathrm{d}x=0$、$\\int_0^\\pi f(x)\\cos x\\,\\mathrm{d}x=0$ 或 $f(1)=k\\int_0^{1/k}(\\cdots)$。",
+          "method": "① 遇单积分配权重 $\\cos x$ 等，优先用**推广积分中值定理**（确保 $\\xi$ 严格落在开区间避开端点零点）；② 遇双正交积分，令 $F(x)=\\int_a^x f$ 作**分部积分**消边界项；③ 遇 $k\\int_0^{1/k}$ 直接令被积函数为 $F$；④ 遇 $\\int_0^1 f=0$ 配 $f''>0$ 直接在中点 $\\frac{1}{2}$ 泰勒展开后积分！",
+          "pitfall": "绝对不可在积分内把依赖 $x$ 的泰勒余项中值 $f''(\\xi(x))$ 当作常数提出积分号外！",
+          "relatedRefs": "例6.12, 强化例6.1, 强化例6.3, 强化例6.5, 强化例6.6, 强化例6.15"
+        }
+      ],
+      "takeaway": "中值定理证明题牢记一句总纲：**先看导数阶数定工具，再盯目标式子逆构造，最后写全连续/可导/端点前提拿满分！**",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.48-63",
+        "pdfPage": 61,
+        "itemRef": "第一部分 用微分中值定理作证明总括",
+        "crossRef": "27张宇《基础30讲·高等数学分册》 P.164-175"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-s-02",
+      "stage": "both",
+      "section": "第 6 讲题型总结 · 二、方程根 / 零点个数全题型速查表",
+      "kind": "summary",
+      "title": "【微分等式 / 方程根】实根存在性、唯一性与含参根个数讨论全题型速查表",
+      "examWeight": "core",
+      "overview": "方程 $f(x)=0$ 实根个数问题本质是「**下界（存在性）+ 上界（唯一性/罗尔推论）**」的双向夹逼，遇到参数则靠「**分离参数画草图**」或「**极值点位置平移**」直接数形结合秒杀！",
+      "tables": [
+        {
+          "caption": "表 6-5 方程实根 / 零点个数 5 大常考题型解题套路与防漏清单（基础 P.175-178 & 强化 P.64-66, 70-71）",
+          "headers": [
+            "题型特征",
+            "存在性（下界）动作",
+            "唯一性 / 上界动作",
+            "代表例题"
+          ],
+          "rows": [
+            [
+              "偶对称 / 含 $|x|$ 超越方程",
+              "查 $x=0$ 后砍半至 $(0,+\\infty)$，缩域再套零点定理",
+              "在缩后区间求导证严格单调，最后根数乘 $2$",
+              "例6.14"
+            ],
+            [
+              "实系数奇次多项式方程",
+              "奇次多项式自动至少 1 实根（两端趋 $\\pm\\infty$）",
+              "求导判双二次式 $\\Delta<0$（恒正单增）或分段查极值异号",
+              "例6.15"
+            ],
+            [
+              "指数配多项式（一阶难定号）",
+              "观察特解 $0,1,-1$ + 零点定理找齐 $m$ 个根",
+              "连求 $n$ 阶导消除多项式，套罗尔推论 $f^{(n)}\\ne 0\\Rightarrow\\le n$ 根",
+              "例6.16"
+            ],
+            [
+              "变限积分 / 含 $\\ln x^2$ 方程",
+              "拆定义域 $x>0$ 与 $x<0$ 两支分别找异号点与端点极限",
+              "变限积分求导直接判两支各自单调性",
+              "例6.18, 强化例6.18"
+            ],
+            [
+              "含参方程 / 参数方程平移",
+              "能分离参数优先拆 $h(x)=k$；不能分离求极值与两端极限",
+              "对照草图或平移极值点相对 $x$ 轴上下位置定 $k$ 区间",
+              "例6.17, 强化例6.17, 强化例6.21"
+            ]
+          ]
+        }
+      ],
+      "patterns": [
+        {
+          "typeName": "含参方程根个数「分离参数 vs 极值符号」二选一快速落刀",
+          "triggers": "已知方程含参数 $k$（或 $a,b$）恰有 1 个或 2 个实根，求参数取值范围。",
+          "method": "① 若 $k$ 呈线性且可孤立（如 $\\mathrm{e}^x=kx$）：先验 $x=0$ 非根，分离为 $h(x)=k$，画 $h(x)$ 单调/极值/渐近线草图直接拉水平线 $y=k$ 数交点；② 若无法分离或属参数方程平移（如 $ax-b\\ln x=0$、$v=y+k$）：算出全部极值点与两端点极限，令极小值 $<0$（或抬过/压过横轴）一步出范围！",
+          "pitfall": "两大漏解点：① 除 $x$ 分离参数前忘了验 $x=0$ 是否为根；② 见到 $\\ln x^2$ 错写成 $2\\ln x$ 直接丢掉负半轴全部实根！",
+          "relatedRefs": "例6.17, 强化例6.17, 强化例6.18, 强化例6.21"
+        }
+      ],
+      "takeaway": "记住方程根三句防漏口诀：**偶函数先砍半、奇次必有根、含 $\\ln x^2$ 必查负半轴**！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.175-178",
+        "pdfPage": 180,
+        "itemRef": "二 微分等式总括",
+        "crossRef": "27张宇《高数18讲》(强化) P.64-66, 70-71"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-s-03",
+      "stage": "both",
+      "section": "第 6 讲题型总结 · 三、微分不等式六大工具与破题路线总表",
+      "kind": "summary",
+      "title": "【微分不等式】六大证明工具触发信号、常数变量化与含参不等式速查总表",
+      "examWeight": "core",
+      "overview": "微分不等式证明最怕「上来就硬求导算成一团浆糊」——按表 6-6 先做**化简（脱绝对值、分母归正、常数变量化、提纯分子）**再选对凹凸/单调/中值/泰勒工具，事半功倍！",
+      "tables": [
+        {
+          "caption": "表 6-6 微分不等式 6 大证明工具触发信号、标准动作与代表例题速查表（基础 P.179-181 & 强化 P.66-70）",
+          "headers": [
+            "工具 / 策略",
+            "第一触发信号",
+            "标准破题动作",
+            "代表例题"
+          ],
+          "rows": [
+            [
+              "凹凸端点法",
+              "端点 $f(a)=f(b)=0$ 且 $f''$ 在 $(a,b)$ 保号",
+              "两行秒杀：$f''<0$（凸）$\\Rightarrow f>0$；$f''>0$（凹）$\\Rightarrow f<0$",
+              "例6.19（方法二）"
+            ],
+            [
+              "单调性 + 抽分子二次求导",
+              "$f'(x)$ 分母恒正但分子难判号，或含参 $k$ 需脱参",
+              "丢掉正分母只对分子 $g(x)$ 再求导求极小值；含 $(x-1)f(x)\\ge 0$ 证 $f$ 单增且 $f(1)=0$",
+              "例6.19, 例6.20, 强化例6.20"
+            ],
+            [
+              "先证内正脱绝对值",
+              "不等式含平方 $(\\cdots)^2<A$ 或绝对值 $|\\cdots|<A$",
+              "先开方，再证内部恒正（常用 $\\frac{1}{1+x}<\\ln(1+\\frac{1}{x})<\\frac{1}{x}$），脱绝对值后单调证",
+              "例6.20"
+            ],
+            [
+              "常数变量化",
+              "双字母 $0<a<b$ 全常数不等式且难直接用中值定理",
+              "固定 $a$ 把 $b$ 改为变量 $x>a$ 构 $\\varphi(x)$，验 $\\varphi(a)=0$ 与 $\\varphi'(x)$ 定号",
+              "例6.21（右半）"
+            ],
+            [
+              "拉格朗日 / 柯西 / 泰勒",
+              "形如 $\\frac{f(b)-f(a)}{b-a}$、含 $f''$ 或需联立多个割线斜率",
+              "拉格朗日直接夹 $\\frac{1}{\\xi}$；$f''>0$ 用泰勒切线在弧下；保严格 $<$ 用四段插点法！",
+              "例6.10, 例6.21（左半）, 强化例6.19"
+            ]
+          ]
+        }
+      ],
+      "patterns": [
+        {
+          "typeName": "遇到「分子判不了号 / 导数含参」的提纯降维法",
+          "triggers": "算出一阶导 $f'(x)=\\frac{g(x)}{D(x)}$ 其中分母 $D(x)>0$，但分子 $g(x)$ 仍有对数/三角或参数 $k$。",
+          "method": "① **绝对不要对整个分式 $f'(x)$ 求二阶导**！直接单独令分子为 $g(x)$ 求导 $g'(x)$；② 若 $g'(x)$ 依然含参或难判，继续抽分子或找 $g(x)$ 唯一极小值点代入题设参数边界（如强化例6.20 $g(2)\\ge 0$）；③ 反推回 $g(x)\\ge 0\\Rightarrow f'(x)\\ge 0\\Rightarrow f$ 单增闭环！",
+          "pitfall": "带分母硬算 $f''(x)$ 会平白多出商求导项，既容易算错又掩盖了 $g'(x)$ 自动消去常数参数 $k$ 的好结构！",
+          "relatedRefs": "例6.19, 例6.20, 强化例6.20"
+        }
+      ],
+      "takeaway": "牢记高频必背基础不等式链：**$\\frac{2}{\\pi}x<\\sin x<x\\;(0<x<\\frac{\\pi}{2})$**、**$\\frac{x}{1+x}<\\ln(1+x)<x\\;(x>0)$**、**$\\frac{1}{b}<\\frac{\\ln b-\\ln a}{b-a}<\\frac{1}{\\sqrt{ab}}<\\frac{1}{a}\\;(0<a<b)$**！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.66-70",
+        "pdfPage": 79,
+        "itemRef": "第三~四部分 微分不等式总括",
+        "crossRef": "27张宇《基础30讲·高等数学分册》 P.179-181"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c06-s-04",
+      "stage": "both",
+      "section": "第 6 讲题型总结 · 四、本讲 SymPy 核验与原书勘误/严谨性补注台账",
+      "kind": "summary",
+      "title": "【避坑 & 核验台账】第 6 讲 4 处 SymPy 核验与原书印刷瑕疵/严谨性补注台账",
+      "examWeight": "core",
+      "overview": "经 SymPy 1.14.0 对本讲全部核心辅助函数求导恒等式、22 个常用泰勒展开式与全部 43 道例题（基础 21 例 + 强化 22 例）中的计算、极限与不等式做符号/数值验算，**全部结论均核验通过**，同时实锤捕获并透明修正了原书 **4 处印刷笔误与严谨性补注**（详见表 6-7）。",
+      "tables": [
+        {
+          "caption": "表 6-7 第 6 讲《基础30讲》与《高数18讲》SymPy 核验与印刷瑕疵/严谨性补注台账（共 4 处）",
+          "headers": [
+            "编号",
+            "出处与位置",
+            "原书写法 / 瑕疵",
+            "SymPy 核验与精确修正"
+          ],
+          "rows": [
+            [
+              "1",
+              "基础30讲 P.171 例6.8",
+              "题干写「若 $f(x)$ 在 $(a,b)$ 内可导且 $f'(x)$ 有界，证 $f$ 有界」，未明示区间有限",
+              "仅对**有限区间**（$b-a<+\\infty$）成立（解答用到了 $|x-x_0|\\le b-a$）；在无穷区间 $(0,+\\infty)$ 上反例 $f(x)=x$ 导数恒为 $1$ 有界但 $f$ 无界！"
+            ],
+            [
+              "2",
+              "基础30讲 P.174 例6.12 方法一",
+              "仅知 $f$ 在 $[0,1]$ 二阶可导（未给 $f''$ 连续），直接写出积分 $\\int_0^1 f''(\\xi)(x-\\frac{1}{2})^2\\,\\mathrm{d}x$",
+              "该被积函数实等于连续函数 $2[f(x)-f(\\frac{1}{2})-f'(\\frac{1}{2})(x-\\frac{1}{2})]$ 故确可积，但**推荐使用方法二**（先写严格不等式 $f(x)\\ge f(\\frac{1}{2})+f'(\\frac{1}{2})(x-\\frac{1}{2})$ 再积分），彻底避开 $\\xi(x)$ 可积性争议！"
+            ],
+            [
+              "3",
+              "强化18讲 P.52 强化例6.3 第 7 行",
+              "令 $F(x)=x\\mathrm{e}^{1-x}f(x)$，求导行漏印指数上的 `1-`，误印为 $F'(\\xi)=\\mathrm{e}^{-\\xi}[f(\\xi)-\\xi f(\\xi)+\\xi f'(\\xi)]=0$",
+              "SymPy 符号求导实锤精确导数为 **$\\mathrm{e}^{1-\\xi}[f(\\xi)-\\xi f(\\xi)+\\xi f'(\\xi)]=0$**（虽因指数恒正不影响 $=0$，卡片已修正）。"
+            ],
+            [
+              "4",
+              "强化18讲 P.66 强化例6.18(2) 首行",
+              "首行将 $F(-\\frac{3}{2}\\pi)$ 的积分上限漏印负号，误印为 $\\int_1^{\\frac{3}{2}\\pi}\\frac{\\sin t}{t}\\,\\mathrm{d}t-2\\ln\\frac{3}{2}\\pi$",
+              "其下一行推导用回正确的上限 $-\\frac{3}{2}\\pi$；SymPy 数值验算 $\\int_1^{-3\\pi/2}\\frac{\\sin t}{t}\\,\\mathrm{d}t\\approx -2.5545<0$ 且 $F(-\\frac{3}{2}\\pi)\\approx -5.6548<0$，卡片已修正首行上限为 $-\\frac{3}{2}\\pi$。"
+            ]
+          ]
+        }
+      ],
+      "patterns": [
+        {
+          "typeName": "第 6 讲证明与大题考场防扣分四项自检",
+          "triggers": "完成中值定理证明、方程根讨论或不等式证明大题后，用 10 秒查漏补缺。",
+          "method": "① **前提写全**：罗尔/拉格朗日写清闭区间连续、开区间可导，柯西多写一句 $g'(x)\\ne 0$；② **单侧/无连续防越界**：未给 $f',f''$ 连续时绝不对导数套连续介值定理，改用费马或达布定理；③ **定义域/开闭查漏**：$\\ln x^2$ 查负半轴、分离参数除 $x$ 前验 $x=0$、有限区间有界性勿乱用至 $\\pm\\infty$；④ **极限保严格**：需保严格 $<$ 时检查是否该用四段插点法！",
+          "pitfall": "中值定理证明大题步骤分扣得最狠的三处：漏验柯西 $g'\\ne 0$、漏写辅助函数端点等值条件、未给 $f''$ 连续却写「由介值定理」！",
+          "relatedRefs": "例6.3, 例6.8, 例6.12, 强化例6.3, 强化例6.8, 强化例6.18, 强化例6.19"
+        }
+      ],
+      "takeaway": "本讲 43 例与 22 个泰勒展开式经 SymPy 全量验算无误，牢记表 6-7 四处严谨与勘误补注，证明与不等式压轴题稳拿高分！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.171, 174",
+        "pdfPage": 176,
+        "itemRef": "第6讲 核验与勘误台账",
+        "crossRef": "27张宇《高数18讲》(强化) P.52, 66"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c06_f_aux_derivs",
+        "verified": true
+      }
+    }
+  ]
+}
