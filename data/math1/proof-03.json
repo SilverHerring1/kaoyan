@@ -1,0 +1,947 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "proof-03",
+  "chapterNum": "证明专项 · 单元 3",
+  "chapterTitle": "2013–2026 历年证明真题大合集（18 道全解）",
+  "syllabusRef": "2027 考研数学一证明专项 · 猪哥&狗姐《猪狗证明大合集（2027版）》（2013–2026 共 18 道考研证明压轴真题全解 + 命题演进图谱 + 破题总表）",
+  "items": [
+    {
+      "id": "m1-p03-f-01",
+      "section": "一、近五年新风向：凹凸性与导数单调性「充要条件」双向定理",
+      "kind": "formula",
+      "title": "2022 & 2025 压轴新母题：弦斜率单调 $\\iff f'$ 严增、中点积分不等式 $\\iff f''\\ge 0$",
+      "examWeight": "core",
+      "prompt": "默写 2025 与 2022 两年考研数学压轴证明题的核心充要等价刻画公式：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{2025 弦斜率充要：}f'(x)\\text{ 在 }(a,b)\\text{ 严增}\\iff \\forall x_1<x_2<x_3,\\;\\frac{f(x_2)-f(x_1)}{x_2-x_1}<\\frac{f(x_3)-f(x_2)}{x_3-x_2}\\\\\n&\\text{2022 埃尔米特-阿达玛充要（}f\\in C^2(\\mathbb{R})\\text{）：}f''(x)\\ge 0\\iff \\forall a\\ne b,\\;f\\!\\left(\\frac{a+b}{2}\\right)\\le\\frac{1}{b-a}\\int_a^b f(x)\\,\\mathrm{d}x\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "2025 充分性防等号退化神技（真题2025）",
+          "desc": "取极限会把严格 $<$ 变成 $\\le$！欲证 $f'(u)<f'(v)$，必须先插入中间锚点 $m\\in(u,v)$，用「$f'(u)\\le\\frac{f(m)-f(u)}{m-u}<\\frac{f(v)-f(m)}{v-m}\\le f'(v)$」借中间严格不等号守住严格小于！"
+        },
+        {
+          "sym": "2022 充分性洛必达直出 $\\frac{1}{3}f''(x_0)\\ge 0$（真题2022）",
+          "desc": "取对称区间 $[x_0-h,x_0+h]$，对非负商 $\\frac{\\int_{x_0-h}^{x_0+h}f(t)\\,\\mathrm{d}t-2h f(x_0)}{h^3}\\ge 0$ 连用两次洛必达（或二阶泰勒展开积分），令 $h\\to 0^+$ 立得 $\\frac{1}{3}f''(x_0)\\ge 0$！"
+        }
+      ],
+      "conditions": "2025 仅要求 $f$ 在 $(a,b)$ 内一阶可导（无需二阶导或 $f'$ 连续！）；2022 要求 $f\\in C^2(-\\infty,+\\infty)$（充分性也只需二阶可导即可由佩亚诺泰勒推得）。",
+      "pitfalls": "2025 充分性最致命失分点：直接令 $x_1\\to u^+,\\;x_3\\to v^-$ 会丢掉严格小于号只证出 $f'(u)\\le f'(v)$，漏插中间锚点 $m$ 直接扣一半以上分数！",
+      "figureSvg": "<svg viewBox=\"0 0 600 184\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">\n  <title>2013至2026年考研数学证明压轴真题四大命题基因图谱（共18道真题全景分布）</title>\n  <defs>\n    <marker id=\"m1p3_arr1\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#334155\"/>\n    </marker>\n  </defs>\n  <rect x=\"145\" y=\"6\" width=\"310\" height=\"26\" rx=\"6\" fill=\"#1e3a8a\"/>\n  <text x=\"300\" y=\"23\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#ffffff\">2013–2026 考研证明大题 18 题 · 四大命题母题演进</text>\n\n  <!-- Quadrant 1: Auxiliary function & Rolle -->\n  <rect x=\"6\" y=\"42\" width=\"288\" height=\"64\" rx=\"7\" fill=\"#eff6ff\" stroke=\"#3b82f6\" stroke-width=\"1.2\"/>\n  <text x=\"150\" y=\"59\" text-anchor=\"middle\" font-size=\"10.4\" font-weight=\"700\" fill=\"#1e40af\">① 辅助函数构造 + 罗尔/柯西（6 题）</text>\n  <text x=\"150\" y=\"76\" text-anchor=\"middle\" font-size=\"9\" fill=\"#0f172a\">2026(三零点F) · 2020-2(变限柯西) · 2017(ff′三零点)</text>\n  <text x=\"150\" y=\"94\" text-anchor=\"middle\" font-size=\"9\" fill=\"#1d4ed8\">2015-1(切线截距) · 2013-1(无穷截断) · 2013-3(奇函数e^x)</text>\n\n  <!-- Quadrant 2: Taylor & Convexity Equivalence -->\n  <rect x=\"306\" y=\"42\" width=\"288\" height=\"64\" rx=\"7\" fill=\"#fff7ed\" stroke=\"#f97316\" stroke-width=\"1.2\"/>\n  <text x=\"450\" y=\"59\" text-anchor=\"middle\" font-size=\"10.4\" font-weight=\"700\" fill=\"#9a3412\">② 泰勒展开 + 凹凸/单调充要证明（5 题）</text>\n  <text x=\"450\" y=\"76\" text-anchor=\"middle\" font-size=\"9\" fill=\"#0f172a\">2025(f′严增充要) · 2024(梯形1/12) · 2023(对称二阶泰勒)</text>\n  <text x=\"450\" y=\"94\" text-anchor=\"middle\" font-size=\"9\" fill=\"#c2410c\">2022(中点积分凸性充要) · 2019-1(f″&lt;−2/辅助多项式)</text>\n\n  <!-- Quadrant 3: Sequence Limit & Integral Recurrence -->\n  <rect x=\"6\" y=\"114\" width=\"288\" height=\"64\" rx=\"7\" fill=\"#f0fdf4\" stroke=\"#22c55e\" stroke-width=\"1.2\"/>\n  <text x=\"150\" y=\"131\" text-anchor=\"middle\" font-size=\"10.4\" font-weight=\"700\" fill=\"#166534\">③ 数列单调有界 + 积分递推夹逼（3 题）</text>\n  <text x=\"150\" y=\"148\" text-anchor=\"middle\" font-size=\"9\" fill=\"#0f172a\">2019-2(积分递推与比值夹逼=1)</text>\n  <text x=\"150\" y=\"166\" text-anchor=\"middle\" font-size=\"9\" fill=\"#15803d\">2018(xₙe^xₙ₊₁=e^xₙ−1) · 2013-2(ln x+1/x 最值推单增)</text>\n\n  <!-- Quadrant 4: Integral/Extremum/Definition Proofs -->\n  <rect x=\"306\" y=\"114\" width=\"288\" height=\"64\" rx=\"7\" fill=\"#faf5ff\" stroke=\"#a855f7\" stroke-width=\"1.2\"/>\n  <text x=\"450\" y=\"131\" text-anchor=\"middle\" font-size=\"10.4\" font-weight=\"700\" fill=\"#6b21a8\">④ 积分不等式、最值反证与定义回归（4 题）</text>\n  <text x=\"450\" y=\"148\" text-anchor=\"middle\" font-size=\"9\" fill=\"#0f172a\">2020-1(|f′|≤M反证M=0) · 2016(凑d(x−3π/2)均值+唯一零点)</text>\n  <text x=\"450\" y=\"166\" text-anchor=\"middle\" font-size=\"9\" fill=\"#7e22ce\">2015-2(导数定义证乘法法则) · 2014(Steffensen积分不等式)</text>\n</svg>",
+      "source": {
+        "book": "27猪哥&狗姐《猪狗证明大合集（2027版）》",
+        "printedPage": "P.1, P.3",
+        "pdfPage": 1,
+        "itemRef": "真题2025 & 真题2022 核心定理"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p03_real_exams",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p03-f-02",
+      "section": "二、对称区间积分拆零与端点配权消一阶导公式",
+      "kind": "formula",
+      "title": "2026 / 2024 / 2023 高频真题三大核心恒等式：对称折半、端点配权与极值泰勒",
+      "examWeight": "core",
+      "prompt": "默写 2026、2024、2023 连续三年真题最核心的三大破冰恒等式：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{2026 对称折半：}\\int_{-1}^1 f=0\\implies 2\\int_0^1 f=\\int_0^1\\bigl[f(x)-f(-x)\\bigr]\\,\\mathrm{d}x>0\\;\\text{（}f\\text{ 严增）}\\\\\n&\\text{2024 双端点配权：}f'(0)=f'(1)\\implies f(x)-f(0)(1-x)-f(1)x=\\frac{x(1-x)}{2}\\bigl[xf''(\\xi_1)+(1-x)f''(\\xi_2)\\bigr]\\\\\n&\\text{2023 极值点展开：}f'(c)=0\\implies f(a)-f(-a)=\\frac{1}{2}\\bigl[f''(\\eta_1)(a-c)^2-f''(\\eta_2)(a+c)^2\\bigr]\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "2026 第 (2) 问出题人送的三零点（真题2026）",
+          "desc": "题目直接把辅助函数 $F(x)=a(1-x^2)+\\int_1^x f(t)\\,\\mathrm{d}t$ 喂到了嘴边：立刻代入 $x=-1,0,1$ 验出 $F(-1)=F(0)=F(1)=0$，两次罗尔瞬间满分！"
+        },
+        {
+          "sym": "2023 第 (2) 问放缩关键：$a^2+c^2<2a^2$（真题2023）",
+          "desc": "因 $(a-c)^2+(a+c)^2=2(a^2+c^2)$ 且 $c\\in(-a,a)\\implies a^2+c^2<2a^2$，立得 $|f(a)-f(-a)|\\le 2a^2 M\\implies |f''(\\eta)|\\ge\\frac{1}{2a^2}|f(a)-f(-a)|$！"
+        }
+      ],
+      "conditions": "2023 (1) 由对称二阶泰勒相加得 $\\frac{f''(\\xi_1)+f''(\\xi_2)}{2}=\\frac{f(a)+f(-a)}{a^2}$，最后一步须借助题设「$f''$ 连续」的介值定理合并为单个 $\\xi$！",
+      "pitfalls": "2026 第 (1) 问切勿误以为「$f$ 严增且 $\\int_{-1}^1 f=0$ 必有 $f(0)=0$」（反例 $f(x)=x^2+x-\\frac{1}{3}$ 在 $[0,1]$ 不对称，零点未必在 $0$！）；正确证法是配对 $\\int_0^1[f(x)-f(-x)]\\,\\mathrm{d}x>0$，完全不依赖 $f(0)$ 符号！",
+      "source": {
+        "book": "27猪哥&狗姐《猪狗证明大合集（2027版）》",
+        "printedPage": "P.1-2",
+        "pdfPage": 1,
+        "itemRef": "真题2026, 真题2024, 真题2023 核心式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p03_real_exams",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p03-f-03",
+      "section": "三、积分分部凑零边界与积分递推夹逼公式",
+      "kind": "formula",
+      "title": "2016 / 2019-2 / 2014 积分证明三大神式：凑 $\\mathrm{d}(x-\\frac{3\\pi}{2})$、递推夹逼与史蒂芬森",
+      "examWeight": "core",
+      "prompt": "默写 2016、2019-2、2014 经典积分证明真题的三大破题核心公式：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{2016 凑边界消分母：}\\int_0^{\\frac{3\\pi}{2}}f(x)\\,\\mathrm{d}x=\\int_0^{\\frac{3\\pi}{2}}f(x)\\,\\mathrm{d}\\!\\left(x-\\frac{3\\pi}{2}\\right)=-\\frac{1}{2}\\int_0^{\\frac{3\\pi}{2}}\\cos x\\,\\mathrm{d}x=\\frac{1}{2}\\\\\n&\\text{2019-2 积分递推与夹逼：}a_n=\\frac{n-1}{n+2}a_{n-2}\\implies \\frac{n-1}{n+2}=\\frac{a_n}{a_{n-2}}<\\frac{a_n}{a_{n-1}}<1\\implies \\lim_{n\\to\\infty}\\frac{a_n}{a_{n-1}}=1\\\\\n&\\text{2014 Steffensen 变上限构造：}F(x)=\\int_a^x f(t)g(t)\\,\\mathrm{d}t-\\int_a^{a+\\int_a^x g(t)\\,\\mathrm{d}t}f(t)\\,\\mathrm{d}t\\implies F'(x)\\ge 0\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "2016 为何凑 $\\mathrm{d}(x-\\frac{3\\pi}{2})$（真题2016）",
+          "desc": "分部积分挑原函数时，刻意加常数 $-\\frac{3\\pi}{2}$ 一箭双雕：① 令上边界项 $(x-\\frac{3\\pi}{2})f(x)\\big|_{\\frac{3\\pi}{2}}=0$，下边界项由 $f(0)=0$ 为 $0$；② 积分内 $(x-\\frac{3\\pi}{2})$ 与分母 $(2x-3\\pi)$ 约成干净的 $\\frac{1}{2}$！"
+        },
+        {
+          "sym": "2014 原讲义 P.8 印刷勘误预警",
+          "desc": "《2027证明题专项》P.8 `🐷2014` 第 (1) 问把下限 $a$ 误印成了 $0$（印作 $0\\le\\int_0^x g(t)\\,\\mathrm{d}t\\le x-a$），正确下限为 $a$（即 $0\\le\\int_a^x g(t)\\,\\mathrm{d}t\\le x-a$）！"
+        }
+      ],
+      "conditions": "2016 分部积分严格来说 $f'(x)=\\frac{\\cos x}{2x-3\\pi}$ 在右端点 $\\frac{3\\pi}{2}$ 可去间断（左极限 $\\frac{1}{2}$ 有限），故反常/正常分部边界项严格收敛于 $0$。",
+      "pitfalls": "2016 第 (2) 问证唯一零点时，千万不要忘掉联动第 (1) 问算出的平均值 $\\frac{1}{3\\pi}>0$——它免费给出区间内必存在正值点 $c\\in(\\frac{\\pi}{2},\\frac{3\\pi}{2})$，从而免去痛苦的三角波段折半估号！",
+      "source": {
+        "book": "27猪哥&狗姐《猪狗证明大合集（2027版）》",
+        "printedPage": "P.5, P.6, P.8",
+        "pdfPage": 5,
+        "itemRef": "真题2019-2, 真题2016, 真题2014 核心式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p03_real_exams",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p03-f-04",
+      "section": "四、导数定义回归与函数最值驱动数列单调",
+      "kind": "formula",
+      "title": "2015-2 乘法求导定义证法 & 2013-2 最值 $f(x)=\\ln x+\\frac{1}{x}\\ge 1$ 驱动数列单增",
+      "examWeight": "core",
+      "prompt": "默写 2015-2 乘积求导定义拆项公式与 2013-2 用函数最小值反推数列单调及定极限的链式不等式：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{2015-2 乘积求导：}\\frac{u(x+\\Delta x)v(x+\\Delta x)-u(x)v(x)}{\\Delta x}=\\frac{u(x+\\Delta x)-u(x)}{\\Delta x}v(x+\\Delta x)+u(x)\\frac{v(x+\\Delta x)-v(x)}{\\Delta x}\\\\\n&\\text{2013-2 最值锁单调与定极限：}\\ln x_n+\\frac{1}{x_{n+1}}<1\\le\\ln x_n+\\frac{1}{x_n}\\implies x_{n+1}>x_n,\\quad x_n<\\mathrm{e},\\quad \\ln A+\\frac{1}{A}=1\\implies A=1\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "2015-2 第 (2) 问严禁乱用对数求导（真题2015-2）",
+          "desc": "证明 $n$ 个可导函数乘积求导公式 $\\sum_{k=1}^n u_1\\cdots u_k'\\cdots u_n$ 时，因 $u_k(x)$ 可能取 $0$ 或负数，必须用**数学归纳法**直接递推，绝不可盲目两边取 $\\ln$！"
+        }
+      ],
+      "conditions": "2015-2 拆项取极限时必须显式写明「因 $v(x)$ 在 $x$ 处可导必连续，故 $\\lim_{\\Delta x\\to 0}v(x+\\Delta x)=v(x)$」这一关键采分句！",
+      "pitfalls": "2013-2 末步极易卡壳：取极限后得到 $\\ln A+\\frac{1}{A}\\le 1$，不要以为少了个等号解不出 $A$——立刻结合第 (1) 问「$f(x)\\ge 1$ 且仅在 $x=1$ 取等」两头夹出唯一解 $A=1$！",
+      "source": {
+        "book": "27猪哥&狗姐《猪狗证明大合集（2027版）》",
+        "printedPage": "P.7, P.9",
+        "pdfPage": 7,
+        "itemRef": "真题2015-2 & 真题2013-2 核心式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p03_real_exams",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p03-c-01",
+      "section": "核心结论 · 14 年真题揭示的「第一问喂第二问」铁律",
+      "kind": "conclusion",
+      "title": "考研证明大题 90% 是连环套：第 (1) 问的结论就是第 (2) 问的钥匙！",
+      "examWeight": "core",
+      "summary": "纵观 2013–2026 共 18 道证明真题，**凡带 (1)(2) 两问的题几乎全部强耦合**：\n- **真题2026**：(1) 证 $a>0$（为理解 $F(0)=a-a=0$ 铺路），(2) 利用 $F(-1)=F(0)=F(1)=0$ 两次罗尔；\n- **真题2024**：(1) 双端点泰勒证逐点误差 $\\le\\frac{x(1-x)}{2}$，(2) 两边积分秒出 $\\frac{1}{12}$；\n- **真题2020-1**：(1) 由最值点 $c$ 证存在 $|f'(\\xi)|\\ge M$，(2) 当 $|f'|\\le M$ 结合连续性与费马引理 $f'(1)=0$ 反证 $M=0$；\n- **真题2019-2**：(1) 证单减与二阶递推 $a_n=\\frac{n-1}{n+2}a_{n-2}$，(2) 立刻用 $a_n<a_{n-1}<a_{n-2}$ 夹逼出比值极限 $1$；\n- **真题2016**：(1) 算出均值 $\\frac{1}{3\\pi}>0$，(2) 借均值 $>0$ 推出 $f(\\frac{3\\pi}{2})>0$ 秒证唯一零点；\n- **真题2013-2**：(1) 求出 $f(x)=\\ln x+\\frac{1}{x}$ 唯一最小值 $f(1)=1$，(2) 同时用来证单增和夹死极限 $A=1$！",
+      "conditions": "考场做第 (2) 问若 1 分钟无头绪，立刻回头死盯第 (1) 问的结论——看看哪里还没用上！",
+      "pitfalls": "千万不要把 (1)(2) 当成两道孤立的题硬刚；例如真题2016 若丢开第 (1) 问去硬估 $f(\\frac{3\\pi}{2})>0$ 会平白多写半页纸！",
+      "source": {
+        "book": "27猪哥&狗姐《猪狗证明大合集（2027版）》",
+        "printedPage": "P.1-9",
+        "pdfPage": 1,
+        "itemRef": "18 道历年真题命题结构规律"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p03-c-02",
+      "section": "核心结论 · 2020-1 端点/中点分类反证的隐藏大坑",
+      "kind": "conclusion",
+      "title": "真题2020-1 第 (2) 问防翻车指南：为何中点 $c=1$ 必须单独用连续积分 + 费马引理击毙？",
+      "examWeight": "core",
+      "summary": "在真题2020-1（$f\\in C^1[0,2],\\;f(0)=f(2)=0,\\;M=\\max|f|,\\;|f'|\\le M$ 证 $M=0$）中：\n- 若假设 $M>0$ 且最值点 $c\\ne 1$（即 $c<1$ 或 $c>1$），则距较近端点的距离 $d=\\min(c,2-c)<1$，拉格朗日立刻得出 $|f'(\\xi)|=\\frac{M}{d}>M$，直接矛盾！\n- **但若最值点恰好落在正中点 $c=1$**，两边距离恰好等于 $1$，拉格朗日只给出 $|f'(\\xi)|=M$，**并不矛盾**！此时必须动用「$f'$ 连续」与「$c=1$ 是内点极值 $\\Rightarrow f'(1)=0$」：\n  不妨设 $f(1)=M>0$，则 $M=f(1)-f(0)=\\int_0^1 f'(x)\\,\\mathrm{d}x$，即 $\\int_0^1[M-f'(x)]\\,\\mathrm{d}x=0$；因 $M-f'(x)\\ge 0$ 且连续，必有 $f'(x)\\equiv M$ on $[0,1]$，从而 $f'(1)=M>0$，与费马引理 $f'(1)=0$ 彻底矛盾！",
+      "conditions": "前提「$f'(x)$ 在 $[0,2]$ 上连续」是击毙 $c=1$ 临界情形的致命关键（严格保号性依赖被积函数连续）！",
+      "pitfalls": "当年无数考生忘了单独处理 $c=1$，直接写 $\\frac{M}{c}>M$ 痛失半分；切记把 $c\\ne 1$ 和 $c=1$ 分开写清！",
+      "source": {
+        "book": "27猪哥&狗姐《猪狗证明大合集（2027版）》",
+        "printedPage": "P.3",
+        "pdfPage": 3,
+        "itemRef": "真题2020-1 (2) 临界点剖析"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p03-c-03",
+      "section": "核心结论 · 2022~2026 近五年命题趋势洞察",
+      "kind": "conclusion",
+      "title": "近五年（2022–2026）考研证明题三大新趋势：轻技巧构造、重概念本质与充要刻画",
+      "examWeight": "core",
+      "summary": "把 2022–2026 连续五年的证明大题摆在一起看，命题风向发生了极其鲜明的升级：\n1. **充要条件概念深化（2022、2025）**：不再考偏怪微分方程积分因子，而是直击「导数严增 $\\iff$ 弦斜率严增」「二阶导非负 $\\iff$ 中点值 $\\le$ 区间积分均值」这类微积分核心几何性质的双向互证；\n2. **中值与泰勒回归标准套路（2023、2024）**：极值点二阶泰勒展开（2023）、双端点配权二阶泰勒 + 梯形误差 $\\frac{1}{12}$（2024），全是讲义单元 2 的标准母题；\n3. **送辅助函数考基本功（2026）**：2026 直接把 $F(x)=a(1-x^2)+\\int_1^x f(t)\\,\\mathrm{d}t$ 写在题面上，重点考查「对称折半证 $a>0$」与「三零点连续罗尔」的扎实基本功！",
+      "conditions": "备战 2027 考研数一：务必把 2022–2026 这 5 道题独立默写到闭眼不卡壳！",
+      "pitfalls": "切勿只背「偏难怪辅助函数」而忽视了定义、单调/凹凸充要证明与基础对称配对！",
+      "source": {
+        "book": "27猪哥&狗姐《猪狗证明大合集（2027版）》",
+        "printedPage": "P.1-3",
+        "pdfPage": 1,
+        "itemRef": "2022–2026 近五年真题趋势"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p03-c-04",
+      "section": "核心结论 · 原题本印刷核对说明",
+      "kind": "conclusion",
+      "title": "《2027证明题专项》PDF 印刷勘误核注（真题2014 下限笔误）",
+      "examWeight": "core",
+      "summary": "逐页高清核读本 PDF 全部 9 页 18 道真题，发现 1 处印刷笔误已在本单元纠偏：\n- **P.8 `🐷2014` 第 (1) 问**：原 PDF 误印为 $0\\le\\int_0^x g(t)\\,\\mathrm{d}t\\le x-a,\\;x\\in[a,b]$（积分下限误印作 $0$），而其第 (2) 问明确使用 $\\int_a^b g(t)\\,\\mathrm{d}t$；对照 2014 考研真题原卷及张宇基础 30 讲例 11.7，第 (1) 问正确下限应为 **$a$**，即 $0\\le\\int_a^x g(t)\\,\\mathrm{d}t\\le x-a$。\n- 其余 17 道真题题干符号经逐页复核均准确无误。",
+      "conditions": "对照原 PDF 刷题时注意将 P.8 `🐷2014` (1) 积分下限手改为 $a$。",
+      "pitfalls": "若按误印下限 $0$ 在 $a<0$ 时做会导致积分区间越出定义域 $[a,b]$！",
+      "source": {
+        "book": "27猪哥&狗姐《猪狗证明大合集（2027版）》",
+        "printedPage": "P.8",
+        "pdfPage": 8,
+        "itemRef": "真题2014 (1) 下限印刷勘误"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p03-e-01",
+      "section": "一、近五年最新真题（2026 ~ 2022）",
+      "kind": "example",
+      "title": "【真题 2026】严格单增 + $\\int_{-1}^1 f=0$ 对称折半证 $a>0$，三零点罗尔证 $F''(\\xi)=0$",
+      "examWeight": "core",
+      "problem": "设可导函数 $f(x)$ 严格单调递增且满足 $\\displaystyle\\int_{-1}^1 f(x)\\,\\mathrm{d}x=0$，记 $a=\\displaystyle\\int_0^1 f(x)\\,\\mathrm{d}x$。\n(1) 证明 $a>0$；\n(2) 设 $F(x)=a(1-x^2)+\\displaystyle\\int_1^x f(t)\\,\\mathrm{d}t$，证明：存在 $\\xi\\in(-1,1)$ 使得 $F''(\\xi)=0$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：利用对称区间积分拆零，配对 $f(x)-f(-x)>0$ 三行秒证 $a>0$",
+          "detail": "由 $\\int_{-1}^1 f(x)\\,\\mathrm{d}x=\\int_{-1}^0 f(x)\\,\\mathrm{d}x+\\int_0^1 f(x)\\,\\mathrm{d}x=0$，得 $\\int_{-1}^0 f(x)\\,\\mathrm{d}x=-a$。作换元 $t=-x$ 有 $\\int_{-1}^0 f(x)\\,\\mathrm{d}x=\\int_0^1 f(-t)\\,\\mathrm{d}t=-a$，于是 $$2a=\\int_0^1 f(x)\\,\\mathrm{d}x-\\int_0^1 f(-x)\\,\\mathrm{d}x=\\int_0^1\\bigl[f(x)-f(-x)\\bigr]\\,\\mathrm{d}x.$$ 因 $f$ 严格单调递增，对一切 $x\\in(0,1]$ 有 $-x<x\\implies f(x)-f(-x)>0$，又 $f(x)-f(-x)$ 连续非负且不恒为零，由定积分严格保号性得 $2a>0\\implies a>0$！"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：验出 $F(-1)=F(0)=F(1)=0$ 三个零点，连续两次罗尔立得 $F''(\\xi)=0$",
+          "detail": "因 $f$ 可导，故 $F'(x)=-2ax+f(x)$ 可导，即 $F(x)$ 在 $[-1,1]$ 上二阶可导。直接计算三个关键点的值：\n- $F(1)=a(1-1)+\\int_1^1 f(t)\\,\\mathrm{d}t=0$；\n- $F(-1)=a(1-1)+\\int_1^{-1} f(t)\\,\\mathrm{d}t=-\\int_{-1}^1 f(t)\\,\\mathrm{d}t=0$；\n- $F(0)=a(1-0)+\\int_1^0 f(t)\\,\\mathrm{d}t=a-\\int_0^1 f(t)\\,\\mathrm{d}t=a-a=0$！\n分别在 $[-1,0]$ 与 $[0,1]$ 上对 $F$ 用罗尔定理，存在 $c_1\\in(-1,0),\\;c_2\\in(0,1)$ 使 $F'(c_1)=F'(c_2)=0$；再在 $[c_1,c_2]$ 上对 $F'$ 用罗尔定理，即存在 $\\xi\\in(c_1,c_2)\\subset(-1,1)$ 使得 $F''(\\xi)=0$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "2026 最新真题完美印证基本功为王：第 (1) 问绝不可瞎猜 $f(0)=0$，必须用对称折叠 $\\int_0^1[f(x)-f(-x)]\\,\\mathrm{d}x>0$；第 (2) 问三点代入立现三零点！",
+      "source": {
+        "book": "27猪哥&狗姐《猪狗证明大合集（2027版）》",
+        "printedPage": "P.1",
+        "pdfPage": 1,
+        "itemRef": "真题2026 (1)~(2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p03_real_exams",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p03-e-02",
+      "section": "一、近五年最新真题（2026 ~ 2022）",
+      "kind": "example",
+      "title": "【真题 2025】导函数 $f'$ 严格单增 $\\iff$ 割线斜率严格单增（充分性插锚点 $m$ 守严格 $<$）",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)$ 在区间 $(a,b)$ 内可导，证明：导函数 $f'(x)$ 在 $(a,b)$ 内严格单调增加的充分必要条件是：对 $(a,b)$ 内任意的 $x_1,x_2,x_3$，当 $x_1<x_2<x_3$ 时，有 $\\dfrac{f(x_2)-f(x_1)}{x_2-x_1}<\\dfrac{f(x_3)-f(x_2)}{x_3-x_2}$。",
+      "steps": [
+        {
+          "stepTitle": "1. 必要性（$\\Rightarrow$）：两段各自拉格朗日，$\\xi_1<x_2<\\xi_2$ 直接推严格小于",
+          "detail": "设 $f'$ 在 $(a,b)$ 内严格单增，任取 $a<x_1<x_2<x_3<b$。分别在 $[x_1,x_2]$ 与 $[x_2,x_3]$ 上对 $f$ 用拉格朗日中值定理，存在 $\\xi_1\\in(x_1,x_2)$、$\\xi_2\\in(x_2,x_3)$ 使得 $$\\frac{f(x_2)-f(x_1)}{x_2-x_1}=f'(\\xi_1),\\qquad \\frac{f(x_3)-f(x_2)}{x_3-x_2}=f'(\\xi_2).$$ 因 $\\xi_1<x_2<\\xi_2$ 且 $f'$ 严格单增，立得 $f'(\\xi_1)<f'(\\xi_2)$，必要性证毕！"
+        },
+        {
+          "stepTitle": "2. 充分性（$\\Leftarrow$）：任取 $u<v$，插入锚点 $m=\\frac{u+v}{2}$，借中间严格不等号锁死 $f'(u)<f'(v)$！",
+          "detail": "任取 $u,v\\in(a,b)$ 且 $u<v$，取中点 $m=\\frac{u+v}{2}\\in(u,v)$：\n1. 对任意 $x\\in(u,m)$，有 $u<x<m$，由题设得 $\\dfrac{f(x)-f(u)}{x-u}<\\dfrac{f(m)-f(x)}{m-x}$；令 $x\\to u^+$ 取极限，因 $f$ 在 $u$ 可导且连续，得 $$f'(u)\\le\\frac{f(m)-f(u)}{m-u}.$$\n2. 对 $u<m<v$ 直接套用题设，得**严格不等号**：$$\\frac{f(m)-f(u)}{m-u}<\\frac{f(v)-f(m)}{v-m}.$$\n3. 对任意 $y\\in(m,v)$，有 $m<y<v$，由题设得 $\\dfrac{f(y)-f(m)}{y-m}<\\dfrac{f(v)-f(y)}{v-y}$；令 $y\\to v^-$ 取极限得 $$\\frac{f(v)-f(m)}{v-m}\\le f'(v).$$\n三式串联：$$f'(u)\\le\\frac{f(m)-f(u)}{m-u}<\\frac{f(v)-f(m)}{v-m}\\le f'(v)\\implies f'(u)<f'(v)!$$ 故 $f'$ 在 $(a,b)$ 内严格单调增加，充分性证毕！"
+        }
+      ],
+      "finalAnswer": "充要条件证毕。",
+      "takeaway": "2025 压轴神来一笔：**取极限会把 $<$ 弱化成 $\\le$，在 $u,v$ 之间插一个定点 $m$，就能让中间那道不取极限的弦斜率不等式永久保住严格 $<$！**",
+      "source": {
+        "book": "27猪哥&狗姐《猪狗证明大合集（2027版）》",
+        "printedPage": "P.1",
+        "pdfPage": 1,
+        "itemRef": "真题2025"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p03_real_exams",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p03-e-03",
+      "section": "一、近五年最新真题（2026 ~ 2022）",
+      "kind": "example",
+      "title": "【真题 2024】$f'(0)=f'(1),\\;|f''|\\le 1$ 双端点配权二阶泰勒证梯形误差 $\\le\\frac{1}{12}$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[0,1]$ 上具有二阶导数，且 $f'(0)=f'(1)$，$|f''(x)|\\le 1$，证明：\n(1) 当 $x\\in(0,1)$ 时，有 $|f(x)-f(0)(1-x)-f(1)x|\\le\\dfrac{x(1-x)}{2}$；\n(2) $\\displaystyle\\left|\\int_0^1 f(x)\\,\\mathrm{d}x-\\frac{f(0)+f(1)}{2}\\right|\\le\\frac{1}{12}$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：分别在 $0$ 与 $1$ 处展开，乘 $(1-x)$ 与 $x$ 相加消掉 $f'(0)=f'(1)$",
+          "detail": "对任意 $x\\in(0,1)$，由拉格朗日余项二阶泰勒公式存在 $\\xi_1\\in(0,x),\\;\\xi_2\\in(x,1)$ 使 $f(x)=f(0)+f'(0)x+\\frac{1}{2}f''(\\xi_1)x^2$ 与 $f(x)=f(1)+f'(1)(x-1)+\\frac{1}{2}f''(\\xi_2)(x-1)^2$。两式分别乘 $(1-x)$ 与 $x$ 相加（一次项因 $f'(0)=f'(1)$ 全消）：$$f(x)-f(0)(1-x)-f(1)x=\\frac{x(1-x)}{2}\\bigl[x f''(\\xi_1)+(1-x)f''(\\xi_2)\\bigr].$$ 取绝对值并利用 $|f''|\\le 1$ 立得 $|f(x)-f(0)(1-x)-f(1)x|\\le\\frac{x(1-x)}{2}$！"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：在 $[0,1]$ 积分直接得 $\\frac{1}{12}$",
+          "detail": "注意到 $\\int_0^1[f(0)(1-x)+f(1)x]\\,\\mathrm{d}x=\\frac{f(0)+f(1)}{2}$，故 $$\\left|\\int_0^1 f(x)\\,\\mathrm{d}x-\\frac{f(0)+f(1)}{2}\\right|\\le\\int_0^1\\frac{x(1-x)}{2}\\,\\mathrm{d}x=\\frac{1}{12}.$$"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "与单元 2 例 7.26、张宇强化第 11 讲强化例 11.18 完全同题：考场 3 分钟必拿满分题！",
+      "source": {
+        "book": "27猪哥&狗姐《猪狗证明大合集（2027版）》",
+        "printedPage": "P.2",
+        "pdfPage": 2,
+        "itemRef": "真题2024 (1)~(2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p03_real_exams",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p03-e-04",
+      "section": "一、近五年最新真题（2026 ~ 2022）",
+      "kind": "example",
+      "title": "【真题 2023】对称区间 $[-a,a]$ 两次二阶泰勒：中心展开相加 + 极值点展开相减",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)$ 在 $[-a,a]$ 上具有 $2$ 阶连续导数，证明：\n(1) 若 $f(0)=0$，则存在 $\\xi\\in(-a,a)$，使得 $f''(\\xi)=\\dfrac{1}{a^2}\\bigl[f(a)+f(-a)\\bigr]$；\n(2) 若 $f(x)$ 在 $(-a,a)$ 内取得极值，则存在 $\\eta\\in(-a,a)$，使得 $|f''(\\eta)|\\ge\\dfrac{1}{2a^2}\\bigl|f(a)-f(-a)\\bigr|$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：在对称中点 $0$ 处二阶展开代 $\\pm a$ 相加消 $f'(0)$，用 $f''$ 连续介值合点",
+          "detail": "在 $x_0=0$ 处二阶展开代入 $a$ 与 $-a$（结合 $f(0)=0$）：\n$$f(a)=f'(0)a+\\frac{1}{2}f''(\\xi_1)a^2,\\qquad f(-a)=-f'(0)a+\\frac{1}{2}f''(\\xi_2)a^2,$$\n其中 $\\xi_1\\in(0,a),\\;\\xi_2\\in(-a,0)$。两式相加得 $\\frac{f(a)+f(-a)}{a^2}=\\frac{f''(\\xi_1)+f''(\\xi_2)}{2}$。因 $f''$ 在 $[-a,a]$ 连续，由介值定理知在 $\\xi_2,\\xi_1$ 之间必存在 $\\xi\\in(-a,a)$ 使 $f''(\\xi)=\\frac{1}{a^2}[f(a)+f(-a)]$！"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：在极值点 $c\\in(-a,a)$（$f'(c)=0$）二阶展开代 $\\pm a$ 相减，用 $a^2+c^2<2a^2$",
+          "detail": "设 $f$ 在 $c\\in(-a,a)$ 取得极值，由费马引理 $f'(c)=0$。在 $c$ 处二阶泰勒展开代入 $a$ 与 $-a$：\n$$f(a)=f(c)+\\frac{1}{2}f''(\\eta_1)(a-c)^2,\\qquad f(-a)=f(c)+\\frac{1}{2}f''(\\eta_2)(-a-c)^2,$$\n其中 $\\eta_1\\in(c,a),\\;\\eta_2\\in(-a,c)$。两式相减取绝对值，记 $\\eta\\in\\{\\eta_1,\\eta_2\\}$ 为使 $|f''|$ 较大者：\n$$|f(a)-f(-a)|=\\frac{1}{2}\\bigl|f''(\\eta_1)(a-c)^2-f''(\\eta_2)(a+c)^2\\bigr|\\le\\frac{1}{2}|f''(\\eta)|\\bigl[(a-c)^2+(a+c)^2\\bigr]=|f''(\\eta)|(a^2+c^2).$$\n因 $c\\in(-a,a)\\implies a^2+c^2<2a^2$，立得 $|f(a)-f(-a)|\\le 2a^2|f''(\\eta)|\\implies |f''(\\eta)|\\ge\\dfrac{1}{2a^2}|f(a)-f(-a)|$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "2023 真题把「中点展开相加」与「驻点展开相减」各考了一问——正好把单元 2 泰勒选点优先级「驻点 → 中点」考得明明白白！",
+      "source": {
+        "book": "27猪哥&狗姐《猪狗证明大合集（2027版）》",
+        "printedPage": "P.2",
+        "pdfPage": 2,
+        "itemRef": "真题2023 (1)~(2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p03_real_exams",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p03-e-05",
+      "section": "一、近五年最新真题（2026 ~ 2022）",
+      "kind": "example",
+      "title": "【真题 2022】$f''(x)\\ge 0$ 充要条件：中点函数值 $\\le$ 区间积分平均值（Hermite-Hadamard）",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)$ 在 $(-\\infty,+\\infty)$ 有二阶连续导数，证明 $f''(x)\\ge 0$ 的充要条件是对任意不同实数 $a,b$，有 $f\\!\\left(\\dfrac{a+b}{2}\\right)\\le\\dfrac{1}{b-a}\\displaystyle\\int_a^b f(x)\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 必要性（$\\Rightarrow$）：在中点 $m=\\frac{a+b}{2}$ 处二阶泰勒展开后在 $[a,b]$ 积分（一次项积分为 $0$！）",
+          "detail": "不妨设 $a<b$（$a>b$ 时对换 $a,b$ 式子完全不变），记 $m=\\frac{a+b}{2}$。对任意 $x\\in[a,b]$，由二阶泰勒公式及 $f''\\ge 0$：$$f(x)=f(m)+f'(m)(x-m)+\\frac{1}{2}f''(\\xi)(x-m)^2\\ge f(m)+f'(m)(x-m).$$ 两边在 $[a,b]$ 积分，因 $\\int_a^b(x-m)\\,\\mathrm{d}x=0$，立得 $\\int_a^b f(x)\\,\\mathrm{d}x\\ge (b-a)f(m)$，即 $f\\!\\left(\\frac{a+b}{2}\\right)\\le\\frac{1}{b-a}\\int_a^b f(x)\\,\\mathrm{d}x$！"
+        },
+        {
+          "stepTitle": "2. 充分性（$\\Leftarrow$）：对任意 $x_0$ 取对称区间 $[x_0-h,x_0+h]$，连用两次洛必达出 $\\frac{1}{3}f''(x_0)\\ge 0$",
+          "detail": "任取 $x_0\\in\\mathbb{R}$ 与任意 $h>0$，在题设不等式中令 $a=x_0-h,\\;b=x_0+h$，得 $\\int_{x_0-h}^{x_0+h}f(t)\\,\\mathrm{d}t-2h f(x_0)\\ge 0$。两边同除 $h^3>0$ 并令 $h\\to 0^+$，由极限保号性及两次洛必达法则：$$0\\le\\lim_{h\\to 0^+}\\frac{\\int_{x_0-h}^{x_0+h}f(t)\\,\\mathrm{d}t-2h f(x_0)}{h^3}=\\lim_{h\\to 0^+}\\frac{f(x_0+h)+f(x_0-h)-2f(x_0)}{3h^2}=\\lim_{h\\to 0^+}\\frac{f'(x_0+h)-f'(x_0-h)}{6h}=\\frac{1}{3}f''(x_0),$$ 故 $f''(x_0)\\ge 0$，充分性证毕！"
+        }
+      ],
+      "finalAnswer": "充要条件证毕。",
+      "takeaway": "记住「对称区间积分除以 $h^3$」的绝妙反推技：分母为 $h^3$ 时两次洛必达精准剥离出 $\\frac{1}{3}f''(x_0)$！",
+      "source": {
+        "book": "27猪哥&狗姐《猪狗证明大合集（2027版）》",
+        "printedPage": "P.3",
+        "pdfPage": 3,
+        "itemRef": "真题2022"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p03_real_exams",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p03-e-06",
+      "section": "二、2020 ~ 2019 经典综合真题",
+      "kind": "example",
+      "title": "【真题 2020-1】最值点拉格朗日证 $|f'(\\xi)|\\ge M$；分类讨论 $c\\ne 1$ 与 $c=1$ 严密反证 $M=0$",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)$ 在 $[0,2]$ 上具有连续导数，$f(0)=f(2)=0$，$M=\\displaystyle\\max_{x\\in[0,2]}|f(x)|$，证明：\n(1) 存在 $\\xi\\in(0,2)$ 使得 $|f'(\\xi)|\\ge M$；\n(2) 若对任意 $x\\in(0,2)$，$|f'(x)|\\le M$，则 $M=0$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：定位 $|f(c)|=M$，挑距 $0$ 或 $2$ 较近区间（长 $\\le 1$）用拉格朗日",
+          "detail": "若 $M=0$ 则 $f\\equiv 0$ 结论显然。设 $M>0$，因 $f(0)=f(2)=0$，故必存在内点 $c\\in(0,2)$ 使 $|f(c)|=M$。若 $c\\in(0,1]$，在 $[0,c]$ 上用拉格朗日得 $\\xi\\in(0,c)$ 使 $|f'(\\xi)|=\\frac{|f(c)-f(0)|}{c}=\\frac{M}{c}\\ge M$；若 $c\\in(1,2)$，在 $[c,2]$ 上用拉格朗日得 $\\xi\\in(c,2)$ 使 $|f'(\\xi)|=\\frac{|f(2)-f(c)|}{2-c}=\\frac{M}{2-c}>M$。"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：反证设 $M>0$，$c\\ne 1$ 拉格朗日即矛盾；$c=1$ 用连续保号性 + 费马引理 $f'(1)=0$ 击毙！",
+          "detail": "反证法：假设 $M>0$，设 $|f(c)|=M$（$c\\in(0,2)$，不妨设 $f(c)=M>0$，若为 $-M$ 对 $-f$ 证）。\n- **情形 1（$c\\ne 1$）**：则 $\\min(c,2-c)<1$，由 (1) 的证明存在 $\\xi\\in(0,2)$ 使 $|f'(\\xi)|=\\frac{M}{\\min(c,2-c)}>M$，与 $|f'|\\le M$ 矛盾！\n- **情形 2（$c=1$）**：因 $c=1$ 是内点最大值点，由费马引理必有 **$f'(1)=0$**。但在 $[0,1]$ 上，$$M=f(1)-f(0)=\\int_0^1 f'(x)\\,\\mathrm{d}x\\implies \\int_0^1\\bigl[M-f'(x)\\bigr]\\,\\mathrm{d}x=0.$$ 因 $f'$ 连续且 $M-f'(x)\\ge 0$，由定积分严格保号性得 $f'(x)\\equiv M\\;(x\\in[0,1])$，特别地 $f'(1)=M>0$，与 $f'(1)=0$ 矛盾！\n综上必有 $M=0$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "2020 数一/数二公认的「满分试金石」：$c=1$ 临界情形用 $\\int_0^1[M-f'(x)]\\,\\mathrm{d}x=0\\implies f'(1)=M\\ne 0$ 堪称绝杀！",
+      "source": {
+        "book": "27猪哥&狗姐《猪狗证明大合集（2027版）》",
+        "printedPage": "P.3",
+        "pdfPage": 3,
+        "itemRef": "真题2020-1 (1)~(2)"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p03-e-07",
+      "section": "二、2020 ~ 2019 经典综合真题",
+      "kind": "example",
+      "title": "【真题 2020-2】变限积分 $f(x)=\\int_1^x\\mathrm{e}^{t^2}\\,\\mathrm{d}t$ 乘积罗尔 + 隐藏零点柯西",
+      "examWeight": "core",
+      "problem": "已知 $f(x)=\\displaystyle\\int_1^x\\mathrm{e}^{t^2}\\,\\mathrm{d}t$，证明：\n(1) 存在 $\\xi\\in(1,2)$，使得 $f(\\xi)=(2-\\xi)\\mathrm{e}^{\\xi^2}$；\n(2) 存在 $\\eta\\in(1,2)$，使得 $f(2)=\\ln 2\\cdot\\eta\\cdot\\mathrm{e}^{\\eta^2}$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：构造 $F(x)=(x-2)f(x)$ 在 $[1,2]$ 套罗尔",
+          "detail": "注意到 $f(1)=0,\\;f'(x)=\\mathrm{e}^{x^2}$。令 $F(x)=(x-2)f(x)$，则 $F(1)=F(2)=0$。由罗尔定理存在 $\\xi\\in(1,2)$ 使 $F'(\\xi)=f(\\xi)+(\\xi-2)\\mathrm{e}^{\\xi^2}=0\\implies f(\\xi)=(2-\\xi)\\mathrm{e}^{\\xi^2}$。"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：补齐隐藏零点 $f(1)=0,\\;\\ln 1=0$，对 $(f(x),\\ln x)$ 套柯西",
+          "detail": "在 $[1,2]$ 上对 $f(x)$ 与 $g(x)=\\ln x$ 用柯西中值定理，存在 $\\eta\\in(1,2)$ 使得 $$\\frac{f(2)-f(1)}{\\ln 2-\\ln 1}=\\frac{f'(\\eta)}{1/\\eta}=\\eta\\mathrm{e}^{\\eta^2}\\implies f(2)=\\ln 2\\cdot\\eta\\cdot\\mathrm{e}^{\\eta^2}!$$"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "与单元 2 例 7.14 同源：看到变限积分先写下 $f(1)=0$ 和 $f'(x)=\\mathrm{e}^{x^2}$，两问共 6 行拿满分！",
+      "source": {
+        "book": "27猪哥&狗姐《猪狗证明大合集（2027版）》",
+        "printedPage": "P.4",
+        "pdfPage": 4,
+        "itemRef": "真题2020-2 (1)~(2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p03_real_exams",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p03-e-08",
+      "section": "二、2020 ~ 2019 经典综合真题",
+      "kind": "example",
+      "title": "【真题 2019-1】$f(0)=0,f(1)=1,\\int_0^1 f=1$ 证 $f'(\\xi)=0$ 及 $f''(\\eta)<-2$（辅助多项式秒杀）",
+      "examWeight": "core",
+      "problem": "已知函数 $f(x)$ 在 $[0,1]$ 上具有 $2$ 阶导数，且 $f(0)=0,\\;f(1)=1,\\;\\displaystyle\\int_0^1 f(x)\\,\\mathrm{d}x=1$，证明：\n(1) 存在 $\\xi\\in(0,1)$，使得 $f'(\\xi)=0$；\n(2) 存在 $\\eta\\in(0,1)$，使得 $f''(\\eta)<-2$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：开区间积分中值定理得 $f(c)=1=f(1)$，罗尔立得 $f'(\\xi)=0$",
+          "detail": "由开区间积分中值定理知存在 $c\\in(0,1)$ 使 $f(c)=\\int_0^1 f(x)\\,\\mathrm{d}x=1=f(1)$，在 $[c,1]$ 上用罗尔定理得 $\\xi\\in(c,1)\\subset(0,1)$ 使 $f'(\\xi)=0$。"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：用单元 2 降维大招——辅助多项式 $p(x)=-3x^2+4x$ 直接证出 $f''(\\eta)=-6<-2$",
+          "detail": "取二次多项式 $p(x)=-3x^2+4x$（满足 $p(0)=0,\\;p(1)=1,\\;\\int_0^1 p(x)\\,\\mathrm{d}x=1,\\;p''(x)\\equiv -6$）。令 $g(x)=f(x)-p(x)$，则 $g(0)=g(1)=0$ 且 $\\int_0^1 g(x)\\,\\mathrm{d}x=0$。由开区间积分中值定理存在 $d\\in(0,1)$ 使 $g(d)=0$。于是 $g(0)=g(d)=g(1)=0$，连续两次罗尔即得 $\\eta\\in(0,1)$ 使 $g''(\\eta)=0\\implies f''(\\eta)=-6<-2$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "与单元 2 例 7.25/7.31 同源真题！用辅助多项式 $p(x)=-3x^2+4x$ 比传统泰勒展开快两倍、逻辑零漏洞！",
+      "source": {
+        "book": "27猪哥&狗姐《猪狗证明大合集（2027版）》",
+        "printedPage": "P.4",
+        "pdfPage": 4,
+        "itemRef": "真题2019-1 (1)~(2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p03_real_exams",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p03-e-09",
+      "section": "二、2020 ~ 2019 经典综合真题",
+      "kind": "example",
+      "title": "【真题 2019-2】积分数列 $a_n=\\int_0^1 x^n\\sqrt{1-x^2}\\,\\mathrm{d}x$：分部递推 + 单减夹逼求 $\\lim\\frac{a_n}{a_{n-1}}=1$",
+      "examWeight": "core",
+      "problem": "设 $a_n=\\displaystyle\\int_0^1 x^n\\sqrt{1-x^2}\\,\\mathrm{d}x\\;(n=0,1,2,\\dots)$。\n(1) 证明数列 $\\{a_n\\}$ 单调递减，且 $a_n=\\dfrac{n-1}{n+2}a_{n-2}\\;(n=2,3,\\dots)$；\n(2) 求 $\\displaystyle\\lim_{n\\to\\infty}\\frac{a_n}{a_{n-1}}$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：被积比较证严减；凑 $\\mathrm{d}\\!\\left(-\\frac{1}{3}(1-x^2)^{\\frac{3}{2}}\\right)$ 分部建递推",
+          "detail": "单调性：当 $x\\in(0,1)$ 时 $x^{n+1}\\sqrt{1-x^2}<x^n\\sqrt{1-x^2}$，由定积分严格保号性得 $0<a_{n+1}<a_n$，即 $\\{a_n\\}$ 严格单调递减。\n递推式（$n\\ge 2$）：$$a_n=\\int_0^1 x^{n-1}\\cdot x\\sqrt{1-x^2}\\,\\mathrm{d}x=-\\frac{1}{3}\\int_0^1 x^{n-1}\\,\\mathrm{d}\\bigl[(1-x^2)^{\\frac{3}{2}}\\bigr]=0+\\frac{n-1}{3}\\int_0^1 x^{n-2}(1-x^2)\\sqrt{1-x^2}\\,\\mathrm{d}x=\\frac{n-1}{3}(a_{n-2}-a_n).$$ 整理 $(n+2)a_n=(n-1)a_{n-2}\\implies a_n=\\dfrac{n-1}{n+2}a_{n-2}$！"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：由 $0<a_n<a_{n-1}<a_{n-2}$ 一秒夹逼出 $\\lim\\frac{a_n}{a_{n-1}}=1$",
+          "detail": "因 $0<a_n<a_{n-1}<a_{n-2}$，两边同除 $a_{n-1}$ 及结合 (1) 得 $$\\frac{n-1}{n+2}=\\frac{a_n}{a_{n-2}}<\\frac{a_n}{a_{n-1}}<1.$$ 令 $n\\to\\infty$，因 $\\lim_{n\\to\\infty}\\frac{n-1}{n+2}=1$，由夹逼定理立得 $\\lim_{n\\to\\infty}\\dfrac{a_n}{a_{n-1}}=1$！"
+        }
+      ],
+      "finalAnswer": "(1) 证毕；(2) $1$。",
+      "takeaway": "记住「二阶递推 + 单调性 $\\implies$ 相邻项比值夹逼」黄金套路（同样适用于华里士积分 $\\int_0^{\\frac{\\pi}{2}}\\sin^n x\\,\\mathrm{d}x$）！",
+      "source": {
+        "book": "27猪哥&狗姐《猪狗证明大合集（2027版）》",
+        "printedPage": "P.5",
+        "pdfPage": 5,
+        "itemRef": "真题2019-2 (1)~(2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p03_real_exams",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p03-e-10",
+      "section": "三、2018 ~ 2015 经典真题",
+      "kind": "example",
+      "title": "【真题 2018】$x_n\\mathrm{e}^{x_{n+1}}=\\mathrm{e}^{x_n}-1$ 指数双翼不等式证单减下界收敛于 $0$",
+      "examWeight": "core",
+      "problem": "设数列 $\\{x_n\\}$ 满足：$x_1>0$，$x_n\\mathrm{e}^{x_{n+1}}=\\mathrm{e}^{x_n}-1\\;(n=1,2,\\dots)$。证明数列 $\\{x_n\\}$ 收敛，并求 $\\lim_{n\\to\\infty}x_n$。",
+      "steps": [
+        {
+          "stepTitle": "1. 用 $\\mathrm{e}^x-1>x$ 归纳下界 $x_n>0$，用 $\\mathrm{e}^{-x}>1-x$ 证单调递减并定极限 $0$",
+          "detail": "因 $x>0$ 时 $\\mathrm{e}^x-1>x>0$，故 $\\mathrm{e}^{x_{n+1}}=\\frac{\\mathrm{e}^{x_n}-1}{x_n}>1\\implies x_{n+1}>0$（数学归纳法得 $\\forall n\\ge 1,\\;x_n>0$）。又对 $x>0$ 恒有 $\\mathrm{e}^{-x}>1-x\\iff \\frac{\\mathrm{e}^x-1}{x}<\\mathrm{e}^x$，故 $\\mathrm{e}^{x_{n+1}}<\\mathrm{e}^{x_n}\\implies x_{n+1}<x_n$。单调递减有下界 $0$，极限 $A\\ge 0$ 存在；令 $n\\to\\infty$ 得 $A\\mathrm{e}^A=\\mathrm{e}^A-1\\implies \\mathrm{e}^{-A}=1-A$，仅当 $A=0$ 成立，故 $\\lim_{n\\to\\infty}x_n=0$！"
+        }
+      ],
+      "finalAnswer": "$\\lim_{n\\to\\infty}x_n=0$。",
+      "takeaway": "与单元 1 例 4.13(1) 同源真题：记住指数左右夹击 $\\mathrm{e}^x-1>x$ 与 $1-\\mathrm{e}^{-x}<x$！",
+      "source": {
+        "book": "27猪哥&狗姐《猪狗证明大合集（2027版）》",
+        "printedPage": "P.5",
+        "pdfPage": 5,
+        "itemRef": "真题2018"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p03_real_exams",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p03-e-11",
+      "section": "三、2018 ~ 2015 经典真题",
+      "kind": "example",
+      "title": "【真题 2017】局部保号证零点存在，构造 $F=f\\cdot f'$ 凑三零点证两不同实根",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)$ 在区间 $[0,1]$ 上具有 $2$ 阶导数，且 $f(1)>0$，$\\lim_{x\\to 0^+}\\dfrac{f(x)}{x}<0$，证明：\n(1) 方程 $f(x)=0$ 在区间 $(0,1)$ 内至少存在一个实根；\n(2) 方程 $f(x)f''(x)+[f'(x)]^2=0$ 在区间 $(0,1)$ 内至少存在两个不同实根。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：由极限推 $f(0)=0$ 与局部负点 $f(x_1)<0$，套零点定理",
+          "detail": "由 $\\lim_{x\\to 0^+}\\frac{f(x)}{x}<0$ 及 $f$ 在 $0$ 处右连续，必有 $f(0)=0$ 且存在 $x_1\\in(0,1)$ 使 $f(x_1)<0$。又 $f(1)>0$，在 $[x_1,1]$ 上由零点定理存在 $c\\in(x_1,1)\\subset(0,1)$ 使 $f(c)=0$。"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：由 $f(0)=f(c)=0$ 罗尔得 $f'(d)=0$，令 $F=ff'$ 坐拥三零点 $0<d<c$",
+          "detail": "在 $[0,c]$ 上对 $f$ 用罗尔定理得 $d\\in(0,c)$ 使 $f'(d)=0$。令 $F(x)=f(x)f'(x)$，则 $F(0)=F(d)=F(c)=0$。分别在 $[0,d]$ 与 $[d,c]$ 上对 $F$ 用罗尔定理，即得两个不同实根 $\\xi_1\\in(0,d),\\;\\xi_2\\in(d,c)$ 使 $F'(\\xi_i)=f(\\xi_i)f''(\\xi_i)+[f'(\\xi_i)]^2=0$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "与单元 2 例 7.8 完全同源真题！记住「原函数两零点 + 导函数一零点 $\\implies F=ff'$ 凑出三零点」！",
+      "source": {
+        "book": "27猪哥&狗姐《猪狗证明大合集（2027版）》",
+        "printedPage": "P.6",
+        "pdfPage": 6,
+        "itemRef": "真题2017 (1)~(2)"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p03-e-12",
+      "section": "三、2018 ~ 2015 经典真题",
+      "kind": "example",
+      "title": "【真题 2016】凑 $\\mathrm{d}(x-\\frac{3\\pi}{2})$ 分部求均值 $\\frac{1}{3\\pi}$，联动均值正号秒证唯一零点",
+      "examWeight": "core",
+      "problem": "已知函数 $f(x)$ 在 $\\left[0,\\dfrac{3\\pi}{2}\\right]$ 上连续，在 $\\left(0,\\dfrac{3\\pi}{2}\\right)$ 内是函数 $\\dfrac{\\cos x}{2x-3\\pi}$ 的一个原函数，且 $f(0)=0$。\n(1) 求函数 $f(x)$ 在 $\\left[0,\\dfrac{3\\pi}{2}\\right]$ 上的平均值；\n(2) 证明：$f(x)$ 在区间 $\\left(0,\\dfrac{3\\pi}{2}\\right)$ 内存在唯一零点。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：分部积分刻意凑 $\\mathrm{d}\\!\\left(x-\\frac{3\\pi}{2}\\right)$，同时清零边界项与约掉分母！",
+          "detail": "因 $f(0)=0$ 且 $f'(x)=\\frac{\\cos x}{2x-3\\pi}\\;\\left(x\\in(0,\\frac{3\\pi}{2})\\right)$（且右端点左极限 $\\lim_{x\\to\\frac{3\\pi}{2}^-}f'(x)=\\frac{1}{2}$ 有限），分部积分：$$\\int_0^{\\frac{3\\pi}{2}}f(x)\\,\\mathrm{d}x=\\int_0^{\\frac{3\\pi}{2}}f(x)\\,\\mathrm{d}\\!\\left(x-\\frac{3\\pi}{2}\\right)=\\left.\\left(x-\\frac{3\\pi}{2}\\right)f(x)\\right|_0^{\\frac{3\\pi}{2}}-\\int_0^{\\frac{3\\pi}{2}}\\left(x-\\frac{3\\pi}{2}\\right)\\frac{\\cos x}{2x-3\\pi}\\,\\mathrm{d}x=0-\\frac{1}{2}\\int_0^{\\frac{3\\pi}{2}}\\cos x\\,\\mathrm{d}x=-\\frac{1}{2}\\left.\\sin x\\right|_0^{\\frac{3\\pi}{2}}=\\frac{1}{2}.$$ 故平均值为 $\\bar{f}=\\dfrac{1}{\\frac{3\\pi}{2}-0}\\cdot\\dfrac{1}{2}=\\dfrac{1}{3\\pi}$！"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：由 $f'$ 符号定先减后增，再借 (1) 的正均值锁定 $f(\\frac{3\\pi}{2})>0$ 得唯一零点！",
+          "detail": "在 $\\left(0,\\frac{3\\pi}{2}\\right)$ 内分母 $2x-3\\pi<0$ 恒负：\n- 当 $x\\in\\left(0,\\frac{\\pi}{2}\\right)$ 时，$\\cos x>0\\implies f'(x)<0$，故 $f$ 在 $\\left[0,\\frac{\\pi}{2}\\right]$ 严格单减，从而在 $\\left(0,\\frac{\\pi}{2}\\right]$ 上恒有 $f(x)<f(0)=0$（无零点！且 $f\\!\\left(\\frac{\\pi}{2}\\right)<0$）；\n- 当 $x\\in\\left(\\frac{\\pi}{2},\\frac{3\\pi}{2}\\right)$ 时，$\\cos x<0\\implies f'(x)>0$，故 $f$ 在 $\\left[\\frac{\\pi}{2},\\frac{3\\pi}{2}\\right]$ 严格单增。\n由 (1) 知 $\\int_0^{\\frac{3\\pi}{2}}f(x)\\,\\mathrm{d}x=\\frac{1}{2}>0$，由积分中值定理存在 $c\\in\\left(0,\\frac{3\\pi}{2}\\right)$ 使 $f(c)=\\frac{1}{3\\pi}>0$；必有 $c\\in\\left(\\frac{\\pi}{2},\\frac{3\\pi}{2}\\right)$，从而 $f\\!\\left(\\frac{3\\pi}{2}\\right)>f(c)>0$！在 $\\left[\\frac{\\pi}{2},\\frac{3\\pi}{2}\\right]$ 上 $f$ 连续严格单增且 $f\\!\\left(\\frac{\\pi}{2}\\right)<0<f\\!\\left(\\frac{3\\pi}{2}\\right)$，故 $f$ 在 $\\left(0,\\frac{3\\pi}{2}\\right)$ 内有且仅有唯一零点！"
+        }
+      ],
+      "finalAnswer": "(1) $\\dfrac{1}{3\\pi}$；(2) 证毕。",
+      "takeaway": "2016 绝对封神一题：分部积分凑 $\\mathrm{d}(x-\\frac{3\\pi}{2})$ 与利用均值 $>0$ 秒判右端点正号，两步都是考场大师级手感！",
+      "source": {
+        "book": "27猪哥&狗姐《猪狗证明大合集（2027版）》",
+        "printedPage": "P.6",
+        "pdfPage": 6,
+        "itemRef": "真题2016 (1)~(2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p03_real_exams",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p03-e-13",
+      "section": "三、2018 ~ 2015 经典真题",
+      "kind": "example",
+      "title": "【真题 2015-1】牛顿切线法几何原型：严格递增下凸曲线切线截距满足 $a<x_0<b$",
+      "examWeight": "core",
+      "problem": "已知函数 $f(x)$ 在区间 $[a,+\\infty)$ 上具有 $2$ 阶导数，$f(a)=0,\\;f'(x)>0,\\;f''(x)>0$。设 $b>a$，曲线 $y=f(x)$ 在点 $(b,f(b))$ 处的切线与 $x$ 轴的交点是 $(x_0,0)$，证明：$a<x_0<b$。",
+      "steps": [
+        {
+          "stepTitle": "1. 写出切线 $x$ 轴截距 $x_0=b-\\frac{f(b)}{f'(b)}$，由 $f'>0$ 证 $x_0<b$，由拉格朗日 + $f''>0$ 证 $x_0>a$",
+          "detail": "曲线在 $(b,f(b))$ 处切线方程为 $y-f(b)=f'(b)(x-b)$，令 $y=0$ 得 $x_0=b-\\dfrac{f(b)}{f'(b)}$。\n- 因 $f'(x)>0$ 且 $b>a$，故 $f(b)>f(a)=0$ 且 $f'(b)>0\\implies \\dfrac{f(b)}{f'(b)}>0\\implies x_0<b$；\n- 在 $[a,b]$ 上对 $f$ 用拉格朗日中值定理，存在 $\\xi\\in(a,b)$ 使 $f(b)=f(b)-f(a)=f'(\\xi)(b-a)$。因 $f''(x)>0$，$f'$ 严格单增，故 $f'(\\xi)<f'(b)\\implies \\dfrac{f(b)}{f'(b)}=\\dfrac{f'(\\xi)}{f'(b)}(b-a)<b-a$，从而 $x_0=b-\\dfrac{f(b)}{f'(b)}>b-(b-a)=a$！\n综上 $a<x_0<b$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "这道真题的本质就是**牛顿切线求根法每次迭代严格逼近零点 $a$ 的几何证明**：$f'>0,\\;f''>0$ 保证切线恒在曲线下方，故切线与 $x$ 轴交点必落在 $(a,b)$ 之间！",
+      "source": {
+        "book": "27猪哥&狗姐《猪狗证明大合集（2027版）》",
+        "printedPage": "P.7",
+        "pdfPage": 7,
+        "itemRef": "真题2015-1"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p03-e-14",
+      "section": "三、2018 ~ 2015 经典真题",
+      "kind": "example",
+      "title": "【真题 2015-2】教材定理回归：用导数定义严密证明乘积求导法则并归纳 $n$ 项乘积公式",
+      "examWeight": "core",
+      "problem": "(1) 设函数 $u(x),v(x)$ 可导，利用导数定义证明 $[u(x)v(x)]'=u'(x)v(x)+u(x)v'(x)$；\n(2) 设函数 $u_1(x),u_2(x),\\dots,u_n(x)$ 可导，$f(x)=u_1(x)u_2(x)\\cdots u_n(x)$，写出 $f(x)$ 的求导公式（并说明归纳推导）。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：在增量差商中插项 $\\mp u(x)v(x+\\Delta x)$，明写「可导必连续」求极限",
+          "detail": "$$\\begin{aligned} [u(x)v(x)]'&=\\lim_{\\Delta x\\to 0}\\frac{u(x+\\Delta x)v(x+\\Delta x)-u(x)v(x)}{\\Delta x}\\\\ &=\\lim_{\\Delta x\\to 0}\\left[\\frac{u(x+\\Delta x)-u(x)}{\\Delta x}v(x+\\Delta x)+u(x)\\frac{v(x+\\Delta x)-v(x)}{\\Delta x}\\right]. \\end{aligned}$$ 因 $u(x),v(x)$ 可导，特别地 $v(x)$ 在 $x$ 处连续，故 $\\lim_{\\Delta x\\to 0}v(x+\\Delta x)=v(x)$，于是上式 $=u'(x)v(x)+u(x)v'(x)$！"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：由数学归纳法得 $n$ 项乘积求导公式（勿用对数求导！）",
+          "detail": "由 (1) 及数学归纳法（令 $g_{n-1}=u_1\\cdots u_{n-1}$，则 $(g_{n-1}u_n)'=g_{n-1}'u_n+g_{n-1}u_n'$），得 $$f'(x)=\\sum_{k=1}^n u_1(x)\\cdots u_{k-1}(x)u_k'(x)u_{k+1}(x)\\cdots u_n(x)=u_1'u_2\\cdots u_n+u_1 u_2'\\cdots u_n+\\cdots+u_1 u_2\\cdots u_n'.$$"
+        }
+      ],
+      "finalAnswer": "(1) 证毕；(2) $f'(x)=\\displaystyle\\sum_{k=1}^n u_1(x)\\cdots u_k'(x)\\cdots u_n(x)$。",
+      "takeaway": "2015 年轰动一时的「考课本定理证明」警钟：第 (1) 问必须明写「$v$ 可导必连续 $\\Rightarrow v(x+\\Delta x)\\to v(x)$」；第 (2) 问严禁对可能取零的 $u_k$ 取对数求导！",
+      "source": {
+        "book": "27猪哥&狗姐《猪狗证明大合集（2027版）》",
+        "printedPage": "P.7",
+        "pdfPage": 7,
+        "itemRef": "真题2015-2 (1)~(2)"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p03-e-15",
+      "section": "四、2014 ~ 2013 经典真题",
+      "kind": "example",
+      "title": "【真题 2014】史蒂芬森（Steffensen）积分不等式：变上限求导法两步全通（含 PDF 下限勘误）",
+      "examWeight": "core",
+      "problem": "设函数 $f(x),g(x)$ 在区间 $[a,b]$ 上连续，且 $f(x)$ 单调增加，$0\\le g(x)\\le 1$，证明：\n(1) $0\\le\\displaystyle\\int_a^x g(t)\\,\\mathrm{d}t\\le x-a,\\;x\\in[a,b]$；（原 PDF 误印下限 $0$，已校为 $a$）\n(2) $\\displaystyle\\int_a^{a+\\int_a^b g(t)\\,\\mathrm{d}t}f(x)\\,\\mathrm{d}x\\le\\int_a^b f(x)g(x)\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：对 $0\\le g(t)\\le 1$ 在 $[a,x]$ 直接积分",
+          "detail": "当 $x\\in[a,b]$ 时，对 $0\\le g(t)\\le 1$ 在 $[a,x]$ 上积分立得 $0\\le\\int_a^x g(t)\\,\\mathrm{d}t\\le\\int_a^x 1\\,\\mathrm{d}t=x-a$。"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：将上限 $b$ 变活为 $x$ 构造 $F(x)$，求导提出公因式 $g(x)\\ge 0$ 与 $f$ 单增判定 $F'(x)\\ge 0$",
+          "detail": "记 $\\varphi(x)=a+\\int_a^x g(t)\\,\\mathrm{d}t$，由 (1) 知 $\\varphi(x)\\in[a,x]\\subset[a,b]$。构造 $$F(x)=\\int_a^x f(t)g(t)\\,\\mathrm{d}t-\\int_a^{\\varphi(x)}f(t)\\,\\mathrm{d}t,\\quad x\\in[a,b].$$ 求导得 $$F'(x)=f(x)g(x)-f\\bigl(\\varphi(x)\\bigr)\\varphi'(x)=g(x)\\Bigl[f(x)-f\\bigl(\\varphi(x)\\bigr)\\Bigr].$$ 因 $g(x)\\ge 0$、$\\varphi(x)\\le x$ 且 $f$ 单调增加，故 $f(x)-f(\\varphi(x))\\ge 0\\implies F'(x)\\ge 0$！于是 $F(b)\\ge F(a)=0$，即 $\\int_a^{a+\\int_a^b g(t)\\,\\mathrm{d}t}f(x)\\,\\mathrm{d}x\\le\\int_a^b f(x)g(x)\\,\\mathrm{d}x$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "积分不等式「变上限法」的教科书级代表作：第 (1) 问就是用来保证 $\\varphi(x)\\le x$ 使 $f(x)-f(\\varphi(x))\\ge 0$ 的！",
+      "source": {
+        "book": "27猪哥&狗姐《猪狗证明大合集（2027版）》",
+        "printedPage": "P.8",
+        "pdfPage": 8,
+        "itemRef": "真题2014 (1)~(2)（含下限 $a$ 勘误）"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p03-e-16",
+      "section": "四、2014 ~ 2013 经典真题",
+      "kind": "example",
+      "title": "【真题 2013-1】无穷区间极限保号截断为 $[0,M]$，介值 + 拉格朗日证 $f'(\\xi)=\\frac{1}{a}$",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)$ 在 $[0,+\\infty)$ 上可导，$f(0)=0$ 且 $\\lim_{x\\to+\\infty}f(x)=2$，证明：\n(1) 存在 $a>0$，使得 $f(a)=1$；\n(2) 对 (1) 的 $a$，存在 $\\xi\\in(0,a)$，使得 $f'(\\xi)=\\dfrac{1}{a}$。",
+      "steps": [
+        {
+          "stepTitle": "1. 极限保号截出 $M>0$ 使 $f(M)>1$，套介值定理与拉格朗日中值定理",
+          "detail": "(1) 由 $\\lim_{x\\to+\\infty}f(x)=2>1$，存在 $M>0$ 使 $f(M)>\\frac{3}{2}>1$；在 $[0,M]$ 上由 $f(0)=0<1<f(M)$ 及介值定理存在 $a\\in(0,M)$ 使 $f(a)=1$。(2) 在 $[0,a]$ 上对 $f$ 用拉格朗日中值定理，存在 $\\xi\\in(0,a)$ 使 $f'(\\xi)=\\frac{f(a)-f(0)}{a-0}=\\frac{1}{a}$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "与单元 2 例 7.5 同源真题：热身级别的送分证明大题，确保书写零跳步！",
+      "source": {
+        "book": "27猪哥&狗姐《猪狗证明大合集（2027版）》",
+        "printedPage": "P.8",
+        "pdfPage": 8,
+        "itemRef": "真题2013-1 (1)~(2)"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p03-e-17",
+      "section": "四、2014 ~ 2013 经典真题",
+      "kind": "example",
+      "title": "【真题 2013-2】最值驱动单增 + 极限夹死：$f(x)=\\ln x+\\frac{1}{x}\\ge 1$ 证 $\\ln x_n+\\frac{1}{x_{n+1}}<1$ 收敛于 $1$",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)=\\ln x+\\dfrac{1}{x}$。\n(1) 求 $f(x)$ 的最小值；\n(2) 设数列 $\\{x_n\\}$ 满足 $\\ln x_n+\\dfrac{1}{x_{n+1}}<1$，证明 $\\lim_{n\\to\\infty}x_n$ 存在，并求此极限。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：求导定 $(0,1)$ 严减、$(1,+\\infty)$ 严增，得唯一最小值 $f(1)=1$",
+          "detail": "定义域为 $(0,+\\infty)$，$f'(x)=\\frac{1}{x}-\\frac{1}{x^2}=\\frac{x-1}{x^2}$。在 $(0,1)$ 上 $f'(x)<0$ 严减，在 $(1,+\\infty)$ 上 $f'(x)>0$ 严增，故 $x=1$ 为唯一最小值点，最小值为 $f(1)=1$（且当且仅当 $x=1$ 时取等号）。"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：借 (1) 的 $f(x_n)\\ge 1$ 瞬间证严增 + 上界 $\\mathrm{e}$，极限两端夹死 $f(A)=1\\implies A=1$",
+          "detail": "由 $\\ln x_n$ 有意义知 $\\forall n\\ge 1,\\;x_n>0$。\n- **单调递增**：结合 (1) 知 $\\ln x_n+\\frac{1}{x_{n+1}}<1\\le\\ln x_n+\\frac{1}{x_n}\\implies \\frac{1}{x_{n+1}}<\\frac{1}{x_n}\\implies x_{n+1}>x_n$！\n- **有上界**：因 $\\frac{1}{x_{n+1}}>0$，故 $\\ln x_n<1-\\frac{1}{x_{n+1}}<1\\implies x_n<\\mathrm{e}$！\n由单调有界准则，极限 $A=\\lim_{n\\to\\infty}x_n\\in(x_1,\\mathrm{e}]\\subset(0,+\\infty)$ 存在！对不等式 $\\ln x_n+\\frac{1}{x_{n+1}}<1$ 两边取极限得 $\\ln A+\\frac{1}{A}\\le 1$；又由 (1) 恒有 $\\ln A+\\frac{1}{A}\\ge 1$，故必有 $\\ln A+\\frac{1}{A}=1$，由最小值点唯一性立得 $\\lim_{n\\to\\infty}x_n=A=1$！"
+        }
+      ],
+      "finalAnswer": "(1) 最小值为 $f(1)=1$；(2) $\\lim_{n\\to\\infty}x_n=1$。",
+      "takeaway": "函数最值与数列单调有界联动的巅峰神题：同一个不等式 $f(x)\\ge 1$ 在第 (2) 问居然用了**两次**——一次证单增，一次夹死极限 $A=1$！",
+      "source": {
+        "book": "27猪哥&狗姐《猪狗证明大合集（2027版）》",
+        "printedPage": "P.9",
+        "pdfPage": 9,
+        "itemRef": "真题2013-2 (1)~(2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p03_real_exams",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p03-e-18",
+      "section": "四、2014 ~ 2013 经典真题",
+      "kind": "example",
+      "title": "【真题 2013-3】奇函数 $f(0)=0$ + 偶导函数镜像点 + 积分因子 $\\mathrm{e}^x[f'(x)-1]$ 证 $f''(\\eta)+f'(\\eta)=1$",
+      "examWeight": "core",
+      "problem": "设奇函数 $f(x)$ 在 $[-1,1]$ 上具有二阶导数，且 $f(1)=1$，证明：\n(1) 存在 $\\xi\\in(0,1)$，使得 $f'(\\xi)=1$；\n(2) 存在 $\\eta\\in(-1,1)$，使得 $f''(\\eta)+f'(\\eta)=1$。",
+      "steps": [
+        {
+          "stepTitle": "1. 奇函数送 $f(0)=0$ 与偶导函数 $f'(-\\xi)=f'(\\xi)=1$，配 $F(x)=\\mathrm{e}^x[f'(x)-1]$ 套罗尔",
+          "detail": "(1) 奇函数在 $0$ 有定义必 $f(0)=0$，在 $[0,1]$ 对 $f$ 用拉格朗日得 $\\xi\\in(0,1)$ 使 $f'(\\xi)=\\frac{f(1)-f(0)}{1}=1$。(2) 奇函数导数 $f'$ 为偶函数，故 $f'(-\\xi)=f'(\\xi)=1$。构造 $F(x)=\\mathrm{e}^x[f'(x)-1]$，有 $F(-\\xi)=F(\\xi)=0$，在 $[-\\xi,\\xi]$ 用罗尔定理即存在 $\\eta\\in(-\\xi,\\xi)\\subset(-1,1)$ 使 $F'(\\eta)=\\mathrm{e}^\\eta[f''(\\eta)+f'(\\eta)-1]=0\\implies f''(\\eta)+f'(\\eta)=1$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "与单元 2 例 7.9 完全同源真题：奇函数镜像复制驻点 + 积分因子 $\\mathrm{e}^x$ 是考研反复翻拍的经典剧目！",
+      "source": {
+        "book": "27猪哥&狗姐《猪狗证明大合集（2027版）》",
+        "printedPage": "P.9",
+        "pdfPage": 9,
+        "itemRef": "真题2013-3 (1)~(2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p03_real_exams",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p03-s-01",
+      "section": "单元总结 · 一、2013–2026 全部 18 道证明真题全景矩阵",
+      "kind": "summary",
+      "title": "【14 年证明真题全景总表】逐题破题核弹点与专项母题溯源",
+      "examWeight": "core",
+      "overview": "这张总表把 2013–2026 全部 18 道考研证明压轴题一网打尽——你会发现几乎每一道真题，都能精准回溯到前两个专项单元的母题方法！",
+      "tables": [
+        {
+          "caption": "表 3-1 2013–2026 考研数学证明大题 18 题全景破题速查表（点击真题编号可侧边预览详解）",
+          "headers": [
+            "年份编号",
+            "命题主类",
+            "一句话破题核心动作",
+            "母题联动"
+          ],
+          "rows": [
+            [
+              "真题2026",
+              "对称积分 + 罗尔",
+              "对称折半 $\\int_0^1[f(x)-f(-x)]>0$；$F(-1)=F(0)=F(1)=0$ 两次罗尔",
+              "辅助多项式思想"
+            ],
+            [
+              "真题2025",
+              "单调性充要证明",
+              "必要两段拉格朗日；充分插中点 $m$ 保住中间严格 $<$",
+              "凹凸/单调本质"
+            ],
+            [
+              "真题2024",
+              "双端点二阶泰勒",
+              "$0,1$ 展开配权 $(1-x),x$ 相加消 $f'(0)=f'(1)$，积分出 $\\frac{1}{12}$",
+              "单元2 例7.26"
+            ],
+            [
+              "真题2023",
+              "对称二阶泰勒",
+              "(1) $0$ 展开代 $\\pm a$ 相加介值；(2) 极值点 $c$ 展开相减 + $a^2+c^2<2a^2$",
+              "单元2 泰勒选点"
+            ],
+            [
+              "真题2022",
+              "凸性积分充要",
+              "必要中点泰勒积分；充分对称区间除 $h^3$ 两次洛必达出 $\\frac{1}{3}f''$",
+              "Hermite-Hadamard"
+            ],
+            [
+              "真题2020-1",
+              "最值拉格朗日+反证",
+              "(1) 近端点 $\\le 1$；(2) 单独击毙 $c=1$（连续积分保号 vs $f'(1)=0$）",
+              "临界点反证"
+            ],
+            [
+              "真题2020-2",
+              "变限积分罗尔+柯西",
+              "(1) $F=(x-2)f$ 罗尔；(2) 补 $f(1)=\\ln 1=0$ 配 $\\ln x$ 柯西",
+              "单元2 例7.14"
+            ],
+            [
+              "真题2019-1",
+              "高阶导积分中值",
+              "(1) 开区间积分中值+罗尔；(2) 辅助多项式 $p=-3x^2+4x$ 出 $-6$",
+              "单元2 例7.31"
+            ],
+            [
+              "真题2019-2",
+              "积分递推+夹逼",
+              "分部凑 $-\\frac{1}{3}(1-x^2)^{3/2}$ 建 $a_n=\\frac{n-1}{n+2}a_{n-2}$，单减夹逼$=1$",
+              "递推比值夹逼"
+            ],
+            [
+              "真题2018",
+              "超越递推单调有界",
+              "$\\mathrm{e}^x-1>x$ 证正下界，$\\mathrm{e}^{-x}>1-x$ 证单减收敛于 $0$",
+              "单元1 例4.13"
+            ],
+            [
+              "真题2017",
+              "乘积辅助函数",
+              "极限保号得 $f(c)=0$，罗尔得 $f'(d)=0$，$F=ff'$ 三零点两次罗尔",
+              "单元2 例7.8"
+            ],
+            [
+              "真题2016",
+              "分部凑边界+唯一零点",
+              "凑 $\\mathrm{d}(x-\\frac{3\\pi}{2})$ 得均值 $\\frac{1}{3\\pi}>0$，先减后增 + 均值正推唯一根",
+              "分部消分母神技"
+            ],
+            [
+              "真题2015-1",
+              "切线截距+拉格朗日",
+              "$x_0=b-\\frac{f(b)}{f'(b)}$，由 $f''>0\\implies f'(\\xi)<f'(b)$ 证 $a<x_0<b$",
+              "牛顿切线几何"
+            ],
+            [
+              "真题2015-2",
+              "导数定义+归纳",
+              "插项 $\\mp u(x)v(x+\\Delta x)$ + 连续性；$n$ 项用数学归纳法（禁取对数）",
+              "教材定义回归"
+            ],
+            [
+              "真题2014",
+              "积分不等式",
+              "变上限 $F(x)$ 求导提出 $g(x)[f(x)-f(\\varphi(x))]\\ge 0$（原PDF下限勘误为 $a$）",
+              "Steffensen不等式"
+            ],
+            [
+              "真题2013-1",
+              "无穷截断+拉格朗日",
+              "极限保号截有限区间 $[0,M]$ 套介值，再在 $[0,a]$ 拉格朗日",
+              "单元2 例7.5"
+            ],
+            [
+              "真题2013-2",
+              "最值驱动数列单调",
+              "$f(x)=\\ln x+\\frac{1}{x}\\ge 1$ 既证单增上界 $\\mathrm{e}$，又夹死极限 $A=1$",
+              "最值+单调有界"
+            ],
+            [
+              "真题2013-3",
+              "奇偶性+积分因子",
+              "$f(0)=0$ 推 $f'(\\xi)=1$，偶导数得 $f'(-\\xi)=1$，配 $\\mathrm{e}^x[f'(x)-1]$",
+              "单元2 例7.9"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "刷完这 18 道真题你会豁然开朗：考研证明题并非高不可攀，**超过一半直接命中单元 1 & 单元 2 的标准母题，剩下几道也全是「对称/插锚/凑边界/最值联动」四大常规招式**！",
+      "source": {
+        "book": "27猪哥&狗姐《猪狗证明大合集（2027版）》",
+        "printedPage": "P.1-9",
+        "pdfPage": 1,
+        "itemRef": "18 道真题全景对照总表"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p03_real_exams",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p03-s-02",
+      "section": "单元总结 · 二、薄弱项三轮提分刷题路线与勘误清单",
+      "kind": "summary",
+      "title": "【薄弱项攻克路线】证明题从「无从下笔」到「稳定拿 80%+ 步骤分」三步训练法",
+      "examWeight": "core",
+      "overview": "针对证明题薄弱的考生，按以下 3 步反复盘透这 3 个专项单元（共 82 题），考场面对陌生证明大题也能稳拿高分：",
+      "tables": [
+        {
+          "caption": "表 3-2 证明专项 3 单元刷题节奏与原讲义勘误汇总表",
+          "headers": [
+            "阶段 / 单元",
+            "主攻核心能力",
+            "必刷标杆题与勘误留心"
+          ],
+          "rows": [
+            [
+              "第 1 步：单元 1（数列极限 26 例）",
+              "条件反射分流：单调有界（先斩后奏）/ 割线夹逼 / 压缩映射",
+              "重点吃透例 4.12、4.15、4.20、4.23、4.26；留心例 4.6 $|A|$ 与例 4.21 $-b_n$ 印刷细节"
+            ],
+            [
+              "第 2 步：单元 2（中值与泰勒 38 例）",
+              "按「中值个数 + 阶数」锁 7 大通道，练熟辅助多项式与常数 $K$ 值法",
+              "重点吃透例 7.8、7.11、7.12、7.15~7.23、7.26、7.31、7.34、7.37"
+            ],
+            [
+              "第 3 步：单元 3（历年真题 18 题）",
+              "遮住解答限时 15 分钟独立破题，重点补齐近 5 年充要/临界证明细节",
+              "必默写：真题2026、真题2025、真题2023、真题2022、真题2020-1、真题2016、真题2013-2（注意真题2014 下限 $a$ 勘误）"
+            ]
+          ]
+        }
+      ],
+      "patterns": [
+        {
+          "typeName": "考场证明题「保底抢分」四步实战流程",
+          "triggers": "考场上遇到一道全新证明大题、前 2 分钟还没完全想通第 (2) 问时。",
+          "method": "① **先稳拿第 (1) 问满分**（往往是常规介值、积分中值、对称折半或求最值，占 4~5 分）；② **把第 (1) 问结论圈出来贴在第 (2) 问旁边**；③ **按导数阶数定武器**：一阶想罗尔/拉格朗日/柯西/变上限，二三阶想泰勒（驻点/中点展开）或辅助多项式；④ **写清连续、可导、开区间、保号性、舍根依据**，阅卷按点给分也能稳抓 80%+！",
+          "pitfall": "绝对不要因为第 (2) 问一时卡壳就空白交卷——写出正确的辅助函数定义、零点验证与拉格朗日/泰勒展开式，本身就能拿到大量过程步骤分！",
+          "relatedRefs": "真题2026, 真题2025, 真题2022, 真题2020-1, 真题2016, 真题2013-2"
+        }
+      ],
+      "takeaway": "证明题不是拼天赋，而是拼**「见过 82 道母题 + 真题后的模式识别速度」**——把这 3 个单元的卡片逐张点亮「已掌握 ✓」，薄弱项就会变成你的拉分王牌！",
+      "source": {
+        "book": "27猪哥&狗姐《猪狗证明大合集（2027版）》",
+        "printedPage": "P.1-9",
+        "pdfPage": 1,
+        "itemRef": "证明专项总提分策略"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    }
+  ]
+}

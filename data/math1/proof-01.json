@@ -1,0 +1,1221 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "proof-01",
+  "chapterNum": "证明专项 · 单元 1",
+  "chapterTitle": "数列极限证明专题（猪哥&狗姐 26 例全解）",
+  "syllabusRef": "2027 考研数学一证明专项 · 猪哥&狗姐《高数专题·第四章 数列极限》（P.4-1~4-16 全 26 例逐题精解 + 破题流程图 + 反例/放缩武器库）",
+  "items": [
+    {
+      "id": "m1-p01-f-01",
+      "section": "一、数列极限定义（邻域重述）与四大基本性质",
+      "kind": "formula",
+      "title": "数列极限 $\\varepsilon$-$N$ 定义、邻域重述及唯一性/有界性/保号性/保序性",
+      "examWeight": "core",
+      "prompt": "默写数列极限的 $\\varepsilon$-$N$ 定义、几何邻域重述（至多有限项在邻域外），以及保号性与保序性（含严格逆否形式）：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{收敛定义：}\\forall\\varepsilon>0,\\;\\exists N\\in\\mathbb{N}_+,\\;\\forall n>N,\\;|a_n-A|<\\varepsilon \\iff \\lim_{n\\to\\infty}a_n=A\\\\\n&\\text{邻域重述：}\\forall\\varepsilon>0,\\;\\text{至多只有有限项落在 }U(A;\\varepsilon)=(A-\\varepsilon,A+\\varepsilon)\\text{ 之外}\\\\\n&\\text{保号性：}\\lim_{n\\to\\infty}a_n=A>0\\;(A<0)\\implies \\exists N\\in\\mathbb{N}_+,\\;\\forall n>N,\\;a_n>\\frac{A}{2}\\;\\left(a_n<\\frac{A}{2}\\right)\\\\\n&\\text{保序性：}a_n\\le b_n\\;(n>N)\\implies A\\le B\\quad\\Big|\\quad\\text{逆否严格版：}A>B\\implies \\exists N,\\;\\forall n>N,\\;a_n>b_n\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "无穷小 / 无穷大 / 有界 / 无界（P.4-1）",
+          "desc": "$\\lim a_n=0$ 为无穷小数列；$\\forall M>0,\\;\\exists N,\\;\\forall n>N,|a_n|\\ge M$ 为无穷大数列（仍属**发散**）；$\\exists M>0,\\;\\forall n,|a_n|\\le M$ 为有界；$\\forall M>0,\\;\\exists n_0,|a_{n_0}|\\ge M$ 为无界（无界不必为无穷大，如 $a_n=n$ 奇/$0$ 偶）。"
+        },
+        {
+          "sym": "邻域重述的破题威力（例 4.1）",
+          "desc": "只要抓住「$N$ 之后的无穷多项全被锁在窄邻域 $U(A;\\varepsilon)$ 里，外面只剩有限项」，就能秒证收敛数列取最大/最小值（例 4.1）、唯一性与有界性！"
+        }
+      ],
+      "conditions": "数列收敛要求极限 $A$ 为**具体有限实数**（$\\lim a_n=\\infty$ 属于发散）；保序性由不等式取极限只能推非严格 $A\\le B$，反之只有严格 $A>B$ 才能推充分大时 $a_n>b_n$！",
+      "pitfalls": "**保序性三大必错坑（例 4.6）**：① 已知 $A\\le B$ **不能**推充分大时 $a_n\\le b_n$（当 $A=B$ 时可恒有 $a_n>b_n$，如 $\\frac{1}{n}>0$）；② 已知 $\\lim a_n=A$ **不能**推充分大时 $a_n>A-\\frac{1}{n}$（因为收敛速度可能慢于 $\\frac{1}{n}$，如 $a_n=A-\\frac{1}{\\sqrt{n}}$）！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-1~4-4",
+        "pdfPage": 1,
+        "itemRef": "数列极限的定义 & 四大性质（唯一/有界/保号/保序）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p01_seq_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-f-02",
+      "section": "二、数列极限存在的充要条件（子列定理与海涅定理）",
+      "kind": "formula",
+      "title": "子列收敛充要条件（奇偶子列 + 跨步子列桥接）与海涅归结原则",
+      "examWeight": "core",
+      "prompt": "默写数列收敛与子列的充要条件、奇偶子列判定定理，以及数列极限与函数极限沟通的桥梁——海涅定理：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{子列充要：}\\lim_{n\\to\\infty}a_n=a \\iff \\{a_n\\}\\text{ 的任意子列均收敛于 }a \\iff \\lim_{n\\to\\infty}a_{2n}=\\lim_{n\\to\\infty}a_{2n+1}=a\\\\\n&\\text{发散判别：}\\{a_n\\}\\text{ 存在发散子列，或存在两子列收敛于不同极限}\\iff \\{a_n\\}\\text{ 发散}\\\\\n&\\text{海涅定理：}\\lim_{x\\to x_0}f(x)=A \\iff \\forall x_n\\in\\mathring{U}(x_0;\\delta)\\text{ 且 }x_n\\to x_0,\\;\\text{均有 }\\lim_{n\\to\\infty}f(x_n)=A\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "跨步子列桥接（例 4.7）",
+          "desc": "单知 $\\{x_{2n}\\},\\{x_{2n+1}\\}$ 各自收敛还不够（极限可能不等），若再加一条同时跨越奇偶下标的子列如 $\\{x_{3n+1}\\}$ 收敛，就能把奇偶极限强制拉等！"
+        },
+        {
+          "sym": "海涅定理两大考场用法（P.4-6）",
+          "desc": "① 正向把 $n\\to\\infty$ 改写成连续变量 $x\\to+\\infty$，解锁洛必达、拉格朗日中值定理与泰勒展开；② 逆向构造两条趋于 $x_0$（或 $+\\infty$）的特殊数列得到不同极限，一击证伪函数极限存在（例 4.8）。"
+        }
+      ],
+      "conditions": "用海涅定理「把数列改函数」求极限时，**只能从函数极限存在推数列极限存在**，不可反推（例如 $\\lim_{n\\to\\infty}\\sin(n\\pi)=0$ 不能推 $\\lim_{x\\to+\\infty}\\sin(\\pi x)=0$）。",
+      "pitfalls": "千万注意 $\\{x_{2n}\\}$ 与 $\\{x_{3n}\\}$ 即使极限相等，依然漏掉了所有 $6k+1$ 与 $6k+5$ 下标，**不能**推出 $\\{x_n\\}$ 收敛（例 4.7 选项 C）！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-5~4-7",
+        "pdfPage": 5,
+        "itemRef": "数列极限与子列 & 海涅定理"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-f-03",
+      "section": "三、数列极限证明三大核心武器总纲",
+      "kind": "formula",
+      "title": "单调有界准则（先斩后奏）与有界性/单调性常用证明工具库",
+      "examWeight": "core",
+      "prompt": "默写单调有界准则（含上确界/下确界结论）及「先斩后奏」四步标准化证明流程：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{单调有界准则：}\\{a_n\\}\\text{ 单增有上界}\\implies \\lim_{n\\to\\infty}a_n=\\sup_n a_n;\\qquad \\{a_n\\}\\text{ 单减有下界}\\implies \\lim_{n\\to\\infty}a_n=\\inf_n a_n\\\\\n&\\text{有界性常用工具：数学归纳法、均值不等式（AM-GM）、函数值域/最值放缩}\\\\\n&\\text{单调性常用工具：作差法 }a_{n+1}-a_n\\text{、作商法 }\\frac{a_{n+1}}{a_n}\\text{、递推函数导数 }f'(x)>0\\text{、基本不等式}\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "「先斩后奏」三步战略（P.4-7）",
+          "desc": "证明数列极限本质是「冲着答案凑步骤」：① 先在递推式两边假定极限为 $A$ 算出候选极限值；② 比较首项 $x_1$（或 $x_2$）与 $A$ 的大小，瞬间锁定要证「单增有上界 $A$」还是「单减有下界 $A$」；③ 按锁定方向针对性做归纳与放缩！"
+        },
+        {
+          "sym": "隐式方程根数列（例 4.15）",
+          "desc": "若 $x_n$ 定义为方程 $f_n(x)=c$ 的唯一根，证明单调性绝不要硬解 $x_n$，直接代入 $f_{n+1}(x_n)$ 与 $f_{n+1}(x_{n+1})=c$ 比大小，再用 $f_{n+1}$ 单调性脱去函数外壳！"
+        }
+      ],
+      "conditions": "单调有界只需从**某一项 $n\\ge N_0$ 起**单调有界即可（例如例 4.12 当 $x_1\\in(\\frac{3}{2},3)$ 时，$x_2<x_1$，但从 $n\\ge 2$ 起严格单调递增且 $\\le\\frac{3}{2}$！）。",
+      "pitfalls": "解出多个不动点候选 $A$（如例 4.12 的 $0$ 与 $\\frac{3}{2}$、例 4.17 的 $2$ 与 $-1$）时，**必须利用单调方向与某项严格正界排除增根**（如 $x_n\\ge x_2>0\\implies A\\ge x_2>0$ 排除 $A=0$），直接舍去不写理由会扣分！",
+      "figureSvg": "<svg viewBox=\"0 0 600 190\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">\n  <title>数列极限证明三大武器决策流程图：单调有界（先斩后奏）、双数列夹逼、压缩映射原理（仿猪哥狗姐 P.4-7, 4-16）</title>\n  <defs>\n    <marker id=\"m1p1_arr1\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#334155\"/>\n    </marker>\n  </defs>\n  <!-- Root -->\n  <rect x=\"195\" y=\"6\" width=\"210\" height=\"28\" rx=\"6\" fill=\"#1e3a8a\"/>\n  <text x=\"300\" y=\"24\" text-anchor=\"middle\" font-size=\"11.2\" font-weight=\"700\" fill=\"#ffffff\">拿到数列极限证明题：先审结构</text>\n  <!-- Arrows to 3 branches -->\n  <line x1=\"250\" y1=\"34\" x2=\"105\" y2=\"56\" stroke=\"#334155\" stroke-width=\"1.3\" marker-end=\"url(#m1p1_arr1)\"/>\n  <line x1=\"300\" y1=\"34\" x2=\"300\" y2=\"56\" stroke=\"#334155\" stroke-width=\"1.3\" marker-end=\"url(#m1p1_arr1)\"/>\n  <line x1=\"350\" y1=\"34\" x2=\"495\" y2=\"56\" stroke=\"#334155\" stroke-width=\"1.3\" marker-end=\"url(#m1p1_arr1)\"/>\n\n  <!-- Branch 1: Monotone & Bounded -->\n  <rect x=\"8\" y=\"58\" width=\"188\" height=\"126\" rx=\"8\" fill=\"#eff6ff\" stroke=\"#3b82f6\" stroke-width=\"1.3\"/>\n  <text x=\"102\" y=\"75\" text-anchor=\"middle\" font-size=\"10.8\" font-weight=\"700\" fill=\"#1e40af\">① 单调有界准则（首选）</text>\n  <text x=\"102\" y=\"92\" text-anchor=\"middle\" font-size=\"9\" fill=\"#334155\">递推同向 / 隐式方程根 / 累加积分</text>\n  <rect x=\"18\" y=\"100\" width=\"168\" height=\"22\" rx=\"4\" fill=\"#ffffff\" stroke=\"#93c5fd\"/>\n  <text x=\"102\" y=\"114\" text-anchor=\"middle\" font-size=\"8.9\" font-weight=\"700\" fill=\"#1d4ed8\">1. 先斩后奏：取极限解出候选 A</text>\n  <rect x=\"18\" y=\"126\" width=\"168\" height=\"22\" rx=\"4\" fill=\"#ffffff\" stroke=\"#93c5fd\"/>\n  <text x=\"102\" y=\"140\" text-anchor=\"middle\" font-size=\"8.9\" fill=\"#0f172a\">2. 比较 x₁ 与 A 定单增/单减方向</text>\n  <rect x=\"18\" y=\"152\" width=\"168\" height=\"24\" rx=\"4\" fill=\"#dbeafe\" stroke=\"#60a5fa\"/>\n  <text x=\"102\" y=\"167\" text-anchor=\"middle\" font-size=\"8.6\" fill=\"#1e3a8a\">有界: 归纳/均值; 单调: 作差/作商/f′</text>\n\n  <!-- Branch 2: Squeeze Theorem -->\n  <rect x=\"206\" y=\"58\" width=\"188\" height=\"126\" rx=\"8\" fill=\"#f0fdf4\" stroke=\"#22c55e\" stroke-width=\"1.3\"/>\n  <text x=\"300\" y=\"75\" text-anchor=\"middle\" font-size=\"10.8\" font-weight=\"700\" fill=\"#166534\">② 夹逼定理（双数列首选）</text>\n  <text x=\"300\" y=\"92\" text-anchor=\"middle\" font-size=\"9\" fill=\"#334155\">f(aₙ)=g(bₙ) / 双数列比阶</text>\n  <rect x=\"216\" y=\"100\" width=\"168\" height=\"22\" rx=\"4\" fill=\"#ffffff\" stroke=\"#86efac\"/>\n  <text x=\"300\" y=\"114\" text-anchor=\"middle\" font-size=\"8.9\" font-weight=\"700\" fill=\"#15803d\">1. 比大小：利用单调性建立 aₙ 与 bₙ</text>\n  <rect x=\"216\" y=\"126\" width=\"168\" height=\"22\" rx=\"4\" fill=\"#ffffff\" stroke=\"#86efac\"/>\n  <text x=\"300\" y=\"140\" text-anchor=\"middle\" font-size=\"8.9\" fill=\"#0f172a\">2. 非线性转线性：割线/切线放缩</text>\n  <rect x=\"216\" y=\"152\" width=\"168\" height=\"24\" rx=\"4\" fill=\"#dcfce7\" stroke=\"#4ade80\"/>\n  <text x=\"300\" y=\"167\" text-anchor=\"middle\" font-size=\"8.6\" fill=\"#166534\">典型：例 4.18~4.21（双数列压轴）</text>\n\n  <!-- Branch 3: Contraction Mapping -->\n  <rect x=\"404\" y=\"58\" width=\"188\" height=\"126\" rx=\"8\" fill=\"#fff7ed\" stroke=\"#f97316\" stroke-width=\"1.3\"/>\n  <text x=\"498\" y=\"75\" text-anchor=\"middle\" font-size=\"10.8\" font-weight=\"700\" fill=\"#9a3412\">③ 压缩映射（振荡无单调性）</text>\n  <text x=\"498\" y=\"92\" text-anchor=\"middle\" font-size=\"9\" fill=\"#334155\">f′(x) &lt; 0 摆动 / |f′(x)| ≤ k &lt; 1</text>\n  <rect x=\"414\" y=\"100\" width=\"168\" height=\"22\" rx=\"4\" fill=\"#ffffff\" stroke=\"#fdba74\"/>\n  <text x=\"498\" y=\"114\" text-anchor=\"middle\" font-size=\"8.9\" font-weight=\"700\" fill=\"#c2410c\">1. 求不动点 f(A)=A + 锁有界区间</text>\n  <rect x=\"414\" y=\"126\" width=\"168\" height=\"22\" rx=\"4\" fill=\"#ffffff\" stroke=\"#fdba74\"/>\n  <text x=\"498\" y=\"140\" text-anchor=\"middle\" font-size=\"8.9\" fill=\"#0f172a\">2. 证 |xₙ₊₁−A| ≤ k|xₙ−A|（k&lt;1）</text>\n  <rect x=\"414\" y=\"152\" width=\"168\" height=\"24\" rx=\"4\" fill=\"#ffedd5\" stroke=\"#fb923c\"/>\n  <text x=\"498\" y=\"167\" text-anchor=\"middle\" font-size=\"8.6\" fill=\"#9a3412\">必防陷阱：|f′|&lt;1 ≠ |f′|≤k&lt;1！</text>\n</svg>",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-7~4-11",
+        "pdfPage": 7,
+        "itemRef": "数列极限的证明 · 单调有界准则（例 4.9~4.17）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p01_seq_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-f-04",
+      "section": "四、双数列夹逼定理与非线性转线性放缩",
+      "kind": "formula",
+      "title": "双数列夹逼判别与上凸函数割线线性放缩（$\\sin x,\\;\\arctan x$）",
+      "examWeight": "core",
+      "prompt": "默写用于双数列极限证明与比阶的两大数形结合非线性转线性放缩不等式：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{双数列隐式方程夹逼：由 }f(a_n)=g(b_n)\\text{ 用函数单调性直接推出 }0<a_n<b_n\\text{（或 }0<a_n<h(b_n)\\to 0\\text{）}\\\\\n&\\text{正弦上凸割线放缩：}x\\in\\left(0,\\frac{\\pi}{2}\\right]\\implies \\sin x\\ge\\frac{2}{\\pi}x>\\frac{1}{2}x\\\\\n&\\text{反正切上凸割线放缩：}x\\in(0,1]\\implies \\arctan x\\ge\\frac{\\pi}{4}x>\\frac{1}{2}x\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "何时切入夹逼定理（P.4-12）",
+          "desc": "当题设给的是**两个数列之间的方程关系** $f(a_n)=g(b_n)$（例 4.18、例 4.19），或要求比较两个不同速度衰减的递推数列的阶（例 4.20、例 4.21），而不是同一数列前后项时，优先果断上夹逼！"
+        },
+        {
+          "sym": "指数衰减 vs 超指数衰减（例 4.20~4.21）",
+          "desc": "平方式迭代 $y_{n+1}=y_n^2\\implies y_n=y_1^{2^{n-1}}$ 是超指数衰减；只要用线性割线放缩把 $x_{n+1}=\\sin x_n$ 或 $|b_{n+1}|=\\arctan|b_n|$ 托底成等比数列 $c^n$，就能在比值里瞬间秒杀 $\\lim\\frac{y_n}{x_n}=0$！"
+        }
+      ],
+      "conditions": "利用上凸曲线高于端点割线放缩时，必须先确认自变量全部落在目标区间内（如 $x_n\\in(0,\\frac{1}{2}]\\subset(0,\\frac{\\pi}{2}]$，$|b_n|\\in(0,\\frac{\\pi}{4})\\subset(0,1]$）。",
+      "pitfalls": "双数列比阶题（例 4.20、例 4.21）切忌误用 $\\sin x_n\\sim x_n$ 在连乘 $n$ 次后直接代换（无穷多次等价代换误差会累积失真！），必须用**严格全局不等式** $\\sin x>\\frac{1}{2}x$ 逐项迭代！",
+      "figureSvg": "<svg viewBox=\"0 0 600 176\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">\n  <title>数形结合将非线性递推转为线性放缩示意图：y=sin x 与割线 y=(2/π)x，y=arctan x 与割线 y=(π/4)x（例 4.20、例 4.21）</title>\n  <defs>\n    <marker id=\"m1p1_arr2\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#334155\"/>\n    </marker>\n  </defs>\n  <!-- Left: sin x >= (2/pi) x > x/2 -->\n  <rect x=\"6\" y=\"6\" width=\"286\" height=\"164\" rx=\"8\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"149\" y=\"23\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1e3a8a\">① 例 4.20：上凸曲线 sin x 高于割线 (2/π)x</text>\n  <line x1=\"28\" y1=\"130\" x2=\"274\" y2=\"130\" stroke=\"#334155\" stroke-width=\"1.1\" marker-end=\"url(#m1p1_arr2)\"/>\n  <line x1=\"46\" y1=\"142\" x2=\"46\" y2=\"36\" stroke=\"#334155\" stroke-width=\"1.1\" marker-end=\"url(#m1p1_arr2)\"/>\n  <!-- y=x dashed -->\n  <line x1=\"46\" y1=\"130\" x2=\"150\" y2=\"42\" stroke=\"#94a3b8\" stroke-width=\"1.1\" stroke-dasharray=\"4,3\"/>\n  <text x=\"155\" y=\"47\" font-size=\"8.8\" fill=\"#64748b\">y = x</text>\n  <!-- y=sin x -->\n  <path d=\"M 46 130 Q 115 62 220 50\" fill=\"none\" stroke=\"#2563eb\" stroke-width=\"2.2\"/>\n  <text x=\"226\" y=\"54\" font-size=\"9.2\" font-weight=\"700\" fill=\"#2563eb\">y = sin x</text>\n  <!-- secant y = (2/pi)x -->\n  <line x1=\"46\" y1=\"130\" x2=\"220\" y2=\"50\" stroke=\"#dc2626\" stroke-width=\"1.7\"/>\n  <text x=\"195\" y=\"88\" font-size=\"9\" font-weight=\"700\" fill=\"#dc2626\">割线 y=(2/π)x &gt; x/2</text>\n  <circle cx=\"220\" cy=\"50\" r=\"3\" fill=\"#dc2626\"/>\n  <text x=\"220\" y=\"142\" text-anchor=\"middle\" font-size=\"8.5\" fill=\"#334155\">π/2</text>\n  <line x1=\"220\" y1=\"50\" x2=\"220\" y2=\"130\" stroke=\"#cbd5e1\" stroke-width=\"1\" stroke-dasharray=\"2,2\"/>\n  <text x=\"149\" y=\"160\" text-anchor=\"middle\" font-size=\"9\" font-weight=\"700\" fill=\"#1e3a8a\">xₙ₊₁ = sin xₙ &gt; xₙ/2 ⇒ xₙ &gt; (1/2)ⁿ，压垮 yₙ=(1/2)^(2ⁿ⁻¹)</text>\n\n  <!-- Right: arctan x >= (pi/4) x on [0,1] -->\n  <rect x=\"308\" y=\"6\" width=\"286\" height=\"164\" rx=\"8\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"451\" y=\"23\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#166534\">② 例 4.21：上凸曲线 arctan x 高于割线 (π/4)x</text>\n  <line x1=\"330\" y1=\"130\" x2=\"576\" y2=\"130\" stroke=\"#334155\" stroke-width=\"1.1\" marker-end=\"url(#m1p1_arr2)\"/>\n  <line x1=\"348\" y1=\"142\" x2=\"348\" y2=\"36\" stroke=\"#334155\" stroke-width=\"1.1\" marker-end=\"url(#m1p1_arr2)\"/>\n  <!-- y=x dashed -->\n  <line x1=\"348\" y1=\"130\" x2=\"462\" y2=\"42\" stroke=\"#94a3b8\" stroke-width=\"1.1\" stroke-dasharray=\"4,3\"/>\n  <text x=\"466\" y=\"47\" font-size=\"8.8\" fill=\"#64748b\">y = x</text>\n  <!-- y=arctan x -->\n  <path d=\"M 348 130 Q 422 72 522 58\" fill=\"none\" stroke=\"#059669\" stroke-width=\"2.2\"/>\n  <text x=\"518\" y=\"51\" font-size=\"9.2\" font-weight=\"700\" fill=\"#059669\">y = arctan x</text>\n  <!-- secant y = (pi/4)x -->\n  <line x1=\"348\" y1=\"130\" x2=\"522\" y2=\"58\" stroke=\"#ea580c\" stroke-width=\"1.7\"/>\n  <text x=\"492\" y=\"96\" font-size=\"9\" font-weight=\"700\" fill=\"#ea580c\">割线 (π/4)x &gt; x/2</text>\n  <circle cx=\"522\" cy=\"58\" r=\"3\" fill=\"#ea580c\"/>\n  <text x=\"522\" y=\"142\" text-anchor=\"middle\" font-size=\"8.5\" fill=\"#334155\">1</text>\n  <line x1=\"522\" y1=\"58\" x2=\"522\" y2=\"130\" stroke=\"#cbd5e1\" stroke-width=\"1\" stroke-dasharray=\"2,2\"/>\n  <text x=\"451\" y=\"160\" text-anchor=\"middle\" font-size=\"9\" font-weight=\"700\" fill=\"#166534\">|bₙ₊₁|=arctan|bₙ| ≥ (π/4)|bₙ| ⇒ |aₙ/bₙ| → 0！</text>\n</svg>",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-12~4-13",
+        "pdfPage": 12,
+        "itemRef": "夹逼定理与双数列线性放缩（例 4.18~4.21）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p01_seq_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-f-05",
+      "section": "五、压缩映射原理（振荡数列与级数联动杀器）",
+      "kind": "formula",
+      "title": "压缩映射原理标准证明模板与 $|f'(x)|\\le k<1$ 铁律",
+      "examWeight": "core",
+      "prompt": "默写压缩映射原理的完整得分证明链（含不动点与迭代收缩）及闭区间连续导数强化条件：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{不动点版：}x_{n+1}=f(x_n),\\;f(a)=a,\\;|f'(x)|\\le k<1\\implies\\\\\n&\\qquad 0\\le |x_{n+1}-a|=|f(x_n)-f(a)|=|f'(\\xi_n)|\\,|x_n-a|\\le k|x_n-a|\\le\\cdots\\le k^n|x_1-a|\\xrightarrow{n\\to\\infty}0\\\\\n&\\text{无不动点直接级数版（例 4.26）：}|x_{n+1}-x_n|\\le k|x_n-x_{n-1}|\\le\\cdots\\le k^{n-1}|x_2-x_1|\\implies \\sum_{n=1}^\\infty(x_{n+1}-x_n)\\text{ 绝对收敛}\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "代数直接放缩免求导（P.4-14~15）",
+          "desc": "压缩第一步 $|x_{n+1}-a|\\le k|x_n-a|$ 不一定非要求导套拉格朗日，对于分式/多项式递推（例 4.23、4.24、4.25），直接把 $x_{n+1}-a$ 通分或平方差因式分解出 $(x_n-a)$，再用有界范围把系数压到常数 $k<1$ 更干脆！"
+        },
+        {
+          "sym": "闭区间连续导数升级（P.4-14）",
+          "desc": "在闭区间 $[a,b]$ 上若 $f'(x)$ 连续且 $|f'(x)|<1$，由闭区间连续函数最值性自动存在 $k=\\max_{[a,b]}|f'(x)|<1$，从而满足压缩映射！"
+        }
+      ],
+      "conditions": "压缩系数 $k$ 必须是**与 $n$ 无关的严格小于 $1$ 的正常数**（$0<k<1$），且需先用数学归纳法保证全数列 $\\{x_n\\}$ 始终落在满足压缩条件的区间内！",
+      "pitfalls": "**头号生死陷阱（P.4-14 强调）**：$|f'(x)|<1$ 与 $|f'(x)|\\le k<1$ 天壤之别！反例 $f(x)=x+\\frac{1}{x}\\;(x>1)$ 满足 $f'(x)=1-\\frac{1}{x^2}\\in(0,1)$ 处处小于 $1$，却根本**没有不动点**且 $x_n\\to+\\infty$（因为 $f'(x)\\to 1^-$ 无法控住 $k^n\\to 0$）！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-14~4-16",
+        "pdfPage": 14,
+        "itemRef": "压缩映射原理（例 4.22~4.26）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p01_seq_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-c-01",
+      "section": "核心结论 · 稳定性包含链与复合函数保收敛判据",
+      "kind": "conclusion",
+      "title": "数列稳定性包含链（例 4.4~4.5）与复合数列发散判别（例 4.2~4.3）",
+      "examWeight": "core",
+      "summary": "1. **两条单向包含链（不可逆，P.4-3）**：\n$$\\text{无穷小数列}\\subsetneq\\text{收敛数列}\\subsetneq\\text{有界数列},\\qquad \\text{无穷大数列}\\subsetneq\\text{无界数列}\\subsetneq\\text{发散数列}.$$\n将前链统称「稳定」、后链统称「不稳定」：**稳定 $\\pm$ 稳定 $=$ 稳定，稳定 $\\times$ 稳定 $=$ 稳定，稳定 $\\pm$ 不稳定 $=$ 不稳定**；而「不稳定 $\\pm$ 不稳定」「不稳定 $\\times$ 稳定/不稳定」一律不确定，必须构造反例！\n2. **复合数列保收敛逆推铁律（例 4.2~4.3）**：若外层函数 $g$ 在值域上**严格单调且反函数 $g^{-1}$ 连续**，则「$g(a_n)$ 收敛 $\\implies a_n=g^{-1}(g(a_n))$ 收敛」；逆否命题即「$a_n$ 发散 $\\implies g(a_n)$ 必发散」（如 $g(x)=\\mathrm{e}^x-\\mathrm{e}^{-x}=2\\sinh x$）！一旦 $g$ 非单调（如偶函数 $\\cos x,\\;\\mathrm{e}^x+\\mathrm{e}^{-x}$ 或 $x\\pm\\frac{1}{x}$），只需令 $a_n$ 在两个等值点间交替震荡即可秒造反例！",
+      "conditions": "反推内层收敛要求外层映射 $g$ 在数列取值集合上有**连续单值反函数 $g^{-1}$**（如 $\\sin u$ 限制在 $u\\in[0,1]\\subset[0,\\frac{\\pi}{2}]$ 上单调连续可逆）。",
+      "pitfalls": "高频错选：以为「两个无界数列相乘必无界」，反例用奇偶错位零项（$x_n=n/0,\\;y_n=0/n\\implies x_n y_n\\equiv 0$，例 4.4）；以为「单调有界函数 $f$ 配收敛数列 $x_n$ 必收敛」，反例用跳跃间断函数 $\\operatorname{sgn}(x)$ 配 $x_n=\\frac{(-1)^n}{n}$（例 4.9）！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-2~4-4, 4-8",
+        "pdfPage": 2,
+        "itemRef": "唯一性/有界性综合（例 4.2~4.5, 例 4.9）"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-c-02",
+      "section": "核心结论 · 递推数列 f(x) 单调性与振荡判别速断法",
+      "kind": "conclusion",
+      "title": "一阶递推 $x_{n+1}=f(x_n)$ 的「导数符号三分法」：立刻判断该用单调还是压缩",
+      "examWeight": "core",
+      "summary": "面对一阶显式递推 $x_{n+1}=f(x_n)$，一眼看穿 $f'(x)$ 的符号即可决定整道题的战略：\n1. **$f'(x)>0$（$f$ 单调递增）**：数列 $\\{x_n\\}$ **必定单调**！只需算一下 $x_2-x_1$ 的符号（$x_2\\ge x_1\\Rightarrow$ 全程单增；$x_2\\le x_1\\Rightarrow$ 全程单减），直接用**单调有界准则**（例 4.10、4.11、4.14、4.23）！\n2. **$f'(x)<0$（$f$ 单调递减）**：数列 $\\{x_n\\}$ 围绕不动点 $A$ **奇偶交替振荡**（既不单增也不单减）！此时不要硬证整体单调，直接切换**压缩映射原理** $|x_{n+1}-A|\\le k|x_n-A|$（例 4.24、4.25），或拆奇偶子列证明 $f(f(x))$ 单调递增！\n3. **$f(x)$ 先增后减（非单调，如例 4.12 $f(x)=\\sqrt{x(3-x)}$、例 4.17 抛物分式）**：先用均值不等式或作差把 **$n\\ge 2$** 的所有项锁进 $f$ 的单一单调区间内，随后从 $n\\ge 2$ 起恢复单调有界！",
+      "conditions": "适用于显式递推 $x_{n+1}=f(x_n)$ 或可化为隐式单调函数的递推式（如例 4.11 $\\ln(1+x_n)=\\mathrm{e}^{x_{n+1}}-1$）。",
+      "pitfalls": "千万不要在 $f'(x)<0$（如 $x_{n+1}=2+\\frac{1}{x_n}$）上白费功夫证单调性；也不要在例 4.12 中忘了验证 $x_1\\in(\\frac{3}{2},3)$ 时第一步下降、从 $n\\ge 2$ 起才递增！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-7~4-15",
+        "pdfPage": 7,
+        "itemRef": "单调有界与压缩映射分流规律（例 4.10~4.25）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p01_seq_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-c-03",
+      "section": "核心结论 · 递推极限与级数/泰勒/不定式综合联动",
+      "kind": "conclusion",
+      "title": "递推极限「第二问」四大高频追问及破题标配（例 4.13, 4.22, 4.26）",
+      "examWeight": "core",
+      "summary": "近年考研数学一数列证明大题极少只问「证极限存在」，往往在第二问叠加微积分综合考查，四大标配套路如下：\n1. **求相邻项比值极限 $\\lim\\frac{x_{n+1}}{x_n}$（例 4.13）**：已知 $x_n\\to 0$，把递推式改写成 $x_{n+1}=g(x_n)$ 后直接对 $x_n\\to 0$ 做等价无穷小或泰勒展开！\n2. **求收敛速度（阶数）$\\lim\\frac{x_{n+1}-x_0}{(x_n-x_0)^2}$（例 4.22）**：在不动点 $x_0$ 处展开二阶带佩亚诺余项泰勒公式，结合 $f(x_0)=x_0,\\;f'(x_0)=0$ 一行出 $\\frac{1}{2}f''(x_0)$！\n3. **证相邻差级数 $\\sum(x_{n+1}-x_n)$ 绝对收敛并反推极限存在（例 4.26）**：用拉格朗日把 $|x_{n+1}-x_n|$ 压成公比 $k<1$ 的等比级数；再由裂项部分和 $x_{N+1}-x_1=\\sum_{n=1}^N(x_{n+1}-x_n)$ 反向推出 $\\lim x_n$ 存在！\n4. **证欧拉常数型累加减积分极限存在（例 4.16）**：把积分拆成 $\\sum_{k=1}^{n-1}\\int_k^{k+1}f(x)\\,\\mathrm{d}x$，逐段用 $f$ 单调递减夹出 $f(k+1)\\le\\int_k^{k+1}f(x)\\,\\mathrm{d}x\\le f(k)$，同时解决单减与下界！",
+      "conditions": "求 $\\lim\\frac{x_{n+1}-x_0}{(x_n-x_0)^2}$ 时默认充分大 $n$ 满足 $x_n\\ne x_0$（否则分母为零）。",
+      "pitfalls": "在例 4.26 第 (2) 问估计不动点 $A$ 的范围时，不要用繁琐的无穷级数求和硬估（因为 $x_1$ 未给定！），直接对 $f(A)-f(0)=f'(\\eta)A\\implies (1-f'(\\eta))A=1$ 利用 $0<f'(\\eta)<\\frac{1}{2}$ 两行锁死 $1<A<2$！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-9, 4-11, 4-14, 4-16",
+        "pdfPage": 9,
+        "itemRef": "数列极限综合压轴套路（例 4.13, 4.16, 4.22, 4.26）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p01_seq_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-c-04",
+      "section": "核心结论 · 证明题讲义微小印刷细节核注",
+      "kind": "conclusion",
+      "title": "《4.数列极限》原讲义 3 处微小印刷/严谨细节核对说明",
+      "examWeight": "core",
+      "summary": "逐页高清核读本讲义 16 页全部 26 例后，发现 3 处需考生留心的印刷与严谨细节：\n1. **例 4.6 ①（P.4-5）**：题干写 $\\lim_{n\\to\\infty}a_n=A\\ne 0$，后半句误将大写 $|A|$ 印为小写 $|a|$（实指 $|a_n|>\\frac{|A|}{2}$，不影响判真选 B）。\n2. **例 4.21（P.4-13）**：题干同时印有「$a_0=\\frac{1}{2},\\;a_{n+1}=a_n^2,\\;n\\in\\mathbb{N}_+$」与「$0<-b_n<\\frac{\\pi}{4}$」——前者严格应从 $n\\in\\mathbb{N}$（即 $n\\ge 0$）起步以定义 $a_1$；后者若按原字面 $-\\frac{\\pi}{4}<b_n<0$，由 $\\tan x$ 奇性知 $|b_{n+1}|=\\arctan|b_n|\\ge\\frac{\\pi}{4}|b_n|$ 依然成立，最终极限 $\\lim\\frac{a_n}{b_n}=0$ 不变！\n3. **例 4.22 (2)（P.4-14）**：求 $\\lim\\frac{x_{n+1}-x_0}{(x_n-x_0)^2}$ 隐含假设充分大 $n$ 时 $x_n\\ne x_0$（若 $x_1=x_0$ 则数列恒等于 $x_0$，分式无意义）。",
+      "conditions": "适用于对照猪哥&狗姐《4.数列极限》原 PDF 讲义刷题自检。",
+      "pitfalls": "刷到例 4.21 的 $0<-b_n<\\frac{\\pi}{4}$ 时不必惊慌，用绝对值 $|b_n|$ 放缩同时兼容正负两种符号情形！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-5, 4-13, 4-14",
+        "pdfPage": 5,
+        "itemRef": "原讲义核读补注（例 4.6, 4.21, 4.22）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p01_seq_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-e-01",
+      "section": "一、数列极限定义与四大性质（例 4.1~4.6）",
+      "kind": "example",
+      "title": "【例 4.1】用「邻域外至多有限项」证明 $a_n=\\sqrt[n]{n}-\\frac{(-1)^n}{n}$ 有最大值与最小值",
+      "examWeight": "core",
+      "problem": "设 $a_n=\\sqrt[n]{n}-\\dfrac{(-1)^n}{n}\\;(n\\in\\mathbb{N}_+)$，证明 $\\{a_n\\}$ 有最大值和最小值。",
+      "steps": [
+        {
+          "stepTitle": "1. 先求极限，并找比极限严格大、严格小的两个锚点项",
+          "detail": "因 $\\lim_{n\\to\\infty}\\sqrt[n]{n}=1$ 且 $\\lim_{n\\to\\infty}\\frac{(-1)^n}{n}=0$，故 $\\lim_{n\\to\\infty}a_n=1$。计算前两项：$a_1=1-(-1)=2>1$，$a_2=\\sqrt{2}-\\frac{1}{2}\\approx 0.9142<1$。"
+        },
+        {
+          "stepTitle": "2. 取小邻域锁死 $n>N$ 的无穷多项，归结为有限集合取最值",
+          "detail": "取 $\\varepsilon=\\min\\{a_1-1,\\;1-a_2\\}=1-(\\sqrt{2}-\\frac{1}{2})=\\frac{3}{2}-\\sqrt{2}>0$。由极限定义，$\\exists N\\in\\mathbb{N}_+$（且可取 $N\\ge 2$），使当 $n>N$ 时恒有 $$a_2=1-\\varepsilon<a_n<1+\\varepsilon<a_1.$$ 于是 $n>N$ 的一切项均严格夹在 $a_2$ 与 $a_1$ 之间，故全体数列的最值必在前 $N$ 项有限集 $\\{a_1,a_2,\\dots,a_N\\}$ 中取得：$$\\max_{n\\ge 1}a_n=\\max_{1\\le n\\le N}a_n,\\qquad \\min_{n\\ge 1}a_n=\\min_{1\\le n\\le N}a_n.$$ （进一步验算可知最大值即为 $a_1=2$，最小值即为 $a_2=\\sqrt{2}-\\frac{1}{2}$。）"
+        }
+      ],
+      "finalAnswer": "证毕（且 $\\max a_n=a_1=2,\\;\\min a_n=a_2=\\sqrt{2}-\\frac{1}{2}$）。",
+      "takeaway": "证明收敛数列存在最大值/最小值的通杀母题：**只要能找到某一项 $>A$ 就必有最大值，找到某一项 $<A$ 就必有最小值**——本质全靠「邻域外至多有限项」！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-2",
+        "pdfPage": 2,
+        "itemRef": "例4.1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p01_seq_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-e-02",
+      "section": "一、数列极限定义与四大性质（例 4.1~4.6）",
+      "kind": "example",
+      "title": "【例 4.2】复合三角数列 $\\cos(\\sin x_n)$ 与 $\\sin(\\cos x_n)$ 收敛反推判别",
+      "examWeight": "core",
+      "problem": "设 $-\\dfrac{\\pi}{2}\\le x_n\\le\\dfrac{\\pi}{2}$，则（　）。\nA. 若 $\\lim_{n\\to\\infty}\\cos(\\sin x_n)$ 存在，则 $\\lim_{n\\to\\infty}x_n$ 存在；\nB. 若 $\\lim_{n\\to\\infty}\\sin(\\cos x_n)$ 存在，则 $\\lim_{n\\to\\infty}x_n$ 存在；\nC. 若 $\\lim_{n\\to\\infty}\\cos(\\sin x_n)$ 存在，则 $\\lim_{n\\to\\infty}\\sin x_n$ 存在，但 $\\lim_{n\\to\\infty}x_n$ 不一定存在；\nD. 若 $\\lim_{n\\to\\infty}\\sin(\\cos x_n)$ 存在，则 $\\lim_{n\\to\\infty}\\cos x_n$ 存在，但 $\\lim_{n\\to\\infty}x_n$ 不一定存在。",
+      "steps": [
+        {
+          "stepTitle": "1. 构造对称震荡反例瞬间秒杀 A、B、C",
+          "detail": "取 $x_n=(-1)^n\\frac{\\pi}{2}\\in[-\\frac{\\pi}{2},\\frac{\\pi}{2}]$：此时 $\\sin x_n=(-1)^n$ 发散、$x_n$ 发散，但 $\\cos(\\sin x_n)=\\cos(\\pm 1)=\\cos 1$ 为常数列收敛，立否 A、C！再取 $x_n=(-1)^n\\frac{\\pi}{4}$：$\\cos x_n=\\frac{\\sqrt{2}}{2}$、$\\sin(\\cos x_n)=\\sin\\frac{\\sqrt{2}}{2}$ 均收敛，但 $x_n$ 发散，立否 B！"
+        },
+        {
+          "stepTitle": "2. 用严格单调连续反函数证明 D 必真",
+          "detail": "因 $x_n\\in[-\\frac{\\pi}{2},\\frac{\\pi}{2}]$，故 $u_n=\\cos x_n\\in[0,1]\\subset[0,\\frac{\\pi}{2}]$。在 $[0,1]$ 上函数 $y=\\sin u$ 严格单调递增，其反函数 $u=\\arcsin y$ 在 $[0,\\sin 1]$ 上连续。若 $\\lim_{n\\to\\infty}\\sin(u_n)=L$，则必有 $\\lim_{n\\to\\infty}\\cos x_n=\\lim_{n\\to\\infty}\\arcsin(\\sin u_n)=\\arcsin L$ 存在！又由反例 $x_n=(-1)^n\\frac{\\pi}{4}$ 知 $\\lim x_n$ 不一定存在，故选 D。"
+        }
+      ],
+      "finalAnswer": "选 D。",
+      "takeaway": "复合数列剥外皮黄金法：**看外层函数在内层值域上是否单调可逆**！$\\cos u$ 在 $u\\in[-1,1]$ 上偶函数不可逆，而 $\\sin u$ 在 $u\\in[0,1]$ 上严格单调可逆！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-2",
+        "pdfPage": 2,
+        "itemRef": "例4.2"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-e-03",
+      "section": "一、数列极限定义与四大性质（例 4.1~4.6）",
+      "kind": "example",
+      "title": "【例 4.3】发散数列 $\\{a_n\\}$ 经四类代数/双曲函数复合后的发散保持性",
+      "examWeight": "core",
+      "problem": "已知数列 $\\{a_n\\}$ 发散，且 $a_n\\ne 0$，则下列数列一定发散的是（　）。\nA. $\\left\\{a_n+\\dfrac{1}{a_n}\\right\\}$　　B. $\\left\\{a_n-\\dfrac{1}{a_n}\\right\\}$　　C. $\\left\\{\\mathrm{e}^{a_n}+\\dfrac{1}{\\mathrm{e}^{a_n}}\\right\\}$　　D. $\\left\\{\\mathrm{e}^{a_n}-\\dfrac{1}{\\mathrm{e}^{a_n}}\\right\\}$",
+      "steps": [
+        {
+          "stepTitle": "1. 逐一举出震荡反例排除 A、B、C",
+          "detail": "A 反例：取 $a_n=2^{(-1)^n}$（交替取 $2,\\frac{1}{2}$ 发散），但 $a_n+\\frac{1}{a_n}\\equiv\\frac{5}{2}$ 收敛；\nB 反例：取 $a_n=(-1)^n$（发散），但 $a_n-\\frac{1}{a_n}\\equiv 0$ 收敛；\nC 反例：取 $a_n=(-1)^n$（发散），但 $\\mathrm{e}^{a_n}+\\mathrm{e}^{-a_n}\\equiv\\mathrm{e}+\\mathrm{e}^{-1}$ 收敛！"
+        },
+        {
+          "stepTitle": "2. 用 $g(x)=\\mathrm{e}^x-\\mathrm{e}^{-x}$ 全局严格单调可逆证 D 必发散",
+          "detail": "设 $g(x)=\\mathrm{e}^x-\\mathrm{e}^{-x}$，则 $g'(x)=\\mathrm{e}^x+\\mathrm{e}^{-x}>0$ 在 $\\mathbb{R}$ 上恒成立，故 $g$ 在 $\\mathbb{R}$ 上严格单增且有连续反函数 $g^{-1}(y)=\\ln\\frac{y+\\sqrt{y^2+4}}{2}$。若 $\\{g(a_n)\\}$ 收敛于 $L$，则 $a_n=g^{-1}(g(a_n))\\to g^{-1}(L)$ 收敛，与 $\\{a_n\\}$ 发散矛盾！故 D 必发散。"
+        }
+      ],
+      "finalAnswer": "选 D。",
+      "takeaway": "记住这道题的经典双曲反函数：$\\mathrm{e}^x-\\mathrm{e}^{-x}=2\\sinh x$ 在整个 $\\mathbb{R}$ 上是连续双射，故与原数列的敛散性**完全等价**！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-3",
+        "pdfPage": 3,
+        "itemRef": "例4.3"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-e-04",
+      "section": "一、数列极限定义与四大性质（例 4.1~4.6）",
+      "kind": "example",
+      "title": "【例 4.4】乘积数列 $z_n=x_n y_n$ 的有界/无界/无穷小稳定性判别",
+      "examWeight": "core",
+      "problem": "设 $z_n=x_n y_n$，则下列说法正确的是（　）。\nA. 若 $\\{x_n\\}$ 有界，$\\{y_n\\}$ 为无穷小数列，则 $\\{z_n\\}$ 不一定为有界数列；\nB. 若 $\\{x_n\\}$ 无界，$\\{y_n\\}$ 为有界数列，则 $\\{z_n\\}$ 为无穷大数列；\nC. 若 $\\{x_n\\}$ 有界，$\\{y_n\\}$ 有界，则 $\\{z_n\\}$ 可能无界；\nD. 若 $\\{x_n\\}$ 与 $\\{y_n\\}$ 均为无界数列，则 $\\{z_n\\}$ 可能为无穷小数列。",
+      "steps": [
+        {
+          "stepTitle": "1. 用稳定性法则排除 A、B、C，用奇偶错位零项证 D",
+          "detail": "A 错：有界 $\\times$ 无穷小 $=$ 无穷小 $\\implies$ 必收敛必有界；\nB 错：取 $y_n\\equiv 0$（有界），则 $z_n\\equiv 0$ 不是无穷大；\nC 错：$|x_n|\\le M_1,\\;|y_n|\\le M_2\\implies |z_n|\\le M_1 M_2$ 必有界；\nD 对：构造奇偶错位反例 $x_n=\\begin{cases}n,&n\\text{ 为奇}\\\\ 0,&n\\text{ 为偶}\\end{cases}$，$y_n=\\begin{cases}0,&n\\text{ 为奇}\\\\ n,&n\\text{ 为偶}\\end{cases}$，两者皆无界，却有 $z_n=x_n y_n\\equiv 0\\to 0$（无穷小数列）！"
+        }
+      ],
+      "finalAnswer": "选 D。",
+      "takeaway": "奇偶错位填零是造「无界 $\\times$ 无界 $=$ 无穷小」的万能反例模板！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-3",
+        "pdfPage": 3,
+        "itemRef": "例4.4"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-e-05",
+      "section": "一、数列极限定义与四大性质（例 4.1~4.6）",
+      "kind": "example",
+      "title": "【例 4.5】和数列 $z_n=x_n+y_n$ 的有界/无界/无穷大稳定性判别",
+      "examWeight": "core",
+      "problem": "设 $z_n=x_n+y_n$，则下列说法正确的是（　）。\nA. 若 $\\{x_n\\}$ 有界，$\\{y_n\\}$ 为无穷小数列，则 $\\{z_n\\}$ 不一定为有界数列；\nB. 若 $\\{x_n\\}$ 无界，$\\{y_n\\}$ 有界，则 $\\{z_n\\}$ 为无穷大数列；\nC. 若 $\\{x_n\\}$ 有界，$\\{y_n\\}$ 有界，则 $\\{z_n\\}$ 可能无界；\nD. 若 $\\{x_n\\}$ 无穷大，$\\{y_n\\}$ 无穷大，则 $\\{z_n\\}$ 可能为无穷小数列。",
+      "steps": [
+        {
+          "stepTitle": "1. 逐项辨析（注意 B 中「无界 $\\ne$ 无穷大」）",
+          "detail": "A 错：有界 $+$ 无穷小（必有界）$=$ 必有界；\nB 错：无界 $+$ 有界必**无界**，但不一定是**无穷大**（反例：$x_n=n$ 奇/$0$ 偶，$y_n\\equiv 0$，则 $z_n=x_n$ 偶项恒为 $0$ 不是无穷大！）；\nC 错：$|x_n+y_n|\\le|x_n|+|y_n|\\le M_1+M_2$ 必有界；\nD 对：取 $x_n=n+\\frac{1}{n}$，$y_n=-n$，均为无穷大，但 $z_n=\\frac{1}{n}\\to 0$ 是无穷小数列！"
+        }
+      ],
+      "finalAnswer": "选 D。",
+      "takeaway": "考研高频偷换概念：B 选项把「无界」悄悄换成了「无穷大」，一念之差就会中招！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-4",
+        "pdfPage": 4,
+        "itemRef": "例4.5"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-e-06",
+      "section": "一、数列极限定义与四大性质（例 4.1~4.6）",
+      "kind": "example",
+      "title": "【例 4.6】保号性与保序性四个易错命题精细甄别",
+      "examWeight": "core",
+      "problem": "下列命题中错误的是（　）。\n① $\\lim_{n\\to\\infty}a_n=A\\ne 0$，则当 $n$ 充分大时，有 $|a_n|>\\dfrac{|A|}{2}$；（原讲义误印小写 $|a|$）\n② $\\lim_{n\\to\\infty}a_n=A\\ne 0$，则当 $n$ 充分大时，有 $a_n>A-\\dfrac{1}{n}$；\n③ 若 $\\lim_{n\\to\\infty}a_n=A,\\;\\lim_{n\\to\\infty}b_n=B,\\;A\\le B$，则 $\\exists N\\in\\mathbb{N}_+,\\;n>N$ 时 $a_n\\le b_n$；\n④ $M\\le a_n\\le N$，若 $\\lim_{n\\to\\infty}a_n=A$，则 $M\\le A\\le N$。\nA. ①②　　B. ②③　　C. ③④　　D. ②③④",
+      "steps": [
+        {
+          "stepTitle": "1. 逐条验证真假并给 ②③ 精确反例",
+          "detail": "① 正确：由极限保号性，取 $\\varepsilon=\\frac{|A|}{2}>0$，当 $n$ 充分大时 $||a_n|-|A||\\le|a_n-A|<\\frac{|A|}{2}\\implies |a_n|>\\frac{|A|}{2}$；\n② **错误**：$\\frac{1}{n}$ 是随 $n$ 趋于 $0$ 的变阈值，不能充当固定 $\\varepsilon$！反例 $a_n=1-\\frac{1}{\\sqrt{n}}\\to 1$，对一切 $n\\ge 2$ 均有 $a_n<1-\\frac{1}{n}$；\n③ **错误**：$A=B$ 时不保序！反例 $a_n=\\frac{1}{n}\\to 0,\\;b_n=0\\to 0$，满足 $A\\le B$ 但恒有 $a_n>b_n$；\n④ 正确：由保序性对 $M\\le a_n\\le N$ 两端取极限即得 $M\\le A\\le N$。\n故错误的为 ②③，选 B。"
+        }
+      ],
+      "finalAnswer": "选 B（②③错误）。",
+      "takeaway": "② 是一道极具迷惑性的陷阱题：$\\varepsilon$-$N$ 定义里的 $\\varepsilon$ 必须是**先给定的常数**，绝不能把 $\\varepsilon$ 换成依赖 $n$ 的 $\\frac{1}{n}$！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-5",
+        "pdfPage": 5,
+        "itemRef": "例4.6（含 ① 字母大小写补注）"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-e-07",
+      "section": "二、子列充要条件与海涅归结原则（例 4.7~4.8）",
+      "kind": "example",
+      "title": "【例 4.7】子列收敛推原数列收敛：奇偶子列 + $\\{x_{3n+1}\\}$ 跨步桥接",
+      "examWeight": "core",
+      "problem": "下列选项中能得到数列 $\\{x_n\\}$ 收敛的是（　）。\nA. $\\lim_{n\\to\\infty}x_{3n}=\\lim_{n\\to\\infty}x_{3n+1}=A$；　　B. $\\{x_{2n}\\},\\{x_{2n+1}\\}$ 收敛；\nC. $\\lim_{n\\to\\infty}x_{2n}=\\lim_{n\\to\\infty}x_{3n}=A$；　　D. $\\{x_{2n}\\},\\{x_{2n+1}\\},\\{x_{3n+1}\\}$ 收敛。",
+      "steps": [
+        {
+          "stepTitle": "1. 排除漏下标（A、C）与无桥接（B），证明 D 强制奇偶同极限",
+          "detail": "A 错：漏掉下标 $3n+2$（如 $x_{3n+2}=n$ 发散）；\nB 错：奇偶子列可收敛于不同极限（如 $x_n=(-1)^n$）；\nC 错：漏掉与 $6$ 互质的下标 $6k+1,6k+5$（令其为 $n$ 即可发散）；\nD 对：设 $\\lim x_{2n}=A,\\;\\lim x_{2n+1}=B,\\;\\lim x_{3n+1}=C$。在 $\\{x_{3n+1}\\}$ 中取 $n=2k+1$ 得子列 $\\{x_{6k+4}\\}$（属偶子列，故 $C=A$）；取 $n=2k$ 得子列 $\\{x_{6k+1}\\}$（属奇子列，故 $C=B$）。从而 $A=B=C$，奇偶子列收敛于同一值 $\\implies \\{x_n\\}$ 收敛！"
+        }
+      ],
+      "finalAnswer": "选 D。",
+      "takeaway": "子列拼盘判定收敛看两关：**① 下标集合是否全覆盖 $\\mathbb{N}_+$（仅奇偶覆盖就够）；② 不同块之间是否存在公共无穷子列把极限桥接相等**！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-6",
+        "pdfPage": 6,
+        "itemRef": "例4.7"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-e-08",
+      "section": "二、子列充要条件与海涅归结原则（例 4.7~4.8）",
+      "kind": "example",
+      "title": "【例 4.8】用海涅定理构造双路径数列证明振荡函数极限不存在",
+      "examWeight": "core",
+      "problem": "根据海涅定理说明下列极限不存在：(1) $\\displaystyle\\lim_{x\\to 0}\\sin\\frac{1}{x}$；　(2) $\\displaystyle\\lim_{x\\to+\\infty}x\\sin 2x\\pi$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：分别取使 $\\sin\\frac{1}{x}$ 恒为 $0$ 与恒为 $1$ 的两条趋零数列",
+          "detail": "取 $x_n=\\frac{1}{2n\\pi}\\to 0$，有 $\\sin\\frac{1}{x_n}=\\sin(2n\\pi)=0\\to 0$；再取 $y_n=\\frac{1}{2n\\pi+\\frac{\\pi}{2}}\\to 0$，有 $\\sin\\frac{1}{y_n}=\\sin\\left(2n\\pi+\\frac{\\pi}{2}\\right)=1\\to 1$。因两数列极限不等（$0\\ne 1$），由海涅定理知 $\\lim_{x\\to 0}\\sin\\frac{1}{x}$ 不存在。"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：分别取使 $\\sin 2x\\pi$ 恒为 $0$ 与恒为 $1$ 的趋 $+\\infty$ 数列",
+          "detail": "取 $x_n=n\\to+\\infty$，则 $x_n\\sin 2n\\pi=0\\to 0$；再取 $y_n=n+\\frac{1}{4}\\to+\\infty$，则 $y_n\\sin\\left(2n\\pi+\\frac{\\pi}{2}\\right)=n+\\frac{1}{4}\\to+\\infty$。由海涅定理（两条路径极限不同且后者发散），原极限不存在。"
+        }
+      ],
+      "finalAnswer": "两极限均不存在（证毕）。",
+      "takeaway": "海涅证伪三角振荡极限的固定招式：挑一组点让三角函数锁死在 $0$，再挑一组点让三角函数锁死在 $1$（或 $-1$）！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-7",
+        "pdfPage": 7,
+        "itemRef": "例4.8 (1)~(2)"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-e-09",
+      "section": "三、单调有界准则专题证明（例 4.9~4.17）",
+      "kind": "example",
+      "title": "【例 4.9】单调有界函数 $f(x)$ 与数列 $\\{x_n\\}$ 复合后的收敛性辨析",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $\\mathbb{R}$ 上单调有界，$\\{x_n\\}$ 为数列，则下列命题正确的是（　）。\nA. 若 $\\{x_n\\}$ 收敛，则 $\\{f(x_n)\\}$ 收敛；　　B. 若 $\\{x_n\\}$ 单调，则 $\\{f(x_n)\\}$ 收敛；\nC. 若 $\\{f(x_n)\\}$ 收敛，则 $\\{x_n\\}$ 收敛；　　D. 若 $\\{f(x_n)\\}$ 单调，则 $\\{x_n\\}$ 收敛。",
+      "steps": [
+        {
+          "stepTitle": "1. 紧扣「单调函数未必连续」否 A，用单调有界准则证 B",
+          "detail": "A 错：$f$ 未必连续！取单调有界符号函数 $f(x)=\\operatorname{sgn}(x)$，$x_n=\\frac{(-1)^n}{n}\\to 0$，但 $f(x_n)=(-1)^n$ 发散；\nB 对：因 $f$ 单调且 $\\{x_n\\}$ 单调，故复合数列 $\\{f(x_n)\\}$ 必单调（同增/同减则增，一增一减则减）；又 $f$ 在 $\\mathbb{R}$ 上有界，故 $\\{f(x_n)\\}$ 单调有界，必收敛！\nC、D 错：取常函数 $f(x)\\equiv 1$（单调且有界），取发散数列 $x_n=(-1)^n$ 或 $x_n=n$ 即可一举证伪 C、D。"
+        }
+      ],
+      "finalAnswer": "选 B。",
+      "takeaway": "单调函数允许有可数个跳跃间断点，故不能保证「$x_n$ 收敛 $\\Rightarrow f(x_n)$ 收敛」，但它**绝对保持单调性**！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-8",
+        "pdfPage": 8,
+        "itemRef": "例4.9"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-e-10",
+      "section": "三、单调有界准则专题证明（例 4.9~4.17）",
+      "kind": "example",
+      "title": "【例 4.10】经典嵌套根式 $a_n=\\sqrt{2+\\sqrt{2+\\cdots}}$ 单调有界证明",
+      "examWeight": "core",
+      "problem": "设 $a_1=\\sqrt{2},\\;a_2=\\sqrt{2+\\sqrt{2}},\\;\\dots,\\;a_n=\\sqrt{2+\\sqrt{2+\\cdots}}$（$n$ 个根号），证明数列 $\\{a_n\\}$ 极限存在并求极限。",
+      "steps": [
+        {
+          "stepTitle": "1. 写出递推关系并「先斩后奏」锁定目标界 $2$",
+          "detail": "递推式为 $a_{n+1}=\\sqrt{2+a_n}\\;(n\\ge 1)$。设极限 $A>0$，由 $A=\\sqrt{2+A}\\implies A^2-A-2=0\\implies A=2$（舍 $-1$）。因 $a_1=\\sqrt{2}<2$，故目标锁定为**单增有上界 $2$**。"
+        },
+        {
+          "stepTitle": "2. 数学归纳法证有界 $0<a_n<2$，作差有理化证单调递增",
+          "detail": "有界性：$a_1=\\sqrt{2}<2$；设 $a_k<2$，则 $a_{k+1}=\\sqrt{2+a_k}<\\sqrt{2+2}=2$，故 $\\forall n\\ge 1,\\;0<a_n<2$。单调性：$$a_{n+1}-a_n=\\sqrt{2+a_n}-a_n=\\frac{2+a_n-a_n^2}{\\sqrt{2+a_n}+a_n}=\\frac{(2-a_n)(1+a_n)}{\\sqrt{2+a_n}+a_n}>0,$$ 故 $\\{a_n\\}$ 严格单增有上界，极限 $A\\in[\\sqrt{2},2]$ 存在，解 $A=\\sqrt{2+A}$ 得 $\\lim_{n\\to\\infty}a_n=2$。"
+        }
+      ],
+      "finalAnswer": "$\\lim_{n\\to\\infty}a_n=2$。",
+      "takeaway": "单调有界入门母题：把「先算候选极限 $2\\to$ 归纳上界 $2\\to$ 作差因式分解 $(2-a_n)(1+a_n)$」这套肌肉记忆刻进 DNA！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-8",
+        "pdfPage": 8,
+        "itemRef": "例4.10"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p01_seq_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-e-11",
+      "section": "三、单调有界准则专题证明（例 4.9~4.17）",
+      "kind": "example",
+      "title": "【例 4.11】隐式超越递推 $\\ln(1+x_n)=\\mathrm{e}^{x_{n+1}}-1$ 用经典链式不等式秒证单减下界",
+      "examWeight": "core",
+      "problem": "设 $0<x_1<1$，$\\ln(1+x_n)=\\mathrm{e}^{x_{n+1}}-1\\;(n\\in\\mathbb{N}_+)$，证明数列 $\\{x_n\\}$ 极限存在并求极限。",
+      "steps": [
+        {
+          "stepTitle": "1. 数学归纳法证下界 $x_n>0$（无需显式解出复杂嵌套对数）",
+          "detail": "当 $n=1$ 时 $x_1>0$。设 $x_k>0$，则 $\\mathrm{e}^{x_{k+1}}-1=\\ln(1+x_k)>0\\implies \\mathrm{e}^{x_{k+1}}>1\\implies x_{k+1}>0$。故 $\\forall n\\ge 1,\\;x_n>0$（有下界 $0$）。"
+        },
+        {
+          "stepTitle": "2. 利用核心不等式链 $\\ln(1+x)<x<\\mathrm{e}^x-1\\;(x>0)$ 一行证单调递减并定极限",
+          "detail": "对一切 $x>0$ 恒有 $\\ln(1+x)<x<\\mathrm{e}^x-1$。代入 $x=x_n>0$：$$\\mathrm{e}^{x_{n+1}}-1=\\ln(1+x_n)<x_n<\\mathrm{e}^{x_n}-1\\implies \\mathrm{e}^{x_{n+1}}<\\mathrm{e}^{x_n}\\implies x_{n+1}<x_n.$$ 故 $\\{x_n\\}$ 严格单调递减且有下界 $0$，极限 $A=\\lim_{n\\to\\infty}x_n\\ge 0$ 存在。令 $n\\to\\infty$ 得 $\\ln(1+A)=\\mathrm{e}^A-1$；若 $A>0$ 则左端 $<A<$ 右端矛盾，故只能 $A=0$！"
+        }
+      ],
+      "finalAnswer": "$\\lim_{n\\to\\infty}x_n=0$。",
+      "takeaway": "隐式递推不要盲目反解 $x_{n+1}=\\ln(1+\\ln(1+x_n))$！保留原等式并架起黄金桥 $\\ln(1+x)<x<\\mathrm{e}^x-1$，三行全通！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-8",
+        "pdfPage": 8,
+        "itemRef": "例4.11"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p01_seq_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-e-12",
+      "section": "三、单调有界准则专题证明（例 4.9~4.17）",
+      "kind": "example",
+      "title": "【例 4.12】首项跨越极值点：$x_n=\\sqrt{x_{n-1}(3-x_{n-1})}$ 从 $n\\ge 2$ 起单增有上界 $\\frac{3}{2}$",
+      "examWeight": "core",
+      "problem": "设 $0<x_1<3$，$x_n=\\sqrt{x_{n-1}(3-x_{n-1})}\\;(n\\ge 2)$，证明数列 $\\{x_n\\}$ 极限存在并求极限。",
+      "steps": [
+        {
+          "stepTitle": "1. 用 AM-GM 均值不等式将 $n\\ge 2$ 全数列锁入 $(0,\\frac{3}{2}]$（避开 $x_1>\\frac{3}{2}$ 陷阱！）",
+          "detail": "因 $0<x_1<3$，显然 $x_2=\\sqrt{x_1(3-x_1)}>0$ 且由均值不等式 $x_2\\le\\frac{x_1+(3-x_1)}{2}=\\frac{3}{2}$。数学归纳可得：若 $0<x_k\\le\\frac{3}{2}<3$，则 $x_{k+1}=\\sqrt{x_k(3-x_k)}>0$ 且 $x_{k+1}\\le\\frac{x_k+(3-x_k)}{2}=\\frac{3}{2}$。故 $\\forall n\\ge 2$ 均有 $0<x_n\\le\\frac{3}{2}$！"
+        },
+        {
+          "stepTitle": "2. 证明从 $n\\ge 2$ 起单调递增并排除 $A=0$ 得极限 $\\frac{3}{2}$",
+          "detail": "对一切 $n\\ge 2$，因 $0<x_n\\le\\frac{3}{2}\\implies 3-x_n\\ge\\frac{3}{2}\\ge x_n$，故 $$x_{n+1}=\\sqrt{x_n(3-x_n)}\\ge\\sqrt{x_n\\cdot x_n}=x_n.$$ 于是 $\\{x_n\\}_{n\\ge 2}$ 单调递增且有上界 $\\frac{3}{2}$，极限 $A=\\lim_{n\\to\\infty}x_n$ 存在，且 $A\\ge x_2>0$！递推式取极限得 $A=\\sqrt{A(3-A)}\\implies 2A^2=3A$，因 $A>0$ 舍去 $0$，得 $\\lim_{n\\to\\infty}x_n=\\frac{3}{2}$。"
+        }
+      ],
+      "finalAnswer": "$\\lim_{n\\to\\infty}x_n=\\dfrac{3}{2}$。",
+      "takeaway": "超级经典防翻车点：当 $x_1\\in(\\frac{3}{2},3)$（如 $x_1=2.9$）时 $x_2\\approx 0.54<x_1$（第一步下降），**绝不能从 $n=1$ 写单增**！用 AM-GM 从 $n\\ge 2$ 锁界并写明 $A\\ge x_2>0$ 排除 $0$ 才是满分严谨证明！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-9",
+        "pdfPage": 9,
+        "itemRef": "例4.12"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p01_seq_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-e-13",
+      "section": "三、单调有界准则专题证明（例 4.9~4.17）",
+      "kind": "example",
+      "title": "【例 4.13】$x_n\\mathrm{e}^{x_{n+1}}=\\mathrm{e}^{x_n}-1$ 证收敛于 $0$ 并求相邻项比值 $\\lim\\frac{x_{n+1}}{x_n}=\\frac{1}{2}$",
+      "examWeight": "core",
+      "problem": "设 $x_1>0$，$x_n\\mathrm{e}^{x_{n+1}}=\\mathrm{e}^{x_n}-1\\;(n\\in\\mathbb{N}_+)$。\n(1) 证明数列 $\\{x_n\\}$ 极限存在并求极限；\n(2) 计算 $\\displaystyle\\lim_{n\\to\\infty}\\frac{x_{n+1}}{x_n}$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：用 $\\mathrm{e}^x-1>x$ 证 $x_n>0$，用 $\\mathrm{e}^{-x}>1-x$ 证严格单减",
+          "detail": "下界：由 $x_1>0$ 及 $\\mathrm{e}^{x_{n+1}}=\\frac{\\mathrm{e}^{x_n}-1}{x_n}>1$（因 $x>0$ 时 $\\mathrm{e}^x-1>x$），归纳即得 $\\forall n\\ge 1,\\;x_n>0$。\n单调性：对 $x>0$，因 $\\mathrm{e}^{-x}>1-x\\iff 1-\\mathrm{e}^{-x}<x\\iff \\frac{\\mathrm{e}^x-1}{x}<\\mathrm{e}^x$，代入 $x_n>0$ 得 $$\\mathrm{e}^{x_{n+1}}=\\frac{\\mathrm{e}^{x_n}-1}{x_n}<\\mathrm{e}^{x_n}\\implies x_{n+1}<x_n.$$ 故 $\\{x_n\\}$ 严格单减有下界 $0$，极限 $A\\ge 0$ 存在。若 $A>0$，令 $n\\to\\infty$ 得 $A\\mathrm{e}^A=\\mathrm{e}^A-1\\implies \\mathrm{e}^{-A}=1-A$，与 $\\mathrm{e}^{-A}>1-A\\;(A>0)$ 矛盾！故 $\\lim_{n\\to\\infty}x_n=0$。"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：显式取对数 + 泰勒展开秒求比值极限 $\\frac{1}{2}$",
+          "detail": "由 $x_n\\to 0^+$，$$\\frac{x_{n+1}}{x_n}=\\frac{1}{x_n}\\ln\\!\\left(\\frac{\\mathrm{e}^{x_n}-1}{x_n}\\right)=\\frac{1}{x_n}\\ln\\!\\left(1+\\frac{1}{2}x_n+o(x_n)\\right)=\\frac{\\frac{1}{2}x_n+o(x_n)}{x_n}\\xrightarrow{n\\to\\infty}\\frac{1}{2}.$$"
+        }
+      ],
+      "finalAnswer": "(1) $\\lim_{n\\to\\infty}x_n=0$；(2) $\\lim_{n\\to\\infty}\\dfrac{x_{n+1}}{x_n}=\\dfrac{1}{2}$。",
+      "takeaway": "记住指数双翼不等式（$x>0$）：下界 $\\mathrm{e}^x>1+x$ 证 $x_{n+1}>0$，上界 $1-\\mathrm{e}^{-x}<x$ 证 $x_{n+1}<x_n$，正好配成一套左右夹击！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-9",
+        "pdfPage": 9,
+        "itemRef": "例4.13 (1)~(2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p01_seq_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-e-14",
+      "section": "三、单调有界准则专题证明（例 4.9~4.17）",
+      "kind": "example",
+      "title": "【例 4.14】导数严格递减（严格上凸）+ $f(0)=0$ 推割线不等式与迭代收敛于 $0$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 可导且 $f'(x)$ 严格单调递减，$f(0)=0$。\n(1) 证明：$\\forall x\\in(0,1)$，有 $f(1)x<f(x)<f'(0)x$；\n(2) 若 $f(1)\\ge 0,\\;f'(0)\\le 1$，任取 $x_0\\in(0,1)$，$x_n=f(x_{n-1})\\;(n\\in\\mathbb{N}_+)$，证明 $\\lim_{n\\to\\infty}x_n$ 存在并求其值。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：分别在 $[0,x]$ 与 $[x,1]$ 上用拉格朗日中值定理（结合 $f'$ 严格递减）",
+          "detail": "对任意 $x\\in(0,1)$，分别在 $[0,x]$ 与 $[x,1]$ 上用拉格朗日中值定理：存在 $\\xi_1\\in(0,x)$、$\\xi_2\\in(x,1)$，使得 $$\\frac{f(x)-f(0)}{x}=f'(\\xi_1),\\qquad \\frac{f(1)-f(x)}{1-x}=f'(\\xi_2).$$ 因 $0<\\xi_1<x<\\xi_2<1$ 且 $f'$ 严格递减，故 $f'(0)>f'(\\xi_1)>f'(\\xi_2)$：\n- 由 $f'(\\xi_1)<f'(0)$ 且 $f(0)=0$，立得 $f(x)<f'(0)x$；\n- 由 $\\frac{f(x)}{x}>\\frac{f(1)-f(x)}{1-x}$ 两边乘正数 $x(1-x)$ 得 $(1-x)f(x)>xf(1)-xf(x)\\implies f(x)>f(1)x$！"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：直接把 (1) 的双边不等式喂给递推，一举完成有界、单减与定值",
+          "detail": "由 $f(1)\\ge 0$ 与 $f'(0)\\le 1$，第 (1) 问对一切 $x\\in(0,1)$ 给出 $$0\\le f(1)x<f(x)<f'(0)x\\le x<1.$$ 因 $x_0\\in(0,1)$，数学归纳知 $\\forall n\\ge 0,\\;x_n\\in(0,1)$，且 $x_n=f(x_{n-1})<x_{n-1}$。于是 $\\{x_n\\}$ 严格单减有下界 $0$，极限 $A=\\lim_{n\\to\\infty}x_n\\in[0,x_0)\\subset[0,1)$ 存在。因 $f$ 可导必连续，两边取极限得 $f(A)=A$。若 $A\\in(0,1)$，由 (1) 有 $f(A)<f'(0)A\\le A$ 矛盾，故只能 $A=0$！"
+        }
+      ],
+      "finalAnswer": "(1) 证毕；(2) $\\lim_{n\\to\\infty}x_n=0$。",
+      "takeaway": "第 (1) 问的几何本质超级直观：$f'$ 递减即曲线严格上凸，原点处切线 $f'(0)x$ 必在曲线上方，而 $(0,0)$ 到 $(1,f(1))$ 的割线 $f(1)x$ 必在曲线下方！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-10",
+        "pdfPage": 10,
+        "itemRef": "例4.14 (1)~(2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p01_seq_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-e-15",
+      "section": "三、单调有界准则专题证明（例 4.9~4.17）",
+      "kind": "example",
+      "title": "【例 4.15】隐式方程根数列：$f_n(x)=\\sum_{k=1}^n\\sin^k x=1$ 在 $[\\frac{\\pi}{6},\\frac{\\pi}{2}]$ 的唯一根及极限",
+      "examWeight": "core",
+      "problem": "设 $f_n(x)=\\sin x+\\sin^2 x+\\dots+\\sin^n x\\;(n\\in\\mathbb{N}_+)$，证明 $f_n(x)=1$ 在 $\\left[\\dfrac{\\pi}{6},\\dfrac{\\pi}{2}\\right]$ 上有且仅有一个实根 $x_n$，且 $\\lim_{n\\to\\infty}x_n$ 存在并求其值。",
+      "steps": [
+        {
+          "stepTitle": "1. 用零点定理 + 导数正号证唯一实根 $x_n\\in(\\frac{\\pi}{6},\\frac{\\pi}{2}]$",
+          "detail": "当 $n=1$ 时，$\\sin x=1$ 在 $[\\frac{\\pi}{6},\\frac{\\pi}{2}]$ 上有唯一根 $x_1=\\frac{\\pi}{2}$。当 $n\\ge 2$ 时，$f_n$ 连续且 $f_n\\!\\left(\\frac{\\pi}{6}\\right)=\\sum_{k=1}^n\\frac{1}{2^k}=1-\\frac{1}{2^n}<1$，$f_n\\!\\left(\\frac{\\pi}{2}\\right)=n>1$；又在 $\\left[\\frac{\\pi}{6},\\frac{\\pi}{2}\\right)$ 上 $f_n'(x)=\\cos x(1+2\\sin x+\\dots+n\\sin^{n-1}x)>0$，故 $f_n$ 严格单增，由零点定理知 $f_n(x)=1$ 有唯一实根 $x_n\\in\\left(\\frac{\\pi}{6},\\frac{\\pi}{2}\\right)$。"
+        },
+        {
+          "stepTitle": "2. 不解 $x_n$，直接代入 $f_{n+1}(x_n)$ 比较证严格单减，再等比求和求极限 $\\frac{\\pi}{6}$",
+          "detail": "对任意 $n\\ge 1$，因 $\\sin x_n>0$，故 $$f_{n+1}(x_n)=f_n(x_n)+\\sin^{n+1}x_n=1+\\sin^{n+1}x_n>1=f_{n+1}(x_{n+1}).$$ 由 $f_{n+1}$ 严格单增立得 $x_{n+1}<x_n$！又 $x_n>\\frac{\\pi}{6}$，故 $\\{x_n\\}$ 单减有下界，$\\lim_{n\\to\\infty}x_n=A\\in\\left[\\frac{\\pi}{6},x_2\\right]\\subset\\left[\\frac{\\pi}{6},\\frac{\\pi}{2}\\right)$ 存在。对 $n\\ge 2$（此时 $\\sin x_n\\le\\sin x_2<1$）套等比求和：$$1=\\frac{\\sin x_n(1-\\sin^n x_n)}{1-\\sin x_n}\\implies 1-2\\sin x_n=-\\sin^{n+1}x_n.$$ 因 $0<\\sin x_n\\le\\sin x_2<1\\implies \\lim_{n\\to\\infty}\\sin^{n+1}x_n=0$，两边取极限得 $1-2\\sin A=0\\implies \\sin A=\\frac{1}{2}\\implies A=\\frac{\\pi}{6}$！"
+        }
+      ],
+      "finalAnswer": "唯一实根存在且 $\\lim_{n\\to\\infty}x_n=\\dfrac{\\pi}{6}$。",
+      "takeaway": "考研数一真题级最高频母题（方程根数列）三大固定动作：**① 端点异号 + 严格单调定唯一根；② 代入 $f_{n+1}(x_n)$ 与 $c$ 比大小脱外壳定单调；③ 注意先用 $x_n\\le x_2<\\frac{\\pi}{2}$ 严格说明公比 $<1$ 再取极限**！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-10",
+        "pdfPage": 10,
+        "itemRef": "例4.15"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p01_seq_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-e-16",
+      "section": "三、单调有界准则专题证明（例 4.9~4.17）",
+      "kind": "example",
+      "title": "【例 4.16】欧拉常数推广模型：证 $a_n=\\sum_{k=1}^n f(k)-\\int_1^n f(x)\\,\\mathrm{d}x$ 收敛",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 是 $[0,+\\infty)$ 上单调递减的非负连续函数，$a_n=\\displaystyle\\sum_{k=1}^n f(k)-\\int_1^n f(x)\\,\\mathrm{d}x\\;(n\\in\\mathbb{N}_+)$，证明 $\\lim_{n\\to\\infty}a_n$ 存在。",
+      "steps": [
+        {
+          "stepTitle": "1. 作差 $a_{n+1}-a_n$，利用单调递减证 $\\{a_n\\}$ 单调递减",
+          "detail": "因 $f(x)$ 单调递减，在 $[n,n+1]$ 上恒有 $f(x)\\ge f(n+1)$，故 $$a_{n+1}-a_n=f(n+1)-\\int_n^{n+1}f(x)\\,\\mathrm{d}x\\le f(n+1)-\\int_n^{n+1}f(n+1)\\,\\mathrm{d}x=0,$$ 于是 $\\{a_n\\}$ 单调递减。"
+        },
+        {
+          "stepTitle": "2. 把 $\\int_1^n f$ 拆成 $n-1$ 段逐段放大证下界 $a_n\\ge 0$",
+          "detail": "对每个 $k=1,2,\\dots,n-1$，在 $[k,k+1]$ 上有 $f(x)\\le f(k)\\implies \\int_k^{k+1}f(x)\\,\\mathrm{d}x\\le f(k)$。相加得 $\\int_1^n f(x)\\,\\mathrm{d}x\\le\\sum_{k=1}^{n-1}f(k)$，从而 $$a_n=\\sum_{k=1}^n f(k)-\\int_1^n f(x)\\,\\mathrm{d}x\\ge f(n)\\ge 0.$$ 单调递减且有下界 $0$，由单调有界准则知 $\\lim_{n\\to\\infty}a_n$ 存在！"
+        }
+      ],
+      "finalAnswer": "证毕（取 $f(x)=\\frac{1}{x}$ 即得欧拉常数 $\\gamma\\approx 0.5772$）。",
+      "takeaway": "阶梯矩形与曲线面积对比的灵魂证明：右端点矩形 $\\le$ 曲边梯形面积 $\\le$ 左端点矩形，既管单调又管下界！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-11",
+        "pdfPage": 11,
+        "itemRef": "例4.16"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p01_seq_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-e-17",
+      "section": "三、单调有界准则专题证明（例 4.9~4.17）",
+      "kind": "example",
+      "title": "【例 4.17】二次有理分式递推 $a_{n+1}=\\frac{a_n^2+2}{2a_n-1}$ 凑完全平方证下界与单减",
+      "examWeight": "core",
+      "problem": "设数列 $\\{a_n\\}$ 满足 $a_1=4$，$a_{n+1}=\\dfrac{a_n^2+2}{2a_n-1}\\;(n\\ge 1)$。证明数列极限存在并求出 $\\lim_{n\\to\\infty}a_n$。",
+      "steps": [
+        {
+          "stepTitle": "1. 先斩后奏算不动点 $2$，作差 $a_{n+1}-2$ 惊现完全平方秒证下界",
+          "detail": "设极限 $A$，由 $A=\\frac{A^2+2}{2A-1}\\implies A^2-A-2=0\\implies A=2$ 或 $-1$。因 $a_1=4>2$，瞄准**单减有下界 $2$**。考察 $$a_{n+1}-2=\\frac{a_n^2+2-4a_n+2}{2a_n-1}=\\frac{(a_n-2)^2}{2a_n-1}.$$ 当 $a_n>2$ 时分子 $>0$ 且分母 $2a_n-1>3>0$，故归纳立得 $\\forall n\\ge 1,\\;a_n>2$！"
+        },
+        {
+          "stepTitle": "2. 作差 $a_{n+1}-a_n$ 证严格单调递减并定极限 $2$",
+          "detail": "$$a_{n+1}-a_n=\\frac{a_n^2+2-2a_n^2+a_n}{2a_n-1}=-\\frac{(a_n-2)(a_n+1)}{2a_n-1}<0.$$ 故 $\\{a_n\\}$ 严格单减有下界 $2$，极限 $A\\ge 2$ 存在，舍去 $-1$ 得 $\\lim_{n\\to\\infty}a_n=2$。"
+        }
+      ],
+      "finalAnswer": "$\\lim_{n\\to\\infty}a_n=2$。",
+      "takeaway": "分式递推证下界 $A$ 的绝活：**直接算 $a_{n+1}-A$**，因为 $A$ 是不动点，分子必能提出因子 $(a_n-A)$（本题直接出平方 $(a_n-2)^2$，顺便预示了这是牛顿切线法式的二次超快收敛！）",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-11",
+        "pdfPage": 11,
+        "itemRef": "例4.17"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p01_seq_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-e-18",
+      "section": "四、双数列夹逼定理与非线性转线性放缩（例 4.18~4.21）",
+      "kind": "example",
+      "title": "【例 4.18】双数列方程 $\\mathrm{e}^{a_n}+a_n=\\mathrm{e}^{b_n}$ 直接脱壳夹逼求 $\\lim a_n$",
+      "examWeight": "core",
+      "problem": "设 $a_n>0$，$\\lim_{n\\to\\infty}b_n=0$，且 $\\mathrm{e}^{a_n}+a_n=\\mathrm{e}^{b_n}\\;(n\\in\\mathbb{N}_+)$，求 $\\lim_{n\\to\\infty}a_n$。",
+      "steps": [
+        {
+          "stepTitle": "1. 利用 $a_n>0$ 放缩出 $0<a_n<b_n$（或 $0<a_n<\\mathrm{e}^{b_n}-1$）夹逼",
+          "detail": "因 $a_n>0$，有 $\\mathrm{e}^{b_n}=\\mathrm{e}^{a_n}+a_n>\\mathrm{e}^{a_n}$；又指数函数 $\\mathrm{e}^x$ 严格单调递增，立得 $$0<a_n<b_n.$$ （或由 $\\mathrm{e}^{a_n}>1$ 得 $0<a_n<\\mathrm{e}^{b_n}-1$。）因 $\\lim_{n\\to\\infty}b_n=0$，由夹逼准则立得 $\\lim_{n\\to\\infty}a_n=0$！"
+        }
+      ],
+      "finalAnswer": "$\\lim_{n\\to\\infty}a_n=0$。",
+      "takeaway": "看到双数列混合等式 $f(a_n)=g(b_n)$，根本不用把 $a_n$ 解出来——丢掉一个正项，用函数单调性一秒夹出 $0<a_n<b_n$！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-12",
+        "pdfPage": 12,
+        "itemRef": "例4.18"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p01_seq_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-e-19",
+      "section": "四、双数列夹逼定理与非线性转线性放缩（例 4.18~4.21）",
+      "kind": "example",
+      "title": "【例 4.19】双数列三角方程 $\\cos a_n-a_n=\\cos b_n$ 利用 $\\cos x$ 递减夹逼",
+      "examWeight": "core",
+      "problem": "设 $0<a_n<\\dfrac{\\pi}{2}$，$0<b_n<\\dfrac{\\pi}{2}$，$\\lim_{n\\to\\infty}b_n=0$，$\\cos a_n-a_n=\\cos b_n$，求 $\\lim_{n\\to\\infty}a_n$。",
+      "steps": [
+        {
+          "stepTitle": "1. 移项比较 $\\cos a_n>\\cos b_n$，由 $(0,\\frac{\\pi}{2})$ 上余弦严格递减夹出 $0<a_n<b_n$",
+          "detail": "因 $a_n>0$，由 $\\cos a_n=\\cos b_n+a_n>\\cos b_n$。又 $a_n,b_n\\in(0,\\frac{\\pi}{2})$ 且 $\\cos x$ 在 $(0,\\frac{\\pi}{2})$ 上严格单调递减，立得 $$0<a_n<b_n.$$ （另解：直接用 $\\cos a_n<1$ 得 $0<a_n=\\cos a_n-\\cos b_n<1-\\cos b_n\\to 0$！）因 $\\lim_{n\\to\\infty}b_n=0$，由夹逼定理得 $\\lim_{n\\to\\infty}a_n=0$。"
+        }
+      ],
+      "finalAnswer": "$\\lim_{n\\to\\infty}a_n=0$。",
+      "takeaway": "两种夹逼都只需两行：法一由 $\\cos$ 单减得 $0<a_n<b_n$；法二由 $\\cos a_n<1$ 得 $0<a_n<1-\\cos b_n$（甚至直接看出 $a_n=O(b_n^2)$ 比 $b_n$ 趋零更快！）。",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-12",
+        "pdfPage": 12,
+        "itemRef": "例4.19"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p01_seq_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-e-20",
+      "section": "四、双数列夹逼定理与非线性转线性放缩（例 4.18~4.21）",
+      "kind": "example",
+      "title": "【例 4.20】双数列比阶压轴：$x_{n+1}=\\sin x_n$ 与 $y_{n+1}=y_n^2$ 的线性割线放缩",
+      "examWeight": "core",
+      "problem": "设数列 $\\{x_n\\},\\{y_n\\}$ 满足 $x_{n+1}=\\sin x_n$，$y_{n+1}=y_n^2\\;(n\\in\\mathbb{N}_+)$，$x_1=y_1=\\dfrac{1}{2}$，证明 $n\\to\\infty$ 时 $y_n$ 是 $x_n$ 的高阶无穷小。",
+      "steps": [
+        {
+          "stepTitle": "1. 求出 $y_n$ 的显式通项，并用上凸割线把非线性 $\\sin x_n$ 托底为线性 $\\frac{1}{2}x_n$",
+          "detail": "由 $y_1=\\frac{1}{2},\\;y_{n+1}=y_n^2$ 归纳立得 $y_n=\\left(\\frac{1}{2}\\right)^{2^{n-1}}$。\n对 $\\{x_n\\}$：因 $x_1=\\frac{1}{2}\\in(0,\\frac{\\pi}{2})$，归纳知 $0<x_{n+1}=\\sin x_n<x_n\\le\\frac{1}{2}$。在 $(0,\\frac{\\pi}{2}]$ 上 $g(x)=\\sin x$ 上凸，故其图像恒高于端点割线：$$\\sin x\\ge\\frac{2}{\\pi}x>\\frac{1}{2}x\\quad\\left(x\\in\\left(0,\\frac{\\pi}{2}\\right]\\right).$$ 于是 $x_{n+1}=\\sin x_n>\\frac{1}{2}x_n$，连乘归纳得 $x_n>\\left(\\frac{1}{2}\\right)^{n-1}x_1=\\left(\\frac{1}{2}\\right)^n$！"
+        },
+        {
+          "stepTitle": "2. 比值夹逼证 $\\lim_{n\\to\\infty}\\frac{y_n}{x_n}=0$",
+          "detail": "对一切 $n\\ge 3$，有 $2^{n-1}-n\\ge 1$ 且 $2^{n-1}-n\\to+\\infty$，故 $$0<\\frac{y_n}{x_n}<\\frac{(1/2)^{2^{n-1}}}{(1/2)^n}=\\left(\\frac{1}{2}\\right)^{2^{n-1}-n}\\xrightarrow{n\\to\\infty}0.$$ 由夹逼定理得 $\\lim_{n\\to\\infty}\\frac{y_n}{x_n}=0$，即 $y_n=o(x_n)$！"
+        }
+      ],
+      "finalAnswer": "证毕（$\\lim_{n\\to\\infty}\\dfrac{y_n}{x_n}=0$）。",
+      "takeaway": "绝妙数形结合思维：面对非线性递推 $x_{n+1}=f(x_n)$ 无法写通项时，**用割线 $f(x)\\ge c x$ 把它降格成等比数列 $c^n$**，就能轻松和超指数衰减的 $y_n=y_1^{2^{n-1}}$ 分出胜负！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-13",
+        "pdfPage": 13,
+        "itemRef": "例4.20"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p01_seq_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-e-21",
+      "section": "四、双数列夹逼定理与非线性转线性放缩（例 4.18~4.21）",
+      "kind": "example",
+      "title": "【例 4.21】双数列比阶再升级：$a_{n+1}=a_n^2$ 与 $b_n=\\tan b_{n+1}$ 用 $\\arctan$ 割线托底",
+      "examWeight": "core",
+      "problem": "设数列 $\\{a_n\\},\\{b_n\\}$ 满足 $a_0=\\dfrac{1}{2},\\;a_{n+1}=a_n^2\\;(n\\in\\mathbb{N})$；$b_n=\\tan b_{n+1}$，$0<-b_n<\\dfrac{\\pi}{4}\\;(n\\in\\mathbb{N}_+)$（原讲义印有负号，下方解法用 $|b_n|$ 同时兼容正负情形）。计算 $\\displaystyle\\lim_{n\\to\\infty}\\frac{a_n}{b_n}$。",
+      "steps": [
+        {
+          "stepTitle": "1. 写 $a_n$ 显式通项，将 $b_n=\\tan b_{n+1}$ 反解并用 $\\arctan$ 上凸割线托底 $|b_n|$",
+          "detail": "由 $a_0=\\frac{1}{2},\\;a_{n+1}=a_n^2$ 归纳得 $a_n=\\left(\\frac{1}{2}\\right)^{2^n}$。\n因 $b_n\\in\\left(-\\frac{\\pi}{4},0\\right)$（或 $\\left(0,\\frac{\\pi}{4}\\right)$），由 $b_n=\\tan b_{n+1}$ 及 $\\tan$ 的奇性与单调性知 $|b_{n+1}|=\\arctan|b_n|$，且 $|b_n|\\in\\left(0,\\frac{\\pi}{4}\\right)\\subset(0,1)$。在 $[0,1]$ 上 $h(t)=\\arctan t$ 满足 $h''(t)=\\frac{-2t}{(1+t^2)^2}\\le 0$（上凸），故图像高于连线 $(0,0)\\to(1,\\frac{\\pi}{4})$：$$\\arctan t\\ge\\frac{\\pi}{4}t>\\frac{1}{2}t\\quad(t\\in(0,1]).$$ 从而 $|b_{n+1}|=\\arctan|b_n|>\\frac{1}{2}|b_n|$，迭代得 $|b_n|>\\left(\\frac{1}{2}\\right)^{n-1}|b_1|$！"
+        },
+        {
+          "stepTitle": "2. 比值夹逼立得极限为 $0$",
+          "detail": "$$0<\\left|\\frac{a_n}{b_n}\\right|<\\frac{(1/2)^{2^n}}{(1/2)^{n-1}|b_1|}=\\frac{1}{|b_1|}\\left(\\frac{1}{2}\\right)^{2^n-n+1}\\xrightarrow{n\\to\\infty}0\\implies \\lim_{n\\to\\infty}\\frac{a_n}{b_n}=0.$$"
+        }
+      ],
+      "finalAnswer": "$\\lim_{n\\to\\infty}\\dfrac{a_n}{b_n}=0$。",
+      "takeaway": "与例 4.20 是孪生兄弟题：看到 $b_n=\\tan b_{n+1}$ 立刻反解成 $b_{n+1}=\\arctan b_n$，画草图用割线 $\\arctan t\\ge\\frac{\\pi}{4}t>\\frac{1}{2}t$ 瞬间通杀！（注意用绝对值 $|b_n|$ 既优雅又无缝免疫原题干 `-b_n` 符号！）",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-13",
+        "pdfPage": 13,
+        "itemRef": "例4.21（含 -b_n 与下标起始核注）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p01_seq_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-e-22",
+      "section": "五、压缩映射原理专题证明（例 4.22~4.26）",
+      "kind": "example",
+      "title": "【例 4.22】压缩映射标准模板 + 不动点处 $f'(x_0)=0$ 二阶泰勒求二次收敛系数",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[a,b]$ 二阶可导，$|f'(x)|\\le k<1$，$f'(x_0)=0,\\;f''(x_0)\\ne 0$，$x_0\\in(a,b)$ 且 $x_0=f(x_0)$。\n(1) 设 $x_{n+1}=f(x_n),\\;x_n\\in[a,b]\\;(n\\in\\mathbb{N}_+)$，证明 $\\lim_{n\\to\\infty}x_n=x_0$；\n(2) 求 $\\displaystyle\\lim_{n\\to\\infty}\\frac{x_{n+1}-x_0}{(x_n-x_0)^2}$（设充分大 $n$ 时 $x_n\\ne x_0$）。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：拉格朗日中值定理迭代收缩 $k^n\\to 0$",
+          "detail": "因 $f(x_0)=x_0$ 且 $x_n\\in[a,b]$，由拉格朗日中值定理存在 $\\xi_n$ 介于 $x_n$ 与 $x_0$ 之间，使 $$0\\le|x_{n+1}-x_0|=|f(x_n)-f(x_0)|=|f'(\\xi_n)|\\,|x_n-x_0|\\le k|x_n-x_0|.$$ 递推 $n$ 次得 $0\\le|x_{n+1}-x_0|\\le k^n|x_1-x_0|$。因 $0\\le k<1\\implies k^n\\to 0$，由夹逼定理得 $\\lim_{n\\to\\infty}x_n=x_0$！"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：在 $x_0$ 处展开二阶佩亚诺泰勒公式一行出值",
+          "detail": "因 $f$ 在 $x_0$ 处二阶可导且 $f(x_0)=x_0,\\;f'(x_0)=0$，由带佩亚诺余项的二阶泰勒公式：$$x_{n+1}-x_0=f(x_n)-f(x_0)=f'(x_0)(x_n-x_0)+\\frac{1}{2}f''(x_0)(x_n-x_0)^2+o\\bigl((x_n-x_0)^2\\bigr)=\\frac{1}{2}f''(x_0)(x_n-x_0)^2+o\\bigl((x_n-x_0)^2\\bigr).$$ 两边同除 $(x_n-x_0)^2$ 并令 $n\\to\\infty$（$x_n\\to x_0$），立得极限为 $\\dfrac{1}{2}f''(x_0)$！"
+        }
+      ],
+      "finalAnswer": "(1) 证毕；(2) $\\dfrac{1}{2}f''(x_0)$。",
+      "takeaway": "记住数值分析里牛顿迭代「二阶收敛」的理论原型：当不动点满足 $f'(x_0)=0$ 时，误差满足 $|e_{n+1}|\\approx\\frac{1}{2}|f''(x_0)|\\,e_n^2$！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-14",
+        "pdfPage": 14,
+        "itemRef": "例4.22 (1)~(2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p01_seq_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-e-23",
+      "section": "五、压缩映射原理专题证明（例 4.22~4.26）",
+      "kind": "example",
+      "title": "【例 4.23】分式递推 $x_{n+1}=\\frac{a+ax_n}{a+x_n}\\;(a>1)$ 免分类讨论压缩映射一步通关",
+      "examWeight": "core",
+      "problem": "若 $x_{n+1}=\\dfrac{a+ax_n}{a+x_n}\\;(n\\in\\mathbb{N}_+)$，$a>1$，$x_1=b>0$，证明 $\\lim_{n\\to\\infty}x_n$ 存在并求其值。",
+      "steps": [
+        {
+          "stepTitle": "1. 算不动点 $\\sqrt{a}$，直接对 $|x_{n+1}-\\sqrt{a}|$ 代数通分构造压缩因子 $k=1-\\frac{1}{\\sqrt{a}}<1$",
+          "detail": "因 $x_1=b>0,\\;a>1$，显然归纳得 $\\forall n\\ge 1,\\;x_n>0$。解不动点 $A=\\frac{a+aA}{a+A}\\implies A^2=a\\implies A=\\sqrt{a}>0$。直接作差通分：$$|x_{n+1}-\\sqrt{a}|=\\left|\\frac{a+ax_n-a\\sqrt{a}-\\sqrt{a}x_n}{a+x_n}\\right|=\\frac{\\sqrt{a}(\\sqrt{a}-1)}{a+x_n}|x_n-\\sqrt{a}|.$$ 因 $x_n>0$，放大分母的倒数得 $\\frac{\\sqrt{a}(\\sqrt{a}-1)}{a+x_n}<\\frac{\\sqrt{a}(\\sqrt{a}-1)}{a}=1-\\frac{1}{\\sqrt{a}}$。记 $k=1-\\frac{1}{\\sqrt{a}}$，因 $a>1$ 故 $0<k<1$！递推得 $$0\\le|x_{n+1}-\\sqrt{a}|\\le k^n|b-\\sqrt{a}|\\xrightarrow{n\\to\\infty}0\\implies \\lim_{n\\to\\infty}x_n=\\sqrt{a}.$$"
+        }
+      ],
+      "finalAnswer": "$\\lim_{n\\to\\infty}x_n=\\sqrt{a}$。",
+      "takeaway": "这道题用单调有界还要分 $b<\\sqrt{a}$、$b=\\sqrt{a}$、$b>\\sqrt{a}$ 三种情况讨论，而**代数压缩映射完全免分类、三行秒杀**，爽度拉满！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-15",
+        "pdfPage": 15,
+        "itemRef": "例4.23"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p01_seq_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-e-24",
+      "section": "五、压缩映射原理专题证明（例 4.22~4.26）",
+      "kind": "example",
+      "title": "【例 4.24】振荡连分数递推 $x_{n+1}=2+\\frac{1}{x_n}$ 用压缩映射免拆奇偶子列",
+      "examWeight": "core",
+      "problem": "设 $x_1=2$，$x_{n+1}=2+\\dfrac{1}{x_n}\\;(n\\in\\mathbb{N}_+)$，求极限 $\\lim_{n\\to\\infty}x_n$。",
+      "steps": [
+        {
+          "stepTitle": "1. 看出递推振荡（$f'(x)=-\\frac{1}{x^2}<0$），先锁下界 $x_n\\ge 2$ 与不动点 $1+\\sqrt{2}$",
+          "detail": "因 $x_1=2>0$，归纳立得 $\\forall n\\ge 1,\\;x_n\\ge 2$。解不动点 $A=2+\\frac{1}{A}\\implies A^2-2A-1=0$，正根为 $A=1+\\sqrt{2}>2$。"
+        },
+        {
+          "stepTitle": "2. 代数作差收缩（无需拉格朗日，直接通分！）",
+          "detail": "$$|x_{n+1}-A|=\\left|\\left(2+\\frac{1}{x_n}\\right)-\\left(2+\\frac{1}{A}\\right)\\right|=\\frac{|x_n-A|}{A\\,x_n}\\le\\frac{1}{2(1+\\sqrt{2})}|x_n-A|.$$ 记 $k=\\frac{1}{2(1+\\sqrt{2})}<\\frac{1}{4}<1$，递推得 $0\\le|x_{n+1}-A|\\le k^n|2-A|\\to 0$，故 $\\lim_{n\\to\\infty}x_n=1+\\sqrt{2}$！"
+        }
+      ],
+      "finalAnswer": "$\\lim_{n\\to\\infty}x_n=1+\\sqrt{2}$。",
+      "takeaway": "记住所有形如 $x_{n+1}=c+\\frac{d}{x_n}\\;(c,d>0)$ 的振荡数列，永远先锁 $x_n\\ge c$，再用 $|x_{n+1}-A|=\\frac{d}{A x_n}|x_n-A|$ 配 $k=\\frac{d}{c A}<1$ 一行结束战斗！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-15",
+        "pdfPage": 15,
+        "itemRef": "例4.24"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p01_seq_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-e-25",
+      "section": "五、压缩映射原理专题证明（例 4.22~4.26）",
+      "kind": "example",
+      "title": "【例 4.25】二次振荡递推 $2x_{n+1}+x_n^2=1$ 锁入 $[0,\\frac{1}{2}]$ 平方差压缩",
+      "examWeight": "core",
+      "problem": "设 $x_1=\\dfrac{1}{2}$，$2x_{n+1}+x_n^2=1\\;(n\\in\\mathbb{N}_+)$，求极限 $\\lim_{n\\to\\infty}x_n$。",
+      "steps": [
+        {
+          "stepTitle": "1. 改写 $x_{n+1}=\\frac{1-x_n^2}{2}$，归纳锁入 $[0,\\frac{1}{2}]$ 并解出不动点 $\\sqrt{2}-1$",
+          "detail": "当 $x_n\\in[0,\\frac{1}{2}]$ 时，$x_{n+1}=\\frac{1-x_n^2}{2}\\in[\\frac{3}{8},\\frac{1}{2}]\\subset[0,\\frac{1}{2}]$，故 $\\forall n\\ge 1,\\;0\\le x_n\\le\\frac{1}{2}$。解不动点 $A=\\frac{1-A^2}{2}\\implies A^2+2A-1=0$，取正根 $A=\\sqrt{2}-1\\in(0,\\frac{1}{2})$。"
+        },
+        {
+          "stepTitle": "2. 平方差分解出 $|x_n-A|$ 并压出常数 $k=\\frac{1}{2}$",
+          "detail": "$$|x_{n+1}-A|=\\left|\\frac{1-x_n^2}{2}-\\frac{1-A^2}{2}\\right|=\\frac{x_n+A}{2}|x_n-A|\\le\\frac{\\frac{1}{2}+\\frac{1}{2}}{2}|x_n-A|=\\frac{1}{2}|x_n-A|.$$ （紧界 $k=\\frac{2\\sqrt{2}-1}{4}\\approx 0.457<1$，用粗界 $\\frac{1}{2}$ 更清爽！）递推得 $0\\le|x_{n+1}-A|\\le\\frac{1}{2^n}|x_1-A|\\to 0$，故 $\\lim_{n\\to\\infty}x_n=\\sqrt{2}-1$！"
+        }
+      ],
+      "finalAnswer": "$\\lim_{n\\to\\infty}x_n=\\sqrt{2}-1$。",
+      "takeaway": "平方递推压缩映射不一定要算精界 $\\frac{2\\sqrt{2}-1}{4}$，只要知道 $x_n\\le\\frac{1}{2}$ 与 $A<\\frac{1}{2}$，直接放成 $\\frac{1}{2}$ 既干净又绝不出错！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-15",
+        "pdfPage": 15,
+        "itemRef": "例4.25"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p01_seq_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-e-26",
+      "section": "五、压缩映射原理专题证明（例 4.22~4.26）",
+      "kind": "example",
+      "title": "【例 4.26】考研压轴综合：$0<f'(x)<\\frac{1}{2}$ 证差分级数绝对收敛并锁死不动点 $A\\in(0,2)$",
+      "examWeight": "core",
+      "problem": "设可导函数 $f(x)$ 满足 $f(0)=1$，$0<f'(x)<\\dfrac{1}{2}$，数列 $\\{x_n\\}$ 满足 $x_{n+1}=f(x_n)\\;(n\\in\\mathbb{N}_+)$，证明：\n(1) $\\displaystyle\\sum_{n=1}^\\infty(x_{n+1}-x_n)$ 绝对收敛；\n(2) $\\lim_{n\\to\\infty}x_n$ 存在且 $0<\\lim_{n\\to\\infty}x_n<2$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：拉格朗日压缩相邻项差，与等比级数 $\\sum\\frac{1}{2^{n-1}}$ 比较判绝对收敛",
+          "detail": "对任意 $n\\ge 2$，由拉格朗日中值定理存在 $\\xi_n$ 介于 $x_n$ 与 $x_{n-1}$ 之间，使得 $$|x_{n+1}-x_n|=|f(x_n)-f(x_{n-1})|=|f'(\\xi_n)|\\,|x_n-x_{n-1}|\\le\\frac{1}{2}|x_n-x_{n-1}|.$$ 迭代得 $|x_{n+1}-x_n|\\le\\frac{1}{2^{n-1}}|x_2-x_1|\\;(n\\ge 1)$。因正项等比级数 $\\sum_{n=1}^\\infty\\frac{|x_2-x_1|}{2^{n-1}}=2|x_2-x_1|$ 收敛，由比较审敛法知 $\\sum_{n=1}^\\infty|x_{n+1}-x_n|$ 收敛，即原级数绝对收敛！"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：由级数部分和裂项得极限存在，再在 $[0,A]$ 用拉格朗日两行锁死 $1<A<2$",
+          "detail": "因 $\\sum_{n=1}^\\infty(x_{n+1}-x_n)$ 绝对收敛必收敛，记其和为 $S$。考察部分和裂项相消：$$S_N=\\sum_{n=1}^N(x_{n+1}-x_n)=x_{N+1}-x_1\\xrightarrow{N\\to\\infty}S\\implies \\lim_{n\\to\\infty}x_n=x_1+S=A\\text{ 存在！}$$\n因 $f$ 可导必连续，在 $x_{n+1}=f(x_n)$ 两端取极限得 $A=f(A)$。首先 $A\\ne 0$（因 $f(0)=1\\ne 0$）；在 $0$ 与 $A$ 之间对 $f$ 用拉格朗日中值定理，存在 $\\eta$ 使 $$A-1=f(A)-f(0)=f'(\\eta)(A-0)\\implies \\bigl[1-f'(\\eta)\\bigr]A=1.$$ 因 $0<f'(\\eta)<\\frac{1}{2}\\implies \\frac{1}{2}<1-f'(\\eta)<1$，故立得 $$A=\\frac{1}{1-f'(\\eta)}\\in(1,2)\\subset(0,2)!$$"
+        }
+      ],
+      "finalAnswer": "证毕（事实上可更紧地锁定 $1<\\lim_{n\\to\\infty}x_n<2$）。",
+      "takeaway": "绝对必背的压轴神器组合：**① 未知不动点也能用压缩映射——直接压缩相邻差 $|x_{n+1}-x_n|$ 转为级数绝对收敛，再裂项反推数列收敛（巴拿赫不动点定理的核心思想！）② 估不动点范围，直接对 $f(A)-f(0)=f'(\\eta)A$ 解出 $A=\\frac{1}{1-f'(\\eta)}$**！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-16",
+        "pdfPage": 16,
+        "itemRef": "例4.26 (1)~(2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p01_seq_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-s-01",
+      "section": "单元总结 · 一、数列极限证明三大武器全题型速查表",
+      "kind": "summary",
+      "title": "【数列证明决策总表】单调有界 / 双数列夹逼 / 压缩映射一站式落刀路线",
+      "examWeight": "core",
+      "overview": "数列极限证明题表面花样百出，本质全逃不出「**单调有界（先斩后奏）— 双数列夹逼（线性割线放缩）— 压缩映射（导数/代数收缩）**」三驾马车！",
+      "tables": [
+        {
+          "caption": "表 4-1 数列极限证明 5 大高频题型与破题落刀表（猪哥&狗姐 P.4-1~4-16 全 26 例归类）",
+          "headers": [
+            "题型特征",
+            "首选武器",
+            "核心破题动作",
+            "代表例题"
+          ],
+          "rows": [
+            [
+              "概念判别：最值、复合敛散、子列拼盘",
+              "邻域重述 / 单调反函数 / 奇偶桥接",
+              "外层单调可逆才能反推；非单调直接构造 $(-1)^n$ 震荡或奇偶错位填零反例",
+              "例4.1~4.9"
+            ],
+            [
+              "显式/隐式同向递推、方程唯一根、累加减积分",
+              "单调有界准则（先斩后奏）",
+              "先解候选 $A$ 定方向；作差因式分解 $(x_n-A)$；隐式方程代 $f_{n+1}(x_n)$ 脱外壳",
+              "例4.10~4.17"
+            ],
+            [
+              "双数列隐式等式 $f(a_n)=g(b_n)$",
+              "夹逼定理（直接脱壳）",
+              "丢正项或用 $\\cos/\\exp$ 单调性直接夹出 $0<a_n<b_n$（或 $1-\\cos b_n$）",
+              "例4.18, 例4.19"
+            ],
+            [
+              "双数列比阶（超指数 $y_n^2$ vs 慢衰减 $\\sin/\\arctan$）",
+              "夹逼 + 数形结合线性放缩",
+              "上凸函数用割线 $\\sin x>\\frac{1}{2}x,\\;\\arctan t>\\frac{1}{2}t$ 托底成等比数列",
+              "例4.20, 例4.21"
+            ],
+            [
+              "振荡递推（$f'<0$）、免分类分式、级数联动",
+              "压缩映射原理（$|f'|\\le k<1$）",
+              "求 $A$ 或压缩相邻差 $|x_{n+1}-x_n|\\le k|x_n-x_{n-1}|$；分式/二次直接代数因式分解",
+              "例4.22~4.26"
+            ]
+          ]
+        }
+      ],
+      "patterns": [
+        {
+          "typeName": "考场证明数列极限「三步体检法」",
+          "triggers": "拿到一道陌生数列递推证明大题、一时不知道该从哪下手时。",
+          "method": "① **先求不动点 $A$**：令 $x_{n+1}=x_n=A$ 算出候选极限（若无显式递推则看双数列关系）；② **算导数 $f'(A)$**：若 $f'(x)>0$ 走**单调有界**，若 $f'(x)<0$ 且 $|f'(x)|\\le k<1$ 走**压缩映射**，若给双数列走**夹逼**；③ **补全闭环**：单调有界必写「舍增根理由」，压缩映射必写「$x_n$ 始终留在压缩区间内的归纳证明」！",
+          "pitfall": "绝对不要忘了检查首项 $x_1$ 是否跨过极值点（例 4.12 从 $n\\ge 2$ 起单调），也绝不可用 $|f'(x)|<1$ 替代 $|f'(x)|\\le k<1$！",
+          "relatedRefs": "例4.12, 例4.15, 例4.20, 例4.23, 例4.26"
+        }
+      ],
+      "takeaway": "牢记猪哥&狗姐章末金句：单调有界靠「先斩后奏」，双数列靠「割线线性放缩」，压缩映射靠「死磕第一步 $|x_{n+1}-a|\\le k|x_n-a|$」！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-16",
+        "pdfPage": 16,
+        "itemRef": "章末总结"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-s-02",
+      "section": "单元总结 · 二、高频反例武器库与常用不等式工具箱",
+      "kind": "summary",
+      "title": "【反例 + 放缩武器库】选择题 6 大秒杀反例 & 证明题 6 条高频不等式",
+      "examWeight": "core",
+      "overview": "选择题靠「精准反例库」10 秒排错，证明大题靠「常用不等式库」一击打穿卡壳步骤！",
+      "tables": [
+        {
+          "caption": "表 4-2 数列选择题高频反例速查库（一击证伪伪命题）",
+          "headers": [
+            "待证伪的常见误区",
+            "最简黄金反例",
+            "出处例题"
+          ],
+          "rows": [
+            [
+              "$\\cos(\\sin x_n)$ 收敛 $\\Rightarrow \\sin x_n$ 收敛",
+              "$x_n=(-1)^n\\frac{\\pi}{2}\\implies \\cos(\\sin x_n)\\equiv\\cos 1$",
+              "例4.2"
+            ],
+            [
+              "$\\{a_n\\}$ 发散 $\\Rightarrow a_n\\pm\\frac{1}{a_n}$ 发散",
+              "加号取 $a_n=2^{(-1)^n}$；减号取 $a_n=(-1)^n$",
+              "例4.3"
+            ],
+            [
+              "无界 $\\times$ 无界必无界；无界 $+$ 有界必无穷大",
+              "奇偶错位填零：$x_n=n/0,\\;y_n=0/n$",
+              "例4.4, 例4.5"
+            ],
+            [
+              "$\\lim a_n=A \\Rightarrow$ 充分大 $a_n>A-\\frac{1}{n}$",
+              "$a_n=A-\\frac{1}{\\sqrt{n}}$（趋近慢于 $\\frac{1}{n}$）",
+              "例4.6"
+            ],
+            [
+              "单调有界函数 $f$ 配收敛 $x_n\\Rightarrow f(x_n)$ 收敛",
+              "$f(x)=\\operatorname{sgn}(x)$（0点跳跃）配 $x_n=\\frac{(-1)^n}{n}$",
+              "例4.9"
+            ],
+            [
+              "$|f'(x)|<1 \\Rightarrow$ 压缩映射必收敛",
+              "$f(x)=x+\\frac{1}{x}\\;(x>1)$，导数 $<1$ 却无不动点",
+              "P.4-14 压缩映射"
+            ]
+          ]
+        },
+        {
+          "caption": "表 4-3 数列极限证明高频放缩不等式速查表",
+          "headers": [
+            "不等式",
+            "适用范围",
+            "典型应用场景"
+          ],
+          "rows": [
+            [
+              "$\\ln(1+x)<x<\\mathrm{e}^x-1$；$1-\\mathrm{e}^{-x}<x$",
+              "$x>0$",
+              "例4.11, 例4.13（指对超越递推单调与下界）"
+            ],
+            [
+              "$\\sqrt{ab}\\le\\dfrac{a+b}{2}$",
+              "$a,b\\ge 0$",
+              "例4.12（两项之和为常数时秒锁上界）"
+            ],
+            [
+              "$f(1)x<f(x)<f'(0)x$（$f'$ 严减，$f(0)=0$）",
+              "$x\\in(0,1)$",
+              "例4.14（上凸函数切线割线夹心）"
+            ],
+            [
+              "$\\sin x\\ge\\dfrac{2}{\\pi}x>\\dfrac{1}{2}x$",
+              "$x\\in\\left(0,\\frac{\\pi}{2}\\right]$",
+              "例4.20（将 $\\sin$ 递推线性化托底）"
+            ],
+            [
+              "$\\arctan x\\ge\\dfrac{\\pi}{4}x>\\dfrac{1}{2}x$",
+              "$x\\in(0,1]$",
+              "例4.21（将 $\\arctan$ 递推线性化托底）"
+            ],
+            [
+              "$f(k+1)\\le\\displaystyle\\int_k^{k+1}f(x)\\,\\mathrm{d}x\\le f(k)$",
+              "$f$ 在 $[k,k+1]$ 递减",
+              "例4.16（欧拉常数型累加减积分）"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "这 6 个反例和 6 条不等式覆盖了 90% 以上考研数列极限的「卡壳点」，考前过一遍立省 15 分钟！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-1~4-16",
+        "pdfPage": 1,
+        "itemRef": "全章反例与放缩总整理"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p01_seq_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p01-s-03",
+      "section": "单元总结 · 三、与张宇第 2 讲联动与易扣分规范清单",
+      "kind": "summary",
+      "title": "【大题防扣分清单】数列证明阅卷 4 条硬性采分点",
+      "examWeight": "core",
+      "overview": "数列极限大题最怕「思路全对但步骤漏写关键句被扣 3~4 分」，写完解答前按以下 4 点逐一核对：",
+      "patterns": [
+        {
+          "typeName": "阅卷硬核采分点核查（4 条红线）",
+          "triggers": "每次写完单调有界或压缩映射大题后、准备检查收尾时。",
+          "method": "① **有界性与单调性缺一不可**，且有界性若跨多步必须明写「由数学归纳法」；② **极限方程出现多个解时必须明写舍根依据**（如 $x_n\\ge x_2>0\\implies A>0$）；③ **递推式两边取极限前必须已证极限存在**（不可先写 $\\lim x_{n+1}=\\lim f(x_n)$ 再回头证存在，草稿先斩后奏，卷面必须先证后算！）；④ **用压缩映射必须显式写出常数 $0<k<1$ 及「由夹逼准则得极限为 $A$」**！",
+          "pitfall": "卷面顺序写反（没证存在就先取极限算 $A$）属于循环论证，严格阅卷会直接扣掉一半以上步骤分！",
+          "relatedRefs": "例4.10, 例4.12, 例4.15, 例4.22, 例4.26"
+        }
+      ],
+      "takeaway": "草稿纸上「先斩后奏」算 $A$，答题卡上「先证有界单调/压缩，再令 $n\\to\\infty$ 求 $A$」——心里有底，卷面无懈！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·4.数列极限》",
+        "printedPage": "P.4-7, 4-14, 4-16",
+        "pdfPage": 7,
+        "itemRef": "证明书写规范总结"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    }
+  ]
+}

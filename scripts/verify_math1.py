@@ -1084,6 +1084,91 @@ def run_all_checks() -> list[tuple[str, bool, str]]:
     )
     check("m1_c12_physics_and_econ", c12_ok, "zy30 Ex12.1-12.4, rod gravity, Pappus 8pi^2, zy18 Ex12.1-12.7 all exact")
 
+    # ==================== Proof Special Section (proof-01 ~ proof-03) ====================
+    # 68. proof-01: Sequence limit proofs (26 examples numerical & symbolic sanity)
+    seq41 = [float(k**(1 / k) - ((-1)**k) / k) for k in range(1, 30)]
+    x412 = 2.9
+    for _ in range(80):
+        x412 = (x412 * (3 - x412)) ** 0.5
+    x413 = 1.5
+    for _ in range(40):
+        x413_next = float(mp.log((mp.exp(x413) - 1) / x413))
+        r413 = x413_next / x413
+        x413 = x413_next
+    x417 = 4.0
+    for _ in range(15):
+        x417 = (x417**2 + 2) / (2 * x417 - 1)
+    x424 = 2.0
+    for _ in range(40):
+        x424 = 2.0 + 1.0 / x424
+    x425 = 0.5
+    for _ in range(40):
+        x425 = (1.0 - x425**2) / 2.0
+    # Ex4.26 sample f(x) = 1 + 0.3*x + 0.05*sin(x), 0<f'<0.5 => fixed point in (1,2)
+    x426 = -5.0
+    for _ in range(80):
+        x426 = 1.0 + 0.3 * x426 + 0.05 * float(mp.sin(x426))
+    p01_ok = (
+        max(seq41) == seq41[0] and min(seq41) == seq41[1]
+        and abs(x412 - 1.5) < 1e-10
+        and abs(x413) < 1e-10 and abs(r413 - 0.5) < 1e-9
+        and abs(x417 - 2.0) < 1e-12
+        and abs(x424 - (1 + 2**0.5)) < 1e-12
+        and abs(x425 - (2**0.5 - 1)) < 1e-12
+        and 1.0 < x426 < 2.0
+        and sp.limit((sp.Rational(1, 2))**(2**(n - 1) - n), n, sp.oo) == 0
+        and sp.simplify(sp.diff(sp.exp(x) - sp.exp(-x), x).subs(x, 0) - 2) == 0
+    )
+    check("m1_p01_seq_all", p01_ok, f"p01 Ex4.1/4.12({x412:.4f})/4.13(r={r413:.4f})/4.17/4.24/4.25/4.26({x426:.4f}) exact")
+
+    # 69. proof-02: MVT, Taylor, Landau/Kolmogorov, Aux-Polynomial & Constant-K identities
+    f_sym = sp.Function("f")
+    M_s, N_s, h_s = sp.symbols("M_s N_s h_s", positive=True)
+    landau_min = (M_s / h_s + N_s * h_s / 2).subs(h_s, sp.sqrt(2 * M_s / N_s))
+    kolm_min = (M_s / h_s + N_s * h_s**2 / 6).subs(h_s, (3 * M_s / N_s)**sp.Rational(1, 3))
+    p731 = -3 * x**2 + 4 * x
+    p734 = 3 * x + 1
+    # Ex7.37 F''(x) cancellation & Ex7.38 quadratic check
+    K_s, a_s = sp.symbols("K_s a_s", positive=True)
+    F737 = f_sym(x) - f_sym(a_s) - sp.Rational(1, 2) * (x - a_s) * (sp.diff(f_sym(x), x) + sp.diff(f_sym(a_s), a_s)) + sp.Rational(1, 12) * (x - a_s)**3 * K_s
+    d2_737 = sp.simplify(sp.diff(F737, x, 2) - sp.Rational(1, 2) * (x - a_s) * (K_s - sp.diff(f_sym(x), x, 3)))
+    p02_ok = (
+        sp.simplify(sp.diff((x - 1)**2 * sp.diff(f_sym(x), x), x) - (x - 1) * (2 * sp.diff(f_sym(x), x) + (x - 1) * sp.diff(f_sym(x), x, 2))) == 0
+        and sp.simplify(sp.diff(x * sp.exp(x) * (sp.diff(f_sym(x), x) - 1), x) - sp.exp(x) * ((1 + x) * (sp.diff(f_sym(x), x) - 1) + x * sp.diff(f_sym(x), x, 2))) == 0
+        and sp.simplify(landau_min - sp.sqrt(2 * M_s * N_s)) == 0
+        and sp.simplify(kolm_min**3 - sp.Rational(9, 8) * M_s**2 * N_s) == 0
+        and p731.subs(x, 0) == 0 and p731.subs(x, 1) == 1 and sp.integrate(p731, (x, 0, 1)) == 1 and sp.diff(p731, x, 2) == -6
+        and sp.integrate(p734, (x, 0, 1)) == sp.Rational(5, 2) and sp.integrate(x * p734, (x, 0, 1)) == sp.Rational(3, 2)
+        and d2_737 == 0
+        and sp.simplify(sp.integrate(x**2, (x, 0, a_s)) - (a_s / 2 * (0 - a_s**2) + sp.Rational(5, 12) * 2 * a_s**3)) == 0
+    )
+    check("m1_p02_aux_and_k", p02_ok, "p02 ODE aux, Landau sqrt(2MN), Kolm (9M^2N/8)^(1/3), Ex7.31/34/37/38 exact")
+
+    # 70. proof-03: 2013-2026 Real Kaoyan proof exams concrete identities & 2016 numerical mean
+    # 2016: f(x) = int_0^x cos(t)/(2t - 3pi) dt => average on [0, 3pi/2] = 1/(3pi)
+    f2016_int = mp.quad(lambda u: mp.quad(lambda v: mp.cos(v) / (2 * v - 3 * mp.pi), [0, u]), [0, 1.5 * mp.pi])
+    mean_2016 = f2016_int / (1.5 * mp.pi)
+    f2016_end = mp.quad(lambda v: mp.cos(v) / (2 * v - 3 * mp.pi), [0, mp.pi / 2, mp.pi, 1.5 * mp.pi])
+    # 2019-2 recurrence: a_n = int_0^1 x^n sqrt(1-x^2) dx
+    a2019_1 = sp.integrate(x * sp.sqrt(1 - x**2), (x, 0, 1))
+    a2019_3 = sp.integrate(x**3 * sp.sqrt(1 - x**2), (x, 0, 1))
+    # 2022 sufficiency 2nd-order Taylor coefficient: int_{-h}^h t^2 dt / (2h) = h^2/3 -> factor 1/3 * f''
+    c2022_coeff = sp.integrate(t**2 / 2, (t, -h_s, h_s)) / h_s**3
+    # 2026 F(-1)=F(0)=F(1)=0 check on f(x)=x^3 + x^2 - 1/3 (strictly inc on [-1,1]? take f(x)=x+0.1*(x^2-1/3))
+    f2026 = x + sp.Rational(1, 10) * (x**2 - sp.Rational(1, 3))
+    a2026 = sp.integrate(f2026, (x, 0, 1))
+    F2026 = a2026 * (1 - x**2) + sp.integrate(f2026.subs(x, t), (t, 1, x))
+    p03_ok = (
+        sp.integrate(f2026, (x, -1, 1)) == 0 and a2026 > 0
+        and F2026.subs(x, -1) == 0 and F2026.subs(x, 0) == 0 and F2026.subs(x, 1) == 0
+        and c2022_coeff == sp.Rational(1, 3)
+        and sp.simplify(a2019_3 - sp.Rational(2, 5) * a2019_1) == 0
+        and abs(mean_2016 - 1 / (3 * mp.pi)) < 1e-8
+        and f2016_end > 0
+        and sp.diff(sp.log(xp) + 1 / xp, xp).subs(xp, 1) == 0 and (sp.log(1) + 1) == 1
+    )
+    check("m1_p03_real_exams", p03_ok, f"p03 2026(a={a2026}), 2022(1/3), 2019-2(2/5), 2016(mean={float(mean_2016):.6f}, end={float(f2016_end):.4f}>0) exact")
+
     return results
 
 

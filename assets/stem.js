@@ -58,6 +58,7 @@ function renderMathSafe(rootEl, retries = 25) {
 function buildChapterRefIndex(items) {
   const byId = new Map();
   const mathEx = new Map();
+  const proofReal = new Map();
   const ctrlEx = new Map();
   const exercises = new Map();
   const tables = new Map();
@@ -77,16 +78,39 @@ function buildChapterRefIndex(items) {
     const book = String(item.source?.book || '');
     const combined = `${title} ${itemRef}`;
 
-    // 1. Math I examples: 例 1.12 / 强化例 1.8
+    // 1. Math I examples: 例 1.12 / 强化例 1.8 / 证明真题 2026 / 2020-1
+    // Primary title badge (e.g. 【例 7.31】 / 【真题 2026】) on example cards always wins over secondary cross-mentions like "对照例 7.31" or formula itemRef lists.
+    const primaryMathMatch = item.kind === 'example'
+      ? title.match(/【\s*(?:基础|强化)?\s*(强化)?例\s*(\d+\.\d+)/)
+      : null;
+    if (primaryMathMatch) {
+      const pNum = primaryMathMatch[2];
+      const pBucket = primaryMathMatch[1] ? 'i' : (item.stage === 'intensive' ? 'i' : 'f');
+      mathEx.set(`${pBucket}:${pNum}`, item);
+      mathEx.set(`any:${pNum}`, item);
+    }
     if (item.kind === 'example' || /例\s*\d+\.\d+/.test(combined)) {
       const stageBucket = item.stage === 'intensive' ? 'i' : 'f';
+      const cleanCombined = combined.replace(/[（(][^）)]*对照[^）)]*[）)]/g, '');
       const reMath = /(强化)?例\s*(\d+\.\d+)/g;
       let m;
-      while ((m = reMath.exec(combined)) !== null) {
+      while ((m = reMath.exec(cleanCombined)) !== null) {
         const num = m[2];
         const bucket = m[1] ? 'i' : stageBucket;
         setIfEmpty(mathEx, `${bucket}:${num}`, item);
         setIfEmpty(mathEx, `any:${num}`, item);
+      }
+    }
+    const primaryRealMatch = item.kind === 'example'
+      ? title.match(/【\s*真题\s*(\d{4}(?:-[123])?)/)
+      : null;
+    if (primaryRealMatch) {
+      proofReal.set(primaryRealMatch[1], item);
+    } else if (item.kind === 'example') {
+      const reReal = /真题\s*(\d{4}(?:-[123])?)/g;
+      let mrp;
+      while ((mrp = reReal.exec(combined)) !== null) {
+        setIfEmpty(proofReal, mrp[1], item);
       }
     }
 
@@ -182,7 +206,7 @@ function buildChapterRefIndex(items) {
     }
   }
 
-  return { byId, mathEx, ctrlEx, exercises, tables, equations };
+  return { byId, mathEx, proofReal, ctrlEx, exercises, tables, equations };
 }
 
 function resolveRefToken(token, refIndex, currentItem) {
@@ -193,6 +217,11 @@ function resolveRefToken(token, refIndex, currentItem) {
   // Direct card ID (e.g. ctrl-ch02-e-34)
   if (refIndex.byId.has(clean)) {
     target = refIndex.byId.get(clean);
+  }
+  // Proof real exam: 真题 2026 / 真题 2020-1
+  else if (/^真题\s*\d{4}(?:-[123])?$/.test(clean)) {
+    const m = clean.match(/^真题\s*(\d{4}(?:-[123])?)$/);
+    if (m) target = refIndex.proofReal?.get(m[1]);
   }
   // Math I example: (基础|强化)?例 1.12
   else if (/^(?:基础\s*|强化\s*)?例\s*\d+\.\d+$/.test(clean)) {
@@ -260,7 +289,7 @@ function resolveRefToken(token, refIndex, currentItem) {
 }
 
 const MATH_SPLIT_RE = /(\$\$[\s\S]*?\$\$|\$(?!\s)[^$\n]+?\$|\\\([\s\S]*?\\\)|\\\[[\s\S]*?\\\])/g;
-const REF_TOKEN_RE = /`((?:ctrl|m1)-[a-z0-9-]+)`|(?:主教材\s*|学习辅导\s*|辅导\s*|主|辅|基础\s*|强化\s*)?例\s*\d+(?:\.\d+|-\d+[a-z]?)(?!\d)|(?:课后)?习题\s*\d+-\d+|\b[AB]\d+-\d+\b|(?:主教材\s*|辅导\s*)?表\s*\d+-\d+|式\s*[（(]?\s*\d+-\d+'?\s*[）)]?/gi;
+const REF_TOKEN_RE = /`((?:ctrl|m1)-[a-z0-9-]+)`|真题\s*\d{4}(?:-[123])?|(?:主教材\s*|学习辅导\s*|辅导\s*|主|辅|基础\s*|强化\s*)?例\s*\d+(?:\.\d+|-\d+[a-z]?)(?!\d)|(?:课后)?习题\s*\d+-\d+|\b[AB]\d+-\d+\b|(?:主教材\s*|辅导\s*)?表\s*\d+-\d+|式\s*[（(]?\s*\d+-\d+'?\s*[）)]?/gi;
 
 function linkRefsInProseHtml(html, refCtx) {
   if (!refCtx?.refIndex) return html;

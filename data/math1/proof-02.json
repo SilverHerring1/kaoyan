@@ -1,0 +1,1630 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "proof-02",
+  "chapterNum": "证明专项 · 单元 2",
+  "chapterTitle": "中值定理与泰勒证明专题（猪哥&狗姐 38 例全解）",
+  "syllabusRef": "2027 考研数学一证明专项 · 猪哥&狗姐《高数专题·第七章 中值定理与泰勒公式》（P.7-1~7-24 全 38 例精解 + 7 大通道决策树 + 辅助多项式/常数 K 值法）",
+  "items": [
+    {
+      "id": "m1-p02-f-01",
+      "section": "一、闭区间连续函数、微分中值定理与积分中值定理工具箱",
+      "kind": "formula",
+      "title": "证明题底层工具全景：介值/平均值、罗尔/拉格朗日/柯西与开区间积分中值定理",
+      "examWeight": "core",
+      "prompt": "默写中值证明题的全部基础工具（平均值定理、四大微分中值定理及开区间积分中值定理）：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{平均值定理（连续）：}\\forall x_1,\\dots,x_n\\in[a,b],\\;\\exists x_0\\in[a,b],\\;f(x_0)=\\frac{1}{n}\\sum_{i=1}^n f(x_i)\\\\\n&\\text{罗尔/拉格朗日/柯西：}f'(\\xi)=0\\;\\Big|\\;f'(\\xi)=\\frac{f(b)-f(a)}{b-a}\\;\\Big|\\;\\frac{f'(\\xi)}{g'(\\xi)}=\\frac{f(b)-f(a)}{g(b)-g(a)}\\\\\n&\\text{积分中值定理（开区间版）：}f\\in C[a,b]\\implies \\exists\\xi\\in(a,b),\\;\\int_a^b f(x)\\,\\mathrm{d}x=f(\\xi)(b-a)\\\\\n&\\text{推广积分中值定理：}f,g\\in C[a,b]\\text{ 且 }g\\text{ 不变号}\\implies \\exists\\xi\\in(a,b),\\;\\int_a^b f(x)g(x)\\,\\mathrm{d}x=f(\\xi)\\int_a^b g(x)\\,\\mathrm{d}x\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "开区间 $\\xi\\in(a,b)$ 的关键价值（P.7-3）",
+          "desc": "积分中值定理若只写 $\\xi\\in[a,b]$，万一中值点撞上端点 $a$ 或 $b$ 就无法与端点配对再用罗尔定理！用原函数 $\\Phi(x)=\\int_a^x f$ 配拉格朗日即可确保**开区间 $\\xi\\in(a,b)$**（见例 7.2、例 7.25）！"
+        },
+        {
+          "sym": "费马引理与最值点联动（例 7.3, 7.4, 7.23）",
+          "desc": "一旦能说明连续函数在开区间内点 $c\\in(a,b)$ 取得最大/最小值（如端点导数同号或端点值为 $0$），费马引理立即白送一个免费驻点 $f'(c)=0$！"
+        }
+      ],
+      "conditions": "微分中值定理要求闭区间连续、开区间可导，柯西中值额外要求 $g'(x)\\ne 0$（从而自动推出 $g(b)\\ne g(a)$）；推广积分中值严格要求 $g(x)$ 不变号。",
+      "pitfalls": "遇到柯西中值题（例 7.13、例 7.14）最容易漏掉「隐藏零点」——例如 $\\ln 1=0$ 或变限积分上下限相等 $f(1)=\\int_1^1\\mathrm{e}^{t^2}\\,\\mathrm{d}t=0$，补上隐藏零点柯西结构才会显形！",
+      "figureSvg": "<svg viewBox=\"0 0 600 194\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">\n  <title>中值定理与泰勒公式证明题全景决策树（单中值/双中值/三中值/泰勒/辅助多项式与常数K值法，仿猪哥狗姐 P.7-1~7-24）</title>\n  <defs>\n    <marker id=\"m1p2_arr1\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#334155\"/>\n    </marker>\n  </defs>\n  <!-- Title Banner -->\n  <rect x=\"175\" y=\"6\" width=\"250\" height=\"26\" rx=\"6\" fill=\"#1e3a8a\"/>\n  <text x=\"300\" y=\"23\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#ffffff\">中值证明题：按「中值个数与导数阶数」秒选路线</text>\n  <line x1=\"220\" y1=\"32\" x2=\"78\" y2=\"54\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1p2_arr1)\"/>\n  <line x1=\"275\" y1=\"32\" x2=\"226\" y2=\"54\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1p2_arr1)\"/>\n  <line x1=\"325\" y1=\"32\" x2=\"374\" y2=\"54\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1p2_arr1)\"/>\n  <line x1=\"380\" y1=\"32\" x2=\"522\" y2=\"54\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1p2_arr1)\"/>\n\n  <!-- Col 1: Single MVT -->\n  <rect x=\"6\" y=\"56\" width=\"142\" height=\"132\" rx=\"7\" fill=\"#eff6ff\" stroke=\"#3b82f6\" stroke-width=\"1.2\"/>\n  <text x=\"77\" y=\"73\" text-anchor=\"middle\" font-size=\"10.2\" font-weight=\"700\" fill=\"#1e40af\">① 单中值 ξ</text>\n  <text x=\"77\" y=\"90\" text-anchor=\"middle\" font-size=\"8.6\" fill=\"#334155\">简式：找等值点用罗尔</text>\n  <text x=\"77\" y=\"106\" text-anchor=\"middle\" font-size=\"8.6\" fill=\"#334155\">乘商：(uv)′ 或 (u/v)′</text>\n  <text x=\"77\" y=\"122\" text-anchor=\"middle\" font-size=\"8.6\" fill=\"#334155\">线性：f′+fg′ → e^g·f</text>\n  <text x=\"77\" y=\"138\" text-anchor=\"middle\" font-size=\"8.6\" fill=\"#1d4ed8\">含端点/ln(b/a)→柯西</text>\n  <rect x=\"14\" y=\"150\" width=\"126\" height=\"30\" rx=\"4\" fill=\"#dbeafe\" stroke=\"#60a5fa\"/>\n  <text x=\"77\" y=\"168\" text-anchor=\"middle\" font-size=\"8.6\" font-weight=\"700\" fill=\"#1e3a8a\">例 7.1 ~ 例 7.14</text>\n\n  <!-- Col 2: Double / Triple MVT -->\n  <rect x=\"155\" y=\"56\" width=\"142\" height=\"132\" rx=\"7\" fill=\"#f0fdf4\" stroke=\"#22c55e\" stroke-width=\"1.2\"/>\n  <text x=\"226\" y=\"73\" text-anchor=\"middle\" font-size=\"10.2\" font-weight=\"700\" fill=\"#166534\">② 双中值 / 三中值</text>\n  <text x=\"226\" y=\"90\" text-anchor=\"middle\" font-size=\"8.6\" font-weight=\"700\" fill=\"#15803d\">同形且 ξ≠η：</text>\n  <text x=\"226\" y=\"104\" text-anchor=\"middle\" font-size=\"8.5\" fill=\"#334155\">找分点 x₀ 拆两不交区间</text>\n  <text x=\"226\" y=\"122\" text-anchor=\"middle\" font-size=\"8.6\" font-weight=\"700\" fill=\"#15803d\">异形 ξ,η：</text>\n  <text x=\"226\" y=\"136\" text-anchor=\"middle\" font-size=\"8.5\" fill=\"#334155\">简单拉格朗日 + 复杂柯西</text>\n  <rect x=\"163\" y=\"150\" width=\"126\" height=\"30\" rx=\"4\" fill=\"#dcfce7\" stroke=\"#4ade80\"/>\n  <text x=\"226\" y=\"168\" text-anchor=\"middle\" font-size=\"8.6\" font-weight=\"700\" fill=\"#166534\">例 7.15 ~ 例 7.21</text>\n\n  <!-- Col 3: Taylor -->\n  <rect x=\"304\" y=\"56\" width=\"142\" height=\"132\" rx=\"7\" fill=\"#fff7ed\" stroke=\"#f97316\" stroke-width=\"1.2\"/>\n  <text x=\"375\" y=\"73\" text-anchor=\"middle\" font-size=\"10.2\" font-weight=\"700\" fill=\"#9a3412\">③ 泰勒展开（高阶）</text>\n  <text x=\"375\" y=\"90\" text-anchor=\"middle\" font-size=\"8.6\" font-weight=\"700\" fill=\"#c2410c\">定点展开（主流）：</text>\n  <text x=\"375\" y=\"104\" text-anchor=\"middle\" font-size=\"8.5\" fill=\"#334155\">驻点 → 中点 → 端点</text>\n  <text x=\"375\" y=\"122\" text-anchor=\"middle\" font-size=\"8.6\" font-weight=\"700\" fill=\"#c2410c\">动点展开（整体界）：</text>\n  <text x=\"375\" y=\"136\" text-anchor=\"middle\" font-size=\"8.5\" fill=\"#334155\">展开点 x，代 x±h 消项</text>\n  <rect x=\"312\" y=\"150\" width=\"126\" height=\"30\" rx=\"4\" fill=\"#ffedd5\" stroke=\"#fb923c\"/>\n  <text x=\"375\" y=\"168\" text-anchor=\"middle\" font-size=\"8.6\" font-weight=\"700\" fill=\"#9a3412\">例 7.22 ~ 例 7.29</text>\n\n  <!-- Col 4: Aux Poly & Constant K -->\n  <rect x=\"453\" y=\"56\" width=\"141\" height=\"132\" rx=\"7\" fill=\"#faf5ff\" stroke=\"#a855f7\" stroke-width=\"1.2\"/>\n  <text x=\"523\" y=\"73\" text-anchor=\"middle\" font-size=\"10.2\" font-weight=\"700\" fill=\"#6b21a8\">④ 降维打击大招</text>\n  <text x=\"523\" y=\"90\" text-anchor=\"middle\" font-size=\"8.6\" font-weight=\"700\" fill=\"#7e22ce\">辅助多项式法：</text>\n  <text x=\"523\" y=\"104\" text-anchor=\"middle\" font-size=\"8.5\" fill=\"#334155\">配 n 次 p(x) 拟合全部条件</text>\n  <text x=\"523\" y=\"122\" text-anchor=\"middle\" font-size=\"8.6\" font-weight=\"700\" fill=\"#7e22ce\">常数 K 值法：</text>\n  <text x=\"523\" y=\"136\" text-anchor=\"middle\" font-size=\"8.5\" fill=\"#334155\">设 Φ(a,b)=K，令 b 动起来</text>\n  <rect x=\"461\" y=\"150\" width=\"125\" height=\"30\" rx=\"4\" fill=\"#f3e8ff\" stroke=\"#c084fc\"/>\n  <text x=\"523\" y=\"168\" text-anchor=\"middle\" font-size=\"8.6\" font-weight=\"700\" fill=\"#6b21a8\">例 7.30 ~ 例 7.38</text>\n</svg>",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-1~7-3",
+        "pdfPage": 1,
+        "itemRef": "常用定理与公式的回顾"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-f-02",
+      "section": "二、单中值罗尔辅助函数两大核心构造法",
+      "kind": "formula",
+      "title": "单中值罗尔辅助函数构造：乘商法则与积分因子 $\\mathrm{e}^{g(x)}f(x)$ 公式",
+      "examWeight": "core",
+      "prompt": "默写由待证等式逆推罗尔辅助函数 $F(x)$ 的两大核心公式（乘商型与一阶线性积分因子型）：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{乘商型：}u'v+uv'=0\\Rightarrow F=uv;\\qquad u'v-uv'=0\\Rightarrow F=\\frac{u}{v}\\\\\n&\\text{一阶线性型：}f'(x)+g'(x)f(x)=0\\implies F(x)=\\mathrm{e}^{g(x)}f(x)\\quad\\bigl(F'=\\mathrm{e}^g(f'+g'f)\\bigr)\\\\\n&\\text{高频特例：}f'+kf=0\\Rightarrow \\mathrm{e}^{kx}f(x);\\qquad xf'+nf=0\\Rightarrow x^n f(x);\\qquad f'f''+(f')^2\\text{ 类}\\Rightarrow [f(x)f'(x)]'\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "逆推口诀：「把 $\\xi$ 换 $x$，解一阶 ODE」",
+          "desc": "面对形如 $2f'(\\xi)+(\\xi-1)f''(\\xi)=0$（例 7.11）或 $\\xi f''(\\xi)+(1+\\xi)f'(\\xi)=1+\\xi$（例 7.12）的复杂高阶单中值式，先把 $\\xi$ 换 $x$、分离变量求通解，把任意常数 $C$ 孤立在一边，另一边就是 100% 精准的辅助函数！"
+        },
+        {
+          "sym": "非齐次右边移项合并（例 7.9, 7.10, 7.12）",
+          "desc": "当右端不是 $0$（如 $f''+f'=1$ 或 $f'=f-x+1$）时，先把常数/多项式吸收进新函数 $h(x)$（如 $h(x)=f(x)-x$），化归为齐次 $h'+g'h=0$ 后秒套 $\\mathrm{e}^g h$！"
+        }
+      ],
+      "conditions": "构造商式 $F=\\frac{u}{v}$ 前必须先确认分母 $v(x)\\ne 0$（如例 7.6 题干明给 $g(x)\\ne 0$）；若 $v(x)$ 可能有零点，应改用 $\\mathrm{e}^{\\dots}$ 或反证法避免除零！",
+      "pitfalls": "高频死胡同：看到例 7.11 $2f'+(\\xi-1)f''=0$ 想到凑 $(x-1)^2 f'(x)$ 后，除了端点 $x=1$ 的零点，**千万别忘了先对 $f(0)=f(1)$ 用一次罗尔造出内点零点 $f'(c)=0$**，凑够两零点才能再罗尔！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-6~7-9",
+        "pdfPage": 6,
+        "itemRef": "以辅助函数为核心的单中值问题（例 7.6~7.12）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p02_aux_and_k",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-f-03",
+      "section": "三、双中值（同形拆区间 / 异形拉柯配）与三中值联动模型",
+      "kind": "formula",
+      "title": "双中值二分法（同形 $\\xi\\ne\\eta$ 找分点 $x_0$ vs 异形拉格朗日+柯西）与三中值模型",
+      "examWeight": "core",
+      "prompt": "默写同形不等双中值、异形双中值（4 大高频柯西配对函数 $g(x)$）及三中值组合的标准化模板：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{同形且 }\\xi\\ne\\eta\\text{：找分点 }x_0\\in(a,b)\\text{，分别在 }[a,x_0]\\text{ 与 }[x_0,b]\\text{ 上用拉格朗日}\\implies \\xi<x_0<\\eta\\\\\n&\\text{异形双中值（例 7.19）：简单中值用拉格朗日 }f'(\\xi)=\\frac{f(b)-f(a)}{b-a}\\text{，复杂中值配柯西：}\\\\\n&\\qquad \\text{见 }\\eta f'(\\eta)\\text{ 配 }g(x)=\\ln x;\\quad \\mathrm{e}^{-\\eta}f'(\\eta)\\text{ 配 }g(x)=\\mathrm{e}^x;\\quad \\eta^2 f'(\\eta)\\text{ 配 }g(x)=\\frac{1}{x};\\quad \\frac{f'(\\eta)}{2\\eta}\\text{ 配 }g(x)=x^2\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "同形双中值如何反推分点 $x_0$（例 7.15~7.18）",
+          "desc": "把待证式里的 $f'(\\xi)$ 换成 $\\frac{f(x_0)-f(a)}{x_0-a}$、$f'(\\eta)$ 换成 $\\frac{f(b)-f(x_0)}{b-x_0}$，反解出关于 $x_0$ 与 $f(x_0)$ 的方程（如 $f(x_0)=1-x_0$、$f(x_0)=2-3x_0$、$f(x_0)=\\frac{1}{2}$），再用零点/介值定理证 $x_0$ 存在！"
+        },
+        {
+          "sym": "三中值本质（例 7.21）",
+          "desc": "把两端点差 $f(2)-f(1)$ 一边用拉格朗日写成 $f'(\\zeta)$，一边用柯西配 $\\ln x$ 写成 $\\xi f'(\\xi)\\ln 2$，再对 $\\ln 2=\\ln 2-\\ln 1$ 用拉格朗日写成 $\\frac{1}{\\eta}$，三个中值瞬间汇合为 $\\frac{f'(\\zeta)}{f'(\\xi)}=\\frac{\\xi}{\\eta}$！"
+        }
+      ],
+      "conditions": "若题干特意强调「存在**不相等的** $\\xi,\\eta$」，必须把区间拆成**两个内部不相交的子区间** $(a,x_0)$ 与 $(x_0,b)$（或在已得 $\\xi$ 的一侧 $(a,\\xi)$ 上再用中值定理，如例 7.20(3)）！",
+      "pitfalls": "在同区间 $[a,b]$ 上同时用拉格朗日和柯西得到的 $\\xi,\\eta$ **无法保证 $\\xi\\ne\\eta$**（例如线性函数 $f(x)=x$ 时一切点导数都一样）；唯有拆区间才能铁板钉钉保证 $\\xi\\ne\\eta$！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-11~7-14",
+        "pdfPage": 11,
+        "itemRef": "双中值的组合模型 & 三中值（例 7.15~7.21）"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-f-04",
+      "section": "四、带拉格朗日余项泰勒公式（定点展开 vs 动点展开）",
+      "kind": "formula",
+      "title": "大区间证明主力：拉格朗日余项泰勒公式及「定点展开 / 动点展开」双战略",
+      "examWeight": "core",
+      "prompt": "默写带拉格朗日型余项的 $n$ 阶泰勒公式，以及证明题选取展开点 $x_0$ 与代入点 $x$ 的优先级口诀：",
+      "formulaLatex": "$$\\begin{aligned}\n&f(x)=f(x_0)+f'(x_0)(x-x_0)+\\frac{f''(x_0)}{2!}(x-x_0)^2+\\cdots+\\frac{f^{(n)}(x_0)}{n!}(x-x_0)^n+\\frac{f^{(n+1)}(\\xi)}{(n+1)!}(x-x_0)^{n+1}\\\\\n&\\text{定点展开优先级：展开点 }x_0\\text{ 选「驻点(导数零点) → 中点 → 端点」；代入点 }x\\text{ 选「已知函数值点 / 端点」}\\\\\n&\\text{动点对称消项（例 7.28~7.29）：在动点 }x\\text{ 展开代 }x\\pm h\\text{ 相减，立消 }f(x)\\text{ 与 }f''(x)\\text{，再对 }h\\text{ 用均值不等式！}\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "朗道-柯尔莫哥洛夫不等式双杰（例 7.28~7.29）",
+          "desc": "全轴 $\\mathbb{R}$ 上 $|f|\\le M$：若 $|f''|\\le N\\implies |f'(x)|\\le\\sqrt{2MN}$（代 $x\\pm h$ 消 $f(x)$）；若 $|f'''|\\le N\\implies |f'(x)|\\le\\sqrt[3]{\\frac{9M^2 N}{8}}$（代 $x\\pm h$ 同消 $f(x)$ 与 $f''(x)$）！"
+        },
+        {
+          "sym": "区间端点双泰勒配权消一阶导（例 7.26）",
+          "desc": "若知 $f'(0)=f'(1)$，分别在 $0$ 和 $1$ 处二阶展开，乘 $(x-1)$ 与 $x$ 相减，一次项完美归零，立得梯形误差黄金界 $\\frac{x(1-x)}{2}$ 与 $\\frac{1}{12}$！"
+        }
+      ],
+      "conditions": "带拉格朗日余项的 $n$ 阶泰勒公式要求 $f$ 在闭区间有 $n$ 阶导数（且 $f^{(n)}$ 连续）、在开区间有 $n+1$ 阶导数；$\\xi$ 严格介于 $x$ 与 $x_0$ 之间。",
+      "pitfalls": "切勿在需要**大区间**证明高阶导界（例 7.22~7.29）时误用带佩亚诺余项 $o((x-x_0)^n)$ 的局部泰勒公式！佩亚诺只管局部极限，拉格朗日余项才管全局估值！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-2~7-3, 7-14~7-18",
+        "pdfPage": 2,
+        "itemRef": "泰勒展开证明等式/不等式（例 7.22~7.29）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p02_aux_and_k",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-f-05",
+      "section": "五、高阶证明降维打击大招：辅助多项式法 & 常数 K 值法",
+      "kind": "formula",
+      "title": "【进阶降维大招】辅助多项式法 $F=f-p_n$ 与常数 $K$ 值法 $K=\\Phi(a,b)$",
+      "examWeight": "core",
+      "prompt": "默写高阶导数中值证明的两大降维神器——辅助多项式法与常数 $K$ 值法的标准构造公式：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{辅助多项式法（证 }f^{(n)}(\\xi)=k\\text{）：取 }p(x)=\\frac{k}{n!}x^n+c_{n-1}x^{n-1}+\\cdots+c_0\\text{ 匹配题设全部条件，令 }F=f-p\\text{ 连用罗尔}\\\\\n&\\text{常数 }K\\text{ 值法（证 }f^{(n)}(\\xi)=\\Phi(a,b)\\text{）：设 }K=\\Phi(a,b)\\text{，去分母并令 }b\\to x\\text{ 得 }F(x)\\text{，使 }F(a)=F(b)=0\\text{ 且 }F'(a)=0\\dots\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "辅助多项式为何降维打击泰勒（例 7.30~7.35）",
+          "desc": "面对既有端点值又有导数或积分条件的题（如例 7.31、7.32、7.34、7.35），泰勒展开往往要凑展开点并分多段讨论；而配一个次数恰为 $n$ 的多项式 $p(x)$ 直接把所有已知条件清零，接着机械连用罗尔定理，**免分段、免放缩、常数更紧**（例 7.31 直接证出 $f''(\\eta)=-6<-2$）！"
+        },
+        {
+          "sym": "常数 $K$ 值法何时出鞘（例 7.36~7.38）",
+          "desc": "当待证等式右端是含端点 $a,b$ 的精确数值公式余项（如中点二阶差分、梯形三阶余项 $-\\frac{1}{12}(b-a)^3 f'''(\\xi)$、积分二阶余项 $\\frac{5}{12}a^3 f''(\\xi)$）时，令端点 $b$ 变活变量 $x$，多次求导自动消去中间项！"
+        }
+      ],
+      "conditions": "辅助多项式法证 $f^{(n)}(\\xi)=0$ 时取 $n-1$ 次多项式（使 $p^{(n)}\\equiv 0$，例 7.35）；证 $f^{(n)}(\\xi)=k\\ne 0$ 时取 $n$ 次多项式且首项为 $\\frac{k}{n!}x^n$（使 $p^{(n)}\\equiv k$）。",
+      "pitfalls": "常数 $K$ 值法（如例 7.38）有时最后一步出现 $K=\\alpha f''(\\eta_1)+(1-\\alpha)f''(\\eta_2)$（权重 $\\alpha>0,1-\\alpha>0$），必须显式援引 **$f''$ 连续的介值定理**（或达布导数介值定理）才算彻底收官！",
+      "figureSvg": "<svg viewBox=\"0 0 600 170\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">\n  <title>高阶中值压轴两大降维武器流程对比：辅助多项式法（例7.30~7.35）与常数K值法（例7.36~7.38）</title>\n  <defs>\n    <marker id=\"m1p2_arr2\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#334155\"/>\n    </marker>\n  </defs>\n  <!-- Left: Auxiliary Polynomial -->\n  <rect x=\"6\" y=\"6\" width=\"286\" height=\"158\" rx=\"8\" fill=\"#eff6ff\" stroke=\"#3b82f6\" stroke-width=\"1.3\"/>\n  <text x=\"149\" y=\"25\" text-anchor=\"middle\" font-size=\"11.2\" font-weight=\"700\" fill=\"#1e3a8a\">① 辅助多项式法（专杀 f^(n)(ξ)=k）</text>\n  <rect x=\"18\" y=\"36\" width=\"262\" height=\"24\" rx=\"4\" fill=\"#ffffff\" stroke=\"#93c5fd\"/>\n  <text x=\"149\" y=\"52\" text-anchor=\"middle\" font-size=\"9.3\" fill=\"#0f172a\">Step 1: 设 n 次多项式 p(x)，令首项系数 = k / n!</text>\n  <line x1=\"149\" y1=\"60\" x2=\"149\" y2=\"71\" stroke=\"#2563eb\" stroke-width=\"1.2\" marker-end=\"url(#m1p2_arr2)\"/>\n  <rect x=\"18\" y=\"73\" width=\"262\" height=\"24\" rx=\"4\" fill=\"#ffffff\" stroke=\"#93c5fd\"/>\n  <text x=\"149\" y=\"89\" text-anchor=\"middle\" font-size=\"9.3\" fill=\"#0f172a\">Step 2: 待定系数使 p 匹配 f 的端点值/导数/积分</text>\n  <line x1=\"149\" y1=\"97\" x2=\"149\" y2=\"108\" stroke=\"#2563eb\" stroke-width=\"1.2\" marker-end=\"url(#m1p2_arr2)\"/>\n  <rect x=\"18\" y=\"110\" width=\"262\" height=\"24\" rx=\"4\" fill=\"#dbeafe\" stroke=\"#60a5fa\"/>\n  <text x=\"149\" y=\"126\" text-anchor=\"middle\" font-size=\"9.3\" font-weight=\"700\" fill=\"#1d4ed8\">Step 3: 令 F=f−p，凑齐 n+1 个零点/驻点连用罗尔！</text>\n  <text x=\"149\" y=\"152\" text-anchor=\"middle\" font-size=\"8.8\" fill=\"#334155\">例7.31(−6&lt;−2) / 例7.32(f‴=3) / 例7.34(∫f,∫xf) / 例7.35</text>\n\n  <!-- Right: Constant K Method -->\n  <rect x=\"308\" y=\"6\" width=\"286\" height=\"158\" rx=\"8\" fill=\"#faf5ff\" stroke=\"#a855f7\" stroke-width=\"1.3\"/>\n  <text x=\"451\" y=\"25\" text-anchor=\"middle\" font-size=\"11.2\" font-weight=\"700\" fill=\"#6b21a8\">② 常数 K 值法（专杀含端点余项等式）</text>\n  <rect x=\"320\" y=\"36\" width=\"262\" height=\"24\" rx=\"4\" fill=\"#ffffff\" stroke=\"#d8b4fe\"/>\n  <text x=\"451\" y=\"52\" text-anchor=\"middle\" font-size=\"9.3\" fill=\"#0f172a\">Step 1: 整理成 f^(n)(ξ)=Φ(a,b)，记常数 K=Φ(a,b)</text>\n  <line x1=\"451\" y1=\"60\" x2=\"451\" y2=\"71\" stroke=\"#7e22ce\" stroke-width=\"1.2\" marker-end=\"url(#m1p2_arr2)\"/>\n  <rect x=\"320\" y=\"73\" width=\"262\" height=\"24\" rx=\"4\" fill=\"#ffffff\" stroke=\"#d8b4fe\"/>\n  <text x=\"451\" y=\"89\" text-anchor=\"middle\" font-size=\"9.3\" fill=\"#0f172a\">Step 2: 去分母后把端点 b 变为动变量 x 得 F(x)</text>\n  <line x1=\"451\" y1=\"97\" x2=\"451\" y2=\"108\" stroke=\"#7e22ce\" stroke-width=\"1.2\" marker-end=\"url(#m1p2_arr2)\"/>\n  <rect x=\"320\" y=\"110\" width=\"262\" height=\"24\" rx=\"4\" fill=\"#f3e8ff\" stroke=\"#c084fc\"/>\n  <text x=\"451\" y=\"126\" text-anchor=\"middle\" font-size=\"9.3\" font-weight=\"700\" fill=\"#6b21a8\">Step 3: F(a)=F(b)=0 且 F′(a)=0… 连用罗尔出 K=f^(n)(ξ)！</text>\n  <text x=\"451\" y=\"152\" text-anchor=\"middle\" font-size=\"8.8\" fill=\"#334155\">例7.36(中点二阶差分) / 例7.37(梯形三阶余项) / 例7.38</text>\n</svg>",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-18~7-23",
+        "pdfPage": 18,
+        "itemRef": "辅助多项式法（例 7.30~7.35）& 常数 K 值法（例 7.36~7.38）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p02_aux_and_k",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-c-01",
+      "section": "核心结论 · 简单单中值与高阶导零点逆向计数法",
+      "kind": "conclusion",
+      "title": "罗尔定理「零点倒推链」：$f^{(k)}(\\xi)=0$ 只需凑够 $k+1$ 个 $f$ 等值点（或带重数驻点）",
+      "examWeight": "core",
+      "summary": "凡待证结论是纯粹的 $f'(\\xi)=0$ 或 $f''(\\xi)=0$（不含复杂系数），直接启动**零点倒推链**：\n- 证 $f'(\\xi)=0$ $\\Longleftarrow$ 找 $2$ 个等值点 $f(x_1)=f(x_2)$（常由平均值定理、积分中值定理、零点定理给出，例 7.1、7.2、7.5）；\n- 证 $f''(\\xi)=0$ $\\Longleftarrow$ 找 $3$ 个 $f$ 等值点（例 7.2、7.3），**或者**找 $2$ 个 $f'$ 零点（如 $f(a)=f(b)=0$ 且端点导数同号 $f'(a)f'(b)>0$ 逼出内零点 $c$，再用两次罗尔得两驻点，例 7.4！）；\n- 证 $f(\\xi)f''(\\xi)+[f'(\\xi)]^2=0$（例 7.8） $\\Longleftarrow$ 认出它就是 $[f(x)f'(x)]'=0$，只需给 $F(x)=f(x)f'(x)$ 凑够 **$3$ 个零点**（$f$ 的零点 $+$ $f'$ 的驻点）即可证出至少 $2$ 个不同实根！",
+      "conditions": "每次使用罗尔定理都会使等值点（或零点）个数减 $1$、导数阶数加 $1$，且保证新产生的零点严格落在相邻两旧零点构成的开区间内，天然互不相等！",
+      "pitfalls": "例 7.3 中 $f,g$ 在 $(a,b)$ 有相等的最大值，但**最大值点 $x_1$ 与 $x_2$ 未必重合**！千万不要默认 $x_1=x_2$，必须用 $(f-g)(x_1)\\ge 0$ 与 $(f-g)(x_2)\\le 0$ 配介值定理才能严密导出内点 $\\xi\\in(a,b)$ 使 $f(\\xi)=g(\\xi)$！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-4~7-7",
+        "pdfPage": 4,
+        "itemRef": "简单单中值与高阶导零点（例 7.1~7.5, 例 7.8）"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-c-02",
+      "section": "核心结论 · 变限积分 + 柯西中值与隐藏零点侦查法",
+      "kind": "conclusion",
+      "title": "柯西中值「隐藏零点侦查法」：看见 $\\ln\\frac{b}{a}$、$\\ln 2$、$b^2-a^2$、$\\int_1^x$ 立刻配对",
+      "examWeight": "core",
+      "summary": "柯西中值定理之所以冷门易卡壳，90% 是因为命题人把其中一个端点值「藏」进了常数 $0$ 里：\n1. **看见 $\\ln 2$**：立刻改写成 $\\ln 2-\\ln 1$，配 $g(x)=\\ln x$（例 7.14(2)）；看见 $\\ln\\frac{b}{a}$ 改写成 $\\ln b-\\ln a$（例 7.13、7.19(1)）；\n2. **看见变限积分 $f(x)=\\int_1^x\\mathrm{e}^{t^2}\\,\\mathrm{d}t$**：立刻挖出免费隐藏零点 **$f(1)=0$**，将 $f(2)$ 写成 $f(2)-f(1)$（例 7.14(2)）；\n3. **看见 $\\int_a^b f(x)\\,\\mathrm{d}x$ 与 $b^2-a^2$ 同框**：立刻令 $F(x)=\\int_a^x f(t)\\,\\mathrm{d}t$（藏着 $F(a)=0$）与 $G(x)=x^2$ 配对柯西（例 7.20(2)）！",
+      "conditions": "柯西中值定理要求辅助分母函数 $g(x)$ 在开区间内 $g'(x)\\ne 0$（如 $\\ln x$ 在 $(a,b)\\subset(0,+\\infty)$、$\\frac{1}{x}$ 在 $ab>0$ 区间）。",
+      "pitfalls": "在例 7.19(3) 证 $ab f'(\\xi)=\\eta^2 f'(\\eta)$ 时，前提 $ab>0$ 至关重要——它保证 $0\\notin[a,b]$，从而 $g(x)=\\frac{1}{x}$ 在 $[a,b]$ 上连续可导无间断点！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-10, 7-13~7-14",
+        "pdfPage": 10,
+        "itemRef": "柯西中值隐藏零点（例 7.13, 7.14, 7.19~7.21）"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-c-03",
+      "section": "核心结论 · 泰勒定点展开 4 步定穴法与动点展开信号",
+      "kind": "conclusion",
+      "title": "泰勒展开证明「定点 vs 动点」选点铁律（例 7.22~7.29）",
+      "examWeight": "core",
+      "summary": "遇到二阶或三阶导数的**存在性或绝对值不等式**证明，按两类场景秒选泰勒展开点：\n1. **局部存在某点 $\\xi$（定点展开，例 7.22~7.26）**：\n   - 展开点 $x_0$ 优先次序：**已知导数零点/极值点（消掉 $f'(x_0)$） $\\to$ 区间中点 $\\frac{a+b}{2}$（两端代入后相减/相加完美消项） $\\to$ 区间端点 $a,b$**；\n   - 例如例 7.22 知 $f'(a)=f'(b)=0$，于是在两端点 $a,b$ 展开并同代入中点 $\\frac{a+b}{2}$ 相减；例 7.23 知 $f(a)=f(b)=0$ 且 $|f''|\\ge 1$，于是在中点或最值点 $c$ 展开代入两端点 $a,b$！\n2. **对全体 $x$ 成立的导数/函数全局界（动点展开，例 7.27~7.29）**：\n   - **必须把动点 $x$ 设为展开点**！有限区间 $[0,1]$ 代入固定端点 $0,1$ 或对变量积分（例 7.27）；全实轴 $\\mathbb{R}$ 代入对称步长 $x\\pm h$ 相减消项，再对自由正参数 $h>0$ 用均值不等式求最小上界（例 7.28、7.29）！",
+      "conditions": "在全轴 $\\mathbb{R}$ 上做动点对称展开代 $x\\pm h$ 时，若 $N=0$ 则 $f$ 为低次多项式且有界必为常数（$f'\\equiv 0$ 显然成立），故只需讨论 $N>0$ 选取最优步长 $h$！",
+      "pitfalls": "在例 7.28/7.29 写 $h=\\sqrt{\\frac{2M}{N}}$ 或 $h=\\sqrt[3]{\\frac{3M}{N}}$ 前，**务必先单列一行讨论 $N=0$（或 $M=0$）退化情形**，避免分母为零被挑严谨性刺！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-14~7-18",
+        "pdfPage": 14,
+        "itemRef": "泰勒定点展开与动点展开规律（例 7.22~7.29）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p02_aux_and_k",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-c-04",
+      "section": "核心结论 · 辅助多项式法 vs 常数 K 值法实战取舍",
+      "kind": "conclusion",
+      "title": "【大招对比】何时用辅助多项式法，何时用常数 $K$ 值法？",
+      "examWeight": "core",
+      "summary": "这两大「期刊级降维方法」各有所长，按题干特征 3 秒精准切换：\n1. **辅助多项式法（例 7.30~7.35）**：题干给的是**具体数值条件**（如 $f(0)=0,f(1)=2,f(2)=0$ 或 $\\int_0^1 f=\\frac{5}{2},\\;\\int_0^1 xf=\\frac{3}{2}$），要证**具体常数** $f^{(n)}(\\xi)=k$（或 $\\le k$）。此时设出 $p_n(x)=\\frac{k}{n!}x^n+\\dots$ 解一个微型线性方程组把条件全清零，连用罗尔瞬间完赛！\n2. **常数 $K$ 值法（例 7.36~7.38）**：题干是**含一般字母区间 $[a,b]$ 或 $[-a,a]$ 的高阶余项恒等式**（如梯形误差 $-\\frac{1}{12}(b-a)^3 f'''(\\xi)$），且待证中值 $f^{(n)}(\\xi)$ 只出现一次。把 $f^{(n)}(\\xi)$ 替换成待定常数 $K$，令上端点 $b$ 变活变量 $x$ 构造 $F(x)$，连续求导直出 $f^{(n)}(\\xi)=K$！",
+      "conditions": "辅助多项式法中若方程组自由度比已知条件多 $1$（如例 7.32 三次多项式有 $3$ 个低次系数但仅 $2$ 个端点值 + $1$ 个导数条件），可以把多余自由度用来额外匹配 $p(0)=f(0)$，白赚一个零点！",
+      "pitfalls": "在例 7.36 中若用对称函数 $F(x)=f(m+x)+f(m-x)-2f(m)-Kx^2$，最后会得出 $K=\\frac{1}{2}[f''(m+t_0)+f''(m-t_0)]$（需用达布导数介值定理）；改用非对称插值二次多项式 $G(x)$ 匹配 $a,\\frac{a+b}{2},b$ 三点零点，两次罗尔直接出 $f''(\\xi)=K$，连达布定理都省了！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-18~7-24",
+        "pdfPage": 18,
+        "itemRef": "辅助多项式与常数 K 值法综述（例 7.30~7.38）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p02_aux_and_k",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-01",
+      "section": "一、单中值罗尔定理 · 简单单中值（例 7.1~7.5）",
+      "kind": "example",
+      "title": "【例 7.1】平均值定理配对 $f(0)+f(1)+f(2)=3,\\;f(3)=1$ 证 $f'(\\xi)=0$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[0,3]$ 上连续，$(0,3)$ 上可导，$f(0)+f(1)+f(2)=3$，$f(3)=1$。证明存在 $\\xi\\in(0,3)$，使得 $f'(\\xi)=0$。",
+      "steps": [
+        {
+          "stepTitle": "1. 在 $[0,2]$ 上用平均值定理造出与 $f(3)=1$ 相等的点 $c$",
+          "detail": "因 $f(x)$ 在 $[0,2]$ 上连续，由平均值定理（介值定理推论），存在 $c\\in[0,2]$ 使得 $$f(c)=\\frac{f(0)+f(1)+f(2)}{3}=\\frac{3}{3}=1=f(3).$$"
+        },
+        {
+          "stepTitle": "2. 在 $[c,3]$ 上套用罗尔定理得证",
+          "detail": "因 $c\\in[0,2]$，故 $c<3$。在 $[c,3]$ 上 $f$ 连续、$(c,3)$ 内可导且 $f(c)=f(3)=1$，由罗尔定理知存在 $\\xi\\in(c,3)\\subset(0,3)$，使得 $f'(\\xi)=0$。"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "看到多个离散点函数值之和等于常数倍另一点值（如 $f(0)+f(1)+f(2)=3f(3)$），条件反射立刻套**平均值定理**凑出等值点！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-4",
+        "pdfPage": 4,
+        "itemRef": "例7.1"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-02",
+      "section": "一、单中值罗尔定理 · 简单单中值（例 7.1~7.5）",
+      "kind": "example",
+      "title": "【例 7.2】开区间积分中值 + 平均值定理凑 3 个等值点证 $f''(\\eta)=0$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[0,3]$ 上连续，$(0,3)$ 上二阶可导，$2f(0)=\\displaystyle\\int_0^2 f(x)\\,\\mathrm{d}x=f(2)+f(3)$，证明：\n(1) 存在 $\\xi\\in(0,2)$，$f(0)=f(\\xi)$；\n(2) 存在 $\\eta\\in(0,3)$，$f''(\\eta)=0$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：用开区间积分中值定理保证 $\\xi$ 严格落在 $(0,2)$ 内",
+          "detail": "记 $\\Phi(x)=\\int_0^x f(t)\\,\\mathrm{d}t$，在 $[0,2]$ 上用拉格朗日中值定理（即开区间积分中值定理），存在 $\\xi\\in(0,2)$ 使得 $\\int_0^2 f(x)\\,\\mathrm{d}x=2f(\\xi)$。结合 $2f(0)=\\int_0^2 f(x)\\,\\mathrm{d}x$ 立得 $f(0)=f(\\xi)$！"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：在 $[2,3]$ 上再造第 3 个等值点 $c$，连续两次罗尔得 $f''(\\eta)=0$",
+          "detail": "由 $2f(0)=f(2)+f(3)\\implies f(0)=\\frac{f(2)+f(3)}{2}$。因 $f$ 在 $[2,3]$ 上连续，由介值定理存在 $c\\in[2,3]$ 使得 $f(c)=f(0)$。现在有三个互异等值点 $0<\\xi<2\\le c\\le 3$ 满足 $f(0)=f(\\xi)=f(c)$！分别在 $[0,\\xi]$ 与 $[\\xi,c]$ 上用罗尔定理得 $\\xi_1\\in(0,\\xi),\\;\\xi_2\\in(\\xi,c)$ 使 $f'(\\xi_1)=f'(\\xi_2)=0$；再在 $[\\xi_1,\\xi_2]$ 上对 $f'$ 用罗尔定理即得 $\\eta\\in(\\xi_1,\\xi_2)\\subset(0,3)$ 使 $f''(\\eta)=0$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "注意第 (1) 问为什么强调**开区间** $\\xi\\in(0,2)$：正是因为 $\\xi<2\\le c$ 严格分离了 $\\xi$ 与 $c$，才确保 $0,\\xi,c$ 绝对是三个**互不重合**的点！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-4",
+        "pdfPage": 4,
+        "itemRef": "例7.2 (1)~(2)"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-03",
+      "section": "一、单中值罗尔定理 · 简单单中值（例 7.1~7.5）",
+      "kind": "example",
+      "title": "【例 7.3】两函数在 $(a,b)$ 具有相等最大值（最大值点未必同点！）证 $f''(\\eta)=g''(\\eta)$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 与 $g(x)$ 在 $[a,b]$ 上连续，$(a,b)$ 上二阶可导，且二者在 $(a,b)$ 存在相等的最大值，$f(a)=g(a)$，$f(b)=g(b)$，证明：\n(1) 存在 $\\xi\\in(a,b)$，$f(\\xi)=g(\\xi)$；\n(2) 存在 $\\eta\\in(a,b)$，$f''(\\eta)=g''(\\eta)$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：设最大值点为 $x_1,x_2\\in(a,b)$，用差函数 $h=f-g$ 在 $[x_1,x_2]$ 套零点定理",
+          "detail": "设 $f$ 在 $x_1\\in(a,b)$ 处、$g$ 在 $x_2\\in(a,b)$ 处分别取得相等的最大值 $M$。令 $h(x)=f(x)-g(x)$，则 $h(x_1)=M-g(x_1)\\ge 0$，$h(x_2)=f(x_2)-M\\le 0$。若 $h(x_1)=0$ 取 $\\xi=x_1$；若 $h(x_2)=0$ 取 $\\xi=x_2$；若 $h(x_1)>0>h(x_2)$，由连续函数零点定理在 $x_1,x_2$ 之间必存在 $\\xi\\in(a,b)$ 使 $h(\\xi)=0$，即 $f(\\xi)=g(\\xi)$！"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：$h(a)=h(\\xi)=h(b)=0$ 三零点连用两次罗尔",
+          "detail": "因 $a<\\xi<b$ 且 $h(a)=h(\\xi)=h(b)=0$，在 $[a,\\xi]$ 与 $[\\xi,b]$ 上分别用罗尔定理得 $\\xi_1\\in(a,\\xi),\\;\\xi_2\\in(\\xi,b)$ 使 $h'(\\xi_1)=h'(\\xi_2)=0$；再在 $[\\xi_1,\\xi_2]$ 上对 $h'$ 用罗尔定理得 $\\eta\\in(\\xi_1,\\xi_2)\\subset(a,b)$ 使 $h''(\\eta)=0$，即 $f''(\\eta)=g''(\\eta)$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "千万别犯「设 $f$ 和 $g$ 在同一点取最大值」的低级逻辑错误！允许 $x_1\\ne x_2$ 并利用 $h(x_1)\\ge 0,\\;h(x_2)\\le 0$ 才是一步不漏的严密证明！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-5",
+        "pdfPage": 5,
+        "itemRef": "例7.3 (1)~(2)"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-04",
+      "section": "一、单中值罗尔定理 · 简单单中值（例 7.1~7.5）",
+      "kind": "example",
+      "title": "【例 7.4】端点零值且导数同号 $f'(a)f'(b)>0$：由局部保号逼出内零点再证 $f''(\\eta)=0$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[a,b]$ 上二阶可导，$f(a)=f(b)=0$，$f'(a)f'(b)>0$，证明存在 $\\xi,\\eta\\in(a,b)$，使得 $f(\\xi)=0$，$f''(\\eta)=0$。",
+      "steps": [
+        {
+          "stepTitle": "1. 借 $f'(a)f'(b)>0$（不妨均正）结合单侧导数局部保号性，用零点定理证存在内零点 $\\xi$",
+          "detail": "因 $f'(a)f'(b)>0$，不妨设 $f'(a)>0$ 且 $f'(b)>0$（同负时对 $-f$ 证即可）。由导数定义 $\\lim_{x\\to a^+}\\frac{f(x)-f(a)}{x-a}=f'(a)>0$，故存在 $x_1\\in(a,b)$ 使 $f(x_1)>f(a)=0$；同理 $\\lim_{x\\to b^-}\\frac{f(x)-f(b)}{x-b}=f'(b)>0$ 且 $x-b<0$，故存在 $x_2\\in(x_1,b)$ 使 $f(x_2)<f(b)=0$。在 $[x_1,x_2]$ 上由零点定理知存在 $\\xi\\in(x_1,x_2)\\subset(a,b)$ 使 $f(\\xi)=0$！"
+        },
+        {
+          "stepTitle": "2. 由三零点 $f(a)=f(\\xi)=f(b)=0$ 连续两次罗尔证 $f''(\\eta)=0$",
+          "detail": "分别在 $[a,\\xi]$ 与 $[\\xi,b]$ 上对 $f$ 用罗尔定理得 $\\xi_1\\in(a,\\xi),\\;\\xi_2\\in(\\xi,b)$ 使 $f'(\\xi_1)=f'(\\xi_2)=0$；再在 $[\\xi_1,\\xi_2]$ 上对 $f'$ 用罗尔定理即得 $\\eta\\in(\\xi_1,\\xi_2)\\subset(a,b)$ 使 $f''(\\eta)=0$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "记住几何直觉：曲线从 $(a,0)$ 向上出发，又要在 $(b,0)$ 处**向上**冲出 $x$ 轴，中途必至少下穿 $x$ 轴一次（产生内零点 $\\xi$），并形成一峰一谷两个驻点和一个拐点！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-5",
+        "pdfPage": 5,
+        "itemRef": "例7.4"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-05",
+      "section": "一、单中值罗尔定理 · 简单单中值（例 7.1~7.5）",
+      "kind": "example",
+      "title": "【例 7.5】无穷区间极限保号截断为有限闭区间，配零点与拉格朗日证 $f'(\\xi)=\\frac{1}{a}$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[0,+\\infty)$ 可导，$f(0)=0$，$\\lim_{x\\to+\\infty}f(x)=2$，证明：\n(1) 存在 $a>0$，$f(a)=1$；\n(2) 对于 (1) 中的 $a$，存在 $\\xi\\in(0,a)$，$f'(\\xi)=\\dfrac{1}{a}$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：用无穷远处极限保号性找到 $f(M)>\\frac{3}{2}>1$，套介值定理",
+          "detail": "因 $\\lim_{x\\to+\\infty}f(x)=2$，取 $\\varepsilon=\\frac{1}{2}>0$，存在 $M>0$ 使 $f(M)>\\frac{3}{2}>1$。又 $f$ 在 $[0,M]$ 上连续且 $f(0)=0<1<f(M)$，由介值定理知存在 $a\\in(0,M)$（故 $a>0$）使 $f(a)=1$。"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：在 $[0,a]$ 上直接套拉格朗日中值定理",
+          "detail": "在 $[0,a]$ 上 $f$ 连续、$(0,a)$ 内可导，由拉格朗日中值定理知存在 $\\xi\\in(0,a)$ 使 $$f'(\\xi)=\\frac{f(a)-f(0)}{a-0}=\\frac{1-0}{a}=\\frac{1}{a}.$$"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "遇到无穷区间 $[0,+\\infty)$ 给极限值，第一步永远是**用极限保号性截出一个有限右端点 $M$**，把问题拉回闭区间 $[0,M]$！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-6",
+        "pdfPage": 6,
+        "itemRef": "例7.5 (1)~(2)"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-06",
+      "section": "二、单中值罗尔定理 · 辅助函数构造核心题（例 7.6~7.12）",
+      "kind": "example",
+      "title": "【例 7.6】商式求导原型：$g(x)\\ne 0$ 构造 $F(x)=\\frac{f(x)}{g(x)}$ 证 $f(\\xi)g'(\\xi)=f'(\\xi)g(\\xi)$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 与 $g(x)$ 在 $[a,b]$ 上连续，$(a,b)$ 上可导，$f(a)=f(b)=0$，$g(x)\\ne 0$，证明存在 $\\xi\\in(a,b)$ 使得 $f(\\xi)g'(\\xi)=f'(\\xi)g(\\xi)$。",
+      "steps": [
+        {
+          "stepTitle": "1. 识别商式导数分子 $f'g-fg'=0$，直接构造 $F(x)=\\frac{f(x)}{g(x)}$ 套罗尔",
+          "detail": "因 $g(x)\\ne 0$，构造辅助函数 $F(x)=\\dfrac{f(x)}{g(x)}$。易知 $F(x)$ 在 $[a,b]$ 上连续、$(a,b)$ 内可导，且 $F(a)=\\frac{f(a)}{g(a)}=0=F(b)$。由罗尔定理存在 $\\xi\\in(a,b)$ 使 $$F'(\\xi)=\\frac{f'(\\xi)g(\\xi)-f(\\xi)g'(\\xi)}{g^2(\\xi)}=0\\implies f(\\xi)g'(\\xi)=f'(\\xi)g(\\xi).$$"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "看到 $f'g-fg'=0$ 条件反射商式 $\\frac{f}{g}$（前提 $g\\ne 0$）；若看到 $f'g+fg'=0$ 则条件反射乘积 $fg$！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-6",
+        "pdfPage": 6,
+        "itemRef": "例7.6"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-07",
+      "section": "二、单中值罗尔定理 · 辅助函数构造核心题（例 7.6~7.12）",
+      "kind": "example",
+      "title": "【例 7.7】含端点组合 $f(2)-2f(1)=\\xi f'(\\xi)-f(\\xi)$：商式 $\\frac{f(x)}{x}$ 配拉格朗日秒杀",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)$ 在 $[1,2]$ 上可导，证明存在 $\\xi\\in(1,2)$ 使得 $f(2)-2f(1)=\\xi f'(\\xi)-f(\\xi)$。",
+      "steps": [
+        {
+          "stepTitle": "1. 观察右端 $\\xi f'(\\xi)-f(\\xi)=\\xi^2\\left(\\frac{f(x)}{x}\\right)'\\Big|_{x=\\xi}$，对 $F(x)=\\frac{f(x)}{x}$ 配柯西（或移项凑商）",
+          "detail": "**法一（拉格朗日/商式移项，最直觉）**：两边同除 $2$ 看不顺眼，但把左端改写为 $2\\left[\\frac{f(2)}{2}-\\frac{f(1)}{1}\\right]$！不对，直接对 $F(x)=\\frac{f(x)}{x}$ 和 $G(x)=-\\frac{1}{x}$ 在 $[1,2]$ 上用柯西中值定理：\n$$\\frac{F(2)-F(1)}{G(2)-G(1)}=\\frac{\\frac{f(2)}{2}-f(1)}{-\\frac{1}{2}+1}=f(2)-2f(1)=\\frac{F'(\\xi)}{G'(\\xi)}=\\frac{\\frac{\\xi f'(\\xi)-f(\\xi)}{\\xi^2}}{\\frac{1}{\\xi^2}}=\\xi f'(\\xi)-f(\\xi)!$$\n**法二（罗尔辅助函数）**：直接把 $F(2)-F(1)=\\frac{f(2)-2f(1)}{2}$ 与 $G(x)=-\\frac{1}{x}$ 合成 $H(x)=\\frac{f(x)}{x}+[f(2)-2f(1)]\\frac{1}{x}=\\frac{f(x)+f(2)-2f(1)}{x}$，检查 $H(1)=f(2)-f(1)$，$H(2)=\\frac{2f(2)-2f(1)}{2}=f(2)-f(1)=H(1)$！罗尔得 $H'(\\xi)=0\\implies \\xi f'(\\xi)-f(\\xi)=f(2)-2f(1)$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "极其惊艳的双解法对比：看到 $\\xi f'(\\xi)-f(\\xi)$ 立刻联想 $\\left(\\frac{f(x)}{x}\\right)'=\\frac{xf'-f}{x^2}$，配分母 $G(x)=-\\frac{1}{x}$（因 $G'(x)=\\frac{1}{x^2}$ 完美抵消分母 $x^2$！）一行 KO！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-7",
+        "pdfPage": 7,
+        "itemRef": "例7.7"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p02_aux_and_k",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-08",
+      "section": "二、单中值罗尔定理 · 辅助函数构造核心题（例 7.6~7.12）",
+      "kind": "example",
+      "title": "【例 7.8】极限推 $f(0)=0$ 与局部负值，构造 $F=ff'$ 凑三零点证至少两个不同实根",
+      "examWeight": "core",
+      "problem": "设函数 $f(x)$ 在 $[0,1]$ 上二阶可导，且 $f(1)>0$，$\\lim_{x\\to 0^+}\\dfrac{f(x)}{x}<0$，证明：\n(1) 方程 $f(x)=0$ 在 $(0,1)$ 内至少存在一个实根；\n(2) 方程 $f(x)f''(x)+[f'(x)]^2=0$ 在 $(0,1)$ 内至少存在两个不同实根。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：由 $\\lim_{x\\to 0^+}\\frac{f(x)}{x}<0$ 推出 $f(0)=0$ 且右邻域 $f(x_1)<0$，配 $f(1)>0$ 用零点定理",
+          "detail": "因 $f$ 在 $[0,1]$ 连续且 $\\lim_{x\\to 0^+}\\frac{f(x)}{x}=L<0$，必有 $f(0)=\\lim_{x\\to 0^+}f(x)=0$。再由极限局部保号性，存在 $x_1\\in(0,1)$ 使 $\\frac{f(x_1)}{x_1}<0\\implies f(x_1)<0$。又 $f(1)>0$，在 $[x_1,1]$ 上由零点定理知存在 $c\\in(x_1,1)\\subset(0,1)$ 使 $f(c)=0$！"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：认出 $[f(x)f'(x)]'=f(x)f''(x)+[f'(x)]^2$，凑出 $F=ff'$ 的 3 个零点",
+          "detail": "由 (1) 知 $f(0)=f(c)=0$，在 $[0,c]$ 上对 $f$ 用罗尔定理，存在 $d\\in(0,c)$ 使 $f'(d)=0$！构造辅助函数 $F(x)=f(x)f'(x)$：它立刻拥有**三个互异零点** $0<d<c<1$，满足 $F(0)=f(0)f'(0)=0$，$F(d)=f(d)f'(d)=0$，$F(c)=f(c)f'(c)=0$！分别在 $[0,d]$ 与 $[d,c]$ 上对 $F$ 用罗尔定理，即得 $\\xi_1\\in(0,d),\\;\\xi_2\\in(d,c)$（显然 $\\xi_1\\ne\\xi_2$）使 $F'(\\xi_1)=F'(\\xi_2)=0$，即 $f(x)f''(x)+[f'(x)]^2=0$ 在 $(0,1)$ 内至少有两个不同实根！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "绝妙组合拳：$f$ 的两个零点 $0,c$ 夹出 $f'$ 的一个零点 $d$，乘在一起 $F=f\\cdot f'$ 就同时白捡了三个互异零点 $0<d<c$！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-7",
+        "pdfPage": 7,
+        "itemRef": "例7.8 (1)~(2)"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-09",
+      "section": "二、单中值罗尔定理 · 辅助函数构造核心题（例 7.6~7.12）",
+      "kind": "example",
+      "title": "【例 7.9】奇函数隐含 $f(0)=0$ + 导函数偶性，配积分因子 $\\mathrm{e}^x[f'(x)-1]$ 证 $f''(\\eta)+f'(\\eta)=1$",
+      "examWeight": "core",
+      "problem": "设奇函数 $f(x)$ 在 $[-1,1]$ 上二阶可导，$f(1)=1$，证明：\n(1) 存在 $\\xi\\in(0,1)$ 使得 $f'(\\xi)=1$；\n(2) 存在 $\\eta\\in(-1,1)$ 使得 $f''(\\eta)+f'(\\eta)=1$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：奇函数必有 $f(0)=0$，在 $[0,1]$ 用拉格朗日立得 $f'(\\xi)=1$",
+          "detail": "因 $f$ 为奇函数且在 $0$ 处有定义，故 $f(0)=0$。在 $[0,1]$ 上用拉格朗日中值定理，存在 $\\xi\\in(0,1)$ 使 $f'(\\xi)=\\frac{f(1)-f(0)}{1-0}=1$。"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：奇函数求导变偶函数白捡对称零点 $f'(-\\xi)=1$，构造 $F(x)=\\mathrm{e}^x[f'(x)-1]$",
+          "detail": "因 $f$ 为奇函数，其导函数 $f'$ 必为**偶函数**，故由 (1) 立得 $f'(-\\xi)=f'(\\xi)=1$！将待证式改写为 $[f'(x)-1]'+[f'(x)-1]=0$，构造积分因子辅助函数 $$F(x)=\\mathrm{e}^x\\bigl[f'(x)-1\\bigr].$$ 显然 $F(-\\xi)=F(\\xi)=0$，在 $[-\\xi,\\xi]$ 上用罗尔定理，存在 $\\eta\\in(-\\xi,\\xi)\\subset(-1,1)$ 使 $F'(\\eta)=\\mathrm{e}^\\eta[f''(\\eta)+f'(\\eta)-1]=0\\implies f''(\\eta)+f'(\\eta)=1$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "记住奇偶联动彩蛋：奇函数不仅送 $f(0)=0$，其导函数是**偶函数**，只要在 $(0,1)$ 找到一个 $f'(\\xi)=1$，立刻镜像复制出 $f'(-\\xi)=1$，白嫖一对罗尔零点！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-8",
+        "pdfPage": 8,
+        "itemRef": "例7.9 (1)~(2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p02_aux_and_k",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-10",
+      "section": "二、单中值罗尔定理 · 辅助函数构造核心题（例 7.6~7.12）",
+      "kind": "example",
+      "title": "【例 7.10】积分条件改写为 $\\int_a^b[f(x)-x]\\,\\mathrm{d}x=0$，再配 $\\mathrm{e}^{-x}[f(x)-x]$ 证 $f'=f-x+1$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[a,b]$ 上连续，$(a,b)$ 上可导，$f(a)=a$，$\\displaystyle\\int_a^b f(x)\\,\\mathrm{d}x=\\frac{1}{2}(b^2-a^2)$，证明至少存在一点 $\\xi\\in(a,b)$ 使得 $f'(\\xi)=f(\\xi)-\\xi+1$。",
+      "steps": [
+        {
+          "stepTitle": "1. 认出 $\\frac{1}{2}(b^2-a^2)=\\int_a^b x\\,\\mathrm{d}x$，换元吸收线性项 $h(x)=f(x)-x$",
+          "detail": "令 $h(x)=f(x)-x$，则 $h(a)=0$，且 $\\int_a^b h(x)\\,\\mathrm{d}x=\\int_a^b f(x)\\,\\mathrm{d}x-\\frac{1}{2}(b^2-a^2)=0$。由开区间积分中值定理，存在 $c\\in(a,b)$ 使得 $h(c)=0$！同时待证结论化简为 $h'(\\xi)-h(\\xi)=0$！"
+        },
+        {
+          "stepTitle": "2. 构造积分因子 $F(x)=\\mathrm{e}^{-x}h(x)$，在 $[a,c]$ 上套罗尔秒证",
+          "detail": "构造 $F(x)=\\mathrm{e}^{-x}[f(x)-x]$，满足 $F(a)=F(c)=0$。在 $[a,c]$ 上用罗尔定理，存在 $\\xi\\in(a,c)\\subset(a,b)$ 使得 $$F'(\\xi)=\\mathrm{e}^{-\\xi}\\bigl[f'(\\xi)-1-f(\\xi)+\\xi\\bigr]=0\\implies f'(\\xi)=f(\\xi)-\\xi+1!$$"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "一眼认出 $\\frac{1}{2}(b^2-a^2)=\\int_a^b x\\,\\mathrm{d}x$，把多项式尾巴整体吸收进 $h(x)=f(x)-x$，题目瞬间从杂乱变得晶莹剔透！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-8",
+        "pdfPage": 8,
+        "itemRef": "例7.10"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p02_aux_and_k",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-11",
+      "section": "二、单中值罗尔定理 · 辅助函数构造核心题（例 7.6~7.12）",
+      "kind": "example",
+      "title": "【例 7.11】解微分方程反推积分因子 $(x-1)^2 f'(x)$ 证 $2f'(\\xi)+(\\xi-1)f''(\\xi)=0$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[0,1]$ 上二阶可导且 $f(0)=f(1)$，证明至少存在一点 $\\xi\\in(0,1)$ 使得 $2f'(\\xi)+(\\xi-1)f''(\\xi)=0$。",
+      "steps": [
+        {
+          "stepTitle": "1. 先由 $f(0)=f(1)$ 造出 $f'(c)=0$，再反解 ODE 找出积分因子 $(x-1)^2 f'(x)$",
+          "detail": "由 $f(0)=f(1)$ 及罗尔定理，存在 $c\\in(0,1)$ 使得 $f'(c)=0$。对待证式 $2y+(x-1)y'=0$（$y=f'$）分离变量 $\\frac{\\mathrm{d}y}{y}=-\\frac{2\\,\\mathrm{d}x}{x-1}\\implies (x-1)^2 y=C$，故精准锁定辅助函数 $$F(x)=(x-1)^2 f'(x)!$$"
+        },
+        {
+          "stepTitle": "2. 在 $[c,1]$ 上对 $F(x)$ 套罗尔，消去非零因子 $(\\xi-1)$ 得证",
+          "detail": "显然 $F(c)=(c-1)^2 f'(c)=0$ 且 $F(1)=0$。在 $[c,1]$ 上对 $F$ 用罗尔定理，存在 $\\xi\\in(c,1)\\subset(0,1)$ 使得 $$F'(\\xi)=2(\\xi-1)f'(\\xi)+(\\xi-1)^2 f''(\\xi)=(\\xi-1)\\bigl[2f'(\\xi)+(\\xi-1)f''(\\xi)\\bigr]=0.$$ 因 $\\xi\\in(c,1)$ 故 $\\xi-1\\ne 0$，从而 $2f'(\\xi)+(\\xi-1)f''(\\xi)=0$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "记住「先解 ODE 找辅助函数 + 再用罗尔补齐第二个零点」的双步套路：只要多乘一个在端点 $1$ 归零的因子 $(x-1)^2$，就能用端点 $1$ 和内部驻点 $c$ 凑成罗尔搭档！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-9",
+        "pdfPage": 9,
+        "itemRef": "例7.11"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p02_aux_and_k",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-12",
+      "section": "二、单中值罗尔定理 · 辅助函数构造核心题（例 7.6~7.12）",
+      "kind": "example",
+      "title": "【例 7.12】吸收线性项 + 解 ODE 构造 $F(x)=x\\mathrm{e}^x[f'(x)-1]$ 证 $\\xi f''+(1+\\xi)f'=1+\\xi$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[0,1]$ 上二阶可导且 $f(0)=0,\\;f(1)=1$，证明至少存在一点 $\\xi\\in(0,1)$ 使得 $\\xi f''(\\xi)+(1+\\xi)f'(\\xi)=1+\\xi$。",
+      "steps": [
+        {
+          "stepTitle": "1. 令 $h(x)=f(x)-x$ 化齐次并造出驻点 $h'(c)=0$，反解 ODE 得 $x\\mathrm{e}^x h'(x)$",
+          "detail": "令 $h(x)=f(x)-x$，则 $h(0)=h(1)=0$，由罗尔定理存在 $c\\in(0,1)$ 使得 $h'(c)=0$。待证式化为 $x h''(x)+(1+x)h'(x)=0$；解 $\\frac{\\mathrm{d}y}{y}=-\\left(\\frac{1}{x}+1\\right)\\mathrm{d}x\\implies x\\mathrm{e}^x y=C$，于是构造 $$F(x)=x\\mathrm{e}^x\\bigl[f'(x)-1\\bigr].$$"
+        },
+        {
+          "stepTitle": "2. 在 $[0,c]$ 上对 $F(x)$ 套罗尔，消去正因子 $\\mathrm{e}^\\xi$ 得证",
+          "detail": "检查两端点：$F(0)=0$，$F(c)=c\\mathrm{e}^c h'(c)=0$。在 $[0,c]$ 上对 $F$ 用罗尔定理，存在 $\\xi\\in(0,c)\\subset(0,1)$ 使得 $$F'(\\xi)=\\mathrm{e}^\\xi\\Bigl[(1+\\xi)\\bigl(f'(\\xi)-1\\bigr)+\\xi f''(\\xi)\\Bigr]=0\\implies \\xi f''(\\xi)+(1+\\xi)f'(\\xi)=1+\\xi!$$"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "例 7.11 和例 7.12 是一对王牌姊妹题：一个在右端点 $1$ 归零配 $(x-1)^2$，一个在左端点 $0$ 归零配 $x\\mathrm{e}^x$，全靠分离变量积分因子机械算出，零玄学！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-9",
+        "pdfPage": 9,
+        "itemRef": "例7.12"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p02_aux_and_k",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-13",
+      "section": "三、单中值柯西中值定理与隐藏零点（例 7.13~7.14）",
+      "kind": "example",
+      "title": "【例 7.13】看见 $\\ln\\frac{b}{a}$ 配 $g(x)=\\ln x$ 套柯西中值证 $f(b)-f(a)=\\xi\\ln\\frac{b}{a}f'(\\xi)$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[a,b]$ 上连续，$(a,b)$ 上可导，$0<a<b$，证明存在 $\\xi\\in(a,b)$ 使得 $f(b)-f(a)=\\xi\\ln\\dfrac{b}{a}\\cdot f'(\\xi)$。",
+      "steps": [
+        {
+          "stepTitle": "1. 改写 $\\ln\\frac{b}{a}=\\ln b-\\ln a$，对 $f(x)$ 与 $g(x)=\\ln x$ 直接套柯西中值定理",
+          "detail": "因 $0<a<b$，$g(x)=\\ln x$ 在 $[a,b]$ 连续、$(a,b)$ 可导且 $g'(x)=\\frac{1}{x}\\ne 0$。由柯西中值定理，存在 $\\xi\\in(a,b)$ 使得 $$\\frac{f(b)-f(a)}{\\ln b-\\ln a}=\\frac{f'(\\xi)}{1/\\xi}=\\xi f'(\\xi)\\implies f(b)-f(a)=\\xi\\ln\\frac{b}{a}\\cdot f'(\\xi)!$$"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "看到 $\\ln\\frac{b}{a}$ 和 $\\xi f'(\\xi)$ 同时现身，大脑 0.5 秒锁定柯西搭档 $g(x)=\\ln x$！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-10",
+        "pdfPage": 10,
+        "itemRef": "例7.13"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-14",
+      "section": "三、单中值柯西中值定理与隐藏零点（例 7.13~7.14）",
+      "kind": "example",
+      "title": "【例 7.14】变限积分 $f(x)=\\int_1^x\\mathrm{e}^{t^2}\\,\\mathrm{d}t$：隐藏零点 $f(1)=0$ 联动罗尔与柯西",
+      "examWeight": "core",
+      "problem": "已知 $f(x)=\\displaystyle\\int_1^x\\mathrm{e}^{t^2}\\,\\mathrm{d}t$，证明：\n(1) 存在 $\\xi\\in(1,2)$，$f(\\xi)=(2-\\xi)\\mathrm{e}^{\\xi^2}$；\n(2) 存在 $\\eta\\in(1,2)$，$f(2)=\\eta\\mathrm{e}^{\\eta^2}\\ln 2$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：认出 $f'(\\xi)=\\mathrm{e}^{\\xi^2}$，构造乘积辅助函数 $F(x)=(x-2)f(x)$",
+          "detail": "注意到 $f(1)=0$ 且 $f'(x)=\\mathrm{e}^{x^2}$。把待证式移项为 $f(\\xi)+(\\xi-2)f'(\\xi)=0$，一眼认出是乘积求导！令 $F(x)=(x-2)f(x)$，有 $F(1)=F(2)=0$。在 $[1,2]$ 上用罗尔定理得 $\\xi\\in(1,2)$ 使 $F'(\\xi)=f(\\xi)+(\\xi-2)\\mathrm{e}^{\\xi^2}=0\\implies f(\\xi)=(2-\\xi)\\mathrm{e}^{\\xi^2}$！"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：挖出两大隐藏零点 $f(1)=0$ 与 $\\ln 1=0$，套柯西中值定理",
+          "detail": "把 $f(2)=\\eta\\mathrm{e}^{\\eta^2}\\ln 2$ 还原出两个隐藏零点：$$\\frac{f(2)-f(1)}{\\ln 2-\\ln 1}=\\frac{f'(\\eta)}{1/\\eta}=\\eta\\mathrm{e}^{\\eta^2}.$$ 对 $f(x)$ 与 $g(x)=\\ln x$ 在 $[1,2]$ 上直接用柯西中值定理，立得存在 $\\eta\\in(1,2)$ 使 $f(2)=\\eta\\mathrm{e}^{\\eta^2}\\ln 2$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "这题完美示范了讲义核心口诀：**补上隐藏零点 $f(1)=0$ 和 $\\ln 1=0$，柯西中值的伪装瞬间卸下**！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-10",
+        "pdfPage": 10,
+        "itemRef": "例7.14 (1)~(2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p02_aux_and_k",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-15",
+      "section": "四、双中值与三中值组合模型（例 7.15~7.21）",
+      "kind": "example",
+      "title": "【例 7.15】同形不等双中值：找分点 $f(x_0)=1-x_0$ 拆区间证 $f'(\\xi)f'(\\eta)=1$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[0,1]$ 上连续，$(0,1)$ 上可导，$f(0)=0,\\;f(1)=1$，证明：\n(1) 存在 $x_0\\in(0,1)$ 使得 $f(x_0)=1-x_0$；\n(2) 证明 $(0,1)$ 上存在不相等的 $\\xi,\\eta$ 使得 $f'(\\xi)f'(\\eta)=1$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：构造 $g(x)=f(x)+x-1$ 套零点定理得 $x_0\\in(0,1)$",
+          "detail": "令 $g(x)=f(x)+x-1$，在 $[0,1]$ 上连续，且 $g(0)=-1<0,\\;g(1)=1>0$，由零点定理知存在 $x_0\\in(0,1)$ 使 $g(x_0)=0$，即 $f(x_0)=1-x_0$。"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：以 $x_0$ 为分界拆成 $[0,x_0]$ 与 $[x_0,1]$ 各用一次拉格朗日相乘",
+          "detail": "在 $[0,x_0]$ 与 $[x_0,1]$ 上分别用拉格朗日中值定理，存在 $\\xi\\in(0,x_0)$ 与 $\\eta\\in(x_0,1)$（显然 $\\xi<x_0<\\eta\\implies\\xi\\ne\\eta$），使得 $$f'(\\xi)=\\frac{f(x_0)-f(0)}{x_0-0}=\\frac{1-x_0}{x_0},\\qquad f'(\\eta)=\\frac{f(1)-f(x_0)}{1-x_0}=\\frac{x_0}{1-x_0}.$$ 两式相乘立得 $f'(\\xi)f'(\\eta)=\\frac{1-x_0}{x_0}\\cdot\\frac{x_0}{1-x_0}=1$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "同形双中值第一经典母题：要消掉分母 $x_0$ 与 $1-x_0$，恰好需要分子交叉互换，于是 $f(x_0)=1-x_0$ 天作之合！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-11",
+        "pdfPage": 11,
+        "itemRef": "例7.15 (1)~(2)"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-16",
+      "section": "四、双中值与三中值组合模型（例 7.15~7.21）",
+      "kind": "example",
+      "title": "【例 7.16】同形不等双中值升级：由 $f(x_0)=2-3x_0$ 证 $[1+f'(\\xi)][1+f'(\\eta)]=4$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[0,1]$ 上连续，$(0,1)$ 上可导，$f(0)=0,\\;f(1)=1$，证明：\n(1) 存在 $x_0\\in(0,1)$ 使得 $f(x_0)=2-3x_0$；\n(2) 证明 $(0,1)$ 上存在不相等的 $\\xi,\\eta$ 使得 $[1+f'(\\xi)][1+f'(\\eta)]=4$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：构造 $g(x)=f(x)+3x-2$ 套零点定理得 $x_0\\in(0,1)$",
+          "detail": "令 $g(x)=f(x)+3x-2$，连续且 $g(0)=-2<0,\\;g(1)=2>0$，由零点定理存在 $x_0\\in(0,1)$ 使 $f(x_0)=2-3x_0$。"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：以 $x_0$ 拆区间，把 $1+f'$ 写成 $[x+f(x)]'$（或直接代入拉格朗日）",
+          "detail": "在 $[0,x_0]$ 与 $[x_0,1]$ 上分别用拉格朗日中值定理得 $\\xi\\in(0,x_0),\\;\\eta\\in(x_0,1)$（$\\xi\\ne\\eta$）：$$1+f'(\\xi)=1+\\frac{2-3x_0}{x_0}=\\frac{2(1-x_0)}{x_0},\\qquad 1+f'(\\eta)=1+\\frac{1-(2-3x_0)}{1-x_0}=\\frac{2x_0}{1-x_0}.$$ 两式相乘立得 $[1+f'(\\xi)][1+f'(\\eta)]=\\frac{2(1-x_0)}{x_0}\\cdot\\frac{2x_0}{1-x_0}=4$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "看透本质：$1+f'(x)=[x+f(x)]'$，令 $H(x)=x+f(x)$ 则 $H(0)=0,\\;H(1)=2$，第 (1) 问的 $f(x_0)=2-3x_0$ 其实就是 $H(x_0)=2(1-x_0)$——本质和例 7.15 一模一样！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-11",
+        "pdfPage": 11,
+        "itemRef": "例7.16 (1)~(2)"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-17",
+      "section": "四、双中值与三中值组合模型（例 7.15~7.21）",
+      "kind": "example",
+      "title": "【例 7.17】固定中点拆区间 $[0,\\frac{1}{2}]\\cup[\\frac{1}{2},1]$ 吸收 $x^3/3$ 证 $f'(\\xi)+f'(\\eta)=\\xi^2+\\eta^2$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[0,1]$ 上连续，$(0,1)$ 上可导，$f(0)=0,\\;f(1)=\\dfrac{1}{3}$，证明存在 $\\xi\\in\\left(0,\\dfrac{1}{2}\\right),\\;\\eta\\in\\left(\\dfrac{1}{2},1\\right)$ 使得 $f'(\\xi)+f'(\\eta)=\\xi^2+\\eta^2$。",
+      "steps": [
+        {
+          "stepTitle": "1. 移项凑齐次 $[f(x)-\\frac{1}{3}x^3]'$，中点 $\\frac{1}{2}$ 一刀拆开两段拉格朗日相加归零！",
+          "detail": "令 $F(x)=f(x)-\\frac{1}{3}x^3$，则 $F(0)=0,\\;F(1)=\\frac{1}{3}-\\frac{1}{3}=0$，且 $F'(x)=f'(x)-x^2$。分别在 $\\left[0,\\frac{1}{2}\\right]$ 与 $\\left[\\frac{1}{2},1\\right]$ 上对 $F$ 用拉格朗日中值定理，存在 $\\xi\\in\\left(0,\\frac{1}{2}\\right)$ 与 $\\eta\\in\\left(\\frac{1}{2},1\\right)$ 使得 $$F'(\\xi)=\\frac{F(\\frac{1}{2})-F(0)}{\\frac{1}{2}}=2F\\!\\left(\\frac{1}{2}\\right),\\qquad F'(\\eta)=\\frac{F(1)-F(\\frac{1}{2})}{\\frac{1}{2}}=-2F\\!\\left(\\frac{1}{2}\\right).$$ 相加立得 $F'(\\xi)+F'(\\eta)=0\\implies f'(\\xi)+f'(\\eta)=\\xi^2+\\eta^2$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "超级好用小绝招：只要把端点值消成 $F(0)=F(1)=0$，**取正中点 $\\frac{1}{2}$ 拆成两等长子区间，两段拉格朗日斜率必然一正一负完美抵消**，连 $F(\\frac{1}{2})$ 等于多少都不用知道！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-12",
+        "pdfPage": 12,
+        "itemRef": "例7.17"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-18",
+      "section": "四、双中值与三中值组合模型（例 7.15~7.21）",
+      "kind": "example",
+      "title": "【例 7.18】倒数和型双中值：找值域中点 $f(x_0)=\\frac{1}{2}$ 证 $\\frac{1}{f'(\\xi)}+\\frac{1}{f'(\\eta)}=2$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[0,1]$ 上连续，$(0,1)$ 上可导，$f(0)=0,\\;f(1)=1$，证明 $(0,1)$ 上存在不相等的 $\\xi,\\eta$ 使得 $\\dfrac{1}{f'(\\xi)}+\\dfrac{1}{f'(\\eta)}=2$。",
+      "steps": [
+        {
+          "stepTitle": "1. 倒推分点动机：要使 $\\frac{x_0}{f(x_0)}+\\frac{1-x_0}{1-f(x_0)}=2$ 恒成立，取 $f(x_0)=\\frac{1}{2}$！",
+          "detail": "因 $f$ 在 $[0,1]$ 上连续且 $f(0)=0<\\frac{1}{2}<1=f(1)$，由介值定理存在 $x_0\\in(0,1)$ 使 $f(x_0)=\\frac{1}{2}$。"
+        },
+        {
+          "stepTitle": "2. 在 $[0,x_0]$ 与 $[x_0,1]$ 上分别用拉格朗日取倒数相加（天然非零！）",
+          "detail": "存在 $\\xi\\in(0,x_0),\\;\\eta\\in(x_0,1)$（$\\xi\\ne\\eta$）使得 $$f'(\\xi)=\\frac{\\frac{1}{2}-0}{x_0}=\\frac{1}{2x_0}\\ne 0,\\qquad f'(\\eta)=\\frac{1-\\frac{1}{2}}{1-x_0}=\\frac{1}{2(1-x_0)}\\ne 0.$$ 取倒数相加立得 $\\dfrac{1}{f'(\\xi)}+\\dfrac{1}{f'(\\eta)}=2x_0+2(1-x_0)=2$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "记住「值域等分」大法：例 7.17 是**定义域二等分**（$x_0=\\frac{1}{2}$）消分子，例 7.18 是**值域二等分**（$f(x_0)=\\frac{1}{2}$）消倒数后的分母，对称得令人拍案叫绝！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-12",
+        "pdfPage": 12,
+        "itemRef": "例7.18"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-19",
+      "section": "四、双中值与三中值组合模型（例 7.15~7.21）",
+      "kind": "example",
+      "title": "【例 7.19】异形双中值四大金刚（$\\ln x,\\;\\mathrm{e}^x,\\;\\frac{1}{x},\\;x^2$ 配对柯西 + 拉格朗日）",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[a,b]$ 上连续，$(a,b)$ 上可导，证明存在 $\\xi,\\eta\\in(a,b)$ 满足：\n(1) 若 $a>0$，$f'(\\xi)=\\eta f'(\\eta)\\dfrac{\\ln\\frac{b}{a}}{b-a}$；\n(2) 若 $f'\\ne 0$，$\\dfrac{f'(\\xi)}{f'(\\eta)}=\\dfrac{\\mathrm{e}^b-\\mathrm{e}^a}{b-a}\\mathrm{e}^{-\\eta}$；\n(3) 若 $ab>0$，$ab f'(\\xi)=\\eta^2 f'(\\eta)$；\n(4) 若 $f'\\ne 0,\\;a>0$，$f'(\\xi)=\\dfrac{a+b}{2\\eta}f'(\\eta)$。",
+      "steps": [
+        {
+          "stepTitle": "1. 通用母步：先对 $f$ 在 $[a,b]$ 用拉格朗日得 $f(b)-f(a)=(b-a)f'(\\xi)$",
+          "detail": "对 4 个小题，先在 $[a,b]$ 上对 $f$ 用拉格朗日中值定理，均得存在 $\\xi\\in(a,b)$ 使 $f(b)-f(a)=(b-a)f'(\\xi)$。"
+        },
+        {
+          "stepTitle": "2. 分别配 $g(x)=\\ln x,\\;\\mathrm{e}^x,\\;\\frac{1}{x},\\;x^2$ 在 $[a,b]$ 上对 $(f,g)$ 套柯西联立消去 $f(b)-f(a)$",
+          "detail": "- **(1) 配 $g(x)=\\ln x$（$a>0$）**：$\\frac{f(b)-f(a)}{\\ln b-\\ln a}=\\frac{f'(\\eta)}{1/\\eta}=\\eta f'(\\eta)\\implies (b-a)f'(\\xi)=\\eta f'(\\eta)\\ln\\frac{b}{a}$；\n- **(2) 配 $g(x)=\\mathrm{e}^x$**：$\\frac{f(b)-f(a)}{\\mathrm{e}^b-\\mathrm{e}^a}=\\frac{f'(\\eta)}{\\mathrm{e}^\\eta}\\implies \\frac{f'(\\xi)}{f'(\\eta)}=\\frac{\\mathrm{e}^b-\\mathrm{e}^a}{b-a}\\mathrm{e}^{-\\eta}$；\n- **(3) 配 $g(x)=\\frac{1}{x}$（$ab>0$ 保 $0\\notin[a,b]$）**：$\\frac{f(b)-f(a)}{\\frac{1}{b}-\\frac{1}{a}}=\\frac{f'(\\eta)}{-1/\\eta^2}\\implies \\frac{(b-a)f'(\\xi)}{-(b-a)/(ab)}=-\\eta^2 f'(\\eta)\\implies abf'(\\xi)=\\eta^2 f'(\\eta)$；\n- **(4) 配 $g(x)=x^2$（$a>0$ 保 $g'=2x>0$）**：$\\frac{f(b)-f(a)}{b^2-a^2}=\\frac{f'(\\eta)}{2\\eta}\\implies f'(\\xi)=\\frac{a+b}{2\\eta}f'(\\eta)$！"
+        }
+      ],
+      "finalAnswer": "四式均证毕。",
+      "takeaway": "背下这「四大异形柯西搭档」：$\\ln x \\leftrightarrow \\eta f'(\\eta)$、$\\mathrm{e}^x \\leftrightarrow \\mathrm{e}^{-\\eta}f'(\\eta)$、$\\frac{1}{x} \\leftrightarrow \\eta^2 f'(\\eta)$、$x^2 \\leftrightarrow \\frac{f'(\\eta)}{2\\eta}$，异形双中值全部秒切！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-13",
+        "pdfPage": 13,
+        "itemRef": "例7.19 (1)~(4)"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-20",
+      "section": "四、双中值与三中值组合模型（例 7.15~7.21）",
+      "kind": "example",
+      "title": "【例 7.20】三连问综合：极限推 $f(a)=0$ → 柯西配 $x^2$ → 在 $[a,\\xi]$ 拉格朗日造 $\\eta\\ne\\xi$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[a,b]$ 上连续，$(a,b)$ 上可导，$f'(x)>0$，若极限 $\\displaystyle\\lim_{x\\to a^+}\\frac{f(2x-a)}{x-a}$ 存在，证明：\n(1) 在 $(a,b)$ 内有 $f(x)>0$；\n(2) 存在 $\\xi\\in(a,b)$，使得 $\\dfrac{b^2-a^2}{\\int_a^b f(x)\\,\\mathrm{d}x}=\\dfrac{2\\xi}{f(\\xi)}$；\n(3) 存在 $\\eta\\in(a,b)$ 且 $\\eta\\ne\\xi$ 使得 $f'(\\eta)(b^2-a^2)=\\dfrac{2\\xi}{\\xi-a}\\displaystyle\\int_a^b f(x)\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：分母趋于 $0$ 且极限存在必有 $f(a)=0$，结合 $f'(x)>0$ 得 $f(x)>0$",
+          "detail": "因 $\\lim_{x\\to a^+}\\frac{f(2x-a)}{x-a}$ 存在且分母 $x-a\\to 0$，必有 $\\lim_{x\\to a^+}f(2x-a)=0$；由 $f$ 在 $a$ 处右连续知 $f(a)=0$。又 $f'(x)>0$，故 $f$ 在 $[a,b]$ 严格单增，在 $(a,b)$ 内恒有 $f(x)>f(a)=0$（从而 $\\int_a^b f(x)\\,\\mathrm{d}x>0$）。"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：变限积分 $F(x)=\\int_a^x f$ 与 $G(x)=x^2$ 配柯西（用罗尔版连 $a=-b$ 也无死角！）",
+          "detail": "记 $F(x)=\\int_a^x f(t)\\,\\mathrm{d}t$，则 $F(a)=0,\\;F'(x)=f(x)>0$。令辅助函数 $H(x)=(b^2-a^2)F(x)-(x^2-a^2)F(b)$（或直接对 $(G,F)$ 用柯西中值定理，因分母 $F'(x)=f(x)>0$ 处处非零，甚至连 $a+b=0$ 也不出错！）：$$\\frac{G(b)-G(a)}{F(b)-F(a)}=\\frac{b^2-a^2}{\\int_a^b f(x)\\,\\mathrm{d}x}=\\frac{G'(\\xi)}{F'(\\xi)}=\\frac{2\\xi}{f(\\xi)}\\quad(\\xi\\in(a,b))!$$"
+        },
+        {
+          "stepTitle": "3. 第 (3) 问：在子区间 $[a,\\xi]$ 上对 $f$ 用拉格朗日，天然保证 $\\eta<\\xi$ 即 $\\eta\\ne\\xi$",
+          "detail": "由 (2) 得 $f(\\xi)=\\frac{2\\xi}{b^2-a^2}\\int_a^b f(x)\\,\\mathrm{d}x$（若 $b^2-a^2=0$ 则两边皆为 $0$，任取 $\\eta\\ne\\xi$ 成立）。在 $[a,\\xi]$ 上对 $f$ 用拉格朗日中值定理，存在 $\\eta\\in(a,\\xi)\\subset(a,b)$（显然 $\\eta\\ne\\xi$），使得 $$f'(\\eta)=\\frac{f(\\xi)-f(a)}{\\xi-a}=\\frac{f(\\xi)}{\\xi-a}\\implies f'(\\eta)(b^2-a^2)=\\frac{2\\xi}{\\xi-a}\\int_a^b f(x)\\,\\mathrm{d}x!$$"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "看第 (2) 问把 $F(x)=\\int_a^x f$ 放在柯西分母的巧思：因为 $F'(x)=f(x)>0$ 处处非零，不用担心 $G'(x)=2x$ 在 $x=0$ 可能为零！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-13",
+        "pdfPage": 13,
+        "itemRef": "例7.20 (1)~(3)"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-21",
+      "section": "四、双中值与三中值组合模型（例 7.15~7.21）",
+      "kind": "example",
+      "title": "【例 7.21】三中值压轴：$f(2)-f(1)$ 借 $\\ln 2$ 搭三座桥证 $\\frac{f'(\\zeta)}{f'(\\xi)}=\\frac{\\xi}{\\eta}$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[1,2]$ 上连续，$(1,2)$ 上可导，且导数不为 $0$，证明 $(1,2)$ 内存在 $\\xi,\\eta,\\zeta$ 使得 $\\dfrac{f'(\\zeta)}{f'(\\xi)}=\\dfrac{\\xi}{\\eta}$。",
+      "steps": [
+        {
+          "stepTitle": "1. 拆解三个中值角色：$f'(\\zeta)$ 走 $f$ 的拉格朗日，$\\xi f'(\\xi)$ 走 $(f,\\ln x)$ 柯西，$\\frac{1}{\\eta}$ 走 $\\ln x$ 的拉格朗日",
+          "detail": "在 $[1,2]$ 上连续施展三次中值定理：\n1. 对 $f(x)$ 用拉格朗日中值定理：$\\exists\\zeta\\in(1,2)$，使 $f(2)-f(1)=f'(\\zeta)(2-1)=f'(\\zeta)$；\n2. 对 $f(x)$ 与 $g(x)=\\ln x$ 用柯西中值定理：$\\exists\\xi\\in(1,2)$，使 $\\dfrac{f(2)-f(1)}{\\ln 2-\\ln 1}=\\dfrac{f'(\\xi)}{1/\\xi}=\\xi f'(\\xi)$；\n3. 对 $\\ln x$ 用拉格朗日中值定理：$\\exists\\eta\\in(1,2)$，使 $\\ln 2-\\ln 1=\\dfrac{1}{\\eta}(2-1)=\\dfrac{1}{\\eta}$！\n将三式首尾相接，因 $f'(\\xi)\\ne 0$：$$f'(\\zeta)=f(2)-f(1)=\\xi f'(\\xi)\\cdot\\ln 2=\\frac{\\xi}{\\eta}f'(\\xi)\\implies \\frac{f'(\\zeta)}{f'(\\xi)}=\\frac{\\xi}{\\eta}!$$"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "惊艳全场的「$\\ln 2$ 桥接术」：把分母 $1$ 拆成 $\\ln 2\\cdot\\frac{1}{\\ln 2}$，让 $\\ln x$ 既当柯西分母造出 $\\xi f'(\\xi)$，又当拉格朗日主角造出 $\\frac{1}{\\eta}$！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-14",
+        "pdfPage": 14,
+        "itemRef": "例7.21"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-22",
+      "section": "五、泰勒展开证明等式与不等式（例 7.22~7.29）",
+      "kind": "example",
+      "title": "【例 7.22】双端点驻点 $f'(a)=f'(b)=0$：端点展开代中点证 $|f''(\\xi)|\\ge\\frac{4}{(b-a)^2}|f(b)-f(a)|$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[a,b]$ 上二阶可导，且 $f'(a)=f'(b)=0$，证明存在 $\\xi\\in(a,b)$ 使得 $|f''(\\xi)|\\ge\\dfrac{4}{(b-a)^2}|f(b)-f(a)|$。",
+      "steps": [
+        {
+          "stepTitle": "1. 遵循「驻点优先展开」：在 $a,b$ 两点二阶展开并同时代入中点 $m=\\frac{a+b}{2}$",
+          "detail": "记 $m=\\frac{a+b}{2}$，分别在 $a$ 与 $b$ 处作带拉格朗日余项的二阶泰勒展开并代入 $x=m$（因 $f'(a)=f'(b)=0$ 一次项全消！）：\n$$f(m)=f(a)+\\frac{1}{2}f''(\\xi_1)\\left(\\frac{b-a}{2}\\right)^2,\\qquad f(m)=f(b)+\\frac{1}{2}f''(\\xi_2)\\left(\\frac{a-b}{2}\\right)^2,$$\n其中 $\\xi_1\\in(a,m),\\;\\xi_2\\in(m,b)$。"
+        },
+        {
+          "stepTitle": "2. 两式相减消 $f(m)$，取绝对值并用最大值选出 $\\xi\\in\\{\\xi_1,\\xi_2\\}$",
+          "detail": "两式相减：$$|f(b)-f(a)|=\\frac{(b-a)^2}{8}\\bigl|f''(\\xi_1)-f''(\\xi_2)\\bigr|\\le\\frac{(b-a)^2}{8}\\bigl(|f''(\\xi_1)|+|f''(\\xi_2)|\\bigr).$$ 取 $\\xi\\in\\{\\xi_1,\\xi_2\\}$ 为 $|f''(\\xi_1)|,|f''(\\xi_2)|$ 中的较大者，立得 $|f(b)-f(a)|\\le\\frac{(b-a)^2}{4}|f''(\\xi)|$，即 $|f''(\\xi)|\\ge\\frac{4}{(b-a)^2}|f(b)-f(a)|$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "二阶导不等式头号经典母题：**看见两端点一阶导为零，立刻在两端点展开、同代中点相减**，系数 $\\frac{1}{2}\\cdot\\frac{1}{4}\\cdot 2=\\frac{1}{4}$ 自动出来！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-14",
+        "pdfPage": 14,
+        "itemRef": "例7.22"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-23",
+      "section": "五、泰勒展开证明等式与不等式（例 7.22~7.29）",
+      "kind": "example",
+      "title": "【例 7.23】$f(a)=f(b)=0,\\;|f''|\\ge 1$：在中点展开代两端点相加消一次项证 $\\max|f|\\ge\\frac{1}{8}(b-a)^2$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[a,b]$ 上连续，$(a,b)$ 上二阶可导，$|f''(x)|\\ge 1$，$f(a)=f(b)=0$，证明 $\\displaystyle\\max_{a\\le x\\le b}|f(x)|\\ge\\frac{1}{8}(b-a)^2$。",
+      "steps": [
+        {
+          "stepTitle": "1. 在中点 $m=\\frac{a+b}{2}$ 处展开，分别代入 $a$ 与 $b$ 后相加完美消掉 $f'(m)$！",
+          "detail": "（注：由达布导数介值定理及 $|f''(x)|\\ge 1>0$，$f''$ 在 $(a,b)$ 上**必不变号**，即恒有 $f''\\ge 1$ 或恒有 $f''\\le -1$！）\n记 $m=\\frac{a+b}{2}$，在 $m$ 处作二阶泰勒展开并分别代入 $x=a$ 与 $x=b$：\n$$0=f(a)=f(m)-f'(m)\\frac{b-a}{2}+\\frac{1}{2}f''(\\xi_1)\\left(\\frac{b-a}{2}\\right)^2,$$\n$$0=f(b)=f(m)+f'(m)\\frac{b-a}{2}+\\frac{1}{2}f''(\\xi_2)\\left(\\frac{b-a}{2}\\right)^2.$$\n两式相加消掉 $f'(m)$：$$-2f(m)=\\frac{(b-a)^2}{8}\\bigl[f''(\\xi_1)+f''(\\xi_2)\\bigr].$$"
+        },
+        {
+          "stepTitle": "2. 利用 $f''$ 保号性 $|f''(\\xi_1)+f''(\\xi_2)|=|f''(\\xi_1)|+|f''(\\xi_2)|\\ge 2$ 瞬间收尾",
+          "detail": "因 $f''(\\xi_1)$ 与 $f''(\\xi_2)$ 同号且绝对值均 $\\ge 1$，故 $|f''(\\xi_1)+f''(\\xi_2)|=|f''(\\xi_1)|+|f''(\\xi_2)|\\ge 2$，于是 $$\\max_{a\\le x\\le b}|f(x)|\\ge|f(m)|=\\frac{(b-a)^2}{16}\\bigl|f''(\\xi_1)+f''(\\xi_2)\\bigr|\\ge\\frac{1}{8}(b-a)^2!$$ （另解：直接取 $|f|$ 的最大值点 $c\\in(a,b)$ 使 $f'(c)=0$，在 $c$ 展开代入距 $c$ 较近的端点 $a$ 或 $b$，距离 $\\le\\frac{b-a}{2}$，连达布定理都不用！）"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "对比两种展开点都极其精妙：中点展开靠**相加消 $f'(m)$**（需补一句达布保号防正负抵消）；最值点 $c$ 展开靠 **$f'(c)=0$ + 近端点距离 $\\le\\frac{b-a}{2}$**（彻底免保号讨论）！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-15",
+        "pdfPage": 15,
+        "itemRef": "例7.23"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-24",
+      "section": "五、泰勒展开证明等式与不等式（例 7.22~7.29）",
+      "kind": "example",
+      "title": "【例 7.24】三阶泰勒中点 $x_0=0$ 展开（$f'(0)=0$），代 $\\pm 1$ 相减消 $f(0),f''(0)$ 证 $f'''(\\xi)=3$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[-1,1]$ 上有三阶连续导数，$f(-1)=0,\\;f(1)=1,\\;f'(0)=0$，证明存在 $\\xi\\in(-1,1)$ 使得 $f'''(\\xi)=3$。",
+      "steps": [
+        {
+          "stepTitle": "1. $x_0=0$ 既是驻点又是中点！在 $0$ 处三阶展开代 $\\pm 1$ 相减",
+          "detail": "在 $x_0=0$ 处三阶泰勒展开（利用 $f'(0)=0$）：\n$$1=f(1)=f(0)+\\frac{1}{2}f''(0)+\\frac{1}{6}f'''(\\xi_1),\\qquad 0=f(-1)=f(0)+\\frac{1}{2}f''(0)-\\frac{1}{6}f'''(\\xi_2),$$\n其中 $\\xi_1\\in(0,1),\\;\\xi_2\\in(-1,0)$。"
+        },
+        {
+          "stepTitle": "2. 两式相减 + 对连续函数 $f'''$ 用平均值（介值）定理得 $f'''(\\xi)=3$",
+          "detail": "两式相减消掉未知的 $f(0)$ 与 $f''(0)$：$$1=\\frac{f'''(\\xi_1)+f'''(\\xi_2)}{6}\\implies \\frac{f'''(\\xi_1)+f'''(\\xi_2)}{2}=3.$$ 因 $f'''$ 在 $[-1,1]$ 上连续，由介值定理知在 $\\xi_2$ 与 $\\xi_1$ 之间必存在 $\\xi\\in(-1,1)$ 使 $f'''(\\xi)=3$！（更绝的辅助多项式解法见例 7.32！）"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "当 $x_0=0$ 同时满足「对称中点 + $f'(0)=0$」双重 Buff 时，代 $\\pm 1$ 相减一刀砍掉所有偶数阶未知项（$f(0),f''(0)$）！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-15",
+        "pdfPage": 15,
+        "itemRef": "例7.24（对照例 7.32 辅助多项式法）"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-25",
+      "section": "五、泰勒展开证明等式与不等式（例 7.22~7.29）",
+      "kind": "example",
+      "title": "【例 7.25】积分条件 $\\int_0^1 f=1$ 配泰勒在驻点 $\\xi$ 展开积分反证 $f''(\\eta)<-2$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在区间 $[0,1]$ 上具有二阶导数，且 $f(0)=0,\\;f(1)=1,\\;\\displaystyle\\int_0^1 f(x)\\,\\mathrm{d}x=1$，证明：\n(1) 存在 $\\xi\\in(0,1)$ 使得 $f'(\\xi)=0$；\n(2) 存在 $\\eta\\in(0,1)$ 使得 $f''(\\eta)<-2$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：由开区间积分中值定理造出 $f(c)=1=f(1)$，套罗尔得驻点 $\\xi$",
+          "detail": "由开区间积分中值定理，存在 $c\\in(0,1)$ 使 $f(c)=\\int_0^1 f(x)\\,\\mathrm{d}x=1=f(1)$。在 $[c,1]$ 上对 $f$ 用罗尔定理，即存在 $\\xi\\in(c,1)\\subset(0,1)$ 使 $f'(\\xi)=0$。"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：法一（泰勒反证）在 $x_0=0$ 或最值点展开积分；更优直接连看例 7.31 辅助多项式秒出 $-6$",
+          "detail": "**泰勒反证法**：若对一切 $x\\in(0,1)$ 均有 $f''(x)\\ge -2$，令 $g(x)=f(x)+x^2-2x$，则 $g(0)=0,\\;g(1)=0$ 且 $g''(x)=f''(x)+2\\ge 0$（下凸函数）！由下凸函数图像在弦线下方知 $\\forall x\\in[0,1],\\;g(x)\\le 0$，即 $f(x)\\le 2x-x^2$。两边在 $[0,1]$ 积分得 $$\\int_0^1 f(x)\\,\\mathrm{d}x\\le\\int_0^1(2x-x^2)\\,\\mathrm{d}x=1-\\frac{1}{3}=\\frac{2}{3}<1,$$ 与 $\\int_0^1 f(x)\\,\\mathrm{d}x=1$ 矛盾！故必存在 $\\eta\\in(0,1)$ 使得 $f''(\\eta)<-2$！（若在例 7.31 用辅助多项式 $p(x)=-3x^2+4x$，可直接证明甚至存在 $f''(\\eta)=-6<-2$！）"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "记住「反证 $f''\\ge -2$ $\\implies$ 减掉二次抛物线变下凸 $\\implies$ 积分矛盾」这一神级等价转换，比硬写带 $\\xi(x)$ 的泰勒积分绕开了可积性争议且只需 3 行！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-16",
+        "pdfPage": 16,
+        "itemRef": "例7.25 (1)~(2)（对照例 7.31）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p02_aux_and_k",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-26",
+      "section": "五、泰勒展开证明等式与不等式（例 7.22~7.29）",
+      "kind": "example",
+      "title": "【例 7.26】$f'(0)=f'(1)$ 双端点二阶泰勒配权消一阶导，证梯形公式误差 $\\le\\frac{1}{12}$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[0,1]$ 上二阶可导，且 $f'(0)=f'(1)$，$|f''(x)|\\le 1$，证明：\n(1) 当 $x\\in(0,1)$ 时，$|f(x)-f(0)(1-x)-f(1)x|\\le\\dfrac{x(1-x)}{2}$；\n(2) $\\displaystyle\\left|\\int_0^1 f(x)\\,\\mathrm{d}x-\\frac{f(0)+f(1)}{2}\\right|\\le\\frac{1}{12}$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：分别在 $0$ 和 $1$ 处二阶展开，乘 $(1-x)$ 与 $x$ 相加（注意符号！）消掉 $f'(0)=f'(1)$",
+          "detail": "对任意 $x\\in(0,1)$，存在 $\\xi_1\\in(0,x),\\;\\xi_2\\in(x,1)$ 使得：\n$$f(x)=f(0)+f'(0)x+\\frac{1}{2}f''(\\xi_1)x^2,\\qquad f(x)=f(1)+f'(1)(x-1)+\\frac{1}{2}f''(\\xi_2)(x-1)^2.$$\n第 1 式乘 $(1-x)$、第 2 式乘 $x$ 后相加，因 $f'(0)x(1-x)+f'(1)x(x-1)=0$ 恰好抵消：\n$$f(x)-f(0)(1-x)-f(1)x=\\frac{x(1-x)}{2}\\bigl[x f''(\\xi_1)+(1-x)f''(\\xi_2)\\bigr].$$\n由 $|f''|\\le 1$ 与 $x,1-x>0$ 立得 $|f(x)-f(0)(1-x)-f(1)x|\\le\\frac{x(1-x)}{2}[x+(1-x)]=\\frac{x(1-x)}{2}$！"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：在 $[0,1]$ 积分直接收割 $\\frac{1}{12}$",
+          "detail": "因 $\\int_0^1[f(0)(1-x)+f(1)x]\\,\\mathrm{d}x=\\frac{f(0)+f(1)}{2}$，故 $$\\left|\\int_0^1 f(x)\\,\\mathrm{d}x-\\frac{f(0)+f(1)}{2}\\right|\\le\\int_0^1\\frac{x(1-x)}{2}\\,\\mathrm{d}x=\\frac{1}{2}\\cdot\\frac{1}{6}=\\frac{1}{12}!$$"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "与张宇强化第 11 讲强化例 11.18 同源真题！记住「分别在 $0,1$ 展开，按距离反比配权 $(1-x)$ 和 $x$ 相加」即可优雅消灭相等的一阶导！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-16",
+        "pdfPage": 16,
+        "itemRef": "例7.26 (1)~(2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p02_aux_and_k",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-27",
+      "section": "五、泰勒展开证明等式与不等式（例 7.22~7.29）",
+      "kind": "example",
+      "title": "【例 7.27】动点展开入门：$\\int_0^1 f=0,\\;|f'|\\le 1$ 证 $\\forall x\\in(0,1),\\;|f(x)|\\le\\frac{1}{2}$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[0,1]$ 连续，$(0,1)$ 可导，且 $\\displaystyle\\int_0^1 f(x)\\,\\mathrm{d}x=0$，$|f'(x)|\\le 1$，试证明对 $\\forall x\\in(0,1)$ 都有 $|f(x)|\\le\\dfrac{1}{2}$。",
+      "steps": [
+        {
+          "stepTitle": "1. 动点 $x$ 固定、对积分变量 $t$ 用一阶泰勒（拉格朗日）并积分消掉 $\\int_0^1 f(t)\\,\\mathrm{d}t=0$",
+          "detail": "对任意固定 $x\\in(0,1)$ 与任意 $t\\in[0,1]$，由拉格朗日中值定理有 $|f(x)-f(t)|\\le|x-t|$（因 $|f'|\\le 1$）。两边对 $t$ 在 $[0,1]$ 积分并利用 $\\int_0^1 f(t)\\,\\mathrm{d}t=0$：$$|f(x)|=\\left|\\int_0^1\\bigl[f(x)-f(t)\\bigr]\\,\\mathrm{d}t\\right|\\le\\int_0^1|x-t|\\,\\mathrm{d}t=\\int_0^x(x-t)\\,\\mathrm{d}t+\\int_x^1(t-x)\\,\\mathrm{d}t=\\frac{x^2+(1-x)^2}{2}.$$ 因 $x\\in(0,1)$，易知 $x^2+(1-x)^2=1-2x(1-x)<1$，故 $|f(x)|<\\frac{1}{2}\\le\\frac{1}{2}$！"
+        }
+      ],
+      "finalAnswer": "证毕（事实上在 $(0,1)$ 内甚至严格满足 $|f(x)|\\le\\frac{x^2+(1-x)^2}{2}<\\frac{1}{2}$）。",
+      "takeaway": "记住「把 $f(x)$ 写成 $\\int_0^1[f(x)-f(t)]\\,\\mathrm{d}t$」的妙招——相比只用积分中值取一个零点 $c$（只能得 $|f(x)|\\le|x-c|\\le 1$ 过松！），整体积分直接把界收紧一倍至 $\\frac{1}{2}$！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-17",
+        "pdfPage": 17,
+        "itemRef": "例7.27"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p02_aux_and_k",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-28",
+      "section": "五、泰勒展开证明等式与不等式（例 7.22~7.29）",
+      "kind": "example",
+      "title": "【例 7.28】全轴二阶朗道不等式：在动点 $x$ 展开代 $x\\pm h$ 证 $|f'(x)|\\le\\sqrt{2MN}$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $\\mathbb{R}$ 上二阶可导，$|f(x)|\\le M,\\;|f''(x)|\\le N$，证明对 $\\forall x\\in\\mathbb{R}$，有 $|f'(x)|\\le\\sqrt{2MN}$。",
+      "steps": [
+        {
+          "stepTitle": "1. 动点 $x$ 二阶展开代入 $x+h$ 与 $x-h\\;(h>0)$，两式相减消 $f(x)$",
+          "detail": "对任意 $x\\in\\mathbb{R}$ 与任意 $h>0$，由二阶泰勒公式存在 $\\xi_1\\in(x,x+h),\\;\\xi_2\\in(x-h,x)$ 使\n$$f(x+h)=f(x)+f'(x)h+\\frac{1}{2}f''(\\xi_1)h^2,\\qquad f(x-h)=f(x)-f'(x)h+\\frac{1}{2}f''(\\xi_2)h^2.$$\n两式相减解出 $f'(x)$：$$f'(x)=\\frac{f(x+h)-f(x-h)}{2h}-\\frac{f''(\\xi_1)-f''(\\xi_2)}{4}h.$$"
+        },
+        {
+          "stepTitle": "2. 取绝对值放缩为 $\\frac{M}{h}+\\frac{N}{2}h$，分类 $N=0$ 与 $N>0$ 选最优步长 $h=\\sqrt{\\frac{2M}{N}}$",
+          "detail": "取绝对值立得对一切 $h>0$：$$|f'(x)|\\le\\frac{2M}{2h}+\\frac{2N}{4}h=\\frac{M}{h}+\\frac{N}{2}h.$$\n- 若 $N=0$，令 $h\\to+\\infty$ 得 $|f'(x)|\\le 0\\implies |f'(x)|=0=\\sqrt{2MN}$；\n- 若 $N>0$（且 $M>0$，若 $M=0$ 则 $f\\equiv 0$ 显然），取最优步长 $h=\\sqrt{\\frac{2M}{N}}>0$，立得 $$|f'(x)|\\le\\sqrt{\\frac{MN}{2}}+\\sqrt{\\frac{MN}{2}}=\\sqrt{2MN}!$$"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "全实轴 $\\mathbb{R}$ 允许向左右对称伸出步长 $x\\pm h$，因此系数比半轴 $[0,+\\infty)$ 的 $2\\sqrt{MN}$ 紧了 $\\sqrt{2}$ 倍，记住黄金步长 $h=\\sqrt{\\frac{2M}{N}}$！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-17",
+        "pdfPage": 17,
+        "itemRef": "例7.28"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p02_aux_and_k",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-29",
+      "section": "五、泰勒展开证明等式与不等式（例 7.22~7.29）",
+      "kind": "example",
+      "title": "【例 7.29】全轴三阶柯尔莫哥洛夫不等式：代 $x\\pm h$ 同时消 $f,f''$ 证 $|f'(x)|\\le\\sqrt[3]{\\frac{9M^2 N}{8}}$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $\\mathbb{R}$ 上三阶可导，$|f(x)|\\le M,\\;|f'''(x)|\\le N$，证明对 $\\forall x\\in\\mathbb{R}$，有 $|f'(x)|\\le\\sqrt[3]{\\dfrac{9M^2 N}{8}}$。",
+      "steps": [
+        {
+          "stepTitle": "1. 动点 $x$ 三阶展开代 $x\\pm h$ 相减，一刀双消 $f(x)$ 与 $f''(x)$！",
+          "detail": "对任意 $x\\in\\mathbb{R},\\;h>0$，存在 $\\xi_1\\in(x,x+h),\\;\\xi_2\\in(x-h,x)$ 使\n$$f(x+h)=f(x)+f'(x)h+\\frac{1}{2}f''(x)h^2+\\frac{1}{6}f'''(\\xi_1)h^3,$$\n$$f(x-h)=f(x)-f'(x)h+\\frac{1}{2}f''(x)h^2-\\frac{1}{6}f'''(\\xi_2)h^3.$$\n两式相减，$f(x)$ 与 $f''(x)$ 同时消失：$$f'(x)=\\frac{f(x+h)-f(x-h)}{2h}-\\frac{f'''(\\xi_1)+f'''(\\xi_2)}{12}h^2.$$"
+        },
+        {
+          "stepTitle": "2. 取绝对值放缩为 $\\frac{M}{h}+\\frac{N}{6}h^2$，三元均值取最优步长 $h=\\sqrt[3]{\\frac{3M}{N}}$",
+          "detail": "于是对一切 $h>0$ 均有 $|f'(x)|\\le\\frac{M}{h}+\\frac{N}{6}h^2$。\n- 若 $N=0$，令 $h\\to+\\infty$ 得 $|f'(x)|=0$ 成立；\n- 若 $N>0,M>0$，由三元均值拆项 $\\frac{M}{2h}+\\frac{M}{2h}+\\frac{N}{6}h^2$，取使三项相等的最优步长 $h=\\sqrt[3]{\\frac{3M}{N}}>0$，代入立得 $$|f'(x)|\\le 3\\sqrt[3]{\\frac{M}{2h}\\cdot\\frac{M}{2h}\\cdot\\frac{N}{6}h^2}=3\\sqrt[3]{\\frac{M^2 N}{24}}=\\sqrt[3]{\\frac{27M^2 N}{24}}=\\sqrt[3]{\\frac{9M^2 N}{8}}!$$"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "对称步长 $x\\pm h$ 的神迹：相减自然清零所有偶数阶导数，再用三元均值把 $\\frac{M}{h}+\\frac{N}{6}h^2$ 拆成两份 $\\frac{M}{2h}$ 配一份 $\\frac{N}{6}h^2$，一秒消光 $h$！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-18",
+        "pdfPage": 18,
+        "itemRef": "例7.29"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p02_aux_and_k",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-30",
+      "section": "六、降维打击大招 · 辅助多项式法（例 7.30~7.35）",
+      "kind": "example",
+      "title": "【例 7.30】辅助多项式法入门：配二次函数 $p(x)=-2x^2+4x$ 三零点秒证 $f''(\\xi)=-4$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[0,2]$ 连续，$(0,2)$ 上二阶可导，$f(0)=0,\\;f(1)=2,\\;f(2)=0$，证明存在 $\\xi\\in(0,2)$，使得 $f''(\\xi)=-4$。",
+      "steps": [
+        {
+          "stepTitle": "1. 构造二次多项式 $p(x)=-2x^2+4x$ 精确拟合全部 3 个已知点",
+          "detail": "为证 $f''(\\xi)=-4$，设二次多项式 $p(x)=-2x^2+bx+c$（满足 $p''(x)\\equiv -4$）。令 $p(0)=0\\implies c=0$，$p(2)=0\\implies -8+2b=0\\implies b=4$，顺带验算 $p(1)=-2+4=2=f(1)$ 完美吻合！故取 $p(x)=-2x^2+4x$。"
+        },
+        {
+          "stepTitle": "2. 令 $F(x)=f(x)-p(x)$，三零点连用两次罗尔得 $f''(\\xi)=-4$",
+          "detail": "构造 $F(x)=f(x)+2x^2-4x$，则 $F(0)=F(1)=F(2)=0$。分别在 $[0,1]$ 与 $[1,2]$ 用罗尔得 $c_1\\in(0,1),\\;c_2\\in(1,2)$ 使 $F'(c_1)=F'(c_2)=0$；再在 $[c_1,c_2]$ 对 $F'$ 用罗尔得 $\\xi\\in(c_1,c_2)\\subset(0,2)$ 使 $F''(\\xi)=0\\implies f''(\\xi)=-4$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "辅助多项式入门标杆：3 个点唯一确定一条抛物线 $p(x)$，减掉它以后 $F=f-p$ 立刻坐拥 3 个零点，两次罗尔直接把二阶导钉死在 $p''$ 上！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-18",
+        "pdfPage": 18,
+        "itemRef": "例7.30"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p02_aux_and_k",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-31",
+      "section": "六、降维打击大招 · 辅助多项式法（例 7.30~7.35）",
+      "kind": "example",
+      "title": "【例 7.31】辅助多项式重做例 7.25：配 $p(x)=-3x^2+4x$ 直接碾压证出 $f''(\\eta)=-6<-2$",
+      "examWeight": "core",
+      "problem": "（使用辅助多项式法）设 $f(x)$ 在区间 $[0,1]$ 上具有二阶导数，且 $f(0)=0,\\;f(1)=1,\\;\\displaystyle\\int_0^1 f(x)\\,\\mathrm{d}x=1$，证明：\n(1) 存在 $\\xi\\in(0,1)$ 使得 $f'(\\xi)=0$；\n(2) 存在 $\\eta\\in(0,1)$ 使得 $f''(\\eta)<-2$。",
+      "steps": [
+        {
+          "stepTitle": "1. 第 (1) 问：开区间积分中值配罗尔得 $f'(\\xi)=0$",
+          "detail": "由开区间积分中值定理存在 $c\\in(0,1)$ 使 $f(c)=\\int_0^1 f(x)\\,\\mathrm{d}x=1=f(1)$，在 $[c,1]$ 上用罗尔定理即得 $\\xi\\in(c,1)\\subset(0,1)$ 使 $f'(\\xi)=0$。"
+        },
+        {
+          "stepTitle": "2. 第 (2) 问：配二次多项式 $p(x)=ax^2+bx+c$ 拟合两端点值与定积分，直接证出 $f''(\\eta)=-6$",
+          "detail": "令 $p(x)=ax^2+bx+c$ 满足 $p(0)=0,\\;p(1)=1,\\;\\int_0^1 p(x)\\,\\mathrm{d}x=1$：解得 $c=0$，$a+b=1$，$\\frac{a}{3}+\\frac{b}{2}=1\\implies a=-3,\\;b=4$，即 $p(x)=-3x^2+4x$（$p''(x)\\equiv -6$）！\n令 $g(x)=f(x)-p(x)$，则 $g(0)=g(1)=0$ 且 $\\int_0^1 g(x)\\,\\mathrm{d}x=0$。由开区间积分中值定理，存在 $d\\in(0,1)$ 使 $g(d)=0$！于是 $g$ 有三个互异零点 $0<d<1$，连用两次罗尔定理即存在 $\\eta\\in(0,1)$ 使 $g''(\\eta)=0\\implies f''(\\eta)=p''(\\eta)=-6<-2$！"
+        }
+      ],
+      "finalAnswer": "证毕（甚至给出紧界 $f''(\\eta)=-6<-2$）。",
+      "takeaway": "见识辅助多项式的降维打击：例 7.25 费尽心思想泰勒/凹凸，这里配出 $p(x)=-3x^2+4x$ 四行机械连用罗尔，还把界从 $-2$ 直接干到了精确值 $-6$！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-19",
+        "pdfPage": 19,
+        "itemRef": "例7.31 (1)~(2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p02_aux_and_k",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-32",
+      "section": "六、降维打击大招 · 辅助多项式法（例 7.30~7.35）",
+      "kind": "example",
+      "title": "【例 7.32】辅助多项式重做例 7.24：配三次多项式连吃 $f(0)$ 凑三驻点证 $f'''(\\xi)=3$",
+      "examWeight": "core",
+      "problem": "（使用辅助多项式法）设 $f(x)$ 在 $[-1,1]$ 上有三阶连续导数，$f(-1)=0,\\;f(1)=1,\\;f'(0)=0$，证明存在 $\\xi\\in(-1,1)$ 使得 $f'''(\\xi)=3$。",
+      "steps": [
+        {
+          "stepTitle": "1. 设首项 $\\frac{3}{3!}x^3=\\frac{1}{2}x^3$ 的三次多项式，把多余自由度用来额外匹配 $p(0)=f(0)$！",
+          "detail": "设 $p(x)=\\frac{1}{2}x^3+ax^2+bx+c$（故 $p'''(x)\\equiv 3$）。令其匹配 $p'(0)=0\\implies b=0$，$p(0)=f(0)\\implies c=f(0)$，$p(1)=1\\implies \\frac{1}{2}+a+f(0)=1\\implies a=\\frac{1}{2}-f(0)$；顺带验算 $p(-1)=-\\frac{1}{2}+(\\frac{1}{2}-f(0))+f(0)=0=f(-1)$ 自动成立！故 $$p(x)=\\frac{1}{2}x^3+\\left(\\frac{1}{2}-f(0)\\right)x^2+f(0).$$"
+        },
+        {
+          "stepTitle": "2. 令 $F(x)=f(x)-p(x)$，3 个零点加驻点 $F'(0)=0$ 凑足 $F'$ 三零点连用罗尔",
+          "detail": "易知 $F(-1)=F(0)=F(1)=0$ 且 $F'(0)=0$。在 $[-1,0]$ 与 $[0,1]$ 上对 $F$ 用罗尔定理得 $c_1\\in(-1,0),\\;c_2\\in(0,1)$ 使 $F'(c_1)=F'(c_2)=0$。于是 $F'$ 拥有三个互异零点 $c_1<0<c_2$！对 $F'$ 连用两次罗尔定理即存在 $\\xi\\in(c_1,c_2)\\subset(-1,1)$ 使 $F'''(\\xi)=0\\implies f'''(\\xi)=p'''(\\xi)=3$！（连 $f'''$ 连续性都没用上，只用三阶可导即成立！）"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "记住「白嫖自由度」技巧：当三次多项式 $p'''\\equiv 3$ 还剩 1 个自由参数时，强制令 $p(0)=f(0)$，瞬间把 $F$ 的零点从 2 个变成 3 个，彻底绕开泰勒介值定理！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-19",
+        "pdfPage": 19,
+        "itemRef": "例7.32"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p02_aux_and_k",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-33",
+      "section": "六、降维打击大招 · 辅助多项式法（例 7.30~7.35）",
+      "kind": "example",
+      "title": "【例 7.33】$f(0)=f(1)=0,\\;\\max f=2$：在最值点 $c$ 附近配抛物线（或泰勒）证 $\\min f''\\le -16$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在区间 $[0,1]$ 上二阶可导，$f(0)=f(1)=0$ 且 $\\displaystyle\\max_{0\\le x\\le 1}f(x)=2$，证明：存在 $\\xi\\in(0,1)$ 使 $f''(\\xi)\\le -16$（当最小值存在时即 $\\displaystyle\\min_{0\\le x\\le 1}f''(x)\\le -16$）。",
+      "steps": [
+        {
+          "stepTitle": "1. 锁定最大值内点 $c\\in(0,1)$ 满足 $f(c)=2,\\;f'(c)=0$，挑较近端点距离 $d\\le\\frac{1}{2}$",
+          "detail": "因 $f(0)=f(1)=0<2$，最大值 $2$ 必在某内点 $c\\in(0,1)$ 取得，且由费马引理知 $f'(c)=0$。显然 $c$ 与 $1-c$ 中必有一个 $\\le\\frac{1}{2}$，不妨设 $0<c\\le\\frac{1}{2}$（若 $1-c\\le\\frac{1}{2}$ 则把下文的 $0$ 换成 $1$、$c$ 换成 $1-c$ 完全对称）。"
+        },
+        {
+          "stepTitle": "2. 辅助抛物线法（与泰勒完全等价）：配 $p(x)=2-\\frac{2}{c^2}(x-c)^2$ 在 $[0,c]$ 连用罗尔",
+          "detail": "令 $p(x)=2-\\frac{2}{c^2}(x-c)^2$（满足 $p(c)=2,\\;p'(c)=0,\\;p(0)=0,\\;p''(x)\\equiv-\\frac{4}{c^2}$）。设 $F(x)=f(x)-p(x)$，则 $F(0)=F(c)=0$ 且 $F'(c)=0$。在 $[0,c]$ 用罗尔得 $c_1\\in(0,c)$ 使 $F'(c_1)=0$；再在 $[c_1,c]$ 对 $F'$ 用罗尔得 $\\xi\\in(c_1,c)\\subset(0,1)$ 使 $F''(\\xi)=0\\implies f''(\\xi)=-\\frac{4}{c^2}\\le-\\frac{4}{(1/2)^2}=-16$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "看清这题与例 7.23 的镜像关系：例 7.23 已知 $|f''|\\ge 1$ 推 $\\max|f|\\ge\\frac{1}{8}(b-a)^2$；本题已知 $\\max f=2$ 且 $b-a=1$ 反推 $\\min f''\\le -8\\max f=-16$，同一个二次抛物线极值常数 $8$！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-20",
+        "pdfPage": 20,
+        "itemRef": "例7.33"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p02_aux_and_k",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-34",
+      "section": "六、降维打击大招 · 辅助多项式法（例 7.30~7.35）",
+      "kind": "example",
+      "title": "【例 7.34】双矩积分 $\\int_0^1 f=\\frac{5}{2},\\;\\int_0^1 xf=\\frac{3}{2}$：配一次函数 $p(x)=3x+1$ + 分部消零证 $f'(\\xi)=3$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[0,1]$ 具有连续导数，$\\displaystyle\\int_0^1 f(x)\\,\\mathrm{d}x=\\frac{5}{2}$，$\\displaystyle\\int_0^1 x f(x)\\,\\mathrm{d}x=\\frac{3}{2}$，证明存在 $\\xi\\in(0,1)$ 使得 $f'(\\xi)=3$。",
+      "steps": [
+        {
+          "stepTitle": "1. 设一次多项式 $p(x)=3x+c$ 匹配 $\\int_0^1 p=\\frac{5}{2}$，惊奇发现 $\\int_0^1 xp=\\frac{3}{2}$ 自动满足！",
+          "detail": "为证 $f'(\\xi)=3$，设 $p(x)=3x+c$（满足 $p'(x)\\equiv 3$）。由 $\\int_0^1(3x+c)\\,\\mathrm{d}x=\\frac{3}{2}+c=\\frac{5}{2}$ 解得 $c=1$，即 $p(x)=3x+1$；验算 $\\int_0^1 x(3x+1)\\,\\mathrm{d}x=1+\\frac{1}{2}=\\frac{3}{2}$ 完美吻合！"
+        },
+        {
+          "stepTitle": "2. 令 $g=f-p$ 及其原函数 $G(x)=\\int_0^x g(t)\\,\\mathrm{d}t$，分部积分证出 $\\int_0^1 G=0$ 凑三零点",
+          "detail": "记 $g(x)=f(x)-(3x+1)$，则 $\\int_0^1 g(x)\\,\\mathrm{d}x=0$ 且 $\\int_0^1 x g(x)\\,\\mathrm{d}x=0$。令 $G(x)=\\int_0^x g(t)\\,\\mathrm{d}t$，则 $G(0)=G(1)=0$。分部积分：$$0=\\int_0^1 x\\,\\mathrm{d}G(x)=\\left.x G(x)\\right|_0^1-\\int_0^1 G(x)\\,\\mathrm{d}x=-\\int_0^1 G(x)\\,\\mathrm{d}x\\implies \\int_0^1 G(x)\\,\\mathrm{d}x=0!$$ 由开区间积分中值定理知存在 $c\\in(0,1)$ 使 $G(c)=0$。现在 $G(0)=G(c)=G(1)=0$，连用两次罗尔定理即存在 $\\xi\\in(0,1)$ 使 $G''(\\xi)=0\\implies g'(\\xi)=0\\implies f'(\\xi)=3$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "超级惊艳的「双矩变限分部术」：只要同时给了 $\\int_0^1 g=0$ 与 $\\int_0^1 x g=0$，变限积分 $G(x)=\\int_0^x g$ 立刻白送 $G(0)=G(1)=0$ 和 $\\int_0^1 G=0$，凑出 3 个零点机械连用罗尔！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-20",
+        "pdfPage": 20,
+        "itemRef": "例7.34"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p02_aux_and_k",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-35",
+      "section": "六、降维打击大招 · 辅助多项式法（例 7.30~7.35）",
+      "kind": "example",
+      "title": "【例 7.35】对称区间等积分 $\\int_1^2 f=\\int_2^3 f$ + $f'(2)=0$：配偶抛物线 $a(x-2)^2+f(2)$ 证 $f'''(\\xi)=0$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在闭区间 $[1,3]$ 上三阶可导，且 $\\displaystyle\\int_1^2 f(x)\\,\\mathrm{d}x=\\int_1^2 f(x+1)\\,\\mathrm{d}x$，$f'(2)=0$，证明存在 $\\xi\\in(1,3)$ 使得 $f'''(\\xi)=0$。",
+      "steps": [
+        {
+          "stepTitle": "1. 换元认出 $\\int_1^2 f=\\int_2^3 f$，构造关于 $x=2$ 偶对称的二次多项式 $p(x)=a(x-2)^2+f(2)$",
+          "detail": "换元 $t=x+1$ 知题设即 $\\int_1^2 f(x)\\,\\mathrm{d}x=\\int_2^3 f(x)\\,\\mathrm{d}x$。为证 $f'''(\\xi)=0$，取关于 $x=2$ 偶对称的二次多项式 $p(x)=a(x-2)^2+f(2)$（满足 $p'''(x)\\equiv 0$，$p(2)=f(2)$，$p'(2)=0=f'(2)$）。选取常数 $a=3\\left[\\int_1^2 f(x)\\,\\mathrm{d}x-f(2)\\right]$，则 $\\int_1^2 p(x)\\,\\mathrm{d}x=\\frac{a}{3}+f(2)=\\int_1^2 f(x)\\,\\mathrm{d}x$；再由偶对称性自动有 $\\int_2^3 p(x)\\,\\mathrm{d}x=\\int_1^2 p(x)\\,\\mathrm{d}x=\\int_2^3 f(x)\\,\\mathrm{d}x$！"
+        },
+        {
+          "stepTitle": "2. 令 $g=f-p$，左右两段积分零点 + 中心二重零点凑齐 $g'$ 三零点连用罗尔",
+          "detail": "由 $\\int_1^2 g(x)\\,\\mathrm{d}x=0$ 与 $\\int_2^3 g(x)\\,\\mathrm{d}x=0$，应用开区间积分中值定理存在 $c_1\\in(1,2),\\;c_2\\in(2,3)$ 使 $g(c_1)=g(c_2)=0$；又 $g(2)=0$ 且 $g'(2)=0$！分别在 $[c_1,2]$ 与 $[2,c_2]$ 上对 $g$ 用罗尔定理得 $d_1\\in(c_1,2),\\;d_2\\in(2,c_2)$ 使 $g'(d_1)=g'(d_2)=0$。于是 $g'$ 拥有三个互异零点 $d_1<2<d_2$，连用两次罗尔即存在 $\\xi\\in(d_1,d_2)\\subset(1,3)$ 使 $g'''(\\xi)=0\\implies f'''(\\xi)=0$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "利用「偶抛物线 $a(x-2)^2+f(2)$ 在 $[1,2]$ 与 $[2,3]$ 积分天然相等」一箭四雕（同时满足 $p(2),p'(2)$ 及左右两段积分），堪称辅助多项式法的天花板！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-21",
+        "pdfPage": 21,
+        "itemRef": "例7.35"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p02_aux_and_k",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-36",
+      "section": "七、降维打击大招 · 常数 K 值法（例 7.36~7.38）",
+      "kind": "example",
+      "title": "【例 7.36】常数 $K$ 值法：证二阶中心差分公式 $f(a)-2f(\\frac{a+b}{2})+f(b)=\\frac{(b-a)^2}{4}f''(\\xi)$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[a,b]$ 上二阶可导，证明存在 $\\xi\\in(a,b)$ 使得 $f(a)-2f\\!\\left(\\dfrac{a+b}{2}\\right)+f(b)=\\dfrac{(b-a)^2}{4}f''(\\xi)$。",
+      "steps": [
+        {
+          "stepTitle": "1. 记 $K=\\frac{4}{(b-a)^2}\\left[f(a)-2f(\\frac{a+b}{2})+f(b)\\right]$，构造插值二次多项式差 $G(x)$ 零免达布",
+          "detail": "记 $m=\\frac{a+b}{2}$，$K=\\frac{4}{(b-a)^2}[f(a)-2f(m)+f(b)]$。构造辅助函数（把 $x=a,m,b$ 三点同时清零）：$$G(x)=f(x)-f(a)-\\frac{f(b)-f(a)}{b-a}(x-a)-\\frac{K}{2}(x-a)(x-b).$$ 验算三零点：$G(a)=0$，$G(b)=0$，且 $$G(m)=f(m)-\\frac{f(a)+f(b)}{2}+\\frac{K}{2}\\frac{(b-a)^2}{4}=f(m)-\\frac{f(a)+f(b)}{2}+\\frac{f(a)-2f(m)+f(b)}{2}=0!$$"
+        },
+        {
+          "stepTitle": "2. 在 $[a,m]$ 与 $[m,b]$ 连用两次罗尔直接出 $f''(\\xi)=K$",
+          "detail": "由 $G(a)=G(m)=G(b)=0$，在 $[a,m]$ 与 $[m,b]$ 上对 $G$ 用罗尔定理得 $c_1\\in(a,m),\\;c_2\\in(m,b)$ 使 $G'(c_1)=G'(c_2)=0$；再在 $[c_1,c_2]$ 上对 $G'$ 用罗尔定理得 $\\xi\\in(c_1,c_2)\\subset(a,b)$ 使 $G''(\\xi)=f''(\\xi)-K=0$，即 $f''(\\xi)=K$！（注：若用对称函数 $F(t)=f(m+t)+f(m-t)-2f(m)-Kt^2$ 则末步需额外套达布导数介值定理，本法纯罗尔零依赖！）"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "记住二阶中心差分精确公式 $f(a)-2f(\\frac{a+b}{2})+f(b)=\\frac{(b-a)^2}{4}f''(\\xi)$，它同时也是例 7.23 中点法的精确等式升级版！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-22",
+        "pdfPage": 22,
+        "itemRef": "例7.36"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p02_aux_and_k",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-37",
+      "section": "七、降维打击大招 · 常数 K 值法（例 7.36~7.38）",
+      "kind": "example",
+      "title": "【例 7.37】常数 $K$ 值法神作：令 $b\\to x$ 两次求导自动消 $f''$，证梯形三阶余项 $-\\frac{1}{12}(b-a)^3 f'''(\\xi)$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[a,b]$ 上三阶可导，证明存在 $\\xi\\in(a,b)$ 使得 $f(b)=f(a)+\\dfrac{1}{2}(b-a)\\bigl[f'(a)+f'(b)\\bigr]-\\dfrac{1}{12}(b-a)^3 f'''(\\xi)$。",
+      "steps": [
+        {
+          "stepTitle": "1. 设待证 $f'''(\\xi)$ 为常数 $K$，把右端点 $b$ 变成动变量 $x$ 构造 $F(x)$",
+          "detail": "记常数 $K$ 满足 $f(b)-f(a)-\\frac{1}{2}(b-a)[f'(a)+f'(b)]+\\frac{1}{12}(b-a)^3 K=0$。将式中的 $b$ 改为动变量 $x\\in[a,b]$，构造 $$F(x)=f(x)-f(a)-\\frac{1}{2}(x-a)\\bigl[f'(a)+f'(x)\\bigr]+\\frac{1}{12}(x-a)^3 K.$$ 显然 $F(a)=0$ 且 $F(b)=0$！"
+        },
+        {
+          "stepTitle": "2. 连续求导两次（见证 $\\frac{1}{2}f''-\\frac{1}{2}f''\\equiv 0$ 神奇抵消！），两次罗尔秒出 $f'''(\\xi)=K$",
+          "detail": "求一阶导：$$F'(x)=\\frac{1}{2}\\bigl[f'(x)-f'(a)\\bigr]-\\frac{1}{2}(x-a)f''(x)+\\frac{1}{4}(x-a)^2 K,$$ 立得 $F'(a)=0$！由 $F(a)=F(b)=0$ 用罗尔定理得 $c\\in(a,b)$ 使 $F'(c)=0$。\n再对 $F'$ 在 $[a,c]$ 上用罗尔定理，存在 $\\xi\\in(a,c)\\subset(a,b)$ 使 $F''(\\xi)=0$。计算 $F''(x)$：$$F''(x)=\\frac{1}{2}f''(x)-\\frac{1}{2}f''(x)-\\frac{1}{2}(x-a)f'''(x)+\\frac{1}{2}(x-a)K=\\frac{1}{2}(x-a)\\bigl[K-f'''(x)\\bigr]!$$ 因 $\\xi>a$，由 $F''(\\xi)=0$ 立得 $f'''(\\xi)=K$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "全讲义最优雅的一笔神来之作！把 $b$ 变活成 $x$ 后，二阶导数 $f''(x)$ 竟然自己正负抵消成零，直接露出一尘不染的 $\\frac{1}{2}(x-a)[K-f'''(x)]$！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-22",
+        "pdfPage": 22,
+        "itemRef": "例7.37"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p02_aux_and_k",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-e-38",
+      "section": "七、降维打击大招 · 常数 K 值法（例 7.36~7.38）",
+      "kind": "example",
+      "title": "【例 7.38】常数 $K$ 值法收官压轴：令 $a\\to x$ 证积分公式 $\\int_0^a f=\\frac{a}{2}[3f(0)-f(-a)]+\\frac{5}{12}a^3 f''(\\xi)$",
+      "examWeight": "core",
+      "problem": "设 $f(x)$ 在 $[-a,a]\\;(a>0)$ 上有二阶连续导数，证明 $[-a,a]$ 上存在一点 $\\xi$ 使得 $\\displaystyle\\int_0^a f(x)\\,\\mathrm{d}x=\\frac{a}{2}\\bigl[3f(0)-f(-a)\\bigr]+\\frac{5}{12}f''(\\xi)a^3$。",
+      "steps": [
+        {
+          "stepTitle": "1. 记待证 $f''(\\xi)$ 为常数 $K$，把参数 $a$ 变活为 $x\\in[0,a]$ 构造 $F(x)$",
+          "detail": "记常数 $K$ 满足 $\\int_0^a f(t)\\,\\mathrm{d}t-\\frac{a}{2}[3f(0)-f(-a)]-\\frac{5}{12}Ka^3=0$。构造 $$F(x)=\\int_0^x f(t)\\,\\mathrm{d}t-\\frac{x}{2}\\bigl[3f(0)-f(-x)\\bigr]-\\frac{5}{12}Kx^3,\\quad x\\in[0,a].$$ 显然 $F(0)=F(a)=0$。"
+        },
+        {
+          "stepTitle": "2. 连续求导两次 + 两次罗尔定位 $c_2\\in(0,a)$，再对 $f'$ 用拉格朗日与介值定理合并得 $\\xi$",
+          "detail": "计算前两阶导数（注意复合求导 $[f(-x)]'=-f'(-x)$）：\n$$F'(x)=f(x)-\\frac{3}{2}f(0)+\\frac{1}{2}f(-x)-\\frac{x}{2}f'(-x)-\\frac{5}{4}Kx^2 \\implies F'(0)=0,$$\n$$F''(x)=f'(x)-f'(-x)+\\frac{x}{2}f''(-x)-\\frac{5}{2}Kx \\implies F''(0)=0.$$\n由 $F(0)=F(a)=0$ 罗尔得 $c_1\\in(0,a)$ 使 $F'(c_1)=0$；再由 $F'(0)=F'(c_1)=0$ 罗尔得 $c_2\\in(0,c_1)$ 使 $F''(c_2)=0$，即 $$f'(c_2)-f'(-c_2)+\\frac{c_2}{2}f''(-c_2)=\\frac{5}{2}K c_2.$$ 对 $f'$ 在 $[-c_2,c_2]$ 用拉格朗日中值定理，存在 $\\eta_1\\in(-c_2,c_2)$ 使 $f'(c_2)-f'(-c_2)=2c_2 f''(\\eta_1)$。同除 $c_2>0$ 得 $$K=\\frac{4}{5}f''(\\eta_1)+\\frac{1}{5}f''(-c_2).$$ 因 $f''$ 在 $[-a,a]$ 上连续且 $\\frac{4}{5}+\\frac{1}{5}=1$（加权平均必介于两值之间），由连续函数介值定理知存在 $\\xi\\in(-a,a)$ 使 $f''(\\xi)=K$！"
+        }
+      ],
+      "finalAnswer": "证毕。",
+      "takeaway": "记住常数 $K$ 值法最后一步的「加权平均介值收尾」：只要 $K=\\alpha f''(\\eta_1)+\\beta f''(\\eta_2)$ 且 $\\alpha,\\beta>0,\\;\\alpha+\\beta=1$，连续函数介值定理就能一步把两个中值合成一个 $\\xi$！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-23",
+        "pdfPage": 23,
+        "itemRef": "例7.38"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p02_aux_and_k",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-s-01",
+      "section": "单元总结 · 一、中值定理与泰勒全 38 例总导航表",
+      "kind": "summary",
+      "title": "【全章 7 大题型落刀导航表】按题干信号 5 秒锁死唯一解法",
+      "examWeight": "core",
+      "overview": "中值证明题看似千变万化，其实按「**中值个数（单/双/三）+ 导数阶数（1 阶/2~3 阶）+ 是否含端点余项**」只有 7 条固定通道！",
+      "tables": [
+        {
+          "caption": "表 7-1 中值定理与泰勒公式 7 大题型一站式落刀表（猪哥&狗姐全 38 例全覆盖）",
+          "headers": [
+            "题型类别",
+            "一眼识别信号",
+            "标准破题动作",
+            "代表例题"
+          ],
+          "rows": [
+            [
+              "1. 简单单中值（$f'=0,f''=0$）",
+              "函数值之和/相等、相等最大值、端点导数同号",
+              "平均值/开区间积分中值/局部保号凑够 $k+1$ 个零点连用罗尔",
+              "例7.1~7.5"
+            ],
+            [
+              "2. 辅助函数单中值",
+              "$f'g\\pm fg'=0$、$f'+g'f=0$、$f''+g'f'=c$",
+              "先吸收非齐次多项式，再乘商法则或分离变量解 ODE 求积分因子",
+              "例7.6~7.12"
+            ],
+            [
+              "3. 隐藏零点柯西单中值",
+              "出现 $\\ln\\frac{b}{a},\\;\\ln 2,\\;\\int_1^x$、端点差",
+              "补全隐藏零点（$\\ln 1=0,\\;f(1)=0$），配 $g=\\ln x$ 等直套柯西",
+              "例7.13~7.14"
+            ],
+            [
+              "4. 同形不等双中值（$\\xi\\ne\\eta$）",
+              "两中值结构相同，强调「不相等的 $\\xi,\\eta$」",
+              "反推分点 $x_0$（或定义域/值域中点）拆成两不交子区间各用拉格朗日",
+              "例7.15~7.18"
+            ],
+            [
+              "5. 异形双中值 / 三中值",
+              "$\\xi$ 与 $\\eta$ 系数不同（如 $\\eta f'(\\eta)$ vs $f'(\\xi)$）",
+              "简单中值走拉格朗日，复杂中值配 $\\ln x,\\mathrm{e}^x,\\frac{1}{x},x^2$ 走柯西",
+              "例7.19~7.21"
+            ],
+            [
+              "6. 泰勒定点/动点展开",
+              "$|f''|\\ge c$、$|f^{(k)}|\\le N$、梯形误差、全轴界",
+              "定点按「驻点→中点→端点」展开；全轴界在动点 $x$ 代 $x\\pm h$ 消项",
+              "例7.22~7.29"
+            ],
+            [
+              "7. 辅助多项式 & 常数 $K$ 值法",
+              "多点值/积分证 $f^{(n)}(\\xi)=k$；含 $a,b$ 高阶余项",
+              "具体条件配 $p_n(x)$ 清零连用罗尔；字母端点设 $K=\\Phi(a,b)$ 令 $b\\to x$",
+              "例7.30~7.38"
+            ]
+          ]
+        }
+      ],
+      "patterns": [
+        {
+          "typeName": "考场卡壳 3 秒急救路线（高阶导证明专用）",
+          "triggers": "看到二阶或三阶导数中值证明题，用常规泰勒展开一时找不到展开点时。",
+          "method": "立刻切换**辅助多项式法**：问自己「能不能配一个次数为 $n$（或 $n-1$）的多项式 $p(x)$，让 $p$ 满足题干给的全部端点值、导数值和积分值？」如果能，令 $F=f-p$，接下来的证明就退化成了无脑连用罗尔定理！",
+          "pitfall": "若结论是不等式（如例 7.22 的 $|f''|\\ge\\dots$、例 7.28 的 $\\sqrt{2MN}$），则直接上泰勒展开，不要强凑辅助多项式！",
+          "relatedRefs": "例7.25, 例7.31, 例7.32, 例7.34, 例7.35"
+        }
+      ],
+      "takeaway": "中值证明题没有「灵光一闪」，只有「把 7 条通道练成条件反射」：单值看 ODE、双值看拆区/柯西、高阶看泰勒/多项式/常数 $K$！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-1~7-24",
+        "pdfPage": 1,
+        "itemRef": "全章 7 大题型总控表"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-s-02",
+      "section": "单元总结 · 二、辅助函数 & 柯西配对 & 泰勒选点三大速查表",
+      "kind": "summary",
+      "title": "【构造速查字典】辅助函数反推表 + 双中值分点表 + 泰勒选点表",
+      "examWeight": "core",
+      "overview": "将全章最容易卡壳的三类「怎么想到这么构造的？」浓缩成 3 张对照字典，考前直接背诵秒切！",
+      "tables": [
+        {
+          "caption": "表 7-2 单中值复杂辅助函数高频构造速查字典（直接对照微分方程逆推）",
+          "headers": [
+            "待证中值式特征",
+            "对应辅助函数 $F(x)$",
+            "出处例题"
+          ],
+          "rows": [
+            [
+              "$f'g-fg'=0\\;(g\\ne 0)$",
+              "$F(x)=\\dfrac{f(x)}{g(x)}$",
+              "例7.6"
+            ],
+            [
+              "$xf'-f=f(2)-2f(1)$",
+              "$(F,G)=\\left(\\dfrac{f(x)}{x},\\;-\\dfrac{1}{x}\\right)$ 柯西",
+              "例7.7"
+            ],
+            [
+              "$ff''+(f')^2=0$",
+              "$F(x)=f(x)f'(x)$",
+              "例7.8"
+            ],
+            [
+              "$f''+f'=1$（或 $f'-f=1-x$）",
+              "$\\mathrm{e}^x[f'(x)-1]$ 或 $\\mathrm{e}^{-x}[f(x)-x]$",
+              "例7.9, 例7.10"
+            ],
+            [
+              "$2f'+(x-1)f''=0$",
+              "$F(x)=(x-1)^2 f'(x)$",
+              "例7.11"
+            ],
+            [
+              "$xf''+(1+x)f'=1+x$",
+              "$F(x)=x\\mathrm{e}^x[f'(x)-1]$",
+              "例7.12"
+            ]
+          ]
+        },
+        {
+          "caption": "表 7-3 同形双中值分点构造速查表（均设 $f(0)=0,\\;f(1)=1$ 或 $\\frac{1}{3}$）",
+          "headers": [
+            "待证双中值等式",
+            "黄金分点 $x_0$ 的构造条件",
+            "出处例题"
+          ],
+          "rows": [
+            [
+              "$f'(\\xi)f'(\\eta)=1$",
+              "零点定理找 $f(x_0)=1-x_0$",
+              "例7.15"
+            ],
+            [
+              "$[1+f'(\\xi)][1+f'(\\eta)]=4$",
+              "零点定理找 $f(x_0)=2-3x_0$",
+              "例7.16"
+            ],
+            [
+              "$f'(\\xi)+f'(\\eta)=\\xi^2+\\eta^2$",
+              "固定定义域中点 $x_0=\\dfrac{1}{2}$ 配 $F=f-\\frac{1}{3}x^3$",
+              "例7.17"
+            ],
+            [
+              "$\\dfrac{1}{f'(\\xi)}+\\dfrac{1}{f'(\\eta)}=2$",
+              "介值定理找值域中点 $f(x_0)=\\dfrac{1}{2}$",
+              "例7.18"
+            ]
+          ]
+        },
+        {
+          "caption": "表 7-4 高阶导泰勒 & 朗道/柯尔莫哥洛夫不等式速查表",
+          "headers": [
+            "已知条件",
+            "展开点与代入点",
+            "核心结论与例题"
+          ],
+          "rows": [
+            [
+              "$f'(a)=f'(b)=0$",
+              "在 $a,b$ 展开，代中点 $\\frac{a+b}{2}$ 相减",
+              "$|f''(\\xi)|\\ge\\frac{4}{(b-a)^2}|f(b)-f(a)|$（例7.22）"
+            ],
+            [
+              "$f(a)=f(b)=0,\\;|f''|\\ge 1$",
+              "在中点（或最值点 $c$）展开，代 $a,b$",
+              "$\\max|f|\\ge\\frac{1}{8}(b-a)^2$（例7.23, 例7.33）"
+            ],
+            [
+              "$f'(0)=f'(1),\\;|f''|\\le 1$",
+              "在 $0,1$ 展开，乘 $(1-x)$ 与 $x$ 相加",
+              "梯形误差 $\\le\\frac{1}{12}$（例7.26）"
+            ],
+            [
+              "$\\mathbb{R}$ 上 $|f|\\le M,\\;|f''|\\le N$",
+              "动点 $x$ 二阶展开代 $x\\pm h$ 相减",
+              "$|f'(x)|\\le\\sqrt{2MN}$（例7.28）"
+            ],
+            [
+              "$\\mathbb{R}$ 上 $|f|\\le M,\\;|f'''|\\le N$",
+              "动点 $x$ 三阶展开代 $x\\pm h$ 相减",
+              "$|f'(x)|\\le\\sqrt[3]{\\frac{9M^2 N}{8}}$（例7.29）"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "背熟这 3 张字典，95% 考研中值大题的第一步构造都能在 30 秒内破冰！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-6~7-23",
+        "pdfPage": 6,
+        "itemRef": "全章构造字典"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_p02_aux_and_k",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-p02-s-03",
+      "section": "单元总结 · 三、复习性价比与严谨避坑清单",
+      "kind": "summary",
+      "title": "【章末复习策略】考研优先级排序与 4 条防扣分严谨红线",
+      "examWeight": "core",
+      "overview": "按猪哥&狗姐章末建议（P.7-24），本章难度上限极高，须分清「必拿核心基本盘」与「压轴加分大招」，切忌盲目钻牛角尖！",
+      "patterns": [
+        {
+          "typeName": "考研数一证明题复习两级梯度",
+          "triggers": "规划中值证明题一轮/二轮复习重点分配时。",
+          "method": "① **必拿 100% 基本盘（占真题 85%+）**：单中值罗尔/柯西（例 7.1~7.14）、双中值拆分与配对（例 7.15~7.20）、定点泰勒展开（例 7.22~7.26）；② **冲刺 135+ 降维神器**：辅助多项式法（例 7.30~7.35）与常数 $K$ 值法（例 7.36~7.38），一旦在考场碰到多条件高阶导或余项等式直接秒穿！",
+          "pitfall": "四大阅卷易扣分红线：① 积分中值忘写开区间 $(a,b)$；② 同区间双中值忘拆区间导致 $\\xi,\\eta$ 未必不等；③ 例 7.28/7.29 忘单列 $N=0$ 退化情形；④ 例 7.38 末步忘援引连续函数介值定理合成单点 $\\xi$！",
+          "relatedRefs": "例7.2, 例7.15, 例7.28, 例7.31, 例7.37, 例7.38"
+        }
+      ],
+      "takeaway": "先死磕透单/双中值与定点泰勒，再用辅助多项式和常数 $K$ 值法做降维复盘，接着立刻去单元 3 拿 2013–2026 真题实战检验！",
+      "source": {
+        "book": "27猪哥&狗姐《考研数学高数专题·7.中值定理与泰勒公式》",
+        "printedPage": "P.7-24",
+        "pdfPage": 24,
+        "itemRef": "章末总结"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    }
+  ]
+}
