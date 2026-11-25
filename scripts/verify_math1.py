@@ -450,6 +450,84 @@ def run_all_checks() -> list[tuple[str, bool, str]]:
           and sp.limit(f38 / xp, xp, 0, "+") == 0 and sp.limit(df38, xp, 0, "+") == 0,
           "Ex3.7 D: f'_+=-1/2 != f'_-=+1/2; Ex3.8 f'(0)=lim f'(x)=0")
 
+    # ==================== Calculus Lecture 4: Differentiation Calculations ====================
+    y = sp.Symbol("y", real=True)
+
+    # 26. Core hyperbolic log derivatives (zy30 P.120)
+    d_c4_asinh = sp.simplify(sp.diff(sp.log(x + sp.sqrt(x**2 + 1)), x) - 1 / sp.sqrt(x**2 + 1))
+    d_c4_acosh = sp.simplify(sp.diff(sp.log(xp + sp.sqrt(xp**2 - 1)), xp) - 1 / sp.sqrt(xp**2 - 1))
+    check("m1_c04_f_core_derivs", d_c4_asinh == 0 and d_c4_acosh == 0)
+
+    # 27. zy30 Ex 4.1 - Ex 4.6 (P.121-125; test Ex 4.1 with even N=6 -> -pi*5!/2 matching N=100)
+    p41 = sp.Integer(1)
+    for kv in range(1, 7):
+        p41 *= (sp.tan(sp.pi * x**kv / 4) - kv)
+    v41 = sp.simplify(sp.diff(p41, x).subs(x, 1))
+    v42 = sp.simplify(sp.diff(sp.log(x + sp.sqrt(x**2 + ap**2)), x).subs(x, 0))
+    d44 = sp.simplify(sp.diff(sp.exp(sp.sin(sp.log(xp))), xp) - sp.exp(sp.sin(sp.log(xp))) * sp.cos(sp.log(xp)) / xp)
+    d46_p2 = sp.simplify(sp.diff(xp * sp.exp(-xp), xp, 2) - sp.exp(-xp) * (xp - 2))
+    d46_m2 = sp.simplify(sp.diff(-x * sp.exp(-x), x, 2) - sp.exp(-x) * (2 - x))
+    check("m1_c04_ex_zy30_01_06",
+          v41 == -sp.pi * sp.factorial(5) / 2 and v42 == 1 / ap
+          and d44 == 0 and d46_p2 == 0 and d46_m2 == 0)
+
+    # 28. zy30 Ex 4.7 - Ex 4.13 (inverse, implicit, parametric, power-exp, P.126-129)
+    f47 = 3 * x**2 + sp.exp(x)
+    phi2_47 = sp.simplify((-sp.diff(f47, x, 2) / sp.diff(f47, x)**3).subs(x, 1))
+    F48 = y**3 + x * y**2 + x**2 * y + 6
+    y1_48 = sp.simplify(-sp.diff(F48, x) / sp.diff(F48, y))
+    y2_48 = sp.simplify(sp.diff(y1_48, x) + sp.diff(y1_48, y) * y1_48)
+    v48 = sp.simplify(y2_48.subs({x: 1, y: -2}))
+    dy49 = sp.simplify(sp.diff(t * sp.sin(t) + sp.cos(t), t) / sp.diff(sp.sin(t), t))
+    v49 = sp.simplify((sp.diff(dy49, t) / sp.diff(sp.sin(t), t)).subs(t, sp.pi / 4))
+    G410 = 2 * y - t * y**2 + sp.exp(t) - 5
+    dydx_410 = sp.simplify((-sp.diff(G410, t) / sp.diff(G410, y)) / sp.diff(sp.atan(t), t))
+    d412 = sp.simplify(sp.diff(xp**xp, xp) - xp**xp * (1 + sp.log(xp)))
+    d413 = sp.simplify(sp.diff(xp**(1 / xp), xp) - xp**(1 / xp - 2) * (1 - sp.log(xp)))
+    check("m1_c04_ex_zy30_07_13",
+          sp.simplify(phi2_47 + 1 / (6 + sp.E)**2) == 0
+          and v48 == sp.Rational(4, 9)
+          and dy49 == t and v49 == sp.sqrt(2)
+          and sp.simplify(dydx_410 - (y**2 - sp.exp(t)) * (1 + t**2) / (2 * (1 - t * y))) == 0
+          and d412 == 0 and d413 == 0)
+
+    # 29. zy30 Ex 4.14 - Ex 4.19 (Higher derivatives, P.129-134)
+    ex415_ok = all(sp.simplify(sp.diff((1 - x) / (1 + x), x, nv).subs(x, 0) - ((-1)**nv * 2 * sp.factorial(nv))) == 0 for nv in range(1, 6))
+    f416 = -1 / (x - 2)
+    ex416_ok = all(sp.simplify(sp.diff(f416, x, nv) - sp.factorial(nv) * f416**(nv + 1)) == 0 for nv in range(1, 5))
+    ex417_ok = all(sp.simplify(sp.diff(x * sp.exp(x), x, nv) - (nv + x) * sp.exp(x)) == 0 for nv in range(1, 5))
+    ex418_ok = all(sp.simplify(sp.diff(x**2 * sp.log(1 - x), x, nv).subs(x, 0) - (-sp.factorial(nv) / (nv - 2))) == 0 for nv in range(3, 7))
+    ex419_ok = all(sp.simplify(sp.diff(x**2 * 2**x, x, nv).subs(x, 0) - (nv * (nv - 1) * sp.log(2)**(nv - 2))) == 0 for nv in range(1, 6))
+    check("m1_c04_ex_zy30_14_19", ex415_ok and ex416_ok and ex417_ok and ex418_ok and ex419_ok)
+
+    # 30. zy18 Intensive Ex 4.1 - Ex 4.5 (P.35-38)
+    fi41 = x / (2 * x + 1)
+    exi41_ok = (sp.simplify(x**2 * sp.diff(fi41, x) - fi41**2) == 0 and fi41.subs(x, 1) == sp.Rational(1, 3)
+                and all(sp.simplify(sp.diff(fi41, x, nv).subs(x, 0) - ((-2)**(nv - 1) * sp.factorial(nv))) == 0 for nv in range(1, 6)))
+    fi42 = 1 / (x * (1 - x))
+    exi42_ok = all(sp.simplify(sp.diff(fi42, x, nv) - (((-1)**nv / x**(nv + 1) + 1 / (1 - x)**(nv + 1)) * sp.factorial(nv))) == 0 for nv in range(1, 5))
+    exi43_ok = all(sp.simplify(sp.diff((x**3 - 1)**nv, x, nv).subs(x, 1) - (3**nv * sp.factorial(nv))) == 0 for nv in range(1, 5))
+    fi44 = x / (1 + x**2)
+    exi44_ok = all(sp.simplify(sp.diff(fi44, x, 2 * kv + 1).subs(x, 0) - ((-1)**kv * sp.factorial(2 * kv + 1))) == 0 and sp.diff(fi44, x, 2 * kv).subs(x, 0) == 0 for kv in range(1, 4))
+    d2_45p = sp.limit(sp.diff((xp / 3) * sp.tan(xp / 3), xp, 2), xp, 0, "+")
+    d2_45m = sp.limit(sp.diff(-x * sp.tan(x), x, 2), x, 0, "-")
+    check("m1_c04_ex_zy18_01_05",
+          exi41_ok and exi42_ok and exi43_ok and exi44_ok and d2_45p == sp.Rational(2, 9) and d2_45m == -2,
+          f"Ex4.5 f''_+={d2_45p} != f''_-={d2_45m}")
+
+    # 31. zy18 Intensive Ex 4.6 - Ex 4.9 (P.38-40)
+    d4_i46 = sp.simplify(sp.diff(1 / (2**x + 1), x, 4).subs(x, 0))
+    F47i = sp.exp(x) + y**2 + y - sp.log(1 + x) * sp.cos(y) - 1
+    y1_47i = -sp.diff(F47i, x) / sp.diff(F47i, y)
+    v47i = sp.simplify((sp.diff(y1_47i, x) + sp.diff(y1_47i, y) * y1_47i).subs({x: 0, y: 0}))
+    dy48i = sp.diff(sp.exp(tp**2), tp) / sp.diff(sp.log(tp), tp)
+    v48i = sp.simplify((sp.diff(dy48i, tp) / sp.diff(sp.log(tp), tp)).subs(tp, 1))
+    f49i = sp.exp(x) + 2 * x + 1
+    v49i = sp.simplify((-sp.diff(f49i, x, 2) / sp.diff(f49i, x)**3).subs(x, 0))
+    check("m1_c04_ex_zy18_06_09",
+          d4_i46 == 0 and v47i == -2 and v48i == 8 * sp.E and v49i == sp.Rational(-1, 27),
+          f"Ex4.7 y''(0)={v47i}, Ex4.8={v48i}, Ex4.9={v49i}")
+
     return results
 
 
