@@ -232,6 +232,224 @@ def run_all_checks() -> list[tuple[str, bool, str]]:
           and int_i14 / 2 == sp.Rational(1, 2)
           and 1 + int_i15 == 1 + sp.pi / 2)
 
+    # ==================== Calculus Lecture 2: Sequence Limits ====================
+    ni, ki = sp.symbols("ni ki", integer=True, positive=True)
+
+    # 12. Common finite sums, telescoping & (1+1/n)^n - e ~ -e/(2n) (zy30 P.78-79, 85)
+    s_k = sp.summation(ki, (ki, 1, ni))
+    s_k2 = sp.summation(ki**2, (ki, 1, ni))
+    s_tel = sp.summation(1 / (ki * (ki + 1)), (ki, 1, ni))
+    lim_euler_seq = sp.limit((1 + 1 / ni)**ni, ni, sp.oo)
+    lim_euler_eq = sp.limit(((1 + 1 / ni)**ni - sp.E) / (1 / ni), ni, sp.oo)
+    check("m1_c02_f_sums_and_e",
+          sp.simplify(s_k - ni * (ni + 1) / 2) == 0
+          and sp.simplify(s_k2 - ni * (ni + 1) * (2 * ni + 1) / 6) == 0
+          and sp.simplify(s_tel - ni / (ni + 1)) == 0
+          and sp.limit(s_tel, ni, sp.oo) == 1
+          and lim_euler_seq == sp.E
+          and sp.simplify(lim_euler_eq + sp.E / 2) == 0)
+
+    # 13. 12 inequalities + max-base squeeze theorem formulas (zy30 P.86-88)
+    ineq12_ok = True
+    for xv in (0.05, 0.25, 0.55, 0.75):
+        if not (math.sin(xv) < xv < math.tan(xv)
+                and xv < math.tan(xv) < (4.0 / math.pi) * xv
+                and math.sin(xv) > (2.0 / math.pi) * xv
+                and math.atan(xv) <= xv <= math.asin(xv)):
+            ineq12_ok = False
+    for xv in (0.1, 0.5, 1.5, 6.0):
+        if not (math.exp(xv) >= xv + 1
+                and xv - 1 >= math.log(xv)
+                and 1 / (1 + xv) < math.log(1 + 1 / xv) < 1 / xv
+                and xv / (1 + xv) < math.log(1 + xv) < xv):
+            ineq12_ok = False
+    lim_max_base = sp.limit((sp.Integer(2)**ni + sp.Integer(5)**ni + sp.Integer(3)**ni)**(1 / ni), ni, sp.oo)
+    lim_inv_base = sp.limit((sp.Rational(1, 2)**ni + sp.Rational(1, 5)**ni)**(1 / ni), ni, sp.oo)
+    check("m1_c02_f_ineq_and_squeeze", ineq12_ok and lim_max_base == 5 and lim_inv_base == sp.Rational(1, 2))
+
+    # 14. zy30 Ex 2.1 & Ex 2.12: x_{n+1} = sqrt(x_n*(3 - x_n)), 0 < x_1 < 3
+    ex21_12_ok = True
+    for x0 in (0.05, 0.7, 1.5, 2.8):
+        seq = [x0]
+        for _ in range(35):
+            seq.append(math.sqrt(seq[-1] * (3.0 - seq[-1])))
+        if not (all(0 < v <= 1.5 + 1e-12 for v in seq[1:])
+                and all(seq[i + 1] >= seq[i] - 1e-12 for i in range(1, len(seq) - 1))
+                and abs(seq[-1] - 1.5) < 1e-6):
+            ex21_12_ok = False
+    check("m1_c02_ex_zy30_01_12", ex21_12_ok)
+
+    # 15. zy30 Ex 2.4 - Ex 2.11 (P.81-89)
+    l24_e = sp.limit(1 / (2 * ni), ni, sp.oo)
+    l24_o = sp.limit(((2 * ni - 1)**2 + sp.sqrt(2 * ni - 1)) / (2 * ni - 1), ni, sp.oo)
+    a25 = [1.0 - ((-1)**m) / m for m in range(1, 200)]
+    sol26 = sp.solve([a + b - 1, a - b - 3], [a, b])
+    l28 = sp.limit(sp.cos(1 / sp.sqrt(ni))**ni, ni, sp.oo)
+    v29 = sum(i / (4000**2 + 4000 + i) for i in range(1, 4001))
+    # Ex 2.11: cos(a_n) - a_n = cos(b_n), b_n = 1e-4 -> a_n / b_n^2 -> 1/2
+    bv211 = 1e-4
+    lo, hi = 0.0, bv211
+    for _ in range(70):
+        mid = 0.5 * (lo + hi)
+        if math.cos(mid) - mid > math.cos(bv211):
+            lo = mid
+        else:
+            hi = mid
+    r211 = (0.5 * (lo + hi)) / (bv211**2)
+    check("m1_c02_ex_zy30_04_11",
+          l24_e == 0 and l24_o == sp.oo
+          and max(a25) == 2.0 and min(a25) == 0.5
+          and sol26[a] == 2 and sol26[b] == -1
+          and sp.simplify(l28 - sp.exp(-sp.Rational(1, 2))) == 0
+          and abs(v29 - 0.5) < 2e-4
+          and abs(r211 - 0.5) < 1e-4)
+
+    # 16. zy30 Ex 2.14 & Ex 2.15 (monotone log recurrence + cos contraction mapping, P.91-94)
+    xi214 = float(sp.nsolve(x - 2 * sp.log(1 + x), x, 2.5))
+    s214_hi, s214_lo = [5.0], [0.5]
+    for _ in range(45):
+        s214_hi.append(2 * math.log(1 + s214_hi[-1]))
+        s214_lo.append(2 * math.log(1 + s214_lo[-1]))
+    a215 = float(sp.nsolve(x - sp.cos(x), x, 0.7))
+    ex215_ok = 0 < a215 < math.pi / 3
+    for x0 in (-1.0, -0.3, 0.2, 1.0):
+        v = x0
+        for step in range(1, 45):
+            v = math.cos(v)
+            if abs(v - a215) > (math.sqrt(3) / 2)**step * abs(x0 - a215) + 1e-12:
+                ex215_ok = False
+        if abs(v - a215) > 1e-5:
+            ex215_ok = False
+    check("m1_c02_ex_zy30_14_15",
+          abs(s214_hi[-1] - xi214) < 1e-6 and abs(s214_lo[-1] - xi214) < 1e-6
+          and all(s214_hi[i] > s214_hi[i + 1] > xi214 - 1e-12 for i in range(35))
+          and all(s214_lo[i] < s214_lo[i + 1] < xi214 + 1e-12 for i in range(35))
+          and ex215_ok,
+          f"Ex2.14 xi={xi214:.5f}, Ex2.15 a={a215:.5f}")
+
+    # 17. zy18 Intensive Ex 2.1 - Ex 2.6 (P.15-17; verifies Ex 2.4 n>=2 monotonicity!)
+    si21 = [1.0]
+    si22 = [math.pi]
+    si23 = [0.8]
+    si24_lo = [1.2]
+    si25 = [1.8]
+    for _ in range(35):
+        si21.append(math.sqrt(4 + 3 * si21[-1]))
+        si22.append(math.pi / 2 + 0.5 * math.cos(si22[-1]))
+        si23.append(1 - math.sqrt(1 - si23[-1]))
+        si24_lo.append(si24_lo[-1]**2 / (2 * (si24_lo[-1] - 1)))
+        si25.append(math.sqrt(si25[-1] * (2 - si25[-1])))
+    H_sum = 0.0
+    euler_seq = []
+    for m in range(1, 300):
+        H_sum += 1.0 / m
+        euler_seq.append(H_sum - math.log(m))
+    check("m1_c02_ex_zy18_01_06",
+          abs(si21[-1] - 4.0) < 1e-6
+          and abs(si22[-1] - math.pi / 2) < 1e-6
+          and abs(si23[-1]) < 1e-7 and abs(si23[-1] / si23[-2] - 0.5) < 1e-6
+          and si24_lo[1] > si24_lo[0]  # catches zy18 P.16 missing n>=2 note!
+          and all(si24_lo[i + 1] <= si24_lo[i] + 1e-12 for i in range(1, len(si24_lo) - 1))
+          and abs(si24_lo[-1] - 2.0) < 1e-10
+          and abs(si25[-1] - 1.0) < 1e-7
+          and all(euler_seq[i + 1] < euler_seq[i] for i in range(len(euler_seq) - 1))
+          and euler_seq[-1] > 0,
+          f"Ex2.4 x1=1.2->x2={si24_lo[1]:.2f}>x1 (dec for n>=2), Euler~{euler_seq[-1]:.4f}")
+
+    # 18. zy18 Intensive Ex 2.7 - Ex 2.13 (P.18-22; verifies Ex 2.10 vacuous condition!)
+    sol_i27 = sp.solve((1 - a) * a - sp.Rational(1, 4), a)
+    s_i28_lo, s_i28_hi = [2.2], [8.0]
+    for _ in range(25):
+        s_i28_lo.append(s_i28_lo[-1] - (s_i28_lo[-1] - 3) / (s_i28_lo[-1] - 2))
+        s_i28_hi.append(s_i28_hi[-1] - (s_i28_hi[-1] - 3) / (s_i28_hi[-1] - 2))
+    l_i29 = sp.limit((x - sp.sin(x)) / x**3, x, 0)
+    l_i210 = sp.limit(sp.exp(sp.log(1 - xp) * sp.log(xp)), xp, 0, "+")
+    vacuous_210 = all(math.cos(i * 0.005) > 1 - i * 0.005 for i in range(1, 200))
+    l_i213_ok = (
+        sp.limit((1 + xp)**(1 / xp), xp, sp.oo) == 1
+        and sp.limit((1 + 1 / xp)**xp, xp, sp.oo) == sp.E
+        and sp.limit(xp * sp.log(xp), xp, 0, "+") == 0
+        and sp.limit(xp * sp.log(xp), xp, sp.oo) == sp.oo
+        and sp.limit(sp.log(xp) / xp, xp, sp.oo) == 0
+    )
+    check("m1_c02_ex_zy18_07_13",
+          sol_i27 == [sp.Rational(1, 2)]
+          and abs(s_i28_lo[-1] - 3.0) < 1e-8 and abs(s_i28_hi[-1] - 3.0) < 1e-8
+          and l_i29 == sp.Rational(1, 6)
+          and l_i210 == 1 and vacuous_210
+          and l_i213_ok,
+          "Ex2.10 alg=1 & (1-b)^n<cos(b) vacuous on (0,1) verified")
+
+    # ==================== Calculus Lecture 3: Concepts of Differentiation ====================
+
+    # 19. zy30 Ex 3.1 notes: odd/even/periodic higher derivatives at 0 & 2*pi (P.103)
+    d2_31n1 = sp.diff(sp.log((1 - x) / (1 + x)), x, 2).subs(x, 0)
+    d4_31n2 = sp.simplify(sp.diff(1 / (2**x + 1), x, 4).subs(x, 0))
+    d5_31n3 = sp.simplify(sp.diff(sp.sin(sp.cos(x)) + sp.cos(sp.sin(x)), x, 5).subs(x, 2 * sp.pi))
+    check("m1_c03_ex_zy30_01_notes", d2_31n1 == 0 and d4_31n2 == 0 and d5_31n3 == 0)
+
+    # 20. zy30 Ex 3.3 & Ex 3.4: squeeze diff at 0 & product rule at single zero (P.104-105)
+    l33_0 = sp.limit((1 - sp.cos(xp)) / xp, xp, 0, "+")
+    ex34_ok = True
+    for nv in (1, 2, 3, 4, 5):
+        pe = sp.Integer(1)
+        for kv in range(1, nv + 1):
+            pe *= (sp.exp(kv * x) - kv)
+        if sp.simplify(sp.diff(pe, x).subs(x, 0) - ((-1)**(nv - 1)) * sp.factorial(nv - 1)) != 0:
+            ex34_ok = False
+    check("m1_c03_ex_zy30_03_04", l33_0 == 0 and ex34_ok)
+
+    # 21. zy30 Ex 3.6: exact factorizations & non-differentiable point counts (P.105-106)
+    r36_1 = set(sp.solve(x**3 + x**2 - 2 * x - 2, x))
+    r36_2 = set(sp.solve(x**3 - 2 * x**2 - x + 2, x))
+    r36_3 = set(sp.solve(x**3 + 3 * x**2 - 2 * x - 6, x))
+    outer_36 = {-1, 1}
+    check("m1_c03_ex_zy30_06",
+          r36_1 - outer_36 == {-sp.sqrt(2), sp.sqrt(2)}
+          and r36_2 - outer_36 == {2}
+          and r36_3 - outer_36 == {-3, -sp.sqrt(2), sp.sqrt(2)},
+          "n2=1 < n1=2 < n3=3")
+
+    # 22. zy30 Ex 3.8, Ex 3.10, Ex 3.11 (tangent intercept + differentials, P.110-114)
+    l38_e = sp.limit((1 - 1 / ni)**ni, ni, sp.oo)
+    ys = sp.Symbol("ys", positive=True)
+    v310 = (ys / (x + sp.sqrt(x**2 + ys**2))).subs({x: 0, ys: 1})
+    sol311 = sp.solve(sp.Rational(1, 10) - 2 * (-1) * a * sp.Rational(-1, 10), a)[0]
+    check("m1_c03_ex_zy30_08_11",
+          sp.simplify(l38_e - 1 / sp.E) == 0 and v310 == 1 and sol311 == sp.Rational(1, 2))
+
+    # 23. zy18 Intensive Ex 3.1 & Ex 3.2 (P.24-26)
+    df_i31 = sp.diff(2 - x**x - x, x).subs(x, 1)
+    l_i32_a = sp.limit(sp.sqrt(xp) / xp**sp.Rational(1, 3), xp, 0, "+")
+    l_i32_b = sp.limit(sp.sqrt(xp) / xp, xp, 0, "+")
+    check("m1_c03_ex_zy18_01_02", df_i31 == -2 and l_i32_a == 0 and l_i32_b == sp.oo)
+
+    # 24. zy18 Intensive Ex 3.4 & Ex 3.5 + asymptote counterexample (P.29-31)
+    f_i35 = sp.cbrt(x**2) * sp.sin(x)
+    l_i35_p = sp.limit(f_i35 / x, x, 0, "+")
+    l_i35_m = sp.limit(f_i35 / x, x, 0, "-")
+    df_as = sp.diff(sp.sin(x**2) / x, x)
+    check("m1_c03_ex_zy18_04_05",
+          l_i35_p == 0 and l_i35_m == 0
+          and sp.simplify(df_as - (2 * sp.cos(x**2) - sp.sin(x**2) / x**2)) == 0)
+
+    # 25. zy18 Intensive Ex 3.7 & Ex 3.8 (P.32-33)
+    l37_A = sp.limit((xp * sp.tan(xp)) / xp, xp, 0, "+")
+    l37_B = sp.limit((xp * sp.tan(sp.sqrt(xp))) / xp, xp, 0, "+")
+    l37_C = sp.limit((sp.sqrt(sp.cos(xp)) - 1) / xp, xp, 0, "+")
+    l37_Dp = sp.limit((sp.cos(sp.sqrt(xp)) - 1) / xp, xp, 0, "+")
+    l37_Dm = sp.limit((sp.cos(sp.sqrt(xp)) - 1) / (-xp), xp, 0, "+")
+    g38 = lambda s: 1 + s + sp.cos(s)
+    f38 = sp.integrate(g38(xp * t), (t, 0, xp**2))
+    df38 = sp.simplify(sp.diff(f38, xp))
+    df38_form = sp.simplify(-sp.integrate(g38(u), (u, 0, xp**3)) / xp**2 + 3 * xp * g38(xp**3))
+    check("m1_c03_ex_zy18_07_08",
+          l37_A == 0 and l37_B == 0 and l37_C == 0
+          and l37_Dp == sp.Rational(-1, 2) and l37_Dm == sp.Rational(1, 2)
+          and sp.simplify(df38 - df38_form) == 0
+          and sp.limit(f38 / xp, xp, 0, "+") == 0 and sp.limit(df38, xp, 0, "+") == 0,
+          "Ex3.7 D: f'_+=-1/2 != f'_-=+1/2; Ex3.8 f'(0)=lim f'(x)=0")
+
     return results
 
 
