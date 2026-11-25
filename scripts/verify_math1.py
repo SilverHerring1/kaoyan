@@ -710,6 +710,113 @@ def run_all_checks() -> list[tuple[str, bool, str]]:
           and a622 > 0 and F622.subs(x, -1) == 0 and F622.subs(x, 0) == 0 and F622.subs(x, 1) == 0,
           f"Ex6.21 A={pts621[0]}, B={pts621[1]}; Ex6.22 a={a622}")
 
+    # ==================== Calculus Lecture 7: Physical Applications & Economics (Extended) ====================
+    v0_c7, Q_c7, P_c7 = sp.symbols("v0_c7 Q_c7 P_c7", positive=True)
+
+    # 45. Core Math I/II physics examples: zy30 Ex 7.1 + zy18 Ex 7.1 & Ex 7.2
+    dl71 = sp.simplify(sp.diff(sp.sqrt(xp**2 + xp**6), xp).subs(xp, 1) * v0_c7)
+    # zy18 Ex 7.1: L^2 = x^2 + x^3 -> 2*L*dL/dt = (2x+3x^2)*dx/dt at x=3, dL/dt=11
+    L71i = sp.sqrt(3**2 + 3**3)
+    dxdt71i = sp.Rational(2 * L71i * 11, 2 * 3 + 3 * 3**2)
+    # zy18 Ex 7.2: T(t) = 100*exp(-k*t) + 20, T(30)=30 -> k=ln(10)/30; T(t)=21 -> t=60 -> remaining=30
+    k72i = sp.log(10) / 30
+    T72i = 100 * sp.exp(-k72i * t) + 20
+    t72i_end = sp.solve(sp.Eq(T72i, 21), t)[0]
+    check("m1_c07_physics_core",
+          dl71 == 2 * sp.sqrt(2) * v0_c7 and L71i == 6 and dxdt71i == 4
+          and T72i.subs(t, 0) == 120 and T72i.subs(t, 30) == 30 and t72i_end == 60 and (t72i_end - 30) == 30,
+          f"zy30 Ex7.1={dl71}, zy18 Ex7.1={dxdt71i} cm/s, Ex7.2 rem={t72i_end - 30} min")
+
+    # 46. Extended Math III economics examples: zy30 Ex 7.2-7.4 + zy18 Ex 7.3-7.5
+    r72 = sp.Rational(6, 100)
+    t0_72 = sp.solve(sp.diff(sp.Rational(2, 5) * sp.sqrt(tp) - r72 * tp, tp), tp)[0]
+    L73 = (60 - Q_c7 / 1000) * Q_c7 - (60000 + 20 * Q_c7)
+    Q73_max = sp.solve(sp.diff(L73, Q_c7), Q_c7)[0]
+    p73_max = 60 - Q73_max / 1000
+    ER74 = sp.simplify(1 - 2 * P_c7**2 / (192 - P_c7**2)).subs(P_c7, 6)
+    Cbar73i = 25000 / xp + 200 + xp / 40
+    x73i_min = sp.solve(sp.diff(Cbar73i, xp), xp)[0]
+    L74i_left = (25 - sp.Rational(1, 4) * Q_c7) * Q_c7 - (150 + 5 * Q_c7 + sp.Rational(1, 4) * Q_c7**2)
+    L74i_right = (35 - sp.Rational(3, 4) * Q_c7) * Q_c7 - (150 + 5 * Q_c7 + sp.Rational(1, 4) * Q_c7**2)
+    R75i = P_c7 * (100 - 5 * P_c7)
+    eta75i = sp.simplify(sp.diff(R75i, P_c7) * P_c7 / R75i)
+    check("m1_c07_econ_extended",
+          t0_72 == sp.Rational(100, 9) and sp.diff(L73, Q_c7).subs(Q_c7, 10000) == 20 and Q73_max == 20000 and p73_max == 40
+          and ER74 == sp.Rational(7, 13) and x73i_min == 1000
+          and L74i_left.subs(Q_c7, 20) == 50 and L74i_right.subs(Q_c7, 20) == 50
+          and sp.simplify(eta75i.subs(P_c7, 3) * sp.Rational(85, 10) - 7) == 0
+          and sp.simplify(eta75i.subs(P_c7, 12) * 5 + sp.Rational(5, 2)) == 0,
+          f"Ex7.2 t0={t0_72}, Ex7.4={ER74}, Ex7.3i={x73i_min}, Ex7.4i max=50")
+
+    # ==================== Calculus Lecture 8: Integral Concepts, Properties & Improper Integrals ====================
+    # 47. zy30 Ex 8.1 - Ex 8.3 (Antiderivatives vs Riemann integrability, P.196-209)
+    d81 = sp.simplify(sp.diff(sp.asin(x), x) / (1 - x**2) - (1 - x**2)**sp.Rational(-3, 2))
+    F82_l = sp.log(sp.sqrt(1 + x**2) + x) + 1
+    F82_r = (x + 1) * sp.sin(x) + sp.cos(x)
+    d83_2 = sp.simplify(sp.diff(x**2 * sp.sin(1 / x**2), x) - (2 * x * sp.sin(1 / x**2) - (2 / x) * sp.cos(1 / x**2)))
+    d83_4 = sp.simplify(sp.diff(x**2 * sp.cos(1 / x), x) - (2 * x * sp.cos(1 / x) + sp.sin(1 / x)))
+    check("m1_c08_ex_zy30_01_03",
+          d81 == 0 and F82_l.subs(x, 0) == 1 and F82_r.subs(x, 0) == 1
+          and sp.simplify(sp.diff(F82_l, x) - 1 / sp.sqrt(1 + x**2)) == 0
+          and sp.simplify(sp.diff(F82_r, x) - (x + 1) * sp.cos(x)) == 0
+          and d83_2 == 0 and d83_4 == 0)
+
+    # 48. zy30 Ex 8.6, 8.9, 8.10 (Riemann sum & definite integral comparisons, P.211-214)
+    v86 = sp.integrate((1 + x) / (1 + x**2), (x, 0, 1))
+    I1_89 = float(sp.N(sp.Integral(sp.tan(x) / x, (x, 0, sp.pi / 4)), 6))
+    I2_89 = float(sp.N(sp.Integral(x / sp.tan(x), (x, 0, sp.pi / 4)), 6))
+    M_810 = float(sp.N(sp.Integral(sp.sin(sp.sin(x)), (x, 0, sp.pi / 2)), 6))
+    N_810 = float(sp.N(sp.Integral(sp.cos(sp.cos(x)), (x, 0, sp.pi / 2)), 6))
+    check("m1_c08_ex_zy30_06_10",
+          sp.simplify(v86 - (sp.pi / 4 + sp.log(2) / 2)) == 0
+          and 1 > I1_89 > I2_89 and M_810 < 1 < N_810,
+          f"Ex8.9: 1>{I1_89:.4f}>{I2_89:.4f}; Ex8.10: {M_810:.4f}<1<{N_810:.4f}")
+
+    # 49. zy30 Ex 8.12 - Ex 8.14 (Variable-limit integrals, P.217-218)
+    F812_l = sp.integrate(sp.cos(t), (t, 0, x))
+    F812_r = sp.integrate(sp.cos(t), (t, 0, sp.pi)) + sp.integrate(1, (t, sp.pi, x))
+    l813 = sp.limit(sp.exp(x**2) + x**2, x, 0)
+    v814 = sp.simplify(sp.exp(-ap * xp) * sp.integrate(sp.exp(ap * t), (t, 0, xp)) - (1 - sp.exp(-ap * xp)) / ap)
+    check("m1_c08_ex_zy30_12_14",
+          F812_l == sp.sin(x) and F812_r == x - sp.pi
+          and sp.diff(F812_l, x).subs(x, sp.pi) == -1 and sp.diff(F812_r, x).subs(x, sp.pi) == 1
+          and l813 == 1 and v814 == 0)
+
+    # 50. zy30 Ex 8.15 - Ex 8.19 (Improper integrals convergence, P.221-225)
+    l816 = sp.limit((sp.exp(-sp.cos(1 / xp)) - sp.exp(-1)) * xp**2, xp, sp.oo)
+    v817B = sp.integrate(sp.log(xp) / (1 + xp**2), (xp, 0, sp.oo))
+    F818_conv = 2 * sp.sqrt(xp) * (sp.log(xp) - 2)
+    d818_conv = sp.simplify(sp.diff(F818_conv, xp) - sp.log(xp) / sp.sqrt(xp))
+    v818_conv = F818_conv.subs(xp, 1) - sp.limit(F818_conv, xp, 0, "+")
+    v818_div = sp.limit(sp.integrate(sp.log(xp) / xp, (xp, ap, 1)), ap, 0, "+")
+    v819_conv = sp.integrate(sp.log(xp) / xp**2, (xp, 1, sp.oo))
+    v819_div = sp.limit(sp.integrate(sp.log(xp) / xp, (xp, 1, ap)), ap, sp.oo)
+    check("m1_c08_ex_zy30_15_19",
+          sp.simplify(l816 - 1 / (2 * sp.E)) == 0 and v817B == 0
+          and d818_conv == 0 and v818_conv == -4 and v818_div == -sp.oo and v819_conv == 1 and v819_div == sp.oo,
+          f"Ex8.16 coeff={l816}, Ex8.17B={v817B}, Ex8.18(-4)/Ex8.19(1)")
+
+    # 51. zy18 Intensive Ex 8.1 - Ex 8.5 (Riemann sum & product limits, P.79-82)
+    v_i81 = sp.simplify(sp.exp(sp.integrate(sp.log(1 + x), (x, 0, 1))))
+    v_i82 = sp.integrate(sp.sin(x), (x, 0, 1))
+    v_i83 = sp.limit(sp.integrate(sp.cos(t), (t, 0, xp)) / xp, xp, 0, "+")
+    v_i84 = sp.integrate(sp.cos(t)**2, (t, 0, sp.pi / 4))
+    check("m1_c08_ex_zy18_01_05",
+          v_i81 == 4 / sp.E and v_i82 == 1 - sp.cos(1) and v_i83 == 1
+          and sp.simplify(v_i84 - (sp.Rational(1, 4) + sp.pi / 8)) == 0,
+          f"Ex8.1={v_i81}, Ex8.4={v_i84}")
+
+    # 52. zy18 Intensive Ex 8.6 - Ex 8.8 & Parameterized table 8-1 checks (P.86-89)
+    l_i86_1 = sp.limit((sp.log(1 - xp) / xp**sp.Rational(3, 2)) * xp**sp.Rational(1, 2), xp, 0, "+")
+    v_i87_0 = sp.integrate(sp.log(xp) / (1 - xp), (xp, 0, 1))
+    lim_i87_0p_half = sp.limit(xp**sp.Rational(1, 2) * (1 - xp)**sp.Rational(-1, 2) * sp.log(xp), xp, 0, "+")
+    lim_i87_1m_half = sp.limit((1 - xp)**sp.Rational(1, 2) * xp**sp.Rational(-1, 2) * sp.log(1 - xp), xp, 0, "+")
+    v_t81_7 = sp.integrate(-sp.log(xp), (xp, 0, 1))
+    check("m1_c08_ex_zy18_06_08",
+          l_i86_1 == -1 and v_i87_0 == -sp.pi**2 / 6
+          and lim_i87_0p_half == 0 and lim_i87_1m_half == 0 and v_t81_7 == 1,
+          f"Ex8.7 p=0 -> {v_i87_0}; p=1/2 bounded(0,0)=proper")
+
     return results
 
 

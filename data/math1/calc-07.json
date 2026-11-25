@@ -1,0 +1,700 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "calc-07",
+  "chapterNum": "高数 · 第 7 讲",
+  "chapterTitle": "一元函数微分学的应用（三）——物理应用（数一）",
+  "syllabusRef": "2027 考研数学一大纲 · 高等数学第 7 讲（27 张宇《基础30讲·高数》P.186-193 + 《高数18讲》强化 P.72-77；物理应用为数一考纲重点，经济应用作仅数三拓展区分）",
+  "items": [
+    {
+      "id": "m1-c07-f-01",
+      "stage": "both",
+      "section": "一、物理应用与相关变化率（仅数一、数二 · 考纲核心）",
+      "kind": "formula",
+      "title": "【数一/数二必考】速度、加速度（含消时间 $t$ 公式 $a=v\\frac{\\mathrm{d}v}{\\mathrm{d}x}$）与相关变化率链式公式",
+      "examWeight": "core",
+      "prompt": "默写质点运动学的速度与加速度双表达式（含消去时间 $t$ 的链式写法）、牛顿第二定律及一般相关变化率公式：",
+      "formulaLatex": "$$\\begin{aligned}&\\text{① 速度与加速度（}s=s(t)\\text{ 或 }x=x(t)\\text{）：} \\\\&\\qquad v(t)=\\frac{\\mathrm{d}x}{\\mathrm{d}t}=x'(t),\\qquad a(t)=\\frac{\\mathrm{d}v}{\\mathrm{d}t}=\\frac{\\mathrm{d}^2 x}{\\mathrm{d}t^2}=\\frac{\\mathrm{d}v}{\\mathrm{d}x}\\cdot\\frac{\\mathrm{d}x}{\\mathrm{d}t}=v\\frac{\\mathrm{d}v}{\\mathrm{d}x}\\quad\\text{（牛顿第二定律 }F=ma\\text{）} \\\\&\\text{② 相关变化率链式法则：}\\;\\frac{\\mathrm{d}A}{\\mathrm{d}B}=\\frac{\\mathrm{d}A}{\\mathrm{d}C}\\cdot\\frac{\\mathrm{d}C}{\\mathrm{d}B}\\implies \\frac{\\mathrm{d}A}{\\mathrm{d}C}=\\frac{\\mathrm{d}A/\\mathrm{d}B}{\\mathrm{d}C/\\mathrm{d}B} \\\\&\\text{③ 参数曲线相关变化率（}x=x(t),\\;y=y(t),\\;y=f(x)\\text{）：}\\;\\frac{\\mathrm{d}y}{\\mathrm{d}t}=\\frac{\\mathrm{d}y}{\\mathrm{d}x}\\cdot\\frac{\\mathrm{d}x}{\\mathrm{d}t}=f'(x)\\frac{\\mathrm{d}x}{\\mathrm{d}t}\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "加速度双变式（强化 P.73 蓝批）",
+          "desc": "**$a=\\frac{\\mathrm{d}^2 x}{\\mathrm{d}t^2}$** 用于消去 $v$（保留 $x,t$）；**$a=v\\frac{\\mathrm{d}v}{\\mathrm{d}x}$** 用于消去时间 $t$（保留 $v,x$，极利于第 15 讲不显含 $t$ 的运动微分方程求解！）。"
+        },
+        {
+          "sym": "正比变化率翻译（强化 P.73）",
+          "desc": "若题干称「$y$ 对 $t$ 的变化率与 $ax$ 对 $t$ 的变化率成正比」，立刻翻译为 **$\\frac{\\mathrm{d}y}{\\mathrm{d}t}=ka\\frac{\\mathrm{d}x}{\\mathrm{d}t}\\;(k\\ne 0)$**！"
+        }
+      ],
+      "conditions": "应用相关变化率链式法则要求相关物理量均对公共变量（通常为时间 $t$）可导，且除作分母的变化率（如 $\\frac{\\mathrm{d}C}{\\mathrm{d}B}$）在所求瞬时不等于 $0$！",
+      "pitfalls": "高频失分：求距离变化率时先硬开根号写 $L=\\sqrt{x^2+y^2}$ 再求导容易算错——直接写 **$L^2=x^2+y^2$ 两边对 $t$ 隐求导**（强化例7.1）既快又不易算错；且切忌把瞬时值（如 $x=3$）在求导**之前**就代入！",
+      "figureSvg": "<svg role='img' viewBox='0 0 460 138' xmlns='http://www.w3.org/2000/svg'><title>相关变化率几何模型：质点沿曲线 y=f(x) 运动的距离 L(t) 与水平速度 dx/dt 联动示意图（仿基础例7.1 / 强化例7.1）</title><defs><marker id='m1c7_arr1' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='4.5' markerHeight='4.5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><g transform='translate(0,0)'><line x1='22' y1='114' x2='208' y2='114' stroke='#334155' stroke-width='1.1' marker-end='url(#m1c7_arr1)'/><line x1='38' y1='124' x2='38' y2='18' stroke='#334155' stroke-width='1.1' marker-end='url(#m1c7_arr1)'/><path d='M38 114 Q 108 110 176 24' fill='none' stroke='#2563eb' stroke-width='2.1'/><line x1='38' y1='114' x2='144' y2='58' stroke='#dc2626' stroke-width='1.6' stroke-dasharray='4 2'/><line x1='144' y1='58' x2='144' y2='114' stroke='#64748b' stroke-width='1' stroke-dasharray='3 2'/><circle cx='144' cy='58' r='3.2' fill='#dc2626'/><line x1='144' y1='58' x2='182' y2='58' stroke='#059669' stroke-width='1.6' marker-end='url(#m1c7_arr1)'/><text x='172' y='52' font-size='8' fill='#065f46' font-weight='700'>dx/dt</text><text x='84' y='78' font-size='8.4' fill='#dc2626' font-weight='700'>L(t)</text><text x='144' y='127' text-anchor='middle' font-size='8' fill='#334155'>x(t)</text><text x='152' y='45' font-size='8' fill='#1e3a8a' font-weight='700'>P(x, y)</text><text x='174' y='30' font-size='7.8' fill='#2563eb'>y = f(x)</text><text x='30' y='125' font-size='8' fill='#334155'>O</text></g><g transform='translate(220,10)'><rect x='4' y='4' width='228' height='114' rx='7' fill='#f8fafc' stroke='#2563eb' stroke-width='1.2'/><text x='118' y='22' text-anchor='middle' font-size='8.8' fill='#1e3a8a' font-weight='700'>相关变化率三步秒杀流水线（数一/数二）</text><text x='14' y='41' font-size='8' fill='#334155'>① 建立几何/物理等式（优先写平方去根号！）：</text><text x='24' y='56' font-size='8.2' fill='#1d4ed8' font-weight='700'>L² = x² + y² = x² + [f(x)]²</text><text x='14' y='75' font-size='8' fill='#334155'>② 两边同时对时间 t 链式隐求导：</text><text x='24' y='90' font-size='8.2' fill='#dc2626' font-weight='700'>2L (dL/dt) = [2x + 2f(x)f'(x)] (dx/dt)</text><text x='14' y='108' font-size='8' fill='#065f46' font-weight='700'>③ 代入瞬时坐标与已知变化率，解出未知变化率！</text></g></svg>",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.186-187",
+        "pdfPage": 191,
+        "itemRef": "一·1 物理应用 & 一·2 相关变化率",
+        "crossRef": "27张宇《高数18讲》(强化) P.72-73 第一部分·一"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c07_physics_core",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c07-f-02",
+      "stage": "intensive",
+      "section": "强化第一部分·二、物理量微元建模与牛顿冷却定律（仅数一、数二）",
+      "kind": "formula",
+      "title": "【数一/数二必考 · 强化】物理量微元法（微段常量化）与正比变化率微分方程 / 牛顿冷却定律",
+      "examWeight": "core",
+      "prompt": "默写物理量「变化率与某量成正比」的微分方程通式及牛顿冷却定律模型与通解：",
+      "formulaLatex": "$$\\begin{aligned}&\\text{① 正比变化率微元建模：}A\\text{ 对 }t\\text{ 的变化率与 }B\\text{ 成正比} \\implies \\frac{\\mathrm{d}A}{\\mathrm{d}t}=kB\\;(k\\ne 0) \\\\&\\text{② 牛顿冷却定律（高温物体置于恒温 }T_0\\text{ 介质中）：} \\\\&\\qquad \\frac{\\mathrm{d}T}{\\mathrm{d}t}=-k(T-T_0)\\;(k>0) \\implies T(t)=T_0+C\\mathrm{e}^{-kt}\\quad\\big(C=T(0)-T_0\\big)\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "正负号物理定性铁律",
+          "desc": "温度下降（冷却）、质量衰减、水位下降时，若设比例系数 **$k>0$**，务必在右端手动添上**负号**（如 $\\frac{\\mathrm{d}T}{\\mathrm{d}t}=-k(T-20)$），确保随 $t\\to+\\infty$ 指数衰减至稳态 $T_0$！"
+        }
+      ],
+      "conditions": "建模时必须检查**两个独立定解条件**（初值条件 $T(0)$ 定积分常数 $C$，另一时刻观测值 $T(t_1)$ 定比例系数 $k$），缺一不可！",
+      "pitfalls": "高频审题杀手（强化例7.2）：算出目标时刻 $t=60\\text{ min}$ 后，务必回读题干问的是「总共需要多久」还是「**还需**冷却多长时间」（$60-30=30\\text{ min}$）！",
+      "figureSvg": "<svg role='img' viewBox='0 0 460 134' xmlns='http://www.w3.org/2000/svg'><title>牛顿冷却定律指数衰减与等比时间倍增图：120℃→30℃（30 min）→21℃（再需 30 min）（仿强化例7.2）</title><defs><marker id='m1c7_arr2' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='4.5' markerHeight='4.5' orient='auto'><path d='M0 1 L10 5 L0 9 z' fill='#334155'/></marker></defs><g transform='translate(0,0)'><line x1='24' y1='110' x2='236' y2='110' stroke='#334155' stroke-width='1.1' marker-end='url(#m1c7_arr2)'/><line x1='38' y1='118' x2='38' y2='16' stroke='#334155' stroke-width='1.1' marker-end='url(#m1c7_arr2)'/><line x1='38' y1='94' x2='228' y2='94' stroke='#64748b' stroke-width='1.1' stroke-dasharray='4 2'/><text x='228' y='104' text-anchor='end' font-size='7.2' fill='#475569'>恒温介质 20℃</text><path d='M38 24 C 66 64, 92 81, 118 87 C 148 91.5, 174 92.8, 220 93.6' fill='none' stroke='#be123c' stroke-width='2.1'/><circle cx='38' cy='24' r='2.6' fill='#be123c'/><circle cx='118' cy='87' r='2.6' fill='#2563eb'/><circle cx='198' cy='93.3' r='2.6' fill='#059669'/><line x1='118' y1='87' x2='118' y2='110' stroke='#2563eb' stroke-width='1' stroke-dasharray='2 2'/><line x1='198' y1='93.3' x2='198' y2='110' stroke='#059669' stroke-width='1' stroke-dasharray='2 2'/><text x='44' y='26' font-size='7.5' fill='#be123c' font-weight='700'>(0, 120℃) ΔT=100</text><text x='132' y='72' text-anchor='middle' font-size='7.4' fill='#2563eb' font-weight='700'>(30, 30℃) ΔT=10</text><text x='194' y='81' text-anchor='middle' font-size='7.4' fill='#065f46' font-weight='700'>(60, 21℃) ΔT=1</text><text x='118' y='122' text-anchor='middle' font-size='7.6' fill='#2563eb'>t=30</text><text x='198' y='122' text-anchor='middle' font-size='7.6' fill='#065f46'>t=60</text><text x='234' y='122' font-size='7.6' fill='#334155'>t(min)</text></g><g transform='translate(248,10)'><rect x='2' y='4' width='202' height='112' rx='7' fill='#fffbeb' stroke='#d97706' stroke-width='1.2'/><text x='103' y='22' text-anchor='middle' font-size='8.6' fill='#92400e' font-weight='700'>牛顿冷却定律与审题防坑</text><text x='12' y='41' font-size='8' fill='#334155'>• 方程：dT/dt = -k(T - T₀), k&gt;0</text><text x='12' y='58' font-size='8' fill='#1e3a8a' font-weight='700'>• 通解：ΔT(t) = ΔT(0)·e^(-kt)</text><text x='12' y='76' font-size='7.8' fill='#065f46' font-weight='700'>• 等比速检：ΔT 每降为 1/10 用时相同</text><text x='20' y='91' font-size='7.6' fill='#334155'>100→10 用 30 min ⇒ 10→1 再用 30 min！</text><text x='12' y='108' font-size='7.8' fill='#be123c' font-weight='700'>⚠ 问「还需」答 60-30=30，勿答 60！</text></g></svg>",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.73-74",
+        "pdfPage": 86,
+        "itemRef": "第一部分·二 & 例7.2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c07_physics_core",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c07-f-03",
+      "stage": "foundation",
+      "section": "二、复利与连续复利（仅数三 · 数一拓展了解）",
+      "kind": "formula",
+      "title": "【仅数三·数一拓展】离散复利、年付 $n$ 次复利、连续复利与现值贴现公式",
+      "examWeight": "extended",
+      "prompt": "（数一不考，作教材完整溯源了解）默写离散复利、连续复利终值 $A_t$ 及现值 $A$ 计算公式：",
+      "formulaLatex": "$$\\begin{aligned}&\\text{① 通用复利（每期利率 }r\\text{，总期数 }m\\text{）：}\\;A_m=A(1+r)^m \\\\&\\text{② 年利率 }r\\text{、年付 }n\\text{ 次、存 }t\\text{ 年：}\\;A_t=A\\left(1+\\frac{r}{n}\\right)^{nt} \\\\&\\text{③ 连续复利（}n\\to\\infty\\text{）：}\\;A_t=\\lim_{n\\to\\infty}A\\left(1+\\frac{r}{n}\\right)^{nt}=A\\mathrm{e}^{rt}\\quad\\Longleftrightarrow\\quad \\text{现值：}A=R\\mathrm{e}^{-rt}\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "数一备考策略",
+          "desc": "2027 考研数学一大纲**不考**复利与经济应用（仅数学三考查），本卡仅作教材完整性对照与 $\\lim_{n\\to\\infty}(1+\\frac{r}{n})^{nt}=\\mathrm{e}^{rt}$ 重要极限应用参考。"
+        }
+      ],
+      "conditions": "连续复利中 $r$ 为年名义利率（如 $6\\%=0.06$），$t$ 为年数；由未来终值 $R$ 反算当下现值用负指数 $A=R\\mathrm{e}^{-rt}$。",
+      "pitfalls": "审清题目给定的是年付 1 次、年付 $n$ 次还是连续复利（数三题目会明确告知）。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.188",
+        "pdfPage": 193,
+        "itemRef": "二 复利与连续复利（仅数学三）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c07_econ_extended",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c07-f-04",
+      "stage": "both",
+      "section": "三 & 强化第二部分、边际函数与弹性函数（仅数三 · 数一拓展了解）",
+      "kind": "formula",
+      "title": "【仅数三·数一拓展】边际函数、弹性函数 $\\frac{Ey}{Ex}$ 及总收益导数双符号约定对照",
+      "examWeight": "extended",
+      "prompt": "（数一不考，作教材完整溯源了解）默写边际成本/收益/利润、弹性函数定义及总收益对价格的导数关系式：",
+      "formulaLatex": "$$\\begin{aligned}&\\text{① 常用经济函数：}C(Q)=C_1+C_2(Q),\\;\\bar{C}=\\frac{C}{Q},\\;R=pQ,\\;L=R-C \\\\&\\text{② 边际函数（近似第 }Q+1\\text{ 单位增量）：}MC=C'(Q),\\quad MR=R'(Q),\\quad ML=L'(Q) \\\\&\\text{③ 弹性函数（相对变化率之比）：}\\;\\eta=\\frac{Ey}{Ex}=\\frac{x}{f(x)}f'(x)\\implies \\frac{\\Delta y}{y_0}\\approx \\left.\\frac{Ey}{Ex}\\right|_{x_0}\\cdot\\frac{\\Delta x}{x_0} \\\\&\\text{④ 总收益对价格导数（注意两书对 }\\eta\\text{ 正负符号约定！）：} \\\\&\\qquad \\text{基础 30 讲取正弹性 }\\eta=-\\frac{p}{Q}Q'(p)>0 \\implies \\frac{\\mathrm{d}R}{\\mathrm{d}p}=Q(1-\\eta) \\\\&\\qquad \\text{强化 18 讲取带号弹性 }\\eta=\\frac{p}{Q}Q'(p)<0 \\implies R'(p)=Q(p)(1+\\eta)\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "符号约定核验警示",
+          "desc": "两书对需求价格弹性 $\\eta$ 是否自带负号约定相反（见表 7-1），但最终经济结论完全一致：低弹性（$|\\eta|<1$）涨价增收，高弹性（$|\\eta|>1$）涨价减收！"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 7-1 《基础30讲》与《高数18讲》需求价格弹性符号约定对照表（仅数三拓展）",
+          "headers": [
+            "书目出处",
+            "需求价格弹性定义",
+            "符号特征",
+            "总收益导数 $R'(p)$",
+            "涨价增收条件"
+          ],
+          "rows": [
+            [
+              "基础 30 讲 P.191-192",
+              "$\\eta=-\\frac{p}{Q(p)}Q'(p)$（注：带负号取正）",
+              "$\\eta>0$",
+              "$Q(1-\\eta)$",
+              "$\\eta<1$"
+            ],
+            [
+              "强化 18 讲 P.76",
+              "$\\eta(p)=\\frac{p}{Q(p)}Q'(p)$（不加负号）",
+              "$\\eta(p)<0$",
+              "$Q(p)(1+\\eta)$",
+              "$|\\eta|<1$"
+            ]
+          ]
+        }
+      ],
+      "conditions": "2027 考研数学一不考查经济应用；无特殊说明时，需求/供给函数以价格 $p$ 为自变量，成本/收益/利润函数以产量 $Q$ 为自变量。",
+      "pitfalls": "切勿把基础 30 讲的 $Q(1-\\eta)$ 与强化 18 讲的 $Q(1+\\eta)$ 混用而未核对题干是否规定 $\\eta>0$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.189-192",
+        "pdfPage": 194,
+        "itemRef": "三 导数的经济应用（仅数学三）",
+        "crossRef": "27张宇《高数18讲》(强化) P.74-76 第二部分"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c07_econ_extended",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c07-c-01",
+      "stage": "both",
+      "section": "一 · 相关变化率隐式平方提速技与物理应用三类考法（数一核心）",
+      "kind": "conclusion",
+      "title": "【数一/数二必考】相关变化率「隐式平方去根号」提速技与高数物理应用三大跨讲联动",
+      "examWeight": "core",
+      "summary": "张宇在基础 P.187 注与强化 P.72 明确指出：**微分学物理应用单独出题不难，真正的高分拉分点在于与第 15 讲微分方程联动！**掌握表 7-2 三类题型即可通杀全部数一微分物理应用：\n1. **隐式平方去根号提速技（强化例7.1）**：遇到距离 $L=\\sqrt{x^2+y^2}$、勾股关系 $s^2=x^2+(y+10)^2$ 或圆锥容积，**先保留平方/整式对 $t$ 隐求导**（$2L\\frac{\\mathrm{d}L}{\\mathrm{d}t}=2x\\frac{\\mathrm{d}x}{\\mathrm{d}t}+2y\\frac{\\mathrm{d}y}{\\mathrm{d}t}$），再代入瞬时坐标与瞬时 $L$，比硬导根式清爽一倍！\n2. **「先求导、后代瞬时值」铁律**：题目给的「当 $x=3$ 时」或「当 $t=1$ 时」是瞬时截面条件，**绝对不能在求导前就把 $x=3$ 代进方程变成常数**！\n3. **跨讲衔接接口**：加速度 $a=v\\frac{\\mathrm{d}v}{\\mathrm{d}x}$ 是第 15 讲不显含 $t$ 的二阶牛顿定律方程 $m\\frac{\\mathrm{d}^2 x}{\\mathrm{d}t^2}=F(x,v)$ 的唯一降阶入口！",
+      "tables": [
+        {
+          "caption": "表 7-2 考研数学一微分学物理应用 3 大核心考法与跨讲衔接速查表（基础 P.186-188 & 强化 P.72-74）",
+          "headers": [
+            "题型类别",
+            "核心数学工具",
+            "高阶跨讲衔接",
+            "代表例题"
+          ],
+          "rows": [
+            [
+              "运动轨迹相关变化率",
+              "建几何关系 $L^2=x^2+y^2$ 两边对 $t$ 隐求导",
+              "参数方程求导（第 4 讲）",
+              "例7.1, 强化例7.1"
+            ],
+            [
+              "速度/加速度与牛顿定律",
+              "$v=\\frac{\\mathrm{d}x}{\\mathrm{d}t},\\;a=\\frac{\\mathrm{d}^2 x}{\\mathrm{d}t^2}=v\\frac{\\mathrm{d}v}{\\mathrm{d}x}$",
+              "不显含 $t$ 的二阶 ODE 降阶（第 15 讲）",
+              "基础 P.187, 强化 P.73"
+            ],
+            [
+              "正比变化率与微元建模",
+              "$\\frac{\\mathrm{d}A}{\\mathrm{d}t}=kB$（牛顿冷却、放射性衰变、漏水等）",
+              "一阶可分离变量/线性 ODE（第 15 讲）",
+              "强化例7.2"
+            ]
+          ]
+        }
+      ],
+      "conditions": "套用 $L^2=x^2+[f(x)]^2$ 对 $t$ 隐求导后，注意根据运动方向判断变化率正负号（「远离原点」则 $\\frac{\\mathrm{d}L}{\\mathrm{d}t}>0$，「靠近」则 $\\frac{\\mathrm{d}L}{\\mathrm{d}t}<0$）！",
+      "pitfalls": "高频错算：忘记检查题目给的**物理量单位是否统一**（如 $\\text{cm}$ vs $\\text{m}$、$\\text{min}$ vs $\\text{s}$），或把瞬时值提前代入方程求导得 $0$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.187-188",
+        "pdfPage": 192,
+        "itemRef": "一·2 注 & 方法总结",
+        "crossRef": "27张宇《高数18讲》(强化) P.72-73"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c07-c-02",
+      "stage": "intensive",
+      "section": "强化第一部分·二 · 牛顿冷却定律等比速检与审题陷阱（数一核心）",
+      "kind": "conclusion",
+      "title": "【数一/数二必考 · 强化】牛顿冷却定律「温差等比时间倍增」秒算规律与「还需」审题防线",
+      "examWeight": "core",
+      "summary": "由牛顿冷却方程 $\\frac{\\mathrm{d}T}{\\mathrm{d}t}=-k(T-T_0)$ 的通解 $\\Delta T(t)=T(t)-T_0=\\Delta T(0)\\mathrm{e}^{-kt}$ 立得一条考场超快验算规律：\n1. **温差等比律**：在相等时间间隔 $\\Delta t$ 内，物体与环境的**温差 $\\Delta T=T-T_0$ 按相同固定比例 $\\mathrm{e}^{-k\\Delta t}$ 衰减**！\n   - 例证（强化例7.2）：环境 $20^\\circ\\text{C}$，初始温差 $120-20=100^\\circ\\text{C}$；经 $30\\text{ min}$ 降至 $30^\\circ\\text{C}$，温差缩为 $10^\\circ\\text{C}$（变为 $\\frac{1}{10}$）；再降至 $21^\\circ\\text{C}$ 时温差缩为 $1^\\circ\\text{C}$（再变为 $\\frac{1}{10}$），**不用算 $\\ln 10$ 一眼秒知还需整整 $30\\text{ min}$**！\n2. **解答题规范写法**：解答题仍须按「设 $T(t)\\to$ 列 ODE $\\frac{\\mathrm{d}T}{\\mathrm{d}t}=-k(T-20)\\to$ 分离变量求通解 $\\to$ 代两个条件定 $C,k\\to$ 解 $t$ 并相减」写齐步骤，再用等比律 2 秒验算答案！",
+      "conditions": "该等比规律严格针对**温差 $\\Delta T=T-T_0$** 而非绝对温度 $T$ 本身！且要求环境温度 $T_0$ 恒定不变。",
+      "pitfalls": "高频丢分点：① 误把绝对温度 $120\\to 30$ 当等比（漏减环境温度 $20^\\circ\\text{C}$！）；② 算得总时刻 $t=60$ 直接交卷，忘了题干问「**继续**降至 $21^\\circ\\text{C}$，**还需**冷却多长时间」而漏减 $30$！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.73-74",
+        "pdfPage": 86,
+        "itemRef": "第一部分·二 例7.2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c07_physics_core",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c07-c-03",
+      "stage": "both",
+      "section": "三 & 强化第二部分 · 需求弹性定调价策略与分段利润角点极值（仅数三拓展）",
+      "kind": "conclusion",
+      "title": "【仅数三·数一拓展】需求弹性高低定调价涨跌规律与分段利润函数角点最大值",
+      "examWeight": "extended",
+      "summary": "（本条为仅数三内容，数一作拓展区分）\n1. **调价与总收益关系口诀（基础例7.4~7.5 & 强化 P.76、例7.5）**：\n   - **低弹性（$|\\eta|<1$，如生活必需品）**：$R'(p)>0$，价格与总收益**同向变化**（涨价增收、降价减收）；\n   - **高弹性（$|\\eta|>1$，如奢侈品）**：$R'(p)<0$，价格与总收益**反向变化**（涨价减收、薄利多销降价增收）；\n   - **单位弹性（$|\\eta|=1$）**：$R'(p)=0$，总收益取极大值，小幅调价几乎不影响总收益。\n2. **分段利润函数最值防坑（强化例7.4）**：当价格按产量 $Q$ 分段时，利润 $L(Q)$ 的最大值极可能取在**连续但不可导的分段角点**（如 $Q=20$），切勿只解某一段的驻点而忽略分段点检验！",
+      "conditions": "利用相对变化率近似公式 $\\frac{\\Delta R}{R}\\approx\\eta_{RP}\\cdot\\frac{\\Delta P}{P}$ 时，注意 $\\eta_{RP}=1+\\eta_{QP}$（带号弹性）$=1-|\\eta_{QP}|$（正弹性）。",
+      "pitfalls": "在强化例7.4 中，右支二次式 $-(Q-15)^2+75$ 的顶点 $Q=15$ 落在其定义域 $Q>20$ 之外，若不核对定义域直接答最大利润 $75$ 万元将满盘皆输！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.76-77",
+        "pdfPage": 89,
+        "itemRef": "第二部分·二·2 & 例7.4-7.5",
+        "crossRef": "27张宇《基础30讲·高等数学分册》 P.192-193 例7.4-7.5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c07_econ_extended",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c07-e-01",
+      "stage": "foundation",
+      "section": "基础30讲 · 一、物理应用与相关变化率（仅数一、数二 · 例7.1）",
+      "kind": "example",
+      "title": "【基础例 7.1 · 数一/数二】动点沿 $y=x^3$ 运动，由水平速率 $v_0$ 求距原点距离变化率",
+      "examWeight": "core",
+      "problem": "已知动点 $P$ 在曲线 $y=x^3$ 上运动，记坐标原点与点 $P$ 间的距离为 $l$。若点 $P$ 的横坐标对时间的变化率为常数 $v_0$，则当点 $P$ 运动到点 $(1,1)$ 时，$l$ 对时间的变化率是 ____。",
+      "steps": [
+        {
+          "stepTitle": "1. 建立距离 $l$ 与横坐标 $x$ 的函数关系式",
+          "detail": "由 $y=x^3$ 得原点到点 $P(x,y)$ 的距离 $l=\\sqrt{x^2+y^2}=\\sqrt{x^2+x^6}$（或写成平方 $l^2=x^2+x^6$）。"
+        },
+        {
+          "stepTitle": "2. 用相关变化率链式求导并代入瞬时点 $x=1$ 与 $\\frac{\\mathrm{d}x}{\\mathrm{d}t}=v_0$",
+          "detail": "$$\\frac{\\mathrm{d}l}{\\mathrm{d}t}=\\frac{\\mathrm{d}l}{\\mathrm{d}x}\\cdot\\frac{\\mathrm{d}x}{\\mathrm{d}t}=\\frac{2x+6x^5}{2\\sqrt{x^2+x^6}}\\cdot v_0 \\implies \\left.\\frac{\\mathrm{d}l}{\\mathrm{d}t}\\right|_{x=1}=\\frac{8}{2\\sqrt{2}}v_0=2\\sqrt{2}v_0$$"
+        }
+      ],
+      "finalAnswer": "$2\\sqrt{2}v_0$",
+      "takeaway": "相关变化率两步法：**① 建关系式（把 $y$ 消成 $x$）$\\to$ ② 先链式求导再代瞬时坐标 $(1,1)$**！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.188",
+        "pdfPage": 193,
+        "itemRef": "例7.1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c07_physics_core",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c07-e-02",
+      "stage": "foundation",
+      "section": "基础30讲 · 二~三、复利与经济应用（仅数三 · 数一拓展 · 例7.2~7.5）",
+      "kind": "example",
+      "title": "【基础例 7.2 · 仅数三拓展】连续复利现值最大化求最佳窖藏时间 $t_0$",
+      "examWeight": "extended",
+      "problem": "设某酒厂有一批新酿的好酒，如果现在（假定 $t=0$）就售出，总收入为 $R_0$ 元；如果窖藏起来，待来日按陈酒价格出售，$t$ 年末总收入为 $R=R_0\\mathrm{e}^{\\frac{2}{5}\\sqrt{t}}$。假定银行的年利率 $r$ 为 $6\\%$，并以连续复利计息，若 $t_0$ 年售出可使总收入的现值最大，则窖藏的时间 $t_0=$ ____。",
+      "steps": [
+        {
+          "stepTitle": "1. 写出 $t$ 年末总收入的现值函数 $A(t)=R\\mathrm{e}^{-rt}$",
+          "detail": "代入 $R=R_0\\mathrm{e}^{\\frac{2}{5}\\sqrt{t}}$ 得 $A(t)=R_0\\mathrm{e}^{\\frac{2}{5}\\sqrt{t}-rt}\\;(t>0)$。"
+        },
+        {
+          "stepTitle": "2. 求唯一极大/最大值点 $t_0=\\frac{1}{25r^2}$ 并代入 $r=6\\%$",
+          "detail": "$$\\frac{\\mathrm{d}A}{\\mathrm{d}t}=R_0\\mathrm{e}^{\\frac{2}{5}\\sqrt{t}-rt}\\left(\\frac{1}{5\\sqrt{t}}-r\\right)=0 \\implies t_0=\\frac{1}{25r^2}$$左正右负，故 $t_0$ 为唯一极大值点亦即最大值点。代 $r=0.06$ 得 $t_0=\\frac{1}{25\\times 0.0036}=\\frac{100}{9}\\approx 11$（年）。"
+        }
+      ],
+      "finalAnswer": "约 $11$ 年（精确值 $\\frac{100}{9}$ 年；原书填空答案写 `11`）。",
+      "takeaway": "【仅数三拓展】现值贴现永远乘 **$\\mathrm{e}^{-rt}$**（负指数！），一元连续函数在开区间有唯一极大值点即最大值点。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.188-189",
+        "pdfPage": 193,
+        "itemRef": "例7.2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c07_econ_extended",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c07-e-03",
+      "stage": "foundation",
+      "section": "基础30讲 · 二~三、复利与经济应用（仅数三 · 数一拓展 · 例7.2~7.5）",
+      "kind": "example",
+      "title": "【基础例 7.3 · 仅数三拓展】边际利润函数、经济意义解释与最大利润单价",
+      "examWeight": "extended",
+      "problem": "设生产某商品的固定成本为 $60\\,000$ 元，可变成本为 $20$ 元/件，价格函数为 $p=60-\\frac{Q}{1000}$（$p$ 为单价，元；$Q$ 为销量，件）。已知产销平衡，求：\n(1) 该商品的边际利润函数；　(2) 当 $p=50$ 元时的边际利润并解释经济意义；　(3) 使利润最大的单价 $p$。",
+      "steps": [
+        {
+          "stepTitle": "1. 建立利润函数 $L(Q)=R(Q)-C(Q)$ 并求导得边际利润 $L'(Q)$",
+          "detail": "$C(Q)=60\\,000+20Q$，$R(Q)=pQ=60Q-\\frac{Q^2}{1000}$，故 $L(Q)=-\\frac{Q^2}{1000}+40Q-60\\,000$，边际利润 $L'(Q)=-\\frac{Q}{500}+40$。"
+        },
+        {
+          "stepTitle": "2. 解 (2)(3)：代 $p=50$ 求 $Q=10\\,000$ 与边际利润；令 $L'(Q)=0$ 求最大利润单价",
+          "detail": "(2) $p=50\\Rightarrow Q=10\\,000$ 件，$L'(10\\,000)=20$ 元，意义：当销量为 $10\\,000$ 件时，销售第 $10\\,001$ 件商品所得利润约为 $20$ 元。\n(3) 令 $L'(Q)=0$ 得 $Q=20\\,000$ 件（$L''<0$ 极大即最大），代回价格函数得 $p=60-20=40$ 元。"
+        }
+      ],
+      "finalAnswer": "(1) $L'(Q)=-\\frac{Q}{500}+40$；(2) $20$ 元（第 $10\\,001$ 件利润约 $20$ 元）；(3) $p=40$ 元。",
+      "takeaway": "【仅数三拓展】边际值 $L'(Q_0)$ 对应「第 $Q_0+1$ 件」的近似利润增量！（注：原书 P.191 分析 ① 笔误写成「对 $Q$ 求偏导数」，一元函数实为导数，见表 7-4。）",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.191-192",
+        "pdfPage": 196,
+        "itemRef": "例7.3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c07_econ_extended",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c07-e-04",
+      "stage": "foundation",
+      "section": "基础30讲 · 二~三、复利与经济应用（仅数三 · 数一拓展 · 例7.2~7.5）",
+      "kind": "example",
+      "title": "【基础例 7.4 · 仅数三拓展】证 $\\frac{\\mathrm{d}R}{\\mathrm{d}p}=Q(1-\\eta)$ 及求总收益对价格的弹性",
+      "examWeight": "extended",
+      "problem": "设某商品需求量 $Q$ 是价格 $p$ 的单调减少函数 $Q=Q(p)$，其中需求弹性 $\\eta=\\frac{2p^2}{192-p^2}>0$。\n(1) 设 $R=R(p)$ 为总收益函数，证明 $\\frac{\\mathrm{d}R}{\\mathrm{d}p}=Q(1-\\eta)$；　(2) 当 $p=6$ 时，求总收益对价格的弹性并说明经济意义。",
+      "steps": [
+        {
+          "stepTitle": "1. 证 (1)：对 $R(p)=pQ(p)$ 求导并代入正弹性定义 $\\eta=-\\frac{p}{Q}\\frac{\\mathrm{d}Q}{\\mathrm{d}p}$",
+          "detail": "$$\\frac{\\mathrm{d}R}{\\mathrm{d}p}=Q+p\\frac{\\mathrm{d}Q}{\\mathrm{d}p}=Q\\left(1+\\frac{p}{Q}\\frac{\\mathrm{d}Q}{\\mathrm{d}p}\\right)=Q(1-\\eta)$$"
+        },
+        {
+          "stepTitle": "2. 解 (2)：利用 $\\frac{ER}{Ep}=1-\\eta$ 代入 $p=6$",
+          "detail": "$$\\frac{ER}{Ep}=\\frac{p}{R}\\frac{\\mathrm{d}R}{\\mathrm{d}p}=\\frac{p}{pQ}Q(1-\\eta)=1-\\eta=1-\\frac{2p^2}{192-p^2}=\\frac{192-3p^2}{192-p^2}$$代 $p=6$ 得 $\\left.\\frac{ER}{Ep}\\right|_{p=6}=\\frac{84}{156}=\\frac{7}{13}\\approx 0.54$，意义：当 $p=6$ 时，若价格上涨 $1\\%$，总收益约增加 $0.54\\%$。"
+        }
+      ],
+      "finalAnswer": "(1) 证毕；(2) $\\frac{7}{13}\\approx 0.54$（价格涨 $1\\%$，总收益增约 $0.54\\%$）。",
+      "takeaway": "【仅数三拓展】记住两条黄金公式（正弹性约定 $\\eta>0$）：**$R'(p)=Q(1-\\eta)$** 且 **$\\frac{ER}{Ep}=1-\\eta$**！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.192",
+        "pdfPage": 197,
+        "itemRef": "例7.4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c07_econ_extended",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c07-e-05",
+      "stage": "foundation",
+      "section": "基础30讲 · 二~三、复利与经济应用（仅数三 · 数一拓展 · 例7.2~7.5）",
+      "kind": "example",
+      "title": "【基础例 7.5 · 仅数三拓展】用 $\\frac{\\mathrm{d}R}{\\mathrm{d}P}=Q(1-\\eta)$ 判价格变动对总收益的影响方向",
+      "examWeight": "extended",
+      "problem": "设某商品需求量 $Q$ 对价格 $P$ 的弹性为 $\\eta\\;(\\eta>0)$，$R$ 为收益，则（ ）。\n(A) 当 $\\eta<1,\\;\\Delta P>0$ 时，$\\Delta R>0$　　(B) 当 $\\eta<1,\\;\\Delta P<0$ 时，$\\Delta R>0$\n(C) 当 $\\eta>1,\\;\\Delta P>0$ 时，$\\Delta R>0$　　(D) 当 $\\eta>1,\\;\\Delta P<0$ 时，$\\Delta R<0$",
+      "steps": [
+        {
+          "stepTitle": "1. 由 $\\frac{\\mathrm{d}R}{\\mathrm{d}P}=Q(1-\\eta)$ 直接判单调方向",
+          "detail": "当 $\\eta<1$ 时 $\\frac{\\mathrm{d}R}{\\mathrm{d}P}>0$（$R$ 随 $P$ 增而增），故 $\\Delta P>0\\Rightarrow \\Delta R>0$；当 $\\eta>1$ 时 $\\frac{\\mathrm{d}R}{\\mathrm{d}P}<0$（$R$ 随 $P$ 增而减），故 $\\Delta P>0\\Rightarrow \\Delta R<0,\\;\\Delta P<0\\Rightarrow \\Delta R>0$。综上选 (A)。"
+        }
+      ],
+      "finalAnswer": "选 (A) 当 $\\eta<1,\\;\\Delta P>0$ 时，$\\Delta R>0$。",
+      "takeaway": "【仅数三拓展】口诀秒杀：**低弹性（$\\eta<1$）同向，高弹性（$\\eta>1$）反向！**",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.192-193",
+        "pdfPage": 197,
+        "itemRef": "例7.5"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c07-e-06",
+      "stage": "intensive",
+      "section": "强化18讲 · 第一部分、物理应用题（仅数一、数二 · 强化例7.1~7.2）",
+      "kind": "example",
+      "title": "【强化例 7.1 · 数一/数二】沿 $y=x^{3/2}$ 运动由 $\\frac{\\mathrm{d}L}{\\mathrm{d}t}=11$ 求水平速度（平方隐求导！）",
+      "examWeight": "core",
+      "problem": "质点在第一象限沿曲线 $y=x^{\\frac{3}{2}}$ 远离原点，已知质点与原点的距离以 $11\\text{ cm/s}$ 的变化率增加，则当质点运动到 $x=3\\text{ cm}$ 时的水平速度为 ____。",
+      "steps": [
+        {
+          "stepTitle": "1. 写距离平方关系 $L^2=x^2+y^2=x^2+x^3$（去根号！）并对时间 $t$ 隐求导",
+          "detail": "由 $y=x^{\\frac{3}{2}}$ 得 $L^2=x^2+x^3$，两边同时对 $t$ 求导：$$2L\\frac{\\mathrm{d}L}{\\mathrm{d}t}=(2x+3x^2)\\frac{\\mathrm{d}x}{\\mathrm{d}t}$$"
+        },
+        {
+          "stepTitle": "2. 代入瞬时值 $x=3,\\;L=\\sqrt{3^2+3^3}=6,\\;\\frac{\\mathrm{d}L}{\\mathrm{d}t}=11$ 解出水平速度",
+          "detail": "$$\\left.\\frac{\\mathrm{d}x}{\\mathrm{d}t}\\right|_{x=3}=\\frac{2\\times 6\\times 11}{2\\times 3+3\\times 3^2}=\\frac{132}{33}=4\\text{ cm/s}$$"
+        }
+      ],
+      "finalAnswer": "$4\\text{ cm/s}$",
+      "takeaway": "比基础例 7.1 更清爽的一招：**保留 $L^2=x^2+x^3$ 直接对 $t$ 隐求导**，彻底消灭根号分母求导计算量！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.73",
+        "pdfPage": 86,
+        "itemRef": "强化例7.1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c07_physics_core",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c07-e-07",
+      "stage": "intensive",
+      "section": "强化18讲 · 第一部分、物理应用题（仅数一、数二 · 强化例7.1~7.2）",
+      "kind": "example",
+      "title": "【强化例 7.2 · 数一/数二】牛顿冷却定律列微分方程求「继续冷却至 $21^\\circ\\text{C}$ 还需时间」",
+      "examWeight": "core",
+      "problem": "已知高温物体置于低温介质中，任一时刻该物体温度对时间的变化率与该时刻物体和介质的温差成正比。现将一初始温度为 $120^\\circ\\text{C}$ 的物体在 $20^\\circ\\text{C}$ 恒温介质中冷却，$30\\text{ min}$ 后该物体温度降至 $30^\\circ\\text{C}$，若要将该物体的温度继续降至 $21^\\circ\\text{C}$，还需冷却多长时间？",
+      "steps": [
+        {
+          "stepTitle": "1. 设 $t$ 时刻温度为 $T(t)$，列牛顿冷却微分方程并求通解",
+          "detail": "由题意（温度下降取负号，$k>0$）：$$\\frac{\\mathrm{d}T}{\\mathrm{d}t}=-k(T-20) \\implies T(t)=C\\mathrm{e}^{-kt}+20$$"
+        },
+        {
+          "stepTitle": "2. 代 $T(0)=120$ 与 $T(30)=30$ 定出 $C=100,\\;k=\\frac{\\ln 10}{30}$，解 $T=21$ 再减 $30$！",
+          "detail": "代 $t=0,T=120$ 得 $C=100$，即 $T=100\\mathrm{e}^{-kt}+20$；再代 $t=30,T=30$ 得 $10=100\\mathrm{e}^{-30k}\\Rightarrow k=\\frac{\\ln 10}{30}$，故：$$T(t)=100\\mathrm{e}^{-\\frac{\\ln 10}{30}t}+20$$令 $T=21$ 得 $\\mathrm{e}^{-\\frac{\\ln 10}{30}t}=10^{-2}\\implies t=60\\text{ min}$。因已冷却 $30\\text{ min}$，故**还需冷却 $60-30=30\\text{ min}$**！"
+        }
+      ],
+      "finalAnswer": "$30\\text{ min}$",
+      "takeaway": "牢记双重核验：**温差从 $100\\to 10$（降为 $\\frac{1}{10}$）用 $30\\text{ min}$，从 $10\\to 1$（再降为 $\\frac{1}{10}$）必然再用 $30\\text{ min}$！**绝别忘减已用掉的 $30\\text{ min}$！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.73-74",
+        "pdfPage": 86,
+        "itemRef": "强化例7.2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c07_physics_core",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c07-e-08",
+      "stage": "intensive",
+      "section": "强化18讲 · 第二部分、经济应用题（仅数三 · 数一拓展 · 强化例7.3~7.5）",
+      "kind": "example",
+      "title": "【强化例 7.3 · 仅数三拓展】求平均成本 $\\bar{C}=\\frac{C}{x}$ 最小时的产量 $x$",
+      "examWeight": "extended",
+      "problem": "设生产 $x$ 件产品的成本为 $C=25\\,000+200x+\\frac{x^2}{40}$（元）。当平均成本最小时，应生产产品的件数为 ____。",
+      "steps": [
+        {
+          "stepTitle": "1. 写出平均成本 $\\bar{C}(x)=\\frac{C(x)}{x}$ 并求正驻点",
+          "detail": "$$\\bar{C}(x)=\\frac{25\\,000}{x}+200+\\frac{x}{40}\\;(x>0),\\qquad \\frac{\\mathrm{d}\\bar{C}}{\\mathrm{d}x}=-\\frac{25\\,000}{x^2}+\\frac{1}{40}=0 \\implies x=1\\,000\\;\\text{（负根舍去）}$$又 $\\bar{C}''(x)=\\frac{50\\,000}{x^3}>0$，故 $x=1\\,000$ 件时平均成本最小（亦可用均值不等式 $\\frac{25\\,000}{x}+\\frac{x}{40}\\ge 50$ 秒出 $x=1\\,000$！）。"
+        }
+      ],
+      "finalAnswer": "$1\\,000$",
+      "takeaway": "【仅数三拓展】平均成本最小必满足**边际成本等于平均成本（$C'(x)=\\bar{C}(x)$）**！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.76-77",
+        "pdfPage": 89,
+        "itemRef": "强化例7.3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c07_econ_extended",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c07-e-09",
+      "stage": "intensive",
+      "section": "强化18讲 · 第二部分、经济应用题（仅数三 · 数一拓展 · 强化例7.3~7.5）",
+      "kind": "example",
+      "title": "【强化例 7.4 · 仅数三拓展】分段价格函数下在不可导分段角点 $Q=20$ 取最大利润",
+      "examWeight": "extended",
+      "problem": "某产品的价格函数为 $P=\\begin{cases}25-0.25Q,&Q\\le 20,\\\\ 35-0.75Q,&Q>20\\end{cases}$（$P$ 为单价，万元；$Q$ 为产量，件），总成本函数为 $C=150+5Q+0.25Q^2$（万元），则经营该产品可获得的最大利润为 ____ 万元。",
+      "steps": [
+        {
+          "stepTitle": "1. 写出分段利润函数 $L(Q)=PQ-C$ 并配方",
+          "detail": "$$L(Q)=\\begin{cases}-0.5(Q-20)^2+50,&Q\\le 20,\\\\ -(Q-15)^2+75,&Q>20\\end{cases}$$核验分段点连续性：$L(20^-)=50=L(20^+)$。"
+        },
+        {
+          "stepTitle": "2. 分段判导数符号，锁定分段角点 $Q=20$ 取最大利润 $50$ 万元",
+          "detail": "$$L'(Q)=\\begin{cases}-(Q-20)\\ge 0,&Q<20,\\\\ -2(Q-15)<0,&Q>20\\end{cases}$$故 $L(Q)$ 在 $(-\\infty,20]$ 单增、在 $[20,+\\infty)$ 严格单减（注意右支顶点 $Q=15$ 不在 $Q>20$ 内！），最大利润在角点 $Q=20$ 取得，为 $50$ 万元。"
+        }
+      ],
+      "finalAnswer": "$50$",
+      "takeaway": "【仅数三拓展】分段函数最值绝不可只看抛物线顶点，必须把**分段点连续性与左右单调性**画出来，右支顶点 $Q=15$ 越界直接失效！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.77",
+        "pdfPage": 90,
+        "itemRef": "强化例7.4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c07_econ_extended",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c07-e-10",
+      "stage": "intensive",
+      "section": "强化18讲 · 第二部分、经济应用题（仅数三 · 数一拓展 · 强化例7.3~7.5）",
+      "kind": "example",
+      "title": "【强化例 7.5 · 仅数三拓展】用收益弹性 $\\eta_{RP}=\\frac{20-2P}{20-P}$ 量化计算涨价对销售收入的影响幅度",
+      "examWeight": "extended",
+      "problem": "设某商品的需求函数为 $Q=100-5P$（$Q$ 为需求量，$P$ 为价格），则下列结论：① 当 $P=3$ 时，若价格上涨幅度为 $8.5\\%$，则销售收入减少 $7\\%$；② 增加 $7\\%$；③ 当 $P=12$ 时，若价格上涨幅度为 $5\\%$，则销售收入增加 $2.5\\%$；④ 减少 $2.5\\%$。所有正确结论的序号是（ ）。\n(A) ①③　　(B) ①④　　(C) ②④　　(D) ②③",
+      "steps": [
+        {
+          "stepTitle": "1. 计算收益对价格弹性 $\\eta_{RP}=\\frac{\\mathrm{d}R}{\\mathrm{d}P}\\frac{P}{R}=\\frac{20-2P}{20-P}$",
+          "detail": "由 $R=PQ=100P-5P^2$ 得 $\\frac{\\mathrm{d}R}{\\mathrm{d}P}=100-10P$，故：$$\\eta_{RP}=\\frac{(100-10P)P}{P(100-5P)}=\\frac{20-2P}{20-P}$$"
+        },
+        {
+          "stepTitle": "2. 代入 $P=3$ 与 $P=12$ 乘以涨价幅度锁定 ②④",
+          "detail": "- $P=3$ 时，$\\eta_{RP}=\\frac{14}{17}>0$，涨价 $8.5\\%$ 使收入变化 $\\frac{14}{17}\\times 8.5\\%=+7\\%$（增加 $7\\%$，**② 正确**）；\n- $P=12$ 时，$\\eta_{RP}=\\frac{-4}{8}=-\\frac{1}{2}<0$，涨价 $5\\%$ 使收入变化 $-\\frac{1}{2}\\times 5\\%=-2.5\\%$（减少 $2.5\\%$，**④ 正确**）。应选 (C)。"
+        }
+      ],
+      "finalAnswer": "选 (C) ②④。",
+      "takeaway": "【仅数三拓展】求价格变化引起的收入相对变化幅度，直接算 **$\\eta_{RP}=\\frac{R'(P)P}{R(P)}$** 再乘涨跌幅一步到位！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.77",
+        "pdfPage": 90,
+        "itemRef": "强化例7.5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c07_econ_extended",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c07-s-01",
+      "stage": "both",
+      "section": "第 7 讲题型总结 · 一、数一物理应用核心路线与数一/数三考纲边界总表",
+      "kind": "summary",
+      "title": "【数一物理应用总纲】相关变化率、运动学消元与微元微分方程落刀总表（附数一/数三边界）",
+      "examWeight": "core",
+      "overview": "第 7 讲在两书中篇幅精炼且数一/数三泾渭分明：**数一考生集中 100% 精力吃透「相关变化率」与「运动学/牛顿冷却微分方程建模」即可（表 7-3 前三行）**，经济应用仅作教材拓展区分！",
+      "tables": [
+        {
+          "caption": "表 7-3 第 7 讲数一核心物理应用与数三拓展经济应用全景分类速查表（基础 P.186-193 & 强化 P.72-77）",
+          "headers": [
+            "模块类别",
+            "考纲归属",
+            "核心公式与落刀动作",
+            "代表例题"
+          ],
+          "rows": [
+            [
+              "曲线动点相关变化率",
+              "**★ 数一/数二必考**",
+              "优先写平方关系 $L^2=x^2+[f(x)]^2$ 对 $t$ 隐求导，先导后代瞬时值",
+              "例7.1, 强化例7.1"
+            ],
+            [
+              "运动学速度/加速度消元",
+              "**★ 数一/数二必考**",
+              "$v=\\frac{\\mathrm{d}x}{\\mathrm{d}t},\\;a=\\frac{\\mathrm{d}^2 x}{\\mathrm{d}t^2}$（去 $v$）或 $a=v\\frac{\\mathrm{d}v}{\\mathrm{d}x}$（去 $t$），衔接第 15 讲 ODE",
+              "基础 P.187, 强化 P.73"
+            ],
+            [
+              "正比变化率与牛顿冷却",
+              "**★ 数一/数二必考**",
+              "列 $\\frac{\\mathrm{d}T}{\\mathrm{d}t}=-k(T-T_0)$ 分离变量求解；温差等比速检，防「还需」审题坑",
+              "强化例7.2"
+            ],
+            [
+              "复利/边际/弹性经济应用",
+              "仅数三（数一拓展）",
+              "现值 $R\\mathrm{e}^{-rt}$；$R'(p)=Q(1-\\eta)$（正弹性）或 $Q(1+\\eta)$（带号弹性）；分段查角点",
+              "例7.2~7.5, 强化例7.3~7.5"
+            ]
+          ]
+        }
+      ],
+      "patterns": [
+        {
+          "typeName": "数一相关变化率与冷却/衰减题四步满分套路",
+          "triggers": "题干出现「变化率」「速率」「远离/靠近速度」「冷却/衰变速率与温差/余量成正比」。",
+          "method": "① **画草图定变量**：把所有随时间变化的量记成 $x(t),y(t),L(t),T(t)$；② **列方程**：几何题优先写去根号整式（如 $L^2=x^2+y^2$），正比题列 $\\frac{\\mathrm{d}A}{\\mathrm{d}t}=\\pm kB$（增取 $+$、减取 $-$）；③ **先求导/求解、后代瞬时值**：绝不提前代数字；④ **终检单位与措辞**：核对 $\\text{cm/s}$ 与「还需 vs 总共」！",
+          "pitfall": "两大白丢分陷阱：① 求导前误把 $x=3$ 代进去；② 强化例7.2 算出总时刻 $t=60$ 忘了减已过去的 $30\\text{ min}$！",
+          "relatedRefs": "例7.1, 强化例7.1, 强化例7.2"
+        }
+      ],
+      "takeaway": "数一考生复习第 7 讲只需 10 分钟抓牢三件事：**平方隐求导算变化率、$a=v\\frac{\\mathrm{d}v}{\\mathrm{d}x}$ 消时间衔接第 15 讲、牛顿冷却看清「还需」**！",
+      "source": {
+        "book": "27张宇《高数18讲》(强化)",
+        "printedPage": "P.72-74",
+        "pdfPage": 85,
+        "itemRef": "第一部分 求解物理应用题总括",
+        "crossRef": "27张宇《基础30讲·高等数学分册》 P.186-188"
+      },
+      "verification": {
+        "method": "textbook",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c07-s-02",
+      "stage": "both",
+      "section": "第 7 讲题型总结 · 二、本讲 SymPy 核验与符号约定/措辞细节台账",
+      "kind": "summary",
+      "title": "【避坑 & 核验台账】第 7 讲 SymPy 全量验算与 3 处符号约定/措辞细节台账",
+      "examWeight": "core",
+      "overview": "经 SymPy 1.14.0 对本讲全部 10 道例题（基础 5 例 + 强化 5 例，含物理与经济拓展）进行符号与数值验算，**计算结果 100% 通过**，并明确梳理出原书 **3 处符号约定差异与措辞细节**（详见表 7-4）。",
+      "tables": [
+        {
+          "caption": "表 7-4 第 7 讲《基础30讲》与《高数18讲》SymPy 核验与符号约定/细节台账（共 3 处）",
+          "headers": [
+            "编号",
+            "出处与位置",
+            "原书写法 / 现象",
+            "SymPy 核验与精确说明"
+          ],
+          "rows": [
+            [
+              "1",
+              "基础30讲 P.189 例7.2（数三拓展）",
+              "填空答案直接写 `11`",
+              "SymPy 精确最大值点为 $t_0=\\frac{1}{25\\times 0.06^2}=\\frac{100}{9}\\approx 11.11$ 年，原书取近似整年数 `11`。"
+            ],
+            [
+              "2",
+              "基础30讲 P.191 例7.3 分析 ①（数三拓展）",
+              "写「再对 $Q$ 求偏导数得到边际利润」",
+              "$L(Q)$ 仅为产量 $Q$ 的一元函数，此处应为「对 $Q$ 求导数」（措辞小笔误）。"
+            ],
+            [
+              "3",
+              "基础 P.191-192 vs 强化 P.76（数三拓展）",
+              "基础写 $R'=Q(1-\\eta)$，强化写 $R'=Q(1+\\eta)$",
+              "因基础取正弹性 $\\eta=-\\frac{p}{Q}Q'>0$，强化取带号弹性 $\\eta=\\frac{p}{Q}Q'<0$；二者等价于「$|\\eta|<1$ 涨价增收、$|\\eta|>1$ 涨价减收」，切勿混套！"
+            ]
+          ]
+        }
+      ],
+      "patterns": [
+        {
+          "typeName": "物理应用题快速量纲与特值自检法",
+          "triggers": "算完任何速度、相关变化率或冷却时间数值后，花 5 秒做量纲与趋势自检。",
+          "method": "① **量纲核对**：$\\frac{\\mathrm{d}L}{\\mathrm{d}t}$ 与 $\\frac{\\mathrm{d}x}{\\mathrm{d}t}$ 单位同为 $\\text{cm/s}$，系数 $\\frac{2x+3x^2}{2L}$ 须无量纲；② **大小合理性**：沿第一象限远离原点运动时水平分量 $|\\frac{\\mathrm{d}x}{\\mathrm{d}t}|$ 必小于径向增长率 $\\frac{\\mathrm{d}L}{\\mathrm{d}t}$（如强化例7.1 中 $4<11$）；③ **冷却温差等比核对**：$\\Delta T$ 连续减为 $\\frac{1}{10}$ 所花时间必相等！",
+          "pitfall": "量纲不合或算出的速度分量大于合速度，一眼就能揪出代数化简失误！",
+          "relatedRefs": "例7.1, 强化例7.1, 强化例7.2"
+        }
+      ],
+      "takeaway": "第 7 讲全部 10 例经 SymPy 符号验算 100% 准确；数一聚焦物理核心 3 例（例7.1、强化例7.1、强化例7.2），轻松满分过关！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.188-192",
+        "pdfPage": 193,
+        "itemRef": "第7讲 核验与细节台账",
+        "crossRef": "27张宇《高数18讲》(强化) P.72-77"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c07_physics_core",
+        "verified": true
+      }
+    }
+  ]
+}
