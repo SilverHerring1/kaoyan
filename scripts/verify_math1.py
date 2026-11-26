@@ -1380,6 +1380,107 @@ def run_all_checks() -> list[tuple[str, bool, str]]:
     )
     check("m1_c13_zy18_extrema_all", c13_ext_ok, "zy18 Ex13.25-13.32 (Hessian 36/-36, Peano -x^4/4, eig [1,6], disk 112/-16, ODE32 exact)")
 
+    # ==================== Calculus Lecture 14 (calc-14: 二重积分) ====================
+    r_s, th = sp.symbols("r_s th", real=True)
+    a_p, b_p = sp.symbols("a_p b_p", positive=True)
+
+    # 77. zy18 P.179 5 unit-disk formulas + Gaussian/Gamma (Ex 14.11 ~ 14.13)
+    ud_1 = sp.integrate(sp.integrate(r_s**3, (r_s, 0, 1)), (th, 0, 2 * sp.pi))
+    ud_2 = sp.integrate(sp.integrate(r_s**2, (r_s, 0, 1)), (th, 0, 2 * sp.pi))
+    ud_3 = sp.integrate(sp.integrate(sp.sqrt(1 - r_s**2) * r_s, (r_s, 0, 1)), (th, 0, 2 * sp.pi))
+    ud_4 = sp.integrate(sp.integrate((1 - r_s) * r_s, (r_s, 0, 1)), (th, 0, 2 * sp.pi))
+    ud_5 = sp.integrate(sp.integrate((r_s**2 * sp.cos(th)**2 / a_p**2 + r_s**2 * sp.sin(th)**2 / b_p**2) * r_s, (r_s, 0, 1)), (th, 0, 2 * sp.pi))
+    g14_11 = sp.integrate(sp.exp(-x**2), (x, 0, sp.oo))
+    g14_12 = sp.integrate(x**2 * sp.exp(-x**2), (x, -sp.oo, sp.oo))
+    g14_12_half = sp.integrate(x**2 * sp.exp(-x**2), (x, 0, sp.oo))
+    lim_14_13 = sp.limit((sp.integrate(t**2 * sp.exp(-t**2), (t, 0, xp)) - sp.sqrt(sp.pi) / 4) / (xp * sp.exp(-xp**2)), xp, sp.oo)
+    c14_ud_ok = (
+        ud_1 == sp.pi / 2 and ud_2 == 2 * sp.pi / 3 and ud_3 == 2 * sp.pi / 3 and ud_4 == sp.pi / 3
+        and sp.simplify(ud_5 - sp.pi / 4 * (1 / a_p**2 + 1 / b_p**2)) == 0
+        and g14_11 == sp.sqrt(sp.pi) / 2 and g14_12 == sp.sqrt(sp.pi) / 2
+        and g14_12_half == sp.sqrt(sp.pi) / 4 and lim_14_13 == -sp.Rational(1, 2)
+    )
+    check("m1_c14_unit_disk_and_sym", c14_ud_ok, "zy18 P.179 5 unit-disk formulas + Ex14.11-14.13 Gaussian/limit exact")
+
+    # 78. zy30 Ex 14.1 ~ 14.10
+    # Ex 14.1: compare I_1..I_4 directly (D1: r<=1, D2: r<=sqrt(2), D3: x^2/2+y^2<=1, D4: x^2+y^2/2<=1)
+    I14_1 = sp.integrate(sp.integrate((1 - r_s**2 * sp.cos(th)**2 - r_s**2 * sp.sin(th)**2 / 2) * r_s, (r_s, 0, 1)), (th, 0, 2 * sp.pi))
+    I14_2 = sp.integrate(sp.integrate((1 - r_s**2 * sp.cos(th)**2 - r_s**2 * sp.sin(th)**2 / 2) * r_s, (r_s, 0, sp.sqrt(2))), (th, 0, 2 * sp.pi))
+    # D3: x=sqrt(2)*r*cos, y=r*sin, |J|=sqrt(2)*r
+    I14_3 = sp.integrate(sp.integrate((1 - 2 * r_s**2 * sp.cos(th)**2 - r_s**2 * sp.sin(th)**2 / 2) * sp.sqrt(2) * r_s, (r_s, 0, 1)), (th, 0, 2 * sp.pi))
+    # D4: x=r*cos, y=sqrt(2)*r*sin, |J|=sqrt(2)*r
+    I14_4 = sp.integrate(sp.integrate((1 - r_s**2) * sp.sqrt(2) * r_s, (r_s, 0, 1)), (th, 0, 2 * sp.pi))
+    # Ex 14.3: J2 > 0 (on 0<=y<=sqrt(x) using real cube root), J3 = -J2 < 0
+    rcbrt = lambda val: (val if val >= 0 else -((-val) ** (mp.mpf(1) / 3))) if val < 0 else val ** (mp.mpf(1) / 3)
+    J14_2 = float(mp.quad(lambda xv: mp.quad(lambda yv: rcbrt(xv - yv), [0, xv, mp.sqrt(xv)]), [0, 1]))
+    # Ex 14.6: f(x) = int_0^x t*(cos(t)-1) dt ~ -1/8 x^4 -> a*b = -1/2
+    f14_6 = sp.integrate(t * (sp.cos(t) - 1), (t, 0, x))
+    lim14_6 = sp.limit(f14_6 / (-sp.Rational(1, 8) * x**4), x, 0)
+    # Ex 14.7: int_0^1 x*arcsin(sqrt(4x-4x^2)) dx = 1/2
+    v14_7 = float(mp.quad(lambda xv: xv * mp.asin(mp.sqrt(max(0.0, 4 * xv - 4 * xv**2))), [0, 0.5, 1]))
+    # Ex 14.8: D: x^2+y^2<=sqrt(2) -> 3*pi/4
+    v14_8 = sp.integrate(sp.integrate((r_s**2 * sp.cos(th)**2 + r_s**2 * sp.sin(th)**2 / 2) * r_s, (r_s, 0, sp.Integer(2)**sp.Rational(1, 4))), (th, 0, 2 * sp.pi))
+    # Ex 14.9 / Intensive Ex 14.7: (ln 2 / 2) * int_0^(pi/3) dth/(3cos^2+sin^2) = sqrt(3)*ln(2)*pi/24
+    v14_9 = sp.log(2) / 2 * sp.integrate(1 / (3 * sp.cos(th)**2 + sp.sin(th)**2), (th, 0, sp.pi / 3))
+    c14_a_ok = (
+        I14_4 == sp.sqrt(2) * sp.pi / 2 and float(I14_4) > max(float(I14_1), float(I14_2), float(I14_3))
+        and sp.simplify(sp.sqrt(6) * sp.pi * (-sp.Rational(1, 3)) - (-sp.sqrt(6) * sp.pi / 3)) == 0
+        and J14_2 > 0.05
+        and lim14_6 == 1
+        and abs(v14_7 - 0.5) < 1e-9
+        and sp.simplify(v14_8 - 3 * sp.pi / 4) == 0
+        and sp.simplify(v14_9 - sp.sqrt(3) * sp.log(2) * sp.pi / 24) == 0
+    )
+    check("m1_c14_zy30_01_10", c14_a_ok, f"zy30 Ex14.1(I4={float(I14_4):.4f} max), 14.2, 14.3(J2={J14_2:.4f}), 14.6-14.10 exact")
+
+    # 79. zy30 Ex 14.14 ~ 14.17 (polar/Jacobian, Pappus 2nd Theorem + one-sided check #50, centroid, P.370(5) critical a)
+    v14_14 = sp.integrate(sp.integrate((r_s * (sp.cos(th) + sp.sin(th))) / r_s**2 * r_s, (r_s, 1 / (sp.cos(th) + sp.sin(th)), 1)), (th, 0, sp.pi / 2))
+    v14_15_uv = sp.integrate(sp.integrate(sp.exp(v_s / u_s), (v_s, 0, u_s)), (u_s, 0, 1))
+    d_trig_15 = sp.simplify(sp.diff(sp.sin(th) / (sp.cos(th) + sp.sin(th)), th) - 1 / (sp.cos(th) + sp.sin(th))**2)
+    # Ex 14.16: y=sin x [0,2pi] around x+y=0 -> direct 2D integral = 2*pi/sqrt(2) * (int_0^pi int_0^sin(x) (x+y) dy dx + int_pi^(2pi) int_sin(x)^0 (x+y) dy dx)
+    V14_16_direct = sp.simplify(2 * sp.pi / sp.sqrt(2) * (
+        sp.integrate(sp.integrate(x + y, (y, 0, sp.sin(x))), (x, 0, sp.pi))
+        + sp.integrate(sp.integrate(x + y, (y, sp.sin(x), 0)), (x, sp.pi, 2 * sp.pi))
+    ))
+    # Ex 14.17: crescent D = big semicircle R=2 center (2,0) minus small R=1 center (1,0)
+    S14_17 = sp.pi * (4 - 1) / 2
+    xbar_14_17 = (sp.pi * 4 / 2 * 2 - sp.pi * 1 / 2 * 1) / S14_17
+    ybar_14_17 = (sp.Rational(4, 3) * sp.pi * (8 - 1)) / (2 * sp.pi * S14_17)
+    # P.370 (5) critical parameters: 2/3*(2y-y^2) + 2/9*y^2 = a^2 => 4/9*y^2 - 4/3*y + a^2 = 0 => disc=0 at a=1; top vertex y=3/sqrt(2)*a=2 => a=2*sqrt(2)/3
+    disc_p370 = sp.discriminant(sp.Rational(4, 9) * y**2 - sp.Rational(4, 3) * y + a_p**2, y)
+    a_tan_p370 = sp.solve(disc_p370, a_p)
+    c14_b_ok = (
+        sp.simplify(v14_14 - (2 - sp.pi / 2)) == 0
+        and sp.simplify(v14_15_uv - (sp.E - 1) / 2) == 0 and d_trig_15 == 0
+        and sp.simplify(V14_16_direct - 4 * sp.sqrt(2) * sp.pi**2) == 0
+        and xbar_14_17 == sp.Rational(7, 3) and ybar_14_17 == 28 / (9 * sp.pi)
+        and a_tan_p370 == [1]
+    )
+    check("m1_c14_zy30_14_17_pappus", c14_b_ok, "zy30 Ex14.14(2-pi/2), 14.15((e-1)/2), 14.16(4sqrt2 pi^2 direct), 14.17(7/3, 28/(9pi)) exact")
+
+    # 80. zy18 ALL 8 intensive examples (强化例 14.1 ~ 14.8)
+    i14_1 = sp.integrate(x / (1 + x), (x, 0, 1)) * sp.integrate(1 / (1 + y**2), (y, 0, 1))
+    i14_2 = sp.integrate(sp.integrate(sp.cos(x) / x, (y, 0, x)), (x, 0, sp.pi / 6))
+    i14_3 = sp.integrate(sp.integrate(y / sp.sqrt(1 + x**3), (y, 0, x)), (x, 0, 2))
+    # Intensive Ex 14.5: a = (e-1)*pi/(pi+1)
+    a14_5 = sp.Symbol("a14_5")
+    rhs14_5 = sp.integrate(sp.integrate((sp.exp(r_s**2) - a14_5) * r_s, (r_s, 0, 1)), (th, 0, 2 * sp.pi))
+    sol14_5 = sp.solve(sp.Eq(a14_5, rhs14_5), a14_5)[0]
+    # Intensive Ex 14.6: int_0^1 int_0^x sqrt(1-(x-y)^2) dy dx = pi/4 - 1/3
+    i14_6 = sp.integrate((1 - u_s) * sp.sqrt(1 - u_s**2), (u_s, 0, 1))
+    # Intensive Ex 14.8: both polar & translated methods = -8/3
+    i14_8_m1 = sp.integrate(sp.integrate(r_s**2 * (sp.cos(th) - sp.sin(th)), (r_s, 0, 2 * (sp.sin(th) + sp.cos(th)))), (th, sp.pi / 4, 3 * sp.pi / 4))
+    i14_8_m2 = sp.integrate(sp.integrate(r_s**2 * (sp.cos(th) - sp.sin(th)), (r_s, 0, sp.sqrt(2))), (th, sp.pi / 4, 5 * sp.pi / 4))
+    c14_i_ok = (
+        sp.simplify(i14_1 - (1 - sp.log(2)) * sp.pi / 4) == 0
+        and i14_2 == sp.Rational(1, 2)
+        and i14_3 == sp.Rational(2, 3)
+        and sp.simplify(sol14_5 - (sp.E - 1) * sp.pi / (sp.pi + 1)) == 0
+        and sp.simplify(i14_6 - (sp.pi / 4 - sp.Rational(1, 3))) == 0
+        and i14_8_m1 == -sp.Rational(8, 3) and i14_8_m2 == -sp.Rational(8, 3)
+    )
+    check("m1_c14_zy18_all", c14_i_ok, "zy18 Ex14.1-14.8 ((1-ln2)pi/4, 1/2, 2/3, (e-1)pi/(pi+1), pi/4-1/3, -8/3 dual-method) exact")
+
     return results
 
 

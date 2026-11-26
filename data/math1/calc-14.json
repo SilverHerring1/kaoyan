@@ -1,0 +1,1518 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "calc-14",
+  "chapterNum": "高数 · 第 14 讲",
+  "chapterTitle": "二重积分",
+  "syllabusRef": "2027 考研数学一大纲 · 高等数学第 14 讲（27 张宇《基础30讲·高数》P.338-371上 17 例 + 85 平面区域大观精华 + 《高数18讲》强化 P.175-183 8 例全量合编；含 12 类不可积核、单位圆五大秒杀结论、古鲁金第二定理与高斯积分）",
+  "items": [
+    {
+      "id": "m1-c14-f-01",
+      "stage": "both",
+      "section": "一、二重积分的概念、和式极限与七大基本性质",
+      "kind": "formula",
+      "title": "二重积分黎曼定义、和式极限转化、估值定理与二重积分中值定理",
+      "examWeight": "core",
+      "prompt": "默写二重积分定义、矩形域均匀分割的二重和式极限公式，以及可加性、保号性、估值定理与二重积分中值定理：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{黎曼定义：}\\iint_D f(x,y)\\,\\mathrm{d}\\sigma=\\lim_{\\lambda\\to 0}\\sum_{i=1}^n f(\\xi_i,\\eta_i)\\Delta\\sigma_i\\qquad(\\lambda=\\max\\{\\text{各小域直径}\\})\\\\\n&\\text{矩形域和式极限（强化 P.175）：}\\lim_{n\\to\\infty}\\sum_{i=1}^n\\sum_{j=1}^n f\\!\\left(a+\\frac{b-a}{n}i,\\;c+\\frac{d-c}{n}j\\right)\\frac{b-a}{n}\\cdot\\frac{d-c}{n}=\\iint_{[a,b]\\times[c,d]}f(x,y)\\,\\mathrm{d}\\sigma\\\\\n&\\text{面积与保号：}\\iint_D 1\\,\\mathrm{d}\\sigma=A;\\qquad f\\le g\\implies\\iint_D f\\,\\mathrm{d}\\sigma\\le\\iint_D g\\,\\mathrm{d}\\sigma,\\quad \\left|\\iint_D f\\,\\mathrm{d}\\sigma\\right|\\le\\iint_D |f|\\,\\mathrm{d}\\sigma\\\\\n&\\text{估值与中值定理：}mA\\le\\iint_D f(x,y)\\,\\mathrm{d}\\sigma\\le MA;\\qquad f\\in C(D)\\implies\\exists(\\xi,\\eta)\\in D,\\;\\iint_D f(x,y)\\,\\mathrm{d}\\sigma=f(\\xi,\\eta)\\cdot A\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "几何意义（代数体积）",
+          "desc": "当 $f(x,y)\\ge 0$ 时，$\\iint_D f(x,y)\\,\\mathrm{d}\\sigma$ 为以 $D$ 为底、$z=f(x,y)$ 为顶的曲顶柱体体积；一般情形等于 $xOy$ 面上方体积减去下方体积之差。"
+        },
+        {
+          "sym": "【严谨补注 #49】可加性交界条件",
+          "desc": "基础 P.340 性质 4 写 $D_1\\cup D_2=D,\\;D_1\\cap D_2=\\varnothing$；严谨而言，两闭子域共享一段边界曲线时交集非空，实为**内部互不相交（$D_1^\\circ\\cap D_2^\\circ=\\varnothing$，即公共边界零面积）**，不影响二重积分可加性。"
+        }
+      ],
+      "conditions": "可积必有界，闭区域 $D$ 上连续函数必可积；二重积分中值定理要求 $D$ 为**有界闭区域**且 $f\\in C(D)$（动态收缩区域 $D(t)\\to(0,0)$ 求导时是核心武器，见例14.2 及 P.343 注）。",
+      "pitfalls": "和式极限转化为二重积分时，切记提取的步长因子是 **$\\frac{1}{n^2}$**（二维面积微元 $\\frac{1}{n}\\cdot\\frac{1}{n}$），若只提了 $\\frac{1}{n}$ 就会多出或少掉一个 $n$（见强化例14.1）！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.339-343",
+        "pdfPage": 344,
+        "itemRef": "一·1 概念 & 一·2 性质 (1)~(7)",
+        "crossRef": "27张宇《高数18讲》(强化) P.175-177 一、和式极限 & 三、积分保号性"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy18_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-f-02",
+      "stage": "both",
+      "section": "一、二重积分的概念、和式极限与七大基本性质",
+      "kind": "formula",
+      "title": "普通对称性四大类型（含平移轴 $x=a,y=a$ 推广）与轮换对称性公式",
+      "examWeight": "core",
+      "prompt": "默写关于 $y$ 轴（及平移轴 $x=a$）、$x$ 轴（及平移轴 $y=a$）、原点、直线 $y=x$ 的普通对称性，以及直角坐标系下的轮换对称性公式：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{关于 }x=a\\text{ 对称（}a=0\\text{ 即 }y\\text{ 轴）：}\\iint_D f(x,y)\\,\\mathrm{d}\\sigma=\\begin{cases}2\\iint_{D_1}f(x,y)\\,\\mathrm{d}\\sigma,&f(x,y)=f(2a-x,y),\\\\0,&f(x,y)=-f(2a-x,y)\\end{cases}\\\\\n&\\text{关于 }y=a\\text{ 对称（}a=0\\text{ 即 }x\\text{ 轴）：}\\iint_D f(x,y)\\,\\mathrm{d}\\sigma=\\begin{cases}2\\iint_{D_1}f(x,y)\\,\\mathrm{d}\\sigma,&f(x,y)=f(x,2a-y),\\\\0,&f(x,y)=-f(x,2a-y)\\end{cases}\\\\\n&\\text{关于原点 / }y=x\\text{ 对称：同理代入 }(-x,-y)\\text{ 或 }(y,x)\\text{，同则 }2\\text{ 倍、反则为 }0\\\\\n&\\text{轮换对称性（}D\\text{ 关于 }y=x\\text{ 对称）：}\\iint_D f(x,y)\\,\\mathrm{d}\\sigma=\\iint_D f(y,x)\\,\\mathrm{d}\\sigma=\\frac{1}{2}\\iint_D\\bigl[f(x,y)+f(y,x)\\bigr]\\,\\mathrm{d}\\sigma\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "平移对称轴秒杀技巧（基础 P.344 & 强化 P.177-178 注）",
+          "desc": "若偏心圆 $(x-a)^2+y^2\\le R^2$ 关于 $x=a$ 对称，则被积函数中的一次项 $(x-a)$ 满足 $f(2a-x,y)=-(x-a)$，故 $\\iint_D(x-a)\\,\\mathrm{d}\\sigma=0 \\implies \\iint_D x\\,\\mathrm{d}\\sigma=a\\cdot S_D$，一步免积！"
+        },
+        {
+          "sym": "轮换对称定值/不等式推论（基础 P.347 注(1)）",
+          "desc": "若 $D$ 关于 $y=x$ 对称且 $f(x,y)+f(y,x)=a$（或 $>a,\\;<a$），则立即得 $I=\\frac{a}{2}S_D$（或 $>\\frac{a}{2}S_D,\\;<\\frac{a}{2}S_D$），如基础 P.346 $\\iint_{x^2+y^2\\le 1,x>0,y>0}\\frac{a\\sqrt{f(x)}+b\\sqrt{f(y)}}{\\sqrt{f(x)}+\\sqrt{f(y)}}\\,\\mathrm{d}\\sigma=\\frac{a+b}{2}\\cdot\\frac{\\pi}{4}$！"
+        }
+      ],
+      "conditions": "**轮换对称性本质是直角坐标系中哑变量 $x,y$ 对调**，前提是 $x,y$ 互换后区域 $D$ 不变（即 $D$ 关于 $y=x$ 对称）；应用普通对称性必须**同时核对区域对称与被积函数奇偶**！",
+      "pitfalls": "极坐标下切勿直接把 $r$ 和 $\\theta$ 当 $x,y$ 互换！且当 $D$ 仅关于 $x$ 轴对称却不关于 $y$ 轴对称时，只能对 $y$ 的奇函数消零，绝不能误消 $x$ 的奇函数。",
+      "figureSvg": "<svg viewBox=\"0 0 640 232\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">\n  <title>二重积分对称性化简（含平移轴与补线构对称）与极坐标三大极点位置图（仿基础图14-4, 14-5, 14-8与强化P.181）</title>\n  <defs>\n    <marker id=\"m1c14_arr1\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#334155\"/>\n    </marker>\n    <marker id=\"m1c14_arr1_blue\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#2563eb\"/>\n    </marker>\n  </defs>\n\n  <!-- Left panel: Symmetry & Auxiliary curve (Ex 14.3 + shifted axis) -->\n  <rect x=\"6\" y=\"6\" width=\"296\" height=\"220\" rx=\"8\" fill=\"#eff6ff\" stroke=\"#3b82f6\" stroke-width=\"1.2\"/>\n  <text x=\"154\" y=\"24\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1e3a8a\">① 普通对称、平移轴与补线构对称（例14.3）</text>\n\n  <!-- Sub-box 1: Shifted axis x=a -->\n  <rect x=\"16\" y=\"34\" width=\"134\" height=\"126\" rx=\"6\" fill=\"#ffffff\" stroke=\"#93c5fd\" stroke-width=\"1\"/>\n  <line x1=\"26\" y1=\"128\" x2=\"140\" y2=\"128\" stroke=\"#334155\" stroke-width=\"1\" marker-end=\"url(#m1c14_arr1)\"/>\n  <line x1=\"42\" y1=\"142\" x2=\"42\" y2=\"46\" stroke=\"#334155\" stroke-width=\"1\" marker-end=\"url(#m1c14_arr1)\"/>\n  <!-- Axis x=a -->\n  <line x1=\"90\" y1=\"140\" x2=\"90\" y2=\"48\" stroke=\"#dc2626\" stroke-width=\"1.5\" stroke-dasharray=\"4,2\"/>\n  <text x=\"90\" y=\"152\" text-anchor=\"middle\" font-size=\"8.4\" font-weight=\"700\" fill=\"#dc2626\">x = a</text>\n  <!-- Symmetric ellipse around x=a -->\n  <ellipse cx=\"90\" cy=\"92\" rx=\"34\" ry=\"24\" fill=\"#dbeafe\" opacity=\"0.7\" stroke=\"#2563eb\" stroke-width=\"1.5\"/>\n  <circle cx=\"70\" cy=\"86\" r=\"2.6\" fill=\"#dc2626\"/>\n  <circle cx=\"110\" cy=\"86\" r=\"2.6\" fill=\"#dc2626\"/>\n  <line x1=\"70\" y1=\"86\" x2=\"110\" y2=\"86\" stroke=\"#dc2626\" stroke-width=\"1\" stroke-dasharray=\"2,2\"/>\n  <text x=\"64\" y=\"79\" text-anchor=\"middle\" font-size=\"7.6\" fill=\"#991b1b\">(2a−x, y)</text>\n  <text x=\"118\" y=\"79\" text-anchor=\"middle\" font-size=\"7.6\" fill=\"#991b1b\">(x, y)</text>\n  <text x=\"83\" y=\"57\" text-anchor=\"middle\" font-size=\"8.2\" font-weight=\"700\" fill=\"#1e40af\">平移轴对称</text>\n\n  <!-- Sub-box 2: Auxiliary curve y=x^2 inside 0<=y<=sqrt(x) -->\n  <rect x=\"158\" y=\"34\" width=\"134\" height=\"126\" rx=\"6\" fill=\"#ffffff\" stroke=\"#93c5fd\" stroke-width=\"1\"/>\n  <line x1=\"170\" y1=\"138\" x2=\"280\" y2=\"138\" stroke=\"#334155\" stroke-width=\"1\" marker-end=\"url(#m1c14_arr1)\"/>\n  <line x1=\"184\" y1=\"148\" x2=\"184\" y2=\"46\" stroke=\"#334155\" stroke-width=\"1\" marker-end=\"url(#m1c14_arr1)\"/>\n  <!-- Region between y=sqrt(x) and y=x^2 (symmetric about y=x, integral = 0) -->\n  <path d=\"M 184 138 Q 196 76 264 62 Q 248 124 184 138 Z\" fill=\"#cbd5e1\" opacity=\"0.65\" stroke=\"#475569\" stroke-width=\"1.2\"/>\n  <!-- Remaining positive region D22: 0<=y<=x^2 -->\n  <path d=\"M 184 138 Q 248 124 264 62 L 264 138 Z\" fill=\"#bbf7d0\" opacity=\"0.85\" stroke=\"#16a34a\" stroke-width=\"1.3\"/>\n  <!-- Diagonal y=x -->\n  <line x1=\"184\" y1=\"138\" x2=\"270\" y2=\"56\" stroke=\"#dc2626\" stroke-width=\"1.2\" stroke-dasharray=\"3,2\"/>\n  <text x=\"218\" y=\"98\" text-anchor=\"middle\" font-size=\"8.2\" font-weight=\"700\" fill=\"#334155\">D₂₁→0</text>\n  <text x=\"242\" y=\"128\" text-anchor=\"middle\" font-size=\"8.2\" font-weight=\"700\" fill=\"#15803d\">D₂₂&gt;0</text>\n  <text x=\"225\" y=\"54\" text-anchor=\"middle\" font-size=\"8.2\" font-weight=\"700\" fill=\"#1e40af\">补 y=x² 构对称</text>\n\n  <!-- Bottom note -->\n  <rect x=\"16\" y=\"168\" width=\"276\" height=\"48\" rx=\"6\" fill=\"#ffffff\" stroke=\"#bfdbfe\" stroke-width=\"1\"/>\n  <text x=\"154\" y=\"185\" text-anchor=\"middle\" font-size=\"8.6\" font-weight=\"700\" fill=\"#1e3a8a\">普通对称（同偶2倍、奇为0）：看 f(对称点) = ±f(x,y)</text>\n  <text x=\"154\" y=\"203\" text-anchor=\"middle\" font-size=\"8.6\" font-weight=\"700\" fill=\"#059669\">轮换对称（D关于y=x对称）：I = ½∬[f(x,y)+f(y,x)]dσ</text>\n\n  <!-- Right panel: 3 Polar Coordinate Cases -->\n  <rect x=\"312\" y=\"6\" width=\"322\" height=\"220\" rx=\"8\" fill=\"#f0fdf4\" stroke=\"#22c55e\" stroke-width=\"1.2\"/>\n  <text x=\"473\" y=\"24\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#166534\">② 极坐标三种位置情形（dσ = r dr dθ）</text>\n\n  <!-- Case (a): Pole outside D -->\n  <rect x=\"322\" y=\"34\" width=\"96\" height=\"126\" rx=\"6\" fill=\"#ffffff\" stroke=\"#86efac\" stroke-width=\"1\"/>\n  <line x1=\"330\" y1=\"126\" x2=\"410\" y2=\"126\" stroke=\"#334155\" stroke-width=\"1\" marker-end=\"url(#m1c14_arr1)\"/>\n  <circle cx=\"336\" cy=\"126\" r=\"2.6\" fill=\"#dc2626\"/>\n  <text x=\"334\" y=\"138\" font-size=\"8.2\" font-weight=\"700\" fill=\"#dc2626\">O</text>\n  <line x1=\"336\" y1=\"126\" x2=\"404\" y2=\"100\" stroke=\"#64748b\" stroke-width=\"1\" stroke-dasharray=\"3,2\"/>\n  <line x1=\"336\" y1=\"126\" x2=\"386\" y2=\"56\" stroke=\"#64748b\" stroke-width=\"1\" stroke-dasharray=\"3,2\"/>\n  <ellipse cx=\"382\" cy=\"92\" rx=\"18\" ry=\"15\" transform=\"rotate(-35 382 92)\" fill=\"#bbf7d0\" stroke=\"#16a34a\" stroke-width=\"1.5\"/>\n  <line x1=\"336\" y1=\"126\" x2=\"402\" y2=\"76\" stroke=\"#2563eb\" stroke-width=\"1.3\" marker-end=\"url(#m1c14_arr1_blue)\"/>\n  <text x=\"370\" y=\"50\" text-anchor=\"middle\" font-size=\"8.4\" font-weight=\"700\" fill=\"#166534\">(a) O 在 D 外</text>\n  <text x=\"370\" y=\"151\" text-anchor=\"middle\" font-size=\"8.2\" font-weight=\"700\" fill=\"#1d4ed8\">r₁(θ) ≤ r ≤ r₂(θ)</text>\n\n  <!-- Case (b): Pole on boundary -->\n  <rect x=\"425\" y=\"34\" width=\"96\" height=\"126\" rx=\"6\" fill=\"#ffffff\" stroke=\"#86efac\" stroke-width=\"1\"/>\n  <line x1=\"433\" y1=\"126\" x2=\"513\" y2=\"126\" stroke=\"#334155\" stroke-width=\"1\" marker-end=\"url(#m1c14_arr1)\"/>\n  <ellipse cx=\"475\" cy=\"98\" rx=\"22\" ry=\"26\" transform=\"rotate(24 475 98)\" fill=\"#bbf7d0\" stroke=\"#16a34a\" stroke-width=\"1.5\"/>\n  <circle cx=\"456\" cy=\"126\" r=\"2.8\" fill=\"#dc2626\"/>\n  <text x=\"454\" y=\"138\" font-size=\"8.2\" font-weight=\"700\" fill=\"#dc2626\">O</text>\n  <line x1=\"456\" y1=\"126\" x2=\"498\" y2=\"74\" stroke=\"#2563eb\" stroke-width=\"1.3\" marker-end=\"url(#m1c14_arr1_blue)\"/>\n  <text x=\"473\" y=\"50\" text-anchor=\"middle\" font-size=\"8.4\" font-weight=\"700\" fill=\"#166534\">(b) O 在边界上</text>\n  <text x=\"473\" y=\"151\" text-anchor=\"middle\" font-size=\"8.2\" font-weight=\"700\" fill=\"#1d4ed8\">0 ≤ r ≤ r(θ)</text>\n\n  <!-- Case (c): Pole inside D -->\n  <rect x=\"528\" y=\"34\" width=\"96\" height=\"126\" rx=\"6\" fill=\"#ffffff\" stroke=\"#86efac\" stroke-width=\"1\"/>\n  <circle cx=\"576\" cy=\"96\" r=\"28\" fill=\"#bbf7d0\" stroke=\"#16a34a\" stroke-width=\"1.5\"/>\n  <line x1=\"540\" y1=\"96\" x2=\"616\" y2=\"96\" stroke=\"#334155\" stroke-width=\"1\" marker-end=\"url(#m1c14_arr1)\"/>\n  <circle cx=\"576\" cy=\"96\" r=\"2.8\" fill=\"#dc2626\"/>\n  <text x=\"571\" y=\"109\" font-size=\"8.2\" font-weight=\"700\" fill=\"#dc2626\">O</text>\n  <line x1=\"576\" y1=\"96\" x2=\"600\" y2=\"74\" stroke=\"#2563eb\" stroke-width=\"1.3\" marker-end=\"url(#m1c14_arr1_blue)\"/>\n  <text x=\"576\" y=\"50\" text-anchor=\"middle\" font-size=\"8.4\" font-weight=\"700\" fill=\"#166534\">(c) O 在 D 内</text>\n  <text x=\"576\" y=\"151\" text-anchor=\"middle\" font-size=\"8.2\" font-weight=\"700\" fill=\"#1d4ed8\">θ∈[0,2π], 0≤r≤r(θ)</text>\n\n  <!-- Bottom polar rule -->\n  <rect x=\"322\" y=\"168\" width=\"302\" height=\"48\" rx=\"6\" fill=\"#ffffff\" stroke=\"#86efac\" stroke-width=\"1\"/>\n  <text x=\"473\" y=\"185\" text-anchor=\"middle\" font-size=\"8.6\" font-weight=\"700\" fill=\"#166534\">口诀：从 Ox 逆时针扫出 [α, β]，原点射出先穿 r₁ 后穿 r₂</text>\n  <text x=\"473\" y=\"203\" text-anchor=\"middle\" font-size=\"8.4\" font-weight=\"700\" fill=\"#dc2626\">极坐标切忌漏乘雅可比因子 r！（dσ = r dr dθ）</text>\n</svg>",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.343-347",
+        "pdfPage": 348,
+        "itemRef": "一·3 普通对称性与轮换对称性",
+        "crossRef": "27张宇《高数18讲》(强化) P.177-179 四、对称性的使用"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy30_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-f-03",
+      "stage": "both",
+      "section": "二、二重积分的计算法（直角坐标、极坐标与换元法）",
+      "kind": "formula",
+      "title": "直角坐标系 X 型/Y 型累次积分、交换积分次序口诀与 12 类不可求初等原函数核",
+      "examWeight": "core",
+      "prompt": "默写 X 型与 Y 型区域化二重积分为累次积分的公式、交换上下限添负号规则，以及见到必须交换积分次序的 12 类非初等原函数核：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{X 型（先 }y\\text{ 后 }x\\text{）：}\\iint_D f(x,y)\\,\\mathrm{d}\\sigma=\\int_a^b\\mathrm{d}x\\int_{\\varphi_1(x)}^{\\varphi_2(x)}f(x,y)\\,\\mathrm{d}y\\qquad(a\\le b,\\;\\varphi_1(x)\\le\\varphi_2(x))\\\\\n&\\text{Y 型（先 }x\\text{ 后 }y\\text{）：}\\iint_D f(x,y)\\,\\mathrm{d}\\sigma=\\int_c^d\\mathrm{d}y\\int_{\\psi_1(y)}^{\\psi_2(y)}f(x,y)\\,\\mathrm{d}x\\qquad(c\\le d,\\;\\psi_1(y)\\le\\psi_2(y))\\\\\n&\\text{下限大于上限先添负号（例 14.6）：}\\int_a^b\\mathrm{d}x\\int_{\\varphi_1(x)}^{\\varphi_2(x)}f\\,\\mathrm{d}y=-\\int_a^b\\mathrm{d}x\\int_{\\varphi_2(x)}^{\\varphi_1(x)}f\\,\\mathrm{d}y\\qquad(\\text{当 }\\varphi_1(x)>\\varphi_2(x))\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "定限十六字口诀（基础 P.348）",
+          "desc": "「**后积先定限，限内画条线，先交写下限，后交写上限**」：选后积 $x$ 则画竖线（平行 $y$ 轴）从下往上穿；选后积 $y$ 则画横线（平行 $x$ 轴）从左往右穿。"
+        },
+        {
+          "sym": "反向反三角函数防坑（例 14.5）",
+          "desc": "当 $x\\in[\\frac{\\pi}{2},\\pi]$ 时，由 $y=\\sin x$ 反解 $x$ **不是** $\\arcsin y$，而是 **$x=\\pi-\\arcsin y$**（因 $\\arcsin y\\in[-\\frac{\\pi}{2},\\frac{\\pi}{2}]$）！"
+        }
+      ],
+      "conditions": "转化为二重积分前**必须保证内、外两层的下限均小于等于上限**；若题干给出下限大于上限的累次积分（如例14.6 中 $x>\\sqrt{y}$），必须先对调上下限并**在积分前添负号**，才能对应到 $\\mathrm{d}\\sigma>0$ 的二重积分！",
+      "pitfalls": "高频丢分点：① 见到下表 12 类不可积核仍硬算内层积分；② 忘记先检查下限是否小于上限（如例14.6 直接交换次序漏掉负号导致符号全反！）。",
+      "figureSvg": "<svg viewBox=\"0 0 640 232\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">\n  <title>直角坐标系 X 型与 Y 型交换积分次序（例14.5）及偏心圆平移换元降维图（强化例14.8）</title>\n  <defs>\n    <marker id=\"m1c14_arr2\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#334155\"/>\n    </marker>\n    <marker id=\"m1c14_arr2_red\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#dc2626\"/>\n    </marker>\n  </defs>\n\n  <!-- Left panel: Exchange of Order (Ex 14.5: pi/2 <= x <= pi, sin x <= y <= 1) -->\n  <rect x=\"6\" y=\"6\" width=\"306\" height=\"220\" rx=\"8\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"159\" y=\"24\" text-anchor=\"middle\" font-size=\"10.8\" font-weight=\"700\" fill=\"#1e3a8a\">① 交换积分次序反解陷阱（例 14.5）</text>\n\n  <!-- Axes -->\n  <line x1=\"30\" y1=\"152\" x2=\"286\" y2=\"152\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1c14_arr2)\"/>\n  <line x1=\"48\" y1=\"170\" x2=\"48\" y2=\"42\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1c14_arr2)\"/>\n  <text x=\"288\" y=\"156\" font-size=\"9.2\" fill=\"#334155\">x</text>\n  <text x=\"53\" y=\"48\" font-size=\"9.2\" fill=\"#334155\">y</text>\n\n  <!-- Sine curve from 0 to pi: (48,152) peak (148,72) to (248,152) -->\n  <!-- Shaded D: x in [pi/2, pi], sin x <= y <= 1 -->\n  <path d=\"M 148 72 L 248 72 L 248 152 Q 204 74 148 72 Z\" fill=\"#dbeafe\" stroke=\"#2563eb\" stroke-width=\"1.4\"/>\n  <!-- Full sine curve -->\n  <path d=\"M 48 152 Q 98 72 148 72 Q 198 72 248 152\" fill=\"none\" stroke=\"#1d4ed8\" stroke-width=\"2\"/>\n  <!-- Line y=1 -->\n  <line x1=\"48\" y1=\"72\" x2=\"262\" y2=\"72\" stroke=\"#64748b\" stroke-width=\"1\" stroke-dasharray=\"3,2\"/>\n  <line x1=\"148\" y1=\"72\" x2=\"148\" y2=\"152\" stroke=\"#64748b\" stroke-width=\"1\" stroke-dasharray=\"3,2\"/>\n  <text x=\"38\" y=\"75\" font-size=\"8.8\" fill=\"#334155\">1</text>\n  <text x=\"148\" y=\"165\" text-anchor=\"middle\" font-size=\"8.8\" fill=\"#334155\">π/2</text>\n  <text x=\"248\" y=\"165\" text-anchor=\"middle\" font-size=\"8.8\" fill=\"#334155\">π</text>\n  <text x=\"218\" y=\"96\" font-size=\"9.4\" font-weight=\"700\" fill=\"#1e3a8a\">D</text>\n\n  <!-- Horizontal arrow showing Y-type entry -->\n  <line x1=\"176\" y1=\"112\" x2=\"254\" y2=\"112\" stroke=\"#dc2626\" stroke-width=\"1.8\" marker-end=\"url(#m1c14_arr2_red)\"/>\n  <text x=\"144\" y=\"116\" text-anchor=\"end\" font-size=\"8.2\" font-weight=\"700\" fill=\"#dc2626\">x = π−arcsin y</text>\n  <text x=\"256\" y=\"116\" font-size=\"8.2\" font-weight=\"700\" fill=\"#dc2626\">x = π</text>\n\n  <rect x=\"18\" y=\"176\" width=\"282\" height=\"42\" rx=\"6\" fill=\"#ffffff\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <text x=\"159\" y=\"192\" text-anchor=\"middle\" font-size=\"8.5\" font-weight=\"700\" fill=\"#1e3a8a\">口诀：后积先定限，限内画条线，先交下限、后交上限</text>\n  <text x=\"159\" y=\"209\" text-anchor=\"middle\" font-size=\"8.3\" font-weight=\"700\" fill=\"#dc2626\">注意：π/2 ≤ x ≤ π 时，y=sin x 反解必为 x = π − arcsin y！</text>\n\n  <!-- Right panel: Shifted Circle Translation (Intensive Ex 14.8) -->\n  <rect x=\"322\" y=\"6\" width=\"312\" height=\"220\" rx=\"8\" fill=\"#fff7ed\" stroke=\"#f97316\" stroke-width=\"1.2\"/>\n  <text x=\"478\" y=\"24\" text-anchor=\"middle\" font-size=\"10.8\" font-weight=\"700\" fill=\"#9a3412\">② 偏心圆平移换元降维（强化例 14.8）</text>\n\n  <!-- Left mini: (x-1)^2+(y-1)^2<=2, y>=x -->\n  <rect x=\"332\" y=\"34\" width=\"132\" height=\"132\" rx=\"6\" fill=\"#ffffff\" stroke=\"#fdba74\" stroke-width=\"1\"/>\n  <line x1=\"342\" y1=\"126\" x2=\"454\" y2=\"126\" stroke=\"#334155\" stroke-width=\"1\" marker-end=\"url(#m1c14_arr2)\"/>\n  <line x1=\"372\" y1=\"152\" x2=\"372\" y2=\"44\" stroke=\"#334155\" stroke-width=\"1\" marker-end=\"url(#m1c14_arr2)\"/>\n  <!-- Circle centered at (398, 100) with r=36.8 (passes through origin (372,126)) -->\n  <circle cx=\"398\" cy=\"100\" r=\"36.8\" fill=\"none\" stroke=\"#ea580c\" stroke-width=\"1.4\" stroke-dasharray=\"3,2\"/>\n  <!-- Upper-left half disk y >= x (diameter from (372,126) to (424,74)) -->\n  <path d=\"M 372 126 A 36.8 36.8 0 0 1 424 74 L 372 126 Z\" fill=\"#fed7aa\" opacity=\"0.85\" stroke=\"#ea580c\" stroke-width=\"1.6\"/>\n  <line x1=\"360\" y1=\"138\" x2=\"438\" y2=\"60\" stroke=\"#2563eb\" stroke-width=\"1.2\"/>\n  <circle cx=\"398\" cy=\"100\" r=\"2.5\" fill=\"#9a3412\"/>\n  <text x=\"412\" y=\"108\" font-size=\"7.8\" fill=\"#9a3412\">(1,1)</text>\n  <text x=\"398\" y=\"160\" text-anchor=\"middle\" font-size=\"8.0\" font-weight=\"700\" fill=\"#9a3412\">原域 D (偏心圆)</text>\n\n  <!-- Arrow u=x-1, v=y-1 -->\n  <line x1=\"467\" y1=\"100\" x2=\"491\" y2=\"100\" stroke=\"#dc2626\" stroke-width=\"2\" marker-end=\"url(#m1c14_arr2_red)\"/>\n  <text x=\"479\" y=\"88\" text-anchor=\"middle\" font-size=\"7.6\" font-weight=\"700\" fill=\"#dc2626\">u=x−1</text>\n  <text x=\"479\" y=\"114\" text-anchor=\"middle\" font-size=\"7.6\" font-weight=\"700\" fill=\"#dc2626\">v=y−1</text>\n  <text x=\"479\" y=\"126\" text-anchor=\"middle\" font-size=\"7.4\" fill=\"#475569\">|J| = 1</text>\n\n  <!-- Right mini: u^2+v^2<=2, v>=u -->\n  <rect x=\"494\" y=\"34\" width=\"130\" height=\"132\" rx=\"6\" fill=\"#ffffff\" stroke=\"#fdba74\" stroke-width=\"1\"/>\n  <line x1=\"504\" y1=\"102\" x2=\"614\" y2=\"102\" stroke=\"#334155\" stroke-width=\"1\" marker-end=\"url(#m1c14_arr2)\"/>\n  <line x1=\"559\" y1=\"152\" x2=\"559\" y2=\"46\" stroke=\"#334155\" stroke-width=\"1\" marker-end=\"url(#m1c14_arr2)\"/>\n  <circle cx=\"559\" cy=\"102\" r=\"35\" fill=\"none\" stroke=\"#16a34a\" stroke-width=\"1.4\" stroke-dasharray=\"3,2\"/>\n  <!-- Upper-left half disk v >= u: from (534.2, 126.8) to (583.8, 77.2) -->\n  <path d=\"M 534.2 126.8 A 35 35 0 0 1 583.8 77.2 L 534.2 126.8 Z\" fill=\"#bbf7d0\" opacity=\"0.85\" stroke=\"#16a34a\" stroke-width=\"1.6\"/>\n  <line x1=\"522\" y1=\"139\" x2=\"596\" y2=\"65\" stroke=\"#2563eb\" stroke-width=\"1.2\"/>\n  <text x=\"598\" y=\"98\" font-size=\"7.8\" fill=\"#166534\">√2</text>\n  <text x=\"559\" y=\"160\" text-anchor=\"middle\" font-size=\"8.0\" font-weight=\"700\" fill=\"#166534\">标准中心圆 D_uv</text>\n\n  <rect x=\"332\" y=\"176\" width=\"292\" height=\"42\" rx=\"6\" fill=\"#ffffff\" stroke=\"#fdba74\" stroke-width=\"1\"/>\n  <text x=\"478\" y=\"192\" text-anchor=\"middle\" font-size=\"8.5\" font-weight=\"700\" fill=\"#9a3412\">平移换元后：r 上限变常数 √2，θ∈[π/4, 5π/4]，两层直接分离！</text>\n  <text x=\"478\" y=\"209\" text-anchor=\"middle\" font-size=\"8.3\" fill=\"#334155\">凡见偏心圆 (x−a)²+(y−b)²≤R²，先考虑平移到原点再极坐标！</text>\n</svg>",
+      "tables": [
+        {
+          "caption": "表 14-1：12 类无初等原函数的被积函数核（见到必换积分次序！基础 P.349 注(1) & 强化 P.176）",
+          "headers": [
+            "类别",
+            "无初等原函数典型核",
+            "考场第一反应",
+            "代表例题"
+          ],
+          "rows": [
+            [
+              "三角/反比型",
+              "$\\dfrac{\\sin x}{x},\\;\\dfrac{\\cos x}{x},\\;\\dfrac{\\tan x}{x},\\;\\sin\\dfrac{1}{x},\\;\\cos\\dfrac{1}{x}$",
+              "立即交换积分次序（避开先对 $x$ 积）",
+              "例 14.6, 强化例 14.2"
+            ],
+            [
+              "二次三角/指数型",
+              "$\\sin x^2,\\;\\cos x^2,\\;\\tan x^2,\\;\\mathrm{e}^{ax^2+bx+c}\\;(a\\ne 0)$",
+              "换序凑出 $x$（或转极坐标配 $r$）",
+              "例 14.11"
+            ],
+            [
+              "对数/指数比型",
+              "$\\dfrac{\\ln(1+x)}{x},\\;\\dfrac{1}{\\ln x},\\;\\dfrac{\\mathrm{e}^x}{x}$",
+              "立即交换积分次序或用级数/换元",
+              "强化 P.176 总结"
+            ],
+            [
+              "难积根式/反三角型",
+              "$\\dfrac{1}{\\sqrt{1+x^3}},\\;\\arcsin\\sqrt{4x-4x^2}$",
+              "换序后多出幂因子 $x$ 或 $x^2$ 瞬间可凑微！",
+              "例 14.7, 强化例 14.3"
+            ]
+          ]
+        }
+      ],
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.347-350",
+        "pdfPage": 352,
+        "itemRef": "二·1 直角坐标系下的计算方法 & P.349 注(1)",
+        "crossRef": "27张宇《高数18讲》(强化) P.176 二、交换积分次序 & P.179-180 六·1 直角坐标"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy18_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-f-04",
+      "stage": "both",
+      "section": "二、二重积分的计算法（直角坐标、极坐标与换元法）",
+      "kind": "formula",
+      "title": "极坐标系下二重积分三种位置公式、选系双原则与直角/极坐标互化",
+      "examWeight": "core",
+      "prompt": "默写极坐标变换式、面积微元 $\\mathrm{d}\\sigma=r\\,\\mathrm{d}r\\mathrm{d}\\theta$、极点相对区域 $D$ 的三种位置积分公式及选用极坐标的两条判定原则：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{变换与微元：}x=r\\cos\\theta,\\;y=r\\sin\\theta,\\qquad x^2+y^2=r^2,\\qquad \\mathrm{d}\\sigma=r\\,\\mathrm{d}r\\,\\mathrm{d}\\theta\\\\\n&(1)\\;\\text{极点 }O\\text{ 在 }D\\text{ 外部：}\\iint_D f(x,y)\\,\\mathrm{d}\\sigma=\\int_\\alpha^\\beta\\mathrm{d}\\theta\\int_{r_1(\\theta)}^{r_2(\\theta)}f(r\\cos\\theta,r\\sin\\theta)\\,r\\,\\mathrm{d}r\\\\\n&(2)\\;\\text{极点 }O\\text{ 在 }D\\text{ 边界：}\\iint_D f(x,y)\\,\\mathrm{d}\\sigma=\\int_\\alpha^\\beta\\mathrm{d}\\theta\\int_0^{r(\\theta)}f(r\\cos\\theta,r\\sin\\theta)\\,r\\,\\mathrm{d}r\\\\\n&(3)\\;\\text{极点 }O\\text{ 在 }D\\text{ 内部：}\\iint_D f(x,y)\\,\\mathrm{d}\\sigma=\\int_0^{2\\pi}\\mathrm{d}\\theta\\int_0^{r(\\theta)}f(r\\cos\\theta,r\\sin\\theta)\\,r\\,\\mathrm{d}r\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "选用极坐标的两条黄金原则（基础 P.351 & 强化 P.181）",
+          "desc": "① **看被积函数**：是否含 $f(x^2+y^2)$、$f(\\frac{y}{x})$、$f(\\frac{x}{y})$ 或齐次二次型分式（主看 ①，如例14.9 区域非圆仍优先用极坐标！）；② **看积分区域**：是否为圆、圆环、扇形、双纽线或圆的一部分。满足其一即优先考虑极坐标！"
+        },
+        {
+          "sym": "高频直线的极坐标转换",
+          "desc": "$x=a\\iff r=a\\sec\\theta$；$y=a\\iff r=a\\csc\\theta$；$x+y=1\\iff r=\\dfrac{1}{\\cos\\theta+\\sin\\theta}$（见例14.14、例14.15 注、强化例14.6）！"
+        }
+      ],
+      "conditions": "一般总是**先积 $r$ 后积 $\\theta$**；从极轴 $Ox$ 逆时针扫出区间 $[\\alpha,\\beta]$，注意偏心圆 $x^2+y^2\\le 2ax$ 的角度范围是 $[-\\frac{\\pi}{2},\\frac{\\pi}{2}]$，而 $x^2+y^2\\le 2ay$ 是 $[0,\\pi]$，切勿一律写成 $[0,2\\pi]$！",
+      "pitfalls": "三大极坐标杀手坑：① 忘乘雅可比因子 **$r$**；② 把偏心圆 $r=2\\cos\\theta$ 的 $\\theta$ 上下限误写为 $[0,2\\pi]$（会令 $r<0$ 重复翻倍！）；③ 遇到极坐标累次积分反难算时（如强化例14.6），果断**逆向化回直角坐标**！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.350-355",
+        "pdfPage": 355,
+        "itemRef": "二·2 极坐标系下的计算方法 & 二·3 极/直角互化",
+        "crossRef": "27张宇《高数18讲》(强化) P.181 六·2 极坐标系积分法"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy30_14_17_pappus",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-f-05",
+      "stage": "both",
+      "section": "二、二重积分的计算法（直角坐标、极坐标与换元法）",
+      "kind": "formula",
+      "title": "二重积分一般换元法（雅可比行列式绝对值 $|J|$ 与「三换」准则）",
+      "examWeight": "core",
+      "prompt": "默写二重积分一般变量代换公式、雅可比行列式绝对值 $|J|=\\left|\\frac{\\partial(x,y)}{\\partial(u,v)}\\right|$ 及由此直接导出极坐标微元的过程：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\iint_{D_{xy}}f(x,y)\\,\\mathrm{d}x\\mathrm{d}y=\\iint_{D_{uv}}f\\bigl[x(u,v),\\;y(u,v)\\bigr]\\left|\\frac{\\partial(x,y)}{\\partial(u,v)}\\right|\\mathrm{d}u\\mathrm{d}v\\\\\n&\\text{雅可比行列式：}J=\\frac{\\partial(x,y)}{\\partial(u,v)}=\\begin{vmatrix}\\dfrac{\\partial x}{\\partial u}&\\dfrac{\\partial x}{\\partial v}\\\\[6pt]\\dfrac{\\partial y}{\\partial u}&\\dfrac{\\partial y}{\\partial v}\\end{vmatrix}\\ne 0\\\\\n&\\text{特例（极坐标）：}\\left|\\frac{\\partial(x,y)}{\\partial(r,\\theta)}\\right|=\\left|\\begin{matrix}\\cos\\theta&-r\\sin\\theta\\\\\\sin\\theta&r\\cos\\theta\\end{matrix}\\right|=r\\implies\\mathrm{d}x\\mathrm{d}y=r\\,\\mathrm{d}r\\mathrm{d}\\theta\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "换元「三换」清单",
+          "desc": "① 换被积函数 $f(x,y)\\to f[x(u,v),y(u,v)]$；② 换积分区域 $D_{xy}\\to D_{uv}$；③ 换面积微元 $\\mathrm{d}x\\mathrm{d}y\\to |J|\\,\\mathrm{d}u\\mathrm{d}v$（**一定带绝对值**！）。"
+        },
+        {
+          "sym": "三大高频考研换元模板",
+          "desc": "① **平移换元** $u=x-a,v=y-b$（$|J|=1$，秒杀偏心圆，见强化例14.8）；② **线性/和差换元** $u=x+y,v=y$（$|J|=1$，化解 $\\mathrm{e}^{\\frac{y}{x+y}}$，见例14.15）；③ **广义极坐标** $x=ar\\cos\\theta,y=br\\sin\\theta$（$|J|=abr$，把椭圆域化为单位圆盘！）。"
+        }
+      ],
+      "conditions": "要求映射 $(u,v)\\mapsto(x,y)$ 是 $D_{uv}$ 到 $D_{xy}$ 的一对一 $C^1$ 映射，且雅可比行列式 $J\\ne 0$（至多在零面积边界上为零）；考研中可直接使用，不必证明（基础 P.356 & 强化 P.182）。",
+      "pitfalls": "高频翻车点：① 忘记给雅可比行列式加**绝对值** $|J|$ 导致面积变负；② 算出的是反向雅可比 $\\frac{\\partial(u,v)}{\\partial(x,y)}$ 却忘记取倒数——牢记 $\\frac{\\partial(x,y)}{\\partial(u,v)}=\\left[\\frac{\\partial(u,v)}{\\partial(x,y)}\\right]^{-1}$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.356-357",
+        "pdfPage": 361,
+        "itemRef": "二·4 换元法（含例 14.15）",
+        "crossRef": "27张宇《高数18讲》(强化) P.182-183 六·3 二重积分的换元法（选学）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy30_14_17_pappus",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-f-06",
+      "stage": "foundation",
+      "section": "三、古鲁金第二定理与平面薄片形心公式",
+      "kind": "formula",
+      "title": "古鲁金第二定理（斜轴旋转体体积式 14-1）与平面均质薄片形心公式",
+      "examWeight": "core",
+      "prompt": "默写平面有界闭区域 $D$ 绕不穿域直线 $L_0:ax+by+c=0$ 旋转一周的体积二重积分公式（式 14-1）、古鲁金第二定理及形心 $(\\bar{x},\\bar{y})$ 公式：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{绕一般直线 }L_0:ax+by+c=0\\text{ 体积（式 14-1）：}V=\\frac{2\\pi}{\\sqrt{a^2+b^2}}\\iint_D |ax+by+c|\\,\\mathrm{d}\\sigma\\\\\n&\\text{古鲁金第二定理：}V=2\\pi\\cdot S\\cdot r(\\bar{x},\\bar{y}),\\qquad r(\\bar{x},\\bar{y})=\\frac{|a\\bar{x}+b\\bar{y}+c|}{\\sqrt{a^2+b^2}}\\\\\n&\\text{均质平面区域 }D\\text{ 形心：}\\bar{x}=\\frac{\\iint_D x\\,\\mathrm{d}\\sigma}{\\iint_D \\mathrm{d}\\sigma},\\qquad \\bar{y}=\\frac{\\iint_D y\\,\\mathrm{d}\\sigma}{\\iint_D \\mathrm{d}\\sigma}\\quad\\left(\\text{半径 }R\\text{ 半圆盘形心距圆心 }\\frac{4R}{3\\pi}\\right)\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "古鲁金第二定理正反双用",
+          "desc": "① **正用（已知形心秒算斜轴旋转体积）**：如例14.16 中 $y=\\sin x\\;[0,2\\pi]$ 形心在 $(\\pi,0)$，一步算得绕 $y=-x$ 体积 $4\\sqrt{2}\\pi^2$；② **反用（已知旋转体体积反求复杂区域形心）**：如例14.17 用「大半圆绕轴体积减去小半圆体积」反解月牙形心 $(\\frac{7}{3},\\frac{28}{9\\pi})$！"
+        },
+        {
+          "sym": "高频必背半圆盘形心",
+          "desc": "半径 $R$ 的上半圆盘 $x^2+y^2\\le R^2\\;(y\\ge 0)$ 形心为 $\\left(0,\\;\\dfrac{4R}{3\\pi}\\right)$（与第 12 讲半圆弧形心 $\\frac{2R}{\\pi}$ 严格区分！）。"
+        }
+      ],
+      "conditions": "核心前提：旋转轴 $L_0$ **不得穿过区域 $D$ 的内部**（整个区域 $D$ 必须完全位于直线 $L_0$ 的同一侧，从而 $|ax+by+c|$ 同号可去绝对值）；若旋转轴穿域则旋转体会自交重叠，式 14-1 失效！",
+      "pitfalls": "使用例14.16 的古鲁金第二定理前，务必确认 $y=-x$ 确实不穿 $y=\\sin x\\;[0,2\\pi]$ 的下半叶（$x\\in[\\pi,2\\pi]$ 时 $x+\\sin x\\ge\\pi-1>0$，见严谨补注 #50）！",
+      "figureSvg": "<svg viewBox=\"0 0 640 232\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">\n  <title>古鲁金第二定理斜轴旋转体积（例14.16）与平面区域大观高频典型区域图谱（仿基础P.358, P.364, P.370）</title>\n  <defs>\n    <marker id=\"m1c14_arr3\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#334155\"/>\n    </marker>\n    <marker id=\"m1c14_arr3_red\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#dc2626\"/>\n    </marker>\n  </defs>\n\n  <!-- Left panel: Pappus 2nd Theorem (Ex 14.16: y=sin x [0,2pi] around y=-x) -->\n  <rect x=\"6\" y=\"6\" width=\"302\" height=\"220\" rx=\"8\" fill=\"#eff6ff\" stroke=\"#3b82f6\" stroke-width=\"1.2\"/>\n  <text x=\"157\" y=\"24\" text-anchor=\"middle\" font-size=\"10.8\" font-weight=\"700\" fill=\"#1e3a8a\">① 古鲁金第二定理与同侧验证（例 14.16）</text>\n\n  <!-- Axes -->\n  <line x1=\"28\" y1=\"106\" x2=\"288\" y2=\"106\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1c14_arr3)\"/>\n  <line x1=\"78\" y1=\"170\" x2=\"78\" y2=\"38\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1c14_arr3)\"/>\n  <text x=\"290\" y=\"110\" font-size=\"9.0\" fill=\"#334155\">x</text>\n  <text x=\"83\" y=\"45\" font-size=\"9.0\" fill=\"#334155\">y</text>\n\n  <!-- Rotation axis y = -x through (78,106) -->\n  <line x1=\"38\" y1=\"66\" x2=\"144\" y2=\"172\" stroke=\"#dc2626\" stroke-width=\"1.8\" stroke-dasharray=\"5,3\"/>\n  <text x=\"148\" y=\"166\" font-size=\"8.5\" font-weight=\"700\" fill=\"#dc2626\">旋转轴 y = −x</text>\n\n  <!-- Sine lobes: [0,pi] (78..168, peak y=70), [pi,2pi] (168..258, trough y=142) -->\n  <path d=\"M 78 106 Q 123 48 168 106 Z\" fill=\"#93c5fd\" opacity=\"0.7\" stroke=\"#1d4ed8\" stroke-width=\"1.6\"/>\n  <path d=\"M 168 106 Q 213 164 258 106 Z\" fill=\"#93c5fd\" opacity=\"0.7\" stroke=\"#1d4ed8\" stroke-width=\"1.6\"/>\n\n  <!-- Centroid (pi, 0) at (168, 106) and perpendicular distance r = pi/sqrt(2) to y=-x -->\n  <!-- Foot of perpendicular from (168,106) to line (x-78)+(y-106)=0 -> dx=90, dy=0 -> foot at (123, 151) -->\n  <line x1=\"168\" y1=\"106\" x2=\"123\" y2=\"151\" stroke=\"#dc2626\" stroke-width=\"1.8\" marker-end=\"url(#m1c14_arr3_red)\"/>\n  <circle cx=\"168\" cy=\"106\" r=\"3.8\" fill=\"#dc2626\"/>\n  <text x=\"174\" y=\"99\" font-size=\"8.4\" font-weight=\"700\" fill=\"#dc2626\">形心 (π, 0)</text>\n  <text x=\"156\" y=\"142\" font-size=\"8.2\" font-weight=\"700\" fill=\"#dc2626\">r = π/√2</text>\n  <text x=\"258\" y=\"99\" text-anchor=\"middle\" font-size=\"8.2\" fill=\"#1e40af\">2π</text>\n\n  <rect x=\"18\" y=\"176\" width=\"278\" height=\"42\" rx=\"6\" fill=\"#ffffff\" stroke=\"#93c5fd\" stroke-width=\"1\"/>\n  <text x=\"157\" y=\"192\" text-anchor=\"middle\" font-size=\"8.6\" font-weight=\"700\" fill=\"#1e3a8a\">V = 2π·S·r(x̄,ȳ) = 2π·4·(π/√2) = 4√2 π²</text>\n  <text x=\"157\" y=\"209\" text-anchor=\"middle\" font-size=\"8.1\" font-weight=\"700\" fill=\"#059669\">验证同侧：x∈[π,2π] 时 x+sin x ≥ π−1 &gt; 0，旋转轴不穿域！</text>\n\n  <!-- Right panel: 3 High-frequency tricky regions from \"平面区域 D 大观\" -->\n  <rect x=\"318\" y=\"6\" width=\"316\" height=\"220\" rx=\"8\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"476\" y=\"24\" text-anchor=\"middle\" font-size=\"10.8\" font-weight=\"700\" fill=\"#0f172a\">②《平面区域 D 大观》三大高频难点图谱</text>\n\n  <!-- Mini 1: Crescent moon (Ex 14.17) -->\n  <rect x=\"328\" y=\"34\" width=\"94\" height=\"132\" rx=\"6\" fill=\"#ffffff\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <line x1=\"334\" y1=\"126\" x2=\"416\" y2=\"126\" stroke=\"#334155\" stroke-width=\"1\"/>\n  <line x1=\"342\" y1=\"138\" x2=\"342\" y2=\"54\" stroke=\"#334155\" stroke-width=\"1\"/>\n  <!-- Outer semicircle center (376,126) r=34; inner semicircle center (359,126) r=17 -->\n  <path d=\"M 342 126 A 34 34 0 0 1 410 126 L 376 126 A 17 17 0 0 0 342 126 Z\" fill=\"#bfdbfe\" stroke=\"#2563eb\" stroke-width=\"1.4\"/>\n  <text x=\"375\" y=\"48\" text-anchor=\"middle\" font-size=\"8.2\" font-weight=\"700\" fill=\"#1e3a8a\">双偏心半圆月牙</text>\n  <text x=\"375\" y=\"149\" text-anchor=\"middle\" font-size=\"7.6\" fill=\"#334155\">例14.17 补减法</text>\n  <text x=\"375\" y=\"160\" text-anchor=\"middle\" font-size=\"7.5\" fill=\"#dc2626\">r∈[2cosθ,4cosθ]</text>\n\n  <!-- Mini 2: Lemniscate (x^2+y^2)^2 <= 2xy -->\n  <rect x=\"429\" y=\"34\" width=\"94\" height=\"132\" rx=\"6\" fill=\"#ffffff\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <line x1=\"436\" y1=\"100\" x2=\"516\" y2=\"100\" stroke=\"#334155\" stroke-width=\"1\"/>\n  <line x1=\"476\" y1=\"138\" x2=\"476\" y2=\"58\" stroke=\"#334155\" stroke-width=\"1\"/>\n  <!-- Lemniscate 2 lobes in Q1 & Q3 -->\n  <path d=\"M 476 100 C 482 66 512 70 504 86 C 498 98 486 100 476 100 Z\" fill=\"#dcfce7\" stroke=\"#16a34a\" stroke-width=\"1.4\"/>\n  <path d=\"M 476 100 C 470 134 440 130 448 114 C 454 102 466 100 476 100 Z\" fill=\"#dcfce7\" stroke=\"#16a34a\" stroke-width=\"1.4\"/>\n  <text x=\"476\" y=\"48\" text-anchor=\"middle\" font-size=\"8.2\" font-weight=\"700\" fill=\"#166534\">斜双纽线 P.364</text>\n  <text x=\"476\" y=\"149\" text-anchor=\"middle\" font-size=\"7.6\" fill=\"#334155\">(x²+y²)² ≤ 2xy</text>\n  <text x=\"476\" y=\"160\" text-anchor=\"middle\" font-size=\"7.5\" fill=\"#15803d\">r² ≤ sin 2θ (Q1,Q3)</text>\n\n  <!-- Mini 3: Parametric Circle vs Ellipse (P.370 (5)) -->\n  <rect x=\"530\" y=\"34\" width=\"94\" height=\"132\" rx=\"6\" fill=\"#ffffff\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <line x1=\"538\" y1=\"126\" x2=\"616\" y2=\"126\" stroke=\"#334155\" stroke-width=\"1\"/>\n  <line x1=\"577\" y1=\"142\" x2=\"577\" y2=\"54\" stroke=\"#334155\" stroke-width=\"1\"/>\n  <!-- Circle x^2+(y-1)^2=1 -> center (577,100), r=26 -->\n  <circle cx=\"577\" cy=\"100\" r=\"26\" fill=\"#dbeafe\" opacity=\"0.55\" stroke=\"#2563eb\" stroke-width=\"1.3\"/>\n  <!-- Ellipse 2/3 x^2 + 2/9 y^2 = a^2 (a ~ 0.97 -> rx=31, ry=54 centered at (577,126)) -->\n  <ellipse cx=\"577\" cy=\"126\" rx=\"30\" ry=\"52\" fill=\"none\" stroke=\"#dc2626\" stroke-width=\"1.4\" stroke-dasharray=\"3,2\"/>\n  <text x=\"577\" y=\"48\" text-anchor=\"middle\" font-size=\"8.2\" font-weight=\"700\" fill=\"#9a3412\">含参相切临界</text>\n  <text x=\"577\" y=\"149\" text-anchor=\"middle\" font-size=\"7.5\" fill=\"#334155\">P.370 (5) 联立 Δ=0</text>\n  <text x=\"577\" y=\"160\" text-anchor=\"middle\" font-size=\"7.4\" fill=\"#dc2626\">临界 a=2√2/3 与 1</text>\n\n  <rect x=\"328\" y=\"176\" width=\"296\" height=\"42\" rx=\"6\" fill=\"#ffffff\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <text x=\"476\" y=\"192\" text-anchor=\"middle\" font-size=\"8.5\" font-weight=\"700\" fill=\"#0f172a\">画图三步：找交点 → 辨凹凸/偏心圆配方 → 遇含参算相切判别式</text>\n  <text x=\"476\" y=\"209\" text-anchor=\"middle\" font-size=\"8.2\" fill=\"#475569\">难画二次曲线（如例14.9 x²+y²−xy=1）可用描点法或极坐标直接定限！</text>\n</svg>",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.358-359",
+        "pdfPage": 363,
+        "itemRef": "三、古鲁金第二定理 式(14-1) & 例 14.16~14.17"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy30_14_17_pappus",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-f-07",
+      "stage": "both",
+      "section": "四、单位圆域五大秒杀结论与高斯/泊松积分",
+      "kind": "formula",
+      "title": "【考场秒杀】单位圆盘五大高频二重积分结论（强化 P.179）与高斯积分 / $\\Gamma$ 函数",
+      "examWeight": "core",
+      "prompt": "默写单位圆盘 $D:x^2+y^2\\le 1$ 上的五个高频二重积分结论，以及由二重积分导出的高斯积分与 $\\Gamma$ 函数联动值：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\iint_{x^2+y^2\\le 1}(x^2+y^2)\\,\\mathrm{d}\\sigma=\\frac{\\pi}{2},\\qquad \\iint_{x^2+y^2\\le 1}\\sqrt{x^2+y^2}\\,\\mathrm{d}\\sigma=\\frac{2\\pi}{3},\\qquad \\iint_{x^2+y^2\\le 1}\\sqrt{1-(x^2+y^2)}\\,\\mathrm{d}\\sigma=\\frac{2\\pi}{3}\\\\\n&\\iint_{x^2+y^2\\le 1}\\bigl(1-\\sqrt{x^2+y^2}\\bigr)\\,\\mathrm{d}\\sigma=\\frac{\\pi}{3},\\qquad \\iint_{x^2+y^2\\le 1}\\left(\\frac{x^2}{a^2}+\\frac{y^2}{b^2}\\right)\\mathrm{d}\\sigma=\\frac{\\pi}{4}\\left(\\frac{1}{a^2}+\\frac{1}{b^2}\\right)\\\\\n&\\text{高斯积分（例 14.11~14.12）：}\\int_0^{+\\infty}\\mathrm{e}^{-x^2}\\,\\mathrm{d}x=\\frac{\\sqrt{\\pi}}{2},\\qquad \\int_{-\\infty}^{+\\infty}\\mathrm{e}^{-x^2}\\,\\mathrm{d}x=\\sqrt{\\pi},\\qquad \\int_0^{+\\infty}x^2\\mathrm{e}^{-x^2}\\,\\mathrm{d}x=\\frac{\\sqrt{\\pi}}{4}\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "几何秒记法（不用硬算！）",
+          "desc": "① $\\sqrt{1-x^2-y^2}$ 是半径 $1$ 的**上半球体体积** $=\\frac{1}{2}\\cdot\\frac{4}{3}\\pi=\\frac{2\\pi}{3}$；② $1-\\sqrt{x^2+y^2}$ 是底半径 $1$、高 $1$ 的**圆锥体积** $=\\frac{1}{3}\\pi$；③ $\\sqrt{x^2+y^2}=1-(1-\\sqrt{x^2+y^2})$ 即圆柱减圆锥 $=\\pi-\\frac{\\pi}{3}=\\frac{2\\pi}{3}$！"
+        },
+        {
+          "sym": "一般半径 $R$ 伸缩与 $\\Gamma$ 联动",
+          "desc": "若区域变为 $x^2+y^2\\le R^2$：$\\iint(x^2+y^2)\\,\\mathrm{d}\\sigma=\\frac{\\pi}{2}R^4$，$\\iint x^2\\,\\mathrm{d}\\sigma=\\iint y^2\\,\\mathrm{d}\\sigma=\\frac{\\pi}{4}R^4$；同时 $\\int_0^{+\\infty}x^{2\\alpha-1}\\mathrm{e}^{-x^2}\\,\\mathrm{d}x=\\frac{1}{2}\\Gamma(\\alpha)$，取 $\\alpha=\\frac{1}{2},\\frac{3}{2}$ 立刻得 $\\frac{\\sqrt{\\pi}}{2},\\;\\frac{\\sqrt{\\pi}}{4}$！"
+        }
+      ],
+      "conditions": "五大公式对应单位圆盘 $x^2+y^2\\le 1$（半径 $R\\ne 1$ 时按齐次次数乘 $R^{k+2}$，例如 $x^2+y^2$ 乘 $R^4$，见例14.8 中 $R=\\sqrt[4]{2}$）；高斯积分要求指数幂负二次系数为正。",
+      "pitfalls": "高频混淆：$\\int_0^{+\\infty}x^2\\mathrm{e}^{-x^2}\\,\\mathrm{d}x=\\frac{\\sqrt{\\pi}}{4}$ 是**半轴**，而例14.12 问的是**全轴** $\\int_{-\\infty}^{+\\infty}x^2\\mathrm{e}^{-x^2}\\,\\mathrm{d}x=\\frac{\\sqrt{\\pi}}{2}$（偶函数两倍），审题一定盯紧积分下限是 $0$ 还是 $-\\infty$！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.179",
+        "pdfPage": 192,
+        "itemRef": "五、二重积分常用结论",
+        "crossRef": "27张宇《基础30讲·高数》P.353-355 例 14.11~14.13"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_unit_disk_and_sym",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-c-01",
+      "stage": "both",
+      "section": "一、二重积分的概念、和式极限与七大基本性质",
+      "kind": "conclusion",
+      "title": "积分保号性三大推论与「最大二重积分区域 $D=\\{f(x,y)\\ge 0\\}$」选域法则",
+      "examWeight": "core",
+      "summary": "强化 P.177 将二重积分保号性凝练为三大必背结论：\n① 若连续函数 $f(x,y)\\ge 0$ 且在 $D$ 上不恒为零，则严格有 $\\iint_D f(x,y)\\,\\mathrm{d}\\sigma>0$；\n② 若连续函数 $f(x,y)$ 对**任意**有界闭区域 $D$ 均有 $\\iint_D f(x,y)\\,\\mathrm{d}\\sigma=0$，则必有 $f(x,y)\\equiv 0$（注意必须是「任意 $D$」才成立，单个固定域积分为零推不出 $f\\equiv 0$！）；\n③ **最大积分选域法则**：欲使 $\\iint_D f(x,y)\\,\\mathrm{d}\\sigma$ 达到最大值，区域 $D$ 应当恰好取遍所有使 $f(x,y)\\ge 0$ 的点而不包含任何 $f(x,y)<0$ 的点，即 $D=\\{(x,y)\\mid f(x,y)\\ge 0\\}$（见例14.1、强化例14.4）！",
+      "conditions": "选域法则要求集合 $\\{f(x,y)\\ge 0\\}$ 为有界区域（如椭圆域 $1-x^2-\\frac{y^2}{2}\\ge 0$）；在边界线 $f(x,y)=0$ 上取开或闭不影响积分值。",
+      "pitfalls": "千万不要拿去强算 4 个区域上的二重积分来比大小（例14.1）！直接画出 $f(x,y)=0$ 的正负分界曲线，利用区域可加性比较「多出来那块的正负号」，15 秒秒杀！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.177",
+        "pdfPage": 190,
+        "itemRef": "三、积分保号性的使用 ①②③ & 强化例 14.4",
+        "crossRef": "27张宇《基础30讲·高数》P.341-342 例 14.1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy30_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-c-02",
+      "stage": "both",
+      "section": "一、二重积分的概念、和式极限与七大基本性质",
+      "kind": "conclusion",
+      "title": "「普通对称 vs 轮换对称」辨析与不对称区域的「补线构对称」绝招",
+      "examWeight": "core",
+      "summary": "当积分区域 $D$ 关于 $y=x$ 对称时，两种对称性各司其职（基础 P.347 注(2) & 强化 P.178 注(2)）：\n① **普通对称性**：检查 $f(y,x)$ 与 $f(x,y)$ 是否**相等**（取半域两倍）或**相反**（直接归零）；\n② **轮换对称性**：当 $f(y,x)$ 与 $f(x,y)$ 既不相等也不相反时，立刻检查 **$f(x,y)+f(y,x)$ 是否化简**（如分子消分母例14.4、凑出 $x^2+y^2$ 例14.8、解二重积分方程强化例14.5）！\n③ **补线构对称（例14.3）**：若区域 $D$ 整体不对称，主动在内部画一条对称辅助线（如在 $0\\le y\\le\\sqrt{x}$ 内画 $y=x^2$），把 $D$ 切成「关于 $y=x$ 对称的归零区 $D_{21}$」与「恒正/恒负剩余区 $D_{22}$」，瞬间判定积分正负号！",
+      "conditions": "遇到一切二重积分题，**第一优先级永远是查对称性**（普通对称 $\\to$ 平移轴对称 $\\to$ 轮换对称 $\\to$ 补线构对称），往往能直接省去 80% 以上的计算量。",
+      "pitfalls": "注意当 $f(x,y)=-f(y,x)$ 时，普通对称与轮换对称是一回事（均得 $I=0$）；但遇到例14.14 $\\frac{x+y}{x^2+y^2}$ 这种本身已关于 $x,y$ 对称的分式，套轮换对称不会带来新化简，应直接转极坐标！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.345-347",
+        "pdfPage": 350,
+        "itemRef": "例 14.3, 轮换对称性 & P.347 注(2)",
+        "crossRef": "27张宇《高数18讲》(强化) P.178-179 强化例 14.5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy18_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-c-03",
+      "stage": "both",
+      "section": "二、二重积分的计算法（直角坐标、极坐标与换元法）",
+      "kind": "conclusion",
+      "title": "二重积分计算「四步决策链」：对称 → 换序/选系 → 平移/换元 → 逆转直角",
+      "examWeight": "core",
+      "summary": "张宇强化 P.175 总结二重积分计算核心仅六字——「**换序、换系、换元**」，实战按以下优先级决策：\n① **先对称化简**：拆开被积函数中的奇函数项（含平移轴 $x-a,y-b$），关于 $y=x$ 对称则试轮换求和；\n② **遇累次积分先查换序**：若内层是表 14-1 的 12 类不可积核或难积核（例14.6、14.7、强化例14.2、14.3），立刻画域交换积分次序；\n③ **再判坐标系（直角 vs 极坐标）**：被积函数含 $x^2+y^2$ / $\\frac{y}{x}$ 或区域是圆/扇形/斜椭圆环（例14.8、14.9、14.14）优先极坐标；若极坐标下反而难积（如强化例14.6 含 $\\sqrt{1-(x-y)^2}$），果断逆化直角坐标；\n④ **偏心圆与斜线性核用换元**：偏心圆 $(x-a)^2+(y-b)^2\\le R^2$ 优先平移 $u=x-a,v=y-b$（强化例14.8）；指数/分母含 $x+y$ 优先线性换元 $u=x+y,v=y$（例14.15）！",
+      "conditions": "适用于考研数一全部二重积分计算解答题与选填题；每种换元/换系都必须同步重写新区域边界并核对雅可比因子 $|J|$（极坐标为 $r$，平移为 $1$）。",
+      "pitfalls": "许多考生陷入思维定势「看到圆就硬上原点极坐标」——对于偏心圆强化例14.8，直接极坐标要算 $(\\sin\\theta+\\cos\\theta)^3(\\cos\\theta-\\sin\\theta)$，而平移换元后 $r$ 上限变常数 $\\sqrt{2}$、两重积分直接拆成两个一元积分乘积，效率高得多！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.175, P.180-183",
+        "pdfPage": 188,
+        "itemRef": "三向解题法总图 & 强化例 14.6~14.8",
+        "crossRef": "27张宇《基础30讲·高数》P.351, P.355-357"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy18_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-c-04",
+      "stage": "foundation",
+      "section": "二、二重积分的计算法（直角坐标、极坐标与换元法）",
+      "kind": "conclusion",
+      "title": "《平面区域 $D$ 大观》（基础 P.360-371上 · 85 图）四大类画域要领与高频陷阱表",
+      "examWeight": "core",
+      "summary": "基础 30 讲 P.360-371 上系统汇编了 **85 个考研高频积分区域**（直线边界 17 个 + 曲线边界 44 个 + 极坐标方程 15 个 + 参数方程 9 个）。画好区域 $D$ 无需死背图形，只需抓住四类边界的核心翻译法：绝对值拆象限/带域、圆方程先配方找圆心半径、极坐标反推直角方程（或描特殊角 $\\theta=0,\\frac{\\pi}{4},\\frac{\\pi}{2}$）、含参区域联立方程判别式 $\\Delta=0$ 找相切临界参数！",
+      "conditions": "适用于所有给定不等式组描述平面区域 $D$ 的二重积分题；遇到复杂二次型边界（如 $x^2+y^2-xy=1$，例14.9）一时画不准图形时，可用「交点描点法 + 直接用极坐标方程代数定限」绕开精绘。",
+      "pitfalls": "高频画域误区：① 把 $x\\le 1-\\sqrt{2y-y^2}$（P.363 (10)）画成右半圆——移项 $(x-1)^2+(y-1)^2=1$ 且 $x\\le 1$ 实为**左半圆外侧凹月牙**；② 把极坐标反序 $0\\le r\\le 2,\\;-\\arccos\\frac{r}{2}\\le\\theta\\le\\arccos\\frac{r}{2}$（P.369 (9)）看晕——还原 $\\cos\\theta\\ge\\frac{r}{2}$ 即偏心圆 $r\\le 2\\cos\\theta$！",
+      "tables": [
+        {
+          "caption": "表 14-2：《平面区域 D 大观》（基础 P.360-371上）八大高频难点区域解析速查",
+          "headers": [
+            "原书出处与编号",
+            "区域不等式描述",
+            "几何本质与关键特征",
+            "首选计算策略"
+          ],
+          "rows": [
+            [
+              "P.361 直线(15)(16)",
+              "$|x|+|y|\\le 1$；$[0,1]^2$ 内 $|x-y|\\le\\frac{1}{2}$",
+              "中心菱形（四顶点 $(\\pm 1,0),(0,\\pm 1)$）；正方形截去两角斜带",
+              "高度对称！先用普通/轮换对称降为第一象限"
+            ],
+            [
+              "P.363 曲线(7)(8)",
+              "$(x-1)^2+(y-1)^2\\le 2$；$\\frac{1}{4}\\le x^2+y^2$ 且 $x^2+y^2\\ge x^4+y^4$",
+              "偏心圆过原点；后者极坐标 $r^2\\le\\frac{1}{\\cos^4\\theta+\\sin^4\\theta}$（四分之一圆枕）",
+              "偏心圆优先平移；四次不等式化极坐标立明"
+            ],
+            [
+              "P.364 曲线(16)(19)",
+              "$x+y+xy\\ge 1,x^2+y^2\\le 1$；$(x^2+y^2)^2\\le 2xy$",
+              "前者因式分解 $(x+1)(y+1)\\ge 2$ 双曲线弓形；后者**斜双纽线** $r^2\\le\\sin 2\\theta$（Q1, Q3）",
+              "斜双纽线必用极坐标 $\\theta\\in[0,\\frac{\\pi}{2}]$ 两倍"
+            ],
+            [
+              "P.365 曲线(23)(27)",
+              "$(x^2+y^2)^2\\le x^2-y^2\\;(x\\ge 0)$；$1\\le 4xy,\\;2xy\\le 1,\\;x<y\\le\\sqrt{3}x$",
+              "前者右半双纽线 $r^2\\le\\cos 2\\theta\\;(\\theta\\in[-\\frac{\\pi}{4},\\frac{\\pi}{4}])$；后者双曲线-射线曲边梯形",
+              "后者可用换元 $u=xy,\\;v=\\frac{y}{x}$ 化矩形！"
+            ],
+            [
+              "P.366 曲线(31)(35)",
+              "$x\\ge -2,0\\le y\\le 2,x\\le -\\sqrt{2y-y^2}$；$x\\le\\sqrt{1+y^2},|y|\\le\\frac{x}{\\sqrt{2}}$",
+              "前者矩形挖去左半圆；后者双曲线右支夹于两渐近线间",
+              "可加性补减法 / 先 $x$ 后 $y$"
+            ],
+            [
+              "P.368-369 极(3)(6)(9)",
+              "$\\frac{\\theta}{2}\\le r\\le\\pi$；$2\\le r\\le 2(1+\\cos\\theta)$；$|\\theta|\\le\\arccos\\frac{r}{2}$",
+              "阿基米德螺线；心形线挖圆（$|\\theta|\\le\\frac{\\pi}{2}$）；反序偏心圆 $r\\le 2\\cos\\theta$",
+              "反序极坐标先还原 $r\\le r(\\theta)$ 再正常先 $r$ 后 $\\theta$"
+            ],
+            [
+              "P.370 极注（19数二）",
+              "$|x|\\le y,\\;(x^2+y^2)^3\\le y^4$",
+              "极坐标 $r\\le\\sin^2\\theta$（$\\theta\\in[\\frac{\\pi}{4},\\frac{3\\pi}{4}]$），关于 $y$ 轴对称花瓣",
+              "极坐标 + $y$ 轴对称 $\\theta\\in[\\frac{\\pi}{4},\\frac{\\pi}{2}]$ 两倍"
+            ],
+            [
+              "P.370 参数(5)",
+              "$x^2+(y-1)^2\\le 1,\\;\\frac{2}{3}x^2+\\frac{2}{9}y^2\\le a^2\\;(a>0)$",
+              "圆与椭圆交域按 $a=\\frac{2\\sqrt{2}}{3}$（顶点超圆顶）与 $a=1$（内切临界）分三段！",
+              "联立消 $x^2$ 算 $\\Delta=0$ 得 $a=1$，比顶点得 $\\frac{2\\sqrt{2}}{3}$"
+            ]
+          ]
+        }
+      ],
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.360-371上",
+        "pdfPage": 365,
+        "itemRef": "四、平面区域 D 大观 (1)~(4)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy30_14_17_pappus",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-c-05",
+      "stage": "both",
+      "section": "四、单位圆域五大秒杀结论与高斯/泊松积分",
+      "kind": "conclusion",
+      "title": "二重积分四大跨讲综合压轴题型（动态域中值、积分方程、拐点与反常极限）",
+      "examWeight": "core",
+      "summary": "近年考研数一极少孤立考纯算二重积分，常把二重积分嵌入四大综合题型中：\n① **动态收缩域求导（例14.2 & P.343 注）**：$F(t)=\\iint_{D(t)}f\\,\\mathrm{d}\\sigma$ 当 $t\\to 0^+$ 时，用二重积分中值定理写 $F(t)=f(\\xi,\\eta)\\cdot S_{D(t)}$，按面积 $S_{D(t)}$ 是 $t$ 的一次方（如椭圆 $2x^2+3y^2\\le 6t\\implies S=\\sqrt{6}\\pi t$）还是二次方（如正方形 $[0,t]^2\\implies S=t^2$）直接出导数！\n② **含二重积分常数项的函数方程（强化例14.5）**：牢记定积分/二重积分的结果只是一个**常数 $a$**，设 $a=\\iint_D\\cdots$ 后结合轮换对称性建立关于 $a$ 的一元一次方程秒解！\n③ **二重积分充当变限积分被积函数求拐点/极值（例14.10）**：先用轮换+极坐标把 $f(x)$ 化为关于 $x$ 的变限积分，无需真算出 $f(x)$，直接求导得 $y''(x)=f'(x)$！\n④ **广义高斯积分与洛必达定参（例14.11~14.13）**：分子分母同除 $\\mathrm{e}^{x^2}$ 化为 $\\frac{0}{0}$ 型，借 $\\int_0^{+\\infty}t^2\\mathrm{e}^{-t^2}\\,\\mathrm{d}t=\\frac{\\sqrt{\\pi}}{4}$ 定出常数 $a$ 后洛必达定幂次 $b$！",
+      "conditions": "动态域中值定理需验证 $f$ 在 $(0,0)$ 连续（先补定义或求极限，如例14.2 联动例13.2 得 $a=-\\frac{1}{3}$）；广义高斯积分定参前需确认收敛性。",
+      "pitfalls": "在例14.10 中切忌傻傻把 $f(x)=\\frac{\\pi}{4}\\int_{1/2}^x r\\ln r\\,\\mathrm{d}r$ 分部积出来再对 $y(x)=\\int_1^x f(t)\\,\\mathrm{d}t$ 求二阶导——既然要 $y''(x)=f'(x)$，直接对变限积分求导一步得 $\\frac{\\pi}{4}x\\ln x$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.342-343, P.352-355",
+        "pdfPage": 347,
+        "itemRef": "例 14.2, 例 14.10~14.13",
+        "crossRef": "27张宇《高数18讲》(强化) P.175 强化例 14.1 & P.179 强化例 14.5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_unit_disk_and_sym",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-e-01",
+      "stage": "foundation",
+      "section": "一、概念、保号性与对称性（基础例 14.1~14.4）",
+      "kind": "example",
+      "title": "【例 14.1】利用保号性与区域可加性比较同一被积函数在四个区域上的积分大小",
+      "examWeight": "core",
+      "problem": "设平面闭区域 $D_i\\;(i=1,2,3,4)$ 分别是由 $L_1:x^2+y^2=1$，$L_2:x^2+y^2=2$，$L_3:x^2+2y^2=2$，$L_4:2x^2+y^2=2$ 围成的平面区域，记 $I_i=\\displaystyle\\iint_{D_i}\\left(1-x^2-\\dfrac{1}{2}y^2\\right)\\mathrm{d}x\\mathrm{d}y$，则 $\\max\\{I_1,I_2,I_3,I_4\\}=$（ ）\n（A）$I_1$　（B）$I_2$　（C）$I_3$　（D）$I_4$",
+      "steps": [
+        {
+          "stepTitle": "求被积函数正负分界曲线（恰好就是 $L_4$！）",
+          "detail": "记 $f(x,y)=1-x^2-\\frac{1}{2}y^2$，令 $f(x,y)\\ge 0$ 得$$x^2+\\frac{1}{2}y^2\\le 1 \\iff 2x^2+y^2\\le 2,$$这恰好就是椭圆闭区域 $D_4$！即在 $D_4$ 内部恒有 $f(x,y)>0$，在 $D_4$ 外部恒有 $f(x,y)<0$。"
+        },
+        {
+          "stepTitle": "用区域可加性与保号性逐一与 $I_4$ 比较（免算积分！）",
+          "detail": "① $D_1\\subset D_4$，在 $D_4\\setminus D_1$ 上 $f>0$，故 $I_4=I_1+\\iint_{D_4\\setminus D_1}f\\,\\mathrm{d}\\sigma>I_1$；\n② $D_4\\subset D_2$，在 $D_2\\setminus D_4$ 上 $f<0$，故 $I_2=I_4+\\iint_{D_2\\setminus D_4}f\\,\\mathrm{d}\\sigma<I_4$；\n③ 对 $D_3$ 与 $D_4$，将互不重合部分拆开：$D_3\\setminus D_4$ 在 $D_4$ 外部（$f<0$），而 $D_4\\setminus D_3$ 在 $D_4$ 内部（$f>0$），故 $I_3=\\iint_{D_3\\cap D_4}f+\\iint_{D_3\\setminus D_4}f<\\iint_{D_3\\cap D_4}f+\\iint_{D_4\\setminus D_3}f=I_4$。综上 $I_4$ 最大！"
+        }
+      ],
+      "finalAnswer": "**选（D）**：$\\max\\{I_1,I_2,I_3,I_4\\}=I_4$。",
+      "takeaway": "凡遇「同一被积函数在不同区域上比二重积分大小」，直接找 $\\{f(x,y)\\ge 0\\}$ 就是最大值区域（对照强化例14.4），绝不要硬算积分！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.341-342",
+        "pdfPage": 346,
+        "itemRef": "例 14.1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy30_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-e-02",
+      "stage": "foundation",
+      "section": "一、概念、保号性与对称性（基础例 14.1~14.4）",
+      "kind": "example",
+      "title": "【例 14.2】动态收缩椭圆域 $D(t)$ 上二重积分的右导数 $F_+'(0)$（中值定理法）",
+      "examWeight": "core",
+      "problem": "设 $D(t)=\\{(x,y)\\mid 2x^2+3y^2\\le 6t\\}\\;(t\\ge 0)$，$f(x,y)=\\begin{cases}\\dfrac{\\sqrt[3]{1-(x^2+y^2)}-1}{\\mathrm{e}^{x^2+y^2}-1},&(x,y)\\ne(0,0),\\\\a,&(x,y)=(0,0)\\end{cases}$ 为连续函数，令 $F(t)=\\displaystyle\\iint_{D(t)}f(x,y)\\,\\mathrm{d}x\\mathrm{d}y$，则 $F_+'(0)=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "先由连续性定 $a=f(0,0)$ 并计算动态椭圆面积 $S_{D(t)}$",
+          "detail": "由第 13 讲例 13.2（令 $u=x^2+y^2\\to 0^+$）得 $a=f(0,0)=\\lim\\limits_{u\\to 0^+}\\frac{(1-u)^{1/3}-1}{\\mathrm{e}^u-1}=-\\frac{1}{3}$。将椭圆方程化为标准形 $\\frac{x^2}{3t}+\\frac{y^2}{2t}\\le 1$，半轴长为 $\\sqrt{3t}$ 与 $\\sqrt{2t}$，故面积为$$S_{D(t)}=\\pi\\cdot\\sqrt{3t}\\cdot\\sqrt{2t}=\\sqrt{6}\\pi t.$$"
+        },
+        {
+          "stepTitle": "套二重积分中值定理并取 $t\\to 0^+$ 极限",
+          "detail": "因 $f$ 连续，由二重积分中值定理，存在 $(\\xi,\\eta)\\in D(t)$ 使 $F(t)=f(\\xi,\\eta)\\cdot\\sqrt{6}\\pi t$（且 $F(0)=0$）。当 $t\\to 0^+$ 时 $D(t)$ 收缩到原点，必有 $(\\xi,\\eta)\\to(0,0)$，故$$F_+'(0)=\\lim_{t\\to 0^+}\\frac{F(t)-F(0)}{t-0}=\\lim_{t\\to 0^+}\\sqrt{6}\\pi f(\\xi,\\eta)=\\sqrt{6}\\pi f(0,0)=-\\frac{\\sqrt{6}\\pi}{3}.$$（注：若区域改为正方形 $[0,t]^2$，面积为 $t^2$，则除以 $t$ 后极限为 $0$，见基础 P.343 注！）"
+        }
+      ],
+      "finalAnswer": "$-\\dfrac{\\sqrt{6}\\pi}{3}$",
+      "takeaway": "动态域 $F(t)=\\iint_{D(t)}f\\,\\mathrm{d}\\sigma$ 在收缩点处求导，首选**二重积分中值定理** $F(t)=f(\\xi,\\eta)S_{D(t)}$，盯紧面积 $S_{D(t)}$ 是 $t$ 的几次方！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.342-343",
+        "pdfPage": 347,
+        "itemRef": "例 14.2 & P.343 注"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy30_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-e-03",
+      "stage": "foundation",
+      "section": "一、概念、保号性与对称性（基础例 14.1~14.4）",
+      "kind": "example",
+      "title": "【例 14.3】补作对称辅助线 $y=x^2$ 与 $y=\\sqrt{x}$ 秒比三个二重积分大小",
+      "examWeight": "core",
+      "problem": "设 $J_i=\\displaystyle\\iint_{D_i}\\sqrt[3]{x-y}\\,\\mathrm{d}x\\mathrm{d}y\\;(i=1,2,3)$，其中 $D_1=[0,1]\\times[0,1]$，$D_2=\\{(x,y)\\mid 0\\le x\\le 1,\\;0\\le y\\le\\sqrt{x}\\}$，$D_3=\\{(x,y)\\mid 0\\le x\\le 1,\\;x^2\\le y\\le 1\\}$，则（ ）\n（A）$J_1<J_2<J_3$　（B）$J_3<J_1<J_2$　（C）$J_2<J_3<J_1$　（D）$J_2<J_1<J_3$",
+      "steps": [
+        {
+          "stepTitle": "识别反对称核 $f(y,x)=-f(x,y)$，秒得 $J_1=0$",
+          "detail": "记 $f(x,y)=\\sqrt[3]{x-y}$，显然 $f(y,x)=\\sqrt[3]{y-x}=-f(x,y)$。正方形 $D_1$ 关于 $y=x$ 对称，由普通对称性立得 $J_1=0$。"
+        },
+        {
+          "stepTitle": "在 $D_2, D_3$ 中补作对称辅助曲线判断正负号",
+          "detail": "① 对 $D_2\\;(0\\le y\\le\\sqrt{x})$：补作 $y=\\sqrt{x}$ 关于 $y=x$ 的对称曲线 $y=x^2$，将 $D_2$ 分为 $D_{21}\\;(x^2\\le y\\le\\sqrt{x})$ 与 $D_{22}\\;(0\\le y\\le x^2)$。$D_{21}$ 关于 $y=x$ 对称故积分 $=0$；而在 $D_{22}$ 上 $x\\ge y$ 且不恒等，故 $J_2=\\iint_{D_{22}}\\sqrt[3]{x-y}\\,\\mathrm{d}\\sigma>0$！\n② 对 $D_3\\;(x^2\\le y\\le 1)$：补作辅助线 $y=\\sqrt{x}$，同理把对称部分 $D_{32}$ 积分为 $0$ 剥离，剩下 $D_{31}\\;(\\sqrt{x}\\le y\\le 1)$ 上恒有 $x\\le y$，故 $J_3=\\iint_{D_{31}}\\sqrt[3]{x-y}\\,\\mathrm{d}\\sigma<0$！综上 $J_3<J_1<J_2$。"
+        }
+      ],
+      "finalAnswer": "**选（B）**：$J_3<J_1<J_2$。",
+      "takeaway": "**补线构对称**是考研高频巧技：把原区域边界关于 $y=x$ 镜像过去画一条辅助线，切出对称归零块，剩余一块正负一眼立判！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.345",
+        "pdfPage": 350,
+        "itemRef": "例 14.3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy30_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-e-04",
+      "stage": "foundation",
+      "section": "一、概念、保号性与对称性（基础例 14.1~14.4）",
+      "kind": "example",
+      "title": "【例 14.4】轮换对称性化简分母 $u+v$：求第一象限圆环积分表达式",
+      "examWeight": "core",
+      "problem": "设 $f(x)=\\displaystyle\\iint_{D(x)}\\dfrac{v\\ln\\sqrt{u^2+v^2}}{u+v}\\,\\mathrm{d}u\\mathrm{d}v$，$D(x)=\\left\\{(u,v)\\,\\middle|\\,\\dfrac{1}{4}\\le u^2+v^2\\le x^2,\\;u>0,\\;v>0\\right\\}\\;\\left(x>\\dfrac{1}{2}\\right)$，则 $f(x)=$（ ）\n（A）$\\dfrac{1}{4}\\displaystyle\\iint_{D(x)}\\ln(u^2+v^2)\\,\\mathrm{d}u\\mathrm{d}v$　（B）$\\dfrac{1}{2}\\displaystyle\\iint_{D(x)}\\ln(u^2+v^2)\\,\\mathrm{d}u\\mathrm{d}v$　（C）$\\displaystyle\\iint_{D(x)}\\ln(u^2+v^2)\\,\\mathrm{d}u\\mathrm{d}v$　（D）$2\\displaystyle\\iint_{D(x)}\\ln(u^2+v^2)\\,\\mathrm{d}u\\mathrm{d}v$",
+      "steps": [
+        {
+          "stepTitle": "检查 $u,v$ 互换区域不变，应用轮换对称性消去分母 $u+v$",
+          "detail": "区域 $D(x)$ 关于直线 $v=u$ 对称，对调哑变量 $u\\leftrightarrow v$ 并相加取半：$$f(x)=\\frac{1}{2}\\iint_{D(x)}\\frac{(v+u)\\ln\\sqrt{u^2+v^2}}{u+v}\\,\\mathrm{d}u\\mathrm{d}v=\\frac{1}{2}\\iint_{D(x)}\\ln\\sqrt{u^2+v^2}\\,\\mathrm{d}u\\mathrm{d}v.$$"
+        },
+        {
+          "stepTitle": "将根号幂次 $\\frac{1}{2}$ 提到对数外",
+          "detail": "利用 $\\ln\\sqrt{u^2+v^2}=\\frac{1}{2}\\ln(u^2+v^2)$，得$$f(x)=\\frac{1}{4}\\iint_{D(x)}\\ln(u^2+v^2)\\,\\mathrm{d}u\\mathrm{d}v.$$"
+        }
+      ],
+      "finalAnswer": "**选（A）**：$\\dfrac{1}{4}\\displaystyle\\iint_{D(x)}\\ln(u^2+v^2)\\,\\mathrm{d}u\\mathrm{d}v$。",
+      "takeaway": "见到对称区域上分母为 $u+v$、分子只含单个 $u$ 或 $v$，100% 触发**轮换对称性**相加约分母！（且莫忘 $\\ln\\sqrt{\\cdot}$ 再吐出一个 $\\frac{1}{2}$；延伸见例14.10！）",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.347",
+        "pdfPage": 352,
+        "itemRef": "例 14.4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy30_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-e-05",
+      "stage": "foundation",
+      "section": "二、直角坐标与交换积分次序（基础例 14.5~14.7）",
+      "kind": "example",
+      "title": "【例 14.5】交换积分次序与反三角分支陷阱：$x\\in[\\frac{\\pi}{2},\\pi]$ 时 $x=\\pi-\\arcsin y$",
+      "examWeight": "core",
+      "problem": "设函数 $f(x,y)$ 连续，则二次积分 $\\displaystyle\\int_{\\frac{\\pi}{2}}^\\pi\\mathrm{d}x\\int_{\\sin x}^1 f(x,y)\\,\\mathrm{d}y=$（ ）\n（A）$\\displaystyle\\int_0^1\\mathrm{d}y\\int_{\\pi+\\arcsin y}^\\pi f(x,y)\\,\\mathrm{d}x$　（B）$\\displaystyle\\int_0^1\\mathrm{d}y\\int_{\\pi-\\arcsin y}^\\pi f(x,y)\\,\\mathrm{d}x$　（C）$\\displaystyle\\int_0^1\\mathrm{d}y\\int_{\\frac{\\pi}{2}}^{\\pi+\\arcsin y}f(x,y)\\,\\mathrm{d}x$　（D）$\\displaystyle\\int_0^1\\mathrm{d}y\\int_{\\frac{\\pi}{2}}^{\\pi-\\arcsin y}f(x,y)\\,\\mathrm{d}x$",
+      "steps": [
+        {
+          "stepTitle": "还原积分区域 $D$ 并画出图形",
+          "detail": "由原累次积分读出 $D=\\left\\{(x,y)\\,\\middle|\\,\\frac{\\pi}{2}\\le x\\le\\pi,\\;\\sin x\\le y\\le 1\\right\\}$（正弦曲线在 $[\\frac{\\pi}{2},\\pi]$ 下降段的上方与 $y=1$ 之间的曲边三角形）。"
+        },
+        {
+          "stepTitle": "改为先 $x$ 后 $y$：注意 $[\\frac{\\pi}{2},\\pi]$ 上 $\\sin x=y$ 的正确反解！",
+          "detail": "先定外层 $y$ 范围：$0\\le y\\le 1$；再在限内画水平线向右穿出，左交曲线 $y=\\sin x$、右交直线 $x=\\pi$。因为 $x\\in[\\frac{\\pi}{2},\\pi]$ 落在第二象限而 $\\arcsin y\\in[0,\\frac{\\pi}{2}]$，故 $\\sin(\\pi-x)=\\sin x=y\\implies x=\\pi-\\arcsin y$！于是原式 $=\\int_0^1\\mathrm{d}y\\int_{\\pi-\\arcsin y}^\\pi f(x,y)\\,\\mathrm{d}x$。"
+        }
+      ],
+      "finalAnswer": "**选（B）**：$\\displaystyle\\int_0^1\\mathrm{d}y\\int_{\\pi-\\arcsin y}^\\pi f(x,y)\\,\\mathrm{d}x$。",
+      "takeaway": "反解 $y=\\sin x$ 务必先看 $x$ 的区间：在 $[-\\frac{\\pi}{2},\\frac{\\pi}{2}]$ 才写 $\\arcsin y$，在 $[\\frac{\\pi}{2},\\frac{3\\pi}{2}]$ 必写 $\\pi-\\arcsin y$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.348-349",
+        "pdfPage": 353,
+        "itemRef": "例 14.5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy30_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-e-06",
+      "stage": "foundation",
+      "section": "二、直角坐标与交换积分次序（基础例 14.5~14.7）",
+      "kind": "example",
+      "title": "【例 14.6】下限大于上限先添负号 + 换序避开不可积核 $\\sin\\frac{y}{t}$ 定等价无穷小（含瑕疵注 #48）",
+      "examWeight": "core",
+      "problem": "当 $x\\to 0^+$ 时，$f(x)=\\displaystyle\\int_0^{x^2}\\mathrm{d}y\\int_x^{\\sqrt{y}}\\sin\\dfrac{y}{t}\\,\\mathrm{d}t$ 与 $g(x)=ax^b$ 是等价无穷小，则 $ab=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "关键排雷：检查上下限大小，先对调添负号再化二重积分！",
+          "detail": "因 $x>0$ 且 $0\\le y\\le x^2$，故有 $\\sqrt{y}\\le x$（内层**下限 $x$ 大于上限 $\\sqrt{y}$**！）。必须先交换内层上下限并在外添负号：$$f(x)=-\\int_0^{x^2}\\mathrm{d}y\\int_{\\sqrt{y}}^x\\sin\\frac{y}{t}\\,\\mathrm{d}t=-\\iint_D\\sin\\frac{y}{t}\\,\\mathrm{d}\\sigma,\\quad D=\\{(t,y)\\mid 0\\le t\\le x,\\;0\\le y\\le t^2\\}.$$（注：原书 P.349 分析行将积分变量 $t$ 误印作 $x$，见台账 #48，正文解答完全正确。）"
+        },
+        {
+          "stepTitle": "交换积分次序改为先 $y$ 后 $t$，再用洛必达定 $(a,b)$",
+          "detail": "因 $\\sin\\frac{y}{t}$ 对 $t$ 无初等原函数，交换为先对 $y$ 积分：$$f(x)=-\\int_0^x\\mathrm{d}t\\int_0^{t^2}\\sin\\frac{y}{t}\\,\\mathrm{d}y=\\int_0^x t\\left.\\cos\\frac{y}{t}\\right|_{y=0}^{y=t^2}\\mathrm{d}t=\\int_0^x t(\\cos t-1)\\,\\mathrm{d}t.$$对 $\\lim\\limits_{x\\to 0^+}\\frac{f(x)}{ax^b}=1$ 用洛必达与等价无穷小 $\\cos x-1\\sim -\\frac{1}{2}x^2$：$$1=\\lim_{x\\to 0^+}\\frac{x(\\cos x-1)}{ab\\,x^{b-1}}=\\lim_{x\\to 0^+}\\frac{-\\frac{1}{2}x^3}{ab\\,x^{b-1}}\\implies b-1=3\\;(b=4),\\quad ab=-\\frac{1}{2}\\;\\left(a=-\\frac{1}{8}\\right).$$"
+        }
+      ],
+      "finalAnswer": "$ab=-\\dfrac{1}{2}$（其中 $a=-\\dfrac{1}{8},\\;b=4$）。",
+      "takeaway": "**双陷阱超级母题**：① 内层下限大于上限必须先对调添负号再画域；② 对 $y$ 积 $\\sin\\frac{y}{t}$ 吐出 $-t\\cos\\frac{y}{t}$ 瞬间可积；③ 只问 $ab$ 时洛必达一次直接读出 $ab=-\\frac{1}{2}$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.349",
+        "pdfPage": 354,
+        "itemRef": "例 14.6"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy30_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-e-07",
+      "stage": "foundation",
+      "section": "二、直角坐标与交换积分次序（基础例 14.5~14.7）",
+      "kind": "example",
+      "title": "【例 14.7】交换积分次序 + 区间再现秒算 $\\int_0^1\\mathrm{d}y\\int_y^1\\arcsin\\sqrt{4x-4x^2}\\,\\mathrm{d}x$",
+      "examWeight": "core",
+      "problem": "计算累次积分 $\\displaystyle\\int_0^1\\mathrm{d}y\\int_y^1\\arcsin\\sqrt{4x-4x^2}\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "画三角形域交换积分次序（先 $y$ 后 $x$）",
+          "detail": "积分区域为 $D=\\{(x,y)\\mid 0\\le x\\le 1,\\;0\\le y\\le x\\}$，交换次序得$$\\text{原式}=\\int_0^1\\mathrm{d}x\\int_0^x\\arcsin\\sqrt{4x-4x^2}\\,\\mathrm{d}y=\\int_0^1 x\\arcsin\\sqrt{4x-4x^2}\\,\\mathrm{d}x.$$"
+        },
+        {
+          "stepTitle": "完整推导：区间再现（$x\\to 1-x$）+ 配方降维算出 $\\frac{1}{2}$",
+          "detail": "注意到 $4x-4x^2=4x(1-x)$ 关于 $x=\\frac{1}{2}$ 对称！令 $t=1-x$ 作区间再现并相加取半：$$I=\\frac{1}{2}\\int_0^1\\arcsin\\sqrt{1-(2x-1)^2}\\,\\mathrm{d}x.$$令 $u=2x-1\\in[-1,1]$（偶函数，取 $[0,1]$ 两倍）：$$I=\\frac{1}{2}\\cdot\\frac{1}{2}\\cdot 2\\int_0^1\\arcsin\\sqrt{1-u^2}\\,\\mathrm{d}u=\\frac{1}{2}\\int_0^1\\arccos u\\,\\mathrm{d}u=\\frac{1}{2}\\left.\\bigl(u\\arccos u-\\sqrt{1-u^2}\\bigr)\\right|_0^1=\\frac{1}{2}(0+1)=\\frac{1}{2}.$$（书上直接引用第 9 讲例 9.15 结论 $\\int_0^1 x\\arcsin\\sqrt{4x-4x^2}\\,\\mathrm{d}x=\\frac{1}{2}$，此处给出完整自洽推导！）"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{1}{2}$",
+      "takeaway": "记住两个常考定积分公式：$\\int_0^1\\arcsin\\sqrt{1-x^2}\\,\\mathrm{d}x=1$，$\\int_0^1 x\\arcsin\\sqrt{4x-4x^2}\\,\\mathrm{d}x=\\frac{1}{2}$（用区间再现 + $\\arcsin\\sqrt{1-u^2}=\\arccos u$ 轻松现推！）。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.350",
+        "pdfPage": 355,
+        "itemRef": "例 14.7"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy30_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-e-08",
+      "stage": "foundation",
+      "section": "三、极坐标系、高斯积分与两系互化（基础例 14.8~14.14）",
+      "kind": "example",
+      "title": "【例 14.8】轮换对称性 + 极坐标秒算圆盘上的 $\\iint_D(x^2+\\frac{y^2}{2})\\,\\mathrm{d}x\\mathrm{d}y$",
+      "examWeight": "core",
+      "problem": "设区域 $D=\\{(x,y)\\mid x^2+y^2\\le\\sqrt{2}\\}$，则 $\\displaystyle\\iint_D\\left(x^2+\\dfrac{y^2}{2}\\right)\\mathrm{d}x\\mathrm{d}y=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "先用轮换对称性凑出旋转对称核 $x^2+y^2$",
+          "detail": "圆盘 $D$ 关于 $y=x$ 对称，由轮换对称性：$$I=\\frac{1}{2}\\iint_D\\left[\\left(x^2+\\frac{y^2}{2}\\right)+\\left(y^2+\\frac{x^2}{2}\\right)\\right]\\mathrm{d}x\\mathrm{d}y=\\frac{3}{4}\\iint_D(x^2+y^2)\\,\\mathrm{d}x\\mathrm{d}y.$$"
+        },
+        {
+          "stepTitle": "转极坐标（半径 $R=2^{1/4}$）两步出数",
+          "detail": "$$I=\\frac{3}{4}\\int_0^{2\\pi}\\mathrm{d}\\theta\\int_0^{2^{\\frac{1}{4}}}r^2\\cdot r\\,\\mathrm{d}r=\\frac{3}{4}\\cdot 2\\pi\\cdot\\left.\\frac{r^4}{4}\\right|_0^{2^{\\frac{1}{4}}}=\\frac{3\\pi}{2}\\cdot\\frac{2}{4}=\\frac{3\\pi}{4}.$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{3\\pi}{4}$",
+      "takeaway": "圆盘 $x^2+y^2\\le R^2$ 上凡见 $ax^2+by^2$，轮换对称立刻变 $\\frac{a+b}{2}(x^2+y^2)$，套 $\\iint(x^2+y^2)\\,\\mathrm{d}\\sigma=\\frac{\\pi}{2}R^4$ 瞬间得 $\\frac{a+b}{4}\\pi R^4$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.351",
+        "pdfPage": 356,
+        "itemRef": "例 14.8"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy30_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-e-09",
+      "stage": "foundation",
+      "section": "三、极坐标系、高斯积分与两系互化（基础例 14.8~14.14）",
+      "kind": "example",
+      "title": "【例 14.9 · ★★★复习标杆】斜椭圆环域上的 $\\iint_D\\frac{1}{3x^2+y^2}\\,\\mathrm{d}x\\mathrm{d}y$（极坐标消参神技！）",
+      "examWeight": "core",
+      "problem": "设平面有界区域 $D$ 位于第一象限，由曲线 $x^2+y^2-xy=1$，$x^2+y^2-xy=2$ 与直线 $y=\\sqrt{3}x$，$y=0$ 围成，计算 $\\displaystyle\\iint_D\\dfrac{1}{3x^2+y^2}\\,\\mathrm{d}x\\mathrm{d}y$。",
+      "steps": [
+        {
+          "stepTitle": "将两斜椭圆与两射线直接化为极坐标方程定上下限",
+          "detail": "由 $x=r\\cos\\theta,\\;y=r\\sin\\theta$，斜椭圆 $x^2+y^2-xy=1$ 化为 $r^2(1-\\sin\\theta\\cos\\theta)=1\\implies r=\\frac{1}{\\sqrt{1-\\sin\\theta\\cos\\theta}}$；同理外边界 $x^2+y^2-xy=2$ 化为 $r=\\frac{\\sqrt{2}}{\\sqrt{1-\\sin\\theta\\cos\\theta}}$。两射线 $y=0$ 与 $y=\\sqrt{3}x$ 对应 $\\theta=0$ 与 $\\theta=\\frac{\\pi}{3}$。（注：即使不画精图也可由代数式直接定限；用描点法或二次型正交变换 $\\frac{1}{2}y_1^2+\\frac{3}{2}y_2^2=1,2$ 均知两边界为同心旋转椭圆！）"
+        },
+        {
+          "stepTitle": "先对 $r$ 积分竟神奇消去含 $\\theta$ 的复杂根式！",
+          "detail": "$$\\iint_D\\frac{1}{3x^2+y^2}\\,\\mathrm{d}x\\mathrm{d}y=\\int_0^{\\frac{\\pi}{3}}\\mathrm{d}\\theta\\int_{\\frac{1}{\\sqrt{1-\\sin\\theta\\cos\\theta}}}^{\\frac{\\sqrt{2}}{\\sqrt{1-\\sin\\theta\\cos\\theta}}}\\frac{1}{r^2(3\\cos^2\\theta+\\sin^2\\theta)}\\cdot r\\,\\mathrm{d}r.$$内层 $\\int_{r_1}^{r_2}\\frac{\\mathrm{d}r}{r}=\\ln\\frac{r_2}{r_1}=\\ln\\sqrt{2}=\\frac{\\ln 2}{2}$，所有 $\\sqrt{1-\\sin\\theta\\cos\\theta}$ 完美约掉！"
+        },
+        {
+          "stepTitle": "分子分母同除 $\\cos^2\\theta$ 凑 $\\mathrm{d}(\\tan\\theta)$ 收尾",
+          "detail": "$$\\text{原式}=\\frac{\\ln 2}{2}\\int_0^{\\frac{\\pi}{3}}\\frac{\\mathrm{d}\\theta}{3\\cos^2\\theta+\\sin^2\\theta}=\\frac{\\ln 2}{2}\\int_0^{\\frac{\\pi}{3}}\\frac{\\mathrm{d}(\\tan\\theta)}{3+\\tan^2\\theta}=\\left.\\frac{\\ln 2}{2}\\cdot\\frac{1}{\\sqrt{3}}\\arctan\\frac{\\tan\\theta}{\\sqrt{3}}\\right|_0^{\\frac{\\pi}{3}}=\\frac{\\ln 2}{2\\sqrt{3}}\\cdot\\frac{\\pi}{4}=\\frac{\\sqrt{3}\\ln 2}{24}\\pi.$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{\\sqrt{3}\\ln 2}{24}\\pi$",
+      "takeaway": "张宇点名「**★★★二重积分复习标杆**」（强化例14.7 同题）：只要被积函数是 $-2$ 次齐次分式（如 $\\frac{1}{3x^2+y^2}$），配极坐标 $r\\,\\mathrm{d}r$ 后内层变成 $\\frac{\\mathrm{d}r}{r}\\to\\ln\\frac{r_2(\\theta)}{r_1(\\theta)}$，上下限公因子全自动约光！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.351-352",
+        "pdfPage": 356,
+        "itemRef": "例 14.9",
+        "crossRef": "27张宇《高数18讲》(强化) P.181 强化例 14.7"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy30_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-e-10",
+      "stage": "foundation",
+      "section": "三、极坐标系、高斯积分与两系互化（基础例 14.8~14.14）",
+      "kind": "example",
+      "title": "【例 14.10】轮换 + 极坐标化变限积分免算求拐点（接续例 14.4）",
+      "examWeight": "core",
+      "problem": "设 $f(x)=\\displaystyle\\iint_{D(x)}\\dfrac{v\\ln\\sqrt{u^2+v^2}}{u+v}\\,\\mathrm{d}u\\mathrm{d}v$，$D(x)=\\left\\{(u,v)\\,\\middle|\\,\\dfrac{1}{4}\\le u^2+v^2\\le x^2,\\;u>0,\\;v>0\\right\\}$，求曲线 $y(x)=\\displaystyle\\int_1^x f(t)\\,\\mathrm{d}t\\;\\left(x>\\dfrac{1}{2}\\right)$ 的拐点。",
+      "steps": [
+        {
+          "stepTitle": "接续例 14.4 并转极坐标将 $f(x)$ 写为变限积分（切忌硬积！）",
+          "detail": "由例14.4 得 $f(x)=\\frac{1}{4}\\iint_{D(x)}\\ln(u^2+v^2)\\,\\mathrm{d}u\\mathrm{d}v$。对第一象限圆环 $D(x)$ 转极坐标（$\\theta\\in[0,\\frac{\\pi}{2}],\\;r\\in[\\frac{1}{2},x]$）：$$f(x)=\\frac{1}{4}\\int_0^{\\frac{\\pi}{2}}\\mathrm{d}\\theta\\int_{\\frac{1}{2}}^x \\ln(r^2)\\cdot r\\,\\mathrm{d}r=\\frac{\\pi}{4}\\int_{\\frac{1}{2}}^x r\\ln r\\,\\mathrm{d}r.$$"
+        },
+        {
+          "stepTitle": "直接对变限积分求导得 $y''(x)=f'(x)$ 并检验变号",
+          "detail": "因 $y'(x)=f(x)$，故$$y''(x)=f'(x)=\\frac{\\pi}{4}x\\ln x.$$令 $y''(x)=0$ 在 $x>\\frac{1}{2}$ 上得唯一根 $x=1$。当 $\\frac{1}{2}<x<1$ 时 $y''(x)<0$，当 $x>1$ 时 $y''(x)>0$，两侧严格变号！又 $y(1)=\\int_1^1 f(t)\\,\\mathrm{d}t=0$，故唯一拐点为 $(1,0)$。"
+        }
+      ],
+      "finalAnswer": "拐点为 $(1,0)$。",
+      "takeaway": "目标只需要 $y''(x)=f'(x)$ 时，化出变限积分 $f(x)=\\frac{\\pi}{4}\\int_{1/2}^x r\\ln r\\,\\mathrm{d}r$ 就**立刻停手直接求导**，绝不做多余的分部积分！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.352-353",
+        "pdfPage": 357,
+        "itemRef": "例 14.10"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy30_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-e-11",
+      "stage": "foundation",
+      "section": "三、极坐标系、高斯积分与两系互化（基础例 14.8~14.14）",
+      "kind": "example",
+      "title": "【例 14.11】高斯/泊松积分 $\\int_0^{+\\infty}\\mathrm{e}^{-x^2}\\,\\mathrm{d}x=\\frac{\\sqrt{\\pi}}{2}$ 的二重积分极坐标巧证",
+      "examWeight": "core",
+      "problem": "计算广义积分 $I=\\displaystyle\\int_0^{+\\infty}\\mathrm{e}^{-x^2}\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "平方升维转化为第一象限二重积分",
+          "detail": "利用定积分与哑变量字母无关，$I=\\int_0^{+\\infty}\\mathrm{e}^{-x^2}\\,\\mathrm{d}x=\\int_0^{+\\infty}\\mathrm{e}^{-y^2}\\,\\mathrm{d}y$，相乘得$$I^2=\\int_0^{+\\infty}\\mathrm{e}^{-x^2}\\,\\mathrm{d}x\\cdot\\int_0^{+\\infty}\\mathrm{e}^{-y^2}\\,\\mathrm{d}y=\\iint_{\\substack{x\\ge 0\\\\y\\ge 0}}\\mathrm{e}^{-(x^2+y^2)}\\,\\mathrm{d}x\\mathrm{d}y.$$"
+        },
+        {
+          "stepTitle": "转极坐标（$r\\in[0,+\\infty),\\;\\theta\\in[0,\\frac{\\pi}{2}]$）并由保号性开正根",
+          "detail": "将第一象限视为半径 $r\\to+\\infty$ 的四分之一圆盘：$$I^2=\\int_0^{\\frac{\\pi}{2}}\\mathrm{d}\\theta\\int_0^{+\\infty}\\mathrm{e}^{-r^2}\\cdot r\\,\\mathrm{d}r=\\frac{\\pi}{2}\\left.\\left(-\\frac{1}{2}\\mathrm{e}^{-r^2}\\right)\\right|_0^{+\\infty}=\\frac{\\pi}{4}.$$由积分保号性知 $I>0$，开方即得 $I=\\dfrac{\\sqrt{\\pi}}{2}$。"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{\\sqrt{\\pi}}{2}$",
+      "takeaway": "全书最经典的一元升二维巧算！记牢 $\\int_0^{+\\infty}\\mathrm{e}^{-x^2}\\,\\mathrm{d}x=\\frac{\\sqrt{\\pi}}{2}$ 与 $\\int_{-\\infty}^{+\\infty}\\mathrm{e}^{-x^2}\\,\\mathrm{d}x=\\sqrt{\\pi}$（概率论正态分布归一化的根本来源）。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.353",
+        "pdfPage": 358,
+        "itemRef": "例 14.11"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_unit_disk_and_sym",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-e-12",
+      "stage": "foundation",
+      "section": "三、极坐标系、高斯积分与两系互化（基础例 14.8~14.14）",
+      "kind": "example",
+      "title": "【例 14.12】偶函数对称 + $\\Gamma$ 函数（与分部积分双法）求 $\\int_{-\\infty}^{+\\infty}x^2\\mathrm{e}^{-x^2}\\,\\mathrm{d}x$",
+      "examWeight": "core",
+      "problem": "计算广义积分 $\\displaystyle\\int_{-\\infty}^{+\\infty}x^2\\mathrm{e}^{-x^2}\\,\\mathrm{d}x$。",
+      "steps": [
+        {
+          "stepTitle": "法一（首选）：偶函数两倍 + $\\Gamma$ 函数一步秒算",
+          "detail": "因被积函数偶且收敛，利用 $\\Gamma(\\alpha)=2\\int_0^{+\\infty}x^{2\\alpha-1}\\mathrm{e}^{-x^2}\\,\\mathrm{d}x$（第 9 讲例 9.28）与 $\\Gamma(\\frac{1}{2})=\\sqrt{\\pi}$：$$\\int_{-\\infty}^{+\\infty}x^2\\mathrm{e}^{-x^2}\\,\\mathrm{d}x=2\\int_0^{+\\infty}x^{2\\cdot\\frac{3}{2}-1}\\mathrm{e}^{-x^2}\\,\\mathrm{d}x=\\Gamma\\!\\left(\\frac{3}{2}\\right)=\\frac{1}{2}\\Gamma\\!\\left(\\frac{1}{2}\\right)=\\frac{\\sqrt{\\pi}}{2}.$$"
+        },
+        {
+          "stepTitle": "法二（书注对比）：分部积分降幂接轨例 14.11",
+          "detail": "$$\\int_0^{+\\infty}x^2\\mathrm{e}^{-x^2}\\,\\mathrm{d}x=\\int_0^{+\\infty}\\left(-\\frac{1}{2}x\\right)\\mathrm{d}(\\mathrm{e}^{-x^2})=\\left.-\\frac{1}{2}x\\mathrm{e}^{-x^2}\\right|_0^{+\\infty}+\\frac{1}{2}\\int_0^{+\\infty}\\mathrm{e}^{-x^2}\\,\\mathrm{d}x=0+\\frac{1}{2}\\cdot\\frac{\\sqrt{\\pi}}{2}=\\frac{\\sqrt{\\pi}}{4},$$再乘 $2$ 得全轴积分 $\\dfrac{\\sqrt{\\pi}}{2}$。"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{\\sqrt{\\pi}}{2}$",
+      "takeaway": "半轴 $\\int_0^{+\\infty}x^2\\mathrm{e}^{-x^2}\\,\\mathrm{d}x=\\frac{\\sqrt{\\pi}}{4}$，全轴 $\\int_{-\\infty}^{+\\infty}x^2\\mathrm{e}^{-x^2}\\,\\mathrm{d}x=\\frac{\\sqrt{\\pi}}{2}$，记住 $\\Gamma$ 递推 $\\Gamma(\\alpha+1)=\\alpha\\Gamma(\\alpha)$ 几秒出结果！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.354",
+        "pdfPage": 359,
+        "itemRef": "例 14.12"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_unit_disk_and_sym",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-e-13",
+      "stage": "foundation",
+      "section": "三、极坐标系、高斯积分与两系互化（基础例 14.8~14.14）",
+      "kind": "example",
+      "title": "【例 14.13】含 $\\mathrm{e}^{x^2}$ 的变限积分极限反求 $(a,b)$（衔接例 14.12 高斯积分！）",
+      "examWeight": "core",
+      "problem": "已知 $\\lim\\limits_{x\\to+\\infty}\\dfrac{\\displaystyle\\int_0^x t^2\\mathrm{e}^{x^2-t^2}\\,\\mathrm{d}t+a\\mathrm{e}^{x^2}}{x^b}=-\\dfrac{1}{2}$，求常数 $a,b$ 的值。",
+      "steps": [
+        {
+          "stepTitle": "分子分母同除以 $\\mathrm{e}^{x^2}$ 化为 $\\frac{0}{0}$ 型并立刻定出 $a$",
+          "detail": "提出与积分变量 $t$ 无关的 $\\mathrm{e}^{x^2}$ 并同除之：$$\\text{原式}=\\lim_{x\\to+\\infty}\\frac{\\displaystyle\\int_0^x t^2\\mathrm{e}^{-t^2}\\,\\mathrm{d}t+a}{x^b\\mathrm{e}^{-x^2}}=-\\frac{1}{2}.$$无论 $b$ 取何实数，当 $x\\to+\\infty$ 时分母 $x^b\\mathrm{e}^{-x^2}\\to 0$，而极限有限，故分子极限必为 $0$！由例14.12 得$$a=-\\int_0^{+\\infty}t^2\\mathrm{e}^{-t^2}\\,\\mathrm{d}t=-\\frac{\\sqrt{\\pi}}{4}.$$"
+        },
+        {
+          "stepTitle": "应用洛必达法则约去 $\\mathrm{e}^{-x^2}$ 定出 $b=1$",
+          "detail": "$$\\text{原式}=\\lim_{x\\to+\\infty}\\frac{x^2\\mathrm{e}^{-x^2}}{b x^{b-1}\\mathrm{e}^{-x^2}-2x^{b+1}\\mathrm{e}^{-x^2}}=\\lim_{x\\to+\\infty}\\frac{x^2}{b x^{b-1}-2x^{b+1}}=-\\frac{1}{2}.$$分子主部为 $x^2$，分母主部为 $-2x^{b+1}$，故 $b+1=2\\implies b=1$！"
+        }
+      ],
+      "finalAnswer": "$a=-\\dfrac{\\sqrt{\\pi}}{4},\\;b=1$",
+      "takeaway": "看到积分号内带 $\\mathrm{e}^{x^2-t^2}$，第一步永远是**把 $\\mathrm{e}^{x^2}$ 提到积分号外并上下同除**，瞬间把 $\\frac{\\infty}{\\infty}$ 变成一眼可定参的 $\\frac{0}{0}$ 型！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.354-355",
+        "pdfPage": 359,
+        "itemRef": "例 14.13"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_unit_disk_and_sym",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-e-14",
+      "stage": "foundation",
+      "section": "三、极坐标系、高斯积分与两系互化（基础例 14.8~14.14）",
+      "kind": "example",
+      "title": "【例 14.14】直角累次积分转极坐标：直线 $x+y=1$ 与单位圆弧所围弓形积分",
+      "examWeight": "core",
+      "problem": "计算累次积分 $\\displaystyle\\int_0^1\\mathrm{d}x\\int_{1-x}^{\\sqrt{1-x^2}}\\dfrac{x+y}{x^2+y^2}\\,\\mathrm{d}y=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "画出区域 $D$ 并写出两边界的极坐标方程",
+          "detail": "区域 $D$ 位于第一象限，介于直线 $x+y=1$ 与单位圆 $x^2+y^2=1$ 之间（弓形），角度范围 $\\theta\\in\\left[0,\\frac{\\pi}{2}\\right]$。下边界 $x+y=1\\iff r(\\cos\\theta+\\sin\\theta)=1\\implies r_1(\\theta)=\\frac{1}{\\cos\\theta+\\sin\\theta}$，上边界 $r_2(\\theta)=1$。"
+        },
+        {
+          "stepTitle": "代入极坐标后 $\\cos\\theta+\\sin\\theta$ 奇迹般约分消去！",
+          "detail": "$$\\begin{aligned}\\text{原式}&=\\int_0^{\\frac{\\pi}{2}}\\mathrm{d}\\theta\\int_{\\frac{1}{\\cos\\theta+\\sin\\theta}}^1\\frac{r(\\cos\\theta+\\sin\\theta)}{r^2}\\cdot r\\,\\mathrm{d}r=\\int_0^{\\frac{\\pi}{2}}(\\cos\\theta+\\sin\\theta)\\left(1-\\frac{1}{\\cos\\theta+\\sin\\theta}\\right)\\mathrm{d}\\theta\\\\&=\\int_0^{\\frac{\\pi}{2}}(\\cos\\theta+\\sin\\theta-1)\\,\\mathrm{d}\\theta=1+1-\\frac{\\pi}{2}=2-\\frac{\\pi}{2}.\\end{aligned}$$"
+        }
+      ],
+      "finalAnswer": "$2-\\dfrac{\\pi}{2}$",
+      "takeaway": "看到直角坐标累次积分里同时出现圆弧 $\\sqrt{1-x^2}$ 与 $x^2+y^2$，别纠结换序，直接**换系（转极坐标）**，直线下限 $\\frac{1}{\\cos\\theta+\\sin\\theta}$ 恰好和分子约成常数 $1$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.355",
+        "pdfPage": 360,
+        "itemRef": "例 14.14"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy30_14_17_pappus",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-e-15",
+      "stage": "foundation",
+      "section": "四、一般换元法与古鲁金第二定理（基础例 14.15~14.17）",
+      "kind": "example",
+      "title": "【例 14.15】雅可比线性换元 vs 极坐标凑微双法求 $\\iint_D\\mathrm{e}^{\\frac{y}{x+y}}\\,\\mathrm{d}\\sigma$",
+      "examWeight": "core",
+      "problem": "设平面区域 $D=\\{(x,y)\\mid 0\\le x\\le 1-y,\\;0\\le y\\le 1\\}$，计算二重积分 $\\displaystyle\\iint_D\\mathrm{e}^{\\frac{y}{x+y}}\\,\\mathrm{d}\\sigma$。",
+      "steps": [
+        {
+          "stepTitle": "法一（首选）：雅可比线性换元 $u=x+y,\\;v=y$ 化解「头重脚轻」指数",
+          "detail": "令 $\\begin{cases}u=x+y,\\\\v=y,\\end{cases}$ 反解 $\\begin{cases}x=u-v,\\\\y=v,\\end{cases}$ 则雅可比行列式 $J=\\begin{vmatrix}1&-1\\\\0&1\\end{vmatrix}=1$。新区域由 $0\\le u-v\\le 1-v$ 及 $0\\le v\\le 1$ 化简为三角形 $D_{uv}=\\{(u,v)\\mid 0\\le u\\le 1,\\;0\\le v\\le u\\}$，于是$$I=\\int_0^1\\mathrm{d}u\\int_0^u\\mathrm{e}^{\\frac{v}{u}}\\,\\mathrm{d}v=\\int_0^1\\left.u\\mathrm{e}^{\\frac{v}{u}}\\right|_{v=0}^{v=u}\\mathrm{d}u=\\int_0^1 u(\\mathrm{e}-1)\\,\\mathrm{d}u=\\frac{1}{2}(\\mathrm{e}-1).$$"
+        },
+        {
+          "stepTitle": "法二（书注对比）：极坐标 + 神级凑微 $\\left(\\frac{\\sin\\theta}{\\cos\\theta+\\sin\\theta}\\right)'=\\frac{1}{(\\cos\\theta+\\sin\\theta)^2}$",
+          "detail": "三角形区域 $0\\le\\theta\\le\\frac{\\pi}{2},\\;0\\le r\\le\\frac{1}{\\cos\\theta+\\sin\\theta}$，转极坐标得$$I=\\int_0^{\\frac{\\pi}{2}}\\mathrm{e}^{\\frac{\\sin\\theta}{\\cos\\theta+\\sin\\theta}}\\,\\mathrm{d}\\theta\\int_0^{\\frac{1}{\\cos\\theta+\\sin\\theta}}r\\,\\mathrm{d}r=\\frac{1}{2}\\int_0^{\\frac{\\pi}{2}}\\mathrm{e}^{\\frac{\\sin\\theta}{\\cos\\theta+\\sin\\theta}}\\frac{\\mathrm{d}\\theta}{(\\cos\\theta+\\sin\\theta)^2}=\\frac{1}{2}\\left.\\mathrm{e}^{\\frac{\\sin\\theta}{\\cos\\theta+\\sin\\theta}}\\right|_0^{\\frac{\\pi}{2}}=\\frac{1}{2}(\\mathrm{e}-1).$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{1}{2}(\\mathrm{e}-1)$",
+      "takeaway": "看到分母或指数分母是 $x+y$、区域边界又恰含 $x+y=1$，用 $u=x+y,v=y$（$|J|=1$）一招通关；同时收藏极坐标神凑微 $\\left(\\frac{\\sin\\theta}{\\cos\\theta+\\sin\\theta}\\right)'=\\frac{1}{(\\cos\\theta+\\sin\\theta)^2}$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.357-358",
+        "pdfPage": 362,
+        "itemRef": "例 14.15 & P.357 注"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy30_14_17_pappus",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-e-16",
+      "stage": "foundation",
+      "section": "四、一般换元法与古鲁金第二定理（基础例 14.15~14.17）",
+      "kind": "example",
+      "title": "【例 14.16】古鲁金第二定理秒求 $y=\\sin x\\;[0,2\\pi]$ 绕斜轴 $y=-x$ 旋转体体积（含同侧验证 #50）",
+      "examWeight": "core",
+      "problem": "曲线 $y=\\sin x\\;(0\\le x\\le 2\\pi)$ 与 $x$ 轴所围区域 $D$ 绕直线 $y=-x$ 旋转一周所成的旋转体的体积为 ______。",
+      "steps": [
+        {
+          "stepTitle": "严谨补注 #50：先确认整片区域 $D$ 严格位于直线 $y=-x$ 同侧！",
+          "detail": "直线 $y=-x$ 即 $x+y=0$。① 在 $[0,\\pi]$ 上 $x\\ge 0,\\;y\\ge 0\\implies x+y\\ge 0$；② 在 $[\\pi,2\\pi]$ 上 $y\\in[\\sin x,0]\\subset[-1,0]$，而 $x\\ge\\pi>1$，故 $x+y\\ge\\pi-1>0$！因此整片区域 $D$（含上下两叶）完全位于直线 $x+y=0$ 的同一侧（仅在原点相接，绝不穿域），古鲁金第二定理严格适用！"
+        },
+        {
+          "stepTitle": "由中心对称读出形心 $(\\pi,0)$ 与面积 $S=4$，套公式秒出体积",
+          "detail": "区域 $D$ 由两个全等拱形构成，面积 $S=2\\int_0^\\pi\\sin x\\,\\mathrm{d}x=4$；且 $D$ 关于点 $(\\pi,0)$ 中心对称，故形心必为 $(\\bar{x},\\bar{y})=(\\pi,0)$！形心到旋转轴 $x+y=0$ 的距离为 $r(\\bar{x},\\bar{y})=\\frac{|\\pi+0|}{\\sqrt{1^2+1^2}}=\\frac{\\pi}{\\sqrt{2}}$，于是$$V=2\\pi\\cdot S\\cdot r(\\bar{x},\\bar{y})=2\\pi\\cdot 4\\cdot\\frac{\\pi}{\\sqrt{2}}=4\\sqrt{2}\\pi^2.$$"
+        }
+      ],
+      "finalAnswer": "$4\\sqrt{2}\\pi^2$",
+      "takeaway": "利用图形中心对称一眼锁定形心 $(\\pi,0)$，再验明不穿旋转轴（台账 #50），古鲁金第二定理两行秒杀复杂斜轴旋转体体积！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.358-359",
+        "pdfPage": 363,
+        "itemRef": "例 14.16"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy30_14_17_pappus",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-e-17",
+      "stage": "foundation",
+      "section": "四、一般换元法与古鲁金第二定理（基础例 14.15~14.17）",
+      "kind": "example",
+      "title": "【例 14.17】反用古鲁金第二定理 + 补减法巧求双偏心半圆月牙域形心 $(\\bar{x},\\bar{y})$",
+      "examWeight": "core",
+      "problem": "设 $D$ 为 $(x-1)^2+y^2=1$ 与 $(x-2)^2+y^2=2^2$ 及 $x$ 轴所围区域在第一象限的部分，则 $D$ 的形心 $(\\bar{x},\\bar{y})=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "用大、小半圆补减求面积 $S$ 与绕 $y$ 轴体积 $V_y$ 反解 $\\bar{x}$",
+          "detail": "区域 $D$ 是半径 $R_2=2$、圆心 $(2,0)$ 的大半圆盘减去半径 $R_1=1$、圆心 $(1,0)$ 的小半圆盘，面积 $S=\\frac{1}{2}\\pi(2^2-1^2)=\\frac{3\\pi}{2}$。绕 $y$ 轴旋转一周的体积由古鲁金第二定理相减得$$V_y=2\\pi\\cdot\\frac{\\pi\\cdot 2^2}{2}\\cdot 2-2\\pi\\cdot\\frac{\\pi\\cdot 1^2}{2}\\cdot 1=8\\pi^2-\\pi^2=7\\pi^2,$$反解形心横坐标 $\\bar{x}=\\dfrac{V_y}{2\\pi S}=\\dfrac{7\\pi^2}{2\\pi\\cdot\\frac{3\\pi}{2}}=\\dfrac{7}{3}$。"
+        },
+        {
+          "stepTitle": "利用半圆盘形心纵坐标 $\\frac{4R}{3\\pi}$ 求绕 $x$ 轴体积 $V_x$ 反解 $\\bar{y}$",
+          "detail": "由半圆盘形心公式（书注极坐标验证 $\\bar{y}_1=\\frac{\\int_0^{\\pi/2}\\mathrm{d}\\theta\\int_0^{2\\cos\\theta}r^2\\sin\\theta\\,\\mathrm{d}r}{\\pi/2}=\\frac{4}{3\\pi}$），小、大半圆盘形心纵坐标分别为 $\\bar{y}_1=\\frac{4}{3\\pi}$ 与 $\\bar{y}_2=\\frac{8}{3\\pi}$。绕 $x$ 轴体积（大球减小球亦可秒算：$\\frac{4}{3}\\pi(2^3-1^3)=\\frac{28\\pi}{3}$！）为$$V_x=2\\pi\\cdot\\frac{\\pi\\cdot 2^2}{2}\\cdot\\frac{8}{3\\pi}-2\\pi\\cdot\\frac{\\pi\\cdot 1^2}{2}\\cdot\\frac{4}{3\\pi}=\\frac{28\\pi}{3},$$反解形心纵坐标 $\\bar{y}=\\dfrac{V_x}{2\\pi S}=\\dfrac{28\\pi/3}{3\\pi^2}=\\dfrac{28}{9\\pi}$。"
+        }
+      ],
+      "finalAnswer": "$\\left(\\dfrac{7}{3},\\;\\dfrac{28}{9\\pi}\\right)$",
+      "takeaway": "**双圆挖孔求形心王炸捷径**：求 $\\bar{y}$ 时 $D$ 绕 $x$ 轴转出的其实就是「大球挖去小球」，直接套球体积 $\\frac{4}{3}\\pi(2^3-1^3)=\\frac{28\\pi}{3}$ 除以 $2\\pi S=3\\pi^2$，连半圆形心都不用算就秒出 $\\frac{28}{9\\pi}$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.359",
+        "pdfPage": 364,
+        "itemRef": "例 14.17 & P.359 注"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy30_14_17_pappus",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-e-18",
+      "stage": "intensive",
+      "section": "一、和式极限与交换积分次序（强化例 14.1~14.3）",
+      "kind": "example",
+      "title": "【强化例 14.1】二重和式极限转化为单位正方形上的二重积分分离变量计算",
+      "examWeight": "core",
+      "problem": "求二重和式极限 $\\lim\\limits_{n\\to\\infty}\\displaystyle\\sum_{i=1}^n\\sum_{j=1}^n\\dfrac{i}{(n+i)(n^2+j^2)}=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "精准提取面积微元 $\\frac{1}{n^2}$，拼出 $\\frac{i}{n}$ 与 $\\frac{j}{n}$",
+          "detail": "分子分母同除以 $n^3$（抽出 $\\frac{1}{n^2}$ 充当面积微元）：$$\\lim_{n\\to\\infty}\\sum_{i=1}^n\\sum_{j=1}^n\\frac{i}{(n+i)(n^2+j^2)}=\\lim_{n\\to\\infty}\\sum_{i=1}^n\\sum_{j=1}^n\\frac{\\frac{i}{n}}{\\left(1+\\frac{i}{n}\\right)\\left[1+\\left(\\frac{j}{n}\\right)^2\\right]}\\cdot\\frac{1}{n^2}.$$"
+        },
+        {
+          "stepTitle": "化为单位正方形 $D=[0,1]^2$ 上的二重积分并拆为两定积分之积",
+          "detail": "令 $x=\\frac{i}{n},\\;y=\\frac{j}{n}\\in[0,1]$，原式化为$$\\iint_{[0,1]^2}\\frac{x}{(1+x)(1+y^2)}\\,\\mathrm{d}x\\mathrm{d}y=\\int_0^1\\left(1-\\frac{1}{1+x}\\right)\\mathrm{d}x\\cdot\\int_0^1\\frac{\\mathrm{d}y}{1+y^2}=(1-\\ln 2)\\cdot\\frac{\\pi}{4}.$$"
+        }
+      ],
+      "finalAnswer": "$(1-\\ln 2)\\dfrac{\\pi}{4}$",
+      "takeaway": "看到双求和 $\\sum_{i=1}^n\\sum_{j=1}^n$，优先提 $\\frac{1}{n^2}$ 凑 $\\frac{i}{n},\\frac{j}{n}$；矩形域且被积函数可写成 $g(x)h(y)$ 时，直接拆成两个一元定积分相乘！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.175-176",
+        "pdfPage": 188,
+        "itemRef": "强化例 14.1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy18_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-e-19",
+      "stage": "intensive",
+      "section": "一、和式极限与交换积分次序（强化例 14.1~14.3）",
+      "kind": "example",
+      "title": "【强化例 14.2】交换积分次序避开不可积核 $\\frac{\\cos x}{x}$",
+      "examWeight": "core",
+      "problem": "计算累次积分 $\\displaystyle\\int_0^{\\frac{\\pi}{6}}\\mathrm{d}y\\int_y^{\\frac{\\pi}{6}}\\dfrac{\\cos x}{x}\\,\\mathrm{d}x=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "识别不可积核 $\\frac{\\cos x}{x}$，画三角形域并交换次序",
+          "detail": "$\\int\\frac{\\cos x}{x}\\,\\mathrm{d}x$ 无初等原函数，必换序！积分区域 $D=\\left\\{(x,y)\\,\\middle|\\,0\\le x\\le\\frac{\\pi}{6},\\;0\\le y\\le x\\right\\}$，交换为先 $y$ 后 $x$：$$\\text{原式}=\\int_0^{\\frac{\\pi}{6}}\\mathrm{d}x\\int_0^x\\frac{\\cos x}{x}\\,\\mathrm{d}y=\\int_0^{\\frac{\\pi}{6}}\\frac{\\cos x}{x}\\cdot x\\,\\mathrm{d}x=\\int_0^{\\frac{\\pi}{6}}\\cos x\\,\\mathrm{d}x=\\left.\\sin x\\right|_0^{\\frac{\\pi}{6}}=\\frac{1}{2}.$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{1}{2}$",
+      "takeaway": "$\\frac{\\cos x}{x}$ 换序后内层对 $y$ 积出一个 $x$ 刚好把分母约掉，这是表 14-1 不可积核换序的最经典手感！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.176",
+        "pdfPage": 189,
+        "itemRef": "强化例 14.2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy18_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-e-20",
+      "stage": "intensive",
+      "section": "一、和式极限与交换积分次序（强化例 14.1~14.3）",
+      "kind": "example",
+      "title": "【强化例 14.3】交换积分次序将 $\\frac{y}{\\sqrt{1+x^3}}$ 变为可凑微的 $\\frac{x^2}{2\\sqrt{1+x^3}}$",
+      "examWeight": "core",
+      "problem": "计算累次积分 $\\displaystyle\\int_0^2\\mathrm{d}y\\int_y^2\\dfrac{y}{\\sqrt{1+x^3}}\\,\\mathrm{d}x=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "识别 $\\frac{1}{\\sqrt{1+x^3}}$ 难积，换序先对 $y$ 积出 $\\frac{1}{2}x^2$",
+          "detail": "区域 $D=\\{(x,y)\\mid 0\\le x\\le 2,\\;0\\le y\\le x\\}$，交换积分次序得$$\\text{原式}=\\int_0^2\\mathrm{d}x\\int_0^x\\frac{y}{\\sqrt{1+x^3}}\\,\\mathrm{d}y=\\int_0^2\\frac{x^2}{2\\sqrt{1+x^3}}\\,\\mathrm{d}x.$$"
+        },
+        {
+          "stepTitle": "凑微分 $\\mathrm{d}(1+x^3)=3x^2\\,\\mathrm{d}x$ 一步出值",
+          "detail": "$$\\text{原式}=\\frac{1}{6}\\int_0^2(1+x^3)^{-\\frac{1}{2}}\\,\\mathrm{d}(1+x^3)=\\left.\\frac{1}{3}(1+x^3)^{\\frac{1}{2}}\\right|_0^2=\\frac{1}{3}(3-1)=\\frac{2}{3}.$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{2}{3}$",
+      "takeaway": "分母出现 $\\sqrt{1+x^3}$ 恰好缺一个 $x^2$ 凑微分，而换序对 $y$ 积分正好吐出 $\\frac{1}{2}x^2$——换序不仅避开不可积核，更是给外层「配凑导数因子」！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.176",
+        "pdfPage": 189,
+        "itemRef": "强化例 14.3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy18_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-e-21",
+      "stage": "intensive",
+      "section": "二、保号性选域与对称性方程（强化例 14.4~14.5）",
+      "kind": "example",
+      "title": "【强化例 14.4】确定使 $\\iint_D(1-x^2-\\frac{y^2}{2})\\,\\mathrm{d}x\\mathrm{d}y$ 达到最大值的积分区域 $D$",
+      "examWeight": "core",
+      "problem": "确定积分区域 $D$，使得二重积分 $I=\\displaystyle\\iint_D\\left(1-x^2-\\dfrac{y^2}{2}\\right)\\mathrm{d}x\\mathrm{d}y$ 达到最大值。",
+      "steps": [
+        {
+          "stepTitle": "应用二重积分保号性与区域可加性直接写出最大域",
+          "detail": "由积分保号性与可加性，要使 $I$ 达到最大，区域 $D$ 必须包含所有使被积函数 $f(x,y)=1-x^2-\\frac{y^2}{2}\\ge 0$ 的点，同时不包含任何使 $f(x,y)<0$ 的点，故最优积分区域为椭圆域$$D=\\left\\{(x,y)\\,\\middle|\\,x^2+\\frac{y^2}{2}\\le 1\\right\\}.$$（延伸：该最大值本身也可经广义极坐标 $x=r\\cos\\theta,\\;y=\\sqrt{2}r\\sin\\theta,\\;|J|=\\sqrt{2}r$ 算得 $\\sqrt{2}\\cdot 2\\pi\\int_0^1(1-r^2)r\\,\\mathrm{d}r=\\frac{\\sqrt{2}\\pi}{2}$！）"
+        }
+      ],
+      "finalAnswer": "$D=\\left\\{(x,y)\\,\\middle|\\,x^2+\\dfrac{y^2}{2}\\le 1\\right\\}$（对应最大积分值 $\\dfrac{\\sqrt{2}\\pi}{2}$）。",
+      "takeaway": "与例14.1 互为母题：令被积函数 $\\ge 0$ 一步确定最大积分域，零计算拿满分！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.177",
+        "pdfPage": 190,
+        "itemRef": "强化例 14.4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy18_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-e-22",
+      "stage": "intensive",
+      "section": "二、保号性选域与对称性方程（强化例 14.4~14.5）",
+      "kind": "example",
+      "title": "【强化例 14.5】二重积分方程定常数 $a$ + 轮换对称性神消分母 $x^2+y^2+1$",
+      "examWeight": "core",
+      "problem": "设 $f(x,y)$ 在 $D=\\{(x,y)\\mid x^2+y^2\\le 1\\}$ 上连续，且满足 $f(x,y)=\\mathrm{e}^{x^2+y^2}-\\displaystyle\\iint_D\\dfrac{(2x^2+1)f(x,y)}{x^2+y^2+1}\\,\\mathrm{d}x\\mathrm{d}y$，求 $\\displaystyle\\iint_D f(x,y)\\,\\mathrm{d}\\sigma$。",
+      "steps": [
+        {
+          "stepTitle": "抓本质：二重积分是常数 $a$，瞬间发现 $f(x,y)=f(y,x)$ 对称！",
+          "detail": "令常数 $a=\\iint_D\\frac{(2x^2+1)f(x,y)}{x^2+y^2+1}\\,\\mathrm{d}x\\mathrm{d}y$，则方程写为$$f(x,y)=\\mathrm{e}^{x^2+y^2}-a,$$立见 $f(x,y)$ 关于 $x,y$ 轮换对称，即 $f(x,y)=f(y,x)$！"
+        },
+        {
+          "stepTitle": "对 $a$ 用轮换对称性直接化出 $a=\\iint_D f(x,y)\\,\\mathrm{d}\\sigma$！",
+          "detail": "因圆盘 $D$ 关于 $y=x$ 对称且 $f(y,x)=f(x,y)$，由轮换对称性：$$a=\\iint_D\\frac{(2y^2+1)f(y,x)}{y^2+x^2+1}\\,\\mathrm{d}x\\mathrm{d}y=\\frac{1}{2}\\iint_D\\frac{(2x^2+2y^2+2)f(x,y)}{x^2+y^2+1}\\,\\mathrm{d}x\\mathrm{d}y=\\iint_D f(x,y)\\,\\mathrm{d}x\\mathrm{d}y!$$"
+        },
+        {
+          "stepTitle": "将 $f(x,y)=\\mathrm{e}^{x^2+y^2}-a$ 代回并转极坐标解出 $a$",
+          "detail": "$$a=\\iint_D\\bigl(\\mathrm{e}^{x^2+y^2}-a\\bigr)\\,\\mathrm{d}\\sigma=\\int_0^{2\\pi}\\mathrm{d}\\theta\\int_0^1(\\mathrm{e}^{r^2}-a)r\\,\\mathrm{d}r=2\\pi\\left[\\left.\\frac{1}{2}\\mathrm{e}^{r^2}\\right|_0^1-\\frac{a}{2}\\right]=(\\mathrm{e}-1-a)\\pi.$$解线性方程 $(1+\\pi)a=(\\mathrm{e}-1)\\pi$ 得 $\\iint_D f(x,y)\\,\\mathrm{d}\\sigma=a=\\dfrac{(\\mathrm{e}-1)\\pi}{\\pi+1}$。"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{(\\mathrm{e}-1)\\pi}{\\pi+1}$",
+      "takeaway": "**满分妙题**：先设积分常数 $a$ 看出 $f(x,y)=f(y,x)$，再回头对 $a$ 自身施展轮换对称把 $2x^2+1$ 凑成 $2(x^2+y^2+1)$ 直接约掉分母！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.179",
+        "pdfPage": 192,
+        "itemRef": "强化例 14.5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy18_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-e-23",
+      "stage": "intensive",
+      "section": "三、坐标逆转、标杆极坐标与平移换元（强化例 14.6~14.8）",
+      "kind": "example",
+      "title": "【强化例 14.6】极坐标域逆化为直角坐标三角域计算 $\\iint_D\\sqrt{1-(x-y)^2}\\,\\mathrm{d}\\sigma$",
+      "examWeight": "core",
+      "problem": "设 $D=\\left\\{(r,\\theta)\\,\\middle|\\,0\\le\\theta\\le\\dfrac{\\pi}{4},\\;0\\le r\\le\\sec\\theta\\right\\}$，则 $\\displaystyle\\iint_D\\sqrt{1-(x-y)^2}\\,\\mathrm{d}\\sigma=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "将极坐标区域还原为直角三角形 $0\\le y\\le x\\le 1$",
+          "detail": "因 $r\\le\\sec\\theta\\iff r\\cos\\theta\\le 1\\iff x\\le 1$，且 $0\\le\\theta\\le\\frac{\\pi}{4}\\iff 0\\le y\\le x$，故 $D=\\{(x,y)\\mid 0\\le x\\le 1,\\;0\\le y\\le x\\}$。被积函数只含 $x-y$，在直角坐标系下远优于极坐标！"
+        },
+        {
+          "stepTitle": "法一（原书 X 型积分 + 分部）与法二（换元 $u=x-y$ 两行秒杀）",
+          "detail": "**法一（原书做法）**：内层令 $t=x-y$ 得 $\\int_0^x\\sqrt{1-(x-y)^2}\\,\\mathrm{d}y=\\int_0^x\\sqrt{1-t^2}\\,\\mathrm{d}t=\\frac{1}{2}\\arcsin x+\\frac{x}{2}\\sqrt{1-x^2}$，再对外层从 $0$ 积到 $1$：\n$$\\text{原式}=\\frac{1}{2}\\int_0^1\\arcsin x\\,\\mathrm{d}x+\\frac{1}{2}\\int_0^1 x\\sqrt{1-x^2}\\,\\mathrm{d}x=\\frac{1}{2}\\left(\\frac{\\pi}{2}-1\\right)+\\frac{1}{6}=\\frac{\\pi}{4}-\\frac{1}{3}.$$\n**法二（捷径：交换成 $u=x-y,\\;v=x$，$|J|=1$）**：直接得$$\\int_0^1\\mathrm{d}u\\int_u^1\\sqrt{1-u^2}\\,\\mathrm{d}v=\\int_0^1(1-u)\\sqrt{1-u^2}\\,\\mathrm{d}u=\\frac{\\pi}{4}-\\frac{1}{3}!$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{\\pi}{4}-\\dfrac{1}{3}$",
+      "takeaway": "别被题干用 $(r,\\theta)$ 描述区域骗去硬算极坐标！先译回直角边界 $x\\le 1,\\;0\\le y\\le x$，再用 $u=x-y$ 换元两行搞定！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.180-181",
+        "pdfPage": 193,
+        "itemRef": "强化例 14.6"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy18_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-e-24",
+      "stage": "intensive",
+      "section": "三、坐标逆转、标杆极坐标与平移换元（强化例 14.6~14.8）",
+      "kind": "example",
+      "title": "【强化例 14.7】斜椭圆环极坐标代数定限消根式（对应基础标杆例 14.9）",
+      "examWeight": "core",
+      "problem": "设平面有界区域 $D$ 位于第一象限，由曲线 $x^2+y^2-xy=1$，$x^2+y^2-xy=2$ 与直线 $y=\\sqrt{3}x$，$y=0$ 围成，计算 $\\displaystyle\\iint_D\\dfrac{1}{3x^2+y^2}\\,\\mathrm{d}x\\mathrm{d}y$。",
+      "steps": [
+        {
+          "stepTitle": "按「主看被积函数」原则果断选极坐标并直接写限",
+          "detail": "虽然积分区域并非标准圆，但被积函数 $\\frac{1}{3x^2+y^2}$ 是二次齐次分式，转极坐标得 $r_1(\\theta)=\\frac{1}{\\sqrt{1-\\cos\\theta\\sin\\theta}}$，$r_2(\\theta)=\\frac{\\sqrt{2}}{\\sqrt{1-\\cos\\theta\\sin\\theta}}$，$\\theta\\in\\left[0,\\frac{\\pi}{3}\\right]$：$$\\iint_D\\frac{1}{3x^2+y^2}\\,\\mathrm{d}x\\mathrm{d}y=\\int_0^{\\frac{\\pi}{3}}\\mathrm{d}\\theta\\int_{\\frac{1}{\\sqrt{1-\\cos\\theta\\sin\\theta}}}^{\\frac{\\sqrt{2}}{\\sqrt{1-\\cos\\theta\\sin\\theta}}}\\frac{r\\,\\mathrm{d}r}{r^2(3\\cos^2\\theta+\\sin^2\\theta)}=\\frac{\\ln 2}{2}\\int_0^{\\frac{\\pi}{3}}\\frac{\\mathrm{d}\\theta}{3\\cos^2\\theta+\\sin^2\\theta}.$$"
+        },
+        {
+          "stepTitle": "凑 $\\mathrm{d}(\\tan\\theta)$ 完成收尾",
+          "detail": "$$\\text{原式}=\\frac{\\ln 2}{2}\\int_0^{\\frac{\\pi}{3}}\\frac{\\mathrm{d}(\\tan\\theta)}{3+\\tan^2\\theta}=\\left.\\frac{\\ln 2}{2\\sqrt{3}}\\arctan\\frac{\\tan\\theta}{\\sqrt{3}}\\right|_0^{\\frac{\\pi}{3}}=\\frac{\\sqrt{3}\\ln 2}{24}\\pi.$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{\\sqrt{3}\\ln 2}{24}\\pi$",
+      "takeaway": "强化 18 讲把此题放在极坐标选系原则正下方，就是为了打破「区域不是圆就不能用极坐标」的执念（详图见例14.9）！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.181",
+        "pdfPage": 194,
+        "itemRef": "强化例 14.7",
+        "crossRef": "27张宇《基础30讲·高数》P.351-352 例 14.9"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy18_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-e-25",
+      "stage": "intensive",
+      "section": "三、坐标逆转、标杆极坐标与平移换元（强化例 14.6~14.8）",
+      "kind": "example",
+      "title": "【强化例 14.8】偏心圆半圆域：直接极坐标 vs 平移换元 $u=x-1,v=y-1$ 双法对比",
+      "examWeight": "core",
+      "problem": "设 $D=\\{(x,y)\\mid (x-1)^2+(y-1)^2\\le 2,\\;y\\ge x\\}$，计算二重积分 $\\displaystyle\\iint_D(x-y)\\,\\mathrm{d}x\\mathrm{d}y$。",
+      "steps": [
+        {
+          "stepTitle": "法一：直接极坐标（凑 $\\mathrm{d}(\\sin\\theta+\\cos\\theta)$）",
+          "detail": "圆方程展开为 $x^2+y^2\\le 2(x+y)\\iff r\\le 2(\\sin\\theta+\\cos\\theta)$，结合 $y\\ge x$ 得 $\\theta\\in\\left[\\frac{\\pi}{4},\\frac{3\\pi}{4}\\right]$（在 $\\frac{3\\pi}{4}$ 处 $r=0$）：$$\\begin{aligned}\\iint_D(x-y)\\,\\mathrm{d}x\\mathrm{d}y&=\\int_{\\frac{\\pi}{4}}^{\\frac{3\\pi}{4}}\\mathrm{d}\\theta\\int_0^{2(\\sin\\theta+\\cos\\theta)}r^2(\\cos\\theta-\\sin\\theta)\\,\\mathrm{d}r\\\\&=\\frac{8}{3}\\int_{\\frac{\\pi}{4}}^{\\frac{3\\pi}{4}}(\\sin\\theta+\\cos\\theta)^3\\,\\mathrm{d}(\\sin\\theta+\\cos\\theta)=\\left.\\frac{2}{3}(\\sin\\theta+\\cos\\theta)^4\\right|_{\\frac{\\pi}{4}}^{\\frac{3\\pi}{4}}=\\frac{2}{3}(0-4)=-\\frac{8}{3}.\\end{aligned}$$"
+        },
+        {
+          "stepTitle": "法二（更推荐）：平移换元 $u=x-1,\\;v=y-1$ 化标准中心半圆盘！",
+          "detail": "令 $u=x-1,\\;v=y-1$（雅可比 $|J|=1$），则被积函数 $x-y=u-v$ 不变，新区域变成中心在原点的标准半圆盘 $D_{uv}=\\{(u,v)\\mid u^2+v^2\\le 2,\\;v\\ge u\\}$（极角 $\\theta\\in\\left[\\frac{\\pi}{4},\\frac{5\\pi}{4}\\right]$，极径 $r\\in[0,\\sqrt{2}]$）：$$\\iint_{D_{uv}}(u-v)\\,\\mathrm{d}u\\mathrm{d}v=\\int_{\\frac{\\pi}{4}}^{\\frac{5\\pi}{4}}(\\cos\\theta-\\sin\\theta)\\,\\mathrm{d}\\theta\\cdot\\int_0^{\\sqrt{2}}r^2\\,\\mathrm{d}r=\\left.(\\sin\\theta+\\cos\\theta)\\right|_{\\frac{\\pi}{4}}^{\\frac{5\\pi}{4}}\\cdot\\frac{2\\sqrt{2}}{3}=(-2\\sqrt{2})\\cdot\\frac{2\\sqrt{2}}{3}=-\\frac{8}{3}.$$"
+        }
+      ],
+      "finalAnswer": "$-\\dfrac{8}{3}$",
+      "takeaway": "偏心圆 $(x-a)^2+(y-b)^2\\le R^2$ 的终极利器是**平移换元**（$|J|=1$）：把圆心拖回原点后极径上限变常数 $R$，两重积分立刻解耦成乘积，且极不容易写错 $\\theta$ 范围！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.183",
+        "pdfPage": 196,
+        "itemRef": "强化例 14.8"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy18_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-s-01",
+      "stage": "both",
+      "section": "题型总结（一）：概念、保号、对称与交换积分次序决策总表",
+      "kind": "summary",
+      "title": "第 14 讲（上）：和式极限、保号比较、对称化简与换序全题型决策总表",
+      "examWeight": "core",
+      "overview": "本讲上半部分解决「**怎么化简再动笔**」：拿到任何二重积分或累次积分，先查保号选域（不用算）、再查普通/平移/轮换/补线对称（消一半甚至消归零）、再看是否属 12 类不可积核必须换序，绝不盲目硬算。",
+      "patterns": [
+        {
+          "typeName": "题型 1：二重和式极限与动态收缩域求导",
+          "triggers": "出现 $\\lim\\limits_{n\\to\\infty}\\sum_{i=1}^n\\sum_{j=1}^n$ 或动态区域 $F(t)=\\iint_{D(t)}f\\,\\mathrm{d}\\sigma$ 求 $F_+'(0)$",
+          "method": "和式极限提取 $\\frac{1}{n^2}$ 凑 $\\frac{i}{n},\\frac{j}{n}$ 化单位正方形二重积分；动态域求导用二重积分中值定理 $F(t)=f(\\xi,\\eta)S_{D(t)}$ 并按面积关于 $t$ 的幂次取极限。",
+          "pitfall": "双求和忘提 $\\frac{1}{n^2}$；动态域算错椭圆面积 $\\pi ab$（例 14.2 须先除 $6t$ 化标准形）。",
+          "relatedRefs": "例 14.2, 强化例 14.1"
+        },
+        {
+          "typeName": "题型 2：积分保号性与区域大小/最优区域判定",
+          "triggers": "同一被积函数在不同区域比大小，或求使二重积分最大的区域 $D$",
+          "method": "直接解 $f(x,y)\\ge 0$ 划出正负分界线，利用区域可加性比差集符号；若整体不对称则补作对称辅助线切出归零块。",
+          "pitfall": "切忌硬算多个区域的二重积分；补线构对称时注意确认剩余块是否严格保号。",
+          "relatedRefs": "例 14.1, 例 14.3, 强化例 14.4"
+        },
+        {
+          "typeName": "题型 3：普通对称、平移轴对称与轮换对称（含积分方程）",
+          "triggers": "区域关于坐标轴、$x=a/y=a$、原点或 $y=x$ 对称；被积函数含 $f(x,y)=g-\\iint\\cdots$",
+          "method": "平移轴 $x=a$ 上 $(x-a)$ 奇消零；关于 $y=x$ 对称时先看相等/相反，不行立刻看 $f(x,y)+f(y,x)$ 能否消分母或凑 $x^2+y^2$；积分方程先设常数 $a$ 再套轮换对称。",
+          "pitfall": "区域未对称就误消奇函数；轮换对称忘记乘系数 $\\frac{1}{2}$。",
+          "relatedRefs": "例 14.4, 例 14.8, 例 14.10, 强化例 14.5"
+        },
+        {
+          "typeName": "题型 4：交换积分次序（含不可积核与反序上下限排雷）",
+          "triggers": "累次积分内层出现表 14-1 的 12 类不可积核，或题干直接要求换序",
+          "method": "先检查内层下限是否小于上限（否则先对调添负号！），画出区域 $D$ 后按「后积先定限、限内画条线」反穿重写。",
+          "pitfall": "例 14.5 在 $[\\frac{\\pi}{2},\\pi]$ 误把 $\\sin x=y$ 反解成 $\\arcsin y$（应为 $\\pi-\\arcsin y$）；例 14.6 漏掉 $x>\\sqrt{y}$ 的对调负号。",
+          "relatedRefs": "例 14.5, 例 14.6, 例 14.7, 强化例 14.2, 强化例 14.3"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 14-3：第 14 讲前半部分（保号·对称·换序·和式）触发词速查表",
+          "headers": [
+            "题干高频信号",
+            "第一反应首选招式",
+            "关键易错点",
+            "代表母题"
+          ],
+          "rows": [
+            [
+              "$\\sum_{i=1}^n\\sum_{j=1}^n$ 双和式",
+              "提 $\\frac{1}{n^2}$ 凑 $\\frac{i}{n},\\frac{j}{n}\\to[0,1]^2$",
+              "步长因子必须是二维面积 $\\frac{1}{n^2}$",
+              "强化例 14.1"
+            ],
+            [
+              "动态收缩域 $D(t)\\to(0,0)$",
+              "中值定理 $f(\\xi,\\eta)\\cdot S_{D(t)}$",
+              "椭圆先化标准形再套面积 $\\pi ab$",
+              "例 14.2"
+            ],
+            [
+              "分母含 $u+v$ 或 $x^2+y^2+1$",
+              "轮换对称 $I=\\frac{1}{2}\\iint[f(x,y)+f(y,x)]$",
+              "必须确认区域关于 $y=x$ 对称",
+              "例 14.4, 强化例 14.5"
+            ],
+            [
+              "内层 $\\frac{\\cos x}{x},\\sin\\frac{y}{t},\\frac{1}{\\sqrt{1+x^3}}$",
+              "画域交换积分次序",
+              "下限大于上限必先对调添负号！",
+              "例 14.6, 强化例 14.2, 强化例 14.3"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "记住「一查对称、二查换序、三查上下限大小」三步体检，就能绕开本讲 80% 的概念与计算陷阱！",
+      "source": {
+        "book": "27张宇《基础30讲·高数》+《高数18讲》（强化）",
+        "printedPage": "基础 P.338-350 / 强化 P.175-179",
+        "pdfPage": 343,
+        "itemRef": "第 14 讲前半部分体系总汇"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy18_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-s-02",
+      "stage": "both",
+      "section": "题型总结（二）：极坐标、雅可比换元、古鲁金与高斯积分计算总表",
+      "kind": "summary",
+      "title": "第 14 讲（下）：极坐标、雅可比换元、平移降维、古鲁金与高斯积分总表",
+      "examWeight": "core",
+      "overview": "本讲下半部分解决「**硬核计算如何最快最稳**」：选坐标系主看被积函数（$x^2+y^2$ 与齐次分式优先极坐标，含 $x-y$ 果断回直角），遇偏心圆果断平移（$|J|=1$），遇分母 $x+y$ 用线性换元，遇斜轴旋转体积与双圆月牙形心正反双用古鲁金第二定理，遇 $\\mathrm{e}^{-x^2}$ 立刻联动高斯积分与 $\\Gamma$ 函数。",
+      "patterns": [
+        {
+          "typeName": "题型 5：极坐标积分、齐次分式消根式与极/直角互化",
+          "triggers": "被积函数含 $x^2+y^2$ 或 $-2$ 次齐次分式；区域为圆/弓形/斜椭圆环或极坐标给出但核含 $x-y$",
+          "method": "按极点在外部/边界/内部定 $r$ 限与 $\\theta$ 限，乘雅可比 $r$；$-2$ 次齐次分式内层必现 $\\ln(r_2/r_1)$ 消公因子；极坐标难算时逆化直角坐标。",
+          "pitfall": "漏乘 $r$；偏心圆 $r\\le 2\\cos\\theta$ 误把 $\\theta$ 写成 $[0,2\\pi]$（应为 $[-\\frac{\\pi}{2},\\frac{\\pi}{2}]$）。",
+          "relatedRefs": "例 14.8, 例 14.9, 例 14.14, 强化例 14.6, 强化例 14.7"
+        },
+        {
+          "typeName": "题型 6：一般换元法（平移换元 & 线性雅可比换元）",
+          "triggers": "偏心圆 $(x-a)^2+(y-b)^2\\le R^2$，或指数/分式含 $x+y$（如 $\\mathrm{e}^{\\frac{y}{x+y}}$）",
+          "method": "偏心圆作平移 $u=x-a,v=y-b$（$|J|=1$）化标准中心圆盘再极坐标；线性核令 $u=x+y,v=y$（$|J|=1$），同步完成「三换」。",
+          "pitfall": "忘记给雅可比行列式加绝对值 $|J|$，或把正反雅可比颠倒。",
+          "relatedRefs": "例 14.15, 强化例 14.8"
+        },
+        {
+          "typeName": "题型 7：古鲁金第二定理与平面形心正反双用",
+          "triggers": "平面区域绕斜直线 $ax+by+c=0$ 旋转体体积，或组合圆/半圆区域求形心 $(\\bar{x},\\bar{y})$",
+          "method": "先验证整片区域位于旋转轴同侧！已知形心正套 $V=2\\pi S\\cdot r(\\bar{x},\\bar{y})$；求组合域形心用补减体积反除 $2\\pi S$（绕 $x$ 轴半圆组合直接套球体积差！）。",
+          "pitfall": "旋转轴穿过区域内部时定理失效；勿混半圆盘形心 $\\frac{4R}{3\\pi}$ 与半圆弧形心 $\\frac{2R}{\\pi}$。",
+          "relatedRefs": "例 14.16, 例 14.17"
+        },
+        {
+          "typeName": "题型 8：高斯积分 $\\mathrm{e}^{-x^2}$、$\\Gamma$ 函数与含参极限综合",
+          "triggers": "出现 $\\int_0^{+\\infty}\\mathrm{e}^{-x^2}\\,\\mathrm{d}x$、$\\int_{-\\infty}^{+\\infty}x^2\\mathrm{e}^{-x^2}\\,\\mathrm{d}x$ 或含 $\\mathrm{e}^{x^2-t^2}$ 的无穷极限",
+          "method": "熟记半轴 $\\frac{\\sqrt{\\pi}}{2},\\frac{\\sqrt{\\pi}}{4}$ 与全轴 $\\sqrt{\\pi},\\frac{\\sqrt{\\pi}}{2}$；极限题先把 $\\mathrm{e}^{x^2}$ 提出积分号并上下同除化 $\\frac{0}{0}$ 型再洛必达。",
+          "pitfall": "半轴 $[0,+\\infty)$ 与全轴 $(-\\infty,+\\infty)$ 差 $2$ 倍，审题盯紧下限！",
+          "relatedRefs": "例 14.11, 例 14.12, 例 14.13"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 14-4：第 14 讲后半部分（极坐标·换元·古鲁金·高斯）计算绝招速查表",
+          "headers": [
+            "题型特征",
+            "首选速算绝招",
+            "核心公式 / 结论",
+            "代表母题"
+          ],
+          "rows": [
+            [
+              "偏心圆 $(x-a)^2+(y-b)^2\\le R^2$",
+              "先平移 $u=x-a,v=y-b$ 再极坐标",
+              "$|J|=1$，$r$ 上限化常数 $R$",
+              "强化例 14.8"
+            ],
+            [
+              "$-2$ 次齐次分式配斜椭圆环",
+              "直接极坐标代数定限，内层消公因子",
+              "$\\int_{r_1}^{r_2}\\frac{\\mathrm{d}r}{r}=\\ln\\frac{r_2}{r_1}$",
+              "例 14.9, 强化例 14.7"
+            ],
+            [
+              "指数/分母含 $x+y$ 配三角形域",
+              "线性换元 $u=x+y,v=y$（$|J|=1$）",
+              "亦配凑微 $\\left(\\frac{\\sin\\theta}{\\cos\\theta+\\sin\\theta}\\right)'$",
+              "例 14.15"
+            ],
+            [
+              "斜轴旋转体积 / 双圆月牙形心",
+              "古鲁金第二定理正反双用 + 补减球体",
+              "$V=2\\pi S\\cdot r(\\bar{x},\\bar{y})$，半圆 $\\bar{y}=\\frac{4R}{3\\pi}$",
+              "例 14.16, 例 14.17"
+            ],
+            [
+              "单位圆盘高频核 / 高斯积分",
+              "直接套五大圆盘秒杀式与 $\\Gamma$ 递推",
+              "$\\frac{\\pi}{2},\\frac{2\\pi}{3},\\frac{\\pi}{3},\\frac{\\pi}{4}(\\frac{1}{a^2}+\\frac{1}{b^2})$；$\\frac{\\sqrt{\\pi}}{2},\\frac{\\sqrt{\\pi}}{4}$",
+              "例 14.11, 例 14.12, 例 14.13"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "记住「极坐标看被积函数、偏心圆必平移、双圆形心用球差、高斯先除 $\\mathrm{e}^{x^2}$」四把快刀，二重积分计算又快又准！",
+      "source": {
+        "book": "27张宇《基础30讲·高数》+《高数18讲》（强化）",
+        "printedPage": "基础 P.350-359 / 强化 P.179-183",
+        "pdfPage": 355,
+        "itemRef": "第 14 讲后半部分体系总汇"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy30_14_17_pappus",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c14-s-03",
+      "stage": "both",
+      "section": "题型总结（三）：第 14 讲原书瑕疵与严谨补注台账（#48~#50）",
+      "kind": "summary",
+      "title": "第 14 讲原书细微印刷瑕疵与严谨性补注台账（累计 #48~#50，SymPy 全核验）",
+      "examWeight": "core",
+      "overview": "本讲逐页核验 27 张宇《基础 30 讲·高数》P.338-371 上（17 例 + 85 平面区域大观）与《高数 18 讲》P.175-183（8 例 + 单位圆五大结论），所有 25 道例题数值与公式均经 SymPy 1.14.0 全量精确验证无误，共记录 **1 处分析行变量名笔误**（#48）与 **2 处严谨性补注**（#49、#50），累计总台账更新至 **50 处**。",
+      "patterns": [
+        {
+          "typeName": "台账 #48（分析行变量名笔误）：基础 P.349 例 14.6",
+          "triggers": "阅读基础 P.349 例 14.6【分析】第一句",
+          "method": "原书分析行写「$\\sin\\frac{y}{x}$ 若对 $x$ 积分没有初等原函数」，而题干与正文解答中的内层积分变量均为 $t$（$\\sin\\frac{y}{t}\\,\\mathrm{d}t$），实应为「$\\sin\\frac{y}{t}$ 若对 $t$ 积分」。",
+          "pitfall": "审题时切忌把外层上限参数 $x$ 与内层积分变量 $t$ 混为一谈！",
+          "relatedRefs": "例 14.6"
+        },
+        {
+          "typeName": "台账 #49 & #50（严谨补注）：可加性零面积交界与古鲁金同侧验证",
+          "triggers": "阅读基础 P.340 性质 4 与基础 P.358-359 例 14.16",
+          "method": "① 性质 4 两闭区域共享公共边界时 $D_1\\cap D_2$ 并非空集，严格应表述为「内部互不相交（$D_1^\\circ\\cap D_2^\\circ=\\varnothing$，公共边界零面积）」；② 例 14.16 套古鲁金第二定理前须验证 $y=\\sin x$ 在 $[\\pi,2\\pi]$ 仍满足 $x+y\\ge\\pi-1>0$，确认整片区域严格位于 $y=-x$ 同侧。",
+          "pitfall": "若把例 14.16 旋转轴改为 $y=0$（$x$ 轴）或穿过下半叶的斜线，区域跨轴自交则古鲁金定理直接失效！",
+          "relatedRefs": "例 14.16"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 14-5：高数第 14 讲原书瑕疵与严谨补注台账（#48~#50）",
+          "headers": [
+            "编号",
+            "出处位置",
+            "类型",
+            "原书写法",
+            "修正 / 严谨补注（已 SymPy 验算）"
+          ],
+          "rows": [
+            [
+              "#48",
+              "基础 P.349 例 14.6【分析】",
+              "变量笔误",
+              "「$\\sin\\frac{y}{x}$ 若对 $x$ 积分，则没有初等原函数」",
+              "内层积分变量是 $t$ 而非 $x$，应为「$\\sin\\frac{y}{t}$ 若对 $t$ 积分」（正文解答完全正确）"
+            ],
+            [
+              "#49",
+              "基础 P.340 性质 4",
+              "严谨补注",
+              "$D_1\\cup D_2=D,\\;D_1\\cap D_2=\\varnothing$",
+              "两闭子域共享边界曲线时交集非空，严格条件为 $D_1^\\circ\\cap D_2^\\circ=\\varnothing$（公共边界零测度）"
+            ],
+            [
+              "#50",
+              "基础 P.358-359 例 14.16",
+              "严谨补注",
+              "直接套古鲁金第二定理写 $2\\pi\\cdot 4\\cdot\\frac{\\pi}{\\sqrt{2}}$",
+              "补证在 $[\\pi,2\\pi]$ 上 $x+y\\ge\\pi-1>0$，确认上下两叶全在 $y=-x$ 同侧不穿域；SymPy 直积复核 $4\\sqrt{2}\\pi^2$ 精确"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "第 14 讲原书全部 25 例计算结果 100% 准确，补齐这 3 处变量名与几何前提细节后，解答过程无懈可击！",
+      "source": {
+        "book": "27张宇《基础30讲·高数》+《高数18讲》（强化）",
+        "printedPage": "基础 P.340, P.349, P.358-359",
+        "pdfPage": 345,
+        "itemRef": "第 14 讲勘误与严谨台账 #48~#50"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c14_zy30_14_17_pappus",
+        "verified": true
+      }
+    }
+  ]
+}
