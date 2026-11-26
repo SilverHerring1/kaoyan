@@ -1625,6 +1625,191 @@ def run_all_checks() -> list[tuple[str, bool, str]]:
     )
     check("m1_c15_zy18_11_19", c15_i2_ok, "zy18 Ex15.11-15.19 + P.195 system (e^y, sqrt(y+x^2), e x ln x, S=e^3, P, diff eq) exact")
 
+    # ==================== Calculus Lecture 16 (calc-16: 无穷级数) ====================
+    k_i, m_i = sp.symbols("k_i m_i", integer=True, positive=True)
+    a_c, b_c, c_c, d_c = sp.symbols("a_c b_c c_c d_c", real=True)
+
+    # 86. Formulas, Table 16-1, cubic polynomial sum, quick sums, Fourier integrals & Basel sums
+    cubic_rhs = (
+        6 * a_c * x**3 / (1 - x)**4
+        + 2 * (3 * a_c + b_c) * x**2 / (1 - x)**3
+        + (a_c + b_c + c_c) * x / (1 - x)**2
+        + d_c / (1 - x)
+    )
+    cubic_ser = sp.series(cubic_rhs, x, 0, 7).removeO()
+    cubic_expected = sum((a_c * j**3 + b_c * j**2 + c_c * j + d_c) * x**j for j in range(7))
+    # zy30 P.447 specific example: sum (n^3 - 1) x^(2n)
+    p447_rhs = 6 * x**6 / (1 - x**2)**4 + 6 * x**4 / (1 - x**2)**3 + x**2 / (1 - x**2)**2 - 1 / (1 - x**2)
+    p447_ser = sp.series(p447_rhs, x, 0, 11).removeO()
+    p447_exp = sum((j**3 - 1) * x**(2 * j) for j in range(6))
+    # Quick numerical sums (P.446, P.452-453) & Fourier standard integrals (P.235)
+    f_int_x = sp.integrate(x * sp.cos(k_i * x), (x, 0, sp.pi))
+    f_int_x2 = sp.integrate(x**2 * sp.cos(k_i * x), (x, 0, sp.pi))
+    s_basel = sp.summation(1 / k_i**2, (k_i, 1, sp.oo))
+    s_alt_basel = sp.summation((-1)**(k_i + 1) / k_i**2, (k_i, 1, sp.oo))
+    s_p453 = sp.summation((-1)**m_i * (2 * m_i + 2) / sp.factorial(2 * m_i + 1), (m_i, 0, sp.oo))
+    c16_f_ok = (
+        sp.expand(cubic_ser - cubic_expected) == 0
+        and sp.expand(p447_ser - p447_exp) == 0
+        and sp.simplify(f_int_x - ((-1)**k_i - 1) / k_i**2) == 0
+        and sp.simplify(f_int_x2 - 2 * sp.pi * (-1)**k_i / k_i**2) == 0
+        and s_basel == sp.pi**2 / 6
+        and s_alt_basel == sp.pi**2 / 12
+        and sp.simplify(s_p453 - (sp.cos(1) + sp.sin(1))) == 0
+        and sp.summation(1 / (k_i * 2**k_i), (k_i, 1, sp.oo)) == sp.log(2)
+        and sp.summation(k_i / 2**k_i, (k_i, 1, sp.oo)) == 2
+    )
+    check("m1_c16_formulas_and_tables", c16_f_ok, "Table 16-1, cubic poly sum, P.447/P.453 sums, Fourier integrals & pi^2/6, pi^2/12 exact")
+
+    # 87. zy30 Ex 16.1 ~ 16.21 (constant-term series)
+    n_s = sp.Symbol("n_s", positive=True)
+    # Ex 16.3: sum 1/n! = e < 3
+    # Ex 16.11: ratio = a/e; at a=e, e/(1+1/n)^n > 1
+    # Ex 16.12: root of (cos(1/sqrt(n)))^(n^2) = e^(-1/2) < 1
+    r16_12 = sp.limit(sp.cos(1 / sp.sqrt(n_s))**n_s, n_s, sp.oo)
+    # Ex 16.15: f(x) = 1/(sqrt(x) - ln x) -> f'(x) = -(sqrt(x)-2)/(2x(sqrt(x)-ln x)^2)
+    f16_15 = 1 / (sp.sqrt(xp) - sp.log(xp))
+    df16_15_exp = -(sp.sqrt(xp) - 2) / (2 * xp * (sp.sqrt(xp) - sp.log(xp))**2)
+    # Ex 16.16: (-1)^n/(sqrt(n)+(-1)^n) = (-1)^n sqrt(n)/(n-1) - 1/(n-1)
+    # Ex 16.18: sum (1/sqrt(n) - 1/sqrt(n+1)) = 1
+    s16_18 = sp.summation(1 / sp.sqrt(k_i) - 1 / sp.sqrt(k_i + 1), (k_i, 1, sp.oo))
+    # Ex 16.21: d/dx [x^p (sqrt(x+1)+sqrt(x))] = x^(p-1) (sqrt(x+1)+sqrt(x)) (p + sqrt(x)/(2 sqrt(x+1)))
+    p_s = sp.Symbol("p_s", real=True)
+    f16_21 = xp**p_s * (sp.sqrt(xp + 1) + sp.sqrt(xp))
+    df16_21_exp = xp**(p_s - 1) * (sp.sqrt(xp + 1) + sp.sqrt(xp)) * (p_s + sp.sqrt(xp) / (2 * sp.sqrt(xp + 1)))
+    c16_a_ok = (
+        sp.summation(1 / sp.factorial(m_i), (m_i, 0, sp.oo)) == sp.E
+        and sp.limit(sp.E / (1 + 1 / n_s)**n_s, n_s, sp.oo) == 1
+        and float((sp.E / (1 + sp.Rational(1, 50))**50).evalf()) > 1.0
+        and r16_12 == sp.exp(-sp.Rational(1, 2))
+        and sp.simplify(sp.diff(f16_15, xp) - df16_15_exp) == 0
+        and sp.simplify((-1)**k_i / (sp.sqrt(k_i) + (-1)**k_i) - ((-1)**k_i * sp.sqrt(k_i) / (k_i - 1) - 1 / (k_i - 1))) == 0
+        and s16_18 == 1
+        and sp.simplify(sp.diff(f16_21, xp) - df16_21_exp) == 0
+    )
+    check("m1_c16_zy30_01_21", c16_a_ok, "zy30 Ex16.1-16.21 (e, a/e, e^-1/2, Ex16.15/16/18/21) all exact")
+
+    # 88. zy30 Ex 16.22 ~ 16.39 (power series & Fourier series)
+    # Ex 16.28: -ln(1-x)/(1-x) coeffs = H_n = sum_{k=1}^n 1/k
+    ser16_28 = sp.series(-sp.log(1 - x) / (1 - x), x, 0, 7).removeO()
+    exp16_28 = sum(sum(sp.Rational(1, j) for j in range(1, n + 1)) * x**n for n in range(1, 7))
+    # Ex 16.29: int_{n pi}^oo e^(-x) cos(2x) dx = e^(-n pi)/5, sum = 1/(5(e^pi - 1))
+    a16_29 = sp.integrate(sp.exp(-x) * sp.cos(2 * x), (x, k_i * sp.pi, sp.oo))
+    r_29 = sp.Symbol("r_29", positive=True)
+    s16_29 = sp.simplify(sp.summation(r_29**k_i / 5, (k_i, 1, sp.oo)).subs(r_29, sp.exp(-sp.pi)).doit())
+    # Ex 16.33: S(x) = 2(1/sqrt(1-x) - 1) => S' - S/(2(1-x)) = 1/(1-x), S(0)=0, recurrence (n+1)a_{n+1}=(n+1/2)a_n
+    S16_33 = 2 * (1 / sp.sqrt(1 - x) - 1)
+    ser16_33 = sp.Poly(sp.series(S16_33, x, 0, 7).removeO(), x)
+    a16_33 = [ser16_33.nth(j) for j in range(1, 7)]
+    rec16_33_ok = a16_33[0] == 1 and all((j + 1) * a16_33[j] == (j + sp.Rational(1, 2)) * a16_33[j - 1] for j in range(1, 6))
+    # Ex 16.34: sum_{n=1}^oo (-1)^n / (n+2) = 1/2 - ln 2
+    s16_34 = sp.summation((-1)**k_i / (k_i + 2), (k_i, 1, sp.oo))
+    # Ex 16.35: lim_{x->0} int_0^{sin x} sin(t^2) dt / (x^3/3) = 1
+    lim16_35 = sp.limit(sp.sin(sp.sin(x)**2) * sp.cos(x) / x**2, x, 0)
+    # Ex 16.36: ln(1-x+x^2) = sum (-1)^(n-1) (x^(3n) - x^n)/n
+    ser16_36 = sp.series(sp.log(1 - x + x**2), x, 0, 10).removeO()
+    exp16_36 = sp.expand(sum((-1)**(n - 1) * (x**(3 * n) - x**n) / n for n in range(1, 10)))
+    exp16_36_trunc = sum(sp.Poly(exp16_36, x).nth(j) * x**j for j in range(10))
+    # Ex 16.37: atan((1+x)/(1-x)) = pi/4 + sum (-1)^n x^(2n+1)/(2n+1)
+    ser16_37 = sp.series(sp.atan((1 + x) / (1 - x)), x, 0, 10).removeO()
+    exp16_37 = sp.pi / 4 + sum((-1)**n * x**(2 * n + 1) / (2 * n + 1) for n in range(5))
+    # Ex 16.39: cosine coeffs of 1 - x^2 on [0, pi]
+    a0_39 = sp.Rational(2, 1) / sp.pi * sp.integrate(1 - x**2, (x, 0, sp.pi))
+    an_39 = sp.Rational(2, 1) / sp.pi * sp.integrate((1 - x**2) * sp.cos(k_i * x), (x, 0, sp.pi))
+    c16_b_ok = (
+        sp.expand(ser16_28 - exp16_28) == 0
+        and sp.simplify(a16_29 - sp.exp(-k_i * sp.pi) / 5) == 0
+        and sp.simplify((s16_29 - 1 / (5 * (sp.exp(sp.pi) - 1))).rewrite(sp.exp)) == 0
+        and sp.simplify(sp.diff(S16_33, x) - S16_33 / (2 * (1 - x)) - 1 / (1 - x)) == 0
+        and S16_33.subs(x, 0) == 0 and rec16_33_ok
+        and sp.simplify(s16_34 - (sp.Rational(1, 2) - sp.log(2))) == 0
+        and lim16_35 == 1
+        and sp.expand(ser16_36 - exp16_36_trunc) == 0
+        and sp.expand(ser16_37 - exp16_37) == 0
+        and sp.simplify(a0_39 - 2 * (1 - sp.pi**2 / 3)) == 0
+        and sp.simplify(an_39 - 4 * (-1)**(k_i + 1) / k_i**2) == 0
+    )
+    check("m1_c16_zy30_22_39", c16_b_ok, "zy30 Ex16.22-16.39 (Cauchy H_n, ODE sum, 1/2-ln2, ln(1-x+x^2), atan, Fourier 1-x^2) exact")
+
+    # 89. zy18 Ex 16.1 ~ 16.20 (necessary condition, Taylor 1/n^2, Errata #58)
+    u_16 = sp.Symbol("u_16", positive=True)
+    a_p = sp.Symbol("a_p", positive=True)
+    ser16_13i = sp.series(sp.exp(u_16 * sp.log(a_p)) - sp.sqrt(1 + u_16), u_16, 0, 3).removeO()
+    exp16_13i = (sp.log(a_p) - sp.Rational(1, 2)) * u_16 + (sp.log(a_p)**2 / 2 + sp.Rational(1, 8)) * u_16**2
+    ser16_14i = sp.series((1 / u_16 + sp.Rational(1, 2)) * sp.log(1 + u_16) - 1, u_16, 0, 3).removeO()
+    ok16_12i_errata = sp.simplify(n_s**2 * sp.log(n_s) / (1 + 1 / n_s**2) - n_s**2 * sp.log(n_s) / (1 + n_s**2)) != 0
+    c16_i0_ok = (
+        sp.limit((1 - 1 / n_s)**n_s, n_s, sp.oo) == sp.exp(-1)
+        and sp.limit((2 - 2 / n_s)**n_s * sp.log(1 / 2**n_s + 1), n_s, sp.oo) == sp.exp(-1)
+        and sp.expand(ser16_13i - exp16_13i) == 0
+        and sp.simplify(ser16_14i - u_16**2 / 12) == 0
+        and float(((sp.sqrt(2) + 1) / 3).evalf()) < 1.0
+        and ok16_12i_errata
+    )
+    check("m1_c16_zy18_01_20", c16_i0_ok, "zy18 Ex16.1-16.20 (e^-1, Ex16.12 #58, Ex16.13/14 Taylor 1/12, Ex16.16) exact")
+
+    # 90. zy18 Ex 16.21 ~ 16.46 (integral test, (-1)^n entanglement, Ex16.40/41/43/44)
+    int16_27i = sp.integrate(2 * t * sp.exp(-t), (t, sp.sqrt(sp.log(2)), sp.oo))
+    ok16_41i = all(
+        abs(float((sp.sin(sp.pi * sp.sqrt(j**2 + 1)) - (-1)**j * sp.sin(sp.pi / (sp.sqrt(j**2 + 1) + j))).evalf())) < 1e-12
+        for j in (1, 2, 5, 10)
+    )
+    ser16_39i = sp.series(sp.log(1 + u_16), u_16, 0, 3).removeO()
+    ser16_40i = sp.series(1 / sp.sqrt(1 + u_16), u_16, 0, 2).removeO()
+    c16_i1_ok = (
+        sp.simplify(int16_27i - 2 * (sp.sqrt(sp.log(2)) + 1) * sp.exp(-sp.sqrt(sp.log(2)))) == 0
+        and sp.limit(sp.log(1 + sp.exp(n_s)) / n_s, n_s, sp.oo) == 1
+        and sp.expand(ser16_39i - (u_16 - u_16**2 / 2)) == 0
+        and sp.expand(ser16_40i - (1 - u_16 / 2)) == 0
+        and sp.simplify(((-2)**(1 - k_i) * k_i + 2**k_i) / (k_i * 2**k_i) - ((-1)**(k_i - 1) / 2**(2 * k_i - 1) + 1 / k_i)) == 0
+        and ok16_41i
+    )
+    check("m1_c16_zy18_21_46", c16_i1_ok, "zy18 Ex16.21-16.46 (Ex16.27 integral, Ex16.31, Ex16.39/40 Taylor, Ex16.41/43) exact")
+
+    # 90. zy18 Ex 16.47 ~ 16.57 (power series sums, expansions, Fourier & integral equation)
+    # Ex 16.48: sum x^(n+1)/(n(n+1)) = x + (1-x) ln(1-x)
+    ser16_48i = sp.series(x + (1 - x) * sp.log(1 - x), x, 0, 8).removeO()
+    exp16_48i = sum(x**(n + 1) / (n * (n + 1)) for n in range(1, 7))
+    lim16_48i = sp.limit(1 / (sp.exp(x) - 1) + x + (1 - x) * sp.log(1 - x), x, 1, "-")
+    # Ex 16.50: ln(1-x-2x^2) = sum ((-1)^(n-1) - 2^n)/n * x^n
+    ser16_50i = sp.series(sp.log(1 - x - 2 * x**2), x, 0, 8).removeO()
+    exp16_50i = sum(((-1)**(n - 1) - 2**n) * x**n / n for n in range(1, 8))
+    # Ex 16.51: sum_{n=1}^oo n * a_{2n} for ln(2+x) = -1/6
+    s16_51i = sp.summation(k_i * (-1)**(2 * k_i - 1) / (2 * k_i * 2**(2 * k_i)), (k_i, 1, sp.oo))
+    # Ex 16.52: 1/(x^2-3x+2) = sum (1 - 1/2^(n+1)) x^n
+    ser16_52i = sp.series(1 / (x**2 - 3 * x + 2), x, 0, 8).removeO()
+    exp16_52i = sum((1 - sp.Rational(1, 2**(n + 1))) * x**n for n in range(8))
+    # Ex 16.53: cos^2(x) - 1/(1+x)^2 exact coefficients to x^10
+    poly16_53i = sp.Poly(sp.series(sp.cos(x)**2 - 1 / (1 + x)**2, x, 0, 11).removeO(), x)
+    ok16_53i = (
+        poly16_53i.nth(0) == 0
+        and all(poly16_53i.nth(2 * j - 1) == 2 * j for j in range(1, 6))
+        and all(
+            sp.simplify(poly16_53i.nth(2 * j) - ((-1)**j * 4**j / (2 * sp.factorial(2 * j)) - 2 * j - 1)) == 0
+            for j in range(1, 6)
+        )
+    )
+    # Ex 16.55: a_{2n-1} = -4/((2n-1)^2 pi), lim n^2 sin(a_{2n-1}) = -1/pi
+    a16_55i = sp.Rational(2, 1) / sp.pi * sp.integrate((x + 1) * sp.cos((2 * k_i - 1) * x), (x, 0, sp.pi))
+    lim16_55i = sp.limit(n_s**2 * sp.sin(-4 / ((2 * n_s - 1)**2 * sp.pi)), n_s, sp.oo)
+    # Ex 16.57: f(x) = 1/(2-x)^2 - 1/4 = sum_{n=1}^oo (n+1) x^n / 2^(n+2)
+    f16_57i = 1 / (2 - x)**2 - sp.Rational(1, 4)
+    ser16_57i = sp.series(f16_57i, x, 0, 9).removeO()
+    exp16_57i = sum((n + 1) * x**n / 2**(n + 2) for n in range(1, 9))
+    c16_i2_ok = (
+        sp.expand(ser16_48i - exp16_48i) == 0
+        and sp.simplify(lim16_48i - sp.E / (sp.E - 1)) == 0
+        and sp.expand(ser16_50i - exp16_50i) == 0
+        and s16_51i == -sp.Rational(1, 6)
+        and sp.expand(ser16_52i - exp16_52i) == 0
+        and ok16_53i
+        and sp.simplify(a16_55i - (-4 / ((2 * k_i - 1)**2 * sp.pi))) == 0
+        and lim16_55i == -1 / sp.pi
+        and sp.simplify(sp.integrate(f16_57i, (x, 0, 1)) - sp.Rational(1, 4)) == 0
+        and sp.expand(ser16_57i - exp16_57i) == 0
+    )
+    check("m1_c16_zy18_47_57", c16_i2_ok, "zy18 Ex16.47-16.57 (Ex16.48 e/(e-1), Ex16.51 -1/6, Ex16.53, Ex16.55 -1/pi, Ex16.57) exact")
+
     return results
 
 
