@@ -1481,6 +1481,150 @@ def run_all_checks() -> list[tuple[str, bool, str]]:
     )
     check("m1_c14_zy18_all", c14_i_ok, "zy18 Ex14.1-14.8 ((1-ln2)pi/4, 1/2, 2/3, (e-1)pi/(pi+1), pi/4-1/3, -8/3 dual-method) exact")
 
+    # ==================== Calculus Lecture 15 (calc-15: 微分方程) ====================
+    C1, C2 = sp.symbols("C1 C2", real=True)
+
+    # 81. All 9 differential operator examples (zy30 P.392-394 注例 1 ~ 注例 9)
+    op_cases = [
+        (sp.Integer(-1), 1, -2, sp.Integer(2)),
+        (x * sp.exp(x) / 3, 1, -2, sp.exp(x)),
+        (x**2 * sp.exp(x) / 2, -2, 1, sp.exp(x)),
+        (-sp.sin(x) / 2, 0, -1, sp.sin(x)),
+        (-x * sp.cos(2 * x) / 4, 0, 4, sp.sin(2 * x)),
+        ((3 * sp.sin(2 * x) + sp.cos(2 * x)) / 40, -3, 2, -sp.cos(2 * x) / 2),
+        (x**3 / 3 - x**2 + 3 * x - 1, 1, 0, x**2 + 1),
+        (-x * sp.exp(-2 * x) * sp.cos(x) / 2, 4, 5, sp.exp(-2 * x) * sp.sin(x)),
+        (-x * (x + 2) * sp.exp(x), -3, 2, 2 * x * sp.exp(x)),
+    ]
+    op_ok = all(
+        sp.simplify(sp.diff(ys, x, 2) + p_c * sp.diff(ys, x) + q_c * ys - rhs) == 0
+        for ys, p_c, q_c, rhs in op_cases
+    )
+    check("m1_c15_op_9_examples", op_ok, "zy30 P.392-394 all 9 differential operator examples (注例1-9) exact")
+
+    # 82. zy30 Ex 15.2 ~ 15.14
+    y15_3 = sp.Rational(1, 2) * (1 + x**2) * (sp.log(1 + x**2) - 1)
+    y15_6 = sp.Rational(1, 4) - xp**2
+    y15_7 = sp.exp(-x) * sp.sin(x)
+    area15_7_one = sp.integrate(sp.exp(-t) * sp.sin(t), (t, 0, sp.pi))
+    area15_7 = sp.simplify(area15_7_one / (1 - sp.exp(-sp.pi)))
+    # Ex 15.9: limit of solution to y' + e y = (1 - 1/x)^x as x->+oo is e^(-2)
+    lim15_9 = sp.limit((1 - 1 / xp)**xp / sp.E, xp, sp.oo)
+    # Ex 15.11: x(y) = 1 / (1 - ln y + C1/y) satisfies y dx/dy = (1 + x ln y) x
+    x15_11 = 1 / (1 - sp.log(yp) + C1 / yp)
+    ode15_11 = sp.simplify(yp * sp.diff(x15_11, yp) - (1 + x15_11 * sp.log(yp)) * x15_11)
+    # Ex 15.12: y = asin(e^x/sqrt(2)) - pi/4 satisfies y'' = y' (1 + y'^2), y(0)=0, y'(0)=1
+    y15_12 = sp.asin(sp.exp(x) / sp.sqrt(2)) - sp.pi / 4
+    ode15_12 = sp.simplify(sp.diff(y15_12, x, 2) - sp.diff(y15_12, x) * (1 + sp.diff(y15_12, x)**2))
+    # Ex 15.13: y = C1 x^3 satisfies y y'' - 2/3 y'^2 = 0
+    y15_13 = C1 * x**3
+    ode15_13 = sp.simplify(y15_13 * sp.diff(y15_13, x, 2) - sp.Rational(2, 3) * sp.diff(y15_13, x)**2)
+    # Ex 15.14: u = x^2 y + x y^2 => du = (2xy+y^2)dx + (x^2+2xy)dy
+    u15_14 = x**2 * y + x * y**2
+    c15_a_ok = (
+        sp.simplify(sp.diff(y15_3, x) - x * sp.log(1 + x**2)) == 0 and y15_3.subs(x, 0) == -sp.Rational(1, 2)
+        and sp.simplify(sp.sqrt(sp.factor(xp**2 + y15_6**2)) - (y15_6 - xp * sp.diff(y15_6, xp))) == 0 and y15_6.subs(xp, sp.Rational(1, 2)) == 0
+        and sp.simplify(sp.diff(y15_7, x) + y15_7 - sp.exp(-x) * sp.cos(x)) == 0 and y15_7.subs(x, 0) == 0
+        and sp.simplify((area15_7 - (sp.exp(-sp.pi) + 1) / (2 * (1 - sp.exp(-sp.pi)))).rewrite(sp.exp)) == 0
+        and lim15_9 == sp.exp(-2)
+        and ode15_11 == 0
+        and ode15_12 == 0 and y15_12.subs(x, 0) == 0 and sp.simplify(sp.diff(y15_12, x).subs(x, 0) - 1) == 0
+        and ode15_13 == 0
+        and sp.diff(u15_14, x) == 2 * x * y + y**2 and sp.diff(u15_14, y) == x**2 + 2 * x * y
+    )
+    check("m1_c15_zy30_01_14", c15_a_ok, "zy30 Ex15.2-15.14 (area, e^-2, Bernoulli, reducible, exact ODE) all exact")
+
+    # 83. zy30 Ex 15.15 ~ 15.25 (linear 2nd/4th, Euler, tractrix, cooling, Math III difference eqs)
+    y15_15 = sp.exp(-2 * x) + 2 * sp.exp(x)
+    y15_16 = sp.exp(-x) * sp.cos(2 * x)
+    y15_17 = C1 * sp.exp(x) + C2 * sp.exp(2 * x) + sp.exp(-x) * (sp.cos(x) - sp.sin(x)) / 5
+    y15_18 = sp.exp(2 * x) + (1 + x) * sp.exp(x)
+    y15_19a, y15_19b = sp.exp(x) * sp.cos(2 * x), x
+    y15_20 = C1 / xp + C2 / xp**2
+    # Ex 15.21 / Intensive Ex 15.18 tractrix: y = ln((1+sqrt(1-x^2))/x) - sqrt(1-x^2) on (0,1)
+    xs = sp.Symbol("xs", positive=True)
+    y15_21 = sp.log((1 + sp.sqrt(1 - xs**2)) / xs) - sp.sqrt(1 - xs**2)
+    dy15_21 = sp.simplify(sp.diff(y15_21, xs) - (-sp.sqrt(1 - xs**2) / xs))
+    # Ex 15.23 cooling: T(t) = 100 e^(-ln(10)/30 * t) + 20
+    T15_23 = 100 * sp.exp(-sp.log(10) / 30 * t) + 20
+    # Ex 15.24 & 15.25 difference equations
+    y15_24 = t * (t - 1) / 2 + C1
+    y15_25 = C1 - 2 * sp.cos(sp.pi * t / 3) + 2 * sp.sqrt(3) * sp.sin(sp.pi * t / 3)
+    c15_b_ok = (
+        sp.simplify(sp.diff(y15_15, x, 2) + sp.diff(y15_15, x) - 2 * y15_15) == 0 and y15_15.subs(x, 0) == 3 and sp.diff(y15_15, x).subs(x, 0) == 0
+        and sp.simplify(sp.diff(y15_16, x, 2) + 2 * sp.diff(y15_16, x) + 5 * y15_16) == 0 and y15_16.subs(x, 0) == 1 and sp.diff(y15_16, x).subs(x, 0) == -1
+        and sp.simplify(sp.diff(y15_17, x, 2) - 3 * sp.diff(y15_17, x) + 2 * y15_17 - 2 * sp.exp(-x) * sp.cos(x)) == 0
+        and sp.simplify(sp.diff(y15_18, x, 2) - 3 * sp.diff(y15_18, x) + 2 * y15_18 - (-sp.exp(x))) == 0
+        and sp.simplify(sp.diff(y15_19a, x, 4) - 2 * sp.diff(y15_19a, x, 3) + 5 * sp.diff(y15_19a, x, 2)) == 0
+        and sp.simplify(sp.diff(y15_19b, x, 4) - 2 * sp.diff(y15_19b, x, 3) + 5 * sp.diff(y15_19b, x, 2)) == 0
+        and sp.simplify(xp**2 * sp.diff(y15_20, xp, 2) + 4 * xp * sp.diff(y15_20, xp) + 2 * y15_20) == 0
+        and dy15_21 == 0 and y15_21.subs(xs, 1) == 0
+        and T15_23.subs(t, 0) == 120 and sp.simplify(T15_23.subs(t, 30) - 30) == 0
+        and sp.simplify(y15_24.subs(t, t + 1) - y15_24 - t) == 0
+        and sp.simplify(sp.trigsimp(y15_25.subs(t, t + 1) - y15_25) - 4 * sp.cos(sp.pi * t / 3)) == 0
+    )
+    check("m1_c15_zy30_15_25", c15_b_ok, "zy30 Ex15.15-15.25 (2nd/4th linear, Euler, tractrix, cooling, diff eqs) exact")
+
+    # 84. zy18 Ex 15.1 ~ 15.10
+    # Ex 15.1: F(x,y) = atan(y/x) + 1/2 ln(x^2+y^2) => -Fx/Fy = (y-x)/(y+x)
+    F15_1i = sp.atan(y / xp) + sp.Rational(1, 2) * sp.log(xp**2 + y**2)
+    # Ex 15.2: F = (y+2x-3)^2 (4y-x-3) => -Fx/Fy = (2x-5y+3)/(2x+4y-6)
+    F15_2i = (y + 2 * x - 3)**2 * (4 * y - x - 3)
+    # Ex 15.4: y = -1/2 ln x + 1/4 x^2, arc length on [1, e] = e^2/4 + 1/4
+    y15_4i = -sp.Rational(1, 2) * sp.log(xp) + sp.Rational(1, 4) * xp**2
+    arc15_4i = sp.integrate(sp.Rational(1, 2) * (xp + 1 / xp), (xp, 1, sp.E))
+    # Ex 15.6 / 15.15: y = 1/4 (x-1)^2 + 1 satisfies 2 y^2 y'' = (1 + y'^2)^2, y(3)=2, y'(3)=1
+    y15_6i = sp.Rational(1, 4) * (x - 1)**2 + 1
+    # Ex 15.7: y = sqrt(C1 x^2 + 2 C2) satisfies x y y'' + x y'^2 - y y' = 0
+    y15_7i = sp.sqrt(2 * x**2 + 5)
+    # Ex 15.9 Euler: y = x^2 satisfies x^2 y'' + x y' - 4 y = 0, y(1)=1, y'(1)=2
+    # Ex 15.10 4th-order: (lambda-1)^2 (lambda^2+4) = lambda^4 - 2 lambda^3 + 5 lambda^2 - 8 lambda + 4
+    lam = sp.Symbol("lam")
+    c15_i1_ok = (
+        sp.simplify(-sp.diff(F15_1i, xp) / sp.diff(F15_1i, y) - (y - xp) / (y + xp)) == 0
+        and sp.simplify(-sp.diff(F15_2i, x) / sp.diff(F15_2i, y) - (2 * x - 5 * y + 3) / (2 * x + 4 * y - 6)) == 0
+        and F15_2i.subs({x: 0, y: 2}) == 5
+        and sp.simplify(2 * xp * sp.diff(y15_4i, xp) - 4 * y15_4i - (2 * sp.log(xp) - 1)) == 0
+        and sp.simplify(arc15_4i - (sp.E**2 / 4 + sp.Rational(1, 4))) == 0
+        and sp.simplify(2 * y15_6i**2 * sp.diff(y15_6i, x, 2) - (1 + sp.diff(y15_6i, x)**2)**2) == 0
+        and y15_6i.subs(x, 3) == 2 and sp.diff(y15_6i, x).subs(x, 3) == 1
+        and sp.simplify(x * y15_7i * sp.diff(y15_7i, x, 2) + x * sp.diff(y15_7i, x)**2 - y15_7i * sp.diff(y15_7i, x)) == 0
+        and sp.expand((lam - 1)**2 * (lam**2 + 4)) == lam**4 - 2 * lam**3 + 5 * lam**2 - 8 * lam + 4
+    )
+    check("m1_c15_zy18_01_10", c15_i1_ok, "zy18 Ex15.1-15.10 (frac-linear, arc e^2/4+1/4, Ex15.6/7/9/10) exact")
+
+    # 85. zy18 Ex 15.11 ~ 15.19 + P.195 functional-derivative system
+    # Ex 15.11: e^y = e^(-x)(C1 + 1/2 e^x (sin x - cos x)) => (e^y)' + e^y = sin x
+    u15_11i = sp.exp(-x) * (C1 + sp.Rational(1, 2) * sp.exp(x) * (sp.sin(x) - sp.cos(x)))
+    # Ex 15.12: y = -3/4 x^2 + x + 1 on x >= -2 -> y' - (x/2 + 1) = -2x, y+x^2 = (x/2+1)^2
+    y15_12i = -sp.Rational(3, 4) * x**2 + x + 1
+    # Ex 15.13: f(x) = e x ln x -> f(xy) = y f(x) + x f(y), f'(1)=e, min at e^-1 is -1
+    f15_13i = sp.E * xp * sp.log(xp)
+    # Ex 15.14: y = 2x - x ln x, S(x) = x^2/(2(ln x - 1)) min at x=e^(3/2) is e^3
+    y15_14i = 2 * xp - xp * sp.log(xp)
+    S15_14i = xp**2 / (2 * (sp.log(xp) - 1))
+    # Ex 15.16 (Math III): P = sqrt(15 + 10 e^(-8.6 t))
+    P15_16i = sp.sqrt(15 + 10 * sp.exp(-sp.Rational(43, 5) * t))
+    # Ex 15.19 (Math III): y_x = C1 + (x - 2) 2^x
+    y15_19i = C1 + (x - 2) * 2**x
+    # P.195 system: f(x) = x + 1/2 ln(1+x^2) - atan(x) => f'(x) + x f'(-x) = x
+    fp_195 = sp.diff(x + sp.Rational(1, 2) * sp.log(1 + x**2) - sp.atan(x), x)
+    c15_i2_ok = (
+        sp.simplify(sp.diff(u15_11i, x) + u15_11i - sp.sin(x)) == 0
+        and sp.simplify(y15_12i + x**2 - (x / 2 + 1)**2) == 0
+        and sp.simplify(sp.diff(y15_12i, x) - (x / 2 + 1) - (-2 * x)) == 0 and y15_12i.subs(x, 0) == 1
+        and sp.simplify(f15_13i.subs(xp, xp * yp) - (yp * f15_13i + xp * f15_13i.subs(xp, yp))) == 0
+        and sp.diff(f15_13i, xp).subs(xp, 1) == sp.E and f15_13i.subs(xp, sp.exp(-1)) == -1
+        and sp.simplify(y15_14i - xp * sp.diff(y15_14i, xp) - xp) == 0 and y15_14i.subs(xp, sp.E**2) == 0
+        and sp.simplify(sp.diff(S15_14i, xp).subs(xp, sp.E**sp.Rational(3, 2))) == 0
+        and sp.simplify(S15_14i.subs(xp, sp.E**sp.Rational(3, 2)) - sp.E**3) == 0
+        and sp.simplify(sp.diff(P15_16i, t) + sp.Rational(43, 10) * P15_16i - sp.Rational(129, 2) / P15_16i) == 0
+        and P15_16i.subs(t, 0) == 5
+        and sp.simplify(y15_19i.subs(x, x + 1) - y15_19i - x * 2**x) == 0
+        and sp.simplify(fp_195 + x * fp_195.subs(x, -x) - x) == 0
+    )
+    check("m1_c15_zy18_11_19", c15_i2_ok, "zy18 Ex15.11-15.19 + P.195 system (e^y, sqrt(y+x^2), e x ln x, S=e^3, P, diff eq) exact")
+
     return results
 
 

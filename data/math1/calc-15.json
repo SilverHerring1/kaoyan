@@ -1,0 +1,2240 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "calc-15",
+  "chapterNum": "高数 · 第 15 讲",
+  "chapterTitle": "微分方程",
+  "syllabusRef": "2027 考研数学一大纲 · 高等数学第 15 讲（27 张宇《基础30讲·高数》P.377-403上 25 例 + 9 道算子法注例 + 《高数18讲》强化 P.184-202 19 例全量合编；含一阶/伯努利/全微分/可降阶/高阶常系数/欧拉与几何物理建模，数三差分方程与经济标为教材拓展）",
+  "items": [
+    {
+      "id": "m1-c15-f-01",
+      "stage": "both",
+      "section": "一、微分方程基本概念与一阶可分离/齐次型",
+      "kind": "formula",
+      "title": "微分方程阶与通解概念、可分离变量型、齐次型及分式线性三情形化归",
+      "examWeight": "core",
+      "prompt": "默写可分离变量型、换元可分离型 $y'=f(ax+by+c)$、齐次型 $y'=\\varphi(\\frac{y}{x})$ 与分式线性型 $y'=f\\!\\left(\\frac{ax+by+c}{a_1 x+b_1 y+c_1}\\right)$ 的求解公式：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{可分离变量：}\\frac{\\mathrm{d}y}{\\mathrm{d}x}=f(x)g(y)\\implies\\int\\frac{\\mathrm{d}y}{g(y)}=\\int f(x)\\,\\mathrm{d}x\\quad(\\text{另查 }g(y)=0)\\\\\n&\\text{换元可分离：}y'=f(ax+by+c)\\xrightarrow{u=ax+by+c}\\frac{\\mathrm{d}u}{\\mathrm{d}x}=a+bf(u)\\\\\n&\\text{齐次型：}\\frac{\\mathrm{d}y}{\\mathrm{d}x}=\\varphi\\!\\left(\\frac{y}{x}\\right)\\xrightarrow{u=\\frac{y}{x},\\;y=ux}x\\frac{\\mathrm{d}u}{\\mathrm{d}x}+u=\\varphi(u)\\implies\\int\\frac{\\mathrm{d}u}{\\varphi(u)-u}=\\int\\frac{\\mathrm{d}x}{x}\\\\\n&\\text{分式线性型 }y'=f\\!\\left(\\frac{ax+by+c}{a_1 x+b_1 y+c_1}\\right)\\text{：}\\begin{cases}c=c_1=0\\implies\\text{直接齐次}\\\\c^2+c_1^2\\ne 0,\\;\\frac{a}{a_1}=\\frac{b}{b_1}\\implies\\text{令 }u=ax+by\\\\c^2+c_1^2\\ne 0,\\;\\frac{a}{a_1}\\ne\\frac{b}{b_1}\\implies\\text{解交点 }(x_0,y_0)\\text{，平移 }X=x-x_0,Y=y-y_0\\text{ 化齐次}\\end{cases}\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "通解中的「独立常数个数 = 方程阶数」",
+          "desc": "经任何恒等变形都不能减少常数个数才叫独立常数；且常数未必取遍 $(-\\infty,+\\infty)$，可能仅在某区间取值（如例15.4 中 $C>1$）！"
+        },
+        {
+          "sym": "奇解与全部解（基础 P.382 注）",
+          "desc": "非线性方程分离变量除 $g(y)$ 时会回避 $g(y)=0$ 对应的「奇解」（如例15.5 的 $1+\\sin u=0$）；线性方程全部解 = 通解，非线性方程全部解 = 通解 + 奇解（考研求通解一般不强求奇解，但初值定解问题如强化例15.5 必须防漏 $u\\equiv 0$！）。"
+        }
+      ],
+      "conditions": "微分方程的阶指未知函数最高阶导数的阶数；分离变量作除法前务必留意被除因子是否为零；对数积分结果便于合并时可把常数记为 $\\ln C$。",
+      "pitfalls": "高频翻车点：① 化分式线性（强化例15.2）解出交点 $(x_0,y_0)$ 后忘记最后用 $X=x-x_0,Y=y-y_0$ 回代；② 初值定解问题分离变量除以 $u^2$ 时把真正满足初值的常数解 $u\\equiv 0$ 丢掉（强化例15.5）！",
+      "figureSvg": "<svg viewBox=\"0 0 640 236\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">\n  <title>一阶微分方程六大类型与二阶可降阶三大类型识别分类决策图（仿基础P.378与强化P.184-189）</title>\n  <defs>\n    <marker id=\"m1c15_arr1\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#1d4ed8\"/>\n    </marker>\n  </defs>\n\n  <!-- Left panel: 1st-order ODE classifier -->\n  <rect x=\"6\" y=\"6\" width=\"386\" height=\"224\" rx=\"8\" fill=\"#eff6ff\" stroke=\"#3b82f6\" stroke-width=\"1.2\"/>\n  <text x=\"199\" y=\"24\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1e3a8a\">① 一阶微分方程（出现 y' 或 dy=...dx）六型速判</text>\n\n  <!-- 6 cards in 2x3 grid -->\n  <rect x=\"16\" y=\"34\" width=\"178\" height=\"54\" rx=\"6\" fill=\"#ffffff\" stroke=\"#93c5fd\" stroke-width=\"1.1\"/>\n  <text x=\"105\" y=\"50\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#1e40af\">1. 可分离变量型</text>\n  <text x=\"105\" y=\"65\" text-anchor=\"middle\" font-size=\"8.2\" fill=\"#334155\">y' = f(x)g(y) 或 f(ax+by+c)</text>\n  <text x=\"105\" y=\"79\" text-anchor=\"middle\" font-size=\"7.8\" fill=\"#dc2626\">注意防丢奇解 g(y)=0！</text>\n\n  <rect x=\"204\" y=\"34\" width=\"178\" height=\"54\" rx=\"6\" fill=\"#ffffff\" stroke=\"#93c5fd\" stroke-width=\"1.1\"/>\n  <text x=\"293\" y=\"50\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#1e40af\">2. 齐次型 / 分式线性</text>\n  <text x=\"293\" y=\"65\" text-anchor=\"middle\" font-size=\"8.2\" fill=\"#334155\">y'=f(y/x) → 令 u=y/x</text>\n  <text x=\"293\" y=\"79\" text-anchor=\"middle\" font-size=\"7.8\" fill=\"#059669\">分式线性先平移交点 (x₀,y₀)</text>\n\n  <rect x=\"16\" y=\"96\" width=\"178\" height=\"56\" rx=\"6\" fill=\"#ffffff\" stroke=\"#2563eb\" stroke-width=\"1.3\"/>\n  <text x=\"105\" y=\"112\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#1d4ed8\">3. 一阶线性型（最高频）</text>\n  <text x=\"105\" y=\"127\" text-anchor=\"middle\" font-size=\"8.2\" fill=\"#334155\">y' + p(x)y = q(x)</text>\n  <text x=\"105\" y=\"142\" text-anchor=\"middle\" font-size=\"7.8\" fill=\"#dc2626\">对 y 非线性时立刻换 x(y)！</text>\n\n  <rect x=\"204\" y=\"96\" width=\"178\" height=\"56\" rx=\"6\" fill=\"#ffffff\" stroke=\"#93c5fd\" stroke-width=\"1.1\"/>\n  <text x=\"293\" y=\"112\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#1e40af\">4. 伯努利方程（仅数一）</text>\n  <text x=\"293\" y=\"127\" text-anchor=\"middle\" font-size=\"8.2\" fill=\"#334155\">y'+p(x)y = q(x)yⁿ (n≠0,1)</text>\n  <text x=\"293\" y=\"142\" text-anchor=\"middle\" font-size=\"7.8\" fill=\"#059669\">除 yⁿ 令 z = y¹⁻ⁿ 化线性</text>\n\n  <rect x=\"16\" y=\"160\" width=\"178\" height=\"58\" rx=\"6\" fill=\"#ffffff\" stroke=\"#93c5fd\" stroke-width=\"1.1\"/>\n  <text x=\"105\" y=\"176\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#1e40af\">5. 全微分方程（仅数一）</text>\n  <text x=\"105\" y=\"191\" text-anchor=\"middle\" font-size=\"8.2\" fill=\"#334155\">P dx + Q dy = 0 (∂P/∂y=∂Q/∂x)</text>\n  <text x=\"105\" y=\"206\" text-anchor=\"middle\" font-size=\"7.8\" fill=\"#059669\">反凑 d(u(x,y))=0 ⇒ u=C</text>\n\n  <rect x=\"204\" y=\"160\" width=\"178\" height=\"58\" rx=\"6\" fill=\"#fefce8\" stroke=\"#ca8a04\" stroke-width=\"1.2\"/>\n  <text x=\"293\" y=\"176\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#854d0e\">6. 非常规换元化归</text>\n  <text x=\"293\" y=\"191\" text-anchor=\"middle\" font-size=\"8.0\" fill=\"#334155\">见 eʸ, y+x², xy 逆凑导数</text>\n  <text x=\"293\" y=\"206\" text-anchor=\"middle\" font-size=\"7.8\" fill=\"#a16207\">如 (eʸ)'+eʸ=sin x (强15.11)</text>\n\n  <!-- Right panel: Reducible 2nd-order ODEs -->\n  <rect x=\"402\" y=\"6\" width=\"232\" height=\"224\" rx=\"8\" fill=\"#f0fdf4\" stroke=\"#22c55e\" stroke-width=\"1.2\"/>\n  <text x=\"518\" y=\"24\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#166534\">② 二阶可降阶（仅数一、数二）</text>\n\n  <rect x=\"414\" y=\"36\" width=\"208\" height=\"54\" rx=\"6\" fill=\"#ffffff\" stroke=\"#86efac\" stroke-width=\"1.2\"/>\n  <text x=\"518\" y=\"52\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#15803d\">缺 y 型：y'' = f(x, y')</text>\n  <text x=\"518\" y=\"68\" text-anchor=\"middle\" font-size=\"8.3\" fill=\"#334155\">令 p = y'(x)，则 y'' = dp/dx</text>\n  <text x=\"518\" y=\"82\" text-anchor=\"middle\" font-size=\"7.8\" fill=\"#dc2626\">防漏解 p≡0（强化例 15.5）</text>\n\n  <rect x=\"414\" y=\"98\" width=\"208\" height=\"56\" rx=\"6\" fill=\"#ffffff\" stroke=\"#16a34a\" stroke-width=\"1.4\"/>\n  <text x=\"518\" y=\"114\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#15803d\">缺 x 型：y'' = f(y, y')</text>\n  <text x=\"518\" y=\"130\" text-anchor=\"middle\" font-size=\"8.4\" font-weight=\"700\" fill=\"#dc2626\">令 p = y'(y)，y'' = p·(dp/dy)！</text>\n  <text x=\"518\" y=\"145\" text-anchor=\"middle\" font-size=\"7.8\" fill=\"#334155\">先解 p(y)，再分离 dy/p(y) = dx</text>\n\n  <rect x=\"414\" y=\"162\" width=\"208\" height=\"56\" rx=\"6\" fill=\"#ffffff\" stroke=\"#86efac\" stroke-width=\"1.2\"/>\n  <text x=\"518\" y=\"178\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#15803d\">缺 x,y 型 &amp; 全微分凑商降阶</text>\n  <text x=\"518\" y=\"193\" text-anchor=\"middle\" font-size=\"8.2\" fill=\"#334155\">y''=f(y') 按缺 y 处理（例15.12）</text>\n  <text x=\"518\" y=\"208\" text-anchor=\"middle\" font-size=\"8.0\" fill=\"#047857\">全微分：(yy'/x)'=0（强化例15.7）</text>\n</svg>",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.378-382",
+        "pdfPage": 383,
+        "itemRef": "一、微分方程概念 & 二·1 可分离变量 & 二·2 齐次型",
+        "crossRef": "27张宇《高数18讲》(强化) P.184-186 一·(1)(2) 含分式线性三情形"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy18_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-f-02",
+      "stage": "both",
+      "section": "一、微分方程基本概念与一阶可分离/齐次型",
+      "kind": "formula",
+      "title": "一阶线性微分方程通解公式（不定积分 + 变限积分双形式）与伯努利方程（仅数一）",
+      "examWeight": "core",
+      "prompt": "默写一阶线性微分方程的不定积分通解公式、用于定性分析的变限积分通解公式，以及伯努利方程（仅数一）化线性步骤：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{一阶线性 }y'+p(x)y=q(x)\\text{：}y=\\mathrm{e}^{-\\int p(x)\\,\\mathrm{d}x}\\left[\\int q(x)\\mathrm{e}^{\\int p(x)\\,\\mathrm{d}x}\\,\\mathrm{d}x+C\\right]\\\\\n&\\text{变限积分形式（求极限/有界/周期必用）：}y=\\mathrm{e}^{-\\int_{x_0}^x p(t)\\,\\mathrm{d}t}\\left[\\int_{x_0}^x q(t)\\mathrm{e}^{\\int_{x_0}^t p(s)\\,\\mathrm{d}s}\\,\\mathrm{d}t+C\\right]\\\\\n&\\text{伯努利方程（仅数一）}y'+p(x)y=q(x)y^n\\;(n\\ne 0,1)\\text{：}\\\\\n&\\qquad \\text{① 同除 }y^n\\text{ 得 }y^{-n}y'+p(x)y^{1-n}=q(x)\\quad\\longrightarrow\\quad \\text{② 令 }z=y^{1-n}\\text{ 得 }\\frac{1}{1-n}\\frac{\\mathrm{d}z}{\\mathrm{d}x}+p(x)z=q(x)\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "为什么 $\\mathrm{e}^{\\int p(x)\\,\\mathrm{d}x}=|\\varphi(x)|$ 可直接去绝对值？（基础 P.383 注(2)）",
+          "desc": "因为公式外侧 $\\mathrm{e}^{-\\int p}=\\pm\\frac{1}{\\varphi(x)}$ 与内侧 $\\mathrm{e}^{\\int p}=\\pm\\varphi(x)$ 同号，两处 $\\pm$ 相乘恒为 $+1$，而 $\\pm C$ 仍吸收为任意常数 $D$！**仅在公式内可去绝对值，其他求原函数时 $\\ln|u|$ 仍须保留绝对值！**"
+        },
+        {
+          "sym": "「换位思考」互换 $x$ 与 $y$（例15.8 & 例15.11）",
+          "desc": "当方程关于 $y$ 高度非线性而关于 $x$ 是一阶线性或伯努利方程时，立即写成 $\\frac{\\mathrm{d}x}{\\mathrm{d}y}+P(y)x=Q(y)$（或 $Q(y)x^n$），把 $y$ 当自变量求解！"
+        }
+      ],
+      "conditions": "套一阶线性通解公式前，**必须先把 $y'$ 的系数化为 $1$**（例如 $2xy'-4y=2\\ln x-1$ 须先化为 $y'-\\frac{2}{x}y=\\frac{2\\ln x-1}{2x}$！）；变限积分形式中 $x_0$ 在未给定初值点时可按解题方便任取。",
+      "pitfalls": "高频致命错误：① 忘记把 $y'$ 前系数除成 $1$ 就直接抄 $p(x)$；② 记反指数负号（牢记「**外负内正**」：外面 $\\mathrm{e}^{-\\int p}$，里面 $\\mathrm{e}^{+\\int p}$）；③ 伯努利方程令 $z=y^{1-n}$ 时漏写因子 $\\frac{1}{1-n}$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.382-386",
+        "pdfPage": 387,
+        "itemRef": "二·3 一阶线性微分方程 & 二·4 伯努利方程",
+        "crossRef": "27张宇《高数18讲》(强化) P.187-188 一·(3)(4)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_01_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-f-03",
+      "stage": "both",
+      "section": "二、全微分方程与二阶可降阶微分方程（数一核心）",
+      "kind": "formula",
+      "title": "全微分方程（仅数一）与二阶可降阶微分方程三大类型（仅数一、数二）",
+      "examWeight": "core",
+      "prompt": "默写全微分方程的充要条件与通解形式，以及二阶可降阶微分方程（缺 $y$ 型、缺 $x$ 型、缺 $x,y$ 型）的降阶代换公式：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{全微分方程（仅数一）：}P(x,y)\\,\\mathrm{d}x+Q(x,y)\\,\\mathrm{d}y=0,\\quad \\frac{\\partial P}{\\partial y}=\\frac{\\partial Q}{\\partial x}\\iff\\mathrm{d}u(x,y)=0\\implies u(x,y)=C\\\\\n&(1)\\;\\text{缺 }y\\text{ 型 }y''=f(x,y')\\text{（斩尽杀绝 }y\\text{）：令 }p=y'(x),\\;y''=\\frac{\\mathrm{d}p}{\\mathrm{d}x}\\implies \\frac{\\mathrm{d}p}{\\mathrm{d}x}=f(x,p)\\\\\n&(2)\\;\\text{缺 }x\\text{ 型 }y''=f(y,y')\\text{（斩草除根 }x\\text{）：令 }p=y'(y),\\;y''=\\frac{\\mathrm{d}p}{\\mathrm{d}x}=\\frac{\\mathrm{d}p}{\\mathrm{d}y}\\cdot\\frac{\\mathrm{d}y}{\\mathrm{d}x}=p\\frac{\\mathrm{d}p}{\\mathrm{d}y}\\implies p\\frac{\\mathrm{d}p}{\\mathrm{d}y}=f(y,p)\\\\\n&(3)\\;\\text{缺 }x,y\\text{ 型 }y''=f(y')\\text{：既缺 }y\\text{ 又缺 }x\\text{，优先按 }(1)\\text{ 缺 }y\\text{ 型处理（例 15.12）}\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "为什么缺 $x$ 型必须写 $y''=p\\frac{\\mathrm{d}p}{\\mathrm{d}y}$？（基础 P.386 注）",
+          "desc": "若错把 $y''$ 写成 $\\frac{\\mathrm{d}p}{\\mathrm{d}x}$，方程变成 $\\frac{\\mathrm{d}p}{\\mathrm{d}x}=f(y,p)$ 同时混杂三个变量 $x,y,p$ 根本无法解；改写为 $p\\frac{\\mathrm{d}p}{\\mathrm{d}y}=f(y,p)$ 才彻底消灭 $x$，化为关于 $(y,p)$ 的一阶方程！"
+        },
+        {
+          "sym": "全微分凑导数降阶（强化例 15.7）",
+          "desc": "二阶方程若既含 $x$ 又含 $y$，观察能否直接凑成某组合的全导数（如 $(yy')'=yy''+(y')^2$，见强化例15.7 $\\left(\\frac{yy'}{x}\\right)'=0$），直接积分一次即降阶！"
+        }
+      ],
+      "conditions": "全微分方程要求 $P,Q\\in C^1$ 于单连通区域 $D$；二阶可降阶方程有初值条件时（如例15.12、强化例15.6），**每积出第一个常数 $C_1$ 就立刻代入初值 $y(x_0),y'(x_0)$ 定出 $C_1$ 和开方正负号**，绝不要带着抽象 $C_1$ 硬做第二次积分！",
+      "pitfalls": "高频丢分点：① 缺 $x$ 型忘记把 $p$ 开方后的正负号用初始导数 $y'(x_0)$ 的符号唯一锁定（强化例15.6）；② 分离变量除以 $p$ 或 $p^2$ 时丢掉常数解 $p\\equiv 0$（例15.13 补 $y\\equiv 0$，强化例15.5 唯一解就是 $u\\equiv 0\\implies y\\equiv 1$！）",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.386-388",
+        "pdfPage": 391,
+        "itemRef": "二·5 二阶可降阶 & 二·6 全微分方程",
+        "crossRef": "27张宇《高数18讲》(强化) P.188-190 二、二阶可降阶微分方程"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_01_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-f-04",
+      "stage": "both",
+      "section": "三、高阶常系数线性微分方程与欧拉方程",
+      "kind": "formula",
+      "title": "二阶与 $n$ 阶常系数齐次线性微分方程特征根通解公式与反求方程四法则",
+      "examWeight": "core",
+      "prompt": "默写二阶与 $n$ 阶常系数齐次线性方程由特征方程根写通解的四条规则，以及由已知特解反推特征根重数的四条反问题法则：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{二阶齐次 }y''+py'+qy=0\\text{，特征方程 }r^2+pr+q=0\\text{：}\\\\\n&\\quad \\text{① }p^2-4q>0\\;(r_1\\ne r_2)\\implies y=C_1\\mathrm{e}^{r_1 x}+C_2\\mathrm{e}^{r_2 x}\\\\\n&\\quad \\text{② }p^2-4q=0\\;(r_1=r_2=r)\\implies y=(C_1+C_2 x)\\mathrm{e}^{rx}\\\\\n&\\quad \\text{③ }p^2-4q<0\\;(r=\\alpha\\pm\\beta\\mathrm{i})\\implies y=\\mathrm{e}^{\\alpha x}(C_1\\cos\\beta x+C_2\\sin\\beta x)\\\\\n&n\\text{ 阶推广：}k\\text{ 重实根 }r\\to(C_1+C_2 x+\\cdots+C_k x^{k-1})\\mathrm{e}^{rx};\\quad \\text{二重共轭复根 }\\alpha\\pm\\beta\\mathrm{i}\\to\\mathrm{e}^{\\alpha x}\\bigl[(C_1+C_3 x)\\cos\\beta x+(C_2+C_4 x)\\sin\\beta x\\bigr]\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "反求微分方程四大判据（基础 P.396 注 & 强化 P.192 注）",
+          "desc": "① 含特解 $\\mathrm{e}^{rx}\\implies r$ 至少为单实根；② 含特解 $x^{k-1}\\mathrm{e}^{rx}\\implies r$ **至少为 $k$ 重实根**（例如含 $x=x^1\\mathrm{e}^{0x}\\implies 0$ 至少二重根，例15.19！）；③ 含 $\\mathrm{e}^{\\alpha x}\\cos\\beta x$ 或 $\\sin\\beta x\\implies\\alpha\\pm\\beta\\mathrm{i}$ 成对至少单复根；④ 含 $x\\mathrm{e}^{\\alpha x}\\cos\\beta x\\implies\\alpha\\pm\\beta\\mathrm{i}$ 至少二重复根。"
+        },
+        {
+          "sym": "二阶齐次两解线性无关判据",
+          "desc": "$y_1(x),y_2(x)$ 线性无关 $\\iff \\dfrac{y_1(x)}{y_2(x)}\\not\\equiv C$（常数），此时通解为 $C_1 y_1(x)+C_2 y_2(x)$。"
+        }
+      ],
+      "conditions": "适用于常系数（$p,q$ 及高阶系数均为实常数）齐次线性方程；实系数多项式的虚根必然成共轭对 $\\alpha\\pm\\beta\\mathrm{i}$ 出现。",
+      "pitfalls": "反求方程最易犯的错：看到特解 $y_2(x)=x$ 误以为 $0$ 是单根——必须写成 $x^1\\mathrm{e}^{0\\cdot x}$，对照 $x^{k-1}\\mathrm{e}^{rx}$ 知 $k-1=1\\implies k=2$，即 **$r=0$ 至少是二重根**（例15.19）！",
+      "figureSvg": "<svg viewBox=\"0 0 640 232\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">\n  <title>二阶常系数齐次线性微分方程特征根复平面性态分布（强化例15.8）与非齐次特解双法流程图</title>\n  <defs>\n    <marker id=\"m1c15_arr2\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#334155\"/>\n    </marker>\n  </defs>\n\n  <!-- Left panel: Characteristic root complex plane & qualitative behavior -->\n  <rect x=\"6\" y=\"6\" width=\"312\" height=\"220\" rx=\"8\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"162\" y=\"24\" text-anchor=\"middle\" font-size=\"10.8\" font-weight=\"700\" fill=\"#1e3a8a\">① 特征根复平面与解的全局性态（强化例 15.8）</text>\n\n  <!-- Left half-plane shaded green (Re < 0: stable / integrable on [0,+oo)) -->\n  <rect x=\"24\" y=\"38\" width=\"136\" height=\"124\" fill=\"#dcfce7\" opacity=\"0.7\"/>\n  <!-- Right half-plane shaded red (Re > 0: unbounded as x->+oo) -->\n  <rect x=\"160\" y=\"38\" width=\"138\" height=\"124\" fill=\"#fee2e2\" opacity=\"0.65\"/>\n\n  <!-- Imaginary axis (blue dashed = periodic / bounded) -->\n  <line x1=\"160\" y1=\"168\" x2=\"160\" y2=\"34\" stroke=\"#2563eb\" stroke-width=\"2\" marker-end=\"url(#m1c15_arr2)\"/>\n  <!-- Real axis -->\n  <line x1=\"20\" y1=\"100\" x2=\"304\" y2=\"100\" stroke=\"#334155\" stroke-width=\"1.3\" marker-end=\"url(#m1c15_arr2)\"/>\n  <text x=\"305\" y=\"104\" font-size=\"8.5\" font-weight=\"700\" fill=\"#334155\">Re</text>\n  <text x=\"166\" y=\"42\" font-size=\"8.5\" font-weight=\"700\" fill=\"#2563eb\">Im</text>\n\n  <!-- Sample roots -->\n  <circle cx=\"92\" cy=\"70\" r=\"3.6\" fill=\"#15803d\"/>\n  <circle cx=\"92\" cy=\"130\" r=\"3.6\" fill=\"#15803d\"/>\n  <circle cx=\"160\" cy=\"68\" r=\"3.6\" fill=\"#2563eb\"/>\n  <circle cx=\"160\" cy=\"132\" r=\"3.6\" fill=\"#2563eb\"/>\n  <circle cx=\"232\" cy=\"100\" r=\"3.6\" fill=\"#dc2626\"/>\n\n  <text x=\"86\" y=\"56\" text-anchor=\"middle\" font-size=\"8.6\" font-weight=\"700\" fill=\"#166534\">Re(λ) &lt; 0（左半平面）</text>\n  <text x=\"86\" y=\"152\" text-anchor=\"middle\" font-size=\"8.0\" fill=\"#15803d\">x→+∞ 衰减至 0</text>\n  <text x=\"230\" y=\"56\" text-anchor=\"middle\" font-size=\"8.6\" font-weight=\"700\" fill=\"#b91c1c\">Re(λ) &gt; 0（右半平面）</text>\n  <text x=\"230\" y=\"152\" text-anchor=\"middle\" font-size=\"8.0\" fill=\"#dc2626\">x→+∞ 指数发散</text>\n  <text x=\"180\" y=\"72\" font-size=\"7.8\" font-weight=\"700\" fill=\"#1d4ed8\">α=0: 周期</text>\n\n  <rect x=\"18\" y=\"172\" width=\"288\" height=\"46\" rx=\"6\" fill=\"#ffffff\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <text x=\"162\" y=\"189\" text-anchor=\"middle\" font-size=\"8.5\" font-weight=\"700\" fill=\"#166534\">一切解满足 ∫₀⁺∞ y(x)dx 收敛 ⇔ 全部特征根 Re(λᵢ) &lt; 0</text>\n  <text x=\"162\" y=\"207\" text-anchor=\"middle\" font-size=\"8.2\" fill=\"#334155\">对 y''+py'+qy=0 恰好等价于劳斯条件 p &gt; 0 且 q &gt; 0！</text>\n\n  <!-- Right panel: Particular solution dual methods -->\n  <rect x=\"328\" y=\"6\" width=\"306\" height=\"220\" rx=\"8\" fill=\"#eff6ff\" stroke=\"#3b82f6\" stroke-width=\"1.2\"/>\n  <text x=\"481\" y=\"24\" text-anchor=\"middle\" font-size=\"10.8\" font-weight=\"700\" fill=\"#1e3a8a\">② 非齐次特解 y* 双法与欧拉方程换元</text>\n\n  <rect x=\"340\" y=\"34\" width=\"282\" height=\"58\" rx=\"6\" fill=\"#ffffff\" stroke=\"#93c5fd\" stroke-width=\"1.1\"/>\n  <text x=\"481\" y=\"50\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#1d4ed8\">法一：待定系数法（「一看、二算、三比较」）</text>\n  <text x=\"481\" y=\"66\" text-anchor=\"middle\" font-size=\"8.2\" fill=\"#334155\">y* = eᵃˣ Qₙ(x) xᵏ 或 eᵃˣ[Qₗ⁽¹⁾cos βx + Qₗ⁽²⁾sin βx]xᵏ</text>\n  <text x=\"481\" y=\"81\" text-anchor=\"middle\" font-size=\"7.9\" fill=\"#dc2626\">k = 特征根重数（0 / 1 / 2）；l = max{m, n} 莫漏项！</text>\n\n  <rect x=\"340\" y=\"99\" width=\"282\" height=\"58\" rx=\"6\" fill=\"#ffffff\" stroke=\"#93c5fd\" stroke-width=\"1.1\"/>\n  <text x=\"481\" y=\"115\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#047857\">法二：微分算子法（选填提速神器，基础 P.391-394）</text>\n  <text x=\"481\" y=\"131\" text-anchor=\"middle\" font-size=\"8.2\" fill=\"#334155\">移位：1/F(D)·[eᵃˣ v(x)] = eᵃˣ · 1/F(D+α)·v(x)</text>\n  <text x=\"481\" y=\"146\" text-anchor=\"middle\" font-size=\"7.9\" fill=\"#059669\">三角：D²→−β²；多项式：1/F(D) 泰勒截断到 k 次</text>\n\n  <rect x=\"340\" y=\"164\" width=\"282\" height=\"54\" rx=\"6\" fill=\"#fff7ed\" stroke=\"#fdba74\" stroke-width=\"1.2\"/>\n  <text x=\"481\" y=\"180\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#9a3412\">欧拉方程 x²y''+pxy'+qy=f(x)（仅数一）</text>\n  <text x=\"481\" y=\"196\" text-anchor=\"middle\" font-size=\"8.3\" fill=\"#334155\">x&gt;0 令 x=eᵗ（x&lt;0 令 x=−eᵗ）⇒ y''(t)+(p−1)y'(t)+qy=f(±eᵗ)</text>\n  <text x=\"481\" y=\"211\" text-anchor=\"middle\" font-size=\"7.9\" fill=\"#dc2626\">记牢系数 p−1，解完务必用 t=ln|x| 回代！</text>\n</svg>",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.388-389, P.396-397",
+        "pdfPage": 393,
+        "itemRef": "三·1 二阶齐次 & 三·3 n阶齐次",
+        "crossRef": "27张宇《高数18讲》(强化) P.190-193 三·(1)(4)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_15_25",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-f-05",
+      "stage": "both",
+      "section": "三、高阶常系数线性微分方程与欧拉方程",
+      "kind": "formula",
+      "title": "二阶常系数非齐次线性方程解的结构、叠加原理与待定系数法特解设定",
+      "examWeight": "core",
+      "prompt": "默写二阶常系数非齐次线性方程 $y''+py'+qy=f(x)$ 的解结构、叠加原理，以及大纲要求的两类自由项特解设定公式：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{通解结构：}y(x)=y_{\\text{齐通}}(x)+y^*(x);\\qquad \\text{两非齐解之差 }y_1^*-y_2^*\\text{ 必为对应齐次解}\\\\\n&\\text{叠加原理：}y_1^*\\text{ 解 }f_1(x),\\;y_2^*\\text{ 解 }f_2(x)\\implies y_1^*+y_2^*\\text{ 解 }f_1(x)+f_2(x)\\\\\n&\\text{类型 ① }f(x)=P_n(x)\\mathrm{e}^{\\alpha x}\\text{：设 }y^*=\\mathrm{e}^{\\alpha x}Q_n(x)x^k,\\quad k=\\begin{cases}0,&\\alpha\\ne r_1,r_2,\\\\1,&\\alpha\\text{ 为单特征根},\\\\2,&\\alpha\\text{ 为二重特征根}\\end{cases}\\\\\n&\\text{类型 ② }f(x)=\\mathrm{e}^{\\alpha x}\\bigl[P_m(x)\\cos\\beta x+P_n(x)\\sin\\beta x\\bigr]\\text{：设 }y^*=\\mathrm{e}^{\\alpha x}\\bigl[Q_l^{(1)}(x)\\cos\\beta x+Q_l^{(2)}(x)\\sin\\beta x\\bigr]x^k\\\\\n&\\qquad \\text{其中 }l=\\max\\{m,n\\},\\qquad k=\\begin{cases}0,&\\alpha\\pm\\beta\\mathrm{i}\\text{ 不是特征根},\\\\1,&\\alpha\\pm\\beta\\mathrm{i}\\text{ 是特征根}\\end{cases}\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "特解设定口诀：「一看、二算、三比较」（基础 P.390-391）",
+          "desc": "**一看**自由项里的 $\\alpha$（或 $\\alpha\\pm\\beta\\mathrm{i}$）；**二算**齐次方程特征根 $r_1,r_2$；**三比较**两者是否撞根以确定 $x^k$ 的重数 $k$！"
+        },
+        {
+          "sym": "类型 ② 即使只有 $\\cos\\beta x$ 也必须同时设 $\\cos$ 与 $\\sin$！",
+          "desc": "例如 $y''-2y'+5y=-\\mathrm{e}^x\\cos 2x$（基础 P.391 注 1），自由项看似没 $\\sin 2x$，但 $m=0,n=0\\implies l=0$ 且 $1\\pm 2\\mathrm{i}$ 是特征根，必须设 $y^*=\\mathrm{e}^x(A\\cos 2x+B\\sin 2x)x$！"
+        }
+      ],
+      "conditions": "自由项若含 $\\sin^2 x$ 或 $\\cos x\\sin 2x$ 等非标准乘积，**必须先降幂/积化和差**拆成标准 $\\cos\\beta x,\\;\\sin\\beta x$ 之和再套叠加原理！",
+      "pitfalls": "高频丢分点：① 多项式 $Q_n(x)$ 必须按最高次设**完整一般多项式**（哪怕 $f(x)=x^2$ 也必须设 $Ax^2+Bx+C$，不可漏 $Bx+C$）；② 忘乘撞根因子 $x^k$ 导致代回方程出现矛盾 $0=1$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.390-391, P.394-395",
+        "pdfPage": 395,
+        "itemRef": "三·2 二阶常系数非齐次线性微分方程",
+        "crossRef": "27张宇《高数18讲》(强化) P.190 三·(1)(2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_15_25",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-f-06",
+      "stage": "foundation",
+      "section": "三、高阶常系数线性微分方程与欧拉方程",
+      "kind": "formula",
+      "title": "【考场提速神器】微分算子法 $y^*=\\frac{1}{F(D)}f(x)$ 四大类型与全 9 道注例速查表（表 15-1）",
+      "examWeight": "core",
+      "prompt": "默写微分算子 $D=\\frac{\\mathrm{d}}{\\mathrm{d}x},\\;\\frac{1}{D}=\\int(\\cdot)\\,\\mathrm{d}x$ 处理指数型、三角型、多项式型及指数乘实函数移位型的四大公式：",
+      "formulaLatex": "$$\\begin{aligned}\n&(1)\\;\\frac{1}{F(D)}\\mathrm{e}^{\\alpha x}=\\begin{cases}\\dfrac{1}{F(\\alpha)}\\mathrm{e}^{\\alpha x},&F(\\alpha)\\ne 0,\\\\x\\dfrac{1}{F'(\\alpha)}\\mathrm{e}^{\\alpha x},&F(\\alpha)=0,\\;F'(\\alpha)\\ne 0,\\\\x^2\\dfrac{1}{F''(\\alpha)}\\mathrm{e}^{\\alpha x},&F(\\alpha)=F'(\\alpha)=0,\\;F''(\\alpha)\\ne 0\\end{cases}\\\\\n&(2)\\;\\frac{1}{F(D)}\\cos\\beta x\\text{（或 }\\sin\\beta x\\text{）：用 }D^2=-\\beta^2\\text{ 代换，余一次项 }pD+q-\\beta^2\\text{ 共轭有理化}\\\\\n&(3)\\;\\frac{1}{F(D)}P_k(x)=Q_k(D)P_k(x)\\quad\\bigl(\\text{将 }\\frac{1}{F(D)}\\text{ 泰勒展开至 }D^k\\text{ 项}\\bigr)\\\\\n&(4)\\;\\text{指数移位定理：}\\frac{1}{F(D)}\\bigl[\\mathrm{e}^{\\alpha x}v(x)\\bigr]=\\mathrm{e}^{\\alpha x}\\frac{1}{F(D+\\alpha)}v(x)\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "为什么选填题强烈推荐微分算子法？（基础 P.391-395）",
+          "desc": "面对 $y''-3y'+2y=2\\mathrm{e}^{-x}\\cos x$（例15.17）或 $2x\\mathrm{e}^x$（注例 9），待定系数法求两次导再联立方程组极易算错符号；微分算子法先移位 $\\mathrm{e}^{\\alpha x}$ 再把 $D^2\\to -\\beta^2$，**3 行出答案且计算量减半**！"
+        },
+        {
+          "sym": "解答题书写策略",
+          "desc": "选填题直接用微分算子法秒杀；解答题若担心阅卷习惯，可用算子法在草稿纸 10 秒算出正确特解 $y^*$，卷面只写「设特解为……代入解得……」，既零失误又稳拿步骤满分！"
+        }
+      ],
+      "conditions": "适用于一切常系数线性非齐次微分方程求特解 $y^*$；约定 $\\frac{1}{D}g(x)$ 取任意一个原函数（积分常数取 $0$ 即可，齐次项已包含在通解中）。",
+      "pitfalls": "切记：只有 $D^2$ 可以直接替换为 $-\\beta^2$，**一次算子 $D$ 绝对不能替成 $\\beta\\mathrm{i}$ 后丢掉虚实部**——遇到 $\\frac{1}{aD+b}\\cos\\beta x$ 必须上下同乘共轭 $(aD-b)$ 造出 $a^2 D^2-b^2=-a^2\\beta^2-b^2$（见下表注例 6）！",
+      "tables": [
+        {
+          "caption": "表 15-1：张宇《基础30讲》微分算子法全部 9 道注例全解速查（基础 P.392-394 · SymPy 9/9 验算通过）",
+          "headers": [
+            "注例号",
+            "微分方程",
+            "算子法核心一步",
+            "特解 $y^*$"
+          ],
+          "rows": [
+            [
+              "注例 1",
+              "$y''+y'-2y=2$",
+              "$F(0)=-2\\ne 0\\implies \\frac{1}{-2}\\cdot 2$",
+              "$-1$"
+            ],
+            [
+              "注例 2",
+              "$y''+y'-2y=\\mathrm{e}^x$",
+              "$F(1)=0,\\;F'(1)=3\\implies x\\cdot\\frac{1}{3}\\mathrm{e}^x$",
+              "$\\dfrac{1}{3}x\\mathrm{e}^x$"
+            ],
+            [
+              "注例 3",
+              "$y''-2y'+y=\\mathrm{e}^x$",
+              "$F(1)=F'(1)=0,\\;F''(1)=2\\implies x^2\\cdot\\frac{1}{2}\\mathrm{e}^x$",
+              "$\\dfrac{1}{2}x^2\\mathrm{e}^x$"
+            ],
+            [
+              "注例 4",
+              "$y''-y=\\sin x$",
+              "$D^2=-1\\implies \\frac{1}{-1-1}\\sin x$",
+              "$-\\dfrac{1}{2}\\sin x$"
+            ],
+            [
+              "注例 5",
+              "$y''+4y=\\sin 2x$",
+              "$D^2+4=0\\implies x\\cdot\\frac{1}{2D}\\sin 2x$",
+              "$-\\dfrac{1}{4}x\\cos 2x$"
+            ],
+            [
+              "注例 6",
+              "$y''-3y'+2y=-\\frac{1}{2}\\cos 2x$",
+              "$D^2=-4\\implies\\frac{1}{2}\\cdot\\frac{3D-2}{9D^2-4}\\cos 2x=-\\frac{1}{80}(3D-2)\\cos 2x$",
+              "$\\dfrac{1}{40}(3\\sin 2x+\\cos 2x)$"
+            ],
+            [
+              "注例 7",
+              "$y''+y'=x^2+1$",
+              "$\\frac{1}{D}\\cdot\\frac{1}{1+D}(x^2+1)=(\\frac{1}{D}-1+D)(x^2+1)$",
+              "$\\dfrac{1}{3}x^3-x^2+3x-1$"
+            ],
+            [
+              "注例 8",
+              "$y''+4y'+5y=\\mathrm{e}^{-2x}\\sin x$",
+              "移位 $D\\to D-2$ 得 $\\mathrm{e}^{-2x}\\frac{1}{D^2+1}\\sin x=\\mathrm{e}^{-2x}\\cdot\\frac{x}{2D}\\sin x$",
+              "$-\\dfrac{1}{2}x\\mathrm{e}^{-2x}\\cos x$"
+            ],
+            [
+              "注例 9",
+              "$y''-3y'+2y=2x\\mathrm{e}^x$",
+              "移位 $D\\to D+1$ 得 $2\\mathrm{e}^x\\frac{1}{D(D-1)}x=2\\mathrm{e}^x(-\\frac{1}{D}-1)x$",
+              "$-x(x+2)\\mathrm{e}^x$"
+            ]
+          ]
+        }
+      ],
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.391-394",
+        "pdfPage": 396,
+        "itemRef": "三·2 注 2 微分算子法 & 注例 1~9"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_op_9_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-f-07",
+      "stage": "both",
+      "section": "三、高阶常系数线性微分方程与欧拉方程",
+      "kind": "formula",
+      "title": "欧拉方程 $x^2 y''+pxy'+qy=f(x)$（仅数一）与非常规方程四大换元模板",
+      "examWeight": "core",
+      "prompt": "默写欧拉方程 $x>0$（及 $x<0$）的对数变量替换公式与化简后的常系数方程，以及强化 P.193 四大换元技巧：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{欧拉方程（仅数一）：}x^2\\frac{\\mathrm{d}^2 y}{\\mathrm{d}x^2}+px\\frac{\\mathrm{d}y}{\\mathrm{d}x}+qy=f(x)\\\\\n&\\text{① }x>0\\text{ 令 }x=\\mathrm{e}^t\\;(t=\\ln x)\\text{：}x\\frac{\\mathrm{d}y}{\\mathrm{d}x}=\\frac{\\mathrm{d}y}{\\mathrm{d}t},\\qquad x^2\\frac{\\mathrm{d}^2 y}{\\mathrm{d}x^2}=\\frac{\\mathrm{d}^2 y}{\\mathrm{d}t^2}-\\frac{\\mathrm{d}y}{\\mathrm{d}t}\\\\\n&\\qquad\\implies \\frac{\\mathrm{d}^2 y}{\\mathrm{d}t^2}+(p-1)\\frac{\\mathrm{d}y}{\\mathrm{d}t}+qy=f(\\mathrm{e}^t)\\qquad(\\text{② }x<0\\text{ 令 }x=-\\mathrm{e}^t,\\;t=\\ln(-x)\\text{ 得 }f(-\\mathrm{e}^t))\\\\\n&\\text{三大算子记法（}D_t=\\frac{\\mathrm{d}}{\\mathrm{d}t}\\text{）：}xy'=D_t y,\\quad x^2 y''=D_t(D_t-1)y,\\quad x^3 y'''=D_t(D_t-1)(D_t-2)y\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "强化 P.193 非标准 ODE 三类换元法",
+          "desc": "① **整体组合换元**：见 $f(x\\pm y),\\;f(xy),\\;f(\\frac{y}{x}),\\;f(x^2\\pm y^2)$ 分别令组合为 $t$（如强化例15.12 令 $u=y+x^2$）；② **逆用求导公式**：见 $f'[g(x)]g'(x)$ 令 $u=f[g(x)]$（如强化例15.11 令 $u=\\mathrm{e}^y$），见 $f'g+fg'$ 令 $u=fg$；③ **互换 $x,y$ 地位**（例15.8、15.11）。"
+        },
+        {
+          "sym": "三阶欧拉方程同理推广",
+          "desc": "$x^3 y'''=D_t(D_t-1)(D_t-2)y$，特征方程直接把 $x^k y^{(k)}$ 换成 $r(r-1)\\cdots(r-k+1)$！"
+        }
+      ],
+      "conditions": "欧拉方程在 $x>0$ 与 $x<0$ 上分别换元 $x=\\mathrm{e}^t$ 与 $x=-\\mathrm{e}^t$；若题干未限定 $x$ 正负且为齐次方程，解出后常以 $|x|$ 合并（若已注明 $x>0$ 如例15.20 或给 $x=1$ 初值如强化例15.9，只需做 $x=\\mathrm{e}^t$！）。",
+      "pitfalls": "两大高频扣分点：① 把化简后 $y'(t)$ 的系数错抄成 $p$ 而非 **`p-1`**；② 解出 $y(t)$ 后忘记用 **$t=\\ln x$** 回代成关于 $x$ 的函数！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.397-398",
+        "pdfPage": 402,
+        "itemRef": "三·4 欧拉方程（仅数学一）",
+        "crossRef": "27张宇《高数18讲》(强化) P.191-194 三·(3) 欧拉方程 & 四、用换元法求解"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_15_25",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-f-08",
+      "stage": "both",
+      "section": "四、微分方程的几何与物理应用（数一核心）",
+      "kind": "formula",
+      "title": "几何应用（切线截距/曲率/曳物线）与物理应用（牛顿定律 $a=v\\frac{\\mathrm{d}v}{\\mathrm{d}x}$ / 牛顿冷却）",
+      "examWeight": "core",
+      "prompt": "默写几何建模十大量（切线两截距、曲率与倾角关系、曳物线切线等式）与物理建模核心方程（阻力减速、牛顿冷却定律）：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{切线两截距（}Y-y=y'(X-x)\\text{）：}x\\text{ 轴截距 }X=x-\\frac{y}{y'},\\qquad y\\text{ 轴截距 }Y=y-xy'\\\\\n&\\text{曲率与倾角（}\\tan\\alpha=y'\\text{）：}k=\\frac{|y''|}{\\bigl[1+(y')^2\\bigr]^{\\frac{3}{2}}},\\qquad \\cos\\alpha=\\frac{1}{\\sqrt{1+(y')^2}}\\;(\\cos\\alpha>0)\\\\\n&\\text{曳物线（定长 }|PQ|=1\\text{ 切线追及）：}\\frac{\\mathrm{d}y}{\\mathrm{d}x}=-\\frac{\\sqrt{1-x^2}}{x}\\implies y=\\ln\\frac{1+\\sqrt{1-x^2}}{x}-\\sqrt{1-x^2}\\\\\n&\\text{牛顿第二定律双消元：}m\\frac{\\mathrm{d}v}{\\mathrm{d}t}=m\\,v\\frac{\\mathrm{d}v}{\\mathrm{d}x}=F(v);\\qquad \\text{牛顿冷却定律：}\\frac{\\mathrm{d}T}{\\mathrm{d}t}=-k(T-T_0)\\;(k>0)\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "强化 P.196-197 几何建模十大数据源",
+          "desc": "① 切线斜率 $f'(x_0)=\\tan\\alpha$；② 公切线 $f'=g'$；③ 两截距；④ 面积 $\\int_a^b f$；⑤ 旋转体体积 $V_x,V_y$；⑥ 平均值 $\\frac{1}{b-a}\\int_a^b f$；⑦ 弧长 $\\int\\sqrt{1+y'^2}$；⑧ 侧面积；⑨ 曲率；⑩ 形心 $(\\bar{x},\\bar{y})$（仅数一、二）。"
+        },
+        {
+          "sym": "牛顿冷却比例系数 $k$ 的两步确定（例 15.23 注）",
+          "desc": "$k>0$ 不是已知常量，必须由初始温度定常数 $C$，再由**第二个时刻的温度观测值**反解出 $k$（且降温过程必须加负号 $\\frac{\\mathrm{d}T}{\\mathrm{d}t}=-k(T-T_0)$！）。"
+        }
+      ],
+      "conditions": "几何与物理应用是考研数学一、数学二核心大题来源；涉及变限积分与面积/弧长建立的积分方程，**两边对 $x$ 求导**即可化为微分方程，同时把积分上下限相等处代入原积分方程提取**隐藏初始条件**！",
+      "pitfalls": "高频失分点：① 物理题「与温差成正比」在降温时忘记写**负号**「$-k$」（例15.23）；② 减速伞问题求位移与速度关系时忘记用链式法则把 $\\frac{\\mathrm{d}v}{\\mathrm{d}t}$ 改写为 **$v\\frac{\\mathrm{d}v}{\\mathrm{d}x}$** 直接消去时间 $t$（例15.22、强化例15.17）！",
+      "figureSvg": "<svg viewBox=\"0 0 640 232\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">\n  <title>曳物线（追踪曲线）几何建模原理图（例15.21与强化例15.18）及几何/物理微分方程核心关系</title>\n  <defs>\n    <marker id=\"m1c15_arr3\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#334155\"/>\n    </marker>\n    <marker id=\"m1c15_arr3_red\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#dc2626\"/>\n    </marker>\n  </defs>\n\n  <!-- Left panel: Tractrix / Pursuit curve -->\n  <rect x=\"6\" y=\"6\" width=\"298\" height=\"220\" rx=\"8\" fill=\"#eff6ff\" stroke=\"#3b82f6\" stroke-width=\"1.2\"/>\n  <text x=\"155\" y=\"24\" text-anchor=\"middle\" font-size=\"10.8\" font-weight=\"700\" fill=\"#1e3a8a\">① 曳物线 / 追踪曲线建模（例15.21 &amp; 强15.18）</text>\n\n  <!-- Coordinate axes -->\n  <line x1=\"36\" y1=\"164\" x2=\"278\" y2=\"164\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1c15_arr3)\"/>\n  <line x1=\"68\" y1=\"176\" x2=\"68\" y2=\"38\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1c15_arr3)\"/>\n  <text x=\"280\" y=\"168\" font-size=\"9.0\" fill=\"#334155\">x</text>\n  <text x=\"73\" y=\"46\" font-size=\"9.0\" fill=\"#334155\">y</text>\n\n  <!-- Tractrix curve from (1,0) at (228,164) ascending asymptotically toward y-axis -->\n  <path d=\"M 228 164 C 168 158 118 134 94 94 C 80 70 74 52 72 42\" fill=\"none\" stroke=\"#1d4ed8\" stroke-width=\"2.2\"/>\n  <!-- Point Q(x,y) on curve at (130, 128), tangent meets y-axis at P(0, Y) at (68, 62) -->\n  <line x1=\"130\" y1=\"128\" x2=\"68\" y2=\"62\" stroke=\"#dc2626\" stroke-width=\"1.8\" marker-end=\"url(#m1c15_arr3_red)\"/>\n  <!-- Right triangle helpers -->\n  <line x1=\"130\" y1=\"128\" x2=\"68\" y2=\"128\" stroke=\"#64748b\" stroke-width=\"1\" stroke-dasharray=\"3,2\"/>\n  <circle cx=\"130\" cy=\"128\" r=\"3.6\" fill=\"#1d4ed8\"/>\n  <circle cx=\"68\" cy=\"62\" r=\"3.6\" fill=\"#dc2626\"/>\n  <circle cx=\"228\" cy=\"164\" r=\"3.2\" fill=\"#059669\"/>\n\n  <text x=\"138\" y=\"128\" font-size=\"8.6\" font-weight=\"700\" fill=\"#1e3a8a\">Q(x, y)</text>\n  <text x=\"36\" y=\"64\" font-size=\"8.4\" font-weight=\"700\" fill=\"#dc2626\">P(0,Y)</text>\n  <text x=\"108\" y=\"88\" font-size=\"8.4\" font-weight=\"700\" fill=\"#dc2626\">|PQ|=1</text>\n  <text x=\"100\" y=\"140\" text-anchor=\"middle\" font-size=\"8.0\" fill=\"#475569\">x</text>\n  <text x=\"44\" y=\"100\" font-size=\"8.0\" fill=\"#475569\">√(1−x²)</text>\n  <text x=\"228\" y=\"176\" text-anchor=\"middle\" font-size=\"8.4\" font-weight=\"700\" fill=\"#059669\">(1, 0)</text>\n\n  <rect x=\"18\" y=\"180\" width=\"274\" height=\"38\" rx=\"6\" fill=\"#ffffff\" stroke=\"#93c5fd\" stroke-width=\"1\"/>\n  <text x=\"155\" y=\"195\" text-anchor=\"middle\" font-size=\"8.4\" font-weight=\"700\" fill=\"#1e3a8a\">切线方向 = QP 方向 ⇒ y' = (y−Y)/x = −√(1−x²)/x</text>\n  <text x=\"155\" y=\"210\" text-anchor=\"middle\" font-size=\"8.1\" font-weight=\"700\" fill=\"#dc2626\">解得：y = ln[(1+√(1−x²))/x] − √(1−x²)</text>\n\n  <!-- Right panel: Geometry & Physics modeling cheat cards -->\n  <rect x=\"314\" y=\"6\" width=\"320\" height=\"220\" rx=\"8\" fill=\"#f0fdf4\" stroke=\"#22c55e\" stroke-width=\"1.2\"/>\n  <text x=\"474\" y=\"24\" text-anchor=\"middle\" font-size=\"10.8\" font-weight=\"700\" fill=\"#166534\">② 几何与物理建模四大核心等式（数一高频）</text>\n\n  <rect x=\"326\" y=\"34\" width=\"296\" height=\"40\" rx=\"6\" fill=\"#ffffff\" stroke=\"#86efac\" stroke-width=\"1.1\"/>\n  <text x=\"474\" y=\"50\" text-anchor=\"middle\" font-size=\"9.0\" font-weight=\"700\" fill=\"#15803d\">1. 切线截距（例 15.6 &amp; 强 15.14）</text>\n  <text x=\"474\" y=\"65\" text-anchor=\"middle\" font-size=\"8.2\" fill=\"#334155\">x 轴截距 X = x − y/y'；y 轴截距 Y = y − x·y'</text>\n\n  <rect x=\"326\" y=\"80\" width=\"296\" height=\"40\" rx=\"6\" fill=\"#ffffff\" stroke=\"#86efac\" stroke-width=\"1.1\"/>\n  <text x=\"474\" y=\"96\" text-anchor=\"middle\" font-size=\"9.0\" font-weight=\"700\" fill=\"#15803d\">2. 曲率与倾角（强化例 15.15）</text>\n  <text x=\"474\" y=\"111\" text-anchor=\"middle\" font-size=\"8.2\" fill=\"#334155\">k = |y''|/[1+(y')²]^(3/2)；cos α = 1/√(1+(y')²)（cos α&gt;0）</text>\n\n  <rect x=\"326\" y=\"126\" width=\"296\" height=\"42\" rx=\"6\" fill=\"#ffffff\" stroke=\"#86efac\" stroke-width=\"1.1\"/>\n  <text x=\"474\" y=\"142\" text-anchor=\"middle\" font-size=\"9.0\" font-weight=\"700\" fill=\"#15803d\">3. 牛顿第二定律双消元（例 15.22 &amp; 强 15.17）</text>\n  <text x=\"474\" y=\"158\" text-anchor=\"middle\" font-size=\"8.2\" fill=\"#dc2626\">m·(dv/dt) = m·v·(dv/dx) = −kv ⇒ dx = −(m/k) dv</text>\n\n  <rect x=\"326\" y=\"174\" width=\"296\" height=\"42\" rx=\"6\" fill=\"#ffffff\" stroke=\"#86efac\" stroke-width=\"1.1\"/>\n  <text x=\"474\" y=\"190\" text-anchor=\"middle\" font-size=\"9.0\" font-weight=\"700\" fill=\"#15803d\">4. 牛顿冷却与变化率（例 15.23）</text>\n  <text x=\"474\" y=\"206\" text-anchor=\"middle\" font-size=\"8.2\" fill=\"#334155\">dT/dt = −k(T−T₀)（k&gt;0 须带负号，并由第二条件反解 k！）</text>\n</svg>",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.398-401",
+        "pdfPage": 403,
+        "itemRef": "四、几何应用 & 五、物理应用（例 15.21~15.23）",
+        "crossRef": "27张宇《高数18讲》(强化) P.196-200 二、几何建模 & 三、变化率建模"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy18_11_19",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-f-09",
+      "stage": "both",
+      "section": "五、一阶常系数线性差分方程（仅数三 · 教材拓展）",
+      "kind": "formula",
+      "title": "【仅数三 · 教材拓展】函数差分定义与一阶常系数线性差分方程 $y_{t+1}+ay_t=f(t)$ 求解表（表 15-2）",
+      "examWeight": "extended",
+      "prompt": "了解数学三大纲要求的差分定义 $\\Delta y_t, \\Delta^2 y_t$、齐次差分方程通解 $y_C(t)=C(-a)^t$ 及非齐次特解试取表：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{一阶与二阶差分：}\\Delta y_t=y_{t+1}-y_t,\\qquad \\Delta^2 y_t=\\Delta(\\Delta y_t)=y_{t+2}-2y_{t+1}+y_t\\\\\n&\\text{一阶常系数齐次差分方程 }y_{t+1}+ay_t=0\\;(a\\ne 0)\\text{：特征根 }\\lambda=-a\\implies y_C(t)=C\\cdot(-a)^t\\\\\n&\\text{非齐次通解结构：}y_t=y_C(t)+y_t^*\\quad(\\text{同样满足线性叠加原理})\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "特征根碰撞判据（对比微分方程）",
+          "desc": "对指数多项式自由项 $f(t)=d^t P_m(t)$，检查 $d$ 是否等于齐次特征根 $-a$（即 $a+d\\stackrel{?}{=}0$）：不撞根设 $d^t Q_m(t)$，撞根（$a+d=0$）多乘一次 $t$ 设 $t\\cdot d^t Q_m(t)$（例15.24、强化例15.19）！"
+        },
+        {
+          "sym": "仅数三大纲边界",
+          "desc": "差分方程与经济供求价格波动（强化例15.16）**仅考研数学三大纲要求**，数学一、二不考，保留于此并标为「教材拓展」以便与张宇原书 100% 对齐。"
+        }
+      ],
+      "conditions": "要求 $a\\ne 0$（常数），$t=0,\\pm 1,\\pm 2,\\cdots$；三角自由项特解判别行列式 $D=(a+\\cos\\omega)^2+\\sin^2\\omega=a^2+2a\\cos\\omega+1$。",
+      "pitfalls": "数一考生浏览了解即可，不必死背三角差分行列式 $D$；数三考生注意例15.24 中 $\\Delta y_t=t$ 即 $y_{t+1}-y_t=1^t\\cdot t$，$a=-1,d=1\\implies a+d=0$ 属于撞根，必须设 $y_t^*=t(a+bt)$！",
+      "tables": [
+        {
+          "caption": "表 15-2：【仅数三】一阶常系数非齐次线性差分方程 $y_{t+1}+ay_t=f(t)$ 特解 $y_t^*$ 试取表（基础 P.402 & 强化 P.202）",
+          "headers": [
+            "自由项 $f(t)$ 形式",
+            "判定条件",
+            "试取特解 $y_t^*$ 形式",
+            "对应例题"
+          ],
+          "rows": [
+            [
+              "$d^t\\cdot P_m(t)\\;(d\\ne 0)$",
+              "$a+d\\ne 0$（不撞根）",
+              "$y_t^*=d^t\\cdot Q_m(t)$",
+              "强化例 15.19"
+            ],
+            [
+              "$d^t\\cdot P_m(t)\\;(d\\ne 0)$",
+              "$a+d=0$（撞特征根）",
+              "$y_t^*=t\\cdot d^t\\cdot Q_m(t)$",
+              "例 15.24"
+            ],
+            [
+              "$b_1\\cos\\omega t+b_2\\sin\\omega t$",
+              "$D=\\begin{vmatrix}a+\\cos\\omega&\\sin\\omega\\\\-\\sin\\omega&a+\\cos\\omega\\end{vmatrix}\\ne 0$",
+              "$y_t^*=\\alpha\\cos\\omega t+\\beta\\sin\\omega t$",
+              "例 15.25"
+            ],
+            [
+              "$b_1\\cos\\omega t+b_2\\sin\\omega t$",
+              "$D=0$",
+              "$y_t^*=t(\\alpha\\cos\\omega t+\\beta\\sin\\omega t)$",
+              "—"
+            ]
+          ]
+        }
+      ],
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.401-402",
+        "pdfPage": 406,
+        "itemRef": "六、一阶常系数线性差分方程（仅数学三）",
+        "crossRef": "27张宇《高数18讲》(强化) P.200-202 四、一阶常系数线性差分方程"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_15_25",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-c-01",
+      "stage": "both",
+      "section": "一、微分方程基本概念与一阶可分离/齐次型",
+      "kind": "conclusion",
+      "title": "「不解方程直接用方程」思维与常数取值范围/丢解两大概念红线",
+      "examWeight": "core",
+      "summary": "① **不解方程直接用方程（例15.1 & 例15.2）**：题目只问某点极值或洛必达极限时，往往初始条件不足以解出特解，直接把 $x_0$ 代入原微分方程反解 $y''(x_0)$ 即可 5 秒秒杀！且常系数线性微分方程的解自动具备**任意阶可导性**；\n② **通解常数区间红线（例15.4）**：通解里的「任意常数 $C$」未必取遍 $\\mathbb{R}$，例如 $(1+x^2)(1+y^2)=Cx^2$ 为保证存在实数解必有 $C>1$；\n③ **分离变量丢解红线（强化例15.5 & 例15.13）**：每次分离变量除以 $u^2$ 或 $p$ 时，必须单独检验「除数恒等于 $0$」是不是原方程（乃至初值问题）的解！",
+      "conditions": "适用于微分方程概念选择题、极限/极值结合题，以及所有非线性分离变量与二阶可降阶定解问题。",
+      "pitfalls": "在强化例15.5 中，如果除以 $u^2$ 得到 $u=\\frac{1}{x^2+C}$ 后直接代入 $u(0)=0$，会得出 $\\frac{1}{C}=0$ 无解的荒谬结论——真正满足初值的恰恰是被你除掉的 **$u\\equiv 0\\implies y\\equiv 1$**！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.379-382",
+        "pdfPage": 384,
+        "itemRef": "例 15.1, 例 15.2, 例 15.4, 例 15.5 注",
+        "crossRef": "27张宇《高数18讲》(强化) P.188-189 强化例 15.5 & 注"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_01_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-c-02",
+      "stage": "both",
+      "section": "一、微分方程基本概念与一阶可分离/齐次型",
+      "kind": "conclusion",
+      "title": "一阶线性方程「变限积分通解」研究极限、有界性与周期性的三大模板",
+      "examWeight": "core",
+      "summary": "当一阶线性方程中的右端项 $q(x)$ 无法求出初等原函数（如 $(1-\\frac{1}{x})^x$，例15.9）或为抽象函数 $f(x),p(x)$（例15.10、强化例15.3）时，**绝对不要用不定积分死磕，立刻改写为变限积分通解**：\n① **求极限（例15.9）**：写成 $y=\\dfrac{\\int_{x_0}^x q(t)\\mathrm{e}^{at}\\,\\mathrm{d}t+C}{\\mathrm{e}^{ax}}$，当 $a>0$ 时分母 $\\mathrm{e}^{ax}\\to+\\infty$，直接套 $\\frac{*}{\\infty}$ 洛必达法则！\n② **证有界性（例15.10）**：若 $a>0$ 且 $|f(x)|\\le M$，直接放缩 $|y(x)|\\le\\mathrm{e}^{-ax}\\!\\left[M\\frac{\\mathrm{e}^{ax}-1}{a}+|C|\\right]\\le\\frac{M}{a}+|C|$，全局有界一步得证！\n③ **判周期性（强化例15.3）**：$y'+p(x)y=0$（$p$ 以 $T$ 为周期）的非零解以 $T$ 为周期 $\\iff \\int_0^x p(t)\\,\\mathrm{d}t$ 以 $T$ 为周期 $\\iff \\int_0^T p(x)\\,\\mathrm{d}x=0$！",
+      "conditions": "适用于所有带抽象函数或不可积核的一阶线性 ODE 性态研究题（近年真题最高频命题方向！）。",
+      "pitfalls": "用 $\\frac{*}{\\infty}$ 型洛必达法则（例15.9）时，无需讨论分子是否也趋于 $\\infty$——只要分母严格单调趋于 $+\\infty$ 且求导后的比值极限存在，洛必达直接成立！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.383-385",
+        "pdfPage": 388,
+        "itemRef": "P.383 ★注(3) & 例 15.9, 例 15.10",
+        "crossRef": "27张宇《高数18讲》(强化) P.187 强化例 15.3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_01_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-c-03",
+      "stage": "both",
+      "section": "三、高阶常系数线性微分方程与欧拉方程",
+      "kind": "conclusion",
+      "title": "常系数齐次线性 ODE 解的有界性、周期性与反常积分收敛充要条件（劳斯视角）",
+      "examWeight": "core",
+      "summary": "对二阶常系数齐次线性方程 $y''+py'+qy=0$ 的任意解 $y(x)$，其全部长期性态完全由特征根实部 $\\operatorname{Re}(\\lambda_i)$ 决定（基础 P.389 注 & 强化例15.8）：\n① **在 $[0,+\\infty)$ 上一切解均有 $\\lim\\limits_{x\\to+\\infty}y(x)=0$（且 $\\int_0^{+\\infty}y(x)\\,\\mathrm{d}x$ 均收敛）** $\\iff$ **全部特征根实部严格为负** $\\operatorname{Re}(\\lambda_1)<0,\\;\\operatorname{Re}(\\lambda_2)<0 \\iff$ **$p>0$ 且 $q>0$**！（无需繁琐分 $\\Delta>0,=0,<0$ 三类也能 3 秒检验，与自动控制原理二阶系统劳斯稳定充要条件完全等价！）\n② **在 $(-\\infty,+\\infty)$ 上全局有界且具周期性** $\\iff$ 特征根为纯虚根 $\\pm\\beta\\mathrm{i}\\;(\\alpha=0)$（即 $p=0,\\;q>0$）；\n③ **只要存在正实部特征根（或二重零根）**，则在 $x\\to+\\infty$ 时必无界发散。",
+      "conditions": "适用于常系数齐次线性微分方程含参定范围选择题（强化例15.8）与解的有界性/周期性/收敛性判别。",
+      "pitfalls": "注意「存在某个非零解有界」与「**一切解**（对任意 $C_1,C_2$）均有界/积分收敛」天差地别：前者只要求至少一个特征根满足，后者要求**全部**特征根同时满足 $\\operatorname{Re}(\\lambda_i)<0$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.389",
+        "pdfPage": 394,
+        "itemRef": "三·1 注 (1)(2)",
+        "crossRef": "27张宇《高数18讲》(强化) P.190-191 强化例 15.8"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy18_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-c-04",
+      "stage": "both",
+      "section": "三、高阶常系数线性微分方程与欧拉方程",
+      "kind": "conclusion",
+      "title": "由特解反求微分方程与「三非齐特解拼通解」线性结构法则",
+      "examWeight": "core",
+      "summary": "遇到「已知几个特解反求方程或拼通解」（例15.18、例15.19、强化例15.10），牢记两条铁律：\n① **差出齐次解**：若 $y_1,y_2,y_3$ 是二阶非齐次线性方程的三个特解，则 $y_1-y_3$ 与 $y_2-y_3$ 必是对应齐次方程的两个解；只要两者不成比例，非齐次通解直接写为 $y=C_1(y_1-y_3)+C_2(y_2-y_3)+y_3$！\n② **逐项拆齐次项与特解项（例15.18）**：给定特解 $y^*=\\mathrm{e}^{2x}+\\mathrm{e}^x+x\\mathrm{e}^x$ 与自由项 $\\gamma\\mathrm{e}^x$ 时，指数系数不为 $1$ 的 $\\mathrm{e}^{2x}$ 绝不可能是非齐次特解部分，**只能属于齐次解**（立即锁定特征根 $r_1=2$！）；继而排斥 $r=1$ 二重根可能性，瞬间锁定 $r_2=1$ 与真正特解 $x\\mathrm{e}^x$！",
+      "conditions": "适用于一切二阶及高阶常系数（甚至变系数）线性微分方程的反问题与解结构题。",
+      "pitfalls": "在例15.19 与强化例15.10 这类四阶反求题中，切莫漏掉共轭复根成对（给 $\\cos 2x$ 自动配 $\\sin 2x$）及幂次项 $x\\mathrm{e}^{rx}$ 至少对应**二重特征根**！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.395-397",
+        "pdfPage": 400,
+        "itemRef": "例 15.18 & 例 15.19",
+        "crossRef": "27张宇《高数18讲》(强化) P.192-193 强化例 15.10"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_15_25",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-c-05",
+      "stage": "intensive",
+      "section": "三、高阶常系数线性微分方程与欧拉方程",
+      "kind": "conclusion",
+      "title": "非标准微分方程与函数方程化归 ODE 的四大实战识别信号",
+      "examWeight": "core",
+      "summary": "强化 18 讲 P.193-195 将考场最易卡壳的非标准方程归纳为四大信号：\n① **复合导数逆用**：出现 $y'+1=\\mathrm{e}^{-y}\\sin x$（强化例15.11），同乘 $\\mathrm{e}^y$ 立现 $(\\mathrm{e}^y)'+\\mathrm{e}^y=\\sin x$，令 $u=\\mathrm{e}^y$ 瞬间变一阶线性！\n② **整体根式凑导**：出现 $y'-\\sqrt{y+x^2}=-2x$（强化例15.12），移项 $y'+2x=\\sqrt{y+x^2}$ 恰好 $(y+x^2)'=\\sqrt{y+x^2}$，令 $u=y+x^2$ 一步分离变量！\n③ **全微分凑商降阶**：出现 $xyy''+x(y')^2-yy'=0$（强化例15.7），认出 $yy''+(y')^2=(yy')'$ 后同除 $x^2$ 凑出 $\\left(\\frac{yy'}{x}\\right)'=0$！\n④ **函数方程 / 对称导数方程组转 ODE（强化 P.195 & 强化例15.13）**：遇 $f'(x)+xf'(-x)=x$ 用 $x\\to -x$ 联立消元解出 $f'(x)$；遇 $f(xy)=yf(x)+xf(y)$ 先代 $x=y=1$ 求 $f(1)$，再用导数定义凑 $f(x(1+\\frac{\\Delta x}{x}))$ 化出 $f'(x)-\\frac{1}{x}f(x)=f'(1)$！",
+      "conditions": "凡一眼套不进七大标准模板的方程，先「移项凑全导数」或「观察重复出现的组合块 $u$」，95% 都能瞬间化归为标准一阶线性或可分离变量方程。",
+      "pitfalls": "凑根式开方（强化例15.12）还原 $y$ 时，务必检查 $2\\sqrt{u}=x+C\\ge 0$ 给出的定义域限制（$x\\ge -2$），绝不可盲目平方扩大定义域！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.190, P.193-195",
+        "pdfPage": 203,
+        "itemRef": "强化例 15.7, 四、换元法 (强化例 15.11~15.12) & 一、建方程 (强化例 15.13)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy18_11_19",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-c-06",
+      "stage": "both",
+      "section": "四、微分方程的几何与物理应用（数一核心）",
+      "kind": "conclusion",
+      "title": "几何/物理应用题建模四步心法与「积分方程求导提取隐藏初值」",
+      "examWeight": "core",
+      "summary": "建立微分方程并求解（强化第二部分 P.194-200）统一遵循「找信息点 $A,B\\to$ 翻译等式 $\\to$ 提初值 $\\to$ 求解检验」四步：\n① **几何条件直译**：切线斜率 $y'$、两截距 $x-\\frac{y}{y'}$ 与 $y-xy'$、曲率 $k=\\frac{|y''|}{(1+y'^2)^{3/2}}$（注意题干给「凹曲线」直接去绝对值写 $y''>0$，见强化例15.15！）；\n② **追及问题（曳物线）**：只要见到「$Q$ 的运动方向始终指向 $P$」，立刻列出「$Q$ 处切线斜率 $y'=$ 线段 $QP$ 斜率 $\\frac{y-Y}{x-X}$」，并由图形方向定准开方正负号（例15.21、强化例15.18）；\n③ **物理变化率**：位移速度关系用 $a=v\\frac{\\mathrm{d}v}{\\mathrm{d}x}$ 绕开时间 $t$（例15.22、强化例15.17）；降温/衰减率带负号 $-k$ 并由两条件定 $C,k$（例15.23）。",
+      "conditions": "适用于所有几何应用与物理应用大题；切记利用「凹/凸」「第一象限」「$x>\\mathrm{e}$」等文字提示正确去掉绝对值与开方正负号。",
+      "pitfalls": "千万注意「到 $y$ 轴的距离」在 $x>\\mathrm{e}$ 时为 $x$（正），「切线在 $y$ 轴上的截距」是带符号的纵坐标 $y-xy'$ 而非绝对值 $|y-xy'|$（例15.6、强化例15.14）！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.196-200",
+        "pdfPage": 209,
+        "itemRef": "第二部分 二、几何建模 & 三、变化率建模（强化例 15.14~15.18）",
+        "crossRef": "27张宇《基础30讲·高数》P.398-401 例 15.21~15.23"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy18_11_19",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-01",
+      "stage": "foundation",
+      "section": "一、微分方程概念与一阶方程（基础例 15.1~15.11）",
+      "kind": "example",
+      "title": "【例 15.1】不解方程直接代入 $x_0$ 判定极值（二阶导数符号秒杀）",
+      "examWeight": "core",
+      "problem": "设 $y=f(x)$ 是方程 $y''-2y'+4y=0$ 的一个解，若 $f(x_0)>0$，且 $f'(x_0)=0$，则函数 $f(x)$ 在点 $x_0$ 处（ ）\n（A）取得极大值　（B）取得极小值　（C）某个邻域内单调增加　（D）某个邻域内单调减少",
+      "steps": [
+        {
+          "stepTitle": "直接把 $x=x_0$ 代入微分方程反解 $f''(x_0)$（切忌先解通解！）",
+          "detail": "因 $y=f(x)$ 满足 $f''(x_0)-2f'(x_0)+4f(x_0)=0$，代入 $f'(x_0)=0$ 与 $f(x_0)>0$，立刻得$$f''(x_0)=-4f(x_0)<0.$$"
+        },
+        {
+          "stepTitle": "套极值第二充分条件秒选答案",
+          "detail": "由 $f'(x_0)=0$ 且 $f''(x_0)<0$，直接判定 $x=x_0$ 是 $f(x)$ 的**极大值点**！"
+        }
+      ],
+      "finalAnswer": "**选（A）**（取得极大值）。",
+      "takeaway": "看到只问某点极值或凹凸性，**千万别傻傻去解通解**（初始条件根本不够解出特解！），直接把 $x_0$ 代入微分方程反读 $f''(x_0)$ 符号！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.379",
+        "pdfPage": 384,
+        "itemRef": "例 15.1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_01_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-02",
+      "stage": "foundation",
+      "section": "一、微分方程概念与一阶方程（基础例 15.1~15.11）",
+      "kind": "example",
+      "title": "【例 15.2】不解方程反推 $y''(0)=1$ 结合洛必达求极限",
+      "examWeight": "core",
+      "problem": "设 $y=y(x)$ 是二阶常系数线性微分方程 $y''+py'+qy=\\mathrm{e}^{3x}$ 满足初始条件 $y(0)=y'(0)=0$ 的特解，则 $\\lim\\limits_{x\\to 0}\\dfrac{\\ln(1+x^2)}{y(x)}=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "把 $x=0$ 代入方程直接读出 $y''(0)=1$",
+          "detail": "因 $y''=-py'-qy+\\mathrm{e}^{3x}$ 连续，代入 $x=0$ 及 $y(0)=y'(0)=0$ 得$$y''(0)=-p\\cdot 0-q\\cdot 0+\\mathrm{e}^0=1.$$"
+        },
+        {
+          "stepTitle": "等价无穷小 + 两次洛必达求极限",
+          "detail": "$$\\lim_{x\\to 0}\\frac{\\ln(1+x^2)}{y(x)}=\\lim_{x\\to 0}\\frac{x^2}{y(x)}=\\lim_{x\\to 0}\\frac{2x}{y'(x)}=\\lim_{x\\to 0}\\frac{2}{y''(x)}=\\frac{2}{y''(0)}=2.$$"
+        }
+      ],
+      "finalAnswer": "$2$",
+      "takeaway": "参数 $p,q$ 都没给，恰恰说明答案与 $p,q$ 无关——直接把初值代入方程读出 $y''(0)$，再配泰勒/洛必达 10 秒拿满分！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.380",
+        "pdfPage": 385,
+        "itemRef": "例 15.2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_01_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-03",
+      "stage": "foundation",
+      "section": "一、微分方程概念与一阶方程（基础例 15.1~15.11）",
+      "kind": "example",
+      "title": "【例 15.3】由切线斜率建可分离变量方程求特解",
+      "examWeight": "core",
+      "problem": "已知曲线 $y=f(x)$ 过点 $\\left(0,-\\dfrac{1}{2}\\right)$，且其上任一点 $(x,y)$ 处的切线斜率为 $x\\ln(1+x^2)$，则 $f(x)=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "翻译几何条件并直接积分（分部积分法）",
+          "detail": "由题意 $\\frac{\\mathrm{d}y}{\\mathrm{d}x}=x\\ln(1+x^2)$ 且 $y(0)=-\\frac{1}{2}$。两边积分并凑 $\\mathrm{d}(1+x^2)$：$$y=\\frac{1}{2}\\int\\ln(1+x^2)\\,\\mathrm{d}(1+x^2)=\\frac{1}{2}\\left[(1+x^2)\\ln(1+x^2)-(1+x^2)\\right]+C=\\frac{1}{2}(1+x^2)\\bigl[\\ln(1+x^2)-1\\bigr]+C.$$"
+        },
+        {
+          "stepTitle": "代入初值定出 $C=0$",
+          "detail": "代入 $x=0,\\;y=-\\frac{1}{2}$ 得 $-\\frac{1}{2}=\\frac{1}{2}\\cdot 1\\cdot(0-1)+C\\implies C=0$，故 $f(x)=\\dfrac{1}{2}(1+x^2)\\bigl[\\ln(1+x^2)-1\\bigr]$。"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{1}{2}(1+x^2)\\bigl[\\ln(1+x^2)-1\\bigr]$",
+      "takeaway": "记住常用凑微原函数 $\\int\\ln u\\,\\mathrm{d}u=u(\\ln u-1)+C$，并务必把常数 $C$ 用初值解精确！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.380-381",
+        "pdfPage": 385,
+        "itemRef": "例 15.3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_01_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-04",
+      "stage": "foundation",
+      "section": "一、微分方程概念与一阶方程（基础例 15.1~15.11）",
+      "kind": "example",
+      "title": "【例 15.4】可分离变量隐式通解与常数范围细节（$C>1$！）",
+      "examWeight": "core",
+      "problem": "微分方程 $\\dfrac{y\\,\\mathrm{d}y}{1+y^2}=\\dfrac{\\mathrm{d}x}{x(1+x^2)}$ 的解为 ______。",
+      "steps": [
+        {
+          "stepTitle": "右端裂项后两边直接积分",
+          "detail": "利用 $\\frac{1}{x(1+x^2)}=\\frac{1}{x}-\\frac{x}{1+x^2}$，两边积分：$$\\int\\frac{y\\,\\mathrm{d}y}{1+y^2}=\\int\\left(\\frac{1}{x}-\\frac{x}{1+x^2}\\right)\\mathrm{d}x \\implies \\frac{1}{2}\\ln(1+y^2)=\\ln|x|-\\frac{1}{2}\\ln(1+x^2)+\\ln C_1\\;(C_1>0).$$"
+        },
+        {
+          "stepTitle": "去对数化简并严格检验常数 $C$ 的存在范围",
+          "detail": "两边乘 $2$ 整理得 $\\ln\\bigl[(1+x^2)(1+y^2)\\bigr]=\\ln(C x^2)$（记 $C=C_1^2>0$），即 $(1+x^2)(1+y^2)=C x^2$。进一步由 $1+y^2=\\frac{Cx^2}{1+x^2}\\ge 1\\iff (C-1)x^2\\ge 1$，可见为使实数解存在，常数必须满足 **$C>1$**！"
+        }
+      ],
+      "finalAnswer": "$(1+x^2)(1+y^2)=Cx^2$，其中 $C>1$ 为任意常数。",
+      "takeaway": "基础 P.381 特别提醒：**通解中的任意常数未必取遍全体实数**！对数合并取 $\\ln C_1$ 后，顺手看一眼实解存在性就能精准锁定 $C>1$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.381",
+        "pdfPage": 386,
+        "itemRef": "例 15.4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_01_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-05",
+      "stage": "foundation",
+      "section": "一、微分方程概念与一阶方程（基础例 15.1~15.11）",
+      "kind": "example",
+      "title": "【例 15.5】换元可分离变量 $\\mathrm{d}y=\\sin(x+y+100)\\,\\mathrm{d}x$（含奇解注）",
+      "examWeight": "core",
+      "problem": "求微分方程 $\\mathrm{d}y=\\sin(x+y+100)\\,\\mathrm{d}x$ 的通解。",
+      "steps": [
+        {
+          "stepTitle": "整体换元 $u=x+y+100$ 化为可分离变量方程",
+          "detail": "令 $u=x+y+100$，则 $\\frac{\\mathrm{d}u}{\\mathrm{d}x}=1+\\frac{\\mathrm{d}y}{\\mathrm{d}x}=1+\\sin u$。"
+        },
+        {
+          "stepTitle": "分子分母同乘 $1-\\sin u$ 积分并回代 $u$",
+          "detail": "分离变量（当 $1+\\sin u\\ne 0$ 时）得 $\\frac{\\mathrm{d}u}{1+\\sin u}=\\mathrm{d}x$，恒等变形：$$\\frac{1-\\sin u}{\\cos^2 u}\\,\\mathrm{d}u=(\\sec^2 u-\\tan u\\sec u)\\,\\mathrm{d}u=\\mathrm{d}x.$$两边积分得 $\\tan u-\\sec u=x+C$，回代 $u=x+y+100$ 得通解$$\\tan(x+y+100)-\\sec(x+y+100)=x+C.$$（注：当 $1+\\sin u=0$ 时给出奇解 $x+y+100=2k\\pi-\\frac{\\pi}{2}\\;(k\\in\\mathbb{Z})$，考研求通解一般不要求写出奇解。）"
+        }
+      ],
+      "finalAnswer": "$\\tan(x+y+100)-\\sec(x+y+100)=x+C$（$C$ 为任意常数）。",
+      "takeaway": "积分 $\\int\\frac{\\mathrm{d}u}{1+\\sin u}$ 牢记「**上下同乘共轭 $1-\\sin u$**」化为 $\\sec^2 u-\\tan u\\sec u$，比万能代换快 3 倍！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.381-382",
+        "pdfPage": 386,
+        "itemRef": "例 15.5 & P.382 注"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_01_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-06",
+      "stage": "foundation",
+      "section": "一、微分方程概念与一阶方程（基础例 15.1~15.11）",
+      "kind": "example",
+      "title": "【例 15.6】切线 $y$ 轴截距等于距原点距离：建齐次型微分方程",
+      "examWeight": "core",
+      "problem": "设 $L$ 是一条平面曲线，其上任意一点 $P(x,y)\\;(x>0)$ 到坐标原点的距离恒等于该点处的切线在 $y$ 轴上的截距，且 $L$ 经过点 $\\left(\\dfrac{1}{2},0\\right)$，求曲线 $L$ 的方程。",
+      "steps": [
+        {
+          "stepTitle": "写出切线 $y$ 轴截距 $y-xy'$ 并化为齐次型方程",
+          "detail": "切线方程 $Y-y=y'(X-x)$，令 $X=0$ 得 $y$ 轴截距 $y-xy'$。由题意 $\\sqrt{x^2+y^2}=y-xy'$，因 $x>0$ 两边同除以 $x$ 得$$\\sqrt{1+\\left(\\frac{y}{x}\\right)^2}=\\frac{y}{x}-y'.$$"
+        },
+        {
+          "stepTitle": "令 $u=\\frac{y}{x}$ 求解并代入初值 $(\\frac{1}{2},0)$ 化简",
+          "detail": "令 $y=ux$，则 $y'=u+x\\frac{\\mathrm{d}u}{\\mathrm{d}x}$，代入得 $\\sqrt{1+u^2}=-x\\frac{\\mathrm{d}u}{\\mathrm{d}x}\\implies\\frac{\\mathrm{d}u}{\\sqrt{1+u^2}}=-\\frac{\\mathrm{d}x}{x}$。两边积分：$$\\ln\\bigl(u+\\sqrt{1+u^2}\\bigr)=-\\ln x+\\ln C \\implies x\\bigl(u+\\sqrt{1+u^2}\\bigr)=y+\\sqrt{x^2+y^2}=C.$$代入点 $(\\frac{1}{2},0)$ 得 $C=\\frac{1}{2}$，即 $\\sqrt{x^2+y^2}=\\frac{1}{2}-y$，两边平方（验 $\\frac{1}{2}-y=\\frac{1}{4}+x^2>0$ 无增根）得 $y=\\frac{1}{4}-x^2\\;(x>0)$。"
+        }
+      ],
+      "finalAnswer": "$y=\\dfrac{1}{4}-x^2\\;(x>0)$",
+      "takeaway": "记住高频积分 $\\int\\frac{\\mathrm{d}u}{\\sqrt{1+u^2}}=\\ln(u+\\sqrt{1+u^2})+C$，与 $-\\ln x$ 合并后立刻还原 $y+\\sqrt{x^2+y^2}=C$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.382",
+        "pdfPage": 387,
+        "itemRef": "例 15.6"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_01_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-07",
+      "stage": "foundation",
+      "section": "一、微分方程概念与一阶方程（基础例 15.1~15.11）",
+      "kind": "example",
+      "title": "【例 15.7】一阶线性方程特解 $y=\\mathrm{e}^{-x}\\sin x$ 与无穷区面积级数求和",
+      "examWeight": "core",
+      "problem": "设 $y=y(x)$ 是微分方程 $y'+y=\\mathrm{e}^{-x}\\cos x$ 满足 $y(0)=0$ 的特解。（1）求 $y(x)$；（2）求曲线 $y(x)$ 与 $x$ 轴在 $[0,+\\infty)$ 上所围图形的面积。",
+      "steps": [
+        {
+          "stepTitle": "（1）套一阶线性通解公式并代入 $y(0)=0$",
+          "detail": "这里 $p(x)=1,\\;q(x)=\\mathrm{e}^{-x}\\cos x$，直接套公式：$$y(x)=\\mathrm{e}^{-\\int 1\\,\\mathrm{d}x}\\left(\\int\\mathrm{e}^{-x}\\cos x\\cdot\\mathrm{e}^{\\int 1\\,\\mathrm{d}x}\\,\\mathrm{d}x+C\\right)=\\mathrm{e}^{-x}(\\sin x+C).$$由 $y(0)=0$ 得 $C=0$，故 $y(x)=\\mathrm{e}^{-x}\\sin x$。"
+        },
+        {
+          "stepTitle": "（2）按周期 $[k\\pi,(k+1)\\pi]$ 分段拆绝对值化成等比级数求和",
+          "detail": "面积 $S=\\int_0^{+\\infty}\\mathrm{e}^{-x}|\\sin x|\\,\\mathrm{d}x=\\sum_{k=0}^\\infty\\int_{k\\pi}^{(k+1)\\pi}\\mathrm{e}^{-x}|\\sin x|\\,\\mathrm{d}x=\\sum_{k=0}^\\infty\\mathrm{e}^{-k\\pi}\\int_0^\\pi\\mathrm{e}^{-t}\\sin t\\,\\mathrm{d}t$。由分部积分 $\\int_0^\\pi\\mathrm{e}^{-t}\\sin t\\,\\mathrm{d}t=\\left.-\\frac{1}{2}\\mathrm{e}^{-t}(\\sin t+\\cos t)\\right|_0^\\pi=\\frac{1+\\mathrm{e}^{-\\pi}}{2}$，再由公比 $\\mathrm{e}^{-\\pi}$ 的无穷等比级数求和（接轨第 10 讲例 10.4）：$$S=\\frac{1+\\mathrm{e}^{-\\pi}}{2}\\cdot\\frac{1}{1-\\mathrm{e}^{-\\pi}}=\\frac{\\mathrm{e}^{-\\pi}+1}{2(1-\\mathrm{e}^{-\\pi})}.$$"
+        }
+      ],
+      "finalAnswer": "（1）$y(x)=\\mathrm{e}^{-x}\\sin x$；（2）$S=\\dfrac{\\mathrm{e}^{-\\pi}+1}{2(1-\\mathrm{e}^{-\\pi})}$。",
+      "takeaway": "见到 $y'+ay=\\mathrm{e}^{-ax}g(x)$ 时积分因子 $\\mathrm{e}^{ax}$ 恰好把 $\\mathrm{e}^{-ax}$ 抵消干净，直接一步口算通解！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.383-384",
+        "pdfPage": 388,
+        "itemRef": "例 15.7"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_01_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-08",
+      "stage": "foundation",
+      "section": "一、微分方程概念与一阶方程（基础例 15.1~15.11）",
+      "kind": "example",
+      "title": "【例 15.8】互换 $x,y$ 角色化为关于 $x(y)$ 的一阶线性方程（初值定正负支！）",
+      "examWeight": "core",
+      "problem": "微分方程 $y\\,\\mathrm{d}x+(x-3y^2)\\,\\mathrm{d}y=0$ 满足条件 $\\left.y\\right|_{x=1}=1$ 的解为 $y=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "互换自变量与因变量，化为关于 $x(y)$ 的一阶线性方程",
+          "detail": "若写 $\\frac{\\mathrm{d}y}{\\mathrm{d}x}=\\frac{y}{3y^2-x}$ 无法拆分；改取倒数写成关于 $x(y)$ 的一阶线性方程：$$\\frac{\\mathrm{d}x}{\\mathrm{d}y}+\\frac{1}{y}x=3y.$$套一阶线性通解公式（注意 $\\mathrm{e}^{\\int\\frac{1}{y}\\mathrm{d}y}=y$ 在公式内可免绝对值）：$$x=\\frac{1}{y}\\left(\\int 3y\\cdot y\\,\\mathrm{d}y+C\\right)=y^2+\\frac{C}{y}.$$（亦可直接凑全微分 $\\mathrm{d}(xy)=3y^2\\,\\mathrm{d}y\\implies xy=y^3+C$ 一步秒杀！）"
+        },
+        {
+          "stepTitle": "代入初值定 $C=0$ 并舍去负平方根支",
+          "detail": "代入 $x=1,y=1$ 得 $C=0\\implies x=y^2\\implies y=\\pm\\sqrt{x}$。由初始条件 $y(1)=1>0$ 舍去 $-\\sqrt{x}$，得 $y=\\sqrt{x}$。"
+        }
+      ],
+      "finalAnswer": "$y=\\sqrt{x}$",
+      "takeaway": "两个亮点：① 看 $y\\,\\mathrm{d}x+x\\,\\mathrm{d}y=\\mathrm{d}(xy)$ 甚至连线性公式都不用背；② 初始条件既定常数 $C$，也定开方后的**正负支**！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.384",
+        "pdfPage": 389,
+        "itemRef": "例 15.8"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_01_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-09",
+      "stage": "foundation",
+      "section": "一、微分方程概念与一阶方程（基础例 15.1~15.11）",
+      "kind": "example",
+      "title": "【例 15.9 · ★★★重点题型】不可积右端项的一阶线性方程：变限积分通解 + 洛必达求极限",
+      "examWeight": "core",
+      "problem": "设函数 $y=\\varphi(x)$ 是微分方程 $y'+\\mathrm{e}y=\\left(1-\\dfrac{1}{x}\\right)^x$ 的一个解，则 $\\lim\\limits_{x\\to+\\infty}\\varphi(x)=$（ ）\n（A）$\\mathrm{e}$　（B）$\\mathrm{e}^2$　（C）$\\dfrac{1}{\\mathrm{e}}$　（D）$\\dfrac{1}{\\mathrm{e}^2}$",
+      "steps": [
+        {
+          "stepTitle": "写出变限积分形式的一阶线性通解",
+          "detail": "这里 $p(x)=\\mathrm{e}$ 为常数，取任意正实数 $x_0>1$ 写出变限积分通解：$$\\varphi(x)=\\mathrm{e}^{-\\mathrm{e}x}\\left[\\int_{x_0}^x\\left(1-\\frac{1}{t}\\right)^t\\mathrm{e}^{\\mathrm{e}t}\\,\\mathrm{d}t+C\\right]=\\frac{\\displaystyle\\int_{x_0}^x\\left(1-\\frac{1}{t}\\right)^t\\mathrm{e}^{\\mathrm{e}t}\\,\\mathrm{d}t+C}{\\mathrm{e}^{\\mathrm{e}x}}.$$"
+        },
+        {
+          "stepTitle": "对分母趋于 $+\\infty$ 用 $\\frac{*}{\\infty}$ 洛必达法则一步出答案",
+          "detail": "当 $x\\to+\\infty$ 时分母 $\\mathrm{e}^{\\mathrm{e}x}\\to+\\infty$，应用洛必达法则并利用重要极限 $\\lim\\limits_{x\\to+\\infty}(1-\\frac{1}{x})^x=\\mathrm{e}^{-1}$：$$\\lim_{x\\to+\\infty}\\varphi(x)=\\lim_{x\\to+\\infty}\\frac{\\left(1-\\frac{1}{x}\\right)^x\\mathrm{e}^{\\mathrm{e}x}}{\\mathrm{e}\\cdot\\mathrm{e}^{\\mathrm{e}x}}=\\frac{\\mathrm{e}^{-1}}{\\mathrm{e}}=\\frac{1}{\\mathrm{e}^2}.$$"
+        }
+      ],
+      "finalAnswer": "**选（D）**：$\\dfrac{1}{\\mathrm{e}^2}$。",
+      "takeaway": "**考研近年超高频压轴母题**：记牢速算结论——对 $y'+ay=q(x)\\;(a>0)$，只要 $\\lim\\limits_{x\\to+\\infty}q(x)=L$，一切解均满足 $\\lim\\limits_{x\\to+\\infty}y(x)=\\frac{L}{a}$！（选填 3 秒口算，大题写变限积分+洛必达！）",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.384-385",
+        "pdfPage": 389,
+        "itemRef": "例 15.9"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_01_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-10",
+      "stage": "foundation",
+      "section": "一、微分方程概念与一阶方程（基础例 15.1~15.11）",
+      "kind": "example",
+      "title": "【例 15.10】用变限积分通解证明 $y'+ay=f(x)\\;(a>0)$ 有界解定理",
+      "examWeight": "core",
+      "problem": "设 $a>0$，函数 $f(x)$ 在 $[0,+\\infty)$ 内连续有界。证明：微分方程 $y'+ay=f(x)$ 的解在 $[0,+\\infty)$ 内有界。",
+      "steps": [
+        {
+          "stepTitle": "写出以 $x_0=0$ 为下限的变限积分通解",
+          "detail": "套一阶线性变限积分通解公式得$$y(x)=\\mathrm{e}^{-ax}\\left[\\int_0^x f(t)\\mathrm{e}^{at}\\,\\mathrm{d}t+C\\right]\\quad(x\\ge 0).$$"
+        },
+        {
+          "stepTitle": "利用 $|f(t)|\\le M$ 绝对值放缩直接证明全局有界",
+          "detail": "因 $f(x)$ 在 $[0,+\\infty)$ 有界，存在 $M>0$ 使 $|f(t)|\\le M$，故对任意 $x\\ge 0$ 有$$|y(x)|\\le\\mathrm{e}^{-ax}\\left[\\int_0^x M\\mathrm{e}^{at}\\,\\mathrm{d}t+|C|\\right]=\\mathrm{e}^{-ax}\\left[\\frac{M}{a}(\\mathrm{e}^{ax}-1)+|C|\\right]=\\frac{M}{a}\\bigl(1-\\mathrm{e}^{-ax}\\bigr)+|C|\\mathrm{e}^{-ax}\\le\\frac{M}{a}+|C|,$$即证 $y(x)$ 在 $[0,+\\infty)$ 内有界！（亦接轨第 8 讲例 8.14。）"
+        }
+      ],
+      "finalAnswer": "证得 $|y(x)|\\le\\dfrac{M}{a}+|C|\\;(\\forall x\\ge 0)$，故方程的一切解在 $[0,+\\infty)$ 内均有界。",
+      "takeaway": "牢记 $a>0$ 是有界性的生命线：$\\mathrm{e}^{-ax}\\int_0^x\\mathrm{e}^{at}\\,\\mathrm{d}t=\\frac{1-\\mathrm{e}^{-ax}}{a}\\le\\frac{1}{a}$ 把增长指数稳稳压住！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.385",
+        "pdfPage": 390,
+        "itemRef": "例 15.10"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_01_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-11",
+      "stage": "foundation",
+      "section": "一、微分方程概念与一阶方程（基础例 15.1~15.11）",
+      "kind": "example",
+      "title": "【例 15.11 · 仅数一】互换 $x,y$ 化为伯努利方程求解 $y\\,\\mathrm{d}x=(1+x\\ln y)x\\,\\mathrm{d}y$",
+      "examWeight": "core",
+      "problem": "求微分方程 $y\\,\\mathrm{d}x=(1+x\\ln y)x\\,\\mathrm{d}y\\;(y>0)$ 的通解。",
+      "steps": [
+        {
+          "stepTitle": "互换 $x,y$ 地位识别出以 $x(y)$ 为未知函数的伯努利方程",
+          "detail": "整理为关于 $x(y)$ 的方程：$$\\frac{\\mathrm{d}x}{\\mathrm{d}y}-\\frac{1}{y}x=\\frac{\\ln y}{y}x^2,$$此为 $n=2$ 的伯努利方程！（注：若 $x\\equiv 0$ 亦满足原方程，见严谨补注 #54。）"
+        },
+        {
+          "stepTitle": "同除 $x^2$ 令 $z=x^{-1}$ 化一阶线性方程求解",
+          "detail": "两边同除 $x^2$ 并令 $z=x^{-1}\\implies\\frac{\\mathrm{d}z}{\\mathrm{d}y}=-\\frac{1}{x^2}\\frac{\\mathrm{d}x}{\\mathrm{d}y}$，方程化为$$\\frac{\\mathrm{d}z}{\\mathrm{d}y}+\\frac{1}{y}z=-\\frac{\\ln y}{y}.$$套一阶线性公式得$$\\frac{1}{x}=z=\\frac{1}{y}\\left(\\int -\\frac{\\ln y}{y}\\cdot y\\,\\mathrm{d}y+C\\right)=\\frac{1}{y}\\bigl[-y(\\ln y-1)+C\\bigr]=1-\\ln y+\\frac{C}{y}\\quad(y>0).$$"
+        }
+      ],
+      "finalAnswer": "通解为 $\\dfrac{1}{x}=1-\\ln y+\\dfrac{C}{y}\\;(y>0,\\;C\\text{ 为任意常数})$（另含平凡解 $x\\equiv 0$）。",
+      "takeaway": "伯努利方程在数一常与「**$x,y$ 互换地位**」连环考查：写不出 $y'$ 的标准形式时，立刻倒过来看 $\\frac{\\mathrm{d}x}{\\mathrm{d}y}$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.385-386",
+        "pdfPage": 390,
+        "itemRef": "例 15.11"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_01_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-12",
+      "stage": "foundation",
+      "section": "二、二阶可降阶与全微分方程（基础例 15.12~15.14）",
+      "kind": "example",
+      "title": "【例 15.12】缺 $x,y$ 型可降阶方程 $y''=y'[1+(y')^2]$ 求特解（含最大存在区间注）",
+      "examWeight": "core",
+      "problem": "求微分方程 $y''=y'\\bigl[1+(y')^2\\bigr]$ 满足 $y(0)=0,\\;y'(0)=1$ 的特解。",
+      "steps": [
+        {
+          "stepTitle": "按缺 $y$ 型令 $y'=p(x),\\;y''=p'$ 分离变量并立刻用 $p(0)=1$ 定 $C_1$",
+          "detail": "方程化为 $p'=p(1+p^2)\\implies\\frac{\\mathrm{d}p}{p(1+p^2)}=\\mathrm{d}x$。裂项 $\\frac{1}{p(1+p^2)}=\\frac{1}{p}-\\frac{p}{1+p^2}$ 积分得$$\\ln|p|-\\frac{1}{2}\\ln(1+p^2)=x+\\frac{1}{2}\\ln C_1 \\iff \\ln\\frac{p^2}{1+p^2}=2x+\\ln C_1\\;(C_1>0).$$代入 $x=0,\\;p(0)=y'(0)=1$ 立得 $C_1=\\frac{1}{2}$！反解 $p$（由 $p(0)=1>0$ 取正根）：$$p=y'=\\frac{\\frac{\\mathrm{e}^x}{\\sqrt{2}}}{\\sqrt{1-\\frac{1}{2}\\mathrm{e}^{2x}}}\\qquad\\left(x<\\frac{1}{2}\\ln 2\\right).$$"
+        },
+        {
+          "stepTitle": "凑 $\\mathrm{d}(\\frac{\\mathrm{e}^x}{\\sqrt{2}})$ 积分并用 $y(0)=0$ 定出 $C_2=-\\frac{\\pi}{4}$",
+          "detail": "$$y=\\int\\frac{\\mathrm{d}\\!\\left(\\frac{\\mathrm{e}^x}{\\sqrt{2}}\\right)}{\\sqrt{1-\\left(\\frac{\\mathrm{e}^x}{\\sqrt{2}}\\right)^2}}=\\arcsin\\frac{\\mathrm{e}^x}{\\sqrt{2}}+C_2.$$代入 $y(0)=0$ 得 $0=\\arcsin\\frac{1}{\\sqrt{2}}+C_2=\\frac{\\pi}{4}+C_2\\implies C_2=-\\frac{\\pi}{4}$，故 $y=\\arcsin\\dfrac{\\mathrm{e}^x}{\\sqrt{2}}-\\dfrac{\\pi}{4}$。"
+        }
+      ],
+      "finalAnswer": "$y=\\arcsin\\dfrac{\\mathrm{e}^x}{\\sqrt{2}}-\\dfrac{\\pi}{4}$",
+      "takeaway": "二阶可降阶定解的黄金习惯：**每解出一层立刻代入初值定出 $C_1$**，省得带着抽象常数 $C_1$ 去积复杂的根式！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.386-387",
+        "pdfPage": 391,
+        "itemRef": "例 15.12"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_01_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-13",
+      "stage": "foundation",
+      "section": "二、二阶可降阶与全微分方程（基础例 15.12~15.14）",
+      "kind": "example",
+      "title": "【例 15.13】缺 $x$ 型可降阶方程 $yy''-\\frac{2}{3}(y')^2=0$ 求满足 $y(0)=0$ 的全部解",
+      "examWeight": "core",
+      "problem": "求微分方程 $yy''-\\dfrac{2}{3}(y')^2=0$ 满足 $y(0)=0$ 的解。",
+      "steps": [
+        {
+          "stepTitle": "按缺 $x$ 型令 $y'=p(y),\\;y''=p\\frac{\\mathrm{d}p}{\\mathrm{d}y}$ 分离变量",
+          "detail": "代入得 $y\\cdot p\\frac{\\mathrm{d}p}{\\mathrm{d}y}-\\frac{2}{3}p^2=0$。当 $p\\ne 0$ 时分离变量：$$\\frac{\\mathrm{d}p}{p}=\\frac{2}{3}\\frac{\\mathrm{d}y}{y}\\implies\\ln|p|=\\frac{2}{3}\\ln|y|+\\ln C_0\\;(C_0>0)\\implies p=\\pm C_0|y|^{\\frac{2}{3}}=C_1 y^{\\frac{2}{3}}\\;(C_1\\ne 0).$$"
+        },
+        {
+          "stepTitle": "第二次分离变量并合并 $p\\equiv 0$ 对应的零解 $y\\equiv 0$",
+          "detail": "由 $\\frac{\\mathrm{d}y}{y^{2/3}}=C_1\\,\\mathrm{d}x$ 积分得 $3y^{\\frac{1}{3}}=C_1 x+C_2$。代入 $y(0)=0$ 得 $C_2=0$，即 $y=C_3 x^3\\;(C_3\\ne 0)$。再检验被除掉的 $p\\equiv 0$ 得 $y\\equiv 0$ 亦满足 $y(0)=0$，合并为 $y=Cx^3$（$C$ 为任意常数）。"
+        }
+      ],
+      "finalAnswer": "$y=Cx^3$（$C$ 为任意常数）。",
+      "takeaway": "注意 $y^{\\frac{2}{3}}=|y|^{\\frac{2}{3}}$ 自动去绝对值，且最后别忘把被除掉的 $p\\equiv 0\\implies y\\equiv 0$ 并入 $C=0$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.387-388",
+        "pdfPage": 392,
+        "itemRef": "例 15.13"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_01_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-14",
+      "stage": "foundation",
+      "section": "二、二阶可降阶与全微分方程（基础例 15.12~15.14）",
+      "kind": "example",
+      "title": "【例 15.14 · 仅数一】由全微分充要条件反求 $f(x)$ 并凑全微分求通解",
+      "examWeight": "core",
+      "problem": "求满足 $f(0)=0$ 的具有一阶连续导数的 $f(x)$，使 $\\bigl[yf'(x)+y^2\\bigr]\\,\\mathrm{d}x+(x^2+2xy)\\,\\mathrm{d}y=0$ 为全微分方程，并求此全微分方程的通解。",
+      "steps": [
+        {
+          "stepTitle": "用 $\\frac{\\partial P}{\\partial y}=\\frac{\\partial Q}{\\partial x}$ 反求 $f(x)$",
+          "detail": "由全微分充要条件 $\\frac{\\partial[yf'(x)+y^2]}{\\partial y}=\\frac{\\partial(x^2+2xy)}{\\partial x}$ 得$$f'(x)+2y=2x+2y\\implies f'(x)=2x\\implies f(x)=x^2+C_1.$$由 $f(0)=0$ 得 $C_1=0$，故 $f(x)=x^2$。"
+        },
+        {
+          "stepTitle": "回代后直接凑全微分写通解",
+          "detail": "方程化为 $(2xy+y^2)\\,\\mathrm{d}x+(x^2+2xy)\\,\\mathrm{d}y=\\mathrm{d}(x^2 y+xy^2)=0$，故通解为 $x^2 y+xy^2=C$（$C$ 为任意常数）。"
+        }
+      ],
+      "finalAnswer": "$f(x)=x^2$；通解为 $x^2 y+xy^2=C$（$C$ 为任意常数）。",
+      "takeaway": "全微分方程在考研数一常以「先定未知函数 $f(x)$，再凑原函数写 $u(x,y)=C$」两步联动形式出现，与第 13 讲无缝衔接！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.388",
+        "pdfPage": 393,
+        "itemRef": "例 15.14"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_01_14",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-15",
+      "stage": "foundation",
+      "section": "三、高阶常系数线性方程与欧拉方程（基础例 15.15~15.20）",
+      "kind": "example",
+      "title": "【例 15.15】由「在 $x=0$ 处取极值 $3$」提取双初值解二阶齐次方程",
+      "examWeight": "core",
+      "problem": "设函数 $y=y(x)$ 是微分方程 $y''+y'-2y=0$ 的解，且在 $x=0$ 处 $y(x)$ 取得极值 $3$，则 $y(x)=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "求特征根写通解，并从「取极值 $3$」提取 $y(0)=3,\\;y'(0)=0$",
+          "detail": "特征方程 $r^2+r-2=(r+2)(r-1)=0\\implies r_1=-2,\\;r_2=1$，通解 $y(x)=C_1\\mathrm{e}^{-2x}+C_2\\mathrm{e}^x$。因解任意阶可导且在 $x=0$ 取极值 $3$，故必有 $y(0)=3$ 且 $y'(0)=0$！"
+        },
+        {
+          "stepTitle": "联立定常数并验证确为极值",
+          "detail": "$\\begin{cases}C_1+C_2=3,\\\\-2C_1+C_2=0,\\end{cases}\\implies C_1=1,\\;C_2=2$，故 $y(x)=\\mathrm{e}^{-2x}+2\\mathrm{e}^x$（检验 $y''(0)=4+2=6>0$，确为极小值 $3$！）。"
+        }
+      ],
+      "finalAnswer": "$\\mathrm{e}^{-2x}+2\\mathrm{e}^x$",
+      "takeaway": "微分方程的解天然光滑可导，见到「在 $x_0$ 处取得极值 $A$」立刻翻译为两个初值条件：$y(x_0)=A$ 且 $y'(x_0)=0$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.389",
+        "pdfPage": 394,
+        "itemRef": "例 15.15"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_15_25",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-16",
+      "stage": "foundation",
+      "section": "三、高阶常系数线性方程与欧拉方程（基础例 15.15~15.20）",
+      "kind": "example",
+      "title": "【例 15.16】共轭复根型二阶齐次线性方程定解 $y''+2y'+5y=0$",
+      "examWeight": "core",
+      "problem": "设函数 $y=f(x)$ 满足微分方程 $y''+2y'+5y=0$，且 $f(0)=1,\\;f'(0)=-1$，则 $f(x)=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "求共轭复特征根写出实通解",
+          "detail": "特征方程 $r^2+2r+5=(r+1)^2+4=0\\implies r_{1,2}=-1\\pm 2\\mathrm{i}$（$\\alpha=-1,\\;\\beta=2$），故通解为$$f(x)=\\mathrm{e}^{-x}(C_1\\cos 2x+C_2\\sin 2x).$$"
+        },
+        {
+          "stepTitle": "代入初值定 $C_1=1,\\;C_2=0$",
+          "detail": "$f(0)=C_1=1$；求导得 $f'(x)=\\mathrm{e}^{-x}\\bigl[(2C_2-C_1)\\cos 2x-(2C_1+C_2)\\sin 2x\\bigr]$，代入 $f'(0)=2C_2-1=-1\\implies C_2=0$，故 $f(x)=\\mathrm{e}^{-x}\\cos 2x$。"
+        }
+      ],
+      "finalAnswer": "$\\mathrm{e}^{-x}\\cos 2x$",
+      "takeaway": "配方 $(r+1)^2+4=0$ 比套求根公式更快看出 $\\alpha=-1,\\;\\beta=2$；求 $f'(0)$ 时含 $\\sin 2x$ 的项自动归零，口算 $f'(0)=-C_1+2C_2$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.389",
+        "pdfPage": 394,
+        "itemRef": "例 15.16"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_15_25",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-17",
+      "stage": "foundation",
+      "section": "三、高阶常系数线性方程与欧拉方程（基础例 15.15~15.20）",
+      "kind": "example",
+      "title": "【例 15.17】待定系数法 vs 微分算子法双解 $y''-3y'+2y=2\\mathrm{e}^{-x}\\cos x$",
+      "examWeight": "core",
+      "problem": "求微分方程 $y''-3y'+2y=2\\mathrm{e}^{-x}\\cos x$ 的通解。",
+      "steps": [
+        {
+          "stepTitle": "先求齐次通解",
+          "detail": "特征方程 $r^2-3r+2=0\\implies r_1=1,\\;r_2=2$，齐次通解 $\\bar{y}=C_1\\mathrm{e}^x+C_2\\mathrm{e}^{2x}$。"
+        },
+        {
+          "stepTitle": "法一（待定系数法）与法二（微分算子法，强烈推荐对比！）",
+          "detail": "**法一（待定系数法）**：$\\alpha\\pm\\beta\\mathrm{i}=-1\\pm\\mathrm{i}$ 不是特征根，设 $y^*=\\mathrm{e}^{-x}(A\\cos x+B\\sin x)$，求导得 $(y^*)'=\\mathrm{e}^{-x}[(B-A)\\cos x-(A+B)\\sin x]$，$(y^*)''=\\mathrm{e}^{-x}(-2B\\cos x+2A\\sin x)$，代入整理得 $5A-5B=2,\\;5A+5B=0\\implies A=\\frac{1}{5},\\;B=-\\frac{1}{5}$。\n**法二（微分算子法，移位秒杀！）**：\n$$y^*=\\frac{1}{D^2-3D+2}2\\mathrm{e}^{-x}\\cos x=2\\mathrm{e}^{-x}\\frac{1}{(D-1)^2-3(D-1)+2}\\cos x=2\\mathrm{e}^{-x}\\frac{1}{D^2-5D+6}\\cos x$$\n代入 $D^2=-1$：$$y^*=2\\mathrm{e}^{-x}\\frac{1}{-5D+5}\\cos x=-\\frac{2}{5}\\mathrm{e}^{-x}\\frac{D+1}{D^2-1}\\cos x=\\frac{1}{5}\\mathrm{e}^{-x}(D+1)\\cos x=\\frac{1}{5}\\mathrm{e}^{-x}(\\cos x-\\sin x).$$合并齐次通解即得 $y=C_1\\mathrm{e}^x+C_2\\mathrm{e}^{2x}+\\frac{1}{5}\\mathrm{e}^{-x}(\\cos x-\\sin x)$。"
+        }
+      ],
+      "finalAnswer": "$y=C_1\\mathrm{e}^x+C_2\\mathrm{e}^{2x}+\\dfrac{1}{5}\\mathrm{e}^{-x}(\\cos x-\\sin x)$（$C_1,C_2$ 为任意常数）。",
+      "takeaway": "亲自对比两种方法的草稿量就知道微分算子法有多香：移位 + $D^2\\to -1$ + 共轭 $(D+1)$ 三行零失误出特解！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.394-395",
+        "pdfPage": 399,
+        "itemRef": "例 15.17"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_15_25",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-18",
+      "stage": "foundation",
+      "section": "三、高阶常系数线性方程与欧拉方程（基础例 15.15~15.20）",
+      "kind": "example",
+      "title": "【例 15.18】由混合特解 $y^*=\\mathrm{e}^{2x}+(1+x)\\mathrm{e}^x$ 反求方程参数 $(\\alpha,\\beta,\\gamma)$ 与通解",
+      "examWeight": "core",
+      "problem": "设二阶常系数线性微分方程 $y''+\\alpha y'+\\beta y=\\gamma\\mathrm{e}^x$ 的一个特解为 $y^*=\\mathrm{e}^{2x}+(1+x)\\mathrm{e}^x$，确定常数 $\\alpha,\\beta,\\gamma$，并求该方程的通解。",
+      "steps": [
+        {
+          "stepTitle": "逐项拆解特解，精准锁定两个特征根 $r_1=2,\\;r_2=1$",
+          "detail": "展开 $y^*=\\mathrm{e}^{2x}+\\mathrm{e}^x+x\\mathrm{e}^x$。因自由项为 $\\gamma\\mathrm{e}^x$，故 $\\mathrm{e}^{2x}$ 绝不可能是非齐次特解部分，**只能是对应齐次方程的解** $\\implies r_1=2$！若 $x\\mathrm{e}^x$ 是齐次解则 $r_1=r_2=1$，与 $r_1=2$ 矛盾，故 $x\\mathrm{e}^x$ 必是撞单根后的非齐次特解，而 $\\mathrm{e}^x$ 是齐次解 $\\implies r_2=1$！于是特征方程为 $(r-1)(r-2)=r^2-3r+2=0\\implies \\alpha=-3,\\;\\beta=2$。"
+        },
+        {
+          "stepTitle": "将纯粹特解 $y_0^*=x\\mathrm{e}^x$ 代入方程定 $\\gamma=-1$ 并写通解",
+          "detail": "代入 $y_0^*=x\\mathrm{e}^x$（$(y_0^*)'=(x+1)\\mathrm{e}^x,\\;(y_0^*)''=(x+2)\\mathrm{e}^x$）：$$(x+2)\\mathrm{e}^x-3(x+1)\\mathrm{e}^x+2x\\mathrm{e}^x=-\\mathrm{e}^x=\\gamma\\mathrm{e}^x \\implies \\gamma=-1.$$故原方程通解为 $y=C_1\\mathrm{e}^x+C_2\\mathrm{e}^{2x}+x\\mathrm{e}^x$。"
+        }
+      ],
+      "finalAnswer": "$\\alpha=-3,\\;\\beta=2,\\;\\gamma=-1$；通解为 $y=C_1\\mathrm{e}^x+C_2\\mathrm{e}^{2x}+x\\mathrm{e}^x$。",
+      "takeaway": "记住这道超级经典反问题逻辑链：「自由项 $\\gamma\\mathrm{e}^x$ 管不到 $\\mathrm{e}^{2x}\\implies r_1=2$」$\\to$「$r=1$ 不能二重$\\implies x\\mathrm{e}^x$ 是特解、$\\mathrm{e}^x$ 是齐次解$\\implies r_2=1$」！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.395-396",
+        "pdfPage": 400,
+        "itemRef": "例 15.18"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_15_25",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-19",
+      "stage": "foundation",
+      "section": "三、高阶常系数线性方程与欧拉方程（基础例 15.15~15.20）",
+      "kind": "example",
+      "title": "【例 15.19】由特解 $y_1=\\mathrm{e}^x\\cos 2x,\\;y_2=x$ 反求四阶常系数齐次线性微分方程",
+      "examWeight": "core",
+      "problem": "已知某四阶常系数齐次线性微分方程有特解 $y_1(x)=\\mathrm{e}^x\\cos 2x,\\;y_2(x)=x$，且方程中 $y^{(4)}$ 前的系数为 $1$，该方程为 ______。",
+      "steps": [
+        {
+          "stepTitle": "从两个特解直接读出全部 4 个特征根",
+          "detail": "① 由 $y_1(x)=\\mathrm{e}^x\\cos 2x$ 知一对共轭复根 **$1\\pm 2\\mathrm{i}$** 必为特征根；② 将 $y_2(x)=x$ 改写为 $x^1\\mathrm{e}^{0\\cdot x}$，知 **$r=0$ 至少为二重实根**！方程恰为四阶，故 4 个特征根恰好为 $1\\pm 2\\mathrm{i},\\;0,\\;0$。"
+        },
+        {
+          "stepTitle": "乘出特征多项式还原四阶方程",
+          "detail": "特征方程为 $\\bigl[(r-1)^2+4\\bigr]r^2=(r^2-2r+5)r^2=r^4-2r^3+5r^2=0$，故所求四阶微分方程为$$y^{(4)}-2y'''+5y''=0.$$"
+        }
+      ],
+      "finalAnswer": "$y^{(4)}-2y'''+5y''=0$",
+      "takeaway": "看到 $y_2=x$ 千万别漏掉「$0$ 是二重根」（同理若给 $x^2$ 则 $0$ 至少是三重根）！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.396-397",
+        "pdfPage": 401,
+        "itemRef": "例 15.19"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_15_25",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-20",
+      "stage": "foundation",
+      "section": "三、高阶常系数线性方程与欧拉方程（基础例 15.15~15.20）",
+      "kind": "example",
+      "title": "【例 15.20 · 仅数一】欧拉方程 $x^2 y''+4xy'+2y=0\\;(x>0)$ 标准换元求解",
+      "examWeight": "core",
+      "problem": "欧拉方程 $x^2\\dfrac{\\mathrm{d}^2 y}{\\mathrm{d}x^2}+4x\\dfrac{\\mathrm{d}y}{\\mathrm{d}x}+2y=0\\;(x>0)$ 的通解为 ______。",
+      "steps": [
+        {
+          "stepTitle": "令 $x=\\mathrm{e}^t\\;(t=\\ln x)$ 化为常系数齐次方程",
+          "detail": "由 $x^2 y''=y''(t)-y'(t),\\;xy'=y'(t)$（直接套 $p-1=4-1=3$），方程化为$$\\frac{\\mathrm{d}^2 y}{\\mathrm{d}t^2}+3\\frac{\\mathrm{d}y}{\\mathrm{d}t}+2y=0.$$"
+        },
+        {
+          "stepTitle": "解特征方程并务必用 $t=\\ln x$ 回代！",
+          "detail": "特征方程 $r^2+3r+2=0\\implies r_1=-1,\\;r_2=-2$，故 $y(t)=C_1\\mathrm{e}^{-t}+C_2\\mathrm{e}^{-2t}$。回代 $\\mathrm{e}^{-t}=\\frac{1}{x}$ 得通解$$y=\\frac{C_1}{x}+\\frac{C_2}{x^2}\\qquad(C_1,C_2\\text{ 为任意常数}).$$"
+        }
+      ],
+      "finalAnswer": "$y=\\dfrac{C_1}{x}+\\dfrac{C_2}{x^2}$（$C_1,C_2$ 为任意常数）。",
+      "takeaway": "欧拉方程最后一步务必回代 $t=\\ln x$（$\\mathrm{e}^{rt}=x^r$），切忌停在 $y(t)$ 就交卷！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.397-398",
+        "pdfPage": 402,
+        "itemRef": "例 15.20"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_15_25",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-21",
+      "stage": "foundation",
+      "section": "四、几何与物理应用及数三差分方程（基础例 15.21~15.25）",
+      "kind": "example",
+      "title": "【例 15.21】达·芬奇自行车追及问题（曳物线轨迹方程建立与求解）",
+      "examWeight": "core",
+      "problem": "设自行车前轮和后轮与地面的接触点分别为 $P$ 和 $Q$，并设 $|PQ|=1$，初始时刻 $P$ 在原点，$Q$ 在 $(1,0)$ 点，若前轮沿 $y$ 轴的正方向前进，求 $Q$ 点的运动轨迹。",
+      "steps": [
+        {
+          "stepTitle": "利用「后轮切线始终指向前轮」建立微分方程",
+          "detail": "设 $Q(x,y)$ 在曲线 $y=y(x)$ 上，$P(0,Y)$ 在 $y$ 轴正向（$Y>y$）。由 $|PQ|=1$ 得 $x^2+(y-Y)^2=1\\implies y-Y=-\\sqrt{1-x^2}$。因为 $Q$ 处切线方向就是 $QP$ 方向，故$$\\frac{\\mathrm{d}y}{\\mathrm{d}x}=\\frac{y-Y}{x-0}=-\\frac{\\sqrt{1-x^2}}{x}\\qquad(0<x\\le 1).$$"
+        },
+        {
+          "stepTitle": "三角换元 $x=\\sin t$ 积分并用 $y(1)=0$ 定常数",
+          "detail": "令 $x=\\sin t\\;(t\\in(0,\\frac{\\pi}{2}])$：$$y=-\\int\\frac{\\sqrt{1-x^2}}{x}\\,\\mathrm{d}x=-\\int\\frac{\\cos^2 t}{\\sin t}\\,\\mathrm{d}t=\\int(\\sin t-\\csc t)\\,\\mathrm{d}t=-\\cos t-\\ln|\\csc t-\\cot t|+C.$$利用 $\\frac{1}{\\csc t-\\cot t}=\\csc t+\\cot t=\\frac{1+\\sqrt{1-x^2}}{x}$，还原得$$y=\\ln\\frac{1+\\sqrt{1-x^2}}{x}-\\sqrt{1-x^2}+C.$$代入 $x=1,y=0$ 得 $C=0$，故轨迹方程为 $y=\\ln\\dfrac{1+\\sqrt{1-x^2}}{x}-\\sqrt{1-x^2}$。（对照强化例15.18 用 $x=\\cos t$ 亦得同解！）"
+        }
+      ],
+      "finalAnswer": "$y=\\ln\\dfrac{1+\\sqrt{1-x^2}}{x}-\\sqrt{1-x^2}\\;(0<x\\le 1)$",
+      "takeaway": "追及曲线核心一句话：**「追及点到被追及点的连线始终为该点的切线方向」**；同时收藏积分 $-\\int\\frac{\\sqrt{1-x^2}}{x}\\,\\mathrm{d}x=\\ln\\frac{1+\\sqrt{1-x^2}}{x}-\\sqrt{1-x^2}+C$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.398-399",
+        "pdfPage": 403,
+        "itemRef": "例 15.21",
+        "crossRef": "27张宇《高数18讲》(强化) P.200 强化例 15.18"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_15_25",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-22",
+      "stage": "foundation",
+      "section": "四、几何与物理应用及数三差分方程（基础例 15.21~15.25）",
+      "kind": "example",
+      "title": "【例 15.22 · 仅数一、二】飞机减速伞滑行方程：用 $a=v\\frac{\\mathrm{d}v}{\\mathrm{d}x}$ 直消时间 $t$",
+      "examWeight": "core",
+      "problem": "一质量为 $m$ 的飞机，着陆时的水平速度为 $v(0)$。经测试，减速伞打开后，飞机所受的总阻力与飞机的速度成正比，比例系数为 $k\\;(k>0)$。从飞机接触跑道开始计时，设 $t$ 时刻飞机的滑行距离为 $x(t)$，速度为 $v(t)$，则飞机滑行的位移方程为（ ）\n（A）$x(t)=\\dfrac{m}{k}\\bigl[v(0)-v(t)\\bigr]$　（B）$x(t)=\\dfrac{m}{k}\\bigl[v(t)-v(0)\\bigr]$　（C）$x(t)=km\\bigl[v(0)-v(t)\\bigr]$　（D）$x(t)=km\\bigl[v(t)-v(0)\\bigr]$",
+      "steps": [
+        {
+          "stepTitle": "列牛顿第二定律并用 $a=v\\frac{\\mathrm{d}v}{\\mathrm{d}x}$ 消去时间 $t$ 与速度 $v$",
+          "detail": "阻力与运动方向相反，故 $m\\frac{\\mathrm{d}v}{\\mathrm{d}t}=-kv$。因为选项直接给 $x$ 与 $v$ 的关系，改写 $\\frac{\\mathrm{d}v}{\\mathrm{d}t}=\\frac{\\mathrm{d}v}{\\mathrm{d}x}\\frac{\\mathrm{d}x}{\\mathrm{d}t}=v\\frac{\\mathrm{d}v}{\\mathrm{d}x}$，得$$mv\\frac{\\mathrm{d}v}{\\mathrm{d}x}=-kv \\implies \\mathrm{d}x=-\\frac{m}{k}\\,\\mathrm{d}v.$$"
+        },
+        {
+          "stepTitle": "积分并用 $x(0)=0$ 确定常数",
+          "detail": "积分得 $x(t)=-\\frac{m}{k}v(t)+C$，由 $x(0)=0$ 得 $C=\\frac{m}{k}v(0)$，故 $x(t)=\\dfrac{m}{k}\\bigl[v(0)-v(t)\\bigr]$。（延伸问滑行总位移一半时速度见强化例15.17！）"
+        }
+      ],
+      "finalAnswer": "**选（A）**：$x(t)=\\dfrac{m}{k}\\bigl[v(0)-v(t)\\bigr]$。",
+      "takeaway": "只要物理题问「位移 $x$ 与速度 $v$ 的关系」而不涉及时间 $t$，立刻亮出加速神恒等式 **$a=v\\frac{\\mathrm{d}v}{\\mathrm{d}x}$**，一步消掉 $t$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.399-400",
+        "pdfPage": 404,
+        "itemRef": "例 15.22",
+        "crossRef": "27张宇《高数18讲》(强化) P.199 强化例 15.17"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_15_25",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-23",
+      "stage": "foundation",
+      "section": "四、几何与物理应用及数三差分方程（基础例 15.21~15.25）",
+      "kind": "example",
+      "title": "【例 15.23 · 仅数一、二】牛顿冷却定律建立一阶微分方程（两条件定 $C$ 与 $k$）",
+      "examWeight": "core",
+      "problem": "已知高温物体置于低温介质中，$t$ 时刻物体温度 $T(t)\\;(\\text{℃})$ 对时间（单位：$\\text{min}$）的变化率与 $t$ 时刻物体和介质的温差 $T-T_0$ 成正比（$T>T_0$），比例系数为 $k\\;(k>0)$。现将一初始温度为 $120\\;\\text{℃}$ 的物体在 $20\\;\\text{℃}$ 恒温介质中冷却，$30\\;\\text{min}$ 后该物体温度降至 $30\\;\\text{℃}$，则 $T(t)=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "列冷却方程（注意降温必添负号！）求通解",
+          "detail": "因温度随时间下降（$\\frac{\\mathrm{d}T}{\\mathrm{d}t}<0$）而 $k>0,\\;T-20>0$，故列方程$$\\frac{\\mathrm{d}T}{\\mathrm{d}t}=-k(T-20)\\implies T(t)=C\\mathrm{e}^{-kt}+20.$$"
+        },
+        {
+          "stepTitle": "先后代入 $T(0)=120$ 与 $T(30)=30$ 确定 $C$ 与 $k$",
+          "detail": "由 $T(0)=C+20=120$ 得 $C=100$；再代入 $T(30)=100\\mathrm{e}^{-30k}+20=30\\implies \\mathrm{e}^{-30k}=\\frac{1}{10}\\implies k=\\frac{\\ln 10}{30}$，故$$T(t)=100\\mathrm{e}^{-\\frac{\\ln 10}{30}t}+20.$$"
+        }
+      ],
+      "finalAnswer": "$T(t)=100\\mathrm{e}^{-\\frac{\\ln 10}{30}t}+20$",
+      "takeaway": "冷却/衰变建模两大必查项：① 降温变化率写 **$-k$**；② $k$ 不是已知量，最后必须用第二观测点把 $k$ 解出来消掉！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.400-401",
+        "pdfPage": 405,
+        "itemRef": "例 15.23"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_15_25",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-24",
+      "stage": "foundation",
+      "section": "四、几何与物理应用及数三差分方程（基础例 15.21~15.25）",
+      "kind": "example",
+      "title": "【例 15.24 · 仅数三拓展】撞特征根的一阶常系数差分方程 $\\Delta y_t=t$",
+      "examWeight": "extended",
+      "problem": "【仅数学三】差分方程 $\\Delta y_t=t$ 的通解为 $y_t=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "化标准形 $y_{t+1}-y_t=t$ 求齐次通解并判别撞根",
+          "detail": "方程即 $y_{t+1}-y_t=1^t\\cdot t$（$a=-1,\\;d=1$）。齐次方程 $y_{t+1}-y_t=0$ 特征根 $\\lambda=1$，通解 $y_C=C$。因 $a+d=0$（撞根！），按表 15-2 设特解 $y_t^*=t(a+bt)$。"
+        },
+        {
+          "stepTitle": "代入差分方程定出 $(a,b)$ 写通解",
+          "detail": "$(t+1)[a+b(t+1)]-t(a+bt)=2bt+(a+b)=t\\implies b=\\frac{1}{2},\\;a=-\\frac{1}{2}$，故 $y_t^*=\\frac{1}{2}t(t-1)$，通解为 $y_t=\\dfrac{1}{2}t(t-1)+C$。"
+        }
+      ],
+      "finalAnswer": "$y_t=\\dfrac{1}{2}t(t-1)+C$（$C$ 为任意常数）。",
+      "takeaway": "$\\Delta y_t=t$ 其实就是高中数列累加法 $y_t-y_0=\\sum_{k=0}^{t-1}k=\\frac{t(t-1)}{2}$！仅数三要求，数一了解即可。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.402",
+        "pdfPage": 407,
+        "itemRef": "例 15.24（仅数学三）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_15_25",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-25",
+      "stage": "foundation",
+      "section": "四、几何与物理应用及数三差分方程（基础例 15.21~15.25）",
+      "kind": "example",
+      "title": "【例 15.25 · 仅数三拓展】三角自由项差分方程 $y_{t+1}-y_t=4\\cos\\frac{\\pi}{3}t$",
+      "examWeight": "extended",
+      "problem": "【仅数学三】求一阶差分方程 $y_{t+1}-y_t=4\\cos\\dfrac{\\pi}{3}t$ 的通解。",
+      "steps": [
+        {
+          "stepTitle": "检验三角判别行列式 $D\\ne 0$ 并设特解",
+          "detail": "齐次通解 $y_A(t)=A$（$a=-1,\\;\\omega=\\frac{\\pi}{3}$）。算判别式$$D=\\begin{vmatrix}-1+\\cos\\frac{\\pi}{3}&\\sin\\frac{\\pi}{3}\\\\-\\sin\\frac{\\pi}{3}&-1+\\cos\\frac{\\pi}{3}\\end{vmatrix}=\\begin{vmatrix}-\\frac{1}{2}&\\frac{\\sqrt{3}}{2}\\\\-\\frac{\\sqrt{3}}{2}&-\\frac{1}{2}\\end{vmatrix}=1\\ne 0,$$故设特解 $y_t^*=B_0\\cos\\frac{\\pi}{3}t+B_1\\sin\\frac{\\pi}{3}t$。"
+        },
+        {
+          "stepTitle": "展开和角公式对比系数解出 $B_0=-2,\\;B_1=2\\sqrt{3}$",
+          "detail": "代入 $y_{t+1}^*-y_t^*=4\\cos\\frac{\\pi}{3}t$ 得 $(-\\frac{1}{2}B_0+\\frac{\\sqrt{3}}{2}B_1)\\cos\\frac{\\pi}{3}t+(-\\frac{\\sqrt{3}}{2}B_0-\\frac{1}{2}B_1)\\sin\\frac{\\pi}{3}t=4\\cos\\frac{\\pi}{3}t$，解得 $B_0=-2,\\;B_1=2\\sqrt{3}$，故通解为$$y_t=A-2\\cos\\frac{\\pi}{3}t+2\\sqrt{3}\\sin\\frac{\\pi}{3}t.$$"
+        }
+      ],
+      "finalAnswer": "$y_t=A-2\\cos\\dfrac{\\pi}{3}t+2\\sqrt{3}\\sin\\dfrac{\\pi}{3}t$（$A$ 为任意常数）。",
+      "takeaway": "仅数三拓展题型，原书注考频较低，数三考生考前记住表 15-2 特解设定即可。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.402-403",
+        "pdfPage": 407,
+        "itemRef": "例 15.25（仅数学三）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy30_15_25",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-26",
+      "stage": "intensive",
+      "section": "一、一阶与二阶可降阶强化精练（强化例 15.1~15.7）",
+      "kind": "example",
+      "title": "【强化例 15.1】齐次型微分方程 $x+yy'=y-xy'$ 标准求解（对数螺旋线）",
+      "examWeight": "core",
+      "problem": "微分方程 $x+yy'=y-xy'$ 的通解为 ______。",
+      "steps": [
+        {
+          "stepTitle": "整理成齐次型 $y'=\\frac{y-x}{y+x}$ 并令 $u=\\frac{y}{x}$",
+          "detail": "移项得 $y'(x+y)=y-x\\implies y'=\\frac{\\frac{y}{x}-1}{\\frac{y}{x}+1}$。令 $u=\\frac{y}{x}\\;(y'=u+x\\frac{\\mathrm{d}u}{\\mathrm{d}x})$，代入整理：$$x\\frac{\\mathrm{d}u}{\\mathrm{d}x}=\\frac{u-1}{u+1}-u=-\\frac{1+u^2}{1+u}\\implies \\frac{1+u}{1+u^2}\\,\\mathrm{d}u=-\\frac{1}{x}\\,\\mathrm{d}x.$$"
+        },
+        {
+          "stepTitle": "拆项积分并还原 $u=\\frac{y}{x}$",
+          "detail": "两边积分：$$\\arctan u+\\frac{1}{2}\\ln(1+u^2)=-\\ln|x|+C\\implies\\arctan\\frac{y}{x}+\\frac{1}{2}\\ln(x^2+y^2)=C.$$（注：也可直接用全微分大观！方程即 $\\frac{y\\,\\mathrm{d}x-x\\,\\mathrm{d}y}{x^2+y^2}-\\frac{x\\,\\mathrm{d}x+y\\,\\mathrm{d}y}{x^2+y^2}=0$，对照第 13 讲表 13-1 瞬间口算！）"
+        }
+      ],
+      "finalAnswer": "$\\arctan\\dfrac{y}{x}+\\dfrac{1}{2}\\ln(x^2+y^2)=C$（$C$ 为任意常数）。",
+      "takeaway": "看到 $x\\,\\mathrm{d}x+y\\,\\mathrm{d}y$ 与 $y\\,\\mathrm{d}x-x\\,\\mathrm{d}y$ 同时出现，两边同除 $x^2+y^2$ 结合第 13 讲全微分公式大观直接 5 秒口算！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.185-186",
+        "pdfPage": 198,
+        "itemRef": "强化例 15.1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy18_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-27",
+      "stage": "intensive",
+      "section": "一、一阶与二阶可降阶强化精练（强化例 15.1~15.7）",
+      "kind": "example",
+      "title": "【强化例 15.2】分式线性方程平移交点 $(1,1)$ 化齐次求特解",
+      "examWeight": "core",
+      "problem": "微分方程 $\\dfrac{\\mathrm{d}y}{\\mathrm{d}x}=\\dfrac{2x-5y+3}{2x+4y-6}$ 满足 $y(0)=2$ 的特解为 ______。",
+      "steps": [
+        {
+          "stepTitle": "解两直线交点 $(1,1)$ 并作平移 $x=X+1,\\;y=Y+1$ 化为齐次方程",
+          "detail": "联立 $\\begin{cases}2x-5y+3=0,\\\\2x+4y-6=0,\\end{cases}$ 得交点 $x_0=1,\\;y_0=1$。令 $x=X+1,\\;y=Y+1$，方程化为齐次型$$\\frac{\\mathrm{d}Y}{\\mathrm{d}X}=\\frac{2X-5Y}{2X+4Y}.$$"
+        },
+        {
+          "stepTitle": "令 $U=\\frac{Y}{X}$ 分离变量并部分分式拆分积分",
+          "detail": "令 $Y=UX$ 得 $X\\frac{\\mathrm{d}U}{\\mathrm{d}X}=\\frac{2-7U-4U^2}{2+4U}=-\\frac{(4U-1)(U+2)}{2+4U}$。当 $U\\ne -2,\\;\\frac{1}{4}$ 时分离变量并裂项：$$\\left(\\frac{2}{3}\\frac{1}{U+2}+\\frac{4}{3}\\frac{1}{4U-1}\\right)\\mathrm{d}U=-\\frac{1}{X}\\,\\mathrm{d}X\\implies \\ln\\sqrt[3]{(U+2)^2|4U-1|}=\\ln\\frac{C}{|X|}.$$化简得 $(Y+2X)^2(4Y-X)=C_1$，回代 $X=x-1,Y=y-1$ 得通解 $(y+2x-3)^2(4y-x-3)=C_1$。"
+        },
+        {
+          "stepTitle": "代入初值 $y(0)=2$ 定出 $C_1=5$（并检验奇解不满足初值）",
+          "detail": "代入 $x=0,y=2$ 得 $(2-3)^2(8-3)=5=C_1$，故特解为 $(y+2x-3)^2(4y-x-3)=5$（检验奇解 $U=-2$ 与 $U=\\frac{1}{4}$ 均不过 $(0,2)$）。"
+        }
+      ],
+      "finalAnswer": "$(y+2x-3)^2(4y-x-3)=5$",
+      "takeaway": "分式线性方程不平行时标准三步：**求交点平移 $\\to$ 令 $U=Y/X$ 裂项积分 $\\to$ 回代原变量定初值**，每一步都规整无死角！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.186",
+        "pdfPage": 199,
+        "itemRef": "强化例 15.2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy18_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-28",
+      "stage": "intensive",
+      "section": "一、一阶与二阶可降阶强化精练（强化例 15.1~15.7）",
+      "kind": "example",
+      "title": "【强化例 15.3】周期系数一阶齐次线性方程存在周期非零解的充要条件",
+      "examWeight": "core",
+      "problem": "设一阶齐次线性微分方程 $y'+p(x)y=0$ 中，$p(x)$ 是以 $T$ 为周期的连续函数，则「该方程的非零解以 $T$ 为周期」是「$\\displaystyle\\int_0^T p(x)\\,\\mathrm{d}x=0$」的（ ）\n（A）充分非必要条件　（B）必要非充分条件　（C）充分必要条件　（D）既非充分也非必要条件",
+      "steps": [
+        {
+          "stepTitle": "写出变限积分非零通解并利用第 11 讲原函数周期充要定理",
+          "detail": "方程的非零解为 $y(x)=C\\mathrm{e}^{-\\int_0^x p(t)\\,\\mathrm{d}t}\\;(C\\ne 0)$。因指数函数严格单调，故$$y(x)\\text{ 以 }T\\text{ 为周期}\\iff\\int_0^x p(t)\\,\\mathrm{d}t\\text{ 以 }T\\text{ 为周期}\\iff\\int_0^T p(x)\\,\\mathrm{d}x=0$$（最后一步直接由第 11 讲「周期函数的变限积分仍为同周期函数 $\\iff$ 周期积分为零」得出！）。"
+        }
+      ],
+      "finalAnswer": "**选（C）**（充分必要条件）。",
+      "takeaway": "记住这条经典跨讲充要定理：周期函数 $p(x)$ 对应的 $y'+p(x)y=0$ 非零解以 $T$ 为周期 $\\iff \\int_0^T p(x)\\,\\mathrm{d}x=0$！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.187",
+        "pdfPage": 200,
+        "itemRef": "强化例 15.3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy18_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-29",
+      "stage": "intensive",
+      "section": "一、一阶与二阶可降阶强化精练（强化例 15.1~15.7）",
+      "kind": "example",
+      "title": "【强化例 15.4 · 仅数一、二】先解一阶线性方程再配完全平方求曲线弧长",
+      "examWeight": "core",
+      "problem": "设函数 $y(x)$ 是微分方程 $2xy'-4y=2\\ln x-1$ 满足条件 $y(1)=\\dfrac{1}{4}$ 的解，求曲线 $y=y(x)\\;(1\\le x\\le\\mathrm{e})$ 的弧长。",
+      "steps": [
+        {
+          "stepTitle": "先化 $y'$ 系数为 $1$ 解一阶线性方程定特解",
+          "detail": "化为 $y'-\\frac{2}{x}y=\\frac{2\\ln x-1}{2x}$，套通解公式（$\\mathrm{e}^{\\int-\\frac{2}{x}\\mathrm{d}x}=x^{-2}$）：$$y=x^2\\left(\\int\\frac{2\\ln x-1}{2x^3}\\,\\mathrm{d}x+C\\right)=x^2\\left[-\\frac{1}{4}\\int(2\\ln x-1)\\,\\mathrm{d}\\!\\left(\\frac{1}{x^2}\\right)+C\\right]=-\\frac{1}{2}\\ln x+Cx^2.$$（检验：$-\\frac{1}{4}\\left[\\frac{2\\ln x-1}{x^2}-\\int\\frac{2}{x^3}\\,\\mathrm{d}x\\right]=-\\frac{1}{4}\\frac{2\\ln x}{x^2}=-\\frac{\\ln x}{2x^2}$！）代入 $y(1)=\\frac{1}{4}$ 得 $C=\\frac{1}{4}$，故 $y=-\\frac{1}{2}\\ln x+\\frac{1}{4}x^2$。"
+        },
+        {
+          "stepTitle": "代弧长公式配成完全平方去根号",
+          "detail": "求导 $y'=-\\frac{1}{2x}+\\frac{x}{2}$，故 $1+(y')^2=1+\\left(\\frac{x}{2}-\\frac{1}{2x}\\right)^2=\\left(\\frac{x}{2}+\\frac{1}{2x}\\right)^2$！从而弧长为$$s=\\int_1^{\\mathrm{e}}\\sqrt{1+(y')^2}\\,\\mathrm{d}x=\\frac{1}{2}\\int_1^{\\mathrm{e}}\\left(x+\\frac{1}{x}\\right)\\mathrm{d}x=\\left.\\frac{1}{2}\\left(\\frac{1}{2}x^2+\\ln x\\right)\\right|_1^{\\mathrm{e}}=\\frac{1}{4}\\mathrm{e}^2+\\frac{1}{4}.$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{1}{4}\\mathrm{e}^2+\\dfrac{1}{4}$",
+      "takeaway": "考研弧长压轴套路：$y'=\\frac{x}{2}-\\frac{1}{2x}$ 平方加 $1$ 必然翻号变成完全平方 $\\left(\\frac{x}{2}+\\frac{1}{2x}\\right)^2$，这是自检你前面微分方程有没有算对的天然试金石！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.187-188",
+        "pdfPage": 200,
+        "itemRef": "强化例 15.4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy18_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-30",
+      "stage": "intensive",
+      "section": "一、一阶与二阶可降阶强化精练（强化例 15.1~15.7）",
+      "kind": "example",
+      "title": "【强化例 15.5 · 防丢解经典】缺 $y$ 型 $y''+2x(y')^2=0,\\;y(0)=1,y'(0)=0$ 的唯一解竟是被除掉的 $u\\equiv 0$！",
+      "examWeight": "core",
+      "problem": "求定解问题 $\\begin{cases}y''+2x(y')^2=0,\\\\y(0)=1,\\\\y'(0)=0\\end{cases}$ 的解。",
+      "steps": [
+        {
+          "stepTitle": "令 $u(x)=y'(x)$ 降阶并严防丢掉常数解 $u\\equiv 0$",
+          "detail": "方程化为 $u'+2xu^2=0$。分离变量时分两种情形：① $u\\ne 0$ 得 $-\\frac{\\mathrm{d}u}{u^2}=2x\\,\\mathrm{d}x\\implies u=\\frac{1}{x^2+C}$；② **绝不可漏的零解 $u\\equiv 0$**！"
+        },
+        {
+          "stepTitle": "代入 $u(0)=y'(0)=0$ 锁定 $u\\equiv 0$ 得常值解 $y\\equiv 1$",
+          "detail": "非零支 $u=\\frac{1}{x^2+C}$ 对任意有限常数 $C$ 均无法满足 $u(0)=0$，故只能取 $u(x)=y'(x)\\equiv 0\\implies y(x)\\equiv C_1$。代入 $y(0)=1$ 得唯一解 $y\\equiv 1$！"
+        }
+      ],
+      "finalAnswer": "$y\\equiv 1$",
+      "takeaway": "**考研经典暗雷**：凡分离变量除以 $u^2$ 时，立刻在草稿纸旁写上「或 $u\\equiv 0$」，否则遇到 $y'(0)=0$ 就会卡死在 $\\frac{1}{C}=0$ 无解！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.188-189",
+        "pdfPage": 201,
+        "itemRef": "强化例 15.5 & P.189 注"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy18_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-31",
+      "stage": "intensive",
+      "section": "一、一阶与二阶可降阶强化精练（强化例 15.1~15.7）",
+      "kind": "example",
+      "title": "【强化例 15.6】缺 $x$ 型可降阶方程 $2y^2 y''=[1+(y')^2]^2$ 定解（衔接曲率强化例 15.15）",
+      "examWeight": "core",
+      "problem": "求微分方程 $2y^2 y''=\\bigl[1+(y')^2\\bigr]^2$ 满足初始条件 $y(3)=2,\\;y'(3)=1$ 的解。",
+      "steps": [
+        {
+          "stepTitle": "按缺 $x$ 型令 $y'=p(y),\\;y''=p\\frac{\\mathrm{d}p}{\\mathrm{d}y}$ 积分并立刻用初值定 $C_1=0$",
+          "detail": "方程化为 $2y^2 p\\frac{\\mathrm{d}p}{\\mathrm{d}y}=(1+p^2)^2\\implies \\frac{2p\\,\\mathrm{d}p}{(1+p^2)^2}=\\frac{\\mathrm{d}y}{y^2}$。两边积分（注意两边负号同消）：$$\\frac{1}{1+p^2}=\\frac{1}{y}+C_1\\implies p^2=\\frac{(1-C_1)y-1}{1+C_1 y}.$$立刻代入初值 $y=2,\\;p=1$ 得 $1=\\frac{2(1-C_1)-1}{1+2C_1}\\implies C_1=0$！从而 $p^2=y-1$。"
+        },
+        {
+          "stepTitle": "由 $y'(3)=1>0$ 锁定正根 $p=+\\sqrt{y-1}$ 再分离变量",
+          "detail": "因 $y'(3)=1>0$，取 $\\frac{\\mathrm{d}y}{\\mathrm{d}x}=\\sqrt{y-1}\\implies \\frac{\\mathrm{d}y}{\\sqrt{y-1}}=\\mathrm{d}x\\implies 2\\sqrt{y-1}=x+C_2$。代入 $x=3,y=2$ 得 $C_2=-1$，即 $2\\sqrt{y-1}=x-1\\;(x\\ge 1)$，平方得$$y=\\frac{1}{4}(x-1)^2+1\\qquad(x\\ge 1).$$"
+        }
+      ],
+      "finalAnswer": "$y=\\dfrac{1}{4}(x-1)^2+1\\;(x\\ge 1)$",
+      "takeaway": "注意两点：① 解出 $C_1=0$ 后立刻化简成 $p^2=y-1$ 超级清爽；② 必须写明定义域 **$x\\ge 1$**（因 $x-1=2\\sqrt{y-1}\\ge 0$ 且 $y'=\\frac{x-1}{2}\\ge 0$）！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.189-190",
+        "pdfPage": 202,
+        "itemRef": "强化例 15.6"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy18_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-32",
+      "stage": "intensive",
+      "section": "一、一阶与二阶可降阶强化精练（强化例 15.1~15.7）",
+      "kind": "example",
+      "title": "【强化例 15.7】全微分凑商降阶技巧：$(yy'/x)'=0$ 秒解 $xyy''+x(y')^2-yy'=0$",
+      "examWeight": "core",
+      "problem": "求解微分方程 $xyy''+x(y')^2-yy'=0$。",
+      "steps": [
+        {
+          "stepTitle": "识别 $(yy')'=yy''+(y')^2$，同除 $x^2$ 凑成商的导数",
+          "detail": "方程同时含 $x$ 与 $y$，不能直接按缺 $x$/缺 $y$ 处理；但观察前两项 $x\\bigl[yy''+(y')^2\\bigr]=x(yy')'$，原方程即 $x(yy')'-yy'=0$！两端同除以 $x^2\\;(x\\ne 0)$ 恰凑成商导数：$$\\frac{x(yy')'-yy'}{x^2}=\\left(\\frac{yy'}{x}\\right)'=0.$$"
+        },
+        {
+          "stepTitle": "两次积分得通解",
+          "detail": "积分一次得 $\\frac{yy'}{x}=C_1\\implies y\\,\\mathrm{d}y=C_1 x\\,\\mathrm{d}x$，再积分得$$\\frac{1}{2}y^2=\\frac{1}{2}C_1 x^2+C_2\\quad(\\text{亦即 }y^2=C_1 x^2+2C_2,\\;C_1,C_2\\text{ 为任意常数}).$$"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{1}{2}y^2=\\dfrac{1}{2}C_1 x^2+C_2$（$C_1,C_2$ 为任意常数）。",
+      "takeaway": "看到二阶方程里同时出现 **$yy''+(y')^2$**，条件反射般把它写成 **$(yy')'$**（就是 $\\frac{1}{2}(y^2)''$！），瞬间降为一阶！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.190",
+        "pdfPage": 203,
+        "itemRef": "强化例 15.7"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy18_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-33",
+      "stage": "intensive",
+      "section": "二、高阶线性、欧拉与换元化归（强化例 15.8~15.12）",
+      "kind": "example",
+      "title": "【强化例 15.8】一切解满足 $\\int_0^{+\\infty}y(x)\\,\\mathrm{d}x$ 收敛的参数范围（含原书印刷错勘误 #51！）",
+      "examWeight": "core",
+      "problem": "如果对微分方程 $y''-2ay'+(a+2)y=0$ 的任一解 $y(x)$，反常积分 $\\displaystyle\\int_0^{+\\infty}y(x)\\,\\mathrm{d}x$ 均收敛，则 $a$ 的取值范围为（ ）\n（A）$(-2,-1]$　（B）$(-\\infty,-1]$　（C）$(-2,0)$　（D）$(-\\infty,0)$",
+      "steps": [
+        {
+          "stepTitle": "法一（分类详证，含 P.191 印刷错勘误 #51）",
+          "detail": "特征方程 $\\lambda^2-2a\\lambda+(a+2)=0$，判别式 $\\Delta=4(a+1)(a-2)$：\n① $\\Delta>0\\;(a<-1\\text{ 或 }a>2)$：两不等实根 $\\lambda_{1,2}=a\\pm\\sqrt{a^2-a-2}$，需最大根 $\\lambda_2<0\\iff a+\\sqrt{a^2-a-2}<0\\iff -2<a<-1$；\n② $\\Delta=0\\;(a=-1\\text{ 或 }a=2)$：二重根 $\\lambda=a$，需 $a<0\\implies a=-1$；\n③ $\\Delta<0\\;(-1<a<2)$：共轭复根 $\\lambda_{1,2}=a\\pm\\mathrm{i}\\sqrt{-a^2+a+2}$，通解为 $y(x)=\\mathrm{e}^{ax}\\bigl[C_1\\cos(\\sqrt{-a^2+a+2}\\,x)+C_2\\sin(\\sqrt{-a^2+a+2}\\,x)\\bigr]$（**勘误 #51**：原书 P.191 根号错延展盖住了 $x$！），需实部 $a<0\\implies -1<a<0$。\n合并三段得 $-2<a<0$！"
+        },
+        {
+          "stepTitle": "法二（劳斯充要条件 3 秒秒杀！）",
+          "detail": "一切解满足 $\\int_0^{+\\infty}y(x)\\,\\mathrm{d}x$ 收敛 $\\iff$ 全部特征根严格位于左半复平面 $\\operatorname{Re}(\\lambda_i)<0 \\iff$ 二次特征多项式系数全正：$$\\begin{cases}-2a>0,\\\\a+2>0,\\end{cases}\\iff -2<a<0!$$（亦可按书注代 $a=-2$ 与 $a=-\\frac{1}{2}$ 排除法秒选 C！）"
+        }
+      ],
+      "finalAnswer": "**选（C）**：$(-2,0)$。",
+      "takeaway": "劳斯稳定判据跨学科大杀器：二阶齐次 $y''+py'+qy=0$ 一切解在 $[0,+\\infty)$ 衰减/可积 $\\iff p>0$ 且 $q>0$，不用分三段 3 秒必中！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.190-191",
+        "pdfPage": 203,
+        "itemRef": "强化例 15.8"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy18_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-34",
+      "stage": "intensive",
+      "section": "二、高阶线性、欧拉与换元化归（强化例 15.8~15.12）",
+      "kind": "example",
+      "title": "【强化例 15.9 · 仅数一】欧拉方程 $x^2 y''+xy'-4y=0$ 定解（$p-1=0$ 妙消一阶项）",
+      "examWeight": "core",
+      "problem": "欧拉方程 $x^2 y''+xy'-4y=0$ 满足条件 $y(1)=1,\\;y'(1)=2$ 的解为 $y=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "令 $x=\\mathrm{e}^t$ 化为简谐双曲型常系数方程 $y''(t)-4y(t)=0$",
+          "detail": "因初值在 $x=1>0$，令 $x=\\mathrm{e}^t$，套公式 $p-1=1-1=0$，方程瞬间化简为$$\\frac{\\mathrm{d}^2 y}{\\mathrm{d}t^2}-4y=0.$$特征根 $\\lambda=\\pm 2$，得 $y(t)=C_1\\mathrm{e}^{2t}+C_2\\mathrm{e}^{-2t}$，回代得通解 $y(x)=C_1 x^2+\\dfrac{C_2}{x^2}$。"
+        },
+        {
+          "stepTitle": "代入 $y(1)=1,\\;y'(1)=2$ 解出 $y=x^2$",
+          "detail": "由 $\\begin{cases}C_1+C_2=1,\\\\2C_1-2C_2=2,\\end{cases}$ 得 $C_1=1,\\;C_2=0$，故特解为 $y=x^2$。"
+        }
+      ],
+      "finalAnswer": "$y=x^2$",
+      "takeaway": "齐次欧拉方程也可直接试幂解 $y=x^\\lambda$ 得特征方程 $\\lambda(\\lambda-1)+p\\lambda+q=0$，这里 $\\lambda^2-4=0\\implies\\lambda=\\pm 2$ 一眼出通解！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.192",
+        "pdfPage": 205,
+        "itemRef": "强化例 15.9"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy18_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-35",
+      "stage": "intensive",
+      "section": "二、高阶线性、欧拉与换元化归（强化例 15.8~15.12）",
+      "kind": "example",
+      "title": "【强化例 15.10】由特解 $y_1=t\\mathrm{e}^t,\\;y_2=\\sin 2t$ 反求四阶常系数齐次方程",
+      "examWeight": "core",
+      "problem": "以 $y_1=t\\mathrm{e}^t,\\;y_2=\\sin 2t$ 为两个特解的四阶常系数齐次线性微分方程为（ ）\n（A）$y^{(4)}-2y'''+5y''-8y'+4y=0$　（B）$y^{(4)}-2y'''+5y''+8y'+4y=0$\n（C）$y^{(4)}+2y'''+5y''-8y'+4y=0$　（D）$y^{(4)}-2y'''-5y''-8y'+4y=0$",
+      "steps": [
+        {
+          "stepTitle": "从两个特解读出全部 4 个特征根并展开特征多项式",
+          "detail": "① $t\\mathrm{e}^t=t^{2-1}\\mathrm{e}^{1\\cdot t}\\implies\\lambda=1$ 至少为二重实根；② $\\sin 2t=\\mathrm{e}^{0\\cdot t}\\sin 2t\\implies\\lambda=\\pm 2\\mathrm{i}$ 至少为一对单复根。方程为四阶，故特征方程恰好为$$(\\lambda-1)^2(\\lambda^2+4)=(\\lambda^2-2\\lambda+1)(\\lambda^2+4)=\\lambda^4-2\\lambda^3+5\\lambda^2-8\\lambda+4=0.$$"
+        },
+        {
+          "stepTitle": "写出微分方程对照选项",
+          "detail": "对应方程为 $y^{(4)}-2y'''+5y''-8y'+4y=0$，故选（A）。"
+        }
+      ],
+      "finalAnswer": "**选（A）**：$y^{(4)}-2y'''+5y''-8y'+4y=0$。",
+      "takeaway": "牢记展开检查技巧：$\\lambda=1$ 是特征根 $\\implies$ 系数之和必为 $0$！检验（A）：$1-2+5-8+4=0$，一眼排除其余三项！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.192-193",
+        "pdfPage": 205,
+        "itemRef": "强化例 15.10"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy18_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-36",
+      "stage": "intensive",
+      "section": "二、高阶线性、欧拉与换元化归（强化例 15.8~15.12）",
+      "kind": "example",
+      "title": "【强化例 15.11】逆用求导公式令 $u=\\mathrm{e}^y$ 化 $y'+1=\\mathrm{e}^{-y}\\sin x$ 为一阶线性",
+      "examWeight": "core",
+      "problem": "求微分方程 $y'+1=\\mathrm{e}^{-y}\\sin x$ 的通解。",
+      "steps": [
+        {
+          "stepTitle": "两边同乘 $\\mathrm{e}^y$ 凑出 $(\\mathrm{e}^y)'$",
+          "detail": "两边乘 $\\mathrm{e}^y$ 得 $\\mathrm{e}^y y'+\\mathrm{e}^y=\\sin x$，即关于 $u=\\mathrm{e}^y$ 的一阶常系数线性方程：$$(\\mathrm{e}^y)'+\\mathrm{e}^y=\\sin x.$$"
+        },
+        {
+          "stepTitle": "套一阶线性通解公式一步出解",
+          "detail": "$$\\mathrm{e}^y=\\mathrm{e}^{-\\int 1\\,\\mathrm{d}x}\\left(\\int\\mathrm{e}^x\\sin x\\,\\mathrm{d}x+C\\right)=\\mathrm{e}^{-x}\\left[\\frac{1}{2}\\mathrm{e}^x(\\sin x-\\cos x)+C\\right].$$（利用高频公式 $\\int\\mathrm{e}^x\\sin x\\,\\mathrm{d}x=\\frac{1}{2}\\mathrm{e}^x(\\sin x-\\cos x)+C$！）"
+        }
+      ],
+      "finalAnswer": "$\\mathrm{e}^y=\\mathrm{e}^{-x}\\left[C+\\dfrac{1}{2}\\mathrm{e}^x(\\sin x-\\cos x)\\right]$（$C$ 为任意常数）。",
+      "takeaway": "看到方程里出现 $y'$ 与 $\\mathrm{e}^{-y}$，立刻同乘 $\\mathrm{e}^y$ 触发 $(\\mathrm{e}^y)'$ 线性化（同理见 $\\frac{y'}{y}$ 凑 $(\\ln y)'$，见 $y'\\cos y$ 凑 $(\\sin y)'$）！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.193-194",
+        "pdfPage": 206,
+        "itemRef": "强化例 15.11"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy18_11_19",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-37",
+      "stage": "intensive",
+      "section": "二、高阶线性、欧拉与换元化归（强化例 15.8~15.12）",
+      "kind": "example",
+      "title": "【强化例 15.12】整体组合换元 $u=y+x^2$ 秒杀 $y'-\\sqrt{y+x^2}=-2x$",
+      "examWeight": "core",
+      "problem": "设 $x\\ge -2$，则微分方程 $y'-\\sqrt{y+x^2}=-2x$ 满足 $y(0)=1$ 的特解为 ______。",
+      "steps": [
+        {
+          "stepTitle": "移项识别 $(y+x^2)'=\\sqrt{y+x^2}$，整体换元 $u=y+x^2$",
+          "detail": "移项得 $y'+2x=\\sqrt{y+x^2}$！令 $u=y+x^2$，则 $\\frac{\\mathrm{d}u}{\\mathrm{d}x}=y'+2x=\\sqrt{u}$，立即分离变量：$$\\frac{\\mathrm{d}u}{\\sqrt{u}}=\\mathrm{d}x\\implies 2\\sqrt{u}=x+C\\implies 2\\sqrt{y+x^2}=x+C.$$"
+        },
+        {
+          "stepTitle": "代入 $y(0)=1$ 定 $C=2$ 并验证 $x\\ge -2$ 保证右端非负",
+          "detail": "代入 $x=0,y=1$ 得 $2=C$，故 $\\sqrt{y+x^2}=\\frac{x}{2}+1$（恰在 $x\\ge -2$ 上右端非负！）。平方整理得$$y=\\left(\\frac{x}{2}+1\\right)^2-x^2=-\\frac{3}{4}x^2+x+1\\qquad(x\\ge -2).$$"
+        }
+      ],
+      "finalAnswer": "$y=-\\dfrac{3}{4}x^2+x+1\\;(x\\ge -2)$",
+      "takeaway": "看到根号里面是 $y+x^2$、外面恰好晃着一个 $-2x$，移项就是 $(y+x^2)'$——「观察对象再化归」的典范！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.194",
+        "pdfPage": 207,
+        "itemRef": "强化例 15.12"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy18_11_19",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-38",
+      "stage": "intensive",
+      "section": "三、建立微分方程并求解（强化例 15.13~15.19）",
+      "kind": "example",
+      "title": "【强化例 15.13】由函数方程 $f(xy)=yf(x)+xf(y)$ 借导数定义建一阶线性 ODE 求极小值",
+      "examWeight": "core",
+      "problem": "已知 $f(xy)=yf(x)+xf(y)$ 对任意正实数 $x,y$ 均成立，且 $f'(1)=\\mathrm{e}$，求 $f(xy)$ 的极小值。",
+      "steps": [
+        {
+          "stepTitle": "先代 $x=y=1$ 得 $f(1)=0$，再用导数定义建立 $f'(x)$ 微分方程",
+          "detail": "令 $x=y=1$ 得 $f(1)=2f(1)\\implies f(1)=0$。对任意 $x>0$，配出乘积形式 $x+\\Delta x=x\\bigl(1+\\frac{\\Delta x}{x}\\bigr)$：$$\\begin{aligned}f'(x)&=\\lim_{\\Delta x\\to 0}\\frac{f\\!\\left[x\\bigl(1+\\frac{\\Delta x}{x}\\bigr)\\right]-f(x)}{\\Delta x}=\\lim_{\\Delta x\\to 0}\\frac{x f\\!\\left(1+\\frac{\\Delta x}{x}\\right)+\\bigl(1+\\frac{\\Delta x}{x}\\bigr)f(x)-f(x)}{\\Delta x}\\\\&=\\lim_{\\Delta x\\to 0}\\frac{f\\!\\left(1+\\frac{\\Delta x}{x}\\right)-f(1)}{\\frac{\\Delta x}{x}}+\\frac{f(x)}{x}=f'(1)+\\frac{f(x)}{x}=\\mathrm{e}+\\frac{f(x)}{x}.\\end{aligned}$$"
+        },
+        {
+          "stepTitle": "解一阶线性方程得 $f(x)=\\mathrm{e}x\\ln x$，令 $u=xy$ 求极小值",
+          "detail": "由 $f'(x)-\\frac{1}{x}f(x)=\\mathrm{e}$ 得 $f(x)=x(\\mathrm{e}\\ln x+C)$，代入 $f(1)=0\\implies C=0\\implies f(x)=\\mathrm{e}x\\ln x$。于是 $f(xy)=\\mathrm{e}(xy)\\ln(xy)=f(u)\\;(u=xy>0)$，求导 $f'(u)=\\mathrm{e}(\\ln u+1)=0\\implies u=\\mathrm{e}^{-1}$，又 $f''(\\mathrm{e}^{-1})=\\mathrm{e}^2>0$，故极小值（亦为全局最小值）为 $f(\\mathrm{e}^{-1})=-1$（在二元视角下取于整条双曲线 $xy=\\mathrm{e}^{-1}$ 上，见严谨补注 #53）。"
+        }
+      ],
+      "finalAnswer": "极小值为 $-1$。",
+      "takeaway": "乘法函数方程 $f(xy)=\\cdots$ 转微分方程的固定套路：把 $f(x+\\Delta x)$ 改写为 **$f\\!\\left[x\\bigl(1+\\frac{\\Delta x}{x}\\bigr)\\right]$**，再拆开凑出 $f'(1)$！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.195",
+        "pdfPage": 208,
+        "itemRef": "强化例 15.13"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy18_11_19",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-39",
+      "stage": "intensive",
+      "section": "三、建立微分方程并求解（强化例 15.13~15.19）",
+      "kind": "example",
+      "title": "【强化例 15.14】切线 $y$ 轴截距等于到 $y$ 轴距离建 ODE + 求切线三角形最小面积",
+      "examWeight": "core",
+      "problem": "设曲线 $L:y=y(x)\\;(x>\\mathrm{e})$ 经过点 $(\\mathrm{e}^2,0)$，$L$ 上任一点 $P(x,y)$ 到 $y$ 轴的距离等于该点处的切线在 $y$ 轴上的截距。（1）求 $y(x)$；（2）在 $L$ 上求一点，使该点处的切线与两坐标轴所围三角形的面积最小，并求此最小面积。",
+      "steps": [
+        {
+          "stepTitle": "（1）建立一阶线性方程 $y-xy'=x$ 并代入 $(\\mathrm{e}^2,0)$ 求解",
+          "detail": "因 $x>\\mathrm{e}>0$，点 $P$ 到 $y$ 轴距离为 $x$，切线 $y$ 轴截距为 $y-xy'$，故 $y-xy'=x\\implies y'-\\frac{y}{x}=-1$。解得$$y=x\\left(-\\int\\frac{\\mathrm{d}x}{x}+C\\right)=x(C-\\ln x).$$代入 $y(\\mathrm{e}^2)=0$ 得 $C=2$，故 $y(x)=2x-x\\ln x\\;(x>\\mathrm{e})$。"
+        },
+        {
+          "stepTitle": "（2）求切线两截距构造面积函数 $S(x)$ 求最小值",
+          "detail": "求导 $y'(x)=1-\\ln x<0\\;(x>\\mathrm{e})$，切线方程 $Y-(2x-x\\ln x)=(1-\\ln x)(X-x)$，两轴截距分别为 $X=\\frac{x}{\\ln x-1}>0$ 与 $Y=x>0$，故三角形面积$$S(x)=\\frac{1}{2}XY=\\frac{x^2}{2(\\ln x-1)}\\qquad(x>\\mathrm{e}).$$求导得 $S'(x)=\\frac{x(2\\ln x-3)}{2(\\ln x-1)^2}=0\\implies x=\\mathrm{e}^{\\frac{3}{2}}$。在 $(\\mathrm{e},\\mathrm{e}^{\\frac{3}{2}})$ 上 $S'<0$，在 $(\\mathrm{e}^{\\frac{3}{2}},+\\infty)$ 上 $S'>0$，故在点 $\\left(\\mathrm{e}^{\\frac{3}{2}},\\;\\frac{1}{2}\\mathrm{e}^{\\frac{3}{2}}\\right)$ 处取得最小面积 $S\\!\\left(\\mathrm{e}^{\\frac{3}{2}}\\right)=\\mathrm{e}^3$！"
+        }
+      ],
+      "finalAnswer": "（1）$y(x)=2x-x\\ln x\\;(x>\\mathrm{e})$；（2）切点为 $\\left(\\mathrm{e}^{\\frac{3}{2}},\\;\\dfrac{1}{2}\\mathrm{e}^{\\frac{3}{2}}\\right)$，最小面积为 $\\mathrm{e}^3$。",
+      "takeaway": "标准「建 ODE + 一元最值」压轴大题二合一：算出 $y(x)$ 后再写两截距时注意检查 $x>\\mathrm{e}\\implies \\ln x-1>0$ 确认截距皆正！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.197",
+        "pdfPage": 210,
+        "itemRef": "强化例 15.14"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy18_11_19",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-40",
+      "stage": "intensive",
+      "section": "三、建立微分方程并求解（强化例 15.13~15.19）",
+      "kind": "example",
+      "title": "【强化例 15.15 · 仅数一、二】由曲率公式 $k=\\frac{1}{2y^2\\cos\\alpha}$ 建缺 $x$ 型 ODE（衔接强化例 15.6）",
+      "examWeight": "core",
+      "problem": "求一条凹曲线 $y=y(x)\\;(x\\ge 1)$ 的表达式，已知其上任一点处的曲率 $k=\\dfrac{1}{2y^2\\cos\\alpha}$，其中 $\\alpha$ 为该曲线在相应点处的切线的倾角，$\\cos\\alpha>0$，并设曲线在点 $(3,2)$ 处的切线的倾角为 $45^\\circ$。",
+      "steps": [
+        {
+          "stepTitle": "用「凹曲线 $\\Rightarrow y''>0$」与 $\\cos\\alpha=\\frac{1}{\\sqrt{1+(y')^2}}$ 化出微分方程",
+          "detail": "因 $\\tan\\alpha=y'$ 且 $\\cos\\alpha>0$，故 $\\cos\\alpha=\\frac{1}{\\sqrt{1+(y')^2}}$；又曲线为凹曲线即 $y''>0$，代入曲率公式 $k=\\frac{y''}{[1+(y')^2]^{3/2}}$：$$\\frac{y''}{\\bigl[1+(y')^2\\bigr]^{\\frac{3}{2}}}=\\frac{\\bigl[1+(y')^2\\bigr]^{\\frac{1}{2}}}{2y^2}\\implies 2y^2 y''=\\bigl[1+(y')^2\\bigr]^2.$$"
+        },
+        {
+          "stepTitle": "提取初值 $y(3)=2,\\;y'(3)=\\tan 45^\\circ=1$ 接轨强化例 15.6",
+          "detail": "由强化例15.6 完整求解过程直接得唯一曲线方程$$y=\\frac{1}{4}(x-1)^2+1\\qquad(x\\ge 1).$$"
+        }
+      ],
+      "finalAnswer": "$y=\\dfrac{1}{4}(x-1)^2+1\\;(x\\ge 1)$",
+      "takeaway": "几何应用题里每个字都有用：「**凹曲线**」负责去掉曲率分子 $|y''|$ 的绝对值，「**$\\cos\\alpha>0$**」负责去掉 $\\frac{1}{\\sqrt{1+(y')^2}}$ 前的 $\\pm$ 号，「**倾角 $45^\\circ$**」给出 $y'(3)=1$！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.197-198",
+        "pdfPage": 210,
+        "itemRef": "强化例 15.15"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy18_11_19",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-41",
+      "stage": "intensive",
+      "section": "三、建立微分方程并求解（强化例 15.13~15.19）",
+      "kind": "example",
+      "title": "【强化例 15.16 · 仅数三拓展】供求价格波动建伯努利方程并换元 $y=P^2$ 求解",
+      "examWeight": "extended",
+      "problem": "【仅数学三】已知某商品供给量 $S=12.8P^2-128$，需求量 $D=-4.4P^2+130$。设价格 $P(t)$ 随时间的变化率与过剩需求量 $D-S$ 成正比、与 $P$ 成反比，比例系数为 $\\dfrac{1}{4}$，且初始价格 $P(0)=5$。（1）建立 $P(t)$ 满足的微分方程；（2）通过变量代换 $y=P^2$ 求解此方程。",
+      "steps": [
+        {
+          "stepTitle": "（1）建立价格变化率伯努利方程",
+          "detail": "由 $D-S=-17.2P^2+258$ 得$$\\frac{\\mathrm{d}P}{\\mathrm{d}t}=\\frac{1}{4}\\cdot\\frac{-17.2P^2+258}{P}\\iff \\frac{\\mathrm{d}P}{\\mathrm{d}t}+4.3P-\\frac{64.5}{P}=0.$$"
+        },
+        {
+          "stepTitle": "（2）令 $y=P^2$ 化一阶常系数线性方程求解",
+          "detail": "由 $\\frac{\\mathrm{d}y}{\\mathrm{d}t}=2P\\frac{\\mathrm{d}P}{\\mathrm{d}t}$ 代入得 $\\frac{\\mathrm{d}y}{\\mathrm{d}t}+8.6y=129$，解得 $y=C\\mathrm{e}^{-8.6t}+15$。由 $P(0)=5\\implies y(0)=25\\implies C=10$，因价格 $P>0$ 开正根得 $P(t)=\\sqrt{15+10\\mathrm{e}^{-8.6t}}$。"
+        }
+      ],
+      "finalAnswer": "（1）$\\dfrac{\\mathrm{d}P}{\\mathrm{d}t}+4.3P-\\dfrac{64.5}{P}=0$；（2）$P(t)=\\sqrt{15+10\\mathrm{e}^{-8.6t}}$。",
+      "takeaway": "仅数三经济应用（其实质是 $n=-1$ 的伯努利方程，令 $y=P^{1-(-1)}=P^2$ 化线性，数一考生可当作伯努利练习题顺手看一眼！）。",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.198-199",
+        "pdfPage": 211,
+        "itemRef": "强化例 15.16（仅数学三）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy18_11_19",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-42",
+      "stage": "intensive",
+      "section": "三、建立微分方程并求解（强化例 15.13~15.19）",
+      "kind": "example",
+      "title": "【强化例 15.17 · 仅数一、二】飞机减速伞滑行至总位移一半时的瞬时速度",
+      "examWeight": "core",
+      "problem": "一质量为 $m$ 的飞机，着陆时的水平速度为 $v(0)$。减速伞打开后所受总阻力与速度成正比（系数 $k>0$），设 $t$ 时刻滑行距离为 $x(t)$、速度为 $v(t)$，则飞机在滑行至总位移的一半时的速度为（ ）\n（A）$\\dfrac{v(0)}{3}$　（B）$\\dfrac{v(0)}{2}$　（C）$\\dfrac{v(0)}{\\sqrt{3}}$　（D）$\\dfrac{v(0)}{\\sqrt{2}}$",
+      "steps": [
+        {
+          "stepTitle": "沿用例 15.22 得线性位移-速度关系 $x(t)=\\frac{m}{k}[v(0)-v(t)]$",
+          "detail": "由 $mv\\frac{\\mathrm{d}v}{\\mathrm{d}x}=-kv$ 及 $x(0)=0$ 得 $x(t)=\\frac{m}{k}[v(0)-v(t)]$。令 $v(t)\\to 0$ 得飞机停下时的**总位移**为 $x_{\\max}=\\frac{m}{k}v(0)$。"
+        },
+        {
+          "stepTitle": "代入一半总位移解出 $v(t_0)=\\frac{v(0)}{2}$",
+          "detail": "令 $x(t_0)=\\frac{1}{2}x_{\\max}=\\frac{mv(0)}{2k}=\\frac{m}{k}[v(0)-v(t_0)]$，直接解得 $v(t_0)=\\dfrac{v(0)}{2}$！"
+        }
+      ],
+      "finalAnswer": "**选（B）**：$\\dfrac{v(0)}{2}$。",
+      "takeaway": "因为阻力与速度 $v$ 呈一次正比，所以位移 $x$ 与速度损失 $v(0)-v$ 严格成正比——滑行一半路程正好掉一半速度！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.199",
+        "pdfPage": 212,
+        "itemRef": "强化例 15.17",
+        "crossRef": "27张宇《基础30讲·高数》P.399-400 例 15.22"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy18_11_19",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-43",
+      "stage": "intensive",
+      "section": "三、建立微分方程并求解（强化例 15.13~15.19）",
+      "kind": "example",
+      "title": "【强化例 15.18】曳物线（追踪曲线）用 $x=\\cos t$ 换元另解（含图注印刷小疵注 #52）",
+      "examWeight": "core",
+      "problem": "在 $xOy$ 平面上，设 $|PQ|=1$，初始时刻 $P$ 在原点，$Q$ 在 $(1,0)$ 点，若 $P$ 点沿着 $y$ 轴的正方向移动，且 $Q$ 点的运动方向始终指向 $P$ 点，求 $Q$ 点的运动轨迹。",
+      "steps": [
+        {
+          "stepTitle": "建切线追及方程 $y'=-\\frac{\\sqrt{1-x^2}}{x}$",
+          "detail": "与例15.21 同理，由 $x^2+(y-Y)^2=1$ 且 $Y>y$ 得 $y-Y=-\\sqrt{1-x^2}$，从而 $\\frac{\\mathrm{d}y}{\\mathrm{d}x}=-\\frac{\\sqrt{1-x^2}}{x}$。（注：原书 P.200 附图曲线旁将 `y=y(x)` 误印多出一个短横 `-y=y(x)`，见台账 #52。）"
+        },
+        {
+          "stepTitle": "用 $x=\\cos t$ 换元巧化成 $\\int(\\sec t-\\cos t)\\,\\mathrm{d}t$ 积分",
+          "detail": "令 $x=\\cos t\\;(t\\in[0,\\frac{\\pi}{2}))$，$\\mathrm{d}x=-\\sin t\\,\\mathrm{d}t$，负号直接抵消：$$y=-\\int\\frac{\\sqrt{1-x^2}}{x}\\,\\mathrm{d}x=\\int\\frac{\\sin^2 t}{\\cos t}\\,\\mathrm{d}t=\\int(\\sec t-\\cos t)\\,\\mathrm{d}t=\\ln\\left|\\frac{1+\\sin t}{\\cos t}\\right|-\\sin t+C.$$还原 $\\cos t=x,\\;\\sin t=\\sqrt{1-x^2}$ 并由 $y(1)=0\\implies C=0$，得 $y=\\ln\\dfrac{1+\\sqrt{1-x^2}}{x}-\\sqrt{1-x^2}$。"
+        }
+      ],
+      "finalAnswer": "$y=\\ln\\dfrac{1+\\sqrt{1-x^2}}{x}-\\sqrt{1-x^2}\\;(0<x\\le 1)$",
+      "takeaway": "比对两种三角换元：$x=\\cos t$ 直接抵消积分前负号化出 $\\sec t-\\cos t$，甚至免了倒数有理化一步，比 $x=\\sin t$ 更顺手！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.200",
+        "pdfPage": 213,
+        "itemRef": "强化例 15.18",
+        "crossRef": "27张宇《基础30讲·高数》P.398-399 例 15.21"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy18_11_19",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-e-44",
+      "stage": "intensive",
+      "section": "三、建立微分方程并求解（强化例 15.13~15.19）",
+      "kind": "example",
+      "title": "【强化例 15.19 · 仅数三拓展】指数多项式不撞根差分方程 $y_{x+1}-y_x=x\\cdot 2^x$",
+      "examWeight": "extended",
+      "problem": "【仅数学三】差分方程 $y_{x+1}-y_x=x\\cdot 2^x$ 的通解为 ______。",
+      "steps": [
+        {
+          "stepTitle": "求齐次通解 $y_C=C$ 并由 $a+d=1\\ne 0$ 设特解 $(Ax+B)2^x$",
+          "detail": "齐次特征方程 $\\lambda-1=0\\implies\\lambda=1\\implies y_C(x)=C$。这里 $a=-1,\\;d=2\\implies a+d=1\\ne 0$（不撞根），按表 15-2 设 $y_x^*=(Ax+B)2^x$。"
+        },
+        {
+          "stepTitle": "代入原差分方程对比系数得 $A=1,\\;B=-2$",
+          "detail": "$\\bigl[A(x+1)+B\\bigr]2^{x+1}-(Ax+B)2^x=\\bigl[Ax+(2A+B)\\bigr]2^x=x\\cdot 2^x\\implies A=1,\\;2A+B=0\\implies B=-2$，故通解为 $y_x=C+(x-2)2^x$。"
+        }
+      ],
+      "finalAnswer": "$y_x=C+(x-2)2^x$（$C$ 为任意常数）。",
+      "takeaway": "仅数三差分方程标准样板：不撞根直接设同次多项式乘 $d^x$，两行出系数！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.202",
+        "pdfPage": 215,
+        "itemRef": "强化例 15.19（仅数学三）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy18_11_19",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-s-01",
+      "stage": "both",
+      "section": "题型总结（一）：一阶 ODE、可降阶与换元化归决策总表",
+      "kind": "summary",
+      "title": "第 15 讲（上）：一阶方程六型、二阶可降阶三型与换元化归决策总表",
+      "examWeight": "core",
+      "overview": "本讲上半部分覆盖所有**一阶微分方程、二阶可降阶方程及非常规换元方程**的求解与定性分析。实战只需按「**先看阶数 $\\to$ 再查是否缺变量/互换 $x,y$ $\\to$ 凑导数/组合换元 $\\to$ 防丢零解与定常数域**」四步推进，全套题型无一漏网。",
+      "patterns": [
+        {
+          "typeName": "题型 1：一阶可分离变量、齐次型与分式线性型",
+          "triggers": "出现 $y'=f(x)g(y)$、$f(ax+by+c)$、$f(\\frac{y}{x})$ 或 $f(\\frac{ax+by+c}{a_1 x+b_1 y+c_1})$",
+          "method": "分离变量直接积（防丢 $g(y)=0$）；齐次令 $u=y/x$；分式线性不平行先求两直线交点平移化齐次，平行则令 $u=ax+by$。",
+          "pitfall": "例 15.4 对数合并后注意常数范围 $C>1$；强化例 15.2 别忘最后回代 $X=x-1,Y=y-1$。",
+          "relatedRefs": "例 15.3, 例 15.4, 例 15.5, 例 15.6, 强化例 15.1, 强化例 15.2"
+        },
+        {
+          "typeName": "题型 2：一阶线性方程（含互换 $x,y$、伯努利与变限积分定性分析）",
+          "triggers": "$y'+p(x)y=q(x)$、对 $y$ 非线性但对 $x$ 线性/伯努利，或求极限/有界/周期性",
+          "method": "先化首项系数为 $1$ 再套外负内正公式；关于 $y$ 难拆立刻倒过来看 $\\frac{\\mathrm{d}x}{\\mathrm{d}y}$；不可积核或性态证明必用变限积分形式 + 洛必达/放缩。",
+          "pitfall": "漏化首项系数为 $1$；伯努利令 $z=y^{1-n}$ 漏因子 $\\frac{1}{1-n}$；周期解充要条件 $\\int_0^T p(x)\\,\\mathrm{d}x=0$。",
+          "relatedRefs": "例 15.7, 例 15.8, 例 15.9, 例 15.10, 例 15.11, 强化例 15.3, 强化例 15.4"
+        },
+        {
+          "typeName": "题型 3：全微分方程（数一）与二阶可降阶三大类型（数一、二）",
+          "triggers": "$P\\,\\mathrm{d}x+Q\\,\\mathrm{d}y=0$ 满足 $P_y'=Q_x'$；或二阶方程缺 $y$ / 缺 $x$ / 缺 $x,y$ / 出现 $yy''+(y')^2$",
+          "method": "全微分凑 $\\mathrm{d}u=0$；缺 $y$ 令 $p=y'(x)$；缺 $x$ 令 $y''=p\\frac{\\mathrm{d}p}{\\mathrm{d}y}$；见 $yy''+(y')^2$ 凑 $(yy')'$；有初值时积一层立刻代初值定 $C_1$ 和开方正负！",
+          "pitfall": "强化例 15.5 除以 $u^2$ 千万别丢零解 $u\\equiv 0$（它就是唯一解！）；强化例 15.6 别忘标定定义域 $x\\ge 1$。",
+          "relatedRefs": "例 15.12, 例 15.13, 例 15.14, 强化例 15.5, 强化例 15.6, 强化例 15.7"
+        },
+        {
+          "typeName": "题型 4：非标准方程换元与函数方程转 ODE",
+          "triggers": "含 $\\mathrm{e}^{-y}$、$\\sqrt{y+x^2}$ 或抽象函数恒等式 $f(xy)=yf(x)+xf(y)$",
+          "method": "逆用导数公式凑 $(\\mathrm{e}^y)'$ 或整体换元 $u=y+x^2$；乘法函数方程代 $x=y=1$ 求 $f(1)$ 再用 $x+\\Delta x=x(1+\\frac{\\Delta x}{x})$ 凑 $f'(1)$ 建一阶线性 ODE。",
+          "pitfall": "开方还原 $y$ 时须检查右端非负范围（如强化例 15.12 $x\\ge -2$）。",
+          "relatedRefs": "强化例 15.11, 强化例 15.12, 强化例 15.13"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 15-3：第 15 讲前半部分（一阶·可降阶·换元）特征识别速查表",
+          "headers": [
+            "方程外观 / 信号",
+            "第一反应化归招式",
+            "关键易错红线",
+            "代表母题"
+          ],
+          "rows": [
+            [
+              "$y'$ 难解但 $x$ 是一次或二次",
+              "倒数互换角色写 $\\frac{\\mathrm{d}x}{\\mathrm{d}y}+P(y)x=Q(y)x^n$",
+              "别忘初值定开方正负支 & 平凡解 $x\\equiv 0$",
+              "例 15.8, 例 15.11"
+            ],
+            [
+              "不可积 $q(x)$ 或问极限/有界/周期",
+              "改写为变限积分通解 + 洛必达/放缩",
+              "速算：$y'+ay=q\\to L\\;(a>0)\\implies y\\to\\frac{L}{a}$",
+              "例 15.9, 例 15.10, 强化例 15.3"
+            ],
+            [
+              "缺 $x$ 的二阶方程 $y''=f(y,y')$",
+              "令 $p=y'(y),\\;y''=p\\frac{\\mathrm{d}p}{\\mathrm{d}y}$",
+              "严禁错写成 $y''=p'$；每层立刻代初值",
+              "例 15.13, 强化例 15.6"
+            ],
+            [
+              "出现 $yy''+(y')^2$ 或 $\\mathrm{e}^{-y}$ / $\\sqrt{y+x^2}$",
+              "逆凑 $(yy')'$、$(\\mathrm{e}^y)'$ 或整体换元 $u=y+x^2$",
+              "分母除 $u^2$ 防丢零解 $u\\equiv 0$",
+              "强化例 15.5, 强化例 15.7, 强化例 15.11, 强化例 15.12"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "一阶与可降阶方程最怕「认死理只把 $y$ 当因变量」和「除以 $u^2$ 丢零解」——记住这两条，上半场稳拿满分！",
+      "source": {
+        "book": "27张宇《基础30讲·高数》+《高数18讲》（强化）",
+        "printedPage": "基础 P.377-388 / 强化 P.184-195",
+        "pdfPage": 382,
+        "itemRef": "第 15 讲前半部分体系总汇"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy18_01_10",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-s-02",
+      "stage": "both",
+      "section": "题型总结（二）：高阶线性、欧拉、反求方程与几何物理建模总表",
+      "kind": "summary",
+      "title": "第 15 讲（下）：常系数线性、微分算子、欧拉方程与几何/物理建模总表",
+      "examWeight": "core",
+      "overview": "本讲下半部分囊括考研数一分值最重的**高阶常系数线性方程、欧拉方程（数一专属）、反求微分方程、全局性态（劳斯稳定）以及几何/物理应用大题**，同时以教材拓展归档数三差分方程。",
+      "patterns": [
+        {
+          "typeName": "题型 5：不解方程用方程 & 二阶/高阶常系数线性求解",
+          "triggers": "给初值问极值/洛必达极限，或求 $y''+py'+qy=f(x)$ 的通解/特解",
+          "method": "只问定点性质直接把 $x_0$ 代入原方程反读 $y''(x_0)$；求特解遵循「一看二算三比较」，选填或草稿验算强烈推荐表 15-1 微分算子法（移位 + $D^2\\to-\\beta^2$）。",
+          "pitfall": "待定系数忘乘撞根因子 $x^k$ 或漏设 $\\sin\\beta x$/低次多项式项；算子法不可对一次 $D$ 直接代 $\\beta\\mathrm{i}$。",
+          "relatedRefs": "例 15.1, 例 15.2, 例 15.15, 例 15.16, 例 15.17"
+        },
+        {
+          "typeName": "题型 6：反求微分方程、解的全局性态与欧拉方程（数一）",
+          "triggers": "由特解反求二阶/四阶方程、求使 $\\int_0^{+\\infty}y\\,\\mathrm{d}x$ 收敛的参数范围，或见 $x^2 y''+pxy'+qy=f(x)$",
+          "method": "反求方程用 $x^{k-1}\\mathrm{e}^{rx}\\Rightarrow k$ 重根 + 共轭成对；全部解在 $[0,+\\infty)$ 收敛 $\\iff$ 全特征根 $\\operatorname{Re}(\\lambda_i)<0$（二阶即 $p>0,q>0$）；欧拉令 $x=\\pm\\mathrm{e}^t$ 记牢 $p-1$ 且最后回代 $t=\\ln|x|$。",
+          "pitfall": "把特解 $y=x$ 的 $r=0$ 误判为单根（实为二重！）；欧拉方程漏把 $p$ 改为 $p-1$ 或忘回代 $x$。",
+          "relatedRefs": "例 15.18, 例 15.19, 例 15.20, 强化例 15.8, 强化例 15.9, 强化例 15.10"
+        },
+        {
+          "typeName": "题型 7：几何应用（截距/曲率/弧长/曳物线）与物理应用（阻力/冷却）",
+          "triggers": "出现切线截距、曲率、追及方向始终指向、减速伞滑行距离、牛顿冷却",
+          "method": "准确翻译十大数据源；追及问题列「切线斜率 = 连线斜率」；位移-速度关系用 $a=v\\frac{\\mathrm{d}v}{\\mathrm{d}x}$ 直消 $t$；降温必带 $-k$ 并由两条件定 $C,k$。",
+          "pitfall": "曲率忘记由「凹/凸」去绝对值；冷却方程漏写负号或把 $k$ 当已知常数留在最终答案中。",
+          "relatedRefs": "例 15.21, 例 15.22, 例 15.23, 强化例 15.14, 强化例 15.15, 强化例 15.17, 强化例 15.18"
+        },
+        {
+          "typeName": "题型 8：【仅数三拓展】一阶常系数差分方程与供求价格建模",
+          "triggers": "出现 $\\Delta y_t$、$y_{t+1}+ay_t=f(t)$ 或供求过剩需求 $D-S$",
+          "method": "齐次通解 $C(-a)^t$，非齐次按表 15-2 检查 $a+d=0$ 或行列式 $D=0$ 试取特解；数一考生仅需知晓属数三拓展。",
+          "pitfall": "例 15.24 中 $\\Delta y_t=t$ 属于 $a+d=0$ 撞根，须设 $t(a+bt)$。",
+          "relatedRefs": "例 15.24, 例 15.25, 强化例 15.16, 强化例 15.19"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 15-4：第 15 讲后半部分（高阶线性·欧拉·建模）高分提速速查表",
+          "headers": [
+            "高频题型",
+            "核心公式 / 判据",
+            "考场提速绝招",
+            "代表母题"
+          ],
+          "rows": [
+            [
+              "非齐次特解 $y^*$",
+              "待定系数法 & 表 15-1 算子法",
+              "算子法草稿 10 秒出解，卷面写待定零扣分",
+              "例 15.17, 表 15-1"
+            ],
+            [
+              "一切解在 $[0,+\\infty)$ 收敛",
+              "全部特征根 $\\operatorname{Re}(\\lambda_i)<0$",
+              "二阶直接秒判 $p>0$ 且 $q>0$（劳斯充要）",
+              "强化例 15.8"
+            ],
+            [
+              "欧拉方程（仅数一）",
+              "$y''(t)+(p-1)y'(t)+qy=f(\\pm\\mathrm{e}^t)$",
+              "齐次直接试 $y=x^\\lambda\\implies\\lambda(\\lambda-1)+p\\lambda+q=0$",
+              "例 15.20, 强化例 15.9"
+            ],
+            [
+              "几何/物理建模大题",
+              "$Y=y-xy'$；$k=\\frac{|y''|}{(1+y'^2)^{3/2}}$；$a=v\\frac{\\mathrm{d}v}{\\mathrm{d}x}$",
+              "紧盯「凹曲线」「降温负号」「两条件定 $C,k$」",
+              "例 15.21~23, 强化例 15.14~18"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "记住「算子法秒特解、劳斯判据秒收敛、$v\\frac{\\mathrm{d}v}{\\mathrm{d}x}$ 秒物理、$p-1$ 秒欧拉」，高数第 15 讲全线通杀！",
+      "source": {
+        "book": "27张宇《基础30讲·高数》+《高数18讲》（强化）",
+        "printedPage": "基础 P.388-403上 / 强化 P.190-202",
+        "pdfPage": 393,
+        "itemRef": "第 15 讲后半部分体系总汇"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy18_11_19",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c15-s-03",
+      "stage": "both",
+      "section": "题型总结（三）：第 15 讲原书印刷错误与严谨补注台账（#51~#55）",
+      "kind": "summary",
+      "title": "第 15 讲原书印刷错误与严谨性补注台账（累计 #51~#55，SymPy 全核验）",
+      "examWeight": "core",
+      "overview": "本讲逐页精读 27 张宇《基础 30 讲·高数》P.377-403 上（25 例 + 9 道算子法注例）与《高数 18 讲》P.184-202（19 例）并经 SymPy 1.14.0 全量验算（`85/85 PASS`），共捕获 **2 处原书印刷瑕疵**（#51、#52）与 **3 处解域/丢解/二元极值严谨性补注**（#53~#55），累计总台账更新至 **55 处**。",
+      "patterns": [
+        {
+          "typeName": "台账 #51（实锤印刷错）：强化 P.191 强化例 15.8 ③ 根号延展覆盖 $x$",
+          "triggers": "阅读强化 P.191 强化例 15.8 情形 ③ 的共轭复根通解",
+          "method": "原书将 $\\cos(\\sqrt{-a^2+a+2}\\,x)$ 与 $\\sin(\\sqrt{-a^2+a+2}\\,x)$ 的根号横线错拉长盖住了 $x$（印成 $\\sqrt{-a^2+a+2x}$），正确应把 $x$ 写在根号外部！",
+          "pitfall": "若误把 $x$ 留在根号内，根本不是常系数齐次方程的解。",
+          "relatedRefs": "强化例 15.8"
+        },
+        {
+          "typeName": "台账 #52（附图小疵）：强化 P.200 强化例 15.18 曲线标签多印负号",
+          "triggers": "查看强化 P.200 强化例 15.18 曳物线示意图",
+          "method": "原书附图蓝色标签把曲线名误印成 `-y=y(x)`，多出一个多余短横，应为 `y=y(x)`。",
+          "pitfall": "以正文求解公式为准，第一象限曳物线纵坐标 $y\\ge 0$。",
+          "relatedRefs": "强化例 15.18"
+        },
+        {
+          "typeName": "台账 #53~#55（严谨补注）：平凡解 $x\\equiv 0$、最大存在区间与二元非严格极小",
+          "triggers": "阅读例 15.11、例 15.12 与强化例 15.13",
+          "method": "① 例 15.11 伯努利方程同除 $x^2$ 遗漏平凡解 $x\\equiv 0$；② 例 15.12 特解 $y=\\arcsin\\frac{\\mathrm{e}^x}{\\sqrt{2}}-\\frac{\\pi}{4}$ 最大定义域为 $x\\le\\frac{1}{2}\\ln 2$；③ 强化例 15.13 $g(x,y)=f(xy)$ 的极小值 $-1$ 沿整条双曲线 $xy=\\mathrm{e}^{-1}$ 取得（二元非严格极小，$\\Delta=0$）。",
+          "pitfall": "养成随手检查除数零解与反三角/根式定义域的严谨习惯。",
+          "relatedRefs": "例 15.11, 例 15.12, 强化例 15.13"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 15-5：高数第 15 讲原书印刷错误与严谨补注台账（#51~#55）",
+          "headers": [
+            "编号",
+            "出处位置",
+            "类型",
+            "原书写法",
+            "修正 / 严谨补注（已 SymPy 验算）"
+          ],
+          "rows": [
+            [
+              "#51",
+              "强化 P.191 强化例 15.8 ③",
+              "**印刷错误**",
+              "$\\cos(\\sqrt{-a^2+a+2x})$ 与 $\\sin(\\sqrt{-a^2+a+2x})$",
+              "根号横线错盖住 $x$！正确为 **$\\cos(\\sqrt{-a^2+a+2}\\,x)$** 与 **$\\sin(\\sqrt{-a^2+a+2}\\,x)$**"
+            ],
+            [
+              "#52",
+              "强化 P.200 强化例 15.18 附图",
+              "图注小疵",
+              "曲线旁标注 `-y = y(x)`",
+              "多印短横，应为 `y = y(x)`（正文方程完全正确）"
+            ],
+            [
+              "#53",
+              "强化 P.195 强化例 15.13",
+              "严谨补注",
+              "令 $u=xy$ 得出 $f(xy)$ 极小值为 $-1$",
+              "补明二元函数 $g(x,y)=f(xy)$ 在整条双曲线 $xy=\\mathrm{e}^{-1}\\;(x,y>0)$ 上取非严格极小/全局最小值 $-1$"
+            ],
+            [
+              "#54",
+              "基础 P.385-386 例 15.11",
+              "严谨补注",
+              "同除 $x^2$ 得通解 $\\frac{1}{x}=1-\\ln y+\\frac{C}{y}$",
+              "同除 $x^2$ 时排除了平凡解 **$x\\equiv 0$**（显然亦满足 $y\\,\\mathrm{d}x=(1+x\\ln y)x\\,\\mathrm{d}y$）"
+            ],
+            [
+              "#55",
+              "基础 P.387 例 15.12",
+              "严谨补注",
+              "写出特解 $y=\\arcsin\\frac{\\mathrm{e}^x}{\\sqrt{2}}-\\frac{\\pi}{4}$",
+              "补明最大存在区间为 $x<\\frac{1}{2}\\ln 2$（端点处 $y'\\to+\\infty$），并由 $y'(0)=1>0$ 锁定开方正支"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "全讲 44 道例题 + 9 道算子法注例全部 SymPy 精确验算通过，这 5 处勘误与严谨细节能帮你避开隐形失分！",
+      "source": {
+        "book": "27张宇《基础30讲·高数》+《高数18讲》（强化）",
+        "printedPage": "基础 P.385-387 / 强化 P.191, P.195, P.200",
+        "pdfPage": 390,
+        "itemRef": "第 15 讲勘误与严谨台账 #51~#55"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c15_zy18_01_10",
+        "verified": true
+      }
+    }
+  ]
+}
