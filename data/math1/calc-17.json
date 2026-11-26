@@ -1,0 +1,1351 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "calc-17",
+  "chapterTitle": "高数 · 第 17 讲 多元函数积分学的预备知识（仅数一）",
+  "sourceScope": "27张宇《基础30讲·高数》P.464-483（13例全解，不含讲末习题）+ 27张宇《高数18讲》（强化）P.237-243（7例全解）",
+  "items": [
+    {
+      "id": "m1-c17-f-01",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "title": "向量代数核心运算：点积、叉积、混合积与方向余弦",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{模与方向余弦：}\\;|\\mathbf{a}|=\\sqrt{a_x^2+a_y^2+a_z^2},\\quad \\mathbf{a}^\\circ=\\frac{\\mathbf{a}}{|\\mathbf{a}|}=(\\cos\\alpha,\\cos\\beta,\\cos\\gamma),\\quad \\cos^2\\alpha+\\cos^2\\beta+\\cos^2\\gamma=1 \\\\\n&\\text{数量积（点积）：}\\;\\mathbf{a}\\cdot\\mathbf{b}=|\\mathbf{a}||\\mathbf{b}|\\cos\\theta=a_xb_x+a_yb_y+a_zb_z,\\quad \\operatorname{Prj}_{\\mathbf{b}}\\mathbf{a}=\\frac{\\mathbf{a}\\cdot\\mathbf{b}}{|\\mathbf{b}|},\\quad \\mathbf{a}\\perp\\mathbf{b}\\Leftrightarrow \\mathbf{a}\\cdot\\mathbf{b}=0 \\\\\n&\\text{向量积（叉积）：}\\;\\mathbf{a}\\times\\mathbf{b}=\\begin{vmatrix}\\mathbf{i}&\\mathbf{j}&\\mathbf{k}\\\\a_x&a_y&a_z\\\\b_x&b_y&b_z\\end{vmatrix},\\quad |\\mathbf{a}\\times\\mathbf{b}|=|\\mathbf{a}||\\mathbf{b}|\\sin\\theta=S_{\\text{平行四边形}},\\quad \\mathbf{a}\\parallel\\mathbf{b}\\Leftrightarrow \\mathbf{a}\\times\\mathbf{b}=\\mathbf{0} \\\\\n&\\text{混合积：}\\;[\\mathbf{a}\\mathbf{b}\\mathbf{c}]=(\\mathbf{a}\\times\\mathbf{b})\\cdot\\mathbf{c}=\\begin{vmatrix}a_x&a_y&a_z\\\\b_x&b_y&b_z\\\\c_x&c_y&c_z\\end{vmatrix},\\quad V_{\\text{平行六面体}}=|[\\mathbf{a}\\mathbf{b}\\mathbf{c}]|,\\quad \\text{共面}\\Leftrightarrow[\\mathbf{a}\\mathbf{b}\\mathbf{c}]=0\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "$\\mathbf{a}=(a_x,a_y,a_z)$",
+          "desc": "三维自由向量的坐标表示；$\\mathbf{a}^\\circ$ 为同向单位向量"
+        },
+        {
+          "sym": "$\\alpha,\\beta,\\gamma$",
+          "desc": "非零向量 $\\mathbf{a}$ 与 $x,y,z$ 轴正向的夹角（方向角），取值均在 $[0,\\pi]$"
+        },
+        {
+          "sym": "$\\operatorname{Prj}_{\\mathbf{b}}\\mathbf{a}$",
+          "desc": "向量 $\\mathbf{a}$ 在非零向量 $\\mathbf{b}$ 方向上的有向投影（可正可负）"
+        },
+        {
+          "sym": "$[\\mathbf{a}\\mathbf{b}\\mathbf{c}]$",
+          "desc": "三向量混合积，满足轮换不变：$[\\mathbf{a}\\mathbf{b}\\mathbf{c}]=[\\mathbf{b}\\mathbf{c}\\mathbf{a}]=[\\mathbf{c}\\mathbf{a}\\mathbf{b}]$，对调任意两向量变号"
+        }
+      ],
+      "conditions": "叉积满足反交换律 $\\mathbf{b}\\times\\mathbf{a}=-(\\mathbf{a}\\times\\mathbf{b})$，不满足结合律；零向量与任何向量既垂直又平行。",
+      "pitfalls": "① 方向余弦 $\\cos\\alpha,\\cos\\beta,\\cos\\gamma$ 是单位向量分量，切勿漏除以模长 $|\\mathbf{a}|$；② 平行判别用分量成比例 $\\frac{a_x}{b_x}=\\frac{a_y}{b_y}=\\frac{a_z}{b_z}$ 时，约定若分母为 $0$ 则对应分子必为 $0$；③ 四面体体积等于平行六面体体积的 $\\frac{1}{6}$，即 $V=\\frac{1}{6}|[\\mathbf{a}\\mathbf{b}\\mathbf{c}]|$，勿漏 $\\frac{1}{6}$。",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 265\" role=\"img\" aria-label=\"向量叉积混合积与空间点线面距离几何图\">\n  <title>向量运算（点积/叉积/混合积）与空间点到平面、点到直线距离的几何直观</title>\n  <defs>\n    <marker id=\"m1c17_arr1_blue\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#1d4ed8\"/>\n    </marker>\n    <marker id=\"m1c17_arr1_red\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#dc2626\"/>\n    </marker>\n    <marker id=\"m1c17_arr1_green\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#059669\"/>\n    </marker>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"720\" height=\"265\" rx=\"12\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n\n  <!-- Left panel: Cross product & Triple scalar product -->\n  <rect x=\"14\" y=\"14\" width=\"336\" height=\"237\" rx=\"9\" fill=\"#ffffff\" stroke=\"#e2e8f0\" stroke-width=\"1\"/>\n  <text x=\"182\" y=\"34\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">叉积面积与混合积体积（右手定则）</text>\n\n  <!-- Parallelepiped base -->\n  <polygon points=\"88,186 218,186 270,152 140,152\" fill=\"#dbeafe\" fill-opacity=\"0.65\" stroke=\"#2563eb\" stroke-width=\"1.4\"/>\n  <!-- Top face (dashed) -->\n  <polygon points=\"122,102 252,102 304,68 174,68\" fill=\"#dcfce7\" fill-opacity=\"0.35\" stroke=\"#059669\" stroke-width=\"1.1\" stroke-dasharray=\"4,3\"/>\n  <!-- Vertical-ish edges of parallelepiped -->\n  <line x1=\"218\" y1=\"186\" x2=\"252\" y2=\"102\" stroke=\"#94a3b8\" stroke-width=\"1\" stroke-dasharray=\"4,3\"/>\n  <line x1=\"270\" y1=\"152\" x2=\"304\" y2=\"68\" stroke=\"#94a3b8\" stroke-width=\"1\" stroke-dasharray=\"4,3\"/>\n  <line x1=\"140\" y1=\"152\" x2=\"174\" y2=\"68\" stroke=\"#94a3b8\" stroke-width=\"1\" stroke-dasharray=\"4,3\"/>\n\n  <!-- Vectors a, b, c, a x b -->\n  <line x1=\"88\" y1=\"186\" x2=\"215\" y2=\"186\" stroke=\"#1d4ed8\" stroke-width=\"2.4\" marker-end=\"url(#m1c17_arr1_blue)\"/>\n  <line x1=\"88\" y1=\"186\" x2=\"138\" y2=\"153\" stroke=\"#1d4ed8\" stroke-width=\"2.4\" marker-end=\"url(#m1c17_arr1_blue)\"/>\n  <line x1=\"88\" y1=\"186\" x2=\"88\" y2=\"66\" stroke=\"#dc2626\" stroke-width=\"2.5\" marker-end=\"url(#m1c17_arr1_red)\"/>\n  <line x1=\"88\" y1=\"186\" x2=\"121\" y2=\"105\" stroke=\"#059669\" stroke-width=\"2.3\" marker-end=\"url(#m1c17_arr1_green)\"/>\n  <!-- Height projection -->\n  <line x1=\"122\" y1=\"102\" x2=\"88\" y2=\"102\" stroke=\"#64748b\" stroke-width=\"1.2\" stroke-dasharray=\"3,2\"/>\n  <rect x=\"88\" y=\"176\" width=\"10\" height=\"10\" fill=\"none\" stroke=\"#dc2626\" stroke-width=\"1.1\"/>\n\n  <text x=\"160\" y=\"203\" font-size=\"12\" font-weight=\"700\" fill=\"#1d4ed8\">a</text>\n  <text x=\"104\" y=\"165\" font-size=\"12\" font-weight=\"700\" fill=\"#1d4ed8\">b</text>\n  <text x=\"128\" y=\"128\" font-size=\"12\" font-weight=\"700\" fill=\"#059669\">c</text>\n  <text x=\"44\" y=\"80\" font-size=\"12\" font-weight=\"700\" fill=\"#dc2626\">a × b</text>\n  <text x=\"186\" y=\"174\" font-size=\"11\" fill=\"#1e3a8a\">底面积 S = |a × b|</text>\n  <text x=\"182\" y=\"226\" text-anchor=\"middle\" font-size=\"11.5\" fill=\"#334155\">体积 V = |(a × b)·c| = |[a b c]|；共面 ⇔ [a b c] = 0</text>\n  <text x=\"182\" y=\"242\" text-anchor=\"middle\" font-size=\"11\" fill=\"#64748b\">四面体体积 = (1/6)|[a b c]|，投影 Prj_b(a) = (a·b)/|b|</text>\n\n  <!-- Right panel: Point-to-Line & Point-to-Plane distance -->\n  <rect x=\"366\" y=\"14\" width=\"340\" height=\"237\" rx=\"9\" fill=\"#ffffff\" stroke=\"#e2e8f0\" stroke-width=\"1\"/>\n  <text x=\"536\" y=\"34\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">点到直线与点到平面距离几何构造</text>\n\n  <!-- Top half: Point to line -->\n  <line x1=\"392\" y1=\"112\" x2=\"682\" y2=\"112\" stroke=\"#1d4ed8\" stroke-width=\"2\" marker-end=\"url(#m1c17_arr1_blue)\"/>\n  <circle cx=\"442\" cy=\"112\" r=\"3.5\" fill=\"#1d4ed8\"/>\n  <circle cx=\"536\" cy=\"60\" r=\"4\" fill=\"#dc2626\"/>\n  <line x1=\"442\" y1=\"112\" x2=\"532\" y2=\"62\" stroke=\"#059669\" stroke-width=\"2\" marker-end=\"url(#m1c17_arr1_green)\"/>\n  <line x1=\"536\" y1=\"60\" x2=\"536\" y2=\"112\" stroke=\"#dc2626\" stroke-width=\"1.8\" stroke-dasharray=\"4,2\"/>\n  <rect x=\"526\" y=\"102\" width=\"10\" height=\"10\" fill=\"none\" stroke=\"#dc2626\" stroke-width=\"1.1\"/>\n  <text x=\"430\" y=\"128\" font-size=\"11\" fill=\"#1e3a8a\">M₁(线上已知点)</text>\n  <text x=\"544\" y=\"64\" font-size=\"11.5\" font-weight=\"700\" fill=\"#dc2626\">M₀(待求点)</text>\n  <text x=\"542\" y=\"92\" font-size=\"11\" font-weight=\"700\" fill=\"#dc2626\">d = |τ × M₁M₀| / |τ|</text>\n  <text x=\"646\" y=\"128\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1d4ed8\">方向向量 τ</text>\n\n  <!-- Divider -->\n  <line x1=\"386\" y1=\"142\" x2=\"686\" y2=\"142\" stroke=\"#e2e8f0\" stroke-width=\"1\"/>\n\n  <!-- Bottom half: Point to plane -->\n  <polygon points=\"396,216 610,216 672,184 458,184\" fill=\"#fef3c7\" fill-opacity=\"0.7\" stroke=\"#d97706\" stroke-width=\"1.4\"/>\n  <circle cx=\"486\" cy=\"202\" r=\"3.5\" fill=\"#d97706\"/>\n  <circle cx=\"566\" cy=\"156\" r=\"4\" fill=\"#dc2626\"/>\n  <line x1=\"486\" y1=\"202\" x2=\"562\" y2=\"158\" stroke=\"#059669\" stroke-width=\"1.8\" marker-end=\"url(#m1c17_arr1_green)\"/>\n  <line x1=\"566\" y1=\"202\" x2=\"566\" y2=\"161\" stroke=\"#dc2626\" stroke-width=\"2\" marker-end=\"url(#m1c17_arr1_red)\"/>\n  <rect x=\"556\" y=\"192\" width=\"10\" height=\"10\" fill=\"none\" stroke=\"#dc2626\" stroke-width=\"1.1\"/>\n  <text x=\"408\" y=\"210\" font-size=\"11\" fill=\"#92400e\">平面 Π: Ax+By+Cz+D=0</text>\n  <text x=\"576\" y=\"162\" font-size=\"11.5\" font-weight=\"700\" fill=\"#dc2626\">M₀(x₀,y₀,z₀)</text>\n  <text x=\"576\" y=\"182\" font-size=\"11\" font-weight=\"700\" fill=\"#dc2626\">法向量 n=(A,B,C)</text>\n  <text x=\"536\" y=\"238\" text-anchor=\"middle\" font-size=\"11.5\" fill=\"#334155\">点面距离 d = |Ax₀+By₀+Cz₀+D| / √(A²+B²+C²) = |Prj_n(M₁M₀)|</text>\n</svg>",
+      "source": {
+        "book": "27张宇《基础30讲·高数》",
+        "printedPage": "P.466-468",
+        "pdfPage": 471,
+        "itemRef": "向量代数核心运算"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_geo_and_tangents",
+        "verified": true
+      },
+      "section": "一、向量代数",
+      "prompt": "默写「向量代数核心运算：点积、叉积、混合积与方向余弦」的核心公式、符号含义与适用前提："
+    },
+    {
+      "id": "m1-c17-f-02",
+      "kind": "formula",
+      "stage": "foundation",
+      "examWeight": "core",
+      "title": "空间平面五式、空间直线四式与位置/距离/夹角公式",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{平面方程：}\\;Ax+By+Cz+D=0\\;\\text{（一般式，}\\mathbf{n}=(A,B,C)\\text{）}\\;|\\;A(x-x_0)+B(y-y_0)+C(z-z_0)=0\\;\\text{（点法式）}\\\\\n&\\qquad\\qquad\\frac{x}{a}+\\frac{y}{b}+\\frac{z}{c}=1\\;\\text{（截距式）}\\;|\\;(A_1x+B_1y+C_1z+D_1)+\\lambda(A_2x+B_2y+C_2z+D_2)=0\\;\\text{（平面束）}\\\\\n&\\text{直线方程：}\\;\\frac{x-x_0}{m}=\\frac{y-y_0}{n}=\\frac{z-z_0}{p}\\;\\text{（点向/对称式，}\\boldsymbol{\\tau}=(m,n,p)\\text{）}\\;|\\;\\begin{cases}x=x_0+mt\\\\y=y_0+nt\\\\z=z_0+pt\\end{cases}\\;\\text{（参数式）}\\\\\n&\\text{两核心距离：}\\;d(M_0,\\Pi)=\\frac{|Ax_0+By_0+Cz_0+D|}{\\sqrt{A^2+B^2+C^2}},\\qquad d(M_0,L)=\\frac{|\\boldsymbol{\\tau}\\times\\overrightarrow{M_1M_0}|}{|\\boldsymbol{\\tau}|}\\;（M_1\\in L）\\\\\n&\\text{三类夹角：}\\;\\cos\\theta_{\\text{线线}}=\\frac{|\\boldsymbol{\\tau}_1\\cdot\\boldsymbol{\\tau}_2|}{|\\boldsymbol{\\tau}_1||\\boldsymbol{\\tau}_2|},\\quad \\cos\\theta_{\\text{面面}}=\\frac{|\\mathbf{n}_1\\cdot\\mathbf{n}_2|}{|\\mathbf{n}_1||\\mathbf{n}_2|},\\quad \\sin\\varphi_{\\text{线面}}=\\frac{|\\mathbf{n}\\cdot\\boldsymbol{\\tau}|}{|\\mathbf{n}||\\boldsymbol{\\tau}|}\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "$\\mathbf{n}=(A,B,C)$",
+          "desc": "平面的非零法向量；过不共线三点 $M_1,M_2,M_3$ 的平面法向量可取 $\\overrightarrow{M_1M_2}\\times\\overrightarrow{M_1M_3}$"
+        },
+        {
+          "sym": "$\\boldsymbol{\\tau}=(m,n,p)$",
+          "desc": "直线的非零方向向量；若直线由两平面交线给出，则 $\\boldsymbol{\\tau}=\\mathbf{n}_1\\times\\mathbf{n}_2$"
+        },
+        {
+          "sym": "$\\theta,\\varphi\\in[0,\\frac{\\pi}{2}]$",
+          "desc": "空间中两直线、两平面及线面夹角均约定为锐角或直角，故分子必须加绝对值"
+        }
+      ],
+      "conditions": "平面束方程 $\\Pi_1+\\lambda\\Pi_2=0$ 表示过交线 $L$ 的除 $\\Pi_2=0$ 外的全部平面；一般直线化对称式需任取一点 $M_0$ 与叉积方向 $\\boldsymbol{\\tau}=\\mathbf{n}_1\\times\\mathbf{n}_2$。",
+      "pitfalls": "① 线面夹角公式左侧是 $\\sin\\varphi$ 而非 $\\cos\\varphi$，且线面平行 $\\Leftrightarrow \\mathbf{n}\\cdot\\boldsymbol{\\tau}=0$，线面垂直 $\\Leftrightarrow \\mathbf{n}\\parallel\\boldsymbol{\\tau}$（与线线/面面恰好对调！）；② 使用平面束 $\\Pi_1+\\lambda\\Pi_2=0$ 求过交线的特定平面时，若解不出 $\\lambda$，须检验漏掉的平面 $\\Pi_2=0$ 本身是否即为所求。",
+      "source": {
+        "book": "27张宇《基础30讲·高数》",
+        "printedPage": "P.468-472",
+        "pdfPage": 473,
+        "itemRef": "空间平面五式、空间直线四式与位置/距离/夹角公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_geo_and_tangents",
+        "verified": true
+      },
+      "section": "二、空间平面与直线",
+      "prompt": "默写「空间平面五式、空间直线四式与位置/距离/夹角公式」的核心公式、符号含义与适用前提："
+    },
+    {
+      "id": "m1-c17-f-03",
+      "kind": "formula",
+      "stage": "foundation",
+      "examWeight": "core",
+      "title": "空间曲线投影、旋转曲面公式与九大二次曲面/柱面全景图鉴",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{曲线在 }xOy\\text{ 面的投影曲线：由}\\begin{cases}F(x,y,z)=0\\\\G(x,y,z)=0\\end{cases}\\text{消去 }z\\text{ 得投影柱面 }H(x,y)=0\\text{，再联立}\\begin{cases}H(x,y)=0\\\\z=0\\end{cases}\\\\\n&\\text{一般绕 }z\\text{ 轴旋转曲面：母线 }\\Gamma:\\begin{cases}x=f_1(z)\\\\y=f_2(z)\\end{cases}\\text{ 绕 }z\\text{ 轴旋转}\\implies x^2+y^2=[f_1(z)]^2+[f_2(z)]^2\\\\\n&\\text{特例（}yOz\\text{ 平面母线 }f(y,z)=0\\text{ 绕 }z\\text{ 轴）：保持 }z\\text{ 不变，将 }y\\text{ 替换为 }\\pm\\sqrt{x^2+y^2}\\implies f(\\pm\\sqrt{x^2+y^2},z)=0\\\\\n&\\text{绕一般定直线 }L(M_0,\\mathbf{s})\\text{ 旋转：联立}\\begin{cases}|\\overrightarrow{M_0M}|^2=|\\overrightarrow{M_0M_1}|^2\\;\\text{（到定直线上定点等距）}\\\\\\overrightarrow{M_1M}\\cdot\\mathbf{s}=0\\;\\text{（旋转圆所在平面垂直于轴 }\\mathbf{s}\\text{）}\\end{cases}\\text{并消去母线点 }M_1\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "$H(x,y)=0$",
+          "desc": "不含 $z$ 的方程表示母线平行于 $z$ 轴的柱面（称为曲线在 $xOy$ 面上的投影柱面）"
+        },
+        {
+          "sym": "$M_1(x_1,y_1,z_1)$",
+          "desc": "母线 $\\Gamma$ 上的动点；$M(x,y,z)$ 为旋转曲面上与 $M_1$ 同纬圆上的任意点"
+        },
+        {
+          "sym": "$\\mathbf{s}=(m,n,p)$",
+          "desc": "一般旋转轴 $L$ 的方向向量，$M_0\\in L$ 为轴上任一定点"
+        }
+      ],
+      "conditions": "投影曲线必须是「柱面方程 + 坐标面方程（如 $z=0$）」的方程组；仅写 $H(x,y)=0$ 表示空间柱面而非平面曲线。",
+      "pitfalls": "① 直线段或有限曲线绕轴旋转或投影时，务必保留变量的实际取值范围（例如例 17.5 中过 $(0,-1,1),(0,0,0)$ 的射线/直线与 $z^2=2x$ 交线投影）；② 双曲抛物面（马鞍面）$z=xy$ 本质上是由标准型 $z=\\frac{x^2}{2}-\\frac{y^2}{2}$ 绕 $z$ 轴旋转 $\\frac{\\pi}{4}$ 得到，考研三重/曲面积分常考。",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 265\" role=\"img\" aria-label=\"空间曲线切线法平面与曲面切平面法线几何图\">\n  <title>空间曲线切向量叉积构造与空间曲面切平面、法向量及旋转曲面直观</title>\n  <defs>\n    <marker id=\"m1c17_arr2_blue\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#1d4ed8\"/>\n    </marker>\n    <marker id=\"m1c17_arr2_red\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#dc2626\"/>\n    </marker>\n    <marker id=\"m1c17_arr2_purple\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#7c3aed\"/>\n    </marker>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"720\" height=\"265\" rx=\"12\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n\n  <!-- Left panel: Surface tangent plane & normal + curve on surface -->\n  <rect x=\"14\" y=\"14\" width=\"346\" height=\"237\" rx=\"9\" fill=\"#ffffff\" stroke=\"#e2e8f0\" stroke-width=\"1\"/>\n  <text x=\"187\" y=\"34\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">曲面切平面与法线 · 交线切向量 τ = n₁ × n₂</text>\n\n  <!-- Curved surface dome -->\n  <path d=\"M 52,204 Q 186,98 320,196 Q 220,224 52,204 Z\" fill=\"#dbeafe\" fill-opacity=\"0.55\" stroke=\"#2563eb\" stroke-width=\"1.5\"/>\n  <!-- Tangent plane at M0 -->\n  <polygon points=\"88,136 250,118 292,158 130,176\" fill=\"#fef3c7\" fill-opacity=\"0.72\" stroke=\"#d97706\" stroke-width=\"1.4\"/>\n  <!-- Space curve Gamma on surface -->\n  <path d=\"M 80,198 Q 146,162 190,146 T 296,174\" fill=\"none\" stroke=\"#7c3aed\" stroke-width=\"2.2\"/>\n  <!-- Point M0 -->\n  <circle cx=\"190\" cy=\"146\" r=\"4.5\" fill=\"#dc2626\"/>\n  <!-- Normal vector n -->\n  <line x1=\"190\" y1=\"146\" x2=\"180\" y2=\"66\" stroke=\"#dc2626\" stroke-width=\"2.5\" marker-end=\"url(#m1c17_arr2_red)\"/>\n  <!-- Tangent vector tau -->\n  <line x1=\"190\" y1=\"146\" x2=\"266\" y2=\"128\" stroke=\"#7c3aed\" stroke-width=\"2.3\" marker-end=\"url(#m1c17_arr2_purple)\"/>\n  <!-- Right angle mark -->\n  <path d=\"M 188,132 L 201,129 L 203,143\" fill=\"none\" stroke=\"#dc2626\" stroke-width=\"1.1\"/>\n\n  <text x=\"192\" y=\"72\" font-size=\"11.5\" font-weight=\"700\" fill=\"#dc2626\">法向量 n = (Fₓ, Fᵧ, F_z)</text>\n  <text x=\"192\" y=\"88\" font-size=\"10.5\" fill=\"#991b1b\">或显式 (-zₓ, -zᵧ, 1) 朝上</text>\n  <text x=\"268\" y=\"122\" font-size=\"11.5\" font-weight=\"700\" fill=\"#7c3aed\">切向量 τ</text>\n  <text x=\"96\" y=\"130\" font-size=\"11\" font-weight=\"700\" fill=\"#b45309\">切平面 Π</text>\n  <text x=\"187\" y=\"226\" text-anchor=\"middle\" font-size=\"11.5\" fill=\"#334155\">核心互换：曲线 τ = 法平面法向；曲面 n = 法线方向</text>\n  <text x=\"187\" y=\"242\" text-anchor=\"middle\" font-size=\"11\" fill=\"#64748b\">交面曲线 {F=0, G=0} 切向量：τ = ∇F × ∇G</text>\n\n  <!-- Right panel: Quadric & Rotation Surface quick anatomy -->\n  <rect x=\"374\" y=\"14\" width=\"332\" height=\"237\" rx=\"9\" fill=\"#ffffff\" stroke=\"#e2e8f0\" stroke-width=\"1\"/>\n  <text x=\"540\" y=\"34\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">旋转曲面构造：母线绕 z 轴旋转（r² = x² + y²）</text>\n\n  <!-- Axes -->\n  <line x1=\"540\" y1=\"204\" x2=\"540\" y2=\"52\" stroke=\"#475569\" stroke-width=\"1.5\" marker-end=\"url(#m1c17_arr2_blue)\"/>\n  <line x1=\"420\" y1=\"186\" x2=\"660\" y2=\"186\" stroke=\"#94a3b8\" stroke-width=\"1.2\"/>\n  <text x=\"548\" y=\"60\" font-size=\"12\" font-weight=\"700\" fill=\"#1d4ed8\">z 轴</text>\n\n  <!-- Cone / Paraboloid revolution outline -->\n  <path d=\"M 462,88 Q 504,162 540,186 Q 576,162 618,88\" fill=\"#e0e7ff\" fill-opacity=\"0.45\" stroke=\"#1d4ed8\" stroke-width=\"2\"/>\n  <!-- Top ellipse -->\n  <ellipse cx=\"540\" cy=\"88\" rx=\"78\" ry=\"16\" fill=\"#dbeafe\" fill-opacity=\"0.5\" stroke=\"#1d4ed8\" stroke-width=\"1.5\"/>\n  <!-- Mid horizontal circle at height z0 -->\n  <ellipse cx=\"540\" cy=\"134\" rx=\"52\" ry=\"11\" fill=\"none\" stroke=\"#dc2626\" stroke-width=\"1.8\" stroke-dasharray=\"5,3\"/>\n  <circle cx=\"592\" cy=\"134\" r=\"3.8\" fill=\"#dc2626\"/>\n  <circle cx=\"508\" cy=\"143\" r=\"3.8\" fill=\"#059669\"/>\n  <line x1=\"540\" y1=\"134\" x2=\"592\" y2=\"134\" stroke=\"#dc2626\" stroke-width=\"1.6\"/>\n\n  <text x=\"598\" y=\"138\" font-size=\"11\" font-weight=\"700\" fill=\"#dc2626\">母线点 M₁(f₁(z),f₂(z),z)</text>\n  <text x=\"410\" y=\"152\" font-size=\"11\" font-weight=\"700\" fill=\"#059669\">旋转点 M(x,y,z)</text>\n  <text x=\"540\" y=\"218\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1e293b\">同高 z 等半径：x² + y² = [f₁(z)]² + [f₂(z)]²</text>\n  <text x=\"540\" y=\"236\" text-anchor=\"middle\" font-size=\"11\" fill=\"#64748b\">yOz 平面母线 f(y,z)=0 绕 z 轴 ⇒ f(±√(x²+y²), z) = 0</text>\n</svg>",
+      "tables": [
+        {
+          "caption": "表 17-1　数一必背二次曲面与柱面标准方程速查图鉴（基础30讲 P.474-475）",
+          "headers": [
+            "曲面名称",
+            "标准方程（$a,b,c>0$）",
+            "核心截痕与几何特征",
+            "高频考法"
+          ],
+          "rows": [
+            [
+              "椭球面",
+              "$\\frac{x^2}{a^2}+\\frac{y^2}{b^2}+\\frac{z^2}{c^2}=1$",
+              "封闭曲面；体积 $V=\\frac{4}{3}\\pi abc$；$a=b=c$ 为球面",
+              "广义球坐标、高斯挖洞、重心逆用"
+            ],
+            [
+              "单叶双曲面",
+              "$\\frac{x^2}{a^2}+\\frac{y^2}{b^2}-\\frac{z^2}{c^2}=1$",
+              "一个负号，腰部连通（小蛮腰），$z=h$ 截痕全为椭圆",
+              "由直母线/双曲线绕虚轴旋转而成"
+            ],
+            [
+              "双叶双曲面",
+              "$\\frac{x^2}{a^2}+\\frac{y^2}{b^2}-\\frac{z^2}{c^2}=-1$",
+              "右端 $-1$（两负一正），上下两支分离 $|z|\\ge c$",
+              "注意与单叶符号区分"
+            ],
+            [
+              "椭圆抛物面",
+              "$z=\\frac{x^2}{a^2}+\\frac{y^2}{b^2}$",
+              "开口朝 $+z$ 的碗形，$a=b$ 为旋转抛物面 $z=k(x^2+y^2)$",
+              "三重积分/曲面积分最高频曲面"
+            ],
+            [
+              "椭圆锥面",
+              "$z^2=\\frac{x^2}{a^2}+\\frac{y^2}{b^2}$",
+              "齐次二次方程，$a=b$ 为圆锥面；$z=\\sqrt{x^2+y^2}$ 仅上半支",
+              "球坐标 $\\varphi=\\frac{\\pi}{4}$、$\\mathrm{d}S=\\sqrt{2}\\mathrm{d}x\\mathrm{d}y$"
+            ],
+            [
+              "双曲抛物面（马鞍面）",
+              "$z=\\frac{x^2}{a^2}-\\frac{y^2}{b^2}$ 或 $z=xy$",
+              "一正一负，原点处为鞍点（非极值点）；$z=xy$ 为旋转 $\\frac{\\pi}{4}$ 变体",
+              "多元极值反例、二重积分与曲面投影"
+            ],
+            [
+              "三大柱面",
+              "$\\frac{x^2}{a^2}+\\frac{y^2}{b^2}=1$；$\\frac{x^2}{a^2}-\\frac{y^2}{b^2}=1$；$y^2=2px$",
+              "方程缺 $z$ 即母线平行 $z$ 轴的柱面（椭圆/双曲/抛物柱面）",
+              "偏心圆柱 $x^2+y^2=2ax$（极坐标 $r=2a\\cos\\theta$）"
+            ]
+          ]
+        }
+      ],
+      "source": {
+        "book": "27张宇《基础30讲·高数》",
+        "printedPage": "P.472-477",
+        "pdfPage": 477,
+        "itemRef": "空间曲线投影、旋转曲面公式与九大二次曲面/柱面全景图"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_geo_and_tangents",
+        "verified": true
+      },
+      "section": "三、空间曲线与曲面（含二次曲面图鉴）",
+      "prompt": "默写「空间曲线投影、旋转曲面公式与九大二次曲面/柱面全景图鉴」的核心公式、符号含义与适用前提："
+    },
+    {
+      "id": "m1-c17-f-04",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "title": "空间曲线的切线与法平面（参数方程法 & 交面叉积法）",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{情形一（参数式 }x=x(t),\\;y=y(t),\\;z=z(t)\\text{，切点 }t=t_0\\text{ 对应 }M_0(x_0,y_0,z_0)\\text{）：}\\\\\n&\\qquad \\boldsymbol{\\tau}=\\big(x'(t_0),\\,y'(t_0),\\,z'(t_0)\\big)\\ne\\mathbf{0}\\\\\n&\\text{情形二（一般交面式 }F(x,y,z)=0,\\;G(x,y,z)=0\\text{ 在 }M_0\\text{ 处）：}\\\\\n&\\qquad \\boldsymbol{\\tau}=\\mathbf{n}_F\\times\\mathbf{n}_G=\\begin{vmatrix}\\mathbf{i}&\\mathbf{j}&\\mathbf{k}\\\\F_x'&F_y'&F_z'\\\\G_x'&G_y'&G_z'\\end{vmatrix}_{M_0}=\\left(\\frac{\\partial(F,G)}{\\partial(y,z)},\\,\\frac{\\partial(F,G)}{\\partial(z,x)},\\,\\frac{\\partial(F,G)}{\\partial(x,y)}\\right)_{M_0}\\\\\n&\\text{切线方程：}\\;\\frac{x-x_0}{\\tau_x}=\\frac{y-y_0}{\\tau_y}=\\frac{z-z_0}{\\tau_z},\\qquad \\text{法平面方程：}\\;\\tau_x(x-x_0)+\\tau_y(y-y_0)+\\tau_z(z-z_0)=0\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "$\\boldsymbol{\\tau}=(\\tau_x,\\tau_y,\\tau_z)$",
+          "desc": "曲线在切点 $M_0$ 处的切向量，同时充当切线的方向向量与法平面的法向量"
+        },
+        {
+          "sym": "$\\mathbf{n}_F,\\mathbf{n}_G$",
+          "desc": "两相交曲面在 $M_0$ 处的法向量，曲线同时位于两曲面上故 $\\boldsymbol{\\tau}\\perp\\mathbf{n}_F$ 且 $\\boldsymbol{\\tau}\\perp\\mathbf{n}_G$"
+        }
+      ],
+      "conditions": "要求参数函数在 $t_0$ 可导且导数不全为零；交面式要求 $F,G$ 在 $M_0$ 具有连续一阶偏导且 $\\mathbf{n}_F\\times\\mathbf{n}_G\\ne\\mathbf{0}$。",
+      "pitfalls": "① 遇到 $\\{z=f(x,y),\\,y=0\\}$（例 17.7）或 $\\{x=y^2,\\,z=x^2\\}$（强化例 17.5(2)）时，直接取 $x$ 或 $y$ 作参数（化为参数式）往往比算叉积快得多且不易算错符号；② 对称式切线方程中若某个分量为 $0$，仍可写成比例形式 $\\frac{x-x_0}{0}=\\dots$ 表示 $x=x_0$。",
+      "source": {
+        "book": "27张宇《基础30讲·高数》+《高数18讲》（强化）",
+        "printedPage": "P.477-479 / P.240-241",
+        "pdfPage": 482,
+        "itemRef": "空间曲线的切线与法平面"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_geo_and_tangents",
+        "verified": true
+      },
+      "section": "四、多元函数微分学的几何应用（曲线）",
+      "prompt": "默写「空间曲线的切线与法平面（参数方程法 & 交面叉积法）」的核心公式、符号含义与适用前提："
+    },
+    {
+      "id": "m1-c17-f-05",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "title": "空间曲面的切平面与法线（隐式与显式法向量公式）",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{隐式曲面 }F(x,y,z)=0\\text{ 在 }M_0(x_0,y_0,z_0)\\text{ 处：法向量 }\\mathbf{n}=\\big(F_x'(M_0),\\,F_y'(M_0),\\,F_z'(M_0)\\big)\\ne\\mathbf{0}\\\\\n&\\text{切平面：}\\;F_x'(M_0)(x-x_0)+F_y'(M_0)(y-y_0)+F_z'(M_0)(z-z_0)=0\\\\\n&\\text{法线：}\\;\\frac{x-x_0}{F_x'(M_0)}=\\frac{y-y_0}{F_y'(M_0)}=\\frac{z-z_0}{F_z'(M_0)}\\\\\n&\\text{显式曲面 }z=f(x,y)\\text{：令 }F=z-f(x,y)=0\\implies \\mathbf{n}_{\\text{上}}=\\big(-f_x',-f_y',1\\big)\\;\\text{（与 }z\\text{ 轴正向成锐角）}\\\\\n&\\qquad\\qquad\\qquad\\text{切平面：}\\;z-z_0=f_x'(x_0,y_0)(x-x_0)+f_y'(x_0,y_0)(y-y_0)\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "$\\mathbf{n}=(F_x',F_y',F_z')$",
+          "desc": "曲面在 $M_0$ 处的法向量，同时充当切平面的法向量与法线的方向向量"
+        },
+        {
+          "sym": "$\\mathbf{n}_{\\text{上}}=(-f_x',-f_y',1)$",
+          "desc": "显式曲面的上侧法向量（$\\cos\\gamma>0$）；取反得下侧法向量 $(f_x',f_y',-1)$"
+        }
+      ],
+      "conditions": "显式曲面需 $f(x,y)$ 在 $(x_0,y_0)$ 处可微；隐式曲面需 $F(x,y,z)$ 在 $M_0$ 处可微（通常一阶偏导连续）且三偏导不同时为零。",
+      "pitfalls": "① 显式曲面切平面方程本质就是全微分 $z-z_0=\\mathrm{d}z$，法向量中 $z$ 的系数为 $1$ 时前两项务必带负号 $(-f_x',-f_y',1)$，切勿误写成 $(f_x',f_y',1)$；② 若 $F_z'(M_0)=0$（如例 17.8 中 $\\mathbf{n}=(4,2,0)$），切平面垂直于 $xOy$ 面，方程不含 $z$，属正常结果。",
+      "source": {
+        "book": "27张宇《基础30讲·高数》+《高数18讲》（强化）",
+        "printedPage": "P.478-479 / P.241-242",
+        "pdfPage": 483,
+        "itemRef": "空间曲面的切平面与法线"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_geo_and_tangents",
+        "verified": true
+      },
+      "section": "四、多元函数微分学的几何应用（曲面）",
+      "prompt": "默写「空间曲面的切平面与法线（隐式与显式法向量公式）」的核心公式、符号含义与适用前提："
+    },
+    {
+      "id": "m1-c17-f-06",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "title": "方向导数、梯度与二元函数的二阶泰勒公式（强化核心）",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{方向导数定义：}\\;\\left.\\frac{\\partial u}{\\partial l}\\right|_{P_0}=\\lim_{t\\to 0^+}\\frac{f(x_0+t\\cos\\alpha,\\,y_0+t\\cos\\beta,\\,z_0+t\\cos\\gamma)-f(x_0,y_0,z_0)}{t}\\\\\n&\\text{可微计算式：}\\;\\left.\\frac{\\partial u}{\\partial l}\\right|_{P_0}=f_x'\\cos\\alpha+f_y'\\cos\\beta+f_z'\\cos\\gamma=\\operatorname{grad}u(P_0)\\cdot\\mathbf{l}^\\circ=|\\operatorname{grad}u(P_0)|\\cos\\theta\\\\\n&\\text{梯度定义：}\\;\\operatorname{grad}u=\\nabla u=\\frac{\\partial u}{\\partial x}\\mathbf{i}+\\frac{\\partial u}{\\partial y}\\mathbf{j}+\\frac{\\partial u}{\\partial z}\\mathbf{k},\\qquad \\max_{\\mathbf{l}^\\circ}\\frac{\\partial u}{\\partial l}=|\\operatorname{grad}u|\\;\\text{（沿梯度正向）}\\\\\n&\\text{二元二阶泰勒展开（}(x_0,y_0)\\text{ 处）：}\\\\\n&\\quad f(x_0+h,y_0+k)=f(x_0,y_0)+\\left(h\\frac{\\partial}{\\partial x}+k\\frac{\\partial}{\\partial y}\\right)f(x_0,y_0)+\\frac{1}{2!}\\left(h\\frac{\\partial}{\\partial x}+k\\frac{\\partial}{\\partial y}\\right)^2f(x_0,y_0)+o(\\rho^2)\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "$t\\to 0^+$",
+          "desc": "方向导数定义中的极限必为单侧正极限（$t>0$），射线方向单向逼近"
+        },
+        {
+          "sym": "$\\mathbf{l}^\\circ=(\\cos\\alpha,\\cos\\beta,\\cos\\gamma)$",
+          "desc": "沿给定方向 $\\mathbf{l}$ 的单位方向向量，必须先单位化 $\\mathbf{l}^\\circ=\\frac{\\mathbf{l}}{|\\mathbf{l}|}$"
+        },
+        {
+          "sym": "$\\rho=\\sqrt{h^2+k^2}$",
+          "desc": "二元泰勒展开中 $(h,k)=(x-x_0,y-y_0)$ 的欧氏距离；展开式可直接拆成线性项与二次型"
+        }
+      ],
+      "conditions": "① $\\frac{\\partial u}{\\partial l}=\\operatorname{grad}u\\cdot\\mathbf{l}^\\circ$ 成立的充分条件是 $u$ 在 $P_0$ 处可微；若不可微必须退回 $t\\to 0^+$ 定义计算。② 二元二阶泰勒公式需 $f$ 在 $(x_0,y_0)$ 邻域具二阶连续偏导（或二阶可微）。",
+      "pitfalls": "① 方向导数是单侧极限 $t\\to 0^+$（如 $f(x,y)=\\sqrt{x^2+y^2}$ 在 $(0,0)$ 处沿任意方向的方向导数均为 $1$，但偏导数不存在！）；② 给方向向量 $\\mathbf{n}=(a,b,c)$ 时，最常犯错是忘除以 $|\\mathbf{n}|$ 直接点乘；③ 严谨补注（#60）：基础30讲 P.480 定义梯度时要求「一阶连续偏导数」，实际只需一阶偏导存在即可定义 $\\operatorname{grad}u$，而点乘公式仅需可微即可。",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 265\" role=\"img\" aria-label=\"梯度方向导数与散度旋度场论几何图\">\n  <title>数量场梯度与方向导数投影关系 · 向量场散度（源）与旋度（涡）几何直观</title>\n  <defs>\n    <marker id=\"m1c17_arr3_red\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#dc2626\"/>\n    </marker>\n    <marker id=\"m1c17_arr3_blue\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#1d4ed8\"/>\n    </marker>\n    <marker id=\"m1c17_arr3_green\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#059669\"/>\n    </marker>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"720\" height=\"265\" rx=\"12\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n\n  <!-- Panel 1: Gradient & Directional Derivative -->\n  <rect x=\"14\" y=\"14\" width=\"234\" height=\"237\" rx=\"9\" fill=\"#ffffff\" stroke=\"#e2e8f0\" stroke-width=\"1\"/>\n  <text x=\"131\" y=\"34\" text-anchor=\"middle\" font-size=\"12.5\" font-weight=\"700\" fill=\"#0f172a\">数量场：梯度与方向导数</text>\n  <!-- Contour ellipses -->\n  <ellipse cx=\"120\" cy=\"148\" rx=\"86\" ry=\"52\" fill=\"none\" stroke=\"#93c5fd\" stroke-width=\"1.2\" stroke-dasharray=\"4,3\"/>\n  <ellipse cx=\"120\" cy=\"148\" rx=\"56\" ry=\"34\" fill=\"#eff6ff\" stroke=\"#60a5fa\" stroke-width=\"1.3\"/>\n  <ellipse cx=\"120\" cy=\"148\" rx=\"28\" ry=\"17\" fill=\"#dbeafe\" stroke=\"#2563eb\" stroke-width=\"1.4\"/>\n  <!-- Point P0 -->\n  <circle cx=\"152\" cy=\"120\" r=\"4\" fill=\"#0f172a\"/>\n  <!-- grad u normal to contour -->\n  <line x1=\"152\" y1=\"120\" x2=\"188\" y2=\"66\" stroke=\"#dc2626\" stroke-width=\"2.5\" marker-end=\"url(#m1c17_arr3_red)\"/>\n  <!-- unit vector e_l -->\n  <line x1=\"152\" y1=\"120\" x2=\"218\" y2=\"108\" stroke=\"#1d4ed8\" stroke-width=\"2.2\" marker-end=\"url(#m1c17_arr3_blue)\"/>\n  <!-- Angle theta -->\n  <path d=\"M 166,99 A 24,24 0 0,1 178,115\" fill=\"none\" stroke=\"#059669\" stroke-width=\"1.5\"/>\n  <text x=\"176\" y=\"103\" font-size=\"11\" font-weight=\"700\" fill=\"#059669\">θ</text>\n  <text x=\"190\" y=\"64\" font-size=\"11.5\" font-weight=\"700\" fill=\"#dc2626\">grad u</text>\n  <text x=\"216\" y=\"102\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1d4ed8\">l°</text>\n  <text x=\"131\" y=\"216\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1e293b\">∂u/∂l = grad u · l° = |grad u|cosθ</text>\n  <text x=\"131\" y=\"234\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#64748b\">垂直等值面；最大变化率 = |grad u|</text>\n\n  <!-- Panel 2: Divergence (Source) -->\n  <rect x=\"258\" y=\"14\" width=\"218\" height=\"237\" rx=\"9\" fill=\"#ffffff\" stroke=\"#e2e8f0\" stroke-width=\"1\"/>\n  <text x=\"367\" y=\"34\" text-anchor=\"middle\" font-size=\"12.5\" font-weight=\"700\" fill=\"#0f172a\">散度 div F = ∇·F（源强）</text>\n  <circle cx=\"367\" cy=\"128\" r=\"10\" fill=\"#fee2e2\" stroke=\"#dc2626\" stroke-width=\"2\"/>\n  <text x=\"367\" y=\"132\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#dc2626\">+</text>\n  <!-- Radial arrows outward -->\n  <line x1=\"367\" y1=\"112\" x2=\"367\" y2=\"66\" stroke=\"#dc2626\" stroke-width=\"2\" marker-end=\"url(#m1c17_arr3_red)\"/>\n  <line x1=\"367\" y1=\"144\" x2=\"367\" y2=\"188\" stroke=\"#dc2626\" stroke-width=\"2\" marker-end=\"url(#m1c17_arr3_red)\"/>\n  <line x1=\"351\" y1=\"128\" x2=\"305\" y2=\"128\" stroke=\"#dc2626\" stroke-width=\"2\" marker-end=\"url(#m1c17_arr3_red)\"/>\n  <line x1=\"383\" y1=\"128\" x2=\"429\" y2=\"128\" stroke=\"#dc2626\" stroke-width=\"2\" marker-end=\"url(#m1c17_arr3_red)\"/>\n  <line x1=\"378\" y1=\"117\" x2=\"412\" y2=\"83\" stroke=\"#dc2626\" stroke-width=\"1.8\" marker-end=\"url(#m1c17_arr3_red)\"/>\n  <line x1=\"356\" y1=\"117\" x2=\"322\" y2=\"83\" stroke=\"#dc2626\" stroke-width=\"1.8\" marker-end=\"url(#m1c17_arr3_red)\"/>\n  <line x1=\"378\" y1=\"139\" x2=\"412\" y2=\"173\" stroke=\"#dc2626\" stroke-width=\"1.8\" marker-end=\"url(#m1c17_arr3_red)\"/>\n  <line x1=\"356\" y1=\"139\" x2=\"322\" y2=\"173\" stroke=\"#dc2626\" stroke-width=\"1.8\" marker-end=\"url(#m1c17_arr3_red)\"/>\n  <text x=\"367\" y=\"216\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1e293b\">数量：∂P/∂x + ∂Q/∂y + ∂R/∂z</text>\n  <text x=\"367\" y=\"234\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#64748b\">&gt;0 正源 · &lt;0 负源 · ≡0 无源场(高斯)</text>\n\n  <!-- Panel 3: Curl (Vortex) -->\n  <rect x=\"486\" y=\"14\" width=\"220\" height=\"237\" rx=\"9\" fill=\"#ffffff\" stroke=\"#e2e8f0\" stroke-width=\"1\"/>\n  <text x=\"596\" y=\"34\" text-anchor=\"middle\" font-size=\"12.5\" font-weight=\"700\" fill=\"#0f172a\">旋度 rot F = ∇×F（涡旋）</text>\n  <!-- Swirling loop -->\n  <ellipse cx=\"596\" cy=\"144\" rx=\"58\" ry=\"26\" fill=\"#ecfdf5\" stroke=\"#059669\" stroke-width=\"2\"/>\n  <path d=\"M 642,130 A 58,26 0 0,1 654,144\" fill=\"none\" stroke=\"#059669\" stroke-width=\"2.4\" marker-end=\"url(#m1c17_arr3_green)\"/>\n  <path d=\"M 550,158 A 58,26 0 0,1 538,144\" fill=\"none\" stroke=\"#059669\" stroke-width=\"2.4\" marker-end=\"url(#m1c17_arr3_green)\"/>\n  <!-- Axis curl vector upward -->\n  <line x1=\"596\" y1=\"144\" x2=\"596\" y2=\"68\" stroke=\"#1d4ed8\" stroke-width=\"2.6\" marker-end=\"url(#m1c17_arr3_blue)\"/>\n  <text x=\"606\" y=\"80\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1d4ed8\">rot F</text>\n  <text x=\"606\" y=\"96\" font-size=\"10\" fill=\"#1e40af\">右手四指顺环流</text>\n  <text x=\"596\" y=\"216\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1e293b\">向量：|i j k; ∂x ∂y ∂z; P Q R|</text>\n  <text x=\"596\" y=\"234\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#64748b\">≡0 无旋场(路径无关/斯托克斯)</text>\n</svg>",
+      "source": {
+        "book": "27张宇《基础30讲·高数》+《高数18讲》（强化）",
+        "printedPage": "P.479-483 / P.237-240",
+        "pdfPage": 484,
+        "itemRef": "方向导数、梯度与二元函数的二阶泰勒公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_field_and_zy18",
+        "verified": true
+      },
+      "section": "五、场论初步与多元泰勒公式（方向导数与梯度）",
+      "prompt": "默写「方向导数、梯度与二元函数的二阶泰勒公式（强化核心）」的核心公式、符号含义与适用前提："
+    },
+    {
+      "id": "m1-c17-f-07",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "title": "向量场的散度与旋度（哈密顿算子 $\\nabla$ 统一形式）",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{哈密顿算子：}\\;\\nabla=\\frac{\\partial}{\\partial x}\\mathbf{i}+\\frac{\\partial}{\\partial y}\\mathbf{j}+\\frac{\\partial}{\\partial z}\\mathbf{k},\\qquad \\mathbf{A}(x,y,z)=P(x,y,z)\\mathbf{i}+Q(x,y,z)\\mathbf{j}+R(x,y,z)\\mathbf{k}\\\\\n&\\text{散度（标量/数量）：}\\;\\operatorname{div}\\mathbf{A}=\\nabla\\cdot\\mathbf{A}=\\frac{\\partial P}{\\partial x}+\\frac{\\partial Q}{\\partial y}+\\frac{\\partial R}{\\partial z}\\\\\n&\\text{旋度（向量）：}\\;\\operatorname{rot}\\mathbf{A}=\\nabla\\times\\mathbf{A}=\\begin{vmatrix}\\mathbf{i}&\\mathbf{j}&\\mathbf{k}\\\\\\frac{\\partial}{\\partial x}&\\frac{\\partial}{\\partial y}&\\frac{\\partial}{\\partial z}\\\\P&Q&R\\end{vmatrix}=\\left(\\frac{\\partial R}{\\partial y}-\\frac{\\partial Q}{\\partial z}\\right)\\mathbf{i}+\\left(\\frac{\\partial P}{\\partial z}-\\frac{\\partial R}{\\partial x}\\right)\\mathbf{j}+\\left(\\frac{\\partial Q}{\\partial x}-\\frac{\\partial P}{\\partial y}\\right)\\mathbf{k}\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "$\\operatorname{div}\\mathbf{A}$",
+          "desc": "标量函数，物理上度量该点通量发散强度（高斯公式被积函数）"
+        },
+        {
+          "sym": "$\\operatorname{rot}\\mathbf{A}$",
+          "desc": "向量函数（亦记 $\\operatorname{curl}\\mathbf{A}$），物理上度量涡旋轴向与最大环量密度（斯托克斯公式核心）"
+        }
+      ],
+      "conditions": "要求向量场分量 $P,Q,R$ 在所考察点具有一阶偏导数。",
+      "pitfalls": "① 散度是数量（标量），旋度是向量，选择题或填空题切勿把旋度写成标量或把散度带上 $\\mathbf{i},\\mathbf{j},\\mathbf{k}$；② 展开旋度行列式时，第二项 $\\mathbf{j}$ 的代数余子式自带负号，即 $-(\\frac{\\partial R}{\\partial x}-\\frac{\\partial P}{\\partial z})=\\frac{\\partial P}{\\partial z}-\\frac{\\partial R}{\\partial x}$，极易丢负号！③ $\\operatorname{rot}\\mathbf{A}$ 的 $\\mathbf{k}$ 分量 $\\frac{\\partial Q}{\\partial x}-\\frac{\\partial P}{\\partial y}$ 正是二维格林公式的核心被积函数。",
+      "source": {
+        "book": "27张宇《基础30讲·高数》+《高数18讲》（强化）",
+        "printedPage": "P.483 / P.242-243",
+        "pdfPage": 488,
+        "itemRef": "向量场的散度与旋度"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_field_and_zy18",
+        "verified": true
+      },
+      "section": "五、场论初步（散度与旋度）",
+      "prompt": "默写「向量场的散度与旋度（哈密顿算子 $\\nabla$ 统一形式）」的核心公式、符号含义与适用前提："
+    },
+    {
+      "id": "m1-c17-c-01",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "title": "方向导数存在与连续、偏导、可微的逻辑关系辨析",
+      "summary": "核心逻辑链：**可微 $\\Rightarrow$ 沿任意方向的方向导数均存在且等于 $\\operatorname{grad}f\\cdot\\mathbf{l}^\\circ$**；但**逆命题全不成立**：① 沿任意方向方向导数存在 $\\not\\Rightarrow$ 连续（反例见强化例 17.1：$y=x^2$ 抛物线上取 $1$，其余取 $0$，任意射线近原点恒取 $0$ 故方向导数全为 $0$，但不连续）；② 沿任意方向方向导数存在 $\\not\\Rightarrow$ 偏导数存在（反例：$f(x,y)=\\sqrt{x^2+y^2}$ 在 $(0,0)$ 沿任意方向方向导数为 $1$，但沿 $+x$ 与 $-x$ 互不相反，偏导不存在）；③ 偏导数存在 $\\Rightarrow$ 沿坐标轴正负方向的方向导数存在且互为相反数，但 $\\not\\Rightarrow$ 沿其他方向存在。",
+      "conditions": "偏导数是沿坐标轴的**双侧极限**（$h\\to 0$），方向导数是沿射线的**单侧极限**（$t\\to 0^+$）；仅当函数可微时，方向导数关于方向才呈线性函数 $\\operatorname{grad}f\\cdot\\mathbf{l}^\\circ$。",
+      "pitfalls": "考场概念选择题高频陷阱：误以为「所有方向的方向导数都存在且相等（甚至都为 $0$）」就能推出函数在该点连续或偏导存在。牢记 $y=x^2$ 抛物线脊反例与锥面 $\\sqrt{x^2+y^2}$ 反例即可秒杀一切变体。",
+      "source": {
+        "book": "27张宇《高数18讲》（强化）",
+        "printedPage": "P.237-238",
+        "pdfPage": 250,
+        "itemRef": "方向导数存在与连续、偏导、可微的逻辑关系辨析"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_field_and_zy18",
+        "verified": true
+      },
+      "section": "重要结论（一）：方向导数与连续/偏导/可微辨析"
+    },
+    {
+      "id": "m1-c17-c-02",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "title": "梯度方向性极值与「不共线双方向导数定梯度」定理",
+      "summary": "设 $u=f(x,y)$ 在 $P_0$ 处可微：① $\\frac{\\partial u}{\\partial l}$ 在沿 $\\operatorname{grad}u(P_0)$ 正向取**最大值 $|\\operatorname{grad}u(P_0)|$**，沿负向取**最小值 $-|\\operatorname{grad}u(P_0)|$**，沿与梯度正交（即等值线切向）方向为 $0$；② **逆向反求定理**：若已知 $f(x,y)$ 在 $P_0$ 沿某给定非零向量 $\\mathbf{l}$ 的方向导数取最大值 $M>0$，则必有 $\\operatorname{grad}f(P_0)=k\\mathbf{l}\\;(k>0)$ 且 $|\\operatorname{grad}f(P_0)|=M$（一步列出方程求待定参数，见例 17.11、强化例 17.3）；③ **双方向定梯度推论**（基础 P.483 注）：只要给出 $P_0$ 处沿两个**不共线**单位方向 $\\mathbf{l}_1^\\circ,\\mathbf{l}_2^\\circ$ 的方向导数，即可由线性方程组唯一解出 $(f_x',f_y')$ 进而确定最大方向导数；特别地，若某连通区域内沿两不共线方向的方向导数恒为 $0$，则 $f(x,y)\\equiv C$。",
+      "conditions": "上述结论均要求函数在 $P_0$（或区域内）可微；三维情形需三个不共面方向唯一确定梯度。",
+      "pitfalls": "反求参数时务必写明比例系数 **$k>0$**（不是 $k\\ne 0$！），否则会把沿梯度负方向取最小值 $-M$ 的增根（如例 17.11 中 $a=1,b=1$）误当成正解！",
+      "source": {
+        "book": "27张宇《基础30讲·高数》+《高数18讲》（强化）",
+        "printedPage": "P.482-483 / P.239",
+        "pdfPage": 487,
+        "itemRef": "梯度方向性极值与「不共线双方向导数定梯度」定理"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_field_and_zy18",
+        "verified": true
+      },
+      "section": "重要结论（二）：梯度极值与双方向定梯度"
+    },
+    {
+      "id": "m1-c17-c-03",
+      "kind": "conclusion",
+      "stage": "foundation",
+      "examWeight": "core",
+      "title": "旋转曲面方程秒杀口诀与一般定轴旋转两步消元法",
+      "summary": "① **绕坐标轴旋转（90%考题）**：若母线在坐标平面内（如 $yOz$ 面 $f(y,z)=0$ 绕 $z$ 轴），口诀「**绕谁谁不变，另元换根号**」，即 $f(\\pm\\sqrt{x^2+y^2},z)=0$；若母线为空间一般曲线 $\\{x=f_1(z),y=f_2(z)\\}$ 绕 $z$ 轴旋转，则同一高度 $z$ 处到 $z$ 轴距离平方相等，直接写出 **$x^2+y^2=[f_1(z)]^2+[f_2(z)]^2$**（如例 17.5、第 18 讲例 18.22）；② **绕斜直线 $L$（过定点 $M_0$，方向 $\\mathbf{s}$）旋转**：任取母线上动点 $M_1(x_1,y_1,z_1)$ 与曲面上动点 $M(x,y,z)$，列两式「垂直轴 $\\overrightarrow{M_1M}\\cdot\\mathbf{s}=0$」+「等距 $|\\overrightarrow{M_0M}|^2=|\\overrightarrow{M_0M_1}|^2$」，再结合母线两方程，共四式消去 $x_1,y_1,z_1$ 即得曲面方程。",
+      "conditions": "绕坐标轴旋转公式中，$[f_1(z)]^2+[f_2(z)]^2$ 对空间歪斜直线同样完全适用，无需先把母线投影到坐标面。",
+      "pitfalls": "① 若母线为有限线段或半直线（如 $z\\ge 0$），旋转后必须注明对应坐标区间（如例 17.5 只取上半锥面 $z=\\sqrt{x^2+y^2}$）；② 绕直线旋转后若求与另一曲面交线在坐标面的投影，千万别忘补上坐标面方程（如 $z=0$）。",
+      "source": {
+        "book": "27张宇《基础30讲·高数》",
+        "printedPage": "P.475-477",
+        "pdfPage": 480,
+        "itemRef": "旋转曲面方程秒杀口诀与一般定轴旋转两步消元法"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_geo_and_tangents",
+        "verified": true
+      },
+      "section": "重要结论（三）：旋转曲面构造与消元法则"
+    },
+    {
+      "id": "m1-c17-c-04",
+      "kind": "conclusion",
+      "stage": "foundation",
+      "examWeight": "core",
+      "title": "曲面法向量特征判别几何类型与可微曲面切点增量性质",
+      "summary": "① **法向量恒垂直于定向量 $\\mathbf{v}_0 \\Leftrightarrow$ 曲面为母线平行于 $\\mathbf{v}_0$ 的柱面**（例 17.9 核心）：若曲面 $F(x,y,z)=0$ 上每一点法向量 $\\mathbf{n}=(F_x',F_y',F_z')$ 均满足 $\\mathbf{n}\\cdot\\mathbf{v}_0\\equiv 0$，说明所有切平面均平行于定直线 $\\mathbf{v}_0$，该曲面必是以 $\\mathbf{v}_0$ 为母线方向的柱面（特别地，形如 $g(ax+by+cz)=f(dx+ey+fz)$ 的曲面，其法向量必同时垂直于 $(a,b,c)\\times(d,e,f)$，必为柱面！）；② **可微曲面在过原点的切点增量极限**（例 17.1）：若 $z=f(x,y)$ 在 $(0,0)$ 可微且 $f(0,0)=0$，记法向量 $\\mathbf{n}=(f_x'(0,0),f_y'(0,0),-1)$，则 $\\mathbf{n}\\cdot(x,y,f(x,y))=f_x'x+f_y'y-f(x,y)=-o(\\sqrt{x^2+y^2})$，即曲面上动点向切平面的偏离量为距离的高阶无穷小。",
+      "conditions": "柱面判别需曲面光滑且梯度非零；曲面可微增量性质是全微分几何意义（用切平面局部线性逼近曲面）的直接向量表达。",
+      "pitfalls": "例 17.9 类题型常把柱面、旋转面、锥面混在四个选项里，抓住「法向量 $\\perp$ 定向量 $\\Rightarrow$ 柱面」、「法线恒过定点 $\\Rightarrow$ 球面」、「法线恒与定轴相交（即 $[\\mathbf{n},\\mathbf{s},\\overrightarrow{M_0M}]=0$）$\\Rightarrow$ 旋转面」、「切平面恒过原点（即 $\\mathbf{n}\\cdot\\mathbf{r}=0$）$\\Rightarrow$ 锥面」四大几何特征即可一眼辨识。",
+      "source": {
+        "book": "27张宇《基础30讲·高数》",
+        "printedPage": "P.467-468 / P.479",
+        "pdfPage": 472,
+        "itemRef": "曲面法向量特征判别几何类型与可微曲面切点增量性质"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_geo_and_tangents",
+        "verified": true
+      },
+      "section": "重要结论（四）：法向量判别曲面与切面增量"
+    },
+    {
+      "id": "m1-c17-c-05",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "title": "梯度、散度、旋度的核心矢量恒等式与第 18 讲衔接地图",
+      "summary": "设标量场 $u$ 与向量场 $\\mathbf{A},\\mathbf{B}$ 具有二阶连续偏导数，则满足两大黄金零恒等式与乘积展开式：① **梯度场必无旋**：$\\operatorname{rot}(\\operatorname{grad}u)=\\nabla\\times(\\nabla u)\\equiv\\mathbf{0}$（反之单连通域内无旋场必为保守梯度场，对应第 18 讲曲线积分与路径无关）；② **旋度场必无源**：$\\operatorname{div}(\\operatorname{rot}\\mathbf{A})=\\nabla\\cdot(\\nabla\\times\\mathbf{A})\\equiv 0$（对应高斯公式中闭合曲面通量为 $0$）；③ **拉普拉斯算子**：$\\operatorname{div}(\\operatorname{grad}u)=\\nabla^2 u=\\Delta u=u_{xx}''+u_{yy}''+u_{zz}''$；④ **标量乘向量散度**：$\\operatorname{div}(u\\mathbf{A})=\\operatorname{grad}u\\cdot\\mathbf{A}+u\\operatorname{div}\\mathbf{A}$；⑤ **叉积散度**：$\\operatorname{div}(\\mathbf{A}\\times\\mathbf{B})=\\mathbf{B}\\cdot\\operatorname{rot}\\mathbf{A}-\\mathbf{A}\\cdot\\operatorname{rot}\\mathbf{B}$。",
+      "conditions": "两零恒等式依赖二阶混合偏导连续相等（克莱罗定理）；梯度运算法则满足线性、乘积 $\\operatorname{grad}(uv)=v\\operatorname{grad}u+u\\operatorname{grad}v$ 及复合链式法则 $\\operatorname{grad}f(u)=f'(u)\\operatorname{grad}u$。",
+      "pitfalls": "① 切忌对标量求散度/旋度，或对向量求梯度（在数一范畴中，梯度作用于标量输出向量；散度作用于向量输出标量；旋度作用于向量输出向量）；② 遇到 $\\operatorname{div}(\\mathbf{v}_1\\times\\mathbf{v}_2)$（如强化例 17.7），直接先算出叉积坐标再求偏导和，比硬套展开式更稳更不易出错。",
+      "source": {
+        "book": "27张宇《基础30讲·高数》+《高数18讲》（强化）",
+        "printedPage": "P.480-483 / P.242-243",
+        "pdfPage": 485,
+        "itemRef": "梯度、散度、旋度的核心矢量恒等式与第 18 讲衔接地"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_field_and_zy18",
+        "verified": true
+      },
+      "section": "重要结论（五）：梯度/散度/旋度矢量恒等式"
+    },
+    {
+      "id": "m1-c17-e-01",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "title": "例 17.1　曲面可微与法向量点积极限（向量代数与全微分几何意义结合）",
+      "problem": "设二元函数 $f(x,y)$ 在点 $(0,0)$ 处可微，且 $f(0,0)=0$，记 $\\mathbf{n}=\\big(f_x'(0,0),\\,f_y'(0,0),\\,-1\\big)$，求极限 $\\displaystyle\\lim_{(x,y)\\to(0,0)}\\frac{\\mathbf{n}\\cdot(x,y,f(x,y))}{\\sqrt{x^2+y^2}}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：按向量点积坐标公式展开分子",
+          "detail": "由点积定义得 $\\mathbf{n}\\cdot(x,y,f(x,y))=f_x'(0,0)x+f_y'(0,0)y-f(x,y)$。"
+        },
+        {
+          "stepTitle": "第二步：代入二元函数在 $(0,0)$ 处可微定义",
+          "detail": "因 $f(x,y)$ 在 $(0,0)$ 可微且 $f(0,0)=0$，有 $f(x,y)-f(0,0)=f_x'(0,0)x+f_y'(0,0)y+o(\\sqrt{x^2+y^2})$，移项即得 $f_x'(0,0)x+f_y'(0,0)y-f(x,y)=-o(\\sqrt{x^2+y^2})$。"
+        },
+        {
+          "stepTitle": "第三步：求二重极限",
+          "detail": "$\\displaystyle\\lim_{(x,y)\\to(0,0)}\\frac{\\mathbf{n}\\cdot(x,y,f(x,y))}{\\sqrt{x^2+y^2}}=\\lim_{(x,y)\\to(0,0)}\\frac{-o(\\sqrt{x^2+y^2})}{\\sqrt{x^2+y^2}}=0$。"
+        }
+      ],
+      "finalAnswer": "$0$",
+      "takeaway": "本题是经典真题思路：把第 13 讲二元可微定义改写成空间曲面切平面法向量 $\\mathbf{n}$ 与位移向量 $(x,y,f(x,y))$ 的点积形式，直观刻画「切平面在切点附近是曲面的最佳线性近似」。",
+      "source": {
+        "book": "27张宇《基础30讲·高数》",
+        "printedPage": "P.467-468",
+        "pdfPage": 472,
+        "itemRef": "例 17.1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_geo_and_tangents",
+        "verified": true
+      },
+      "section": "基础30讲 · 一、向量代数例题"
+    },
+    {
+      "id": "m1-c17-e-02",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "title": "例 17.2　求与两已知直线都平行且过原点的平面方程",
+      "problem": "求过原点且与两直线 $L_1:\\begin{cases}x=1,\\\\y=-1+t,\\\\z=2+t\\end{cases}$ 与 $L_2:\\dfrac{x+1}{1}=\\dfrac{y+2}{2}=\\dfrac{z-1}{1}$ 都平行的平面方程。",
+      "steps": [
+        {
+          "stepTitle": "第一步：提取两直线的方向向量",
+          "detail": "由参数方程与对称式直接读出 $L_1$ 的方向向量 $\\boldsymbol{\\tau}_1=(0,1,1)$，$L_2$ 的方向向量 $\\boldsymbol{\\tau}_2=(1,2,1)$。"
+        },
+        {
+          "stepTitle": "第二步：叉积求平面法向量",
+          "detail": "平面与 $L_1,L_2$ 均平行，故法向量 $\\mathbf{n}\\perp\\boldsymbol{\\tau}_1$ 且 $\\mathbf{n}\\perp\\boldsymbol{\\tau}_2$，取 $\\mathbf{n}=\\boldsymbol{\\tau}_1\\times\\boldsymbol{\\tau}_2=\\begin{vmatrix}\\mathbf{i}&\\mathbf{j}&\\mathbf{k}\\\\0&1&1\\\\1&2&1\\end{vmatrix}=(-1,1,-1)$，化简取同向法向量 $(1,-1,1)$。"
+        },
+        {
+          "stepTitle": "第三步：点法式写出平面方程",
+          "detail": "因平面过原点 $(0,0,0)$，方程为 $1(x-0)-1(y-0)+1(z-0)=0$，即 $x-y+z=0$。"
+        }
+      ],
+      "finalAnswer": "$x-y+z=0$",
+      "takeaway": "只要平面同时平行于两不共线向量 $\\mathbf{v}_1,\\mathbf{v}_2$，无脑取叉积 $\\mathbf{n}=\\mathbf{v}_1\\times\\mathbf{v}_2$ 作法向量；点法式代入已知点即成。",
+      "source": {
+        "book": "27张宇《基础30讲·高数》",
+        "printedPage": "P.471",
+        "pdfPage": 476,
+        "itemRef": "例 17.2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_geo_and_tangents",
+        "verified": true
+      },
+      "section": "基础30讲 · 二、空间平面与直线例题"
+    },
+    {
+      "id": "m1-c17-e-03",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "title": "例 17.3　求空间直线在已知平面上的投影直线（平面束法）",
+      "problem": "求直线 $L_0:\\begin{cases}2x-z-3=0,\\\\y-2z+4=0\\end{cases}$ 在平面 $\\Pi:x+y-z=5$ 上的投影直线方程。",
+      "steps": [
+        {
+          "stepTitle": "第一步：设过直线 $L_0$ 的平面束方程",
+          "detail": "过 $L_0$ 的投影平面 $\\Pi_1$ 必属于平面束 $(2x-z-3)+\\lambda(y-2z+4)=0$，整理为 $2x+\\lambda y-(1+2\\lambda)z+(-3+4\\lambda)=0$，其法向量为 $\\mathbf{n}_1=(2,\\lambda,-1-2\\lambda)$。"
+        },
+        {
+          "stepTitle": "第二步：由投影平面垂直于 $\\Pi$ 定出 $\\lambda$",
+          "detail": "平面 $\\Pi$ 的法向量为 $\\mathbf{n}=(1,1,-1)$。由 $\\Pi_1\\perp\\Pi$ 得 $\\mathbf{n}_1\\cdot\\mathbf{n}=2+\\lambda+(1+2\\lambda)=3+3\\lambda=0$，解得 $\\lambda=-1$。"
+        },
+        {
+          "stepTitle": "第三步：联立两平面写出投影直线",
+          "detail": "将 $\\lambda=-1$ 代入平面束得投影平面 $\\Pi_1:2x-y+z-7=0$。联立 $\\Pi_1$ 与 $\\Pi$ 即得投影直线：$\\begin{cases}2x-y+z-7=0,\\\\x+y-z=5\\end{cases}$。"
+        }
+      ],
+      "finalAnswer": "$\\begin{cases}2x-y+z-7=0,\\\\x+y-z=5\\end{cases}$",
+      "takeaway": "求直线 $L_0$ 在平面 $\\Pi$ 上的投影直线 = 找过 $L_0$ 且垂直于 $\\Pi$ 的投影平面 $\\Pi_1$（平面束一击必杀），再与 $\\Pi$ 联立！",
+      "source": {
+        "book": "27张宇《基础30讲·高数》",
+        "printedPage": "P.471",
+        "pdfPage": 476,
+        "itemRef": "例 17.3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_geo_and_tangents",
+        "verified": true
+      },
+      "section": "基础30讲 · 二、空间平面与直线例题"
+    },
+    {
+      "id": "m1-c17-e-04",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "title": "例 17.4　对称式直线与一般交面式直线的夹角计算",
+      "problem": "求两直线 $L_1:\\dfrac{x-1}{1}=\\dfrac{y-5}{-2}=\\dfrac{z+8}{1}$ 与 $L_2:\\begin{cases}x-y=6,\\\\2y+z=3\\end{cases}$ 的夹角 $\\varphi$。（选项：(A) $\\dfrac{\\pi}{6}$；(B) $\\dfrac{\\pi}{4}$；(C) $\\dfrac{\\pi}{3}$；(D) $\\dfrac{\\pi}{2}$）",
+      "steps": [
+        {
+          "stepTitle": "第一步：分别求两直线的方向向量",
+          "detail": "$L_1$ 直接读出 $\\boldsymbol{\\tau}_1=(1,-2,1)$。$L_2$ 由两平面法向量 $\\mathbf{n}_1=(1,-1,0)$ 与 $\\mathbf{n}_2=(0,2,1)$ 叉积得 $\\boldsymbol{\\tau}_2=\\mathbf{n}_1\\times\\mathbf{n}_2=\\begin{vmatrix}\\mathbf{i}&\\mathbf{j}&\\mathbf{k}\\\\1&-1&0\\\\0&2&1\\end{vmatrix}=(-1,-1,2)$（亦可直接设 $y=t\\Rightarrow x=6+t,\\,z=3-2t\\Rightarrow \\boldsymbol{\\tau}_2=(1,1,-2)$）。"
+        },
+        {
+          "stepTitle": "第二步：代入两直线夹角余弦公式",
+          "detail": "$\\cos\\varphi=\\dfrac{|\\boldsymbol{\\tau}_1\\cdot\\boldsymbol{\\tau}_2|}{|\\boldsymbol{\\tau}_1||\\boldsymbol{\\tau}_2|}=\\dfrac{|1\\cdot(-1)+(-2)\\cdot(-1)+1\\cdot 2|}{\\sqrt{1^2+(-2)^2+1^2}\\sqrt{(-1)^2+(-1)^2+2^2}}=\\dfrac{3}{\\sqrt{6}\\cdot\\sqrt{6}}=\\dfrac{1}{2}$。"
+        },
+        {
+          "stepTitle": "第三步：确定锐角 $\\varphi$",
+          "detail": "由 $\\varphi\\in[0,\\frac{\\pi}{2}]$ 及 $\\cos\\varphi=\\frac{1}{2}$，得 $\\varphi=\\dfrac{\\pi}{3}$，故选 (C)。"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{\\pi}{3}$（选 C）",
+      "takeaway": "一般式直线找方向向量有两种速算：叉积法 $\\mathbf{n}_1\\times\\mathbf{n}_2$，或把公共变量设为参数 $t$ 写成参数方程直接读系数。",
+      "source": {
+        "book": "27张宇《基础30讲·高数》",
+        "printedPage": "P.471-472",
+        "pdfPage": 476,
+        "itemRef": "例 17.4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_geo_and_tangents",
+        "verified": true
+      },
+      "section": "基础30讲 · 二、空间平面与直线例题"
+    },
+    {
+      "id": "m1-c17-e-05",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "title": "例 17.5　旋转圆锥面与抛物柱面交线在 $xOy$ 面的投影曲线",
+      "problem": "将过点 $(0,-1,1)$ 和 $(0,0,0)$ 的直线绕 $z$ 轴旋转一周所得曲面记为 $\\Sigma_1$，求 $\\Sigma_1$ 与曲面 $\\Sigma_2:z^2=2x$ 的交线在 $xOy$ 平面上的投影曲线方程。",
+      "steps": [
+        {
+          "stepTitle": "第一步：写出母线方程并旋转得 $\\Sigma_1$",
+          "detail": "过 $(0,0,0)$ 与 $(0,-1,1)$ 的直线在 $yOz$ 平面内，方程为 $\\begin{cases}x=0,\\\\y=-z\\end{cases}$。绕 $z$ 轴旋转一周，由 $x^2+y^2=[f_1(z)]^2+[f_2(z)]^2$ 得 $\\Sigma_1:x^2+y^2=0^2+(-z)^2=z^2$（即整个双圆锥面 $z^2=x^2+y^2$；若仅取 $z\\ge 0$ 半支亦可，且交线与 $z^2=2x$ 联立消 $z^2$ 结果一致）。"
+        },
+        {
+          "stepTitle": "第二步：联立两曲面方程消去 $z$ 得投影柱面",
+          "detail": "联立 $\\begin{cases}x^2+y^2=z^2,\\\\z^2=2x\\end{cases}$ 直接消去 $z^2$，得投影柱面方程 $x^2+y^2=2x$（即 $(x-1)^2+y^2=1$，满足 $x\\ge 0$ 保证 $z^2=2x\\ge 0$ 有实解）。"
+        },
+        {
+          "stepTitle": "第三步：联立 $z=0$ 写出投影曲线",
+          "detail": "所求在 $xOy$ 面上的投影曲线为 $\\begin{cases}x^2+y^2=2x,\\\\z=0\\end{cases}$。"
+        }
+      ],
+      "finalAnswer": "$\\begin{cases}x^2+y^2=2x,\\\\z=0\\end{cases}$",
+      "takeaway": "注意：原书分析中用「射线/上半锥面 $z=\\sqrt{x^2+y^2}$」或完整双锥面 $z^2=x^2+y^2$，因 $x^2+y^2=2x$ 自动满足 $x\\ge 0$，两支在 $xOy$ 面的投影完全重合为同一个偏心圆；作答时切不可漏写「$z=0$」！",
+      "source": {
+        "book": "27张宇《基础30讲·高数》",
+        "printedPage": "P.476-477",
+        "pdfPage": 481,
+        "itemRef": "例 17.5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_geo_and_tangents",
+        "verified": true
+      },
+      "section": "基础30讲 · 三、空间曲线与曲面例题"
+    },
+    {
+      "id": "m1-c17-e-06",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "title": "例 17.6　含变限积分的参数曲线切线方程",
+      "problem": "求曲线 $\\Gamma:\\begin{cases}x=\\displaystyle\\int_0^t\\mathrm{e}^u\\cos u\\,\\mathrm{d}u,\\\\y=2\\sin t+\\cos t,\\\\z=1+\\mathrm{e}^{3t}\\end{cases}$ 在 $t=0$ 对应点处的切线方程。",
+      "steps": [
+        {
+          "stepTitle": "第一步：求 $t=0$ 对应的切点坐标",
+          "detail": "代入 $t=0$ 得 $x(0)=0,\\;y(0)=1,\\;z(0)=2$，切点为 $M_0(0,1,2)$。"
+        },
+        {
+          "stepTitle": "第二步：对参数 $t$ 求导得切向量",
+          "detail": "由变限积分求导与基本求导公式：$x'(t)=\\mathrm{e}^t\\cos t,\\;y'(t)=2\\cos t-\\sin t,\\;z'(t)=3\\mathrm{e}^{3t}$。代入 $t=0$ 得切向量 $\\boldsymbol{\\tau}=(1,2,3)$。"
+        },
+        {
+          "stepTitle": "第三步：写出点向式切线方程",
+          "detail": "切线方程为 $\\dfrac{x-0}{1}=\\dfrac{y-1}{2}=\\dfrac{z-2}{3}$。"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{x}{1}=\\dfrac{y-1}{2}=\\dfrac{z-2}{3}$",
+      "takeaway": "参数曲线切线/法平面常与变限积分求导综合，无需把积分积出来，直接求导代 $t_0$ 即可。",
+      "source": {
+        "book": "27张宇《基础30讲·高数》",
+        "printedPage": "P.478",
+        "pdfPage": 483,
+        "itemRef": "例 17.6"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_geo_and_tangents",
+        "verified": true
+      },
+      "section": "基础30讲 · 四、微分学几何应用例题"
+    },
+    {
+      "id": "m1-c17-e-07",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "title": "例 17.7　抽象曲面与坐标面交线的法平面方程",
+      "problem": "设可微曲面 $z=f(x,y)$ 满足 $f_x'(0,0)=3$，求曲线 $\\Gamma:\\begin{cases}z=f(x,y),\\\\y=0\\end{cases}$ 在点 $\\big(0,0,f(0,0)\\big)$ 处的法平面方程。",
+      "steps": [
+        {
+          "stepTitle": "第一步：化曲线为以 $x$ 为参数的方程",
+          "detail": "因 $y\\equiv 0$，曲线参数方程为 $\\begin{cases}x=x,\\\\y=0,\\\\z=f(x,0)\\end{cases}$。"
+        },
+        {
+          "stepTitle": "第二步：求切点处切向量",
+          "detail": "对 $x$ 求导得 $\\boldsymbol{\\tau}=(1,0,f_x'(0,0))=(1,0,3)$。（亦可用交面叉积法：$\\mathbf{n}_1=(f_x',f_y',-1),\\;\\mathbf{n}_2=(0,1,0)\\Rightarrow\\mathbf{n}_1\\times\\mathbf{n}_2=(1,0,f_x')=(1,0,3)$。）"
+        },
+        {
+          "stepTitle": "第三步：写出法平面方程",
+          "detail": "以 $\\boldsymbol{\\tau}=(1,0,3)$ 为法向量过 $(0,0,f(0,0))$ 的平面方程为 $1(x-0)+0(y-0)+3(z-f(0,0))=0$，即 $x+3z-3f(0,0)=0$。"
+        }
+      ],
+      "finalAnswer": "$x+3z-3f(0,0)=0$",
+      "takeaway": "本题是经典真题模型：曲面与 $y=0$ 截痕的切向量只依赖 $f_x'(0,0)$，与 $f_y'(0,0)$ 无关；切记点 $(0,0,f(0,0))$ 的竖坐标 $f(0,0)$ 不能漏写。",
+      "source": {
+        "book": "27张宇《基础30讲·高数》",
+        "printedPage": "P.478-479",
+        "pdfPage": 483,
+        "itemRef": "例 17.7"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_geo_and_tangents",
+        "verified": true
+      },
+      "section": "基础30讲 · 四、微分学几何应用例题"
+    },
+    {
+      "id": "m1-c17-e-08",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "title": "例 17.8　隐式空间曲面的切平面方程（法向量某分量为零情形）",
+      "problem": "求曲面 $z-\\mathrm{e}^z+2xy=3$ 在点 $(1,2,0)$ 处的切平面方程。",
+      "steps": [
+        {
+          "stepTitle": "第一步：构造隐函数 $F(x,y,z)$ 并检验点在曲面上",
+          "detail": "令 $F(x,y,z)=z-\\mathrm{e}^z+2xy-3$，代入 $(1,2,0)$ 得 $0-1+4-3=0$，确认点在曲面上。"
+        },
+        {
+          "stepTitle": "第二步：求三偏导数确定法向量",
+          "detail": "$F_x'=2y,\\;F_y'=2x,\\;F_z'=1-\\mathrm{e}^z$。代入 $(1,2,0)$ 得法向量 $\\mathbf{n}=(4,2,0)$（化简取 $(2,1,0)$）。"
+        },
+        {
+          "stepTitle": "第三步：写出切平面方程",
+          "detail": "由点法式 $2(x-1)+1(y-2)+0(z-0)=0$，整理得 $2x+y-4=0$。"
+        }
+      ],
+      "finalAnswer": "$2x+y-4=0$",
+      "takeaway": "隐式曲面 $F=0$ 不必也不可能显化 $z$，直接算 $\\nabla F$ 即可；$F_z'=0$ 说明切平面垂直于 $xOy$ 面。",
+      "source": {
+        "book": "27张宇《基础30讲·高数》",
+        "printedPage": "P.479",
+        "pdfPage": 484,
+        "itemRef": "例 17.8"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_geo_and_tangents",
+        "verified": true
+      },
+      "section": "基础30讲 · 四、微分学几何应用例题"
+    },
+    {
+      "id": "m1-c17-e-09",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "title": "例 17.9　由曲面法向量恒垂直于定向量判定曲面为柱面",
+      "problem": "设函数 $f(u)$ 可微，则方程 $\\mathrm{e}^{2x-z}=f(\\pi y-\\sqrt{2}z)$ 所确定的曲面为（　）。（选项：(A) 旋转曲面；(B) 锥面；(C) 椭球面；(D) 柱面）",
+      "steps": [
+        {
+          "stepTitle": "第一步：构造 $F(x,y,z)=0$ 并求任意点法向量",
+          "detail": "令 $F(x,y,z)=\\mathrm{e}^{2x-z}-f(\\pi y-\\sqrt{2}z)=0$，求偏导得任意点法向量 $\\mathbf{n}=(2\\mathrm{e}^{2x-z},\\;-\\pi f',\\;-\\mathrm{e}^{2x-z}+\\sqrt{2}f')$。"
+        },
+        {
+          "stepTitle": "第二步：寻找与 $\\mathbf{n}$ 恒正交的常向量",
+          "detail": "将 $\\mathbf{n}$ 拆成关于两个未知函数的线性组合：$\\mathbf{n}=\\mathrm{e}^{2x-z}(2,0,-1)+f'\\cdot(0,-\\pi,\\sqrt{2})$。令常向量 $\\mathbf{v}=(v_1,v_2,v_3)$ 同时垂直于 $(2,0,-1)$ 与 $(0,-\\pi,\\sqrt{2})$，取 $\\mathbf{v}=(2,0,-1)\\times(0,-\\pi,\\sqrt{2})$（或设 $v_3=1$ 得 $v_1=\\frac{1}{2},\\,v_2=\\frac{\\sqrt{2}}{\\pi}$，即 $\\mathbf{v}=(\\frac{1}{2},\\frac{\\sqrt{2}}{\\pi},1)$）。"
+        },
+        {
+          "stepTitle": "第三步：由几何特征作结论",
+          "detail": "因曲面上每一点的法向量恒垂直于非零常向量 $\\mathbf{v}=(\\frac{1}{2},\\frac{\\sqrt{2}}{\\pi},1)$，故所有切平面均平行于定方向 $\\mathbf{v}$，曲面必为母线平行于 $\\mathbf{v}$ 的柱面，选 (D)。"
+        }
+      ],
+      "finalAnswer": "柱面（选 D）",
+      "takeaway": "记住一类高频识别模板：凡方程可化为 $G(\\mathbf{a}\\cdot\\mathbf{r},\\,\\mathbf{b}\\cdot\\mathbf{r})=0$（仅含两个线性组合），其法向量必落入 $\\operatorname{span}\\{\\mathbf{a},\\mathbf{b}\\}$，从而恒垂直于定向量 $\\mathbf{a}\\times\\mathbf{b}$，一定是柱面！",
+      "source": {
+        "book": "27张宇《基础30讲·高数》",
+        "printedPage": "P.479",
+        "pdfPage": 484,
+        "itemRef": "例 17.9"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_geo_and_tangents",
+        "verified": true
+      },
+      "section": "基础30讲 · 四、微分学几何应用例题"
+    },
+    {
+      "id": "m1-c17-e-10",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "title": "例 17.10　三元多项式函数沿给定非单位向量的方向导数",
+      "problem": "函数 $f(x,y,z)=x^2y+z^2$ 在点 $(1,2,0)$ 处沿向量 $\\mathbf{n}=(1,2,2)$ 的方向导数为（　）。（选项：(A) $12$；(B) $6$；(C) $4$；(D) $2$）",
+      "steps": [
+        {
+          "stepTitle": "第一步：将方向向量 $\\mathbf{n}$ 单位化",
+          "detail": "$|\\mathbf{n}|=\\sqrt{1^2+2^2+2^2}=3$，故单位方向向量 $\\mathbf{n}^\\circ=\\left(\\dfrac{1}{3},\\dfrac{2}{3},\\dfrac{2}{3}\\right)$。"
+        },
+        {
+          "stepTitle": "第二步：求梯度 $\\operatorname{grad}f(1,2,0)$",
+          "detail": "$f_x'=2xy,\\;f_y'=x^2,\\;f_z'=2z$，代入 $(1,2,0)$ 得 $\\operatorname{grad}f(1,2,0)=(4,1,0)$。"
+        },
+        {
+          "stepTitle": "第三步：点乘得方向导数",
+          "detail": "$\\left.\\dfrac{\\partial f}{\\partial n}\\right|_{(1,2,0)}=(4,1,0)\\cdot\\left(\\dfrac{1}{3},\\dfrac{2}{3},\\dfrac{2}{3}\\right)=\\dfrac{4+2+0}{3}=2$，选 (D)。"
+        }
+      ],
+      "finalAnswer": "$2$（选 D）",
+      "takeaway": "干扰项 (B) $6$ 正是忘记除以 $|\\mathbf{n}|=3$ 直接点乘的结果——求方向导数第一铁律：先单位化！",
+      "source": {
+        "book": "27张宇《基础30讲·高数》",
+        "printedPage": "P.481-482",
+        "pdfPage": 486,
+        "itemRef": "例 17.10"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_field_and_zy18",
+        "verified": true
+      },
+      "section": "基础30讲 · 五、场论初步例题"
+    },
+    {
+      "id": "m1-c17-e-11",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "title": "例 17.11　已知最大方向导数及其方向反求函数参数",
+      "problem": "若函数 $z=2+ax^2+by^2$ 在点 $(3,4)$ 处沿方向 $\\mathbf{l}=-3\\mathbf{i}-4\\mathbf{j}$ 的方向导数最大，且最大值为 $10$，则 $a,b$ 分别为（　）。（选项：(A) $-1,-1$；(B) $1,1$；(C) $1,-1$；(D) $-1,1$）",
+      "steps": [
+        {
+          "stepTitle": "第一步：计算点 $(3,4)$ 处的梯度",
+          "detail": "$\\operatorname{grad}z=(2ax,2by)$，在 $(3,4)$ 处为 $\\operatorname{grad}z(3,4)=(6a,8b)$。"
+        },
+        {
+          "stepTitle": "第二步：利用梯度与最大方向同向且模长等于最大值列方程",
+          "detail": "最大方向导数方向与梯度同向，故存在 **$k>0$** 使 $(6a,8b)=k(-3,-4)$，即 $6a=-3k,\\;8b=-4k$，得 $a=b=-\\dfrac{k}{2}<0$。再由模长等于最大值：$|\\operatorname{grad}z(3,4)|=\\sqrt{(-3k)^2+(-4k)^2}=5k=10\\implies k=2$。"
+        },
+        {
+          "stepTitle": "第三步：解出参数并核验符号",
+          "detail": "代回得 $a=b=-1$，选 (A)。"
+        }
+      ],
+      "finalAnswer": "$a=-1,\\;b=-1$（选 A）",
+      "takeaway": "若漏掉 $k>0$ 的限制，容易选错为干扰项 (B) $(1,1)$（此时在 $\\mathbf{l}$ 方向取的是最小方向导数 $-10$）。",
+      "source": {
+        "book": "27张宇《基础30讲·高数》",
+        "printedPage": "P.482",
+        "pdfPage": 487,
+        "itemRef": "例 17.11"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_field_and_zy18",
+        "verified": true
+      },
+      "section": "基础30讲 · 五、场论初步例题"
+    },
+    {
+      "id": "m1-c17-e-12",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "title": "例 17.12　由两个不共线方向的方向导数反求梯度与最大方向导数",
+      "problem": "设可微函数 $z=f(x,y)$ 在点 $P_0(1,2)$ 处沿从 $P_0(1,2)$ 到 $P_1(2,3)$ 的方向导数为 $2\\sqrt{2}$，沿从 $P_0(1,2)$ 到 $P_2(1,0)$ 的方向导数为 $-3$，求 $z=f(x,y)$ 在点 $P_0$ 处的梯度及最大方向导数。",
+      "steps": [
+        {
+          "stepTitle": "第一步：求两个方向的单位向量",
+          "detail": "$\\overrightarrow{P_0P_1}=(1,1)\\implies \\mathbf{l}_1^\\circ=\\left(\\dfrac{1}{\\sqrt{2}},\\dfrac{1}{\\sqrt{2}}\\right)$；$\\overrightarrow{P_0P_2}=(0,-2)\\implies \\mathbf{l}_2^\\circ=(0,-1)$。"
+        },
+        {
+          "stepTitle": "第二步：由方向导数公式联立方程组解出偏导数",
+          "detail": "记 $P_0$ 处偏导为 $(z_x',z_y')$，则 $\\begin{cases}\\dfrac{1}{\\sqrt{2}}z_x'+\\dfrac{1}{\\sqrt{2}}z_y'=2\\sqrt{2},\\\\0\\cdot z_x'+(-1)z_y'=-3\\end{cases}\\implies \\begin{cases}z_x'+z_y'=4,\\\\z_y'=3\\end{cases}\\implies z_x'=1,\\;z_y'=3$。"
+        },
+        {
+          "stepTitle": "第三步：写出梯度与最大方向导数",
+          "detail": "$\\operatorname{grad}f(1,2)=(1,3)=\\mathbf{i}+3\\mathbf{j}$，最大方向导数为 $|\\operatorname{grad}f(1,2)|=\\sqrt{1^2+3^2}=\\sqrt{10}$。"
+        }
+      ],
+      "finalAnswer": "$\\operatorname{grad}f(1,2)=(1,3)$，最大方向导数为 $\\sqrt{10}$",
+      "takeaway": "牢记基础 P.483 注：平面上任意两个不共线方向的单位向量线性无关，它们对应的方向导数构成 2 元满秩方程组，可唯一锁定梯度。",
+      "source": {
+        "book": "27张宇《基础30讲·高数》",
+        "printedPage": "P.482-483",
+        "pdfPage": 487,
+        "itemRef": "例 17.12"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_field_and_zy18",
+        "verified": true
+      },
+      "section": "基础30讲 · 五、场论初步例题"
+    },
+    {
+      "id": "m1-c17-e-13",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "title": "例 17.13　三维向量场的旋度计算",
+      "problem": "设向量场 $\\mathbf{F}(x,y,z)=xy\\mathbf{i}-yz\\mathbf{j}+zx\\mathbf{k}$，求 $\\operatorname{rot}\\mathbf{F}$ 在点 $(1,1,0)$ 处的值。",
+      "steps": [
+        {
+          "stepTitle": "第一步：套用旋度三阶行列式公式",
+          "detail": "这里 $P=xy,\\;Q=-yz,\\;R=zx$，则 $\\operatorname{rot}\\mathbf{F}=\\begin{vmatrix}\\mathbf{i}&\\mathbf{j}&\\mathbf{k}\\\\\\frac{\\partial}{\\partial x}&\\frac{\\partial}{\\partial y}&\\frac{\\partial}{\\partial z}\\\\xy&-yz&zx\\end{vmatrix}=\\left(\\dfrac{\\partial(zx)}{\\partial y}-\\dfrac{\\partial(-yz)}{\\partial z}\\right)\\mathbf{i}+\\left(\\dfrac{\\partial(xy)}{\\partial z}-\\dfrac{\\partial(zx)}{\\partial x}\\right)\\mathbf{j}+\\left(\\dfrac{\\partial(-yz)}{\\partial x}-\\dfrac{\\partial(xy)}{\\partial y}\\right)\\mathbf{k}$。"
+        },
+        {
+          "stepTitle": "第二步：逐项求偏导并代入定点",
+          "detail": "$\\operatorname{rot}\\mathbf{F}=(0-(-y))\\mathbf{i}+(0-z)\\mathbf{j}+(0-x)\\mathbf{k}=y\\mathbf{i}-z\\mathbf{j}-x\\mathbf{k}$。代入 $(1,1,0)$ 得 $\\operatorname{rot}\\mathbf{F}(1,1,0)=\\mathbf{i}-\\mathbf{k}=(1,0,-1)$。"
+        }
+      ],
+      "finalAnswer": "$\\mathbf{i}-\\mathbf{k}$（即 $(1,0,-1)$）",
+      "takeaway": "算旋度务必按 $(R_y'-Q_z',\\;P_z'-R_x',\\;Q_x'-P_y')$ 循环次序核对正负号，尤其注意 $Q=-yz$ 本身自带负号时「负负得正」。",
+      "source": {
+        "book": "27张宇《基础30讲·高数》",
+        "printedPage": "P.483",
+        "pdfPage": 488,
+        "itemRef": "例 17.13"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_field_and_zy18",
+        "verified": true
+      },
+      "section": "基础30讲 · 五、场论初步例题"
+    },
+    {
+      "id": "m1-c17-e-14",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "title": "强化例 17.1　沿任意方向方向导数均存在却不连续的经典反例",
+      "problem": "设 $f(x,y)=\\begin{cases}1,&y=x^2\\text{ 且 }x\\ne 0,\\\\0,&\\text{其他}\\end{cases}$，则在点 $(0,0)$ 处 $f(x,y)$（　）。（选项：(A) 连续，且沿任意方向的方向导数都存在；(B) 不连续，但沿任意方向的方向导数都存在；(C) 连续，但存在方向其方向导数不存在；(D) 不连续，且存在方向其方向导数不存在）",
+      "steps": [
+        {
+          "stepTitle": "第一步：判别在 $(0,0)$ 处的连续性",
+          "detail": "沿抛物线 $y=x^2\\;(x\\to 0)$ 逼近原点，有 $\\displaystyle\\lim_{\\substack{(x,y)\\to(0,0)\\\\y=x^2}}f(x,y)=1\\ne 0=f(0,0)$，故 $f(x,y)$ 在 $(0,0)$ 处**不连续**。"
+        },
+        {
+          "stepTitle": "第二步：按定义验证沿任意单位方向的方向导数",
+          "detail": "任取单位方向向量 $\\mathbf{l}^\\circ=(\\cos\\alpha,\\cos\\beta)$（记 $(\\cos\\theta,\\sin\\theta)$），射线 $x=t\\cos\\theta,\\;y=t\\sin\\theta\\;(t>0)$ 与抛物线 $y=x^2\\;(x\\ne 0)$ 最多交于一点 $t_1=\\dfrac{\\sin\\theta}{\\cos^2\\theta}$（若 $\\cos\\theta\\ne 0$ 且 $\\sin\\theta>0$）。当 $0<t<t_1$（或无交点时对一切 $t>0$），射线上的点均不落在抛物线上，恒有 $f(t\\cos\\theta,t\\sin\\theta)=0$。"
+        },
+        {
+          "stepTitle": "第三步：求单侧极限下结论",
+          "detail": "于是 $\\left.\\dfrac{\\partial f}{\\partial l}\\right|_{(0,0)}=\\displaystyle\\lim_{t\\to 0^+}\\dfrac{f(t\\cos\\theta,t\\sin\\theta)-f(0,0)}{t}=\\lim_{t\\to 0^+}\\dfrac{0-0}{t}=0$，沿任意方向的方向导数均存在且为 $0$，故选 (B)。"
+        }
+      ],
+      "finalAnswer": "不连续，但沿任意方向的方向导数都存在（选 B）",
+      "takeaway": "射线只能沿直线逼近原点，任何直线在原点附近都能「避开」二阶相切的抛物线 $y=x^2$，因此方向导数全存在却破坏了曲面连续性！",
+      "source": {
+        "book": "27张宇《高数18讲》（强化）",
+        "printedPage": "P.238",
+        "pdfPage": 251,
+        "itemRef": "强化例 17.1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_field_and_zy18",
+        "verified": true
+      },
+      "section": "强化18讲 · 方向导数、梯度与多元泰勒"
+    },
+    {
+      "id": "m1-c17-e-15",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "title": "强化例 17.2　三元幂乘积函数在定点沿给定向量的方向导数",
+      "problem": "求函数 $u=xy^2z^3$ 在点 $P(1,1,1)$ 处沿方向 $\\mathbf{n}=(2,2,-1)$ 的方向导数。",
+      "steps": [
+        {
+          "stepTitle": "第一步：将方向向量单位化",
+          "detail": "$|\\mathbf{n}|=\\sqrt{2^2+2^2+(-1)^2}=3$，故单位方向向量 $\\mathbf{n}^\\circ=\\left(\\dfrac{2}{3},\\dfrac{2}{3},-\\dfrac{1}{3}\\right)$。"
+        },
+        {
+          "stepTitle": "第二步：求三偏导数并代入 $(1,1,1)$",
+          "detail": "$u_x'=y^2z^3,\\;u_y'=2xyz^3,\\;u_z'=3xy^2z^2$，在 $(1,1,1)$ 处 $\\operatorname{grad}u(1,1,1)=(1,2,3)$。"
+        },
+        {
+          "stepTitle": "第三步：计算点积",
+          "detail": "$\\left.\\dfrac{\\partial u}{\\partial n}\\right|_{(1,1,1)}=(1,2,3)\\cdot\\left(\\dfrac{2}{3},\\dfrac{2}{3},-\\dfrac{1}{3}\\right)=\\dfrac{2+4-3}{3}=1$。"
+        }
+      ],
+      "finalAnswer": "$1$",
+      "takeaway": "可微函数的方向导数就是梯度与单位方向向量的内积，三步（单位化 $\\to$ 求梯度 $\\to$ 点乘）标准出分。",
+      "source": {
+        "book": "27张宇《高数18讲》（强化）",
+        "printedPage": "P.238-239",
+        "pdfPage": 251,
+        "itemRef": "强化例 17.2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_field_and_zy18",
+        "verified": true
+      },
+      "section": "强化18讲 · 方向导数、梯度与多元泰勒"
+    },
+    {
+      "id": "m1-c17-e-16",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "title": "强化例 17.3　已知最大方向导数反求二元二次型系数",
+      "problem": "设函数 $f(x,y)=ax^2+by^2$ 在点 $(2,1)$ 处沿方向 $\\mathbf{l}=\\mathbf{i}+2\\mathbf{j}$ 的方向导数最大，且最大值为 $4\\sqrt{5}$，求 $a,b$ 的值。",
+      "steps": [
+        {
+          "stepTitle": "第一步：求点 $(2,1)$ 处的梯度",
+          "detail": "$\\operatorname{grad}f(x,y)=(2ax,2by)$，在 $(2,1)$ 处得 $\\operatorname{grad}f(2,1)=(4a,2b)$。"
+        },
+        {
+          "stepTitle": "第二步：由梯度与 $\\mathbf{l}$ 同向且模长等于最大值求解",
+          "detail": "存在 $k>0$ 使 $(4a,2b)=k(1,2)$，即 $4a=k,\\;2b=2k\\Rightarrow b=4a>0$。由 $|\\operatorname{grad}f(2,1)|=k\\sqrt{1^2+2^2}=\\sqrt{5}k=4\\sqrt{5}$，解得 $k=4$。"
+        },
+        {
+          "stepTitle": "第三步：回代求 $a,b$",
+          "detail": "得 $a=\\dfrac{k}{4}=1,\\;b=k=4$。"
+        }
+      ],
+      "finalAnswer": "$a=1,\\;b=4$",
+      "takeaway": "对比基础例 17.11 与本题：方法完全统一——设 $\\operatorname{grad}f=k\\mathbf{l}\\;(k>0)$，用模长一步定 $k$，省去平方开根号后的正负筛选烦恼。",
+      "source": {
+        "book": "27张宇《高数18讲》（强化）",
+        "printedPage": "P.239",
+        "pdfPage": 252,
+        "itemRef": "强化例 17.3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_field_and_zy18",
+        "verified": true
+      },
+      "section": "强化18讲 · 方向导数、梯度与多元泰勒"
+    },
+    {
+      "id": "m1-c17-e-17",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "title": "强化例 17.4　二元函数 $\\frac{\\cos x}{\\cos y}$ 的二次泰勒多项式（双法秒算）",
+      "problem": "设函数 $f(x,y)=\\dfrac{\\cos x}{\\cos y}$ 在点 $(0,0)$ 处的二次泰勒多项式为 $a+bx^2+cy^2$，则 $a,b,c$ 分别为（　）。（选项：(A) $1,-\\dfrac{1}{2},\\dfrac{1}{2}$；(B) $1,\\dfrac{1}{2},-\\dfrac{1}{2}$；(C) $1,\\dfrac{1}{2},\\dfrac{1}{2}$；(D) $1,-\\dfrac{1}{2},-\\dfrac{1}{2}$）",
+      "steps": [
+        {
+          "stepTitle": "方法一（一元泰勒复合秒杀法，推荐）",
+          "detail": "在 $(0,0)$ 附近直接用一元麦克劳林展开至二阶：$\\cos x=1-\\dfrac{1}{2}x^2+o(x^2)$，$\\dfrac{1}{\\cos y}=\\dfrac{1}{1-\\frac{1}{2}y^2+o(y^2)}=1+\\dfrac{1}{2}y^2+o(y^2)$。相乘并舍去三阶及以上项：$f(x,y)=\\left(1-\\dfrac{1}{2}x^2\\right)\\left(1+\\dfrac{1}{2}y^2\\right)+o(\\rho^2)=1-\\dfrac{1}{2}x^2+\\dfrac{1}{2}y^2+o(\\rho^2)$。"
+        },
+        {
+          "stepTitle": "方法二（套用二元二阶泰勒定义公式验算）",
+          "detail": "计算偏导：$f(0,0)=1$；$f_x'=-\\dfrac{\\sin x}{\\cos y}\\Rightarrow f_x'(0,0)=0$；$f_y'=\\dfrac{\\cos x\\sin y}{\\cos^2 y}\\Rightarrow f_y'(0,0)=0$；$f_{xx}''(0,0)=-1,\\;f_{xy}''(0,0)=0,\\;f_{yy}''(0,0)=1$。代入公式得 $1+\\dfrac{1}{2}(-1\\cdot x^2+0+1\\cdot y^2)=1-\\dfrac{1}{2}x^2+\\dfrac{1}{2}y^2$。"
+        },
+        {
+          "stepTitle": "第三步：对照系数作答",
+          "detail": "得 $a=1,\\;b=-\\dfrac{1}{2},\\;c=\\dfrac{1}{2}$，选 (A)。"
+        }
+      ],
+      "finalAnswer": "$a=1,\\;b=-\\dfrac{1}{2},\\;c=\\dfrac{1}{2}$（选 A）",
+      "takeaway": "求初等二元函数在原点的低阶泰勒多项式时，优先把分子/分母各自按一元展开再相乘（利用展开唯一性），比硬求五个偏导数快三倍！",
+      "source": {
+        "book": "27张宇《高数18讲》（强化）",
+        "printedPage": "P.240",
+        "pdfPage": 253,
+        "itemRef": "强化例 17.4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_field_and_zy18",
+        "verified": true
+      },
+      "section": "强化18讲 · 方向导数、梯度与多元泰勒"
+    },
+    {
+      "id": "m1-c17-e-18",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "title": "强化例 17.5　参数式与交面式空间曲线的切线与法平面（双小题）",
+      "problem": "求下列空间曲线在指定点处的切线方程与法平面方程：（1）$x=\\cos t+\\sin^2 t,\\;y=\\sin t(1-\\cos t),\\;z=\\cos t$ 在 $t=\\dfrac{\\pi}{2}$ 对应点处；（2）$\\begin{cases}x=y^2,\\\\z=x^2\\end{cases}$ 在点 $(1,1,1)$ 处。",
+      "steps": [
+        {
+          "stepTitle": "第（1）题：求切点与参数导数切向量",
+          "detail": "代入 $t=\\dfrac{\\pi}{2}$ 得切点 $M_1(1,1,0)$。求导：$x'(t)=-\\sin t+2\\sin t\\cos t,\\;y'(t)=\\cos t-\\cos 2t,\\;z'(t)=-\\sin t$。代入 $t=\\dfrac{\\pi}{2}$ 得 $\\boldsymbol{\\tau}_1=(-1,1,-1)$。于是切线为 $\\dfrac{x-1}{-1}=\\dfrac{y-1}{1}=\\dfrac{z}{-1}$，法平面为 $-(x-1)+(y-1)-z=0$，即 $x-y+z=0$。"
+        },
+        {
+          "stepTitle": "第（2）题：选 $y$ 作参数化简（亦可交面叉积）",
+          "detail": "由 $x=y^2,\\;z=x^2=y^4$，取 $y$ 为参数得曲线 $(y^2,\\,y,\\,y^4)$，求导得 $\\boldsymbol{\\tau}_2(y)=(2y,1,4y^3)$。在 $(1,1,1)$ 处对应 $y=1$，得 $\\boldsymbol{\\tau}_2=(2,1,4)$。（用叉积验证：$\\mathbf{n}_1=(1,-2y,0)=(1,-2,0),\\;\\mathbf{n}_2=(2x,0,-1)=(2,0,-1)\\Rightarrow\\mathbf{n}_1\\times\\mathbf{n}_2=(2,1,4)$，完全一致！）"
+        },
+        {
+          "stepTitle": "第三步：写出第（2）题切线与法平面",
+          "detail": "切线为 $\\dfrac{x-1}{2}=\\dfrac{y-1}{1}=\\dfrac{z-1}{4}$；法平面为 $2(x-1)+(y-1)+4(z-1)=0$，即 $2x+y+4z-7=0$。"
+        }
+      ],
+      "finalAnswer": "（1）切线 $\\dfrac{x-1}{-1}=\\dfrac{y-1}{1}=\\dfrac{z}{-1}$，法平面 $x-y+z=0$；（2）切线 $\\dfrac{x-1}{2}=\\dfrac{y-1}{1}=\\dfrac{z-1}{4}$，法平面 $2x+y+4z-7=0$",
+      "takeaway": "第（1）题中 $y(t)=\\sin t-\\frac{1}{2}\\sin 2t$ 求导得 $\\cos t-\\cos 2t$，化倍角比直接用乘积法则更不易算错符号。",
+      "source": {
+        "book": "27张宇《高数18讲》（强化）",
+        "printedPage": "P.241",
+        "pdfPage": 254,
+        "itemRef": "强化例 17.5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_field_and_zy18",
+        "verified": true
+      },
+      "section": "强化18讲 · 空间切线切面与散度旋度"
+    },
+    {
+      "id": "m1-c17-e-19",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "title": "强化例 17.6　显式空间曲面在原点处的切平面方程",
+      "problem": "求曲面 $z=x+2y+\\ln(1+x^2+y^2)$ 在点 $(0,0,0)$ 处的切平面方程。",
+      "steps": [
+        {
+          "stepTitle": "第一步：计算一阶偏导数确定上侧法向量",
+          "detail": "$z_x'=1+\\dfrac{2x}{1+x^2+y^2}\\Rightarrow z_x'(0,0)=1$；$z_y'=2+\\dfrac{2y}{1+x^2+y^2}\\Rightarrow z_y'(0,0)=2$。于是切平面法向量为 $(-z_x',-z_y',1)=(-1,-2,1)$（或 $(1,2,-1)$）。"
+        },
+        {
+          "stepTitle": "第二步：写出切平面方程（亦可泰勒一阶线性部秒杀）",
+          "detail": "代入切平面公式 $z-0=1(x-0)+2(y-0)$，即 $x+2y-z=0$。（一阶泰勒速看：$\\ln(1+x^2+y^2)=O(x^2+y^2)$ 为二阶无穷小，切平面直接取线性部 $z=x+2y$！）"
+        }
+      ],
+      "finalAnswer": "$x+2y-z=0$",
+      "takeaway": "在原点求显式曲面 $z=f(x,y)$ 的切平面时，等价于直接截取 $f(x,y)$ 的一阶麦克劳林多项式，高阶项（如 $\\ln(1+x^2+y^2)$）可一眼划去！",
+      "source": {
+        "book": "27张宇《高数18讲》（强化）",
+        "printedPage": "P.242",
+        "pdfPage": 255,
+        "itemRef": "强化例 17.6"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_field_and_zy18",
+        "verified": true
+      },
+      "section": "强化18讲 · 空间切线切面与散度旋度"
+    },
+    {
+      "id": "m1-c17-e-20",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "title": "强化例 17.7　先求两向量场叉积再算散度（向量代数与场论综合）",
+      "problem": "设 $\\mathbf{v}_1=x\\mathbf{j}+z\\mathbf{k}$，$\\mathbf{v}_2=y\\mathbf{i}+\\mathbf{k}$，记向量场 $\\mathbf{F}=\\mathbf{v}_1\\times\\mathbf{v}_2$，求 $\\operatorname{div}\\mathbf{F}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：用三阶行列式计算叉积 $\\mathbf{F}=\\mathbf{v}_1\\times\\mathbf{v}_2$",
+          "detail": "$\\mathbf{v}_1=(0,x,z),\\;\\mathbf{v}_2=(y,0,1)$，故 $\\mathbf{F}=\\begin{vmatrix}\\mathbf{i}&\\mathbf{j}&\\mathbf{k}\\\\0&x&z\\\\y&0&1\\end{vmatrix}=x\\mathbf{i}+yz\\mathbf{j}-xy\\mathbf{k}$。"
+        },
+        {
+          "stepTitle": "第二步：逐分量求偏导相加得散度",
+          "detail": "$\\operatorname{div}\\mathbf{F}=\\dfrac{\\partial(x)}{\\partial x}+\\dfrac{\\partial(yz)}{\\partial y}+\\dfrac{\\partial(-xy)}{\\partial z}=1+z+0=1+z$。"
+        }
+      ],
+      "finalAnswer": "$1+z$",
+      "takeaway": "考研数一填空题偏爱把「叉积 + 散度/旋度」打包考查；切记 $\\mathbf{v}_1$ 缺 $\\mathbf{i}$ 项、$\\mathbf{v}_2$ 缺 $\\mathbf{j}$ 项，列行列式时补 $0$ 对齐即可零失误。",
+      "source": {
+        "book": "27张宇《高数18讲》（强化）",
+        "printedPage": "P.243",
+        "pdfPage": 256,
+        "itemRef": "强化例 17.7"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_field_and_zy18",
+        "verified": true
+      },
+      "section": "强化18讲 · 空间切线切面与散度旋度"
+    },
+    {
+      "id": "m1-c17-s-01",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "title": "空间解析几何五大高频题型决策图谱与位置关系总表",
+      "overview": "数一空间解析几何既在选择题/填空题独立命题（4-5 分），又是第 18 讲画三重积分区域、写旋转面/锥面方程、定曲面正向法向量的地基。所有题型均围绕两个灵魂向量展开：**平面的法向量 $\\mathbf{n}$** 与 **直线的方向向量 $\\boldsymbol{\\tau}$**。",
+      "patterns": [
+        {
+          "typeName": "题型 1：求平面方程（给线/给点/垂直平行条件）",
+          "triggers": "与两直线平行、过定直线与定点、投影平面、过交线且垂直于某平面",
+          "method": "优先找切点/定点 + 法向量（两向量叉积 $\\mathbf{v}_1\\times\\mathbf{v}_2$）；凡过已知两平面交线 $L$，立刻设平面束 $\\Pi_1+\\lambda\\Pi_2=0$ 定 $\\lambda$。",
+          "pitfall": "平面束漏掉 $\\Pi_2=0$；把线面平行误当成 $\\mathbf{n}\\parallel\\boldsymbol{\\tau}$（应为 $\\mathbf{n}\\cdot\\boldsymbol{\\tau}=0$）。",
+          "relatedRefs": "例 17.2, 例 17.3"
+        },
+        {
+          "typeName": "题型 2：点线面距离与空间夹角计算",
+          "triggers": "点到直线距离、点到平面距离、异面直线公垂距、线线/面面/线面夹角",
+          "method": "点面距套公式，点线距用叉积 $d=|\\boldsymbol{\\tau}\\times\\overrightarrow{M_1M_0}|/|\\boldsymbol{\\tau}|$；夹角统一加绝对值，线线/面面用 $\\cos$，线面用 $\\sin$。",
+          "pitfall": "求一般交面式直线方向向量 $\\boldsymbol{\\tau}=\\mathbf{n}_1\\times\\mathbf{n}_2$ 时行列式符号算错；线面夹角误套 $\\cos$。",
+          "relatedRefs": "例 17.1, 例 17.4"
+        },
+        {
+          "typeName": "题型 3：旋转曲面与空间曲线投影",
+          "triggers": "直线/曲线绕 $z$ 轴或一般直线旋转、两曲面交线在坐标面的投影",
+          "method": "绕 $z$ 轴直接套 $x^2+y^2=[f_1(z)]^2+[f_2(z)]^2$；求投影曲线必须「消去第三变量 + 补写坐标面方程（如 $z=0$）」。",
+          "pitfall": "只写投影柱面方程漏掉 $z=0$；或忽略母线自身坐标范围导致多出虚支。",
+          "relatedRefs": "例 17.5, 表 17-1"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 17-2　空间直线与平面位置关系、距离及夹角速查表",
+          "headers": [
+            "几何关系",
+            "向量判据（$\\mathbf{n}$ 平面法向，$\\boldsymbol{\\tau}$ 直线方向）",
+            "夹角 / 距离公式",
+            "易错提醒"
+          ],
+          "rows": [
+            [
+              "两直线 $L_1,L_2$",
+              "平行：$\\boldsymbol{\\tau}_1\\times\\boldsymbol{\\tau}_2=\\mathbf{0}$；垂直：$\\boldsymbol{\\tau}_1\\cdot\\boldsymbol{\\tau}_2=0$",
+              "$\\cos\\theta=\\frac{|\\boldsymbol{\\tau}_1\\cdot\\boldsymbol{\\tau}_2|}{|\\boldsymbol{\\tau}_1||\\boldsymbol{\\tau}_2|}$",
+              "共面判据 $[\\boldsymbol{\\tau}_1,\\boldsymbol{\\tau}_2,\\overrightarrow{M_1M_2}]=0$"
+            ],
+            [
+              "两平面 $\\Pi_1,\\Pi_2$",
+              "平行：$\\mathbf{n}_1\\times\\mathbf{n}_2=\\mathbf{0}$；垂直：$\\mathbf{n}_1\\cdot\\mathbf{n}_2=0$",
+              "$\\cos\\theta=\\frac{|\\mathbf{n}_1\\cdot\\mathbf{n}_2|}{|\\mathbf{n}_1||\\mathbf{n}_2|}$；平行面距 $\\frac{|D_1-D_2|}{\\sqrt{A^2+B^2+C^2}}$",
+              "平行面距须先将 $A,B,C$ 化相同"
+            ],
+            [
+              "直线 $L$ 与平面 $\\Pi$",
+              "平行：$\\mathbf{n}\\cdot\\boldsymbol{\\tau}=0$；垂直：$\\mathbf{n}\\times\\boldsymbol{\\tau}=\\mathbf{0}$",
+              "$\\sin\\varphi=\\frac{|\\mathbf{n}\\cdot\\boldsymbol{\\tau}|}{|\\mathbf{n}||\\boldsymbol{\\tau}|}$",
+              "平行与垂直条件与线线/面面恰好相反"
+            ],
+            [
+              "点 $M_0$ 到平面 $\\Pi$ / 直线 $L$",
+              "点面：法向投影；点线：叉积高",
+              "$d_\\Pi=\\frac{|Ax_0+By_0+Cz_0+D|}{|\\mathbf{n}|}$；$d_L=\\frac{|\\boldsymbol{\\tau}\\times\\overrightarrow{M_1M_0}|}{|\\boldsymbol{\\tau}|}$",
+              "异面直线距离 $d=\\frac{|[\\boldsymbol{\\tau}_1,\\boldsymbol{\\tau}_2,\\overrightarrow{M_1M_2}]|}{|\\boldsymbol{\\tau}_1\\times\\boldsymbol{\\tau}_2|}$"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "记住「法向量对法向量、方向向量对方向向量用正配（$\\cos$），法向量对方向向量用反配（$\\sin$）」，位置关系绝不再混。",
+      "source": {
+        "book": "27张宇《基础30讲·高数》",
+        "printedPage": "P.466-477",
+        "pdfPage": 471,
+        "itemRef": "空间解析几何五大高频题型决策图谱与位置关系总表"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_geo_and_tangents",
+        "verified": true
+      },
+      "section": "题型总结（一）：空间解析几何决策图谱"
+    },
+    {
+      "id": "m1-c17-s-02",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "title": "微分几何应用、多元泰勒与场论（梯/散/旋）综合命题套路",
+      "overview": "本讲后半部分直连第 13 讲多元微分与第 18 讲四大积分定理：切线法面/切面法线考几何翻译，方向导数与梯度考可微辨析与极值反求，散度与旋度是高斯与斯托克斯公式的直接算子。",
+      "patterns": [
+        {
+          "typeName": "题型 4：曲线切线法平面 & 曲面切平面法线",
+          "triggers": "参数曲线（含变限积分）、交面曲线、隐式/显式曲面、法向量判断曲面类型",
+          "method": "能显化一参数的曲线优先用参数求导，否则两面法向叉积；隐式曲面直接算 $\\nabla F$，显式曲面切平面即全微分 $z-z_0=z_x'(x-x_0)+z_y'(y-y_0)$。",
+          "pitfall": "显式法向量把 $(-z_x',-z_y',1)$ 误写为 $(z_x',z_y',1)$；交面切点漏写 $z_0=f(0,0)$。",
+          "relatedRefs": "例 17.6, 例 17.7, 例 17.8, 例 17.9, 强化例 17.5, 强化例 17.6"
+        },
+        {
+          "typeName": "题型 5：方向导数正向计算、概念辨析与最大方向反求参数",
+          "triggers": "沿向量 $\\mathbf{n}$ 方向导数、沿方向 $\\mathbf{l}$ 最大且最大值为 $M$、给定两方向求梯度、分段函数原点方向导数",
+          "method": "正向计算三步（单位化 $\\to$ 求梯度 $\\to$ 点乘）；反求参数设 $\\operatorname{grad}f=k\\mathbf{l}\\;(k>0)$；不可微或分段点必须退回 $t\\to 0^+$ 定义。",
+          "pitfall": "忘记单位化；反求参数漏写 $k>0$ 错选负方向；误用方向导数存在推出连续或偏导存在。",
+          "relatedRefs": "例 17.10, 例 17.11, 例 17.12, 强化例 17.1, 强化例 17.2, 强化例 17.3"
+        },
+        {
+          "typeName": "题型 6：二元二次泰勒多项式 & 散度/旋度算子计算",
+          "triggers": "二元函数在 $(0,0)$ 的二次泰勒多项式、$\\operatorname{div}\\mathbf{F}$、$\\operatorname{rot}\\mathbf{F}$、叉积后再求散度",
+          "method": "二元初等函数泰勒优先用一元麦克劳林相乘截断至二阶；散度标量求和、旋度三阶行列式展开。",
+          "pitfall": "旋度第二分量 $\\mathbf{j}$ 丢负号；把散度和旋度的标量/向量属性搞混。",
+          "relatedRefs": "例 17.13, 强化例 17.4, 强化例 17.7"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 17-3　场论三算子（梯度 / 散度 / 旋度）与第 18 讲积分定理直通映射表",
+          "headers": [
+            "算子",
+            "输入 $\\to$ 输出",
+            "坐标表达式",
+            "零场名称",
+            "第 18 讲对应核心定理"
+          ],
+          "rows": [
+            [
+              "梯度 $\\operatorname{grad}u=\\nabla u$",
+              "标量场 $\\to$ 向量场",
+              "$(u_x',u_y',u_z')$",
+              "常值场（$u\\equiv C$）",
+              "全微分原函数 $\\int_A^B\\nabla u\\cdot\\mathrm{d}\\mathbf{r}=u(B)-u(A)$"
+            ],
+            [
+              "散度 $\\operatorname{div}\\mathbf{F}=\\nabla\\cdot\\mathbf{F}$",
+              "向量场 $\\to$ 标量场",
+              "$P_x'+Q_y'+R_z'$",
+              "无源场（通量守恒）",
+              "高斯公式 $\\oiint_\\Sigma\\mathbf{F}\\cdot\\mathrm{d}\\mathbf{S}=\\iiint_\\Omega\\operatorname{div}\\mathbf{F}\\,\\mathrm{d}v$"
+            ],
+            [
+              "旋度 $\\operatorname{rot}\\mathbf{F}=\\nabla\\times\\mathbf{F}$",
+              "向量场 $\\to$ 向量场",
+              "$(R_y'-Q_z',\\;P_z'-R_x',\\;Q_x'-P_y')$",
+              "无旋场（保守力场）",
+              "斯托克斯公式 $\\oint_\\Gamma\\mathbf{F}\\cdot\\mathrm{d}\\mathbf{r}=\\iint_\\Sigma\\operatorname{rot}\\mathbf{F}\\cdot\\mathrm{d}\\mathbf{S}$（二维即格林公式）"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "第 17 讲的梯度、散度、旋度就是第 18 讲三大定理的微分化身：打通表 17-3，多元微积分即连成一张网。",
+      "source": {
+        "book": "27张宇《基础30讲·高数》+《高数18讲》（强化）",
+        "printedPage": "P.477-483 / P.237-243",
+        "pdfPage": 482,
+        "itemRef": "微分几何应用、多元泰勒与场论"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_field_and_zy18",
+        "verified": true
+      },
+      "section": "题型总结（二）：微分几何与场论综合"
+    },
+    {
+      "id": "m1-c17-s-03",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "title": "高数第 17 讲易错雷区与原书严谨补注清单（#60–#61）",
+      "overview": "本讲计算量普遍不大，失分几乎全集中在「忘单位化、漏 $k>0$、漏 $z=0$、旋度符号、概念辨析」五类细节；同时记录逐页核对基础 30 讲与强化 18 讲发现的 2 处严谨补注。",
+      "patterns": [
+        {
+          "typeName": "高频丢分点自查清单（考前 30 秒扫一遍）",
+          "triggers": "所有第 17 讲选填与大题第一问",
+          "method": "① 方向导数先除以 $|\\mathbf{l}|$；② 最大方向反求必设 $k>0$；③ 投影曲线必写方程组（含 $z=0$）；④ 显式曲面切面法向 $(-z_x',-z_y',1)$；⑤ 旋度 $\\mathbf{j}$ 分量为 $P_z'-R_x'$；⑥ 二元不可微点方向导数回到 $t\\to 0^+$ 单侧极限。",
+          "pitfall": "任何一项跳步都会精准命中选择题预设的 3 个干扰选项。",
+          "relatedRefs": "例 17.5, 例 17.10, 例 17.11, 例 17.13, 强化例 17.1"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 17-4　高数第 17 讲原书严谨补注与符号核查清单（累计 #60–#61）",
+          "headers": [
+            "编号",
+            "出处",
+            "原书表述",
+            "严谨修正与说明"
+          ],
+          "rows": [
+            [
+              "#60",
+              "基础30讲 P.480 五、2. 梯度",
+              "要求「函数 $u=f(x,y,z)$ 在 $P_0$ 具有一阶连续偏导数」才定义梯度",
+              "严格而言，只需在 $P_0$ 处**一阶偏导数存在**即可定义梯度向量 $\\operatorname{grad}u=(u_x',u_y',u_z')$；而方向导数公式 $\\frac{\\partial u}{\\partial l}=\\operatorname{grad}u\\cdot\\mathbf{l}^\\circ$ 成立仅需 $u$ 在 $P_0$ **可微**（与强化18讲 P.239 注(2) 一致）。"
+            ],
+            [
+              "#61",
+              "强化18讲 P.237 方向导数示意图",
+              "正文用方向余弦 $(\\cos\\alpha,\\cos\\beta)$，配图却将终点写为 $P(t\\cos\\alpha+a,\\,t\\sin\\alpha+b)$",
+              "配图混用了极角参数 $(\\cos\\alpha,\\sin\\alpha)$ 与双方向角 $(\\cos\\alpha,\\cos\\beta)$；仅第一象限方向满足 $\\cos\\beta=\\sin\\alpha$，一般二维单位方向向量应统一写作 $(\\cos\\alpha,\\cos\\beta)$ 或极角 $(\\cos\\theta,\\sin\\theta)$。"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "考场守住「单位化、$k>0$、补 $z=0$、法向负号、旋度次序」五条铁律，第 17 讲稳拿满分。",
+      "source": {
+        "book": "27张宇《基础30讲·高数》+《高数18讲》（强化）",
+        "printedPage": "P.464-483 / P.237-243",
+        "pdfPage": 469,
+        "itemRef": "高数第 17 讲易错雷区与原书严谨补注清单"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c17_field_and_zy18",
+        "verified": true
+      },
+      "section": "题型总结（三）：易错雷区与原书严谨补注"
+    }
+  ]
+}

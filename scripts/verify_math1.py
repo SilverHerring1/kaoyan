@@ -1810,6 +1810,233 @@ def run_all_checks() -> list[tuple[str, bool, str]]:
     )
     check("m1_c16_zy18_47_57", c16_i2_ok, "zy18 Ex16.47-16.57 (Ex16.48 e/(e-1), Ex16.51 -1/6, Ex16.53, Ex16.55 -1/pi, Ex16.57) exact")
 
+    # ==================== Calculus Lecture 17 (calc-17: 多元函数积分学的预备知识，仅数一) ====================
+    # 92. Vector algebra, planes, lines, projections, curves/surfaces tangents (zy30 Ex17.1-17.9)
+    z_17 = sp.Symbol("z_17", real=True)
+    # Ex 17.2: (0,1,1) x (1,2,1) = (-1,1,-1)
+    n17_2 = sp.Matrix([0, 1, 1]).cross(sp.Matrix([1, 2, 1]))
+    # Ex 17.3: (2, lam, -1-2*lam) . (1,1,-1) = 0 => lam = -1
+    lam_17 = sp.Symbol("lam_17")
+    sol17_3 = sp.solve(sp.Matrix([2, lam_17, -1 - 2 * lam_17]).dot(sp.Matrix([1, 1, -1])), lam_17)
+    # Ex 17.4: tau1=(1,-2,1), tau2=(1,-1,0)x(0,2,1)=(-1,-1,2) => cos phi = 1/2
+    t17_4a = sp.Matrix([1, -2, 1])
+    t17_4b = sp.Matrix([1, -1, 0]).cross(sp.Matrix([0, 2, 1]))
+    cos17_4 = sp.Abs(t17_4a.dot(t17_4b)) / (t17_4a.norm() * t17_4b.norm())
+    # Ex 17.6: curve tangent at t=0 -> (1,2,3)
+    tau17_6 = (
+        (sp.exp(t) * sp.cos(t)).subs(t, 0),
+        sp.diff(2 * sp.sin(t) + sp.cos(t), t).subs(t, 0),
+        sp.diff(1 + sp.exp(3 * t), t).subs(t, 0),
+    )
+    # Ex 17.8: F = z - e^z + 2xy - 3 at (1,2,0) -> (4,2,0)
+    F17_8 = z_17 - sp.exp(z_17) + 2 * x * y - 3
+    n17_8 = tuple(sp.diff(F17_8, v).subs({x: 1, y: 2, z_17: 0}) for v in (x, y, z_17))
+    # Ex 17.9: e^(2x-z) = f(pi*y - sqrt(2)*z) -> normal perp (1/2, sqrt(2)/pi, 1)
+    f17_9 = sp.Function("f17_9")
+    F17_9 = sp.exp(2 * x - z_17) - f17_9(sp.pi * y - sp.sqrt(2) * z_17)
+    n17_9 = sp.Matrix([sp.diff(F17_9, x), sp.diff(F17_9, y), sp.diff(F17_9, z_17)])
+    v17_9 = sp.Matrix([sp.Rational(1, 2), sp.sqrt(2) / sp.pi, 1])
+    c17_geo_ok = (
+        n17_2 == sp.Matrix([-1, 1, -1])
+        and sol17_3 == [-1]
+        and cos17_4 == sp.Rational(1, 2)
+        and tau17_6 == (1, 2, 3)
+        and F17_8.subs({x: 1, y: 2, z_17: 0}) == 0 and n17_8 == (4, 2, 0)
+        and sp.simplify(n17_9.dot(v17_9)) == 0
+    )
+    check("m1_c17_geo_and_tangents", c17_geo_ok, "zy30 Ex17.1-17.9 (cross/bundle/angle pi/3/tangent/normal/cylinder) exact")
+
+    # 93. Directional derivative, gradient, 2D Taylor, div/rot (zy30 Ex17.10-17.13 + zy18 Ex17.1-17.7)
+    # Ex 17.10: f=x^2y+z^2 at (1,2,0) along (1,2,2)/3 -> 2
+    f17_10 = x**2 * y + z_17**2
+    g17_10 = sp.Matrix([sp.diff(f17_10, v).subs({x: 1, y: 2, z_17: 0}) for v in (x, y, z_17)])
+    dd17_10 = g17_10.dot(sp.Matrix([1, 2, 2]) / 3)
+    # Ex 17.11: (6a, 8b) = k(-3,-4), k>0, norm=10 => a=-1, b=-1
+    # Ex 17.12: (zx+zy)/sqrt(2)=2*sqrt(2), -zy=-3 => zx=1, zy=3, max=sqrt(10)
+    # Ex 17.13: rot(xy, -yz, zx) = (y, -z, -x) at (1,1,0) -> (1,0,-1)
+    P17_13, Q17_13, R17_13 = x * y, -y * z_17, z_17 * x
+    rot17_13 = sp.Matrix([
+        sp.diff(R17_13, y) - sp.diff(Q17_13, z_17),
+        sp.diff(P17_13, z_17) - sp.diff(R17_13, x),
+        sp.diff(Q17_13, x) - sp.diff(P17_13, y),
+    ])
+    # zy18 Ex 17.2: u = x y^2 z^3 at (1,1,1) along (2,2,-1)/3 -> 1
+    dd17_2i = sp.Matrix([1, 2, 3]).dot(sp.Matrix([2, 2, -1]) / 3)
+    # zy18 Ex 17.3: (4a, 2b) = k(1,2), sqrt(5)*k = 4*sqrt(5) => k=4 => a=1, b=4
+    # zy18 Ex 17.4: cos(x)/cos(y) 2nd-order Taylor -> 1 - x^2/2 + y^2/2
+    f17_4i = sp.cos(x) / sp.cos(y)
+    t17_4i_poly = (
+        f17_4i.subs({x: 0, y: 0})
+        + sp.Rational(1, 2) * (
+            sp.diff(f17_4i, x, 2).subs({x: 0, y: 0}) * x**2
+            + 2 * sp.diff(f17_4i, x, y).subs({x: 0, y: 0}) * x * y
+            + sp.diff(f17_4i, y, 2).subs({x: 0, y: 0}) * y**2
+        )
+    )
+    # zy18 Ex 17.5: (1) t=pi/2 -> pt (1,1,0), tau=(-1,1,-1); (2) (y^2,y,y^4) at y=1 -> tau=(2,1,4)
+    c17_5i_x = sp.cos(t) + sp.sin(t)**2
+    c17_5i_y = sp.sin(t) * (1 - sp.cos(t))
+    c17_5i_z = sp.cos(t)
+    tau17_5i = tuple(sp.diff(e, t).subs(t, sp.pi / 2) for e in (c17_5i_x, c17_5i_y, c17_5i_z))
+    # zy18 Ex 17.7: v1=(0,x,z), v2=(y,0,1), F=v1 x v2 = (x, yz, -xy) => div F = 1+z
+    F17_7i = sp.Matrix([0, x, z_17]).cross(sp.Matrix([y, 0, 1]))
+    div17_7i = sp.diff(F17_7i[0], x) + sp.diff(F17_7i[1], y) + sp.diff(F17_7i[2], z_17)
+    # Vector identities: rot(grad u) = 0, div(rot A) = 0
+    u_vec = sp.sin(x * y) + z_17 * sp.exp(x)
+    gu_vec = sp.Matrix([sp.diff(u_vec, x), sp.diff(u_vec, y), sp.diff(u_vec, z_17)])
+    rot_grad = sp.Matrix([
+        sp.diff(gu_vec[2], y) - sp.diff(gu_vec[1], z_17),
+        sp.diff(gu_vec[0], z_17) - sp.diff(gu_vec[2], x),
+        sp.diff(gu_vec[1], x) - sp.diff(gu_vec[0], y),
+    ])
+    div_rot17 = sp.diff(rot17_13[0], x) + sp.diff(rot17_13[1], y) + sp.diff(rot17_13[2], z_17)
+    c17_field_ok = (
+        dd17_10 == 2
+        and sp.Matrix([6 * (-1), 8 * (-1)]).norm() == 10
+        and sp.Matrix([1, 3]).norm() == sp.sqrt(10)
+        and rot17_13.subs({x: 1, y: 1, z_17: 0}) == sp.Matrix([1, 0, -1])
+        and dd17_2i == 1
+        and sp.Matrix([4 * 1, 2 * 4]).norm() == 4 * sp.sqrt(5)
+        and sp.expand(t17_4i_poly - (1 - x**2 / 2 + y**2 / 2)) == 0
+        and tau17_5i == (-1, 1, -1)
+        and F17_7i == sp.Matrix([x, y * z_17, -x * y]) and div17_7i == 1 + z_17
+        and rot_grad == sp.Matrix([0, 0, 0]) and div_rot17 == 0
+    )
+    check("m1_c17_field_and_zy18", c17_field_ok, "zy30 Ex17.10-17.13 + zy18 Ex17.1-17.7 + rot(grad)=0, div(rot)=0 exact")
+
+    # ==================== Calculus Lecture 18 (calc-18: 多元函数积分学，仅数一) ====================
+    r_18, th_18, ph_18, h_18 = sp.symbols("r_18 th_18 ph_18 h_18", positive=True)
+    # 94. Triple integrals (zy30 Ex18.1-18.7 + zy18 Ex18.1-18.11 + Errata #64 counterexample)
+    v18_1 = 6 * sp.integrate(z_17 * sp.Rational(1, 2) * (1 - z_17)**2, (z_17, 0, 1))
+    v18_2 = sp.integrate(sp.integrate(r_18**4 / 8, (r_18, 0, 2 * sp.sin(th_18))), (th_18, 0, sp.pi))
+    v18_3 = sp.Rational(1, 3) * 4 * sp.pi * sp.integrate(r_18**4, (r_18, 0, 1))
+    v18_4 = 2 * sp.pi * sp.integrate(sp.sin(ph_18) * sp.sec(ph_18)**2 / 2, (ph_18, 0, sp.pi / 4))
+    v18_5 = sp.Rational(1, 2) * 4 * sp.pi * sp.integrate((1 - r_18**2) * r_18**2, (r_18, 0, 1))
+    v18_7z = sp.integrate(sp.pi * z_17**2, (z_17, 0, 1)) / sp.integrate(sp.pi * z_17, (z_17, 0, 1))
+    # zy18 Ex18.1, 18.4, 18.5, 18.6, 18.7, 18.8, 18.10, 18.11
+    v18_1i = sp.pi / 2 * sp.integrate(x**2, (x, 0, 1)) * sp.integrate(sp.sin(sp.pi * y / 2), (y, 0, 1)) * sp.integrate(sp.cos(z_17), (z_17, 0, 1))
+    v18_4i = 2 * sp.pi * sp.integrate(sp.sin(ph_18) * sp.cos(ph_18), (ph_18, 0, sp.pi / 4)) * sp.integrate(r_18**3, (r_18, 0, a_p))
+    v18_5i_V = sp.integrate(sp.pi * (1 - z_17)**2, (z_17, 0, 1))
+    v18_5i_My = sp.integrate(z_17 * sp.pi * (1 - z_17)**2, (z_17, 0, 1))
+    v18_6i = 2 * sp.pi * sp.integrate(sp.integrate((r_18**2 + z_17) * r_18, (r_18, 0, sp.sqrt(2 * z_17))), (z_17, 0, 4))
+    v18_7i = 2 * sp.pi * sp.integrate(sp.sin(ph_18), (ph_18, 0, sp.pi / 4)) * sp.integrate(r_18**3, (r_18, 0, a_p))
+    v18_8i = 2 * sp.pi * sp.integrate((9 - r_18**2) * r_18, (r_18, 0, 3))
+    v18_10i = 2 * sp.pi * sp.integrate(r_18 * (1 / (sp.sqrt(2) * r_18) - 1 / sp.sqrt(r_18**2 + h_18**2)), (r_18, 0, 1))
+    v18_11i = sp.pi * sp.integrate(r_18**3 * (1 - r_18), (r_18, 0, 1)) + sp.integrate(sp.pi * y**4, (y, 0, 1))
+    # Errata #64 counterexample: f=xy on unit ball => full integral = 0, octant integral > 0
+    err64_full = sp.integrate(sp.cos(th_18) * sp.sin(th_18), (th_18, 0, 2 * sp.pi))
+    err64_oct = sp.integrate(sp.cos(th_18) * sp.sin(th_18), (th_18, 0, sp.pi / 2))
+    c18_triple_ok = (
+        v18_1 == sp.Rational(1, 4) and v18_2 == sp.Rational(64, 75) and v18_3 == 4 * sp.pi / 15
+        and sp.simplify(v18_4 - (sp.sqrt(2) - 1) * sp.pi) == 0 and v18_5 == 4 * sp.pi / 15
+        and sp.Rational(4, 3) * sp.pi * 1 * 2 * 2 == 16 * sp.pi / 3 and v18_7z == sp.Rational(2, 3)
+        and sp.simplify(v18_1i - sp.sin(1) / 3) == 0
+        and sp.simplify(v18_4i - sp.pi * a_p**4 / 8) == 0
+        and v18_5i_V == sp.pi / 3 and v18_5i_My / v18_5i_V == sp.Rational(1, 4)
+        and v18_6i == 256 * sp.pi / 3
+        and sp.simplify(v18_7i - (2 - sp.sqrt(2)) * sp.pi * a_p**4 / 4) == 0
+        and v18_8i == 81 * sp.pi / 2
+        and sp.simplify(v18_10i - 2 * sp.pi * (1 / sp.sqrt(2) + h_18 - sp.sqrt(h_18**2 + 1))) == 0
+        and v18_11i == sp.pi / 4
+        and err64_full == 0 and err64_oct == sp.Rational(1, 2)
+    )
+    check("m1_c18_triple_and_err64", c18_triple_ok, "zy30 Ex18.1-18.7 + zy18 Ex18.1-18.11 + Errata #64 counterexample exact")
+
+    # 95. Type-I Line & Surface integrals (zy30 Ex18.8-18.14 + zy18 Ex18.12-18.15 + Errata #62)
+    v18_8 = sp.integrate(x * sp.sqrt(1 + 4 * x**2), (x, 0, sp.sqrt(2)))
+    v18_9 = sp.integrate((-2 * sp.sin(th_18)) * 2, (th_18, -sp.pi, 0))
+    # Ex 18.11: x=1+sqrt(2)*cos t, y=1+sqrt(2)*sin t, ds=sqrt(2) dt
+    v18_11 = sp.integrate((2 * (1 + sp.sqrt(2) * sp.cos(t))**2 + 3 * (1 + sp.sqrt(2) * sp.sin(t))**2) * sp.sqrt(2), (t, 0, 2 * sp.pi))
+    v18_12 = sp.integrate(z_17, (z_17, 0, 1)) * sp.integrate(a_p / sp.sqrt(a_p**2 - x**2), (x, 0, a_p))
+    # Ex 18.13 (Errata #62): 1/rho = sqrt(1 - (x^2+y^2)/4), dS = sqrt(4-x^2-y^2)/(2z) dxdy
+    v18_13 = sp.Rational(1, 4) * 2 * sp.pi * sp.integrate((4 - r_18**2) * r_18, (r_18, 0, sp.sqrt(2)))
+    v18_14 = 18 * sp.integrate(sp.integrate(r_18**2, (r_18, 0, 2 * sp.cos(th_18))), (th_18, -sp.pi / 2, sp.pi / 2))
+    v18_13i = (sp.Rational(1, 2) + sp.Rational(1, 3) + sp.Rational(1, 4)) / 3 * a_p**2 * 4 * sp.pi * a_p**2
+    # zy18 Ex18.15 numerical area check S2 > S1 > S3
+    S1_15 = float(mp.quad(lambda rr: rr * mp.quad(lambda tt: mp.sqrt(1 + rr**4 * (mp.cos(tt)**4 + mp.sin(tt)**4)), [0, 2 * mp.pi]), [0, 1]))
+    S2_15 = float(2 * mp.pi * mp.quad(lambda rr: rr * mp.sqrt(1 + rr**2), [0, 1]))
+    S3_15 = float(mp.quad(lambda rr: rr * mp.quad(lambda tt: mp.sqrt(1 + rr**6 * (mp.cos(tt)**2 * mp.sin(tt)**4 + mp.cos(tt)**4 * mp.sin(tt)**2)), [0, 2 * mp.pi]), [0, 1]))
+    c18_t1_ok = (
+        v18_8 == sp.Rational(13, 6) and v18_9 == 8
+        and sp.simplify(v18_11 - 20 * sp.sqrt(2) * sp.pi) == 0
+        and sp.simplify(v18_12 - sp.pi * a_p / 4) == 0
+        and v18_13 == 3 * sp.pi / 2 and v18_14 == 64
+        and sp.simplify(v18_13i - 13 * sp.pi * a_p**4 / 9) == 0
+        and S2_15 > S1_15 > S3_15
+    )
+    check("m1_c18_type1_line_surf", c18_t1_ok, f"zy30 Ex18.8-18.14 + zy18 Ex18.12-18.15 (S2={S2_15:.3f}>S1={S1_15:.3f}>S3={S3_15:.3f}) exact")
+
+    # 96. Type-II Line integrals, Green, Path Independence, Digging Hole (zy30 Ex18.15-18.21 + zy18 Ex18.16-18.23, 18.37)
+    v18_15 = -6 * sp.integrate(sp.sin(t)**4 * sp.cos(t)**2, (t, 0, sp.pi / 2))
+    a_18 = sp.Symbol("a_18", positive=True)
+    I18_16 = sp.integrate(1 + a_18**3 * sp.sin(x)**3 + (2 * x + a_18 * sp.sin(x)) * a_18 * sp.cos(x), (x, 0, sp.pi))
+    # Ex 18.19 curl check
+    P18_19 = (4 * x - y) / (4 * x**2 + y**2)
+    Q18_19 = (x + y) / (4 * x**2 + y**2)
+    curl18_19 = sp.simplify(sp.diff(Q18_19, x) - sp.diff(P18_19, y))
+    # zy18 Ex 18.19 curl check
+    u18_19i = x**2 + 4 * y**2
+    P18_19i = (x * sp.exp(u18_19i) + y) / u18_19i
+    Q18_19i = (4 * y * sp.exp(u18_19i) - x) / u18_19i
+    curl18_19i = sp.simplify(sp.diff(Q18_19i, x) - sp.diff(P18_19i, y))
+    # zy18 Ex 18.20 curl & semicircle integral
+    P18_20i = (x - y) / (x**2 + y**2)
+    Q18_20i = (x + y) / (x**2 + y**2)
+    curl18_20i = sp.simplify(sp.diff(Q18_20i, x) - sp.diff(P18_20i, y))
+    # zy18 Ex 18.23
+    v18_23i = sp.integrate(2 * (1 - sp.sin(t)), (t, 0, sp.pi))
+    # zy18 Ex 18.37: ellipse half area * 6 + int_{-1/2}^{1/2} (-3x^2) dx = sqrt(3)*pi - 1/4
+    v18_37i = 6 * (sp.pi / (2 * sp.sqrt(3))) + sp.integrate(-3 * x**2, (x, -sp.Rational(1, 2), sp.Rational(1, 2)))
+    c18_green_ok = (
+        v18_15 == -3 * sp.pi / 16
+        and sp.expand(I18_16 - (sp.pi - 4 * a_18 + sp.Rational(4, 3) * a_18**3)) == 0
+        and curl18_19 == 0 and curl18_19i == 0 and curl18_20i == 0
+        and sp.integrate(-2 * y, (y, 2, 0)) == 4
+        and sp.integrate(2 * x**3, (x, 0, 1)) == sp.Rational(1, 2)
+        and v18_23i == 2 * sp.pi - 4
+        and sp.simplify(v18_37i - (sp.sqrt(3) * sp.pi - sp.Rational(1, 4))) == 0
+    )
+    check("m1_c18_green_and_path", c18_green_ok, "zy30 Ex18.15-18.21 + zy18 Ex18.16-18.23, 18.37 (curls=0, 2pi-4, sqrt(3)pi-1/4) exact")
+
+    # 97. Type-II Surface, Gauss, Stokes & Space Line integrals (zy30 Ex18.22-18.30 + zy18 Ex18.24-18.36)
+    v18_22 = -2 * sp.pi * sp.E + 4 * sp.pi * sp.E**2 - 2 * sp.pi * (sp.E**2 - sp.E)
+    v18_22_gauss = 2 * sp.pi * sp.integrate(z_17 * sp.exp(z_17), (z_17, 1, 2))
+    v18_25_gauss = -2 * sp.pi * sp.integrate(r_18 * (1 - r_18**2) * (3 * r_18**2 + 7), (r_18, 0, 1))
+    v18_26 = sp.pi + sp.Rational(1, 2) * 2 * sp.pi * sp.integrate(r_18**3, (r_18, 0, 1))
+    v18_27 = -2 * sp.pi - 2 * 2 * sp.pi * sp.integrate(r_18 * sp.integrate(z_17, (z_17, -sp.sqrt(1 - r_18**2), 0)), (r_18, 0, 1)) + sp.pi
+    # Ex 18.28 point source div = 0
+    r3_norm = (x**2 + y**2 + z_17**2)**sp.Rational(3, 2)
+    div18_28 = sp.simplify(sp.diff(x / r3_norm, x) + sp.diff(y / r3_norm, y) + sp.diff(z_17 / r3_norm, z_17))
+    v18_29 = 4 * sp.integrate(sp.cos(th_18) * sp.sin(th_18), (th_18, 0, sp.pi / 2)) * sp.integrate(r_18**3 * (1 - r_18**4), (r_18, 0, 1))
+    v18_30 = sp.integrate(sp.sqrt(2) * sp.sin(t)**2, (t, -sp.pi / 2, sp.pi / 2))
+    # zy18 Ex 18.24 (Stokes & Parametric)
+    v18_24i = sp.integrate(sp.sin(t)**2 * sp.cos(t)**2 / (2 * sp.sqrt(2)), (t, 0, 2 * sp.pi))
+    # zy18 Ex 18.25 (rot = 0, integral = 8pi^3/3)
+    P25, Q25, R25 = x**2 - y * z_17, y**2 - z_17 * x, z_17**2 - x * y
+    rot18_25i = (
+        sp.diff(R25, y) - sp.diff(Q25, z_17),
+        sp.diff(P25, z_17) - sp.diff(R25, x),
+        sp.diff(Q25, x) - sp.diff(P25, y),
+    )
+    # zy18 Ex 18.30, 18.31, 18.35, 18.36
+    v18_30i = sp.integrate(sp.integrate(y**2 / x, (y, -x, x)), (x, 0, 1))
+    J18_31i = sp.Matrix([[1, -1, 1], [1, 1, -1], [-1, 1, 1]]).det()
+    f18_35i = sp.exp(xp) * (sp.exp(xp) - 1) / xp
+    ode18_35i = sp.simplify(xp * sp.diff(f18_35i, xp) + f18_35i - xp * f18_35i - sp.exp(2 * xp))
+    lim18_35i = sp.limit(f18_35i, xp, 0, "+")
+    v18_36i = 2 * sp.pi * sp.integrate(r_18**2, (r_18, 1, 2))
+    c18_gs_ok = (
+        sp.simplify(v18_22 - 2 * sp.pi * sp.E**2) == 0 and sp.simplify(v18_22_gauss - 2 * sp.pi * sp.E**2) == 0
+        and v18_25_gauss == -4 * sp.pi and v18_26 == 5 * sp.pi / 4 and v18_27 == -sp.pi / 2
+        and div18_28 == 0 and v18_29 == sp.Rational(1, 4)
+        and sp.simplify(v18_30 - sp.sqrt(2) * sp.pi / 2) == 0
+        and sp.simplify(v18_24i - sp.sqrt(2) * sp.pi / 16) == 0
+        and rot18_25i == (0, 0, 0) and sp.integrate(z_17**2, (z_17, 0, 2 * sp.pi)) == 8 * sp.pi**3 / 3
+        and v18_30i == sp.Rational(2, 9) and J18_31i == 4 and 3 * sp.Rational(1, 4) * sp.Rational(4, 3) == 1
+        and ode18_35i == 0 and lim18_35i == 1 and v18_36i == 14 * sp.pi / 3
+    )
+    check("m1_c18_gauss_stokes_all", c18_gs_ok, "zy30 Ex18.22-18.30 + zy18 Ex18.24-18.36 (Gauss/Stokes/div=0/ODE/14pi/3) exact")
+
     return results
 
 
