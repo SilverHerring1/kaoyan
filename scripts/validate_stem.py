@@ -52,6 +52,8 @@ def check_latex_delimiters(text: str, ctx: str, errors: list[str]) -> None:
         errors.append(f"{ctx}: unbalanced inline '$' delimiters")
         return
     for idx, block in enumerate(re.findall(r"\$([^$]+)\$", rem)):
+        if "\n" in block:
+            errors.append(f"{ctx}: newline inside inline math #{idx + 1}: {block[:40]!r} (check unescaped \\ne/\\nabla/\\nu)")
         b = block.replace(r"\{", "").replace(r"\}", "")
         if b.count("{") != b.count("}"):
             errors.append(f"{ctx}: unbalanced braces in inline math #{idx + 1}: {block[:40]}")

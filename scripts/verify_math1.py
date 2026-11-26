@@ -1169,6 +1169,217 @@ def run_all_checks() -> list[tuple[str, bool, str]]:
     )
     check("m1_p03_real_exams", p03_ok, f"p03 2026(a={a2026}), 2022(1/3), 2019-2(2/5), 2016(mean={float(mean_2016):.6f}, end={float(f2016_end):.4f}>0) exact")
 
+    # ==================== Calculus Lecture 13 (calc-13: 多元函数微分学) ====================
+    y = sp.Symbol("y", real=True)
+    yp = sp.Symbol("yp", positive=True)
+    u_s, v_s, z_s, a_c, b_c = sp.symbols("u_s v_s z_s a_c b_c", real=True)
+
+    # 71. All 16 total differential formulas (zy18 P.157-158) + Note(1) + Errata #44 Note(2)
+    td16_cases = [
+        ((x**2 + y**2) / 2, x, y),
+        ((x**2 - y**2) / 2, x, -y),
+        (x * y, y, x),
+        (sp.log(xp * yp), 1 / xp, 1 / yp),
+        (sp.Rational(1, 2) * sp.log(x**2 + y**2), x / (x**2 + y**2), y / (x**2 + y**2)),
+        (sp.Rational(1, 2) * sp.log(xp**2 - yp**2), xp / (xp**2 - yp**2), -yp / (xp**2 - yp**2)),
+        (y / x, -y / x**2, 1 / x),
+        (x / y, 1 / y, -x / y**2),
+        (sp.atan(x / y), y / (x**2 + y**2), -x / (x**2 + y**2)),
+        (sp.atan(y / x), -y / (x**2 + y**2), x / (x**2 + y**2)),
+        (sp.Rational(1, 2) * sp.log((xp - yp) / (xp + yp)), yp / (xp**2 - yp**2), -xp / (xp**2 - yp**2)),
+        (sp.Rational(1, 2) * sp.log((xp + yp) / (xp - yp)), -yp / (xp**2 - yp**2), xp / (xp**2 - yp**2)),
+        (-sp.Rational(1, 2) / (x**2 + y**2), x / (x**2 + y**2)**2, y / (x**2 + y**2)**2),
+        (-sp.Rational(1, 2) / (x**2 - y**2), x / (x**2 - y**2)**2, -y / (x**2 - y**2)**2),
+        (sp.Rational(1, 2) * sp.atan(x**2 + y**2), x / (1 + (x**2 + y**2)**2), y / (1 + (x**2 + y**2)**2)),
+        (sp.Rational(1, 2) * sp.atan(x**2 - y**2), x / (1 + (x**2 - y**2)**2), -y / (1 + (x**2 - y**2)**2)),
+    ]
+    td16_ok = True
+    for expr_u, P_exp, Q_exp in td16_cases:
+        vx = xp if expr_u.has(xp) else x
+        vy = yp if expr_u.has(yp) else y
+        if sp.simplify(sp.diff(expr_u, vx) - P_exp) != 0 or sp.simplify(sp.diff(expr_u, vy) - Q_exp) != 0:
+            td16_ok = False
+            break
+    # Note(1): (x dx - a y dy)/(1+(x^2+y^2)^2) exact => a = -1
+    P_n1 = x / (1 + (x**2 + y**2)**2)
+    Q_n1 = -a_c * y / (1 + (x**2 + y**2)**2)
+    a_n1_sol = sp.solve(sp.simplify(sp.diff(P_n1, y) - sp.diff(Q_n1, x)), a_c)
+    # Errata #44 Note(2): corrected Q = -4*x^2*y/(x^2+y^2)^2 => a = 4 (potential 2*x^2/(x^2+y^2)); typo 4*x^6*y fails exactness
+    P_n2 = a_c * x * y**2 / (x**2 + y**2)**2
+    Q_n2_fix = -4 * x**2 * y / (x**2 + y**2)**2
+    Q_n2_typo = -4 * x**6 * y / (x**2 + y**2)**2
+    a_n2_sol = sp.solve(sp.simplify(sp.diff(P_n2, y) - sp.diff(Q_n2_fix, x)), a_c)
+    typo_diff = sp.simplify(sp.diff(P_n2.subs(a_c, 4), y) - sp.diff(Q_n2_typo, x))
+    u_n2 = 2 * x**2 / (x**2 + y**2)
+    td_all_ok = (
+        td16_ok and a_n1_sol == [-1] and a_n2_sol == [4] and typo_diff != 0
+        and sp.simplify(sp.diff(u_n2, x) - P_n2.subs(a_c, 4)) == 0
+        and sp.simplify(sp.diff(u_n2, y) - Q_n2_fix) == 0
+    )
+    check("m1_c13_total_diff_16", td_all_ok, "zy18 all 16 total differentials + Note(1) a=-1 + Errata #44 (4x^2y exact a=4, 4x^6y non-exact) verified")
+
+    # 72. calc-13 zy30 Ex 13.1 ~ 13.11
+    lim_13_2 = sp.limit(((1 - t)**sp.Rational(1, 3) - 1) / (sp.exp(t) - 1), t, 0, "+")
+    # Ex 13.5: int_0^oo e^(-x t^2) dt = sqrt(pi)/(2 sqrt(x))
+    f13_5 = sp.integrate(sp.exp(-xp * t**2), (t, 0, sp.oo))
+    df13_5 = sp.diff(f13_5, xp).subs(xp, 1)
+    # Ex 13.6: f = e^(-x) sin(y), volume pi * int_0^oo e^(-2x) sin^2(x) dx = pi/8
+    vol_13_6 = sp.pi * sp.integrate(sp.exp(-2 * t) * sp.sin(t)**2, (t, 0, sp.oo))
+    # Ex 13.7: (a x y^3 - y^2 cos x) dx + (1 + b y sin x + 3 x^2 y^2) dy
+    P13_7 = a_c * x * y**3 - y**2 * sp.cos(x)
+    Q13_7 = 1 + b_c * y * sp.sin(x) + 3 * x**2 * y**2
+    d13_7 = sp.diff(P13_7, y) - sp.diff(Q13_7, x)
+    sol_13_7 = sp.solve([d13_7.subs({x: 0, y: 1}), d13_7.subs({x: sp.pi / 2, y: 1})], (a_c, b_c))
+    ok_13_7 = sol_13_7 == {a_c: 2, b_c: -2} and sp.simplify(d13_7.subs(sol_13_7)) == 0
+    # Ex 13.9: test with f(u,v) = u - v + 3*u^2 + 5*u*v + 7*v^2
+    f13_9_test = (sp.exp(x) * sp.sin(y)) - (x**2 + y**2) + 3 * (sp.exp(x) * sp.sin(y))**2 + 5 * sp.exp(x) * sp.sin(y) * (x**2 + y**2)
+    zxy_13_9 = sp.diff(f13_9_test, x, y).subs({x: 0, y: 0})
+    # Ex 13.11: x=u*v, y=(u^2-v^2)/2 => g_u^2 + g_v^2 = (u^2+v^2)*(fx^2+fy^2)
+    fx_s, fy_s = sp.symbols("fx_s fy_s", real=True)
+    gu_13_11 = fx_s * v_s + fy_s * u_s
+    gv_13_11 = fx_s * u_s - fy_s * v_s
+    id_13_11 = sp.simplify(gu_13_11**2 + gv_13_11**2 - (u_s**2 + v_s**2) * (fx_s**2 + fy_s**2))
+    c13_b_ok = (
+        lim_13_2 == -sp.Rational(1, 3)
+        and sp.diff(sp.log(y), y).subs(y, 1) == 1
+        and sp.simplify(df13_5 - (-sp.sqrt(sp.pi) / 4)) == 0
+        and vol_13_6 == sp.pi / 8
+        and ok_13_7
+        and zxy_13_9 == 1
+        and id_13_11 == 0
+    )
+    check("m1_c13_zy30_basics", c13_b_ok, "zy30 Ex13.1-13.11 (a=-1/3, -sqrt(pi)/4, V=pi/8, (2,-2), z_xy=1, parabolic PDE) exact")
+
+    # 73. calc-13 zy30 Ex 13.12 ~ 13.22 (implicit, extrema, unclosed arc, ellipse-line, closed ellipse)
+    F13_12 = sp.exp(x + 2 * y + 3 * z_s) + x * y * z_s - 1
+    zx_13_12 = (-sp.diff(F13_12, x) / sp.diff(F13_12, z_s)).subs({x: 0, y: 0, z_s: 0})
+    zy_13_12 = (-sp.diff(F13_12, y) / sp.diff(F13_12, z_s)).subs({x: 0, y: 0, z_s: 0})
+    F13_13 = x * y - z_s * sp.log(y) + sp.exp(x * z_s) - 1
+    pt13_13 = {x: 0, y: 1, z_s: 1}
+    # Ex 13.16: test concrete F(u,v) = u^2 + v^3 - 5 => x*z_x + y*z_y = z - x*y
+    F13_16 = (x + z_s / y)**2 + (y + z_s / x)**3 - 5
+    zx_13_16 = -sp.diff(F13_16, x) / sp.diff(F13_16, z_s)
+    zy_13_16 = -sp.diff(F13_16, y) / sp.diff(F13_16, z_s)
+    id_13_16 = sp.simplify(x * zx_13_16 + y * zy_13_16 - (z_s - x * y))
+    # Ex 13.19: (x^2+y^2)*z + ln(z) + 2(x+y+1)=0 at (-1,-1,1) -> A=C=-2/3, B=0, g'(z)=1/z+2/z^2 > 0
+    F13_19 = (x**2 + y**2) * z_s + sp.log(z_s) + 2 * (x + y + 1)
+    # Implicit second derivatives at stationary point (-1,-1,1) where zx=zy=0: z_xx = -F_xx / F_z
+    A13_19 = (-sp.diff(F13_19, x, 2) / sp.diff(F13_19, z_s)).subs({x: -1, y: -1, z_s: 1})
+    B13_19 = (-sp.diff(F13_19, x, y) / sp.diff(F13_19, z_s)).subs({x: -1, y: -1, z_s: 1})
+    C13_19 = (-sp.diff(F13_19, y, 2) / sp.diff(F13_19, z_s)).subs({x: -1, y: -1, z_s: 1})
+    # Ex 13.20: S = (b-a)^3/6 on a^2+b^2=1, a<=0, b>=0 -> max sqrt(2)/3, min 1/6
+    S13_20_max = (sp.sqrt(2))**3 / 6
+    S13_20_min = sp.Rational(1, 6)
+    # Ex 13.21: x^2+4y^2=4 to 2x+3y-6=0 -> P(8/5,3/5) d=1/sqrt(13), Q(-8/5,-3/5) d=11/sqrt(13)
+    d13_21_min = sp.Abs(2 * sp.Rational(8, 5) + 3 * sp.Rational(3, 5) - 6) / sp.sqrt(13)
+    d13_21_max = sp.Abs(2 * (-sp.Rational(8, 5)) + 3 * (-sp.Rational(3, 5)) - 6) / sp.sqrt(13)
+    # Ex 13.22: z = x^2 - y^2 + 2 on x^2 + y^2/4 <= 1 -> boundary 3 - 5/4 y^2 in [-2, 3]
+    c13_ie_ok = (
+        zx_13_12 == -sp.Rational(1, 3) and zy_13_12 == -sp.Rational(2, 3)
+        and sp.diff(F13_13, x).subs(pt13_13) == 2 and sp.diff(F13_13, y).subs(pt13_13) == -1 and sp.diff(F13_13, z_s).subs(pt13_13) == 0
+        and id_13_16 == 0
+        and F13_19.subs({x: -1, y: -1, z_s: 1}) == 0 and A13_19 == -sp.Rational(2, 3) and B13_19 == 0 and C13_19 == -sp.Rational(2, 3)
+        and sp.simplify(S13_20_max - sp.sqrt(2) / 3) == 0 and S13_20_min == sp.Rational(1, 6)
+        and (sp.Rational(8, 5))**2 + 4 * (sp.Rational(3, 5))**2 == 4
+        and sp.simplify(d13_21_min - 1 / sp.sqrt(13)) == 0 and sp.simplify(d13_21_max - 11 / sp.sqrt(13)) == 0
+        and (3 - sp.Rational(5, 4) * 0) == 3 and (3 - sp.Rational(5, 4) * 4) == -2
+    )
+    check("m1_c13_zy30_impl_extrema", c13_ie_ok, "zy30 Ex13.12-13.22 (dz=-dx/3-2dy/3, Ex13.16 id, Ex13.19 A=C=-2/3, Ex13.20-22 exact)")
+
+    # 74. calc-13 zy18 Ex 13.1 ~ 13.13 (limits, iterated limits, 6 counterexamples, mixed partials)
+    lim_13_2_curve = sp.limit((x**3 + (-x**2 + x**3)**3) / (x**2 + (-x**2 + x**3)), x, 0)
+    quad_min_diff = sp.expand((x**2 - x * y + y**2) - ((x - y / 2)**2 + sp.Rational(3, 4) * y**2))
+    lim_13_4 = sp.limit((x**2 + 1) * sp.exp(-(x + 1)), x, sp.oo)
+    I1_13_6 = sp.limit(sp.limit((x**2 - y**2) / (x**2 + y**2), y, 0), x, 0)
+    I2_13_6 = sp.limit(sp.limit((x**2 - y**2) / (x**2 + y**2), x, 0), y, 0)
+    # Phenomenon 4 (Ex 13.10): along y=x, x>0 -> x^3/(2x^2)^(3/2) = 1/(2 sqrt(2)) != 0
+    ph4_lim = sp.limit(xp**3 / (2 * xp**2)**sp.Rational(3, 2), xp, 0, "+")
+    # Phenomenon 6 (Ex 13.12): derivative along y=0 is 2x sin(1/x^2) - (2/x) cos(1/x^2)
+    f_ph6 = (x**2 + y**2) * sp.sin(1 / (x**2 + y**2))
+    fx_ph6_y0 = sp.simplify(sp.diff(f_ph6, x).subs(y, 0))
+    # Ex 13.13 mixed partials: f_x'(0,y) = -y => f_xy(0,0)=-1; f_y'(x,0) = x => f_yx(0,0)=1
+    c13_lim_ok = (
+        lim_13_2_curve == 1 and quad_min_diff == 0 and lim_13_4 == 0
+        and I1_13_6 == 1 and I2_13_6 == -1
+        and sp.simplify(ph4_lim - 1 / (2 * sp.sqrt(2))) == 0
+        and sp.simplify(fx_ph6_y0 - (2 * x * sp.sin(1 / x**2) - 2 / x * sp.cos(1 / x**2))) == 0
+        and sp.diff(-y, y) == -1 and sp.diff(x, x) == 1
+    )
+    check("m1_c13_zy18_limits_concepts", c13_lim_ok, "zy18 Ex13.1-13.13 (curve limit=1, iterated 1/-1, Ph4/Ph6, mixed -1 vs 1) exact")
+
+    # 75. calc-13 zy18 Ex 13.14 ~ 13.24 (exact diff, implicit system, Euler homogeneous, 4 PDEs)
+    P13_14 = (x + a_c * y) / (x + y)**2
+    Q13_14 = y / (x + y)**2
+    a13_14 = sp.solve(sp.simplify(sp.diff(P13_14, y) - sp.diff(Q13_14, x)), a_c)
+    # Ex 13.15: x/z - ln(z/y) = 0
+    F13_15 = x / z_s - sp.log(z_s) + sp.log(y)
+    zx_13_15 = sp.simplify(-sp.diff(F13_15, x) / sp.diff(F13_15, z_s))
+    zy_13_15 = sp.simplify(-sp.diff(F13_15, y) / sp.diff(F13_15, z_s))
+    # Ex 13.17: e^z - xyz = 0, x z^2 - ln y = 0 at x=1/2, y=e^2, z=2 => dz/dx = -4
+    G1_17 = sp.exp(z_s) - x * y * z_s
+    G2_17 = x * z_s**2 - sp.log(y)
+    pt17 = {x: sp.Rational(1, 2), y: sp.exp(2), z_s: 2}
+    yp_s, zp_s = sp.symbols("yp_s zp_s")
+    sol17 = sp.solve([
+        (sp.diff(G1_17, x) + sp.diff(G1_17, y) * yp_s + sp.diff(G1_17, z_s) * zp_s).subs(pt17),
+        (sp.diff(G2_17, x) + sp.diff(G2_17, y) * yp_s + sp.diff(G2_17, z_s) * zp_s).subs(pt17),
+    ], (yp_s, zp_s))
+    # Ex 13.19: z = sqrt((x^2+y^2)/(xy)) => x z_x + y z_y = 0
+    z13_19 = sp.sqrt((xp**2 + yp**2) / (xp * yp))
+    euler_13_19 = sp.simplify(xp * sp.diff(z13_19, xp) + yp * sp.diff(z13_19, yp))
+    # Ex 13.20: f(u) = (1/2) u ln u
+    f13_20 = sp.Rational(1, 2) * u_s * sp.log(u_s)
+    # Ex 13.21: z(u,v) = 5/4 e^v + (u^2 - 5/4) e^(v/5) with u=x-2y, v=x+3y
+    z21_uv = sp.Rational(5, 4) * sp.exp(v_s) + (u_s**2 - sp.Rational(5, 4)) * sp.exp(v_s / 5)
+    z21_xy = z21_uv.subs({u_s: x - 2 * y, v_s: x + 3 * y})
+    pde21_res = sp.simplify(6 * sp.diff(z21_xy, x, 2) + sp.diff(z21_xy, x, y) - sp.diff(z21_xy, y, 2) - (3 * sp.diff(z21_xy, x) - sp.diff(z21_xy, y)))
+    bc21_1 = sp.simplify(sp.diff(z21_uv.subs(u_s, 0), v_s) - (sp.Rational(1, 5) * z21_uv.subs(u_s, 0) + sp.exp(v_s)))
+    bc21_2 = sp.simplify(z21_uv.subs(v_s, 0) - u_s**2)
+    # Ex 13.23: f(t) = e^(5t)/25 - 11t/5 - 1/25, u = f(ln(sqrt(x^2+y^2)))
+    f23 = sp.exp(5 * t) / 25 - sp.Rational(11, 5) * t - sp.Rational(1, 25)
+    u23 = f23.subs(t, sp.Rational(1, 2) * sp.log(xp**2 + yp**2))
+    lap23_res = sp.simplify(sp.diff(u23, xp, 2) + sp.diff(u23, yp, 2) - (xp**2 + yp**2)**sp.Rational(3, 2))
+    # int_0^1 f(xt) dt / x == int_0^x f(s) ds / x^2 (avoid SymPy Piecewise artefact at x=0)
+    lim23 = sp.limit(sp.integrate(f23.subs(t, u_s), (u_s, 0, x)) / x**2, x, 0)
+    # Ex 13.24: f(x,y) = e^(-x) (1 - ln(cos y))
+    f24 = sp.exp(-x) * (1 - sp.log(sp.cos(y)))
+    c13_pde_ok = (
+        a13_14 == [2]
+        and sp.simplify(zx_13_15 - z_s / (x + z_s)) == 0 and sp.simplify(zy_13_15 - z_s**2 / (y * (x + z_s))) == 0
+        and G1_17.subs(pt17) == 0 and G2_17.subs(pt17) == 0 and sol17[zp_s] == -4
+        and euler_13_19 == 0
+        and f13_20.subs(u_s, 1) == 0 and sp.diff(f13_20, u_s).subs(u_s, 1) == sp.Rational(1, 2)
+        and pde21_res == 0 and bc21_1 == 0 and bc21_2 == 0
+        and lap23_res == 0 and lim23 == -1
+        and sp.simplify(sp.diff(f24, x) + f24) == 0
+        and sp.simplify(sp.diff(f24, y).subs(x, 0) - sp.tan(y)) == 0 and f24.subs({x: 0, y: 0}) == 1
+    )
+    check("m1_c13_zy18_calc_pde", c13_pde_ok, "zy18 Ex13.14-13.24 (a=2, dz/dx=-4, Euler, PDE21/22/23/24 all exact)")
+
+    # 76. calc-13 zy18 Ex 13.25 ~ 13.32 (extrema, Peano, Lagrange quadratic, closed disk, exact diff ODE)
+    f25 = 3 * (x**2 + y**2) - x**3
+    H25 = sp.hessian(f25, (x, y))
+    # Peano Ex 13.26: (y - x^2)(y - 2x^2) along y = 3/2 x^2 gives -x^4/4
+    f26_para = sp.simplify(((sp.Rational(3, 2) * x**2) - x**2) * ((sp.Rational(3, 2) * x**2) - 2 * x**2))
+    # Ex 13.30: eigenvalues of [[5,2],[2,2]] are 1 and 6 => u in [1/sqrt(6), 1]
+    ev30 = sorted(sp.Matrix([[5, 2], [2, 2]]).eigenvals().keys())
+    # Ex 13.31: boundary 48 - x^3 on [-4,4] => max 112 at -4, min -16 at 4
+    # Ex 13.32: f(u) = e^(1-u) - e^(u-1) + u, P = f(xy)/(x^2 y), Q = f''(xy)/(x y^2)
+    f32 = sp.exp(1 - u_s) - sp.exp(u_s - 1) + u_s
+    f32_d2 = sp.diff(f32, u_s, 2)
+    P32 = f32.subs(u_s, x * y) / (x**2 * y)
+    Q32 = f32_d2.subs(u_s, x * y) / (x * y**2)
+    c13_ext_ok = (
+        H25.subs({x: 0, y: 0}).det() == 36 and H25.subs({x: 2, y: 0}).det() == -36
+        and f26_para == -x**4 / 4
+        and ev30 == [1, 6]
+        and f25.subs({x: -4, y: 0}) == 112 and f25.subs({x: 4, y: 0}) == -16 and f25.subs({x: 2, y: 0}) == 4
+        and f32.subs(u_s, 1) == 1 and sp.diff(f32, u_s).subs(u_s, 1) == -1 and f32_d2.subs(u_s, 1) == 0
+        and sp.simplify(sp.diff(P32, y) - sp.diff(Q32, x)) == 0
+        and sp.simplify((f32_d2 - f32) / u_s - (-1)) == 0
+    )
+    check("m1_c13_zy18_extrema_all", c13_ext_ok, "zy18 Ex13.25-13.32 (Hessian 36/-36, Peano -x^4/4, eig [1,6], disk 112/-16, ODE32 exact)")
+
     return results
 
 

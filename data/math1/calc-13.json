@@ -1,0 +1,2611 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "calc-13",
+  "chapterNum": "高数 · 第 13 讲",
+  "chapterTitle": "多元函数微分学",
+  "syllabusRef": "2027 考研数学一大纲 · 高等数学第 13 讲（27 张宇《基础30讲·高数》P.304-331上 22 例 + 《高数18讲》强化 P.145-174 32 例全量合编；含全微分 16 式、六大概念反例、PDE 化简与极值最值；数三偏导经济标为教材拓展）",
+  "items": [
+    {
+      "id": "m1-c13-f-01",
+      "stage": "both",
+      "section": "一、多元函数的基本概念（极限、连续、偏导与可微）",
+      "kind": "formula",
+      "title": "平面 $\\delta$ 邻域、二重极限、累次极限与二元函数连续定义",
+      "examWeight": "core",
+      "prompt": "默写点 $P_0(x_0,y_0)$ 的去心 $\\delta$ 邻域、二重极限定义、二重极限与两累次极限的三条关系，以及二元连续定义：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{去心 }\\delta\\text{ 邻域：}\\mathring{U}(P_0,\\delta)=\\bigl\\{(x,y)\\mid 0<\\sqrt{(x-x_0)^2+(y-y_0)^2}<\\delta\\bigr\\}\\\\\n&\\text{二重极限：}\\lim_{\\substack{x\\to x_0\\\\y\\to y_0}}f(x,y)=A \\iff \\forall\\varepsilon>0,\\;\\exists\\delta>0,\\;0<\\rho(P,P_0)<\\delta\\implies|f(x,y)-A|<\\varepsilon\\\\\n&\\text{二元连续：}\\lim_{\\substack{x\\to x_0\\\\y\\to y_0}}f(x,y)=f(x_0,y_0)\\quad(\\text{考纲不要求分类二元间断点})\\\\\n&\\text{累次极限关系：若二重极限与累次极限均存在，则三者必相等；逆否：}I_1\\ne I_2\\implies\\text{二重极限必不存在}\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "无穷多路径性与「脱帽法」",
+          "desc": "二元极限要求点 $P(x,y)$ 沿**任意方式、任意曲线路径**趋于 $P_0$ 都趋于同一值 $A$；除**洛必达法则与单调有界准则不能直接照搬**外，四则运算、保号性、夹逼准则、等价无穷小、泰勒替换与脱帽法（$f(x,y)=A+\\alpha(x,y),\\;\\alpha\\to 0$）均可类比一元使用。"
+        },
+        {
+          "sym": "单变量连续（强化 P.149）",
+          "desc": "$\\lim\\limits_{x\\to x_0}f(x,y_0)=f(x_0,y_0)$ 仅表示关于 $x$ 连续；两单变量分别连续**推不出**二元连续（反例见强化例13.7）。"
+        }
+      ],
+      "conditions": "定义在 $P_0$ 的去心邻域内（连续性要求在 $P_0$ 点有定义）；证明二重极限**不存在**只需找两条极限不等的路径（如直线族 $y=kx$ 或配阶曲线 $y=-x^2+x^3$），证明**存在**必须对全体方向用夹逼/极坐标 $\\rho\\to 0$ 一致放缩（绝不可仅试直线族！）。",
+      "pitfalls": "高频雷区：① 仅验证所有直线路径 $y=kx$ 极限全为 $0$ **绝推不出**二重极限存在（见强化例13.2，曲线 $y=-x^2+x^3$ 极限为 $1$）；② 两累次极限存在且相等也**推不出**二重极限存在（见强化例13.5）。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.305-308",
+        "pdfPage": 310,
+        "itemRef": "一·1 邻域 ~ 一·3 连续",
+        "crossRef": "27张宇《高数18讲》(强化) P.146-149 极限与累次极限三关系"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_limits_concepts",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-f-02",
+      "stage": "both",
+      "section": "一、多元函数的基本概念（极限、连续、偏导与可微）",
+      "kind": "formula",
+      "title": "一阶偏导数定义（先代后导心法）与混合偏导数连续相等定理",
+      "examWeight": "core",
+      "prompt": "默写 $f_x'(x_0,y_0)$ 与 $f_y'(x_0,y_0)$ 的极限定义、几何意义，以及二阶混合偏导 $f_{xy}''=f_{yx}''$ 的充分条件：",
+      "formulaLatex": "$$\\begin{aligned}\n&f_x'(x_0,y_0)=\\lim_{\\Delta x\\to 0}\\frac{f(x_0+\\Delta x,y_0)-f(x_0,y_0)}{\\Delta x}=\\left.\\frac{\\mathrm{d}}{\\mathrm{d}x}f(x,y_0)\\right|_{x=x_0}\\\\\n&f_y'(x_0,y_0)=\\lim_{\\Delta y\\to 0}\\frac{f(x_0,y_0+\\Delta y)-f(x_0,y_0)}{\\Delta y}=\\left.\\frac{\\mathrm{d}}{\\mathrm{d}y}f(x_0,y)\\right|_{y=y_0}\\\\\n&\\text{克莱罗/施瓦茨定理：若 }f_{xy}''(x,y)\\text{ 与 }f_{yx}''(x,y)\\text{ 在区域 }D\\text{ 内连续，则 }f_{xy}''(x,y)=f_{yx}''(x,y)\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "「先代值再求导」黄金法则",
+          "desc": "求具体点 $(x_0,y_0)$ 处对 $x$ 的偏导时，直接先把 $y=y_0$ 代入化为一元函数 $g(x)=f(x,y_0)$ 再求导（如例13.3、例13.5），不仅速度极快，而且在分段点/绝对值点处绝对忠实于定义！"
+        },
+        {
+          "sym": "偏导的几何意义",
+          "desc": "$f_x'(x_0,y_0)$ 是平面 $y=y_0$ 截曲面 $z=f(x,y)$ 所得截线在 $(x_0,y_0,z_0)$ 处的切线斜率（对 $x$ 轴正方向）；同理 $f_y'(x_0,y_0)$ 是平面 $x=x_0$ 截线的切线斜率。"
+        }
+      ],
+      "conditions": "一阶偏导仅要求沿两条坐标轴方向的一元导数存在；二阶混合偏导 $f_{xy}''=\\frac{\\partial}{\\partial y}\\!\\left(\\frac{\\partial f}{\\partial x}\\right)$（先 $x$ 后 $y$）与 $f_{yx}''$ 在两者连续时才保证相等。",
+      "pitfalls": "绝对不能默认 $f_{xy}''(0,0)=f_{yx}''(0,0)$！当混合偏导不连续时两者完全可能不等（见强化例13.13，$f_{xy}''(0,0)=-1\\ne 1=f_{yx}''(0,0)$）；此外求分段点处 $f_{xy}''(0,0)$ 只需先算沿 $y$ 轴的 $f_x'(0,y)$ 再对 $y$ 求导。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.308-311",
+        "pdfPage": 313,
+        "itemRef": "一·4 偏导数 & 高阶偏导数",
+        "crossRef": "27张宇《高数18讲》(强化) P.149 二、偏导数 & P.154 强化例13.13"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy30_basics",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-f-03",
+      "stage": "both",
+      "section": "一、多元函数的基本概念（极限、连续、偏导与可微）",
+      "kind": "formula",
+      "title": "二元函数可微定义、全微分公式、必要/充分条件与可微判定三步法",
+      "examWeight": "core",
+      "prompt": "默写全增量与全微分定义、可微的必要条件与充分条件，以及判别 $f(x,y)$ 在 $(x_0,y_0)$ 处可微的标准三步法：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{可微定义：}\\Delta z=f(x_0+\\Delta x,y_0+\\Delta y)-f(x_0,y_0)=A\\Delta x+B\\Delta y+o(\\rho),\\quad \\rho=\\sqrt{(\\Delta x)^2+(\\Delta y)^2}\\\\\n&\\text{必要条件：可微}\\implies \\text{连续，且两偏导存在，且 }A=f_x'(x_0,y_0),\\;B=f_y'(x_0,y_0),\\;\\mathrm{d}z=f_x'\\,\\mathrm{d}x+f_y'\\,\\mathrm{d}y\\\\\n&\\text{充分条件：}f_x'(x,y),\\;f_y'(x,y)\\text{ 在 }(x_0,y_0)\\text{ 处连续}\\implies f(x,y)\\text{ 在 }(x_0,y_0)\\text{ 处可微}\\\\\n&\\text{三步判别法：}\\text{① 算 }A=f_x',\\;B=f_y'\\text{（若任一不存在直接不可微）；}\\text{② 写 }\\Delta z\\text{ 与 }\\mathrm{d}z\\text{；}\\text{③ 验 }\\lim_{\\substack{\\Delta x\\to 0\\\\\\Delta y\\to 0}}\\frac{\\Delta z-A\\Delta x-B\\Delta y}{\\sqrt{(\\Delta x)^2+(\\Delta y)^2}}\\stackrel{?}{=}0\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "$A,B$ 与 $\\Delta x,\\Delta y$ 无关",
+          "desc": "线性主部 $A\\Delta x+B\\Delta y$ 中的系数 $A,B$ 只能依赖定点 $(x_0,y_0)$，绝不可含 $\\Delta x,\\Delta y$；若能拆成 $\\Delta z=A\\Delta x+B\\Delta y+o(\\rho)$，则必有 $A=f_x',\\;B=f_y'$。"
+        },
+        {
+          "sym": "全微分存在的逆判定（例13.7 & 强化例13.14）",
+          "desc": "单连通区域内 $P(x,y)\\,\\mathrm{d}x+Q(x,y)\\,\\mathrm{d}y$（$P,Q\\in C^1$）是某二元函数全微分的充要条件是 $\\dfrac{\\partial P}{\\partial y}=\\dfrac{\\partial Q}{\\partial x}$。"
+        }
+      ],
+      "conditions": "三步判别法是可微性的**充要检验**；「一阶偏导数连续」仅是**充分非必要**条件（反例见强化例13.12）；单连通域外（如含原点奇点）$P_y'=Q_x'$ 仅是必要条件。",
+      "pitfalls": "千万不要漏掉第一步「先验证 $f_x',f_y'$ 存在」就直接写分子！若某偏导根本不存在，函数必不可微；即使两偏导皆存在且连续性满足，也必须检验除 $\\rho=\\sqrt{(\\Delta x)^2+(\\Delta y)^2}$ 后的二重极限是否为 $0$（如例13.8、强化例13.10）。",
+      "figureSvg": "<svg viewBox=\"0 0 640 250\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">\n  <title>一元函数与二元函数五大概念关系对比图及六大经典反例现象标注（仿基础图13-6与强化P.150-154）</title>\n  <defs>\n    <marker id=\"m1c13_arr1\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#1d4ed8\"/>\n    </marker>\n    <marker id=\"m1c13_arr1_red\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#dc2626\"/>\n    </marker>\n  </defs>\n\n  <!-- Left panel: 1D function chain -->\n  <rect x=\"6\" y=\"6\" width=\"174\" height=\"238\" rx=\"8\" fill=\"#f8fafc\" stroke=\"#94a3b8\" stroke-width=\"1.2\"/>\n  <text x=\"93\" y=\"25\" text-anchor=\"middle\" font-size=\"11.2\" font-weight=\"700\" fill=\"#0f172a\">一元函数 y = f(x)</text>\n  <text x=\"93\" y=\"39\" text-anchor=\"middle\" font-size=\"8.6\" fill=\"#475569\">（可导 ⇔ 可微，单链关系）</text>\n\n  <rect x=\"26\" y=\"52\" width=\"134\" height=\"32\" rx=\"6\" fill=\"#dbeafe\" stroke=\"#2563eb\" stroke-width=\"1.3\"/>\n  <text x=\"93\" y=\"72\" text-anchor=\"middle\" font-size=\"10.2\" font-weight=\"700\" fill=\"#1e3a8a\">可导 ⇔ 可微</text>\n\n  <line x1=\"93\" y1=\"84\" x2=\"93\" y2=\"112\" stroke=\"#1d4ed8\" stroke-width=\"1.8\" marker-end=\"url(#m1c13_arr1)\"/>\n  <text x=\"117\" y=\"102\" font-size=\"8.4\" fill=\"#dc2626\">反例 |x|</text>\n\n  <rect x=\"26\" y=\"114\" width=\"134\" height=\"32\" rx=\"6\" fill=\"#dcfce7\" stroke=\"#16a34a\" stroke-width=\"1.3\"/>\n  <text x=\"93\" y=\"134\" text-anchor=\"middle\" font-size=\"10.2\" font-weight=\"700\" fill=\"#166534\">连 续</text>\n\n  <line x1=\"93\" y1=\"146\" x2=\"93\" y2=\"174\" stroke=\"#1d4ed8\" stroke-width=\"1.8\" marker-end=\"url(#m1c13_arr1)\"/>\n  <text x=\"122\" y=\"164\" font-size=\"8.4\" fill=\"#dc2626\">可去间断</text>\n\n  <rect x=\"26\" y=\"176\" width=\"134\" height=\"32\" rx=\"6\" fill=\"#fef3c7\" stroke=\"#d97706\" stroke-width=\"1.3\"/>\n  <text x=\"93\" y=\"196\" text-anchor=\"middle\" font-size=\"10.2\" font-weight=\"700\" fill=\"#92400e\">极限存在</text>\n\n  <text x=\"93\" y=\"230\" text-anchor=\"middle\" font-size=\"8.5\" fill=\"#334155\">一维世界里「可导」就是「可微」</text>\n\n  <!-- Right panel: 2D function network -->\n  <rect x=\"190\" y=\"6\" width=\"444\" height=\"238\" rx=\"8\" fill=\"#eff6ff\" stroke=\"#3b82f6\" stroke-width=\"1.2\"/>\n  <text x=\"412\" y=\"25\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1e3a8a\">二元函数 z = f(x, y) 五大概念关系与六大反例现象</text>\n\n  <!-- Top box: Partial derivatives continuous -->\n  <rect x=\"314\" y=\"36\" width=\"196\" height=\"30\" rx=\"6\" fill=\"#1d4ed8\" stroke=\"#1e3a8a\" stroke-width=\"1.2\"/>\n  <text x=\"412\" y=\"55\" text-anchor=\"middle\" font-size=\"10.2\" font-weight=\"700\" fill=\"#ffffff\">偏导数连续（f'x, f'y 连续）</text>\n\n  <!-- Arrow: continuous partials => differentiable -->\n  <line x1=\"412\" y1=\"66\" x2=\"412\" y2=\"94\" stroke=\"#1d4ed8\" stroke-width=\"2\" marker-end=\"url(#m1c13_arr1)\"/>\n  <text x=\"424\" y=\"83\" font-size=\"8.6\" font-weight=\"700\" fill=\"#dc2626\">⇐ 不成立（现象6：强化例13.12）</text>\n\n  <!-- Differentiable box -->\n  <rect x=\"330\" y=\"96\" width=\"164\" height=\"30\" rx=\"6\" fill=\"#dbeafe\" stroke=\"#2563eb\" stroke-width=\"1.5\"/>\n  <text x=\"412\" y=\"115\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#1e3a8a\">可 微（全微分存在）</text>\n\n  <!-- Branch left to Continuous -->\n  <line x1=\"364\" y1=\"126\" x2=\"296\" y2=\"152\" stroke=\"#1d4ed8\" stroke-width=\"1.8\" marker-end=\"url(#m1c13_arr1)\"/>\n  <text x=\"242\" y=\"139\" font-size=\"8.2\" font-weight=\"700\" fill=\"#dc2626\">反例：现象4</text>\n  <text x=\"236\" y=\"150\" font-size=\"8.0\" fill=\"#dc2626\">（强化例13.10）</text>\n\n  <!-- Branch right to Partials exist -->\n  <line x1=\"460\" y1=\"126\" x2=\"528\" y2=\"152\" stroke=\"#1d4ed8\" stroke-width=\"1.8\" marker-end=\"url(#m1c13_arr1)\"/>\n  <text x=\"530\" y=\"139\" font-size=\"8.2\" font-weight=\"700\" fill=\"#dc2626\">反例：现象5</text>\n  <text x=\"526\" y=\"150\" font-size=\"8.0\" fill=\"#dc2626\">（强化例13.11）</text>\n\n  <!-- Continuous box -->\n  <rect x=\"210\" y=\"154\" width=\"140\" height=\"30\" rx=\"6\" fill=\"#dcfce7\" stroke=\"#16a34a\" stroke-width=\"1.4\"/>\n  <text x=\"280\" y=\"173\" text-anchor=\"middle\" font-size=\"10.2\" font-weight=\"700\" fill=\"#166534\">二元函数连续</text>\n\n  <!-- Partials exist box -->\n  <rect x=\"474\" y=\"154\" width=\"144\" height=\"30\" rx=\"6\" fill=\"#fae8ff\" stroke=\"#a21caf\" stroke-width=\"1.4\"/>\n  <text x=\"546\" y=\"173\" text-anchor=\"middle\" font-size=\"10.2\" font-weight=\"700\" fill=\"#701a75\">一阶偏导存在</text>\n\n  <!-- Mutual non-implication between Continuous and Partials Exist -->\n  <line x1=\"354\" y1=\"165\" x2=\"470\" y2=\"165\" stroke=\"#dc2626\" stroke-width=\"1.3\" stroke-dasharray=\"4,2\" marker-end=\"url(#m1c13_arr1_red)\" marker-start=\"url(#m1c13_arr1_red)\"/>\n  <text x=\"412\" y=\"160\" text-anchor=\"middle\" font-size=\"8.4\" font-weight=\"700\" fill=\"#dc2626\">互不推出！</text>\n  <text x=\"412\" y=\"180\" text-anchor=\"middle\" font-size=\"7.8\" fill=\"#991b1b\">现象2(例13.8) / 现象3(例13.9)</text>\n\n  <!-- Down from Continuous to Double Limit & 1D continuous -->\n  <line x1=\"280\" y1=\"184\" x2=\"280\" y2=\"206\" stroke=\"#1d4ed8\" stroke-width=\"1.8\" marker-end=\"url(#m1c13_arr1)\"/>\n  <rect x=\"206\" y=\"208\" width=\"234\" height=\"28\" rx=\"6\" fill=\"#fef3c7\" stroke=\"#d97706\" stroke-width=\"1.3\"/>\n  <text x=\"323\" y=\"226\" text-anchor=\"middle\" font-size=\"9.4\" font-weight=\"700\" fill=\"#92400e\">二重极限存在 &amp; 两单变量分别连续</text>\n\n  <text x=\"536\" y=\"217\" text-anchor=\"middle\" font-size=\"8.2\" font-weight=\"700\" fill=\"#dc2626\">反例：现象1（强化例13.7）</text>\n  <text x=\"536\" y=\"230\" text-anchor=\"middle\" font-size=\"8.0\" fill=\"#334155\">两单变量连续 ⇏ 二元连续</text>\n</svg>",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.313-316",
+        "pdfPage": 318,
+        "itemRef": "一·5 可微 & 图 13-6 & 判别三步法",
+        "crossRef": "27张宇《高数18讲》(强化) P.150-154 三、全微分 & 四、概念关系图"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy30_basics",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-f-04",
+      "stage": "both",
+      "section": "二、多元函数微分法则（链式、全微分与隐函数）",
+      "kind": "formula",
+      "title": "多元复合函数链式求导规则、全导数、位置记号与一阶全微分形式不变性",
+      "examWeight": "core",
+      "prompt": "默写复合函数 $z=f(u(x,y),v(x,y))$ 的一阶链式法则、一元参变全导数公式、抽象函数位置记号 $f_1',f_2'$ 规则及一阶全微分形式不变性：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{链式法则（连线相乘、分叉相加）：}\\frac{\\partial z}{\\partial x}=f_1'\\frac{\\partial u}{\\partial x}+f_2'\\frac{\\partial v}{\\partial x},\\qquad \\frac{\\partial z}{\\partial y}=f_1'\\frac{\\partial u}{\\partial y}+f_2'\\frac{\\partial v}{\\partial y}\\\\\n&\\text{全导数（}z=f(u(t),v(t))\\text{）：}\\frac{\\mathrm{d}z}{\\mathrm{d}t}=f_1'\\frac{\\mathrm{d}u}{\\mathrm{d}t}+f_2'\\frac{\\mathrm{d}v}{\\mathrm{d}t}\\\\\n&\\text{二阶再复合警惕：}\\frac{\\partial}{\\partial y}\\bigl[f_1'(u,v)\\bigr]=f_{11}''\\frac{\\partial u}{\\partial y}+f_{12}''\\frac{\\partial v}{\\partial y}\\\\\n&\\text{一阶全微分形式不变性：}\\mathrm{d}z=\\frac{\\partial z}{\\partial u}\\,\\mathrm{d}u+\\frac{\\partial z}{\\partial v}\\,\\mathrm{d}v\\quad(\\text{无论 }u,v\\text{ 是自变量还是中间变量})\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "位置记号 $f_1',f_2',f_{11}'',f_{12}''$",
+          "desc": "$f_1'$ 表示对抽象函数 $f$ 的「第 1 个空位」求偏导，$f_{12}''$ 表示先对第 1 空位再对第 2 空位求偏导；切忌把 $f(x+y,xy)$ 对第 1 位置的偏导写成 $f_x'$ 而与整体 $\\frac{\\partial z}{\\partial x}$ 混淆！"
+        },
+        {
+          "sym": "一阶形式不变性的边界",
+          "desc": "只有**一阶全微分** $\\mathrm{d}z$ 具有形式不变性；二阶全微分 $\\mathrm{d}^2 z$ 当 $u,v$ 为非线性中间变量时不再保持形式不变（多出 $f_1'\\mathrm{d}^2 u+f_2'\\mathrm{d}^2 v$）。"
+        }
+      ],
+      "conditions": "要求内层中间变量 $u(x,y),v(x,y)$ 在 $(x,y)$ 处偏导存在，且外层函数 $f(u,v)$ 在对应点 $(u,v)$ 处**可微**（求二阶偏导时通常要求 $f\\in C^2$，从而 $f_{12}''=f_{21}''$）。",
+      "pitfalls": "高频丢分点：① 求二阶偏导 $\\frac{\\partial^2 z}{\\partial x\\partial y}$ 时忘记 $f_1'(u,v)$ 本身仍是 $(u,v)$ 的复合函数而漏乘内导数（见例13.9、强化例13.16）；② 见到 $f(x,\\mathrm{e}^x)=x+\\mathrm{e}^x$（例13.10）时，左端对 $x$ 求的是全导数 $f_1'(x,\\mathrm{e}^x)+f_2'(x,\\mathrm{e}^x)\\mathrm{e}^x$ 而非单纯的 $f_1'$！",
+      "figureSvg": "<svg viewBox=\"0 0 640 232\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">\n  <title>多元复合函数链式求导树图、割裂域反例与二元无条件极值判别流程（仿基础P.317, P.324与P.326）</title>\n  <defs>\n    <marker id=\"m1c13_arr2\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#334155\"/>\n    </marker>\n  </defs>\n\n  <!-- Left panel: Chain Rule Tree + Slit Domain Counterexample -->\n  <rect x=\"6\" y=\"6\" width=\"308\" height=\"220\" rx=\"8\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"160\" y=\"24\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1e3a8a\">① 链式求导树图与割裂域反例</text>\n\n  <!-- Top half: Chain rule tree -->\n  <rect x=\"16\" y=\"32\" width=\"288\" height=\"92\" rx=\"6\" fill=\"#eff6ff\" stroke=\"#93c5fd\" stroke-width=\"1\"/>\n  <circle cx=\"52\" cy=\"78\" r=\"14\" fill=\"#1d4ed8\"/>\n  <text x=\"52\" y=\"82\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#ffffff\">z</text>\n\n  <line x1=\"66\" y1=\"72\" x2=\"112\" y2=\"54\" stroke=\"#1d4ed8\" stroke-width=\"1.6\" marker-end=\"url(#m1c13_arr2)\"/>\n  <line x1=\"66\" y1=\"84\" x2=\"112\" y2=\"102\" stroke=\"#1d4ed8\" stroke-width=\"1.6\" marker-end=\"url(#m1c13_arr2)\"/>\n  <text x=\"86\" y=\"56\" font-size=\"8.5\" font-weight=\"700\" fill=\"#1e40af\">f'₁</text>\n  <text x=\"86\" y=\"108\" font-size=\"8.5\" font-weight=\"700\" fill=\"#1e40af\">f'₂</text>\n\n  <circle cx=\"128\" cy=\"52\" r=\"13\" fill=\"#dbeafe\" stroke=\"#2563eb\" stroke-width=\"1.3\"/>\n  <text x=\"128\" y=\"56\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#1e3a8a\">u</text>\n  <circle cx=\"128\" cy=\"104\" r=\"13\" fill=\"#dbeafe\" stroke=\"#2563eb\" stroke-width=\"1.3\"/>\n  <text x=\"128\" y=\"108\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#1e3a8a\">v</text>\n\n  <line x1=\"141\" y1=\"48\" x2=\"180\" y2=\"43\" stroke=\"#059669\" stroke-width=\"1.4\" marker-end=\"url(#m1c13_arr2)\"/>\n  <line x1=\"141\" y1=\"56\" x2=\"180\" y2=\"66\" stroke=\"#64748b\" stroke-width=\"1.2\" marker-end=\"url(#m1c13_arr2)\"/>\n  <line x1=\"141\" y1=\"100\" x2=\"180\" y2=\"92\" stroke=\"#059669\" stroke-width=\"1.4\" marker-end=\"url(#m1c13_arr2)\"/>\n  <line x1=\"141\" y1=\"108\" x2=\"180\" y2=\"115\" stroke=\"#64748b\" stroke-width=\"1.2\" marker-end=\"url(#m1c13_arr2)\"/>\n\n  <text x=\"190\" y=\"46\" font-size=\"9.5\" font-weight=\"700\" fill=\"#047857\">x</text>\n  <text x=\"190\" y=\"69\" font-size=\"9.5\" fill=\"#475569\">y</text>\n  <text x=\"190\" y=\"95\" font-size=\"9.5\" font-weight=\"700\" fill=\"#047857\">x</text>\n  <text x=\"190\" y=\"118\" font-size=\"9.5\" fill=\"#475569\">y</text>\n\n  <text x=\"252\" y=\"64\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#047857\">∂z/∂x =</text>\n  <text x=\"252\" y=\"79\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#047857\">f'₁·u'x + f'₂·v'x</text>\n  <text x=\"252\" y=\"98\" text-anchor=\"middle\" font-size=\"8.0\" fill=\"#475569\">连线相乘，分叉相加</text>\n  <text x=\"252\" y=\"111\" text-anchor=\"middle\" font-size=\"7.8\" fill=\"#dc2626\">二阶导 f'₁ 仍复合 (u,v)！</text>\n\n  <!-- Bottom half: Slit domain counterexample -->\n  <rect x=\"16\" y=\"131\" width=\"288\" height=\"87\" rx=\"6\" fill=\"#fff7ed\" stroke=\"#fdba74\" stroke-width=\"1\"/>\n  <!-- Mini coordinate system -->\n  <line x1=\"30\" y1=\"184\" x2=\"128\" y2=\"184\" stroke=\"#334155\" stroke-width=\"1.1\" marker-end=\"url(#m1c13_arr2)\"/>\n  <line x1=\"78\" y1=\"210\" x2=\"78\" y2=\"140\" stroke=\"#334155\" stroke-width=\"1.1\" marker-end=\"url(#m1c13_arr2)\"/>\n  <!-- Thick red slit along x=0, y>=0 -->\n  <line x1=\"78\" y1=\"184\" x2=\"78\" y2=\"144\" stroke=\"#dc2626\" stroke-width=\"4\"/>\n  <circle cx=\"78\" cy=\"184\" r=\"3\" fill=\"#ffffff\" stroke=\"#dc2626\" stroke-width=\"1.5\"/>\n  <text x=\"50\" y=\"160\" text-anchor=\"middle\" font-size=\"8.4\" font-weight=\"700\" fill=\"#2563eb\">f = 0</text>\n  <text x=\"106\" y=\"160\" text-anchor=\"middle\" font-size=\"8.4\" font-weight=\"700\" fill=\"#dc2626\">f = y²</text>\n  <text x=\"78\" y=\"201\" text-anchor=\"middle\" font-size=\"8.0\" fill=\"#475569\">y ≤ 0: f = 0</text>\n  <text x=\"216\" y=\"152\" text-anchor=\"middle\" font-size=\"9.0\" font-weight=\"700\" fill=\"#9a3412\">割裂域反例（基础 P.324）</text>\n  <text x=\"216\" y=\"168\" text-anchor=\"middle\" font-size=\"8.2\" fill=\"#334155\">D = R² \\ {x=0, y≥0}</text>\n  <text x=\"216\" y=\"183\" text-anchor=\"middle\" font-size=\"8.2\" fill=\"#334155\">处处 f'x ≡ 0，跨缝不连通！</text>\n  <text x=\"216\" y=\"199\" text-anchor=\"middle\" font-size=\"8.3\" font-weight=\"700\" fill=\"#dc2626\">故 f(x,y) 不能写成单一 g(y)</text>\n\n  <!-- Right panel: 2D Unconditional Extrema Decision (\"开不开心少年团\") -->\n  <rect x=\"324\" y=\"6\" width=\"310\" height=\"220\" rx=\"8\" fill=\"#f0fdf4\" stroke=\"#22c55e\" stroke-width=\"1.2\"/>\n  <text x=\"479\" y=\"24\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#166534\">② 二元极值充分条件（Δ = AC − B²）</text>\n\n  <rect x=\"346\" y=\"34\" width=\"266\" height=\"28\" rx=\"6\" fill=\"#dcfce7\" stroke=\"#16a34a\" stroke-width=\"1.2\"/>\n  <text x=\"479\" y=\"52\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#14532d\">先求驻点 f'x=0, f'y=0 → 算 A=f''xx, B=f''xy, C=f''yy</text>\n\n  <!-- 4 outcome cards -->\n  <!-- Case 1: Delta > 0, A > 0 -->\n  <rect x=\"338\" y=\"72\" width=\"136\" height=\"64\" rx=\"6\" fill=\"#ffffff\" stroke=\"#16a34a\" stroke-width=\"1.3\"/>\n  <text x=\"406\" y=\"89\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#15803d\">AC − B² &gt; 0，A &gt; 0</text>\n  <!-- Upward cup (smile) -->\n  <path d=\"M 382 102 Q 406 118 430 102\" fill=\"none\" stroke=\"#16a34a\" stroke-width=\"2.2\"/>\n  <circle cx=\"406\" cy=\"110\" r=\"2.6\" fill=\"#15803d\"/>\n  <text x=\"406\" y=\"128\" text-anchor=\"middle\" font-size=\"9.0\" font-weight=\"700\" fill=\"#166534\">极小值点（开口向上）</text>\n\n  <!-- Case 2: Delta > 0, A < 0 -->\n  <rect x=\"484\" y=\"72\" width=\"138\" height=\"64\" rx=\"6\" fill=\"#ffffff\" stroke=\"#2563eb\" stroke-width=\"1.3\"/>\n  <text x=\"553\" y=\"89\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#1d4ed8\">AC − B² &gt; 0，A &lt; 0</text>\n  <!-- Downward cap -->\n  <path d=\"M 529 112 Q 553 96 577 112\" fill=\"none\" stroke=\"#2563eb\" stroke-width=\"2.2\"/>\n  <circle cx=\"553\" cy=\"104\" r=\"2.6\" fill=\"#1d4ed8\"/>\n  <text x=\"553\" y=\"128\" text-anchor=\"middle\" font-size=\"9.0\" font-weight=\"700\" fill=\"#1e3a8a\">极大值点（开口向下）</text>\n\n  <!-- Case 3: Delta < 0 -->\n  <rect x=\"338\" y=\"144\" width=\"136\" height=\"54\" rx=\"6\" fill=\"#fef2f2\" stroke=\"#dc2626\" stroke-width=\"1.3\"/>\n  <text x=\"406\" y=\"161\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#b91c1c\">AC − B² &lt; 0</text>\n  <text x=\"406\" y=\"177\" text-anchor=\"middle\" font-size=\"9.0\" font-weight=\"700\" fill=\"#dc2626\">必非极值点（鞍点）</text>\n  <text x=\"406\" y=\"191\" text-anchor=\"middle\" font-size=\"8.0\" fill=\"#7f1d1d\">两主曲率异号</text>\n\n  <!-- Case 4: Delta = 0 -->\n  <rect x=\"484\" y=\"144\" width=\"138\" height=\"54\" rx=\"6\" fill=\"#fefce8\" stroke=\"#ca8a04\" stroke-width=\"1.3\"/>\n  <text x=\"553\" y=\"161\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#a16207\">AC − B² = 0</text>\n  <text x=\"553\" y=\"177\" text-anchor=\"middle\" font-size=\"8.8\" font-weight=\"700\" fill=\"#854d0e\">判别失效！用定义判定</text>\n  <text x=\"553\" y=\"191\" text-anchor=\"middle\" font-size=\"8.0\" fill=\"#713f12\">试路径异号或配方保号</text>\n\n  <text x=\"479\" y=\"216\" text-anchor=\"middle\" font-size=\"8.4\" font-weight=\"700\" fill=\"#14532d\">提醒：仅适用于二元 C² 函数；不可偏导点（如 √(x²+y²)）须单查！</text>\n</svg>",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.317-319",
+        "pdfPage": 322,
+        "itemRef": "二·1 链式求导规则 & 二·2 全微分形式不变性",
+        "crossRef": "27张宇《高数18讲》(强化) P.156-157 一、复合函数求导 & 三、全微分形式不变性"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy30_basics",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-f-05",
+      "stage": "both",
+      "section": "二、多元函数微分法则（链式、全微分与隐函数）",
+      "kind": "formula",
+      "title": "隐函数存在定理（单方程 1 & 2）与方程组雅可比行列式求导公式",
+      "examWeight": "core",
+      "prompt": "默写隐函数存在定理 1（$F(x,y)=0$）、定理 2（$F(x,y,z)=0$）的求导公式，以及方程组 $F(x,y,z)=0,\\;G(x,y,z)=0$ 的雅可比行列式公式：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{定理 1（}F(x,y)=0\\text{，}F_y'\\ne 0\\text{）：}\\frac{\\mathrm{d}y}{\\mathrm{d}x}=-\\frac{F_x'}{F_y'}\\\\\n&\\text{定理 2（}F(x,y,z)=0\\text{，}F_z'\\ne 0\\text{）：}\\frac{\\partial z}{\\partial x}=-\\frac{F_x'}{F_z'},\\qquad \\frac{\\partial z}{\\partial y}=-\\frac{F_y'}{F_z'}\\\\\n&\\text{方程组（}F=0,\\;G=0\\text{，}J=\\frac{\\partial(F,G)}{\\partial(y,z)}\\ne 0\\text{）：}\\frac{\\mathrm{d}y}{\\mathrm{d}x}=-\\frac{\\dfrac{\\partial(F,G)}{\\partial(x,z)}}{\\dfrac{\\partial(F,G)}{\\partial(y,z)}},\\qquad \\frac{\\mathrm{d}z}{\\mathrm{d}x}=-\\frac{\\dfrac{\\partial(F,G)}{\\partial(y,x)}}{\\dfrac{\\partial(F,G)}{\\partial(y,z)}}\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "雅可比行列式 $J=\\frac{\\partial(F,G)}{\\partial(y,z)}$",
+          "desc": "$J=\\begin{vmatrix}F_y' & F_z'\\\\ G_y' & G_z'\\end{vmatrix}\\ne 0$ 保证可唯一确定隐函数组 $y=y(x),\\;z=z(x)$；实战中不必死背雅可比公式，直接对两个方程同时关于 $x$ 求导（或两边取全微分）解二元一次线性方程组即可（见强化例13.17）！"
+        },
+        {
+          "sym": "「哪个偏导不为零，就确定谁为因变量」",
+          "desc": "对于 $F(x,y,z)=0$ 在 $(x_0,y_0,z_0)$ 处：$F_z'\\ne 0\\Rightarrow$ 确定 $z(x,y)$；$F_x'\\ne 0\\Rightarrow$ 确定 $x(y,z)$；$F_y'\\ne 0\\Rightarrow$ 确定 $y(x,z)$（见例13.13）。"
+        }
+      ],
+      "conditions": "要求 $F$（及 $G$）在 $P_0$ 某邻域内有连续偏导数、满足方程且对应偏导（或雅可比行列式）非零；注意 $F_y'(x_0,y_0)\\ne 0$ 只是隐函数存在且连续可导的**充分非必要条件**（反例 $(y-x)^2=0$，见例13.14）。",
+      "pitfalls": "千万别漏掉隐函数公式前面的**负号**「$-$」！另外当隐函数本身是抽象复合 $F(x+zy^{-1},y+zx^{-1})=0$（例13.16）时，直接两边对 $x,y$ 求偏导或取全微分比套 $-\\frac{F_x'}{F_z'}$ 更不易出错。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.320-322",
+        "pdfPage": 325,
+        "itemRef": "二·3 隐函数存在定理（定理 1 & 定理 2）",
+        "crossRef": "27张宇《高数18讲》(强化) P.156-157 二、隐函数求导（含方程组雅可比行列式）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy30_impl_extrema",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-f-06",
+      "stage": "intensive",
+      "section": "二、多元函数微分法则（链式、全微分与隐函数）",
+      "kind": "formula",
+      "title": "【强化必背】全微分公式大观 16 式与梯度联系（含强化 P.158 注(2) 印刷勘误 #44）",
+      "examWeight": "core",
+      "prompt": "熟练识别并反凑全部 16 个高频全微分公式（贯穿多元微分、微分方程与第二型曲线积分），并写出梯度 $\\operatorname{grad} u=(P,Q)$ 联系：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{四大凑微内核：}x\\,\\mathrm{d}x\\pm y\\,\\mathrm{d}y=\\mathrm{d}\\!\\left(\\frac{x^2\\pm y^2}{2}\\right),\\qquad y\\,\\mathrm{d}x+x\\,\\mathrm{d}y=\\mathrm{d}(xy),\\qquad \\frac{x\\,\\mathrm{d}y-y\\,\\mathrm{d}x}{x^2}=\\mathrm{d}\\!\\left(\\frac{y}{x}\\right)\\\\\n&\\text{梯度联系（数一注）：}\\mathrm{d}u=P\\,\\mathrm{d}x+Q\\,\\mathrm{d}y \\iff \\operatorname{grad}u=\\left(\\frac{\\partial u}{\\partial x},\\frac{\\partial u}{\\partial y}\\right)=(P,Q),\\quad \\frac{\\partial P}{\\partial y}=\\frac{\\partial Q}{\\partial x}\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "强化 P.158 注(1) 定参例",
+          "desc": "设 $\\dfrac{x\\,\\mathrm{d}x-ay\\,\\mathrm{d}y}{1+(x^2+y^2)^2}$ 为全微分，对照公式 (15) $\\mathrm{d}\\!\\left[\\frac{1}{2}\\arctan(x^2+y^2)\\right]$ 或用 $P_y'=Q_x'$，秒得 $a=-1$。"
+        },
+        {
+          "sym": "【勘误 #44】强化 P.158 注(2) 印刷误笔",
+          "desc": "原书印刷 $\\mathrm{d}u=\\dfrac{axy^2}{(x^2+y^2)^2}\\,\\mathrm{d}x-\\dfrac{4x^6 y}{(x^2+y^2)^2}\\,\\mathrm{d}y$（多印成 $x^6$），而紧接其后的梯度却写为 $\\operatorname{grad}u=\\left(\\dfrac{4xy^2}{(x^2+y^2)^2},-\\dfrac{4x^2 y}{(x^2+y^2)^2}\\right)$！经 SymPy 验算，正确题目为 $-\\dfrac{4x^2 y}{(x^2+y^2)^2}\\,\\mathrm{d}y$，此时 $P_y'=Q_x'=\\dfrac{8xy(x^2-y^2)}{(x^2+y^2)^3}\\implies a=4$（原函数 $u=\\dfrac{2x^2}{x^2+y^2}+C$）。"
+        }
+      ],
+      "conditions": "全部 16 式均在其分母非零且对数真数非零的单连通区域内成立；记住「分子 $x\\mathrm{d}x\\pm y\\mathrm{d}y$ 配分母 $x^2\\pm y^2$」、「分子 $x\\mathrm{d}y-y\\mathrm{d}x$ 配商 $\\frac{y}{x}$ 与 $\\arctan\\frac{y}{x}$」的成对规律，可一次记牢全表。",
+      "pitfalls": "极易搞反符号的是 (9)~(12) 两组：$\\frac{x\\mathrm{d}y-y\\mathrm{d}x}{x^2+y^2}=\\mathrm{d}(\\arctan\\frac{y}{x})$（$x\\mathrm{d}y$ 在前对应 $\\frac{y}{x}$），而 $\\frac{y\\mathrm{d}x-x\\mathrm{d}y}{x^2-y^2}=\\mathrm{d}\\!\\left(\\frac{1}{2}\\ln\\left|\\frac{x-y}{x+y}\\right|\\right)$（分子 $x-y$ 在上时，$y\\mathrm{d}x-x\\mathrm{d}y$ 为正！）。",
+      "tables": [
+        {
+          "caption": "表 13-1：张宇强化 18 讲全微分公式大观 16 式全表（强化 P.157-158 · SymPy 逐式验算通过）",
+          "headers": [
+            "编号",
+            "全微分左端（$P\\,\\mathrm{d}x+Q\\,\\mathrm{d}y$）",
+            "原函数全微分右端（$\\mathrm{d}u$）",
+            "编号",
+            "全微分左端（$P\\,\\mathrm{d}x+Q\\,\\mathrm{d}y$）",
+            "原函数全微分右端（$\\mathrm{d}u$）"
+          ],
+          "rows": [
+            [
+              "(1)",
+              "$x\\,\\mathrm{d}x+y\\,\\mathrm{d}y$",
+              "$\\mathrm{d}\\!\\left(\\dfrac{x^2+y^2}{2}\\right)$",
+              "(9)",
+              "$\\dfrac{y\\,\\mathrm{d}x-x\\,\\mathrm{d}y}{x^2+y^2}$",
+              "$\\mathrm{d}\\!\\left(\\arctan\\dfrac{x}{y}\\right)$"
+            ],
+            [
+              "(2)",
+              "$x\\,\\mathrm{d}x-y\\,\\mathrm{d}y$",
+              "$\\mathrm{d}\\!\\left(\\dfrac{x^2-y^2}{2}\\right)$",
+              "(10)",
+              "$\\dfrac{x\\,\\mathrm{d}y-y\\,\\mathrm{d}x}{x^2+y^2}$",
+              "$\\mathrm{d}\\!\\left(\\arctan\\dfrac{y}{x}\\right)$"
+            ],
+            [
+              "(3)",
+              "$y\\,\\mathrm{d}x+x\\,\\mathrm{d}y$",
+              "$\\mathrm{d}(xy)$",
+              "(11)",
+              "$\\dfrac{y\\,\\mathrm{d}x-x\\,\\mathrm{d}y}{x^2-y^2}$",
+              "$\\mathrm{d}\\!\\left(\\dfrac{1}{2}\\ln\\left|\\dfrac{x-y}{x+y}\\right|\\right)$"
+            ],
+            [
+              "(4)",
+              "$\\dfrac{y\\,\\mathrm{d}x+x\\,\\mathrm{d}y}{xy}$",
+              "$\\mathrm{d}(\\ln|xy|)$",
+              "(12)",
+              "$\\dfrac{x\\,\\mathrm{d}y-y\\,\\mathrm{d}x}{x^2-y^2}$",
+              "$\\mathrm{d}\\!\\left(\\dfrac{1}{2}\\ln\\left|\\dfrac{x+y}{x-y}\\right|\\right)$"
+            ],
+            [
+              "(5)",
+              "$\\dfrac{x\\,\\mathrm{d}x+y\\,\\mathrm{d}y}{x^2+y^2}$",
+              "$\\mathrm{d}\\!\\left[\\dfrac{1}{2}\\ln(x^2+y^2)\\right]$",
+              "(13)",
+              "$\\dfrac{x\\,\\mathrm{d}x+y\\,\\mathrm{d}y}{(x^2+y^2)^2}$",
+              "$\\mathrm{d}\\!\\left(-\\dfrac{1}{2}\\dfrac{1}{x^2+y^2}\\right)$"
+            ],
+            [
+              "(6)",
+              "$\\dfrac{x\\,\\mathrm{d}x-y\\,\\mathrm{d}y}{x^2-y^2}$",
+              "$\\mathrm{d}\\!\\left(\\dfrac{1}{2}\\ln|x^2-y^2|\\right)$",
+              "(14)",
+              "$\\dfrac{x\\,\\mathrm{d}x-y\\,\\mathrm{d}y}{(x^2-y^2)^2}$",
+              "$\\mathrm{d}\\!\\left(-\\dfrac{1}{2}\\dfrac{1}{x^2-y^2}\\right)$"
+            ],
+            [
+              "(7)",
+              "$\\dfrac{x\\,\\mathrm{d}y-y\\,\\mathrm{d}x}{x^2}$",
+              "$\\mathrm{d}\\!\\left(\\dfrac{y}{x}\\right)$",
+              "(15)",
+              "$\\dfrac{x\\,\\mathrm{d}x+y\\,\\mathrm{d}y}{1+(x^2+y^2)^2}$",
+              "$\\mathrm{d}\\!\\left[\\dfrac{1}{2}\\arctan(x^2+y^2)\\right]$"
+            ],
+            [
+              "(8)",
+              "$\\dfrac{y\\,\\mathrm{d}x-x\\,\\mathrm{d}y}{y^2}$",
+              "$\\mathrm{d}\\!\\left(\\dfrac{x}{y}\\right)$",
+              "(16)",
+              "$\\dfrac{x\\,\\mathrm{d}x-y\\,\\mathrm{d}y}{1+(x^2-y^2)^2}$",
+              "$\\mathrm{d}\\!\\left[\\dfrac{1}{2}\\arctan(x^2-y^2)\\right]$"
+            ]
+          ]
+        }
+      ],
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.157-158",
+        "pdfPage": 170,
+        "itemRef": "四、全微分公式大观 (1)~(16) & 注(1)(2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_total_diff_16",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-f-07",
+      "stage": "both",
+      "section": "二、多元函数微分法则（链式、全微分与隐函数）",
+      "kind": "formula",
+      "title": "二元拉格朗日中值定理（连通域常值推论）与 $k$ 次齐次函数欧拉定理",
+      "examWeight": "core",
+      "prompt": "默写二元拉格朗日中值定理及其连通域常值推论，以及 $k$ 次齐次函数的欧拉定理：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{二元拉格朗日定理：}f(x_0+\\Delta x,y_0+\\Delta y)-f(x_0,y_0)=f_x'(x_0+\\theta\\Delta x,y_0+\\theta\\Delta y)\\Delta x+f_y'(x_0+\\theta\\Delta x,y_0+\\theta\\Delta y)\\Delta y\\;(0<\\theta<1)\\\\\n&\\text{连通域推论：若 }D\\text{ 为连通区域且 }f_x'\\equiv 0,\\;f_y'\\equiv 0\\text{，则 }f(x,y)\\equiv C\\text{（常数）}\\\\\n&\\text{欧拉齐次定理：}f\\in C^1\\text{ 为 }k\\text{ 次齐次（}f(tx,ty)=t^k f(x,y),\\;t>0\\text{）}\\iff x f_x'(x,y)+y f_y'(x,y)=k f(x,y)\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "$\\theta\\in(0,1)$ 同一中值点",
+          "desc": "二元拉格朗日定理中的 $f_x'$ 与 $f_y'$ 取在连结两点线段上的**同一个**点 $(x_0+\\theta\\Delta x,\\;y_0+\\theta\\Delta y)$（证法：令 $\\varphi(t)=f(x_0+t\\Delta x,y_0+t\\Delta y)$ 在 $[0,1]$ 用一元拉格朗日）。"
+        },
+        {
+          "sym": "欧拉齐次定理两大秒杀应用",
+          "desc": "① 遇形如 $x z_x'+y z_y'$ 的偏微计算直接读出齐次次数 $k$（见强化例13.19、13.20）；② 拉格朗日条件极值遇二次型约束 $f(x,y)=1$ 时，由 $x f_x'+y f_y'=2f=2$ 一步消元转化为特征值问题（见强化例13.30）！"
+        }
+      ],
+      "conditions": "二元拉格朗日定理要求连结两点的整条线段完全落在区域 $D$ 内，且 $f$ 在该线段上可微；单偏导为零推不出与该变量无关，必须附加「水平（或竖直）线段全在 $D$ 内」的凸/条状条件（反例见基础 P.324 割裂域）。",
+      "pitfalls": "初学者最易把一元「$f'(x)\\equiv 0\\Rightarrow f\\equiv C$」错误类推为「$f_x'\\equiv 0\\Rightarrow f(x,y)=g(y)$」！在割裂域 $D=\\mathbb{R}^2\\setminus\\{x=0,y\\ge 0\\}$ 上，$f(x,y)=y^2\\;(x>0,y\\ge 0)$、$0$（其他）满足 $f_x'\\equiv 0$ 但 $f(1,1)=1\\ne 0=f(-1,1)$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.323-324",
+        "pdfPage": 328,
+        "itemRef": "二·4 二元拉格朗日定理 & 注意事项（割裂域反例）",
+        "crossRef": "27张宇《高数18讲》(强化) P.160-161 强化例13.18~13.20（k 次齐次欧拉定理）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_calc_pde",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-f-08",
+      "stage": "both",
+      "section": "三、多元函数的极值与最值（无条件、条件与闭区域）",
+      "kind": "formula",
+      "title": "无条件极值判别（$\\Delta=AC-B^2$）、拉格朗日乘数法、垂线原理与闭区域最值",
+      "examWeight": "core",
+      "prompt": "默写二元无条件极值的必要与二阶充分条件、拉格朗日乘数法（单约束/双约束及几何行列式）、最远/近点垂线原理与有界闭区域最值步骤：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{无条件极值充分条件（驻点 }f_x'=f_y'=0\\text{，记 }A=f_{xx}'',\\;B=f_{xy}'',\\;C=f_{yy}'',\\;\\Delta=AC-B^2\\text{）：}\\\\\n&\\qquad \\Delta>0\\begin{cases}A>0\\implies\\text{极小值}\\\\A<0\\implies\\text{极大值}\\end{cases},\\qquad \\Delta<0\\implies\\text{非极值（鞍点）},\\qquad \\Delta=0\\implies\\text{失效，转用定义}\\\\\n&\\text{拉格朗日函数：}L(x,y,z,\\lambda,\\mu)=f(x,y,z)+\\lambda\\varphi(x,y,z)+\\mu\\psi(x,y,z),\\quad \\nabla L=\\mathbf{0}\\\\\n&\\text{条件极值几何行列式（数一了解）：}\\left.\\begin{vmatrix}f_x'&f_y'&f_z'\\\\\\varphi_x'&\\varphi_y'&\\varphi_z'\\\\\\psi_x'&\\psi_y'&\\psi_z'\\end{vmatrix}\\right|_{P_0}=0,\\qquad \\text{二维单约束：}\\left.\\begin{vmatrix}f_x'&f_y'\\\\g_x'&g_y'\\end{vmatrix}\\right|_{P_0}=0\\\\\n&\\text{有界闭区域 }D\\text{ 最值}=\\text{比较}\\bigl\\{\\text{内点驻点/不可偏导点}\\;\\cup\\;\\text{边界条件极值点}\\;\\cup\\;\\text{边界角点与不封闭弧端点}\\bigr\\}\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "目标函数单调等价变换技巧（强化 P.171）",
+          "desc": "求 $|u|$ 最值改求 $u^2$；求 $\\sqrt{u}$ 最值改求 $u$（如距离改距离平方）；求 $u_1 u_2\\;(u_i>0)$ 最值改求 $\\ln u_1+\\ln u_2$，极大简化求导！"
+        },
+        {
+          "sym": "最远（近）点垂线原理（基础 P.328-329）",
+          "desc": "光滑曲线/曲面到定点、定直线或定平面的最近/最远点处，**连线（公垂线）必垂直于该点切线（切平面）**，即目标点处曲面法向量平行于给定直线/平面法向量（例13.21，考纲外但解答题也可与拉格朗日等价互验）。"
+        }
+      ],
+      "conditions": "$\\Delta=AC-B^2$ 判别法**仅适用于二元 $C^2$ 函数的内点驻点**；拉格朗日乘数法给出的是条件极值的**必要条件**（需约束梯度线性无关，且须结合实际几何/闭集连续必有最值确定最大最小）。",
+      "pitfalls": "**头号隐蔽大坑**：若约束曲线是**不封闭弧段**（如例13.20 中 $a\\le 0,b\\ge 0$ 限制下的四分之一圆弧 $a^2+b^2=1$），最小值往往取在**端点** $(0,1),(-1,0)$ 处，拉格朗日方程组根本解不出端点！必须把端点加入候选集比较！",
+      "figureSvg": "<svg viewBox=\"0 0 640 232\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">\n  <title>皮亚诺曲面 f=(y-x²)(y-2x²) 符号分布图与椭圆到直线最远最近点垂线原理图（仿强化例13.26与基础例13.21）</title>\n  <defs>\n    <marker id=\"m1c13_arr3\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#334155\"/>\n    </marker>\n    <marker id=\"m1c13_arr3_red\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1.5 L 9 5 L 0 8.5 z\" fill=\"#dc2626\"/>\n    </marker>\n  </defs>\n\n  <!-- Left panel: Peano surface sign regions -->\n  <rect x=\"6\" y=\"6\" width=\"308\" height=\"220\" rx=\"8\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"160\" y=\"24\" text-anchor=\"middle\" font-size=\"10.8\" font-weight=\"700\" fill=\"#7c2d12\">① 皮亚诺反例 f=(y−x²)(y−2x²)（强化例13.26）</text>\n\n  <!-- Axes -->\n  <line x1=\"28\" y1=\"168\" x2=\"294\" y2=\"168\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1c13_arr3)\"/>\n  <line x1=\"160\" y1=\"194\" x2=\"160\" y2=\"38\" stroke=\"#334155\" stroke-width=\"1.2\" marker-end=\"url(#m1c13_arr3)\"/>\n  <text x=\"296\" y=\"172\" font-size=\"9.5\" fill=\"#334155\">x</text>\n  <text x=\"165\" y=\"46\" font-size=\"9.5\" fill=\"#334155\">y</text>\n\n  <!-- Negative crescent region between y=x^2 and y=2x^2 -->\n  <!-- y=x^2: x in [-100,100] px -> dy = 0.006*dx^2 (at dx=100, dy=60 -> y=108) -->\n  <!-- y=2x^2: dy = 0.012*dx^2 (at dx=100, dy=120 -> y=48) -->\n  <path d=\"M 60 108 Q 160 228 260 108 L 260 48 Q 160 288 60 48 Z\" fill=\"#fecaca\" opacity=\"0.65\"/>\n  <!-- Outer parabola y=x^2 -->\n  <path d=\"M 60 108 Q 160 228 260 108\" fill=\"none\" stroke=\"#2563eb\" stroke-width=\"1.8\"/>\n  <!-- Inner parabola y=2x^2 -->\n  <path d=\"M 60 48 Q 160 288 260 48\" fill=\"none\" stroke=\"#7c3aed\" stroke-width=\"1.8\"/>\n\n  <!-- Line y = kx -->\n  <line x1=\"72\" y1=\"190\" x2=\"278\" y2=\"138\" stroke=\"#059669\" stroke-width=\"1.6\" stroke-dasharray=\"5,3\"/>\n  <text x=\"274\" y=\"133\" text-anchor=\"end\" font-size=\"8.6\" font-weight=\"700\" fill=\"#059669\">任意直线 y = kx</text>\n\n  <!-- Origin -->\n  <circle cx=\"160\" cy=\"168\" r=\"3.5\" fill=\"#dc2626\"/>\n  <text x=\"148\" y=\"180\" font-size=\"8.8\" font-weight=\"700\" fill=\"#dc2626\">O</text>\n\n  <!-- Sign labels -->\n  <text x=\"160\" y=\"72\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#15803d\">f &gt; 0</text>\n  <text x=\"234\" y=\"96\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#dc2626\">f &lt; 0</text>\n  <text x=\"86\" y=\"96\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#dc2626\">f &lt; 0</text>\n  <text x=\"250\" y=\"160\" text-anchor=\"middle\" font-size=\"8.6\" font-weight=\"700\" fill=\"#15803d\">f &gt; 0</text>\n  <text x=\"256\" y=\"54\" font-size=\"8.2\" font-weight=\"700\" fill=\"#7c3aed\">y=2x²</text>\n  <text x=\"262\" y=\"114\" font-size=\"8.2\" font-weight=\"700\" fill=\"#2563eb\">y=x²</text>\n\n  <text x=\"160\" y=\"205\" text-anchor=\"middle\" font-size=\"8.4\" font-weight=\"700\" fill=\"#0f172a\">沿任何直线近 O 处皆 f ≥ 0（局部极小）</text>\n  <text x=\"160\" y=\"219\" text-anchor=\"middle\" font-size=\"8.4\" font-weight=\"700\" fill=\"#dc2626\">但沿抛物线 y = 1.5x² 恒有 f = −0.25x⁴ &lt; 0 ⇒ 非二元极值！</text>\n\n  <!-- Right panel: Perpendicular principle + Closed domain extrema -->\n  <rect x=\"326\" y=\"6\" width=\"308\" height=\"220\" rx=\"8\" fill=\"#eff6ff\" stroke=\"#3b82f6\" stroke-width=\"1.2\"/>\n  <text x=\"480\" y=\"24\" text-anchor=\"middle\" font-size=\"10.8\" font-weight=\"700\" fill=\"#1e3a8a\">② 垂线原理（例13.21）与闭区域最值三步</text>\n\n  <!-- Axes centered at (445, 114) -->\n  <line x1=\"344\" y1=\"114\" x2=\"588\" y2=\"114\" stroke=\"#64748b\" stroke-width=\"1\" marker-end=\"url(#m1c13_arr3)\"/>\n  <line x1=\"445\" y1=\"172\" x2=\"445\" y2=\"42\" stroke=\"#64748b\" stroke-width=\"1\" marker-end=\"url(#m1c13_arr3)\"/>\n  <text x=\"590\" y=\"118\" font-size=\"8.8\" fill=\"#475569\">x</text>\n  <text x=\"450\" y=\"48\" font-size=\"8.8\" fill=\"#475569\">y</text>\n\n  <!-- Ellipse x^2/4 + y^2/1 = 1 -> rx=68, ry=34 -->\n  <ellipse cx=\"445\" cy=\"114\" rx=\"68\" ry=\"34\" fill=\"#dbeafe\" opacity=\"0.6\" stroke=\"#2563eb\" stroke-width=\"1.8\"/>\n  <text x=\"394\" y=\"106\" font-size=\"8.2\" font-weight=\"700\" fill=\"#1e40af\">x²+4y²=4</text>\n\n  <!-- Line 2x+3y=6: (3,0)->(547,114), (0,2)->(445,46) -->\n  <line x1=\"422\" y1=\"31\" x2=\"570\" y2=\"130\" stroke=\"#0f172a\" stroke-width=\"1.8\"/>\n  <text x=\"556\" y=\"76\" font-size=\"8.4\" font-weight=\"700\" fill=\"#0f172a\">2x+3y=6</text>\n\n  <!-- Nearest point P(8/5, 3/5) -> x=445 + 1.6*34 = 499.4, y=114 - 0.6*34 = 93.6 -->\n  <!-- Parallel tangent at P -->\n  <line x1=\"468\" y1=\"73\" x2=\"531\" y2=\"115\" stroke=\"#16a34a\" stroke-width=\"1.5\" stroke-dasharray=\"4,2\"/>\n  <!-- Normal line from P to line (perpendicular) -->\n  <line x1=\"499\" y1=\"94\" x2=\"511\" y2=\"76\" stroke=\"#dc2626\" stroke-width=\"1.8\" marker-end=\"url(#m1c13_arr3_red)\"/>\n  <circle cx=\"499\" cy=\"94\" r=\"3.6\" fill=\"#dc2626\"/>\n  <text x=\"524\" y=\"101\" font-size=\"8.2\" font-weight=\"700\" fill=\"#dc2626\">最近 P(8/5, 3/5)</text>\n\n  <!-- Farthest point Q(-8/5, -3/5) -> (391, 134) -->\n  <circle cx=\"391\" cy=\"134\" r=\"3.4\" fill=\"#7c3aed\"/>\n  <text x=\"388\" y=\"156\" text-anchor=\"middle\" font-size=\"8.2\" font-weight=\"700\" fill=\"#7c3aed\">最远 Q(−8/5, −3/5)</text>\n\n  <!-- Bottom summary strip -->\n  <rect x=\"336\" y=\"176\" width=\"288\" height=\"42\" rx=\"6\" fill=\"#ffffff\" stroke=\"#93c5fd\" stroke-width=\"1\"/>\n  <text x=\"480\" y=\"192\" text-anchor=\"middle\" font-size=\"8.6\" font-weight=\"700\" fill=\"#1e3a8a\">垂线原理：切线 ∥ 目标直线 ⇔ 梯度 (2x, 8y) ∥ (2, 3)</text>\n  <text x=\"480\" y=\"209\" text-anchor=\"middle\" font-size=\"8.3\" font-weight=\"700\" fill=\"#dc2626\">闭区域最值 = 内部驻点 ∪ 边界拉格朗日点 ∪ 不封闭弧端点！</text>\n</svg>",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.324-331",
+        "pdfPage": 329,
+        "itemRef": "三·1 概念 ~ 三·5 闭区域最值（含垂线原理）",
+        "crossRef": "27张宇《高数18讲》(强化) P.168-173 无条件极值、条件极值几何行列式与闭区域最值"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_extrema_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-f-09",
+      "stage": "intensive",
+      "section": "四、偏导数的经济应用（仅数三 · 教材拓展）",
+      "kind": "formula",
+      "title": "【仅数三 · 教材拓展】联合成本函数的边际成本与多元需求函数的边际需求分析",
+      "examWeight": "extended",
+      "prompt": "了解数学三多元偏导数经济应用中联合成本函数 $C(x,y)$ 的边际成本，以及相关商品需求函数 $Q_i(p_1,p_2,\\gamma)$ 的边际需求含义：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{联合成本函数 }C=C(x,y)\\text{：}\\frac{\\partial C}{\\partial x}\\approx C(x+1,y)-C(x,y),\\qquad \\frac{\\partial C}{\\partial y}\\approx C(x,y+1)-C(x,y)\\\\\n&\\text{相关商品需求函数 }Q_1=Q_1(p_1,p_2,\\gamma),\\;Q_2=Q_2(p_1,p_2,\\gamma)\\text{：}\\\\\n&\\qquad \\frac{\\partial Q_1}{\\partial p_1},\\;\\frac{\\partial Q_1}{\\partial p_2},\\;\\frac{\\partial Q_1}{\\partial\\gamma};\\qquad \\frac{\\partial Q_2}{\\partial p_1},\\;\\frac{\\partial Q_2}{\\partial p_2},\\;\\frac{\\partial Q_2}{\\partial\\gamma}\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "$\\frac{\\partial C}{\\partial x}$ 与 $\\frac{\\partial C}{\\partial y}$",
+          "desc": "分别称为对产品甲、乙的**边际成本**；$\\frac{\\partial C}{\\partial x}$ 表示当乙产量 $y$ 不变、甲在产量 $x$ 基础上再多生产 $1$ 单位时总成本的近似增量。"
+        },
+        {
+          "sym": "$p_1,p_2$ 与消费者收入 $\\gamma$",
+          "desc": "$\\frac{\\partial Q_1}{\\partial p_1}$ 为甲的需求对自身价格 $p_1$ 的边际需求；$\\frac{\\partial Q_1}{\\partial\\gamma}$ 为甲的需求对消费者收入 $\\gamma$ 的边际需求（保持其他变量固定不变时，变化 $1$ 单位引起的近似需求变化量）。"
+        }
+      ],
+      "conditions": "**仅考研数学三大纲要求**，数学一、数学二不考；将其保留在此并标为「教材拓展」，与张宇《高数18讲》P.149-150 原书完整对齐。",
+      "pitfalls": "数学一考生只需一眼了解其偏导近似增量本质（与线性主部 $\\Delta C\\approx C_x'\\Delta x$ 同理），不必花费额外精力刷经济题。",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.149-150",
+        "pdfPage": 162,
+        "itemRef": "二·2 偏导数的经济应用（仅数学三）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_limits_concepts",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-c-01",
+      "stage": "both",
+      "section": "一、多元函数的基本概念（极限、连续、偏导与可微）",
+      "kind": "conclusion",
+      "title": "二元函数五大概念逻辑网络与六大经典反例现象速查表",
+      "examWeight": "core",
+      "summary": "二元函数在一点处的五个性质呈「菱形分级」而非一元单链：**一阶偏导连续 $\\implies$ 可微 $\\implies$（二元连续 $\\land$ 一阶偏导存在）$\\implies$（二重极限存在 $\\land$ 单变量分别连续）**。其中「二元连续」与「偏导存在」**完全互不推出**，而每一条反向箭头都有一个考研必背的经典反例（强化 P.151-154 现象 1~6）！",
+      "conditions": "适用于选择题概念辨析与真假命题快速排错；在考场上遇到「若 $f$ 满足性质 A 则必满足性质 B」的选项时，先画概念网络图，再用下表六大反例逐个秒杀假命题。",
+      "pitfalls": "最常被命题人拿来挖坑的两条假命题：①「可微 $\\Rightarrow$ 偏导连续」（假！反例是现象 6 振荡函数强化例13.12）；②「连续且偏导存在 $\\Rightarrow$ 可微」（假！反例是现象 4 $\\frac{x^2 y}{x^2+y^2}$ 强化例13.10）。",
+      "tables": [
+        {
+          "caption": "表 13-2：二元函数六大经典反例现象全览（强化 P.151-154 现象 1~6 + 混合偏导不等反例）",
+          "headers": [
+            "现象编号",
+            "欲推翻的假命题",
+            "经典反例（$(0,0)$ 处）",
+            "对应精讲例题"
+          ],
+          "rows": [
+            [
+              "现象 1",
+              "两单变量分别连续 $\\Rightarrow$ 二元连续",
+              "$f(x,y)=1\\;(xy=0),\\;0\\;(xy\\ne 0)$",
+              "强化例 13.7"
+            ],
+            [
+              "现象 2",
+              "两一阶偏导存在 $\\Rightarrow$ 二元连续",
+              "$f(x,y)=\\dfrac{xy}{x^2+y^2}\\;(x^2+y^2\\ne 0),\\;0\\;(0,0)$",
+              "强化例 13.8"
+            ],
+            [
+              "现象 3",
+              "二元连续 $\\Rightarrow$ 一阶偏导存在",
+              "$g(x,y)=\\sqrt{x^2+y^2}$（圆锥尖点）",
+              "强化例 13.9"
+            ],
+            [
+              "现象 4",
+              "连续且两偏导存在 $\\Rightarrow$ 可微",
+              "$f(x,y)=\\dfrac{x^2 y}{x^2+y^2}\\;(x^2+y^2\\ne 0),\\;0\\;(0,0)$",
+              "强化例 13.10"
+            ],
+            [
+              "现象 5",
+              "两偏导存在 $\\Rightarrow$ 偏导连续或可微",
+              "$f(x,y)=x^2\\;(y=0),\\;y^2\\;(x=0),\\;1\\;(xy\\ne 0)$",
+              "强化例 13.11"
+            ],
+            [
+              "现象 6",
+              "可微 $\\Rightarrow$ 一阶偏导连续",
+              "$f(x,y)=(x^2+y^2)\\sin\\dfrac{1}{x^2+y^2}\\;(x^2+y^2\\ne 0),\\;0\\;(0,0)$",
+              "强化例 13.12"
+            ],
+            [
+              "混合偏导",
+              "两混合偏导存在 $\\Rightarrow f_{xy}''=f_{yx}''$",
+              "$f(x,y)=xy\\;(|x|\\ge|y|),\\;-xy\\;(|x|<|y|)$（$-1\\ne 1$）",
+              "强化例 13.13"
+            ]
+          ]
+        }
+      ],
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.150-154",
+        "pdfPage": 163,
+        "itemRef": "四、概念关系图 & 现象 1~6",
+        "crossRef": "27张宇《基础30讲·高数》P.314 图 13-6"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_limits_concepts",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-c-02",
+      "stage": "intensive",
+      "section": "三、多元函数的极值与最值（无条件、条件与闭区域）",
+      "kind": "conclusion",
+      "title": "二元极值与一元极值的两大根本差异及 $\\Delta=0$ 时的三大判定法",
+      "examWeight": "core",
+      "summary": "**两大差异（强化 P.168）**：① 一元函数唯一极值必为最值，但**二元函数唯一极值未必是最值**（例如 $f(x,y)=x^2+y^2(1+x)^3$ 仅有唯一极小值点 $(0,0)$，却无最小值！）；② 沿过 $(x_0,y_0)$ 的**每一条直线**均取严格极小，仍**推不出**二元极小值（皮亚诺反例 $f(x,y)=(y-x^2)(y-2x^2)$，见强化例13.26）；③ 二元极值是两坐标轴截面一元极值的**充分非必要条件**（见例13.17），且 $C^2$ 极大值点必有 $f_{xx}''\\le 0,\\;f_{yy}''\\le 0$（见例13.18）。\n当二阶判别式 $\\Delta=AC-B^2=0$ 失效时，立即改用定义三招：① **配方保号法**（证 $\\Delta f\\ge 0$ 或 $\\le 0$ 为极值）；② **直线/曲线路径异号法**（如取 $y=kx$ 或 $y=cx^2$ 证邻域内有正有负非极值）；③ **泰勒展开主部法**。",
+      "conditions": "适用于无条件极值概念判断题及 $\\Delta=AC-B^2=0$ 时的驻点定性；注意任何极值点都不要求函数在该点连续或可偏导（基础 P.324 注）。",
+      "pitfalls": "千万不要因为某实际应用题算出来只有一个驻点，就套用一元「唯一极值即最值」直接下结论！在非封闭无界域上，必须说明实际背景或边界趋于无穷以确保最值存在，或结合闭区域/二阶正定性严格论证。",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.168-170",
+        "pdfPage": 181,
+        "itemRef": "一、无条件极值注记 & 强化例13.26~13.28",
+        "crossRef": "27张宇《基础30讲·高数》P.324-326 例13.17~13.18"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_extrema_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-c-03",
+      "stage": "intensive",
+      "section": "二、多元函数微分法则（链式、全微分与隐函数）",
+      "kind": "conclusion",
+      "title": "偏微分方程（PDE）化简与求解的四大核心题型通法",
+      "examWeight": "core",
+      "summary": "考研数一关于偏微分方程的解答题归结为四大固定套路（强化 P.162-166）：\n① **已知线性变量替换 $(u,v)=(ax+by,cx+dy)$ 化简并求解**（强化例13.21）：用链式法则把 $z_{xx}'',z_{xy}'',z_{yy}''$ 改写为 $z_{uu}'',z_{uv}'',z_{vv}''$（或直接把二阶算子因式分解！），再逐次积分并借边界条件定任意函数 $\\varphi(v),\\psi(u)$；\n② **待定线性替换系数消交叉/平方项**（强化例13.22）：代入后令目标项（如 $z_{uu}'',z_{vv}''$）系数为 $0$，**同时必须检验剩余保留项系数非零**（防替换退化，雅可比 $\\ne 0$！）；\n③ **径向对称/旋转对称化为常微分方程**（强化例13.23）：$u=f(\\ln\\sqrt{x^2+y^2})$ 令 $t=\\ln r$ 后，拉普拉斯算子直接退化为 $u_{xx}''+u_{yy}''=\\mathrm{e}^{-2t}f''(t)$；\n④ **直接积分一阶偏微分方程**（例13.6、强化例13.24）：把 $y$ 视为参数解关于 $x$ 的一阶线性 ODE，常数写成任意函数 $C(y)$，再结合 $f_y'$ 与初值定出 $C(y)$。",
+      "conditions": "要求目标函数在对应连通区域内具有 $C^2$（或 $C^1$）连续偏导数，保证 $z_{uv}''=z_{vu}''$ 且替换雅可比 $\\frac{\\partial(u,v)}{\\partial(x,y)}\\ne 0$。",
+      "pitfalls": "两大高频失分点：① 化简题（强化例13.22）解出待定参数 $a$ 后**忘记检验留下的 $z_{uv}''$ 系数是否同时变 $0$**（$a=-2$ 会使 $u=v$ 退化，必须舍去！）；② 解一阶 PDE 积分时把未知函数 $C(y)$ 误写成常数 $C$！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.162-166",
+        "pdfPage": 175,
+        "itemRef": "五、偏微分方程化简求解四大题型（强化例13.21~13.24）",
+        "crossRef": "27张宇《基础30讲·高数》P.312 例13.6"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_calc_pde",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-c-04",
+      "stage": "both",
+      "section": "二、多元函数微分法则（链式、全微分与隐函数）",
+      "kind": "conclusion",
+      "title": "「连通域 vs 割裂域」与「封闭边界 vs 不封闭弧端点」双拓扑红线",
+      "examWeight": "core",
+      "summary": "多元微积分中许多看似显然的一元结论之所以失效，根源都在平面区域的**几何/拓扑边界**：\n① **割裂域红线（基础 P.324）**：$f_x'(x,y)\\equiv 0$ 不能保证 $f(x,y)=g(y)$，必须附加「区域内任意同纵坐标两点间的水平线段全在区域内」；只有 $f_x'\\equiv 0$ 且 $f_y'\\equiv 0$ 在**连通区域**上同时成立时，才能断言 $f\\equiv C$；\n② **不封闭约束端点红线（例13.20）**：遇到带不等式限制的条件极值（如 $a\\le 0,b\\ge 0$ 截出的四分之一圆弧 $a^2+b^2=1$），拉格朗日乘数法**只能找弧段内部光滑驻点**，端点必须单独代入比较！\n③ **多驻点闭区域不漏判（强化例13.31）**：闭域内部可能含多个驻点（如 $(0,0)$ 与 $(2,0)$），即使其中一个是鞍点，严谨做法也要列明全部分类或统统纳入函数值比较表。",
+      "conditions": "适用于一切涉及由偏导反求原函数、偏微分方程定义域（如强化例13.24 须在含 $(0,0)$ 的连通带域 $y\\in(-\\frac{\\pi}{2},\\frac{\\pi}{2})$ 上）以及有界区域最值的题型。",
+      "pitfalls": "在例13.20 中，如果只用拉格朗日法求出唯一内部驻点 $(-\\frac{\\sqrt{2}}{2},\\frac{\\sqrt{2}}{2})$ 得面积 $\\frac{\\sqrt{2}}{3}$，就根本找不到最小值 $\\frac{1}{6}$（取在弧段端点 $(-1,0)$ 与 $(0,1)$）！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.324, P.328",
+        "pdfPage": 329,
+        "itemRef": "二·4 割裂域反例 & 例13.20 不封闭弧端点",
+        "crossRef": "27张宇《高数18讲》(强化) P.166 强化例13.24 & P.173 强化例13.31"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy30_impl_extrema",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-c-05",
+      "stage": "both",
+      "section": "二、多元函数微分法则（链式、全微分与隐函数）",
+      "kind": "conclusion",
+      "title": "隐函数求偏导/全微分的「三招选法」与抽象隐函数消元策略",
+      "examWeight": "core",
+      "summary": "面对隐函数方程 $F(x,y,z)=0$（例13.12、例13.15、例13.16、强化例13.15），有**三大等价工具**，按题型选最优：\n① **全微分形式不变性（首选求 $\\mathrm{d}z$ 或点处一阶偏导）**：两边直接取 $\\mathrm{d}(\\cdots)$，把 $\\mathrm{d}z$ 解出来，系数即 $z_x',z_y'$，**免背负号、免分主次变量**；\n② **公式法 $z_x'=-F_x'/F_z'$（首选判别存在性/选择哪几个可确定隐函数）**：直接算 $F_x',F_y',F_z'$ 三个偏导的非零性（例13.13）；\n③ **直接两边对 $x$（或 $y$）求偏导（首选求二阶偏导或隐函数方程组）**：一阶求导后保留方程形态直接再求一次偏导，遇到求具体点二阶导（如强化例13.17）时，**先代入具体数值解一阶导，再代入二阶导方程**，算量降一半！",
+      "conditions": "三种方法在隐函数存在定理条件（$F\\in C^1,\\;F_z'\\ne 0$）下完全等价；遇到隐式极值点判定（如例13.19）时，切勿先把 $z_x'$ 解成分式再求二阶导，直接对「已含 $z_x'=0$」的原一阶隐方程再求导，含 $z_x'$ 的项直接归零，速度暴增！",
+      "pitfalls": "求隐函数极值点（例13.19）或方程组定点导数（强化例13.17）时，算出一个特解（如 $z=1$ 或 $z=2$）后，**务必用单调性（导数恒正）补充证明该实根唯一**（见严谨台账 #43、#45），避免漏掉其他驻点！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.319-323",
+        "pdfPage": 324,
+        "itemRef": "例13.12, 例13.15, 例13.16 三法对比",
+        "crossRef": "27张宇《高数18讲》(强化) P.158-160 强化例13.15, 强化例13.17"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy30_impl_extrema",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-01",
+      "stage": "foundation",
+      "section": "一、多元函数的基本概念（基础例 13.1~13.8）",
+      "kind": "example",
+      "title": "【例 13.1】二重极限存在性辨析：夹逼证存在 vs 直线左右极限证不存在",
+      "examWeight": "core",
+      "problem": "设 $I_1=\\lim\\limits_{\\substack{x\\to 0\\\\y\\to 0}}\\dfrac{|xy|}{\\sqrt{x^2+y^2}}$，$I_2=\\lim\\limits_{\\substack{x\\to 0\\\\y\\to 0}}\\dfrac{x|y|}{x^2+y^2}$，则（ ）\n（A）$I_1$ 存在，$I_2$ 不存在　（B）$I_1$ 不存在，$I_2$ 存在　（C）$I_1$ 存在，$I_2$ 存在　（D）$I_1$ 不存在，$I_2$ 不存在",
+      "steps": [
+        {
+          "stepTitle": "用均值不等式夹逼求 $I_1$",
+          "detail": "利用 $|xy|\\le\\frac{1}{2}(x^2+y^2)$，得$$0\\le\\frac{|xy|}{\\sqrt{x^2+y^2}}\\le\\frac{x^2+y^2}{2\\sqrt{x^2+y^2}}=\\frac{1}{2}\\sqrt{x^2+y^2}\\xrightarrow{(x,y)\\to(0,0)}0,$$由夹逼准则知 $I_1=0$（存在）。"
+        },
+        {
+          "stepTitle": "沿直线 $y=x$ 两侧验证 $I_2$ 不存在",
+          "detail": "取路径 $y=x$：当 $x\\to 0^+$ 时，$\\frac{x|x|}{2x^2}=\\frac{1}{2}$；当 $x\\to 0^-$ 时，$\\frac{x(-x)}{2x^2}=-\\frac{1}{2}$。左右极限不相等，故 $I_2$ 不存在。"
+        }
+      ],
+      "finalAnswer": "**选（A）**（$I_1=0$ 存在，$I_2$ 不存在）。",
+      "takeaway": "齐次分式看次数差：$I_1$ 分子 $2$ 次大于分母 $1$ 次，夹逼必趋于 $0$；$I_2$ 分子分母同为 $2$ 次，沿 $y=kx$（甚至仅沿 $y=x$ 两侧）即可击破！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.306-307",
+        "pdfPage": 311,
+        "itemRef": "例 13.1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy30_basics",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-02",
+      "stage": "foundation",
+      "section": "一、多元函数的基本概念（基础例 13.1~13.8）",
+      "kind": "example",
+      "title": "【例 13.2】利用整体等价无穷小由二元连续性定参 $a$",
+      "examWeight": "core",
+      "problem": "已知函数 $f(x,y)=\\begin{cases}\\dfrac{\\sqrt[3]{1-(x^2+y^2)}-1}{\\mathrm{e}^{x^2+y^2}-1},&x^2+y^2\\ne 0,\\\\a,&x^2+y^2=0\\end{cases}$ 在 $(0,0)$ 处连续，求常数 $a$。",
+      "steps": [
+        {
+          "stepTitle": "整体换元 $u=x^2+y^2\\to 0^+$ 并作等价替换",
+          "detail": "因 $f(x,y)$ 在 $(0,0)$ 处连续，故 $a=\\lim\\limits_{(x,y)\\to(0,0)}f(x,y)$。令 $u=x^2+y^2\\to 0^+$，利用 $(1-u)^{\\frac{1}{3}}-1\\sim -\\frac{1}{3}u$ 与 $\\mathrm{e}^u-1\\sim u$，得$$a=\\lim_{u\\to 0^+}\\frac{(1-u)^{\\frac{1}{3}}-1}{\\mathrm{e}^u-1}=\\lim_{u\\to 0^+}\\frac{-\\frac{1}{3}u}{u}=-\\frac{1}{3}.$$"
+        }
+      ],
+      "finalAnswer": "$a=-\\dfrac{1}{3}$",
+      "takeaway": "二元极限只通过单一组合 $u=x^2+y^2$ 出现时，瞬间降维成一元极限，等价无穷小与洛必达均可放心使用！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.308",
+        "pdfPage": 313,
+        "itemRef": "例 13.2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy30_basics",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-03",
+      "stage": "foundation",
+      "section": "一、多元函数的基本概念（基础例 13.1~13.8）",
+      "kind": "example",
+      "title": "【例 13.3】含绝对值二元函数「先代值再求导」判定偏导存在性",
+      "examWeight": "core",
+      "problem": "设 $f(x,y)=\\ln(y+|x\\sin y|)$，则在点 $(0,1)$ 处（ ）\n（A）$f_x'(0,1)$ 不存在，$f_y'(0,1)$ 存在　（B）$f_x'(0,1)$ 存在，$f_y'(0,1)$ 不存在　（C）两者均存在　（D）两者均不存在",
+      "steps": [
+        {
+          "stepTitle": "求 $f_x'(0,1)$：先代入 $y=1$",
+          "detail": "固定 $y=1$，得一元函数 $f(x,1)=\\ln(1+|x|\\sin 1)$。因 $\\sin 1>0$，在 $x=0$ 处左右导数分别为$$f_x'(0^+,1)=\\lim_{x\\to 0^+}\\frac{\\ln(1+x\\sin 1)}{x}=\\sin 1,\\qquad f_x'(0^-,1)=\\lim_{x\\to 0^-}\\frac{\\ln(1-x\\sin 1)}{x}=-\\sin 1.$$左右导数不等，故 $f_x'(0,1)$ **不存在**。"
+        },
+        {
+          "stepTitle": "求 $f_y'(0,1)$：先代入 $x=0$",
+          "detail": "固定 $x=0$，绝对值项直接归零，得 $f(0,y)=\\ln y$（$y>0$），故$$f_y'(0,1)=\\left.\\frac{\\mathrm{d}}{\\mathrm{d}y}(\\ln y)\\right|_{y=1}=\\left.\\frac{1}{y}\\right|_{y=1}=1,$$因此 $f_y'(0,1)$ **存在**且等于 $1$。"
+        }
+      ],
+      "finalAnswer": "**选（A）**（$f_x'(0,1)$ 不存在，$f_y'(0,1)=1$ 存在）。",
+      "takeaway": "遇到含绝对值的偏导判定题，**先代值再求导**能直接消灭掉让绝对值归零的那个分支（如 $x=0$ 立刻干掉 $|x\\sin y|$），既快又零失误！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.309-310",
+        "pdfPage": 314,
+        "itemRef": "例 13.3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy30_basics",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-04",
+      "stage": "foundation",
+      "section": "一、多元函数的基本概念（基础例 13.1~13.8）",
+      "kind": "example",
+      "title": "【例 13.4】含参变限积分 $F(x,y)=\\int_0^{x-y}(x-y-t)f(t)\\,\\mathrm{d}t$ 的二阶偏导关系",
+      "examWeight": "core",
+      "problem": "设 $f(t)$ 连续，$F(x,y)=\\displaystyle\\int_0^{x-y}(x-y-t)f(t)\\,\\mathrm{d}t$，则下列结论正确的是（ ）\n（A）$F_{xx}''+F_{yy}''=0$　（B）$F_{xx}''-F_{xy}''=0$　（C）$F_{xx}''-F_{yy}''=0$　（D）$F_{yy}''-F_{xy}''=0$",
+      "steps": [
+        {
+          "stepTitle": "拆项提参化为标准变限积分",
+          "detail": "记 $u=x-y$，则 $F(x,y)=G(u)$，其中$$G(u)=u\\int_0^u f(t)\\,\\mathrm{d}t-\\int_0^u t f(t)\\,\\mathrm{d}t.$$对 $u$ 求导得$$G'(u)=\\int_0^u f(t)\\,\\mathrm{d}t+u f(u)-u f(u)=\\int_0^u f(t)\\,\\mathrm{d}t,\\qquad G''(u)=f(u).$$"
+        },
+        {
+          "stepTitle": "用链式法则秒算全部一、二阶偏导",
+          "detail": "因 $u_x'=1,\\;u_y'=-1$，故$$F_x'=G'(u),\\quad F_y'=-G'(u);\\qquad F_{xx}''=G''(u)=f(x-y),\\quad F_{yy}''=G''(u)=f(x-y),\\quad F_{xy}''=-G''(u)=-f(x-y).$$对照选项知 $F_{xx}''-F_{yy}''=0$（且 $F_{xx}''+F_{xy}''=0$）。"
+        }
+      ],
+      "finalAnswer": "**选（C）**（$F_{xx}''=F_{yy}''=f(x-y)$，即 $F_{xx}''-F_{yy}''=0$）。",
+      "takeaway": "看到 $\\int_0^u(u-t)f(t)\\,\\mathrm{d}t$，直接背出它的「二次积分」本质：求一次导得 $\\int_0^u f(t)\\,\\mathrm{d}t$，求两次导直接得 $f(u)$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.310-311",
+        "pdfPage": 315,
+        "itemRef": "例 13.4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy30_basics",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-05",
+      "stage": "foundation",
+      "section": "一、多元函数的基本概念（基础例 13.1~13.8）",
+      "kind": "example",
+      "title": "【例 13.5】含参反常积分 $f(x,y)=\\int_0^{xy}\\mathrm{e}^{-xt^2}\\,\\mathrm{d}t$ 的极限与先代后导",
+      "examWeight": "core",
+      "problem": "设 $f(x,y)=\\displaystyle\\int_0^{xy}\\mathrm{e}^{-xt^2}\\,\\mathrm{d}t\\;(x>0)$，记 $f(x,+\\infty)=\\lim\\limits_{y\\to+\\infty}f(x,y)$，求 $f_x'(1,+\\infty)$。",
+      "steps": [
+        {
+          "stepTitle": "先求 $y\\to+\\infty$ 极限（利用泊松积分 $\\int_0^{+\\infty}\\mathrm{e}^{-u^2}\\,\\mathrm{d}u=\\frac{\\sqrt{\\pi}}{2}$）",
+          "detail": "固定 $x>0$，作换元 $u=\\sqrt{x}\\,t$（$\\mathrm{d}t=\\frac{\\mathrm{d}u}{\\sqrt{x}}$），当 $y\\to+\\infty$ 时上限 $\\sqrt{x}\\cdot xy\\to+\\infty$，故$$f(x,+\\infty)=\\int_0^{+\\infty}\\mathrm{e}^{-xt^2}\\,\\mathrm{d}t=\\frac{1}{\\sqrt{x}}\\int_0^{+\\infty}\\mathrm{e}^{-u^2}\\,\\mathrm{d}u=\\frac{\\sqrt{\\pi}}{2}x^{-\\frac{1}{2}}.$$"
+        },
+        {
+          "stepTitle": "对 $x$ 求导并代入 $x=1$",
+          "detail": "对一元函数 $f(x,+\\infty)=\\frac{\\sqrt{\\pi}}{2}x^{-\\frac{1}{2}}$ 求导并令 $x=1$：$$f_x'(1,+\\infty)=\\left.\\frac{\\sqrt{\\pi}}{2}\\left(-\\frac{1}{2}x^{-\\frac{3}{2}}\\right)\\right|_{x=1}=-\\frac{\\sqrt{\\pi}}{4}.$$"
+        }
+      ],
+      "finalAnswer": "$f_x'(1,+\\infty)=-\\dfrac{\\sqrt{\\pi}}{4}$",
+      "takeaway": "记牢高频泊松积分 $\\int_0^{+\\infty}\\mathrm{e}^{-xt^2}\\,\\mathrm{d}t=\\frac{\\sqrt{\\pi}}{2\\sqrt{x}}\\;(x>0)$；先取 $y\\to+\\infty$ 化为一元函数再对 $x$ 求导，一步到位！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.311",
+        "pdfPage": 316,
+        "itemRef": "例 13.5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy30_basics",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-06",
+      "stage": "foundation",
+      "section": "一、多元函数的基本概念（基础例 13.1~13.8）",
+      "kind": "example",
+      "title": "【例 13.6】由两一阶偏导反求原函数 $f(x,y)$（含原书注：反常旋转体体积）",
+      "examWeight": "core",
+      "problem": "已知二元函数 $f(x,y)$ 在全平面可微，且满足 $f(0,0)=0$，$\\dfrac{\\partial f}{\\partial x}=-f(x,y)$，$\\dfrac{\\partial f}{\\partial y}=\\mathrm{e}^{-x}\\cos y$，求 $f(x,y)$。（注：并计算曲线 $y=f(x,x)\\;(x\\ge 0)$ 绕 $x$ 轴旋转的广义旋转体体积。）",
+      "steps": [
+        {
+          "stepTitle": "把 $y$ 视为常数，解关于 $x$ 的一阶线性偏微分方程",
+          "detail": "由 $\\frac{\\partial f}{\\partial x}+f=0$，两边乘积分因子 $\\mathrm{e}^x$ 得 $\\frac{\\partial}{\\partial x}(\\mathrm{e}^x f)=0$，在全平面（连通域）上积分得$$f(x,y)=C(y)\\mathrm{e}^{-x},$$其中 $C(y)$ 为仅与 $y$ 有关的可微函数。"
+        },
+        {
+          "stepTitle": "代入第二偏导条件与初值 $f(0,0)=0$ 确定 $C(y)$",
+          "detail": "对 $y$ 求偏导得 $\\frac{\\partial f}{\\partial y}=C'(y)\\mathrm{e}^{-x}=\\mathrm{e}^{-x}\\cos y\\implies C'(y)=\\cos y\\implies C(y)=\\sin y+C_0$。代入 $f(0,0)=0$ 得 $C_0=0$，故$$f(x,y)=\\mathrm{e}^{-x}\\sin y.$$"
+        },
+        {
+          "stepTitle": "书注延伸：计算 $y=f(x,x)=\\mathrm{e}^{-x}\\sin x\\;(x\\ge 0)$ 绕 $x$ 轴旋转体积",
+          "detail": "$$V=\\pi\\int_0^{+\\infty}\\mathrm{e}^{-2x}\\sin^2 x\\,\\mathrm{d}x=\\frac{\\pi}{2}\\int_0^{+\\infty}\\mathrm{e}^{-2x}(1-\\cos 2x)\\,\\mathrm{d}x=\\frac{\\pi}{2}\\left(\\frac{1}{2}-\\frac{2}{2^2+2^2}\\right)=\\frac{\\pi}{2}\\cdot\\frac{1}{4}=\\frac{\\pi}{8}.$$"
+        }
+      ],
+      "finalAnswer": "$f(x,y)=\\mathrm{e}^{-x}\\sin y$（注中旋转体体积 $V=\\dfrac{\\pi}{8}$）。",
+      "takeaway": "由偏导反求原函数时，积分任意项必须写成「另一变量的函数 $C(y)$」，绝不能漏写自变量 $y$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.312",
+        "pdfPage": 317,
+        "itemRef": "例 13.6 & P.312 注"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy30_basics",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-07",
+      "stage": "foundation",
+      "section": "一、多元函数的基本概念（基础例 13.1~13.8）",
+      "kind": "example",
+      "title": "【例 13.7】由全微分充要条件 $P_y'=Q_x'$ 确定双参数 $(a,b)$",
+      "examWeight": "core",
+      "problem": "若 $(axy^3-y^2\\cos x)\\,\\mathrm{d}x+(1+by\\sin x+3x^2 y^2)\\,\\mathrm{d}y$ 为某二元函数 $u(x,y)$ 的全微分，则 $(a,b)=$（ ）\n（A）$(-2,2)$　（B）$(2,-2)$　（C）$(2,2)$　（D）$(-2,-2)$",
+      "steps": [
+        {
+          "stepTitle": "套用 $P_y'=Q_x'$ 列出恒等式",
+          "detail": "记 $P=axy^3-y^2\\cos x$，$Q=1+by\\sin x+3x^2 y^2$。分别求偏导：$$\\frac{\\partial P}{\\partial y}=3axy^2-2y\\cos x,\\qquad \\frac{\\partial Q}{\\partial x}=by\\cos x+6xy^2.$$"
+        },
+        {
+          "stepTitle": "比较同类项系数求解 $(a,b)$",
+          "detail": "由 $\\frac{\\partial P}{\\partial y}\\equiv\\frac{\\partial Q}{\\partial x}$ 得 $3a=6,\\;b=-2$，即 $a=2,\\;b=-2$。（可立即验证原函数 $u=x^2 y^3-y^2\\sin x+y+C$！）"
+        }
+      ],
+      "finalAnswer": "**选（B）**：$(a,b)=(2,-2)$。",
+      "takeaway": "全微分定参题是数一送分题：直接算 $P_y'=Q_x'$ 对照同类项即可，10 秒拿满分。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.315",
+        "pdfPage": 320,
+        "itemRef": "例 13.7"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy30_basics",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-08",
+      "stage": "foundation",
+      "section": "一、多元函数的基本概念（基础例 13.1~13.8）",
+      "kind": "example",
+      "title": "【例 13.8】可微三步判别法实战：$z_1=|xy|$ 可微 vs $z_2=\\frac{x|y|}{\\sqrt{x^2+y^2}}$ 不可微",
+      "examWeight": "core",
+      "problem": "考察函数 $z_1=|xy|$ 与 $z_2=\\begin{cases}\\dfrac{x|y|}{\\sqrt{x^2+y^2}},&x^2+y^2\\ne 0,\\\\0,&x^2+y^2=0\\end{cases}$ 在点 $(0,0)$ 处的可微性，正确的是（ ）\n（A）$z_1,z_2$ 均可微　（B）$z_1,z_2$ 均不可微　（C）$z_1$ 可微，$z_2$ 不可微　（D）$z_1$ 不可微，$z_2$ 可微",
+      "steps": [
+        {
+          "stepTitle": "三步判别 $z_1=|xy|$ 在 $(0,0)$ 处可微",
+          "detail": "① 先代后导：$z_1(x,0)\\equiv 0,\\;z_1(0,y)\\equiv 0\\implies z_{1x}'(0,0)=z_{1y}'(0,0)=0$；② $\\Delta z_1-\\mathrm{d}z_1=|xy|$；③ 由例13.1 知$$\\lim_{\\substack{x\\to 0\\\\y\\to 0}}\\frac{|xy|}{\\sqrt{x^2+y^2}}=0,$$故 $z_1$ 在 $(0,0)$ 处**可微**！"
+        },
+        {
+          "stepTitle": "三步判别 $z_2$ 在 $(0,0)$ 处不可微",
+          "detail": "① 沿两坐标轴 $z_2(x,0)\\equiv 0,\\;z_2(0,y)\\equiv 0\\implies z_{2x}'(0,0)=z_{2y}'(0,0)=0$；② $\\Delta z_2-\\mathrm{d}z_2=\\frac{x|y|}{\\sqrt{x^2+y^2}}$；③ 检验余项比值：$$\\lim_{\\substack{x\\to 0\\\\y\\to 0}}\\frac{z_2(x,y)-0}{\\sqrt{x^2+y^2}}=\\lim_{\\substack{x\\to 0\\\\y\\to 0}}\\frac{x|y|}{x^2+y^2},$$由例13.1 知该极限不存在（不为 $0$），故 $z_2$ 在 $(0,0)$ 处**不可微**！"
+        }
+      ],
+      "finalAnswer": "**选（C）**（$z_1$ 可微，$z_2$ 不可微）。",
+      "takeaway": "别被绝对值吓住！$z_1=|xy|$ 虽含绝对值，但在原点是「$2$ 次无穷小」，除掉 $1$ 次的 $\\rho$ 后仍趋于 $0$，因此在原点完全可微（且仅在两坐标轴除原点外不可偏导）！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.315-316",
+        "pdfPage": 320,
+        "itemRef": "例 13.8"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy30_basics",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-09",
+      "stage": "foundation",
+      "section": "二、多元函数微分法则（基础例 13.9~13.16）",
+      "kind": "example",
+      "title": "【例 13.9】抽象复合 $z=f(\\mathrm{e}^x\\sin y,x^2+y^2)$ 在原点处求二阶混合偏导",
+      "examWeight": "core",
+      "problem": "设 $f(u,v)$ 具有二阶连续偏导数，且 $f_1'(0,0)=1,\\;f_2'(0,0)=-1$，$z=f(\\mathrm{e}^x\\sin y,\\;x^2+y^2)$，则 $\\left.\\dfrac{\\partial^2 z}{\\partial x\\partial y}\\right|_{(0,0)}=$（ ）\n（A）$0$　（B）$1$　（C）$-1$　（D）$2$",
+      "steps": [
+        {
+          "stepTitle": "先对 $x$ 求一阶偏导（留全自变量）",
+          "detail": "记 $u=\\mathrm{e}^x\\sin y,\\;v=x^2+y^2$，则$$\\frac{\\partial z}{\\partial x}=f_1'(u,v)\\cdot \\mathrm{e}^x\\sin y+f_2'(u,v)\\cdot 2x.$$"
+        },
+        {
+          "stepTitle": "技巧提速：直接先代 $x=0$ 再对 $y$ 求导！",
+          "detail": "因为要求 $\\left.\\frac{\\partial}{\\partial y}\\!\\left(\\frac{\\partial z}{\\partial x}\\right)\\right|_{(0,0)}$，**先代入 $x=0$** 得$$\\left.\\frac{\\partial z}{\\partial x}\\right|_{x=0}=f_1'(\\sin y,\\;y^2)\\cdot\\sin y+0.$$再对该一元函数在 $y=0$ 处求导（乘法法则）：$$\\left.\\frac{\\partial^2 z}{\\partial x\\partial y}\\right|_{(0,0)}=\\left.\\left[\\bigl(f_{11}''\\cos y+2y f_{12}''\\bigr)\\sin y+f_1'(\\sin y,y^2)\\cos y\\right]\\right|_{y=0}=0+f_1'(0,0)\\cdot 1=1.$$"
+        }
+      ],
+      "finalAnswer": "**选（B）**：$1$。",
+      "takeaway": "**考场神技——求定点二阶偏导务必「求完一阶立刻先代一个坐标再求二阶」！** 先代 $x=0$ 直接把第二项 $2x f_2'$ 消灭，少写一大半链式展开！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.317-318",
+        "pdfPage": 322,
+        "itemRef": "例 13.9"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy30_basics",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-10",
+      "stage": "foundation",
+      "section": "二、多元函数微分法则（基础例 13.9~13.16）",
+      "kind": "example",
+      "title": "【例 13.10】沿曲线 $y=\\mathrm{e}^x$ 已知函数值与 $f_x'$ 反求 $f_y'$",
+      "examWeight": "core",
+      "problem": "设二元函数 $f(x,y)$ 可微，且满足 $f(x,\\mathrm{e}^x)=x+\\mathrm{e}^x$，又已知 $\\left.f_x'(x,y)\\right|_{y=\\mathrm{e}^x}=1+2\\mathrm{e}^x$，求 $\\left.f_y'(x,y)\\right|_{y=\\mathrm{e}^x}$。",
+      "steps": [
+        {
+          "stepTitle": "对恒等式 $f(x,\\mathrm{e}^x)=x+\\mathrm{e}^x$ 两边关于 $x$ 求全导数",
+          "detail": "注意左端两个位置均含 $x$，由全导数法则得$$f_1'(x,\\mathrm{e}^x)\\cdot 1+f_2'(x,\\mathrm{e}^x)\\cdot\\mathrm{e}^x=1+\\mathrm{e}^x.$$"
+        },
+        {
+          "stepTitle": "代入已知偏导解出 $f_2'(x,\\mathrm{e}^x)$",
+          "detail": "因 $f_1'(x,\\mathrm{e}^x)=\\left.f_x'(x,y)\\right|_{y=\\mathrm{e}^x}=1+2\\mathrm{e}^x$，代入上式得$$(1+2\\mathrm{e}^x)+f_2'(x,\\mathrm{e}^x)\\cdot\\mathrm{e}^x=1+\\mathrm{e}^x \\implies f_2'(x,\\mathrm{e}^x)\\cdot\\mathrm{e}^x=-\\mathrm{e}^x \\implies f_2'(x,\\mathrm{e}^x)=-1.$$"
+        }
+      ],
+      "finalAnswer": "$\\left.f_y'(x,y)\\right|_{y=\\mathrm{e}^x}=-1$",
+      "takeaway": "看到条件给 $f(x,\\varphi(x))=\\psi(x)$，第一反应永远是**对 $x$ 求全导数** $f_1'+f_2'\\varphi'(x)=\\psi'(x)$，瞬间串联起 $f_x'$ 与 $f_y'$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.318",
+        "pdfPage": 323,
+        "itemRef": "例 13.10"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy30_basics",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-11",
+      "stage": "foundation",
+      "section": "二、多元函数微分法则（基础例 13.9~13.16）",
+      "kind": "example",
+      "title": "【例 13.11】抛物坐标系变量替换 $(x,y)=(uv,\\frac{u^2-v^2}{2})$ 变换一阶非线性 PDE",
+      "examWeight": "core",
+      "problem": "设可微函数 $f(x,y)$ 满足 $(f_x')^2+(f_y')^2=4$，作变量代换 $x=uv,\\;y=\\dfrac{u^2-v^2}{2}$，记 $g(u,v)=f\\!\\left(uv,\\dfrac{u^2-v^2}{2}\\right)$，若原方程化为 $a(g_u')^2-b(g_v')^2=u^2+v^2$，求常数 $a,b$。",
+      "steps": [
+        {
+          "stepTitle": "用链式法则写出 $g_u'$ 与 $g_v'$",
+          "detail": "$$\\begin{cases}g_u'=f_x'\\cdot v+f_y'\\cdot u,\\\\g_v'=f_x'\\cdot u+f_y'\\cdot(-v).\\end{cases}$$"
+        },
+        {
+          "stepTitle": "平方相加自动消去交叉项！",
+          "detail": "将两式直接平方后相加，交叉项 $+2uv f_x' f_y'$ 与 $-2uv f_x' f_y'$ 恰好抵消：$$(g_u')^2+(g_v')^2=(u^2+v^2)\\bigl[(f_x')^2+(f_y')^2\\bigr]=4(u^2+v^2).$$两边同除以 $4$ 得$$\\frac{1}{4}(g_u')^2+\\frac{1}{4}(g_v')^2=u^2+v^2.$$"
+        },
+        {
+          "stepTitle": "对照目标形式 $a(g_u')^2-b(g_v')^2=u^2+v^2$（注意负号！）",
+          "detail": "对比系数得 $a=\\frac{1}{4}$，$-b=\\frac{1}{4}\\implies b=-\\frac{1}{4}$。"
+        }
+      ],
+      "finalAnswer": "$a=\\dfrac{1}{4},\\;b=-\\dfrac{1}{4}$",
+      "takeaway": "看到 $g_u'=v f_x'+u f_y'$ 与 $g_v'=u f_x'-v f_y'$ 这种正交旋转结构，**平方相加一步消交叉项**；另外务必盯紧题干的「$-b$」负号坑！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.318-319",
+        "pdfPage": 323,
+        "itemRef": "例 13.11"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy30_basics",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-12",
+      "stage": "foundation",
+      "section": "二、多元函数微分法则（基础例 13.9~13.16）",
+      "kind": "example",
+      "title": "【例 13.12】全微分形式不变性秒求隐函数 $\\mathrm{e}^{x+2y+3z}+xyz=1$ 在 $(0,0)$ 的 $\\mathrm{d}z$",
+      "examWeight": "core",
+      "problem": "设 $z=z(x,y)$ 由方程 $\\mathrm{e}^{x+2y+3z}+xyz=1$ 确定，用全微分形式不变性求 $\\left.\\mathrm{d}z\\right|_{(0,0)}$。",
+      "steps": [
+        {
+          "stepTitle": "先求对应点 $z(0,0)$",
+          "detail": "代入 $x=0,y=0$ 到原方程得 $\\mathrm{e}^{3z}+0=1\\implies z(0,0)=0$。"
+        },
+        {
+          "stepTitle": "两边同时取全微分并立即代点 $(0,0,0)$",
+          "detail": "两边取全微分：$$\\mathrm{e}^{x+2y+3z}(\\mathrm{d}x+2\\,\\mathrm{d}y+3\\,\\mathrm{d}z)+yz\\,\\mathrm{d}x+xz\\,\\mathrm{d}y+xy\\,\\mathrm{d}z=0.$$将 $x=0,y=0,z=0$ 直接代入上式（**不必先化简一般式**！）：$$1\\cdot(\\mathrm{d}x+2\\,\\mathrm{d}y+3\\,\\mathrm{d}z)+0=0 \\implies \\left.\\mathrm{d}z\\right|_{(0,0)}=-\\frac{1}{3}\\,\\mathrm{d}x-\\frac{2}{3}\\,\\mathrm{d}y.$$"
+        }
+      ],
+      "finalAnswer": "$\\left.\\mathrm{d}z\\right|_{(0,0)}=-\\dfrac{1}{3}\\,\\mathrm{d}x-\\dfrac{2}{3}\\,\\mathrm{d}y$",
+      "takeaway": "求具体点处的全微分 $\\left.\\mathrm{d}z\\right|_{(x_0,y_0)}$，取完微分**立刻代坐标**，所有 $xyz$ 乘积项瞬间归零，比公式法快一倍！（对照例13.15）",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.319",
+        "pdfPage": 324,
+        "itemRef": "例 13.12"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy30_impl_extrema",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-13",
+      "stage": "foundation",
+      "section": "二、多元函数微分法则（基础例 13.9~13.16）",
+      "kind": "example",
+      "title": "【例 13.13】隐函数存在定理 2 判定：在 $(0,1,1)$ 处能确定哪几个隐函数？",
+      "examWeight": "core",
+      "problem": "方程 $xy-z\\ln y+\\mathrm{e}^{xz}=1$ 在点 $(0,1,1)$ 的某邻域内可唯一确定具有连续偏导数的隐函数（ ）\n（A）$z=z(x,y)$　（B）$z=z(x,y)$ 与 $y=y(x,z)$　（C）$z=z(x,y)$ 与 $x=x(y,z)$　（D）$x=x(y,z)$ 与 $y=y(x,z)$",
+      "steps": [
+        {
+          "stepTitle": "令 $F(x,y,z)=xy-z\\ln y+\\mathrm{e}^{xz}-1$ 并逐一算三个偏导",
+          "detail": "先验证 $F(0,1,1)=0-0+1-1=0$，且 $F$ 在 $(0,1,1)$ 邻域连续可偏导。计算三偏导：$$F_x'=y+z\\mathrm{e}^{xz},\\qquad F_y'=x-\\frac{z}{y},\\qquad F_z'=-\\ln y+x\\mathrm{e}^{xz}.$$"
+        },
+        {
+          "stepTitle": "代入 $(0,1,1)$ 检查非零性",
+          "detail": "$$F_x'(0,1,1)=1+1=2\\ne 0,\\qquad F_y'(0,1,1)=0-1=-1\\ne 0,\\qquad F_z'(0,1,1)=-\\ln 1+0=0.$$由隐函数存在定理 2，因为 $F_x'\\ne 0$ 且 $F_y'\\ne 0$，可确定连续可偏导的 $x=x(y,z)$ 与 $y=y(x,z)$（而 $F_z'=0$ 不能由定理保证确定 $z(x,y)$）。"
+        }
+      ],
+      "finalAnswer": "**选（D）**（确定 $x=x(y,z)$ 与 $y=y(x,z)$）。",
+      "takeaway": "口诀：**「谁的偏导不为零，就能把谁解出来当因变量」**！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.320-321",
+        "pdfPage": 325,
+        "itemRef": "例 13.13"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy30_impl_extrema",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-14",
+      "stage": "foundation",
+      "section": "二、多元函数微分法则（基础例 13.9~13.16）",
+      "kind": "example",
+      "title": "【例 13.14】概念辨析：$F_y'(x_0,y_0)\\ne 0$ 是隐函数存在且连续可导的充分非必要条件",
+      "examWeight": "core",
+      "problem": "设 $F(x,y)$ 在点 $(x_0,y_0)$ 某邻域内有连续偏导数且 $F(x_0,y_0)=0$，则 $F_y'(x_0,y_0)\\ne 0$ 是方程 $F(x,y)=0$ 在该点某邻域内唯一确定具有连续导数的隐函数 $y=y(x)$ 的（ ）\n（A）必要非充分条件　（B）充分非必要条件　（C）充要条件　（D）既非充分也非必要条件",
+      "steps": [
+        {
+          "stepTitle": "充分性成立（隐函数存在定理 1）",
+          "detail": "由隐函数存在定理 1，条件满足且 $F_y'(x_0,y_0)\\ne 0$ 直接保证隐函数 $y=y(x)$ 存在唯一且连续可导，故**充分性成立**。"
+        },
+        {
+          "stepTitle": "举反例否决必要性",
+          "detail": "取 $F(x,y)=(y-x)^2$ 与点 $(0,0)$：方程 $(y-x)^2=0$ 等价于 $y=x$，唯一确定光滑连续可导的隐函数 $y=x$，但 $F_y'(0,0)=\\left.2(y-x)\\right|_{(0,0)}=0$！故**必要性不成立**。（另取 $F(x,y)=(y-x)^3$ 同理。）"
+        }
+      ],
+      "finalAnswer": "**选（B）**（充分非必要条件）。",
+      "takeaway": "记住最简反例 $F(x,y)=(y-x)^2=0$（或 $(y-x)^3=0$），随时戳穿把隐函数存在定理当充要条件的陷阱选项！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.321",
+        "pdfPage": 326,
+        "itemRef": "例 13.14"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy30_impl_extrema",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-15",
+      "stage": "foundation",
+      "section": "二、多元函数微分法则（基础例 13.9~13.16）",
+      "kind": "example",
+      "title": "【例 13.15】用隐函数公式法重解例 13.12（对照全微分形式不变性）",
+      "examWeight": "core",
+      "problem": "设 $z=z(x,y)$ 由方程 $\\mathrm{e}^{x+2y+3z}+xyz=1$ 确定，用隐函数求导公式法求 $\\left.\\mathrm{d}z\\right|_{(0,0)}$。",
+      "steps": [
+        {
+          "stepTitle": "构造 $F(x,y,z)=\\mathrm{e}^{x+2y+3z}+xyz-1$ 并算三偏导",
+          "detail": "由 $x=0,y=0\\implies z=0$。求三偏导：$$F_x'=\\mathrm{e}^{x+2y+3z}+yz,\\qquad F_y'=2\\mathrm{e}^{x+2y+3z}+xz,\\qquad F_z'=3\\mathrm{e}^{x+2y+3z}+xy.$$"
+        },
+        {
+          "stepTitle": "代点套公式 $z_x'=-F_x'/F_z'$ 与 $z_y'=-F_y'/F_z'$",
+          "detail": "在 $(0,0,0)$ 处 $F_x'=1,\\;F_y'=2,\\;F_z'=3$，故$$\\left.z_x'\\right|_{(0,0)}=-\\frac{1}{3},\\qquad \\left.z_y'\\right|_{(0,0)}=-\\frac{2}{3} \\implies \\left.\\mathrm{d}z\\right|_{(0,0)}=-\\frac{1}{3}\\,\\mathrm{d}x-\\frac{2}{3}\\,\\mathrm{d}y.$$"
+        }
+      ],
+      "finalAnswer": "$\\left.\\mathrm{d}z\\right|_{(0,0)}=-\\dfrac{1}{3}\\,\\mathrm{d}x-\\dfrac{2}{3}\\,\\mathrm{d}y$",
+      "takeaway": "与例13.12 两相对照：公式法步步规整不易漏项，全微分法一步出 $\\mathrm{d}z$ 且不用记负号，两者考场可互验！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.321-322",
+        "pdfPage": 326,
+        "itemRef": "例 13.15"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy30_impl_extrema",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-16",
+      "stage": "foundation",
+      "section": "二、多元函数微分法则（基础例 13.9~13.16）",
+      "kind": "example",
+      "title": "【例 13.16】抽象隐函数 $F(x+zy^{-1},y+zx^{-1})=0$ 一题三解证 $xz_x'+yz_y'=z-xy$",
+      "examWeight": "core",
+      "problem": "设可微函数 $F(u,v)$ 满足方程 $F\\!\\left(x+\\dfrac{z}{y},\\;y+\\dfrac{z}{x}\\right)=0$，且 $xF_1'+yF_2'\\ne 0$，求 $x\\dfrac{\\partial z}{\\partial x}+y\\dfrac{\\partial z}{\\partial y}$。",
+      "steps": [
+        {
+          "stepTitle": "法一（全微分形式不变性，最清爽）",
+          "detail": "记 $u=x+\\frac{z}{y},\\;v=y+\\frac{z}{x}$。对 $F(u,v)=0$ 两边取全微分得 $F_1'\\,\\mathrm{d}u+F_2'\\,\\mathrm{d}v=0$，展开：$$F_1'\\left(\\mathrm{d}x+\\frac{\\mathrm{d}z}{y}-\\frac{z}{y^2}\\,\\mathrm{d}y\\right)+F_2'\\left(\\mathrm{d}y+\\frac{\\mathrm{d}z}{x}-\\frac{z}{x^2}\\,\\mathrm{d}x\\right)=0.$$整理 $\\mathrm{d}z$ 与 $\\mathrm{d}x,\\mathrm{d}y$ 系数得$$\\frac{xF_1'+yF_2'}{xy}\\,\\mathrm{d}z=\\left(\\frac{z}{x^2}F_2'-F_1'\\right)\\mathrm{d}x+\\left(\\frac{z}{y^2}F_1'-F_2'\\right)\\mathrm{d}y.$$"
+        },
+        {
+          "stepTitle": "组合 $x z_x'+y z_y'$ 自动约去 $xF_1'+yF_2'$",
+          "detail": "两边分别读取 $z_x',z_y'$ 后作线性组合：$$\\frac{xF_1'+yF_2'}{xy}\\bigl(xz_x'+yz_y'\\bigr)=\\left(\\frac{z}{x}F_2'-xF_1'\\right)+\\left(\\frac{z}{y}F_1'-yF_2'\\right)=\\frac{z-xy}{y}F_1'+\\frac{z-xy}{x}F_2'=\\frac{z-xy}{xy}(xF_1'+yF_2').$$因 $xF_1'+yF_2'\\ne 0$，两边约去公因子即得 $xz_x'+yz_y'=z-xy$。（法二隐函数公式法、法三两边直接对 $x,y$ 求偏导均完全同构得出同一结果！）"
+        }
+      ],
+      "finalAnswer": "$x\\dfrac{\\partial z}{\\partial x}+y\\dfrac{\\partial z}{\\partial y}=z-xy$",
+      "takeaway": "一题三解（全微分 / 公式法 / 直接求偏导）的典范母题！遇到抽象函数 $F(u,v)=0$ 求线性组合 $a z_x'+b z_y'$，最后一步一定会出现 $F_1',F_2'$ 公因子整体消去。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.322-323",
+        "pdfPage": 327,
+        "itemRef": "例 13.16"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy30_impl_extrema",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-17",
+      "stage": "foundation",
+      "section": "三、多元函数的极值与最值（基础例 13.17~13.22）",
+      "kind": "example",
+      "title": "【例 13.17】二元极值是一元坐标截面函数 $f(x,y_0),f(x_0,y)$ 取极值的充分非必要条件",
+      "examWeight": "core",
+      "problem": "二元函数 $f(x,y)$ 在点 $(x_0,y_0)$ 处取得极值是一元函数 $f(x,y_0)$ 和 $f(x_0,y)$ 分别在 $x_0$ 和 $y_0$ 处取得极值的（ ）\n（A）充分条件　（B）必要条件　（C）充要条件　（D）既非充分也非必要条件",
+      "steps": [
+        {
+          "stepTitle": "证充分性（由定义一步推出）",
+          "detail": "不妨设 $f(x,y)$ 在 $(x_0,y_0)$ 取极小值，则存在邻域使一切 $(x,y)$ 满足 $f(x,y)\\ge f(x_0,y_0)$。特别固定 $y=y_0$ 得 $f(x,y_0)\\ge f(x_0,y_0)$，固定 $x=x_0$ 得 $f(x_0,y)\\ge f(x_0,y_0)$，故两一元截面函数分别取极小值。"
+        },
+        {
+          "stepTitle": "举反例否决必要性",
+          "detail": "取 $f(x,y)=x^4+y^4-(x+y)^2$ 考察原点 $(0,0)$（$f(0,0)=0$）：沿两轴 $f(x,0)=x^4-x^2<0$、$f(0,y)=y^4-y^2<0$（在原点去心邻域内），故两一元函数均在 $0$ 处取**极大值**；但沿直线 $y=-x$ 有 $f(x,-x)=2x^4>0$，而沿 $y=x$ 有 $f(x,x)=2x^4-4x^2<0$，邻域内异号，故 $(0,0)$ 不是二元极值点！"
+        }
+      ],
+      "finalAnswer": "**选（A）**（充分非必要条件）。",
+      "takeaway": "坐标轴只是两条直线！仅在两条坐标轴上取极值远远管不住对角线方向 $y=\\pm x$（甚至沿所有直线取极小也管不住抛物线，见强化例13.26）。",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.324-325",
+        "pdfPage": 329,
+        "itemRef": "例 13.17"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy30_impl_extrema",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-18",
+      "stage": "foundation",
+      "section": "三、多元函数的极值与最值（基础例 13.17~13.22）",
+      "kind": "example",
+      "title": "【例 13.18】$C^2$ 二元函数取极大值的二阶纯偏导必要条件：$a\\le 0,\\;b\\le 0$",
+      "examWeight": "core",
+      "problem": "设函数 $f(x,y)$ 具有二阶连续偏导数，且在点 $(x_0,y_0)$ 处取极大值，记 $a=\\left.\\dfrac{\\partial^2 f}{\\partial x^2}\\right|_{(x_0,y_0)}$，$b=\\left.\\dfrac{\\partial^2 f}{\\partial y^2}\\right|_{(x_0,y_0)}$，则（ ）\n（A）$a>0,\\;b>0$　（B）$a\\ge 0,\\;b\\ge 0$　（C）$a<0,\\;b<0$　（D）$a\\le 0,\\;b\\le 0$",
+      "steps": [
+        {
+          "stepTitle": "法一：借例 13.17 降维为一元极值必要条件",
+          "detail": "由例13.17 知 $g(x)=f(x,y_0)$ 在 $x=x_0$ 处取极大值，由一元二阶导极值必要条件立得 $a=g''(x_0)\\le 0$；同理 $h(y)=f(x_0,y)$ 在 $y=y_0$ 处取极大值，故 $b=h''(y_0)\\le 0$。"
+        },
+        {
+          "stepTitle": "法二：特例排除法",
+          "detail": "取 $f_1(x,y)=-(x^2+y^2)$ 在 $(0,0)$ 取极大，$a=b=-2<0$ 排除（A）（B）；再取 $f_2(x,y)=-(x^4+y^4)$ 在 $(0,0)$ 取极大，$a=b=0$ 排除（C），故选（D）。"
+        }
+      ],
+      "finalAnswer": "**选（D）**（$a\\le 0,\\;b\\le 0$）。",
+      "takeaway": "**高频必背结论**：二元 $C^2$ 极大值点的二阶纯偏导必须带等号 $f_{xx}''\\le 0,\\;f_{yy}''\\le 0$（极小值则 $\\ge 0$），切莫忘记 $-(x^4+y^4)$ 这类 $a=b=0$ 的特例！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.325-326",
+        "pdfPage": 330,
+        "itemRef": "例 13.18"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy30_impl_extrema",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-19",
+      "stage": "foundation",
+      "section": "三、多元函数的极值与最值（基础例 13.17~13.22）",
+      "kind": "example",
+      "title": "【例 13.19】隐函数 $(x^2+y^2)z+\\ln z+2(x+y+1)=0$ 的无条件极值（含根唯一性严谨补注 #43）",
+      "examWeight": "core",
+      "problem": "求由方程 $(x^2+y^2)z+\\ln z+2(x+y+1)=0$ 确定的隐函数 $z=z(x,y)$ 的极值。",
+      "steps": [
+        {
+          "stepTitle": "两边求偏导找驻点（先令 $z_x'=z_y'=0$）",
+          "detail": "方程两边分别对 $x,y$ 求偏导：$$\\begin{cases}2xz+(x^2+y^2)z_x'+\\dfrac{z_x'}{z}+2=0,\\\\2yz+(x^2+y^2)z_y'+\\dfrac{z_y'}{z}+2=0.\\end{cases}$$令 $z_x'=0,\\;z_y'=0$ 得 $2xz+2=0,\\;2yz+2=0\\implies x=y=-\\frac{1}{z}$（因 $\\ln z$ 要求 $z>0$）。"
+        },
+        {
+          "stepTitle": "回代原方程求 $z$ 并严格证唯一性（严谨补注 #43）",
+          "detail": "将 $x=y=-\\frac{1}{z}$ 代回原方程得$$\\frac{2}{z^2}\\cdot z+\\ln z+2\\left(-\\frac{2}{z}+1\\right)=0 \\iff g(z):=\\ln z-\\frac{2}{z}+2=0.$$易见 $g(1)=0$；又在定义域 $(0,+\\infty)$ 上 $g'(z)=\\frac{1}{z}+\\frac{2}{z^2}>0$ 恒成立，故 $g(z)$ 严格单调递增，$z=1$ 是**唯一实根**！从而得唯一驻点 $(-1,-1)$，对应 $z(-1,-1)=1$。"
+        },
+        {
+          "stepTitle": "原一阶隐方程直接再求导算 $A,B,C$（驻点处 $z_x'=z_y'=0$ 省算量！）",
+          "detail": "对一阶偏导方程再分别对 $x,y$ 求导，并直接代入 $x=-1,y=-1,z=1,z_x'=0,z_y'=0$：$$\\begin{cases}2z+2xz_x'+(x^2+y^2)z_{xx}''+\\frac{z_{xx}''}{z}=0 \\implies 2+3A=0 \\implies A=-\\dfrac{2}{3},\\\\2xz_y'+(x^2+y^2)z_{xy}''+\\frac{z_{xy}''}{z}=0 \\implies 3B=0 \\implies B=0,\\\\2z+2yz_y'+(x^2+y^2)z_{yy}''+\\frac{z_{yy}''}{z}=0 \\implies 2+3C=0 \\implies C=-\\dfrac{2}{3}.\\end{cases}$$故 $\\Delta=AC-B^2=\\frac{4}{9}>0$ 且 $A=-\\frac{2}{3}<0$，因此 $z(-1,-1)=1$ 为**极大值**！"
+        }
+      ],
+      "finalAnswer": "$z=z(x,y)$ 在驻点 $(-1,-1)$ 处取得**极大值 $1$**。",
+      "takeaway": "隐函数极值三大必杀技：① 求完驻点方程立刻反代消元；② **切忌漏证超越方程根唯一性**（如 $g'(z)=\\frac{1}{z}+\\frac{2}{z^2}>0$，见台账 #43）；③ 求 $A,B,C$ 直接对一阶隐方程再求导，把所有含 $z_x',z_y'$ 的项直接划零！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.327",
+        "pdfPage": 332,
+        "itemRef": "例 13.19"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy30_impl_extrema",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-20",
+      "stage": "foundation",
+      "section": "三、多元函数的极值与最值（基础例 13.17~13.22）",
+      "kind": "example",
+      "title": "【例 13.20】不封闭圆弧约束条件最值（拉格朗日驻点 + 必查弧段两端点！）",
+      "examWeight": "core",
+      "problem": "已知 $a\\le 0,\\;b\\ge 0$ 且 $\\displaystyle\\int_a^b |x|\\,\\mathrm{d}x=\\dfrac{1}{2}$，求抛物线 $y=x^2+ax$ 与直线 $y=bx$ 所围成平面图形面积 $S$ 的最大值与最小值。",
+      "steps": [
+        {
+          "stepTitle": "化简约束方程与面积目标函数",
+          "detail": "由 $a\\le 0\\le b$ 分段拆绝对值：$$\\int_a^b |x|\\,\\mathrm{d}x=\\int_a^0(-x)\\,\\mathrm{d}x+\\int_0^b x\\,\\mathrm{d}x=\\frac{a^2+b^2}{2}=\\frac{1}{2}\\implies a^2+b^2=1\\quad(a\\le 0,\\;b\\ge 0).$$联立 $x^2+ax=bx$ 得交点 $x_1=0,\\;x_2=b-a\\ge 0$，故所围面积为$$S(a,b)=\\int_0^{b-a}\\bigl[bx-(x^2+ax)\\bigr]\\,\\mathrm{d}x=\\int_0^{b-a}\\bigl[(b-a)x-x^2\\bigr]\\,\\mathrm{d}x=\\frac{1}{6}(b-a)^3.$$"
+        },
+        {
+          "stepTitle": "拉格朗日乘数法求四分之一圆弧内部驻点",
+          "detail": "因 $b-a>0$，等价于求 $f(a,b)=b-a$ 在 $a^2+b^2=1\\;(a\\le 0,b\\ge 0)$ 上的最值。构造 $L(a,b,\\lambda)=b-a+\\lambda(a^2+b^2-1)$，令$$\\begin{cases}L_a'=-1+2\\lambda a=0,\\\\L_b'=1+2\\lambda b=0,\\\\a^2+b^2=1,\\end{cases}\\implies a=-b=-\\frac{\\sqrt{2}}{2},\\quad b=\\frac{\\sqrt{2}}{2}.$$此时 $b-a=\\sqrt{2}$，对应 $S=\\frac{1}{6}(\\sqrt{2})^3=\\frac{\\sqrt{2}}{3}$。"
+        },
+        {
+          "stepTitle": "绝不可漏！检查不封闭弧段的两个端点",
+          "detail": "约束曲线是第二象限的四分之一圆弧 $a^2+b^2=1\\;(a\\le 0,b\\ge 0)$，两个端点分别为 $(-1,0)$ 和 $(0,1)$！在这两点处均有 $b-a=1$，对应 $S=\\frac{1}{6}$。比较得：$S_{\\max}=\\frac{\\sqrt{2}}{3}$，$S_{\\min}=\\frac{1}{6}$。（也可由 $(b-a)^2=1-2ab\\in[1,2]$ 一步互验！）"
+        }
+      ],
+      "finalAnswer": "面积最大值 $S_{\\max}=\\dfrac{\\sqrt{2}}{3}$，最小值 $S_{\\min}=\\dfrac{1}{6}$。",
+      "takeaway": "**考场保命铁律**：带不等式范围（$a\\le 0,b\\ge 0$）的约束曲线是不封闭弧段，**拉格朗日乘数法只能找内部驻点，端点必须单独检验**，否则必定丢掉最小值 $\\frac{1}{6}$！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.328",
+        "pdfPage": 333,
+        "itemRef": "例 13.20"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy30_impl_extrema",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-21",
+      "stage": "foundation",
+      "section": "三、多元函数的极值与最值（基础例 13.17~13.22）",
+      "kind": "example",
+      "title": "【例 13.21】椭圆到直线最近点：拉格朗日乘数法与「垂线原理」双法秒解",
+      "examWeight": "core",
+      "problem": "求椭圆 $x^2+4y^2=4$ 上距离直线 $2x+3y-6=0$ 最近的点（并求最近距离与最远点）。",
+      "steps": [
+        {
+          "stepTitle": "先判别椭圆与直线相离（确保距离非零且可去绝对值）",
+          "detail": "椭圆参数方程 $(2\\cos t,\\sin t)$ 代入 $2x+3y=4\\cos t+3\\sin t\\le 5<6$，故椭圆完全位于直线 $2x+3y-6<0$ 一侧（相离），点 $(x,y)$ 到直线距离 $d=\\frac{6-2x-3y}{\\sqrt{13}}$，极值等价于求 $2x+3y$ 的极值。"
+        },
+        {
+          "stepTitle": "法一（拉格朗日乘数法）与法二（最远近点垂线原理）",
+          "detail": "**法一（拉格朗日）**：设 $L(x,y,\\lambda)=2x+3y+\\lambda(x^2+4y^2-4)$，令 $L_x'=2+2\\lambda x=0,\\;L_y'=3+8\\lambda y=0$，得 $x=-\\frac{1}{\\lambda},\\;y=-\\frac{3}{8\\lambda}$。\n**法二（垂线原理，一步出比例！）**：椭圆在 $(x,y)$ 处的法向量 $(2x,8y)$ 必与直线法向量 $(2,3)$ 平行，即$$\\frac{2x}{2}=\\frac{8y}{3}\\implies y=\\frac{3}{8}x.$$代入椭圆方程 $x^2+4\\cdot\\frac{9}{64}x^2=\\frac{25}{16}x^2=4\\implies x=\\pm\\frac{8}{5}$，对应两点 $P\\!\\left(\\frac{8}{5},\\frac{3}{5}\\right)$ 与 $Q\\!\\left(-\\frac{8}{5},-\\frac{3}{5}\\right)$。"
+        },
+        {
+          "stepTitle": "代入距离公式比较",
+          "detail": "在 $P\\!\\left(\\frac{8}{5},\\frac{3}{5}\\right)$ 处，$d_{\\min}=\\frac{|16/5+9/5-6|}{\\sqrt{13}}=\\frac{1}{\\sqrt{13}}$；在 $Q\\!\\left(-\\frac{8}{5},-\\frac{3}{5}\\right)$ 处，$d_{\\max}=\\frac{|-5-6|}{\\sqrt{13}}=\\frac{11}{\\sqrt{13}}$。"
+        }
+      ],
+      "finalAnswer": "最近点为 $\\left(\\dfrac{8}{5},\\dfrac{3}{5}\\right)$（最近距离 $\\dfrac{1}{\\sqrt{13}}$；最远点 $\\left(-\\dfrac{8}{5},-\\dfrac{3}{5}\\right)$，最远距离 $\\dfrac{11}{\\sqrt{13}}$）。",
+      "takeaway": "选填题求光滑曲线/曲面到直线/平面的最远最近点，直接用「**法向量平行**（垂线原理）」：$\\frac{F_x'}{A}=\\frac{F_y'}{B}$，两行直接出坐标！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.329-330",
+        "pdfPage": 334,
+        "itemRef": "例 13.21"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy30_impl_extrema",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-22",
+      "stage": "foundation",
+      "section": "三、多元函数的极值与最值（基础例 13.17~13.22）",
+      "kind": "example",
+      "title": "【例 13.22】先由全微分还原 $f(x,y)$，再求闭椭圆域 $x^2+\\frac{y^2}{4}\\le 1$ 上的最值",
+      "examWeight": "core",
+      "problem": "设可微函数 $z=f(x,y)$ 满足全微分 $\\mathrm{d}z=2x\\,\\mathrm{d}x-2y\\,\\mathrm{d}y$ 且 $f(1,1)=2$，求 $f(x,y)$ 在有界闭区域 $D=\\left\\{(x,y)\\,\\middle|\\,x^2+\\dfrac{y^2}{4}\\le 1\\right\\}$ 上的最大值与最小值。",
+      "steps": [
+        {
+          "stepTitle": "由全微分积分还原函数表达式",
+          "detail": "$\\mathrm{d}z=\\mathrm{d}(x^2-y^2)\\implies f(x,y)=x^2-y^2+C$。代入 $f(1,1)=2$ 得 $C=2$，故$$f(x,y)=x^2-y^2+2.$$"
+        },
+        {
+          "stepTitle": "第一步：求区域内部驻点",
+          "detail": "令 $f_x'=2x=0,\\;f_y'=-2y=0$，得唯一内部驻点 $(0,0)\\in D^\\circ$，函数值 $f(0,0)=2$。"
+        },
+        {
+          "stepTitle": "第二步：求椭圆边界 $x^2+\\frac{y^2}{4}=1$ 上的最值并全局比较",
+          "detail": "在边界上代入 $x^2=1-\\frac{y^2}{4}\\;(y\\in[-2,2])$（直接消元比拉格朗日更快！）：$$f(x,y)=\\left(1-\\frac{y^2}{4}\\right)-y^2+2=3-\\frac{5}{4}y^2,\\qquad y\\in[-2,2].$$显然当 $y=0$（即 $(\\pm 1,0)$）时取边界最大值 $3$；当 $y=\\pm 2$（即 $(0,\\pm 2)$）时取边界最小值 $3-5=-2$。比较所有候选值 $\\{2,\\;3,\\;-2\\}$，得最大值为 $3$，最小值为 $-2$。"
+        }
+      ],
+      "finalAnswer": "最大值 $3$（在 $(\\pm 1,0)$ 处），最小值 $-2$（在 $(0,\\pm 2)$ 处）。",
+      "takeaway": "求有界闭区域边界上的最值时，若边界方程能直接把一个变量显式消掉（如 $x^2=1-\\frac{y^2}{4}$）或用三角参数化，化为一元闭区间最值远比列拉格朗日方程组更省时且绝不漏点！",
+      "source": {
+        "book": "27张宇《基础30讲·高等数学分册》",
+        "printedPage": "P.330-331",
+        "pdfPage": 335,
+        "itemRef": "例 13.22"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy30_impl_extrema",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-23",
+      "stage": "intensive",
+      "section": "一、二元函数极限与累次极限（强化例 13.1~13.6）",
+      "kind": "example",
+      "title": "【强化例 13.1】直线路径法判定二重极限 $\\lim\\limits_{(x,y)\\to(0,0)}\\frac{x^2-y^2}{x^2+y^2}$ 不存在",
+      "examWeight": "core",
+      "problem": "求极限 $\\lim\\limits_{\\substack{x\\to 0\\\\y\\to 0}}\\frac{x^2-y^2}{x^2+y^2}$。",
+      "steps": [
+        {
+          "stepTitle": "沿直线族 $y=kx$ 趋近原点",
+          "detail": "分子分母均为 $(x,y)$ 的 $2$ 次齐次多项式，故令 $(x,y)$ 沿直线 $y=kx$ 趋于 $(0,0)$，得$$\\lim_{\\substack{x\\to 0\\\\y=kx}}\\frac{x^2-y^2}{x^2+y^2}=\\lim_{x\\to 0}\\frac{x^2-k^2 x^2}{x^2+k^2 x^2}=\\frac{1-k^2}{1+k^2}.$$"
+        },
+        {
+          "stepTitle": "极限值依赖斜率 $k$ 故不存在",
+          "detail": "该值随 $k$ 的取值不同而变化（例如 $k=0$ 时为 $1$，$k=1$ 时为 $0$），违背二重极限与路径无关的要求，故原极限不存在。"
+        }
+      ],
+      "finalAnswer": "该二重极限**不存在**。",
+      "takeaway": "分子分母齐次且同次时，首先试探直线族 $y=kx$，一眼看穿极限是否随 $k$ 变化。",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.146",
+        "pdfPage": 159,
+        "itemRef": "强化例 13.1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_limits_concepts",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-24",
+      "stage": "intensive",
+      "section": "一、二元函数极限与累次极限（强化例 13.1~13.6）",
+      "kind": "example",
+      "title": "【强化例 13.2】非线性配阶路径 $y=-x^2+x^3$ 破除二重极限存在假象",
+      "examWeight": "core",
+      "problem": "讨论二重极限 $\\lim\\limits_{\\substack{x\\to 0\\\\y\\to 0}}\\frac{x^3+y^3}{x^2+y}$ 是否存在。",
+      "steps": [
+        {
+          "stepTitle": "路径一：沿所有直线 $y=kx$（含 $y=x$）趋于 $0$",
+          "detail": "取路径 $y=x$，有$$\\lim_{\\substack{x\\to 0\\\\y=x}}\\frac{x^3+y^3}{x^2+y}=\\lim_{x\\to 0}\\frac{2x^3}{x^2+x}=0.$$（实际上沿任意直线 $y=kx$ 极限皆为 $0$，绝不能据此误判极限存在！）"
+        },
+        {
+          "stepTitle": "路径二：令分母 $x^2+y$ 与分子同阶（取 $y=-x^2+x^3$）",
+          "detail": "为使分母 $x^2+y$ 变成与分子 $x^3$ 同阶的三阶无穷小，取曲线路径 $y=-x^2+x^3$（当 $x\\to 0$ 时 $y\\to 0$ 且 $x^2+y=x^3\\ne 0$）：$$\\lim_{\\substack{x\\to 0\\\\y=-x^2+x^3}}\\frac{x^3+y^3}{x^2+y}=\\lim_{x\\to 0}\\frac{x^3+(-x^2+x^3)^3}{x^3}=\\lim_{x\\to 0}\\bigl(1+(-x+x^2)^3\\bigr)=1.$$"
+        },
+        {
+          "stepTitle": "两路径结果不等",
+          "detail": "因为 $0\\ne 1$，故原二重极限不存在。"
+        }
+      ],
+      "finalAnswer": "该二重极限**不存在**。",
+      "takeaway": "**分母可为零线附近必藏陷阱！** 看到分母形如 $x^2+y$，直接构造 $y=-x^2+c\\,x^3$ 让分母精准压成与分子同阶，一击必杀！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.146",
+        "pdfPage": 159,
+        "itemRef": "强化例 13.2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_limits_concepts",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-25",
+      "stage": "intensive",
+      "section": "一、二元函数极限与累次极限（强化例 13.1~13.6）",
+      "kind": "example",
+      "title": "【强化例 13.3】无穷远处二重极限的配方放缩与夹逼法",
+      "examWeight": "core",
+      "problem": "求二重极限 $\\lim\\limits_{\\substack{x\\to\\infty\\\\y\\to\\infty}}\\frac{x+y}{x^2-xy+y^2}$。",
+      "steps": [
+        {
+          "stepTitle": "对分母作配完全平方放缩",
+          "detail": "注意到对任意实数 $(x,y)$ 均有$$x^2-xy+y^2=\\left(x-\\frac{1}{2}y\\right)^2+\\frac{3}{4}y^2\\ge\\frac{3}{4}y^2,\\qquad x^2-xy+y^2=\\left(y-\\frac{1}{2}x\\right)^2+\\frac{3}{4}x^2\\ge\\frac{3}{4}x^2.$$（也可用均值不等式：$x^2-xy+y^2\\ge x^2+y^2-\\frac{1}{2}(x^2+y^2)=\\frac{1}{2}(x^2+y^2)$，极坐标下立即得 $\\frac{|r(\\cos\\theta+\\sin\\theta)|}{\\frac{1}{2}r^2}\\le\\frac{2\\sqrt{2}}{r}\\to 0$！）"
+        },
+        {
+          "stepTitle": "绝对值夹逼求极限",
+          "detail": "采用书上配方拆项法：$$0\\le\\left|\\frac{x+y}{x^2-xy+y^2}\\right|\\le\\frac{|x|}{x^2-xy+y^2}+\\frac{|y|}{x^2-xy+y^2}\\le\\frac{|x|}{\\frac{3}{4}x^2}+\\frac{|y|}{\\frac{3}{4}y^2}=\\frac{4}{3|x|}+\\frac{4}{3|y|}.$$当 $x\\to\\infty,\\;y\\to\\infty$ 时，$\\frac{4}{3|x|}+\\frac{4}{3|y|}\\to 0$，由夹逼准则知原极限为 $0$。"
+        }
+      ],
+      "finalAnswer": "$0$",
+      "takeaway": "遇到二次型分母 $x^2\\pm xy+y^2$，记住两个高频下界：既可分别配方得 $\\ge\\frac{3}{4}x^2$ 与 $\\ge\\frac{3}{4}y^2$，也可一步放缩为 $\\ge\\frac{1}{2}(x^2+y^2)$。",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.146",
+        "pdfPage": 159,
+        "itemRef": "强化例 13.3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_limits_concepts",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-26",
+      "stage": "intensive",
+      "section": "一、二元函数极限与累次极限（强化例 13.1~13.6）",
+      "kind": "example",
+      "title": "【强化例 13.4】单变量拆乘分离法求 $\\lim\\limits_{x\\to+\\infty,y\\to 1}(x^2+y^2)\\mathrm{e}^{-(x+y)}$",
+      "examWeight": "core",
+      "problem": "求极限 $\\lim\\limits_{\\substack{x\\to+\\infty\\\\y\\to 1}}(x^2+y^2)\\mathrm{e}^{-(x+y)}$。",
+      "steps": [
+        {
+          "stepTitle": "拆项为单变量函数乘积之和",
+          "detail": "利用指数律 $\\mathrm{e}^{-(x+y)}=\\mathrm{e}^{-x}\\mathrm{e}^{-y}$，将原式完全分离变量：$$(x^2+y^2)\\mathrm{e}^{-(x+y)}=\\left(x^2\\mathrm{e}^{-x}\\right)\\cdot\\mathrm{e}^{-y}+\\mathrm{e}^{-x}\\cdot\\left(y^2\\mathrm{e}^{-y}\\right).$$"
+        },
+        {
+          "stepTitle": "逐项取极限（四则运算法则）",
+          "detail": "当 $x\\to+\\infty$ 时，$x^2\\mathrm{e}^{-x}\\to 0$、$\\mathrm{e}^{-x}\\to 0$；当 $y\\to 1$ 时，$\\mathrm{e}^{-y}\\to\\mathrm{e}^{-1}$、$y^2\\mathrm{e}^{-y}\\to\\mathrm{e}^{-1}$。两项各自极限均存在，故$$\\lim_{\\substack{x\\to+\\infty\\\\y\\to 1}}(x^2+y^2)\\mathrm{e}^{-(x+y)}=0\\cdot\\mathrm{e}^{-1}+0\\cdot\\mathrm{e}^{-1}=0.$$"
+        }
+      ],
+      "finalAnswer": "$0$",
+      "takeaway": "能把 $x$ 和 $y$ 完全拆成 $g(x)h(y)$ 之和时，只要各单变量极限存在，直接套四则运算法则秒算！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.146-147",
+        "pdfPage": 159,
+        "itemRef": "强化例 13.4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_limits_concepts",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-27",
+      "stage": "intensive",
+      "section": "一、二元函数极限与累次极限（强化例 13.1~13.6）",
+      "kind": "example",
+      "title": "【强化例 13.5】累次极限存在但二重极限不存在（$f=\\frac{xy}{x^2+y^2}$）",
+      "examWeight": "core",
+      "problem": "记 $I_1=\\lim\\limits_{\\substack{x\\to 0\\\\y\\to 0}}\\frac{xy}{x^2+y^2}$，$I_2=\\lim\\limits_{x\\to 0}\\lim\\limits_{y\\to 0}\\frac{xy}{x^2+y^2}$，则（ ）\n（A）$I_1$ 存在，$I_2$ 存在　（B）$I_1$ 存在，$I_2$ 不存在　（C）$I_1$ 不存在，$I_2$ 存在　（D）$I_1$ 不存在，$I_2$ 不存在",
+      "steps": [
+        {
+          "stepTitle": "判别二重极限 $I_1$",
+          "detail": "令 $y=kx$，则 $\\lim\\limits_{\\substack{x\\to 0\\\\y=kx}}\\frac{xy}{x^2+y^2}=\\frac{k}{1+k^2}$，随 $k$ 变化，故二重极限 $I_1$ **不存在**。"
+        },
+        {
+          "stepTitle": "计算累次极限 $I_2$",
+          "detail": "计算内层极限时把 $x$ 固定为非零常数（去心邻域 $x\\ne 0$），故$$\\lim_{y\\to 0}\\frac{xy}{x^2+y^2}=\\frac{x\\cdot 0}{x^2+0}=0\\quad(x\\ne 0),$$再取外层极限得 $I_2=\\lim\\limits_{x\\to 0}0=0$，存在！同理另一累次极限 $\\lim\\limits_{y\\to 0}\\lim\\limits_{x\\to 0}\\frac{xy}{x^2+y^2}=0$ 也存在。"
+        }
+      ],
+      "finalAnswer": "**选（C）**（$I_1$ 不存在，$I_2=0$ 存在）。",
+      "takeaway": "两个累次极限都存在且相等（皆为 $0$），也**推不出**二重极限存在！因为累次极限只探查了平行于坐标轴的折线趋近。",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.147",
+        "pdfPage": 160,
+        "itemRef": "强化例 13.5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_limits_concepts",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-28",
+      "stage": "intensive",
+      "section": "一、二元函数极限与累次极限（强化例 13.1~13.6）",
+      "kind": "example",
+      "title": "【强化例 13.6】两累次极限存在但不相等必致二重极限不存在",
+      "examWeight": "core",
+      "problem": "设 $I_1=\\lim\\limits_{x\\to 0}\\lim\\limits_{y\\to 0}\\frac{x^2-y^2}{x^2+y^2}$，$I_2=\\lim\\limits_{y\\to 0}\\lim\\limits_{x\\to 0}\\frac{x^2-y^2}{x^2+y^2}$，$I_3=\\lim\\limits_{\\substack{x\\to 0\\\\y\\to 0}}\\frac{x^2-y^2}{x^2+y^2}$，则（ ）\n（A）$I_1=1,\\;I_2=-1$，$I_3$ 不存在　（B）$I_1=-1,\\;I_2=1$，$I_3$ 不存在　（C）$I_1=I_2=I_3=1$　（D）$I_1,I_2,I_3$ 均不存在",
+      "steps": [
+        {
+          "stepTitle": "分别计算两个累次极限 $I_1, I_2$",
+          "detail": "$$I_1=\\lim_{x\\to 0}\\left(\\lim_{y\\to 0}\\frac{x^2-y^2}{x^2+y^2}\\right)=\\lim_{x\\to 0}\\frac{x^2}{x^2}=1,\\qquad I_2=\\lim_{y\\to 0}\\left(\\lim_{x\\to 0}\\frac{x^2-y^2}{x^2+y^2}\\right)=\\lim_{y\\to 0}\\frac{-y^2}{y^2}=-1.$$"
+        },
+        {
+          "stepTitle": "由逆否定理断定二重极限 $I_3$ 不存在",
+          "detail": "由于 $I_1=1\\ne -1=I_2$，根据「若二重极限与两累次极限都存在则三者必相等」的逆否命题，直接断定二重极限 $I_3$ 必不存在（亦见强化例13.1）。"
+        }
+      ],
+      "finalAnswer": "**选（A）**（$I_1=1,\\;I_2=-1$，$I_3$ 不存在）。",
+      "takeaway": "算两累次极限往往比选曲线路径更省事：只要算出 $I_1\\ne I_2$，立刻否决二重极限！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.147-148",
+        "pdfPage": 160,
+        "itemRef": "强化例 13.6"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_limits_concepts",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-29",
+      "stage": "intensive",
+      "section": "二、五大概念辨析与六大经典反例现象（强化例 13.7~13.13）",
+      "kind": "example",
+      "title": "【强化例 13.7 · 现象 1】两单变量分别连续却在原点不连续",
+      "examWeight": "core",
+      "problem": "设 $f(x,y)=\\begin{cases}1,&xy=0,\\\\0,&xy\\ne 0,\\end{cases}$ 则关于 $f(x,y)$ 在 $(0,0)$ 处的连续性，正确的是（ ）\n（A）$f(x,y)$ 连续　（B）对 $x$ 和对 $y$ 分别连续，但二元不连续　（C）对 $x$ 连续，对 $y$ 不连续　（D）对 $x$、对 $y$ 及二元均不连续",
+      "steps": [
+        {
+          "stepTitle": "检查两个一元截面函数 $f(x,0)$ 与 $f(0,y)$",
+          "detail": "固定 $y=0$，由于 $x\\cdot 0=0$，故 $f(x,0)\\equiv 1$，在 $x=0$ 处连续；同理固定 $x=0$，有 $f(0,y)\\equiv 1$，在 $y=0$ 处连续。"
+        },
+        {
+          "stepTitle": "检查二元极限与函数值",
+          "detail": "沿直线 $y=x\\;(x\\ne 0)$ 趋于 $(0,0)$ 时，$xy=x^2\\ne 0$，故 $f(x,x)=0\\to 0\\ne 1=f(0,0)$（且沿坐标轴趋近极限为 $1$，二重极限甚至不存在），因此 $f(x,y)$ 在 $(0,0)$ 处不连续。"
+        }
+      ],
+      "finalAnswer": "**选（B）**（对 $x$、对 $y$ 分别连续，但二元不连续）。",
+      "takeaway": "这是**六大反例现象之现象 1**：十字坐标轴上是常数 $1$、象限内全为 $0$，最简构造秒破「分别连续 $\\Rightarrow$ 二元连续」的假命题。",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.151",
+        "pdfPage": 164,
+        "itemRef": "强化例 13.7（现象 1）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_limits_concepts",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-30",
+      "stage": "intensive",
+      "section": "二、五大概念辨析与六大经典反例现象（强化例 13.7~13.13）",
+      "kind": "example",
+      "title": "【强化例 13.8 · 现象 2】在原点不连续，但两个一阶偏导数皆存在",
+      "examWeight": "core",
+      "problem": "设 $f(x,y)=\\begin{cases}\\dfrac{xy}{x^2+y^2},&x^2+y^2\\ne 0,\\\\0,&x^2+y^2=0,\\end{cases}$ 则 $f(x,y)$ 在 $(0,0)$ 处（ ）\n（A）连续且偏导存在　（B）连续但偏导不存在　（C）不连续但两个一阶偏导均存在　（D）不连续且偏导不存在",
+      "steps": [
+        {
+          "stepTitle": "不连续性判定",
+          "detail": "由强化例13.5 知 $\\lim\\limits_{(x,y)\\to(0,0)}f(x,y)$ 不存在，故 $f(x,y)$ 在 $(0,0)$ 处不连续。"
+        },
+        {
+          "stepTitle": "用定义求偏导（先代值再求导）",
+          "detail": "因为 $f(x,0)\\equiv 0$、$f(0,y)\\equiv 0$，所以$$f_x'(0,0)=\\left.\\frac{\\mathrm{d}}{\\mathrm{d}x}f(x,0)\\right|_{x=0}=0,\\qquad f_y'(0,0)=\\left.\\frac{\\mathrm{d}}{\\mathrm{d}y}f(0,y)\\right|_{y=0}=0,$$两个一阶偏导数均存在且等于 $0$！"
+        }
+      ],
+      "finalAnswer": "**选（C）**（不连续，但两偏导均存在且为 $0$）。",
+      "takeaway": "这是**六大反例现象之现象 2**：在二元函数里，「偏导存在」完全管不到坐标轴以外的任何方向，因此**推不出连续**（与一元「可导 $\\Rightarrow$ 连续」截然不同！）。",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.151",
+        "pdfPage": 164,
+        "itemRef": "强化例 13.8（现象 2）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_limits_concepts",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-31",
+      "stage": "intensive",
+      "section": "二、五大概念辨析与六大经典反例现象（强化例 13.7~13.13）",
+      "kind": "example",
+      "title": "【强化例 13.9 · 现象 3】圆锥面 $g(x,y)=\\sqrt{x^2+y^2}$ 连续但偏导不存在",
+      "examWeight": "core",
+      "problem": "考察函数 $g(x,y)=\\sqrt{x^2+y^2}$ 在原点 $(0,0)$ 处的连续性与偏导存在性，正确的是（ ）\n（A）不连续且偏导不存在　（B）连续但两个一阶偏导均不存在　（C）连续且偏导存在　（D）不连续但偏导存在",
+      "steps": [
+        {
+          "stepTitle": "连续性验证",
+          "detail": "$\\lim\\limits_{(x,y)\\to(0,0)}\\sqrt{x^2+y^2}=0=g(0,0)$，故在 $(0,0)$ 处连续。"
+        },
+        {
+          "stepTitle": "偏导不存在（圆锥尖点）",
+          "detail": "先代后导：$g(x,0)=|x|$ 在 $x=0$ 处左右导数分别为 $1$ 和 $-1$，故 $g_x'(0,0)$ 不存在；同理 $g(0,y)=|y|$，故 $g_y'(0,0)$ 也不存在。"
+        }
+      ],
+      "finalAnswer": "**选（B）**（连续，但 $g_x'(0,0)$ 与 $g_y'(0,0)$ 均不存在）。",
+      "takeaway": "这是**六大反例现象之现象 3**：几何上 $z=\\sqrt{x^2+y^2}$ 是尖端在原点的圆锥面，连切线都没有，自然既无偏导更不可微（类似一元 $|x|$）。",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.152",
+        "pdfPage": 165,
+        "itemRef": "强化例 13.9（现象 3）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_limits_concepts",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-32",
+      "stage": "intensive",
+      "section": "二、五大概念辨析与六大经典反例现象（强化例 13.7~13.13）",
+      "kind": "example",
+      "title": "【强化例 13.10 · 现象 4】连续且偏导存在却不可微（$f=\\frac{x^2 y}{x^2+y^2}$）",
+      "examWeight": "core",
+      "problem": "设 $f(x,y)=\\begin{cases}\\dfrac{x^2 y}{x^2+y^2},&x^2+y^2\\ne 0,\\\\0,&x^2+y^2=0,\\end{cases}$ 则 $f(x,y)$ 在 $(0,0)$ 处（ ）\n（A）可微　（B）连续且两一阶偏导均存在，但不可微　（C）不连续但偏导存在　（D）连续但偏导不存在",
+      "steps": [
+        {
+          "stepTitle": "证明连续且两偏导均为 $0$",
+          "detail": "由 $0\\le\\left|\\frac{x^2 y}{x^2+y^2}\\right|\\le|y|\\to 0=f(0,0)$ 知连续；又 $f(x,0)\\equiv 0$、$f(0,y)\\equiv 0$，故 $f_x'(0,0)=0,\\;f_y'(0,0)=0$。"
+        },
+        {
+          "stepTitle": "用可微定义检验余项极限",
+          "detail": "检验$$\\lim_{\\substack{x\\to 0\\\\y\\to 0}}\\frac{f(x,y)-f(0,0)-0\\cdot x-0\\cdot y}{\\sqrt{x^2+y^2}}=\\lim_{\\substack{x\\to 0\\\\y\\to 0}}\\frac{x^2 y}{(x^2+y^2)^{3/2}}.$$沿直线 $y=kx\\;(x>0)$ 得 $\\frac{k}{(1+k^2)^{3/2}}$，随 $k$ 变化（$k=1$ 时为 $\\frac{1}{2\\sqrt{2}}\\ne 0$），极限不存在（不为 $0$），故不可微！"
+        }
+      ],
+      "finalAnswer": "**选（B）**（连续且两偏导皆存在，但不可微）。",
+      "takeaway": "这是**六大反例现象之现象 4**（真题最高频母题！）：分子次数 $3$ 大于分母次数 $2$ 保证连续，但可微检测再除一次 $\\rho=\\sqrt{x^2+y^2}$ 后变为「$3$ 次比 $3$ 次」齐次，立刻暴露不可微！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.152",
+        "pdfPage": 165,
+        "itemRef": "强化例 13.10（现象 4）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_limits_concepts",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-33",
+      "stage": "intensive",
+      "section": "二、五大概念辨析与六大经典反例现象（强化例 13.7~13.13）",
+      "kind": "example",
+      "title": "【强化例 13.11 · 现象 5】偏导存在但偏导不连续且不可微",
+      "examWeight": "core",
+      "problem": "设 $f(x,y)=\\begin{cases}x^2,&y=0,\\\\y^2,&x=0,\\\\1,&xy\\ne 0,\\end{cases}$ 则 $f(x,y)$ 在 $(0,0)$ 处（ ）\n（A）可微　（B）连续　（C）偏导连续　（D）两偏导均存在但不连续，且在原点不连续、不可微",
+      "steps": [
+        {
+          "stepTitle": "原点处不连续（从而必不可微）",
+          "detail": "在原点 $f(0,0)=0$，但沿直线 $y=x\\;(x\\ne 0)$ 有 $f(x,x)=1\\to 1\\ne 0$，故 $f$ 在 $(0,0)$ 不连续，从而不可微。"
+        },
+        {
+          "stepTitle": "原点两偏导存在但在原点不连续",
+          "detail": "沿两轴 $f(x,0)=x^2,\\;f(0,y)=y^2$，故 $f_x'(0,0)=0,\\;f_y'(0,0)=0$；而在 $xy\\ne 0$ 处 $f\\equiv 1$ 看似偏导为 $0$，但在 $x$ 轴（$x\\ne 0,y=0$）处 $f(x,0)=x^2\\ne 1=\\lim\\limits_{y\\to 0}f(x,y)$，致 $f_y'(x,0)$ 在 $x\\ne 0$ 处根本不存在（同理 $f_x'(0,y)$ 在 $y\\ne 0$ 不存在），故两偏导函数在 $(0,0)$ 任何去心邻域内甚至不全有定义，必不连续。"
+        }
+      ],
+      "finalAnswer": "**选（D）**（两偏导在原点存在且为 $0$，但偏导不连续，且函数不连续、不可微）。",
+      "takeaway": "这是**六大反例现象之现象 5**：说明「仅有两偏导存在」甚至无法保证偏导连续或函数连续。",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.153",
+        "pdfPage": 166,
+        "itemRef": "强化例 13.11（现象 5）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_limits_concepts",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-34",
+      "stage": "intensive",
+      "section": "二、五大概念辨析与六大经典反例现象（强化例 13.7~13.13）",
+      "kind": "example",
+      "title": "【强化例 13.12 · 现象 6】经典振荡函数：在原点可微但偏导数不连续！",
+      "examWeight": "core",
+      "problem": "设 $f(x,y)=\\begin{cases}(x^2+y^2)\\sin\\dfrac{1}{x^2+y^2},&x^2+y^2\\ne 0,\\\\0,&x^2+y^2=0,\\end{cases}$ 则 $f(x,y)$ 在 $(0,0)$ 处（ ）\n（A）不可微　（B）可微，但一阶偏导数在 $(0,0)$ 处不连续　（C）一阶偏导数连续　（D）偏导数不存在",
+      "steps": [
+        {
+          "stepTitle": "先求原点处一阶偏导数",
+          "detail": "先代值：$f(x,0)=x^2\\sin\\frac{1}{x^2}\\;(x\\ne 0),\\;0\\;(x=0)$，故$$f_x'(0,0)=\\lim_{x\\to 0}\\frac{x^2\\sin\\frac{1}{x^2}-0}{x}=\\lim_{x\\to 0}x\\sin\\frac{1}{x^2}=0;$$由对称性得 $f_y'(0,0)=0$。"
+        },
+        {
+          "stepTitle": "用定义证明在 $(0,0)$ 处可微",
+          "detail": "$$\\lim_{\\substack{x\\to 0\\\\y\\to 0}}\\frac{f(x,y)-f(0,0)-0\\cdot x-0\\cdot y}{\\sqrt{x^2+y^2}}=\\lim_{\\substack{x\\to 0\\\\y\\to 0}}\\sqrt{x^2+y^2}\\sin\\frac{1}{x^2+y^2}=0,$$（无穷小乘有界函数），故 $f(x,y)$ 在 $(0,0)$ 处**可微**！"
+        },
+        {
+          "stepTitle": "证明一阶偏导在 $(0,0)$ 处不连续",
+          "detail": "当 $x^2+y^2\\ne 0$ 时求偏导得$$f_x'(x,y)=2x\\sin\\frac{1}{x^2+y^2}-\\frac{2x}{x^2+y^2}\\cos\\frac{1}{x^2+y^2}.$$取路径 $y=0,\\;x\\to 0$，得 $f_x'(x,0)=2x\\sin\\frac{1}{x^2}-\\frac{2}{x}\\cos\\frac{1}{x^2}$，当 $x\\to 0$ 时第二项无界振荡，极限不存在！故 $f_x'(x,y)$（同理 $f_y'$）在 $(0,0)$ 处不连续。"
+        }
+      ],
+      "finalAnswer": "**选（B）**（在原点可微，但偏导不连续）。",
+      "takeaway": "这是**六大反例现象之现象 6**（最顶级的必背反例！）：它直接推翻「可微 $\\Rightarrow$ 偏导连续」，证明「偏导连续」只是可微的**充分非必要**条件！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.153-154",
+        "pdfPage": 166,
+        "itemRef": "强化例 13.12（现象 6）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_limits_concepts",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-35",
+      "stage": "intensive",
+      "section": "二、五大概念辨析与六大经典反例现象（强化例 13.7~13.13）",
+      "kind": "example",
+      "title": "【强化例 13.13】混合偏导不连续导致 $f_{xy}''(0,0)\\ne f_{yx}''(0,0)$ 经典反例",
+      "examWeight": "core",
+      "problem": "设 $f(x,y)=\\begin{cases}xy,&|x|\\ge|y|,\\\\-xy,&|x|<|y|,\\end{cases}$ 则 $f_{xy}''(0,0)$ 与 $f_{yx}''(0,0)$ 的值分别为（ ）\n（A）$1,\\;1$　（B）$-1,\\;-1$　（C）$-1,\\;1$　（D）$1,\\;-1$",
+      "steps": [
+        {
+          "stepTitle": "先求 $f_x'(0,y)$ 再对 $y$ 求导得 $f_{xy}''(0,0)$",
+          "detail": "对任意固定 $y\\ne 0$，当 $x$ 充分靠近 $0$ 时必有 $|x|<|y|$，此时 $f(x,y)=-xy$，故$$f_x'(0,y)=\\lim_{x\\to 0}\\frac{f(x,y)-f(0,y)}{x}=\\lim_{x\\to 0}\\frac{-xy-0}{x}=-y;$$又 $f(x,0)=0\\implies f_x'(0,0)=0$，合写为 $f_x'(0,y)=-y\\;(\\forall y\\in\\mathbb{R})$！对其在 $y=0$ 处求导得$$f_{xy}''(0,0)=\\left.\\frac{\\mathrm{d}}{\\mathrm{d}y}(-y)\\right|_{y=0}=-1.$$"
+        },
+        {
+          "stepTitle": "先求 $f_y'(x,0)$ 再对 $x$ 求导得 $f_{yx}''(0,0)$",
+          "detail": "对任意固定 $x\\ne 0$，当 $y$ 充分靠近 $0$ 时必有 $|y|<|x|$，此时 $f(x,y)=+xy$，故$$f_y'(x,0)=\\lim_{y\\to 0}\\frac{f(x,y)-f(x,0)}{y}=\\lim_{y\\to 0}\\frac{xy-0}{y}=x,$$且 $f_y'(0,0)=0$，即 $f_y'(x,0)=x\\;(\\forall x\\in\\mathbb{R})$！对其在 $x=0$ 处求导得$$f_{yx}''(0,0)=\\left.\\frac{\\mathrm{d}}{\\mathrm{d}x}(x)\\right|_{x=0}=1.$$"
+        }
+      ],
+      "finalAnswer": "**选（C）**：$f_{xy}''(0,0)=-1$，$f_{yx}''(0,0)=1$。",
+      "takeaway": "求分段点处混合偏导的铁律：**算 $f_{xy}''(0,0)$ 只需先算沿 $y$ 轴的 $f_x'(0,y)$**（此时 $y\\ne 0$ 固定而 $x\\to 0$，故落入 $|x|<|y|$ 分支！）；算 $f_{yx}''(0,0)$ 只需先算沿 $x$ 轴的 $f_y'(x,0)$（落入 $|x|\\ge|y|$ 分支！）。",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.154",
+        "pdfPage": 167,
+        "itemRef": "强化例 13.13"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_limits_concepts",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-36",
+      "stage": "intensive",
+      "section": "三、全微分、复合与隐函数高阶求导（强化例 13.14~13.17）",
+      "kind": "example",
+      "title": "【强化例 13.14】分式全微分定参：$\\frac{(x+ay)\\mathrm{d}x+y\\mathrm{d}y}{(x+y)^2}$ 为全微分求 $a$",
+      "examWeight": "core",
+      "problem": "若 $\\dfrac{(x+ay)\\,\\mathrm{d}x+y\\,\\mathrm{d}y}{(x+y)^2}$ 为某二元函数 $u(x,y)$ 的全微分，则 $a=$ ______。",
+      "steps": [
+        {
+          "stepTitle": "应用全微分充要条件 $\\frac{\\partial P}{\\partial y}=\\frac{\\partial Q}{\\partial x}$",
+          "detail": "记 $P=\\frac{x+ay}{(x+y)^2}$，$Q=\\frac{y}{(x+y)^2}$。分别求偏导：$$\\frac{\\partial P}{\\partial y}=\\frac{a(x+y)^2-2(x+ay)(x+y)}{(x+y)^4}=\\frac{(a-2)x-ay}{(x+y)^3},$$$$\\frac{\\partial Q}{\\partial x}=\\frac{-2y(x+y)}{(x+y)^4}=\\frac{-2y}{(x+y)^3}.$$"
+        },
+        {
+          "stepTitle": "比较分子对应系数定参",
+          "detail": "令 $(a-2)x-ay\\equiv -2y$，对照 $x$ 与 $y$ 系数立得 $a-2=0$ 且 $-a=-2$，唯一解 $a=2$。（验证原函数：当 $a=2$ 时，原式 $=\\frac{(x+y)\\mathrm{d}x+y(\\mathrm{d}x+\\mathrm{d}y)}{(x+y)^2}=\\frac{\\mathrm{d}x}{x+y}+\\frac{y\\,\\mathrm{d}(x+y)}{(x+y)^2}=\\mathrm{d}\\!\\left(\\ln|x+y|-\\frac{y}{x+y}\\right)$！）"
+        }
+      ],
+      "finalAnswer": "$a=2$",
+      "takeaway": "全微分定参永远优先用 $P_y'=Q_x'$，一步列出恒等式秒解参数，而且还能顺手反向验证原函数 $u(x,y)$。",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.155",
+        "pdfPage": 168,
+        "itemRef": "强化例 13.14"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_calc_pde",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-37",
+      "stage": "intensive",
+      "section": "三、全微分、复合与隐函数高阶求导（强化例 13.14~13.17）",
+      "kind": "example",
+      "title": "【强化例 13.15】全微分形式不变性与隐函数公式法双解 $\\frac{x}{z}=\\ln\\frac{z}{y}$",
+      "examWeight": "core",
+      "problem": "设 $z=z(x,y)$ 是由方程 $\\dfrac{x}{z}=\\ln\\dfrac{z}{y}$ 确定的二元隐函数，求全微分 $\\mathrm{d}z$。",
+      "steps": [
+        {
+          "stepTitle": "法一（推荐）：一阶全微分形式不变性",
+          "detail": "先化简对数为 $\\frac{x}{z}=\\ln z-\\ln y$，两边直接取全微分：$$\\frac{1}{z}\\,\\mathrm{d}x-\\frac{x}{z^2}\\,\\mathrm{d}z=\\frac{1}{z}\\,\\mathrm{d}z-\\frac{1}{y}\\,\\mathrm{d}y.$$移项合并 $\\mathrm{d}z$ 项：$$\\left(\\frac{1}{z}+\\frac{x}{z^2}\\right)\\mathrm{d}z=\\frac{1}{z}\\,\\mathrm{d}x+\\frac{1}{y}\\,\\mathrm{d}y \\implies \\frac{x+z}{z^2}\\,\\mathrm{d}z=\\frac{y\\,\\mathrm{d}x+z\\,\\mathrm{d}y}{yz},$$解得$$\\mathrm{d}z=\\frac{z}{y(x+z)}(y\\,\\mathrm{d}x+z\\,\\mathrm{d}y)=\\frac{z}{x+z}\\,\\mathrm{d}x+\\frac{z^2}{y(x+z)}\\,\\mathrm{d}y.$$"
+        },
+        {
+          "stepTitle": "法二（书注对比）：隐函数求导公式法",
+          "detail": "令 $F(x,y,z)=\\frac{x}{z}-\\ln z+\\ln y$，算 $F_x'=\\frac{1}{z},\\;F_y'=\\frac{1}{y},\\;F_z'=-\\frac{x}{z^2}-\\frac{1}{z}=-\\frac{x+z}{z^2}$，故$$z_x'=-\\frac{F_x'}{F_z'}=\\frac{z}{x+z},\\qquad z_y'=-\\frac{F_y'}{F_z'}=\\frac{z^2}{y(x+z)},$$从而 $\\mathrm{d}z=z_x'\\,\\mathrm{d}x+z_y'\\,\\mathrm{d}y=\\frac{z}{y(x+z)}(y\\,\\mathrm{d}x+z\\,\\mathrm{d}y)$，与法一完全一致。"
+        }
+      ],
+      "finalAnswer": "$\\mathrm{d}z=\\dfrac{z}{y(x+z)}(y\\,\\mathrm{d}x+z\\,\\mathrm{d}y)$",
+      "takeaway": "求隐函数的一阶全微分 $\\mathrm{d}z$，用「两边同取全微分」最不易丢符号，连谁是因变量谁是自变量都无需事先纠结！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.158-159",
+        "pdfPage": 171,
+        "itemRef": "强化例 13.15"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_calc_pde",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-38",
+      "stage": "intensive",
+      "section": "三、全微分、复合与隐函数高阶求导（强化例 13.14~13.17）",
+      "kind": "example",
+      "title": "【强化例 13.16】嵌套抽象复合 $z=f[x+y,f(x,y)]$ 结合极值驻点求二阶混合偏导",
+      "examWeight": "core",
+      "problem": "设 $f(u,v)$ 具有二阶连续偏导数，且 $f(1,1)=2$ 是 $f$ 的极值，记 $z=f\\bigl[x+y,\\;f(x,y)\\bigr]$，求 $\\left.\\dfrac{\\partial^2 z}{\\partial x\\partial y}\\right|_{(1,1)}$。",
+      "steps": [
+        {
+          "stepTitle": "由极值必要条件提取隐藏零条件",
+          "detail": "因 $f\\in C^2$ 且在 $(1,1)$ 处取极值，由极值必要条件立得$$f_1'(1,1)=0,\\qquad f_2'(1,1)=0.$$（这是化简二阶导数的关键暗桩！）"
+        },
+        {
+          "stepTitle": "第一次对 $x$ 求偏导（严守位置记号 $f_1', f_2'$）",
+          "detail": "记外层自变量为 $u=x+y,\\;v=f(x,y)$，则$$\\frac{\\partial z}{\\partial x}=f_1'(u,v)\\cdot 1+f_2'(u,v)\\cdot f_1'(x,y).$$"
+        },
+        {
+          "stepTitle": "第二次对 $y$ 求偏导并代入 $(x,y)=(1,1)$（对应 $(u,v)=(2,2)$）",
+          "detail": "对上式两边关于 $y$ 求偏导（注意乘法法则与 $u,v$ 均含 $y$）：$$\\frac{\\partial^2 z}{\\partial x\\partial y}=\\bigl[f_{11}''(u,v)\\cdot 1+f_{12}''(u,v)\\cdot f_2'(x,y)\\bigr]+\\bigl[f_{21}''(u,v)\\cdot 1+f_{22}''(u,v)\\cdot f_2'(x,y)\\bigr]f_1'(x,y)+f_2'(u,v)\\cdot f_{12}''(x,y).$$代入 $x=1,y=1$，此时 $u=2,v=f(1,1)=2$，且 $f_1'(1,1)=f_2'(1,1)=0$，大批量交叉项瞬间归零，仅余$$\\left.\\frac{\\partial^2 z}{\\partial x\\partial y}\\right|_{(1,1)}=f_{11}''(2,2)+f_2'(2,2)f_{12}''(1,1).$$"
+        }
+      ],
+      "finalAnswer": "$f_{11}''(2,2)+f_2'(2,2)f_{12}''(1,1)$",
+      "takeaway": "嵌套抽象复合 $f[x+y,f(x,y)]$ 的防错心法：**一定要把外层 $(u,v)$ 和内层 $(x,y)$ 的括号写全**，切莫简写成光秃秃的 $f_2' f_{12}''$ 导致把 $(2,2)$ 和 $(1,1)$ 搞混！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.159",
+        "pdfPage": 172,
+        "itemRef": "强化例 13.16"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_calc_pde",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-39",
+      "stage": "intensive",
+      "section": "三、全微分、复合与隐函数高阶求导（强化例 13.14~13.17）",
+      "kind": "example",
+      "title": "【强化例 13.17】隐函数方程组求导 $\\left.\\frac{\\mathrm{d}z}{\\mathrm{d}x}\\right|_{x=1/2}$（含实根唯一性严谨补注 #45）",
+      "examWeight": "core",
+      "problem": "设 $y=y(x),\\;z=z(x)$ 是由方程组 $\\begin{cases}\\mathrm{e}^z-xyz=0,\\\\xz^2=\\ln y\\end{cases}$ 确定的隐函数，求 $\\left.\\dfrac{\\mathrm{d}z}{\\mathrm{d}x}\\right|_{x=\\frac{1}{2}}$。",
+      "steps": [
+        {
+          "stepTitle": "先代 $x=\\frac{1}{2}$ 求对应 $(y,z)$ 并证解唯一（严谨补注 #45）",
+          "detail": "当 $x=\\frac{1}{2}$ 时，由第二式得 $\\ln y=\\frac{1}{2}z^2\\implies y=\\mathrm{e}^{\\frac{1}{2}z^2}>0$；由第一式得 $z=\\frac{2\\mathrm{e}^z}{y}>0$，两边取对数得$$z=\\ln\\frac{1}{2}+\\ln y+\\ln z=\\frac{1}{2}z^2+\\ln\\frac{z}{2} \\iff h(z):=\\frac{1}{2}z^2+\\ln\\frac{z}{2}-z=0.$$易观察 $h(2)=2+0-2=0$；又在 $(0,+\\infty)$ 上 $h'(z)=z+\\frac{1}{z}-1\\ge 2-1=1>0$，故 $h(z)$ 严格单调递增，$z=2$ 为**唯一正根**，进而唯一确定 $y=\\mathrm{e}^2$。"
+        },
+        {
+          "stepTitle": "两边同时对 $x$ 求导并立即代值解二元一次方程组",
+          "detail": "对方程组两边关于 $x$ 求导：$$\\begin{cases}\\mathrm{e}^z\\dfrac{\\mathrm{d}z}{\\mathrm{d}x}-yz-xz\\dfrac{\\mathrm{d}y}{\\mathrm{d}x}-xy\\dfrac{\\mathrm{d}z}{\\mathrm{d}x}=0,\\\\[6pt]z^2+2xz\\dfrac{\\mathrm{d}z}{\\mathrm{d}x}=\\dfrac{1}{y}\\dfrac{\\mathrm{d}y}{\\mathrm{d}x}.\\end{cases}$$直接代入 $x=\\frac{1}{2},\\;y=\\mathrm{e}^2,\\;z=2$（省去繁琐雅可比行列式！）：$$\\begin{cases}\\mathrm{e}^2 z'-2\\mathrm{e}^2-y'-\\dfrac{1}{2}\\mathrm{e}^2 z'=0,\\\\[6pt]4+2z'=\\mathrm{e}^{-2}y' \\implies y'=\\mathrm{e}^2(4+2z').\\end{cases}$$将第二式代入第一式：$\\frac{1}{2}\\mathrm{e}^2 z'-2\\mathrm{e}^2-\\mathrm{e}^2(4+2z')=0\\implies -\\frac{3}{2}z'=6\\implies z'=-4$。"
+        }
+      ],
+      "finalAnswer": "$\\left.\\dfrac{\\mathrm{d}z}{\\mathrm{d}x}\\right|_{x=\\frac{1}{2}}=-4$",
+      "takeaway": "隐函数方程组求定点导数：直接对两方程求导后**立刻代入具体数值**，退化为初中二元一次方程组，远比背雅可比行列式稳妥；同时别忘用 $h'(z)\\ge 1>0$ 确认 $z=2$ 唯一（台账 #45）！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.159-160",
+        "pdfPage": 172,
+        "itemRef": "强化例 13.17"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_calc_pde",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-40",
+      "stage": "intensive",
+      "section": "四、齐次函数欧拉定理与偏微分方程化简（强化例 13.18~13.24）",
+      "kind": "example",
+      "title": "【强化例 13.18】证明 $k$ 次齐次函数的欧拉定理：$f(tx,ty)=t^k f(x,y)\\iff xf_x'+yf_y'=kf$",
+      "examWeight": "core",
+      "problem": "设 $f(x,y)$ 具有连续的一阶偏导数，证明：$f(x,y)$ 为 $k$ 次齐次函数（即对一切 $t>0$ 恒有 $f(tx,ty)=t^k f(x,y)$）的充要条件是 $x f_x'(x,y)+y f_y'(x,y)=k f(x,y)$。",
+      "steps": [
+        {
+          "stepTitle": "必要性（$\\Rightarrow$）：固定 $(x,y)$ 对 $t$ 求导后令 $t=1$",
+          "detail": "对恒等式 $f(tx,ty)=t^k f(x,y)$ 两边关于 $t$ 求导（链式法则）：$$x f_1'(tx,ty)+y f_2'(tx,ty)=k t^{k-1} f(x,y).$$令 $t=1$，立得 $x f_x'(x,y)+y f_y'(x,y)=k f(x,y)$。"
+        },
+        {
+          "stepTitle": "充分性（$\\Leftarrow$）：构造商函数 $\\varphi(t)=\\frac{f(tx,ty)}{t^k}$ 证其导数为零",
+          "detail": "固定 $(x,y)$，令 $\\varphi(t)=\\dfrac{f(tx,ty)}{t^k}\\;(t>0)$，对 $t$ 求导并利用已知方程（在点 $(tx,ty)$ 处有 $tx f_1'(tx,ty)+ty f_2'(tx,ty)=k f(tx,ty)$）：$$\\varphi'(t)=\\frac{\\bigl[x f_1'(tx,ty)+y f_2'(tx,ty)\\bigr]t^k-k t^{k-1}f(tx,ty)}{t^{2k}}=\\frac{\\bigl[tx f_1'(tx,ty)+ty f_2'(tx,ty)-k f(tx,ty)\\bigr]}{t^{k+1}}=0.$$故 $\\varphi(t)\\equiv\\varphi(1)=f(x,y)$，即 $f(tx,ty)=t^k f(x,y)\\;(\\forall t>0)$。"
+        }
+      ],
+      "finalAnswer": "命题得证：$f(tx,ty)=t^k f(x,y)\\;(\\forall t>0)\\iff x f_x'+y f_y'=k f$。",
+      "takeaway": "欧拉定理的充分性证明技巧极具普适性：**要证两个含参函数恒等，就把它们相除（或相减）构造一元函数 $\\varphi(t)$，证 $\\varphi'(t)\\equiv 0$**！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.160",
+        "pdfPage": 173,
+        "itemRef": "强化例 13.18"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_calc_pde",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-41",
+      "stage": "intensive",
+      "section": "四、齐次函数欧拉定理与偏微分方程化简（强化例 13.18~13.24）",
+      "kind": "example",
+      "title": "【强化例 13.19】$0$ 次齐次函数秒杀计算 $x z_x'+y z_y'=0$",
+      "examWeight": "core",
+      "problem": "设 $z=\\sqrt{\\dfrac{x^2+y^2}{xy}}\\;(xy>0)$，求 $x\\dfrac{\\partial z}{\\partial x}+y\\dfrac{\\partial z}{\\partial y}$。",
+      "steps": [
+        {
+          "stepTitle": "直接验证 $z(x,y)$ 为 $0$ 次齐次函数",
+          "detail": "对任意 $t>0$，$$z(tx,ty)=\\sqrt{\\frac{t^2 x^2+t^2 y^2}{t^2 xy}}=\\sqrt{\\frac{x^2+y^2}{xy}}=t^0 z(x,y),$$可见 $z(x,y)$ 为 $0$ 次齐次函数（仅依赖于比值 $\\frac{y}{x}$）。"
+        },
+        {
+          "stepTitle": "套用欧拉定理一步出答案",
+          "detail": "由强化例13.18 欧拉齐次定理（$k=0$）直接得$$x\\frac{\\partial z}{\\partial x}+y\\frac{\\partial z}{\\partial y}=0\\cdot z=0.$$"
+        }
+      ],
+      "finalAnswer": "$0$",
+      "takeaway": "凡是仅依赖比值 $\\frac{y}{x}$ 的光滑函数（$0$ 次齐次），$x z_x'+y z_y'$ 恒等于 $0$，根本无需硬求偏导！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.160",
+        "pdfPage": 173,
+        "itemRef": "强化例 13.19"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_calc_pde",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-42",
+      "stage": "intensive",
+      "section": "四、齐次函数欧拉定理与偏微分方程化简（强化例 13.18~13.24）",
+      "kind": "example",
+      "title": "【强化例 13.20】$2$ 次齐次结构 $z=xyf(\\frac{y}{x})$ 结合 $xz_x'+yz_y'$ 反求 $f(1),f'(1)$",
+      "examWeight": "core",
+      "problem": "设可微函数 $f(u)$ 满足 $z=xy\\,f\\!\\left(\\dfrac{y}{x}\\right)\\;(x>0,y>0)$，且 $x\\dfrac{\\partial z}{\\partial x}+y\\dfrac{\\partial z}{\\partial y}=y^2(\\ln y-\\ln x)$，则（ ）\n（A）$f(1)=0,\\;f'(1)=0$　（B）$f(1)=1,\\;f'(1)=\\frac{1}{2}$　（C）$f(1)=\\frac{1}{2},\\;f'(1)=0$　（D）$f(1)=0,\\;f'(1)=\\frac{1}{2}$",
+      "steps": [
+        {
+          "stepTitle": "识别 $z(x,y)$ 是 $2$ 次齐次函数，一步套欧拉定理！",
+          "detail": "对任意 $t>0$，$z(tx,ty)=(tx)(ty)f\\!\\left(\\frac{ty}{tx}\\right)=t^2 z(x,y)$，故 $z$ 是 $2$ 次齐次函数！由欧拉定理立得$$x\\frac{\\partial z}{\\partial x}+y\\frac{\\partial z}{\\partial y}=2z=2xy\\,f\\!\\left(\\frac{y}{x}\\right).$$"
+        },
+        {
+          "stepTitle": "直接解出 $f(u)$ 的显式表达式",
+          "detail": "由题设 $2xy\\,f\\!\\left(\\frac{y}{x}\\right)=y^2\\ln\\frac{y}{x}$，两边除以 $2xy$ 并令 $u=\\frac{y}{x}>0$，得$$f(u)=\\frac{1}{2}u\\ln u,\\qquad f'(u)=\\frac{1}{2}(\\ln u+1).$$代入 $u=1$ 得 $f(1)=0,\\;f'(1)=\\frac{1}{2}$。"
+        }
+      ],
+      "finalAnswer": "**选（D）**：$f(1)=0,\\;f'(1)=\\dfrac{1}{2}$。",
+      "takeaway": "形如 $x^p y^q f(\\frac{y}{x})$ 的函数必是 $(p+q)$ 次齐次函数！用欧拉定理 3 秒把偏微分方程打成代数方程！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.160-161",
+        "pdfPage": 173,
+        "itemRef": "强化例 13.20"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_calc_pde",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-43",
+      "stage": "intensive",
+      "section": "四、齐次函数欧拉定理与偏微分方程化简（强化例 13.18~13.24）",
+      "kind": "example",
+      "title": "【强化例 13.21】已知线性替换 $(u,v)=(x-2y,x+3y)$ 化简并全解二阶 PDE",
+      "examWeight": "core",
+      "problem": "设函数 $z=z(u,v)$ 具有二阶连续偏导数，其中 $u=x-2y,\\;v=x+3y$，满足偏微分方程 $6\\dfrac{\\partial^2 z}{\\partial x^2}+\\dfrac{\\partial^2 z}{\\partial x\\partial y}-\\dfrac{\\partial^2 z}{\\partial y^2}=3\\dfrac{\\partial z}{\\partial x}-\\dfrac{\\partial z}{\\partial y}$，且满足边界条件 $\\dfrac{\\mathrm{d}z(0,v)}{\\mathrm{d}v}=\\dfrac{1}{5}z(0,v)+\\mathrm{e}^v$ 及 $z(u,0)=u^2$。（1）化简该偏微分方程为关于 $(u,v)$ 的方程；（2）求函数 $z(u,v)$。",
+      "steps": [
+        {
+          "stepTitle": "（1）用链式法则（或微分算子因式分解）化简 PDE",
+          "detail": "计算一阶偏导算子：$$\\frac{\\partial z}{\\partial x}=z_u'+z_v',\\qquad \\frac{\\partial z}{\\partial y}=-2z_u'+3z_v'.$$故右端 $3z_x'-z_y'=3(z_u'+z_v')-(-2z_u'+3z_v')=5z_u'$。再算二阶偏导：$$z_{xx}''=z_{uu}''+2z_{uv}''+z_{vv}'',\\quad z_{xy}''=-2z_{uu}''+z_{uv}''+3z_{vv}'',\\quad z_{yy}''=4z_{uu}''-12z_{uv}''+9z_{vv}''.$$代入左端：$6z_{xx}''+z_{xy}''-z_{yy}''=(6-2-4)z_{uu}''+(12+1+12)z_{uv}''+(6+3-9)z_{vv}''=25z_{uv}''$（技巧：直接因式分解 $(3\\partial_x-\\partial_y)(2\\partial_x+\\partial_y)=(5\\partial_u)(5\\partial_v)=25\\partial_{uv}^2$ 更秒！）。于是方程化为$$25z_{uv}''=5z_u' \\iff \\frac{\\partial^2 z}{\\partial u\\partial v}=\\frac{1}{5}\\frac{\\partial z}{\\partial u}.$$"
+        },
+        {
+          "stepTitle": "（2）先对 $u$ 积分并利用 $u=0$ 边值定出 $\\varphi(v)$",
+          "detail": "方程改写为 $\\frac{\\partial}{\\partial u}\\!\\left(z_v'-\\frac{1}{5}z\\right)=0$，对 $u$ 积分得$$z_v'(u,v)-\\frac{1}{5}z(u,v)=\\varphi(v).$$令 $u=0$ 并对照已知 $\\frac{\\mathrm{d}z(0,v)}{\\mathrm{d}v}-\\frac{1}{5}z(0,v)=\\mathrm{e}^v$，立即定出 $\\varphi(v)=\\mathrm{e}^v$！"
+        },
+        {
+          "stepTitle": "解关于 $v$ 的一阶线性方程并用 $z(u,0)=u^2$ 定出 $\\psi(u)$",
+          "detail": "把 $u$ 视为参数解 $z_v'-\\frac{1}{5}z=\\mathrm{e}^v$（乘积分因子 $\\mathrm{e}^{-\\frac{v}{5}}$）：$$\\frac{\\partial}{\\partial v}\\!\\left(z\\mathrm{e}^{-\\frac{v}{5}}\\right)=\\mathrm{e}^{\\frac{4}{5}v}\\implies z\\mathrm{e}^{-\\frac{v}{5}}=\\frac{5}{4}\\mathrm{e}^{\\frac{4}{5}v}+\\psi(u)\\implies z(u,v)=\\frac{5}{4}\\mathrm{e}^v+\\psi(u)\\mathrm{e}^{\\frac{v}{5}}.$$代入 $z(u,0)=u^2$ 得 $\\frac{5}{4}+\\psi(u)=u^2\\implies \\psi(u)=u^2-\\frac{5}{4}$，最终得$$z(u,v)=\\frac{5}{4}\\mathrm{e}^v+\\left(u^2-\\frac{5}{4}\\right)\\mathrm{e}^{\\frac{v}{5}}.$$"
+        }
+      ],
+      "finalAnswer": "（1）$\\dfrac{\\partial^2 z}{\\partial u\\partial v}=\\dfrac{1}{5}\\dfrac{\\partial z}{\\partial u}$；（2）$z(u,v)=\\dfrac{5}{4}\\mathrm{e}^v+\\left(u^2-\\dfrac{5}{4}\\right)\\mathrm{e}^{\\frac{v}{5}}$。",
+      "takeaway": "常系数二阶线性 PDE 化简神技：**把左端像二次多项式那样因式分解** $6\\partial_x^2+\\partial_x\\partial_y-\\partial_y^2=(3\\partial_x-\\partial_y)(2\\partial_x+\\partial_y)$，立刻秒算且绝不出错！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.163",
+        "pdfPage": 176,
+        "itemRef": "强化例 13.21"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_calc_pde",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-44",
+      "stage": "intensive",
+      "section": "四、齐次函数欧拉定理与偏微分方程化简（强化例 13.18~13.24）",
+      "kind": "example",
+      "title": "【强化例 13.22】待定变换系数 $u=x-2y,v=x+ay$ 化方程为 $z_{uv}''=0$（必检退化增根 $a=-2$！）",
+      "examWeight": "core",
+      "problem": "求常数 $a$，使变量替换 $u=x-2y,\\;v=x+ay$ 将偏微分方程 $6\\dfrac{\\partial^2 z}{\\partial x^2}+\\dfrac{\\partial^2 z}{\\partial x\\partial y}-\\dfrac{\\partial^2 z}{\\partial y^2}=0$ 化简为 $\\dfrac{\\partial^2 z}{\\partial u\\partial v}=0$。",
+      "steps": [
+        {
+          "stepTitle": "展开二阶偏导并合并 $z_{uu}'',z_{uv}'',z_{vv}''$ 系数",
+          "detail": "由 $z_x'=z_u'+z_v',\\;z_y'=-2z_u'+az_v'$，得$$z_{xx}''=z_{uu}''+2z_{uv}''+z_{vv}'',\\quad z_{xy}''=-2z_{uu}''+(a-2)z_{uv}''+az_{vv}'',\\quad z_{yy}''=4z_{uu}''-4az_{uv}''+a^2 z_{vv}''.$$代入原方程整理：$$(6-2-4)z_{uu}''+(12+a-2+4a)z_{uv}''+(6+a-a^2)z_{vv}''=0,$$即$$(10+5a)z_{uv}''-(a-3)(a+2)z_{vv}''=0.$$"
+        },
+        {
+          "stepTitle": "令 $z_{vv}''$ 系数为零且务必保证 $z_{uv}''$ 系数非零（防替换退化！）",
+          "detail": "令 $(a-3)(a+2)=0$ 得 $a=3$ 或 $a=-2$。检验保留项系数 $10+5a\\ne 0$（等价于雅可比 $\\frac{\\partial(u,v)}{\\partial(x,y)}=a+2\\ne 0$）：当 $a=-2$ 时 $u=v$ 替换退化且 $10+5a=0$，方程变成 $0=0$，必须舍去！故唯一解 $a=3$。"
+        }
+      ],
+      "finalAnswer": "$a=3$（$a=-2$ 致替换退化必须舍去）。",
+      "takeaway": "**待定变量替换的生死检验**：使不需要项系数为 $0$ 后，**必须检查保留项系数及雅可比行列式均非零**！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.164-165",
+        "pdfPage": 177,
+        "itemRef": "强化例 13.22"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_calc_pde",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-45",
+      "stage": "intensive",
+      "section": "四、齐次函数欧拉定理与偏微分方程化简（强化例 13.18~13.24）",
+      "kind": "example",
+      "title": "【强化例 13.23】径向函数 $u=f(\\ln\\sqrt{x^2+y^2})$ 满足拉普拉斯方程结合积分极限求 $f(x)$",
+      "examWeight": "core",
+      "problem": "设二阶可导函数 $f(t)$ 使 $u(x,y)=f\\!\\left(\\ln\\sqrt{x^2+y^2}\\right)$ 满足 $u_{xx}''+u_{yy}''=(x^2+y^2)^{\\frac{3}{2}}$，且 $\\lim\\limits_{x\\to 0}\\dfrac{\\int_0^1 f(xt)\\,\\mathrm{d}t}{x}=-1$，求 $f(x)$。",
+      "steps": [
+        {
+          "stepTitle": "计算径向拉普拉斯算子 $u_{xx}''+u_{yy}''$",
+          "detail": "记 $t=\\ln\\sqrt{x^2+y^2}=\\frac{1}{2}\\ln(x^2+y^2)$，则 $x^2+y^2=\\mathrm{e}^{2t}$，且 $t_x'=\\frac{x}{x^2+y^2},\\;t_y'=\\frac{y}{x^2+y^2}$。求偏导：$$u_x'=f'(t)\\frac{x}{x^2+y^2}\\implies u_{xx}''=f''(t)\\frac{x^2}{(x^2+y^2)^2}+f'(t)\\frac{y^2-x^2}{(x^2+y^2)^2},$$同理 $u_{yy}''=f''(t)\\frac{y^2}{(x^2+y^2)^2}+f'(t)\\frac{x^2-y^2}{(x^2+y^2)^2}$。两式相加，$f'(t)$ 项完全抵消！得$$u_{xx}''+u_{yy}''=\\frac{f''(t)}{x^2+y^2}=\\mathrm{e}^{-2t}f''(t).$$"
+        },
+        {
+          "stepTitle": "化为常微分方程两次积分求通解",
+          "detail": "右端 $(x^2+y^2)^{\\frac{3}{2}}=\\mathrm{e}^{3t}$，故 $\\mathrm{e}^{-2t}f''(t)=\\mathrm{e}^{3t}\\implies f''(t)=\\mathrm{e}^{5t}$。连积两次得$$f'(t)=\\frac{1}{5}\\mathrm{e}^{5t}+C_1,\\qquad f(t)=\\frac{1}{25}\\mathrm{e}^{5t}+C_1 t+C_2.$$"
+        },
+        {
+          "stepTitle": "从积分极限提取两个初值 $f(0)=0,\\;f'(0)=-2$",
+          "detail": "对极限 $\\lim\\limits_{x\\to 0}\\frac{\\int_0^1 f(xt)\\,\\mathrm{d}t}{x}=-1$，分母趋于 $0$ 而极限有限，故分子极限 $\\int_0^1 f(0)\\,\\mathrm{d}t=f(0)=0$！再作换元 $s=xt$ 化为变限积分并用洛必达：$$-1=\\lim_{x\\to 0}\\frac{\\int_0^x f(s)\\,\\mathrm{d}s}{x^2}=\\lim_{x\\to 0}\\frac{f(x)}{2x}=\\frac{1}{2}f'(0)\\implies f'(0)=-2.$$代入通解：$\\frac{1}{25}+C_2=0\\implies C_2=-\\frac{1}{25}$；$\\frac{1}{5}+C_1=-2\\implies C_1=-\\frac{11}{5}$。将自变量改写为 $x$ 得$$f(x)=\\frac{1}{25}\\mathrm{e}^{5x}-\\frac{11}{5}x-\\frac{1}{25}.$$"
+        }
+      ],
+      "finalAnswer": "$f(x)=\\dfrac{1}{25}\\mathrm{e}^{5x}-\\dfrac{11}{5}x-\\dfrac{1}{25}$",
+      "takeaway": "记住超值结论：$u=f(\\ln r)$ 的二维拉普拉斯算子干净到没有一阶导项——$u_{xx}''+u_{yy}''=\\frac{1}{r^2}f''(\\ln r)$！（因 $\\ln r$ 本身就是二维调和函数！）",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.165-166",
+        "pdfPage": 178,
+        "itemRef": "强化例 13.23"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_calc_pde",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-46",
+      "stage": "intensive",
+      "section": "四、齐次函数欧拉定理与偏微分方程化简（强化例 13.18~13.24）",
+      "kind": "example",
+      "title": "【强化例 13.24】直接积分一阶偏微分方程 $f_x'+f=0$ 结合边值 $f_y'(0,y)=\\tan y$（含定义域补注 #47）",
+      "examWeight": "core",
+      "problem": "设正值函数 $f(x,y)>0$ 具有一阶连续偏导数，满足 $f_x'(x,y)+f(x,y)=0$，且 $f_y'(0,y)=\\tan y$，$f(0,0)=1$，求 $f(x,y)$。",
+      "steps": [
+        {
+          "stepTitle": "对 $x$ 求解一阶线性偏微分方程",
+          "detail": "由 $\\frac{\\partial}{\\partial x}\\bigl[\\mathrm{e}^x f(x,y)\\bigr]=0$，得$$f(x,y)=C(y)\\mathrm{e}^{-x}.$$"
+        },
+        {
+          "stepTitle": "代入边值 $f_y'(0,y)=\\tan y$ 与 $f(0,0)=1$ 定出 $C(y)$（定义域补注 #47）",
+          "detail": "对 $y$ 求偏导并令 $x=0$ 得 $f_y'(0,y)=C'(y)=\\tan y$，积分得$$C(y)=\\int\\tan y\\,\\mathrm{d}y=-\\ln|\\cos y|+C_0.$$代入 $f(0,0)=C(0)=1$ 得 $C_0=1$。故在包含原点的最大连通无奇点带域 $y\\in\\left(-\\frac{\\pi}{2},\\frac{\\pi}{2}\\right)$ 上（此时 $\\cos y>0$ 且 $1-\\ln\\cos y\\ge 1>0$ 严格满足 $f>0$！），有$$f(x,y)=\\mathrm{e}^{-x}(1-\\ln|\\cos y|)\\quad\\bigl(\\text{在 }y\\in(-\\tfrac{\\pi}{2},\\tfrac{\\pi}{2})\\text{ 上即 }\\mathrm{e}^{-x}(1-\\ln\\cos y)\\bigr).$$"
+        }
+      ],
+      "finalAnswer": "$f(x,y)=\\mathrm{e}^{-x}(1-\\ln|\\cos y|)$（在含原点的连通带域 $y\\in(-\\frac{\\pi}{2},\\frac{\\pi}{2})$ 上即 $\\mathrm{e}^{-x}(1-\\ln\\cos y)$）。",
+      "takeaway": "一阶线性 PDE 永远先解出 $C(y)$ 再借 $x=0$ 轴上的边值条件反定 $C'(y)$；同时注意 $\\tan y$ 的奇点将定义域自然限制在含原点的连通带域 $(-\\frac{\\pi}{2},\\frac{\\pi}{2})$ 内（台账 #47）。",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.166",
+        "pdfPage": 179,
+        "itemRef": "强化例 13.24"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_calc_pde",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-47",
+      "stage": "intensive",
+      "section": "五、无条件极值、条件极值与闭区域最值（强化例 13.25~13.32）",
+      "kind": "example",
+      "title": "【强化例 13.25】多项式无条件极值标准流程：$f(x,y)=3(x^2+y^2)-x^3$（极小点 + 鞍点）",
+      "examWeight": "core",
+      "problem": "求函数 $f(x,y)=3(x^2+y^2)-x^3$ 的极值。",
+      "steps": [
+        {
+          "stepTitle": "求全部驻点",
+          "detail": "令$$\\begin{cases}f_x'=6x-3x^2=3x(2-x)=0,\\\\f_y'=6y=0,\\end{cases}$$解得两个驻点：$P_1(0,0)$ 和 $P_2(2,0)$。"
+        },
+        {
+          "stepTitle": "计算二阶偏导 $A,B,C$ 并逐点判别 $\\Delta=AC-B^2$",
+          "detail": "$f_{xx}''=6-6x,\\;f_{xy}''=0,\\;f_{yy}''=6$。\n① 在 $P_1(0,0)$：$A=6,\\;B=0,\\;C=6\\implies AC-B^2=36>0$ 且 $A=6>0$，故 $(0,0)$ 为**极小值点**，极小值 $f(0,0)=0$；\n② 在 $P_2(2,0)$：$A=-6,\\;B=0,\\;C=6\\implies AC-B^2=-36<0$，故 $(2,0)$ 是鞍点，**非极值点**！"
+        }
+      ],
+      "finalAnswer": "在 $(0,0)$ 处取得极小值 $0$；$(2,0)$ 非极值点（无极大值）。",
+      "takeaway": "这是强化例13.31 闭圆盘最值题的前置母题：注意 $(2,0)$ 是鞍点，在无条件极值里不是极值点，但在后续闭区域最值中也会自然被排除！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.168-169",
+        "pdfPage": 181,
+        "itemRef": "强化例 13.25"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_extrema_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-48",
+      "stage": "intensive",
+      "section": "五、无条件极值、条件极值与闭区域最值（强化例 13.25~13.32）",
+      "kind": "example",
+      "title": "【强化例 13.26】皮亚诺曲面 $f(x,y)=(y-x^2)(y-2x^2)$：沿每条直线均极小却非二元极值！",
+      "examWeight": "core",
+      "problem": "设 $f(x,y)=(y-x^2)(y-2x^2)$，则在点 $(0,0)$ 处（ ）\n（A）$f(x,y)$ 取极小值　（B）沿过原点的每一条直线均在原点取极小值，但 $(0,0)$ 不是二元极值点　（C）$f(x,y)$ 取极大值　（D）沿某些直线不取极值",
+      "steps": [
+        {
+          "stepTitle": "验证沿过原点的任意直线（含 $x=0$ 与 $y=kx$）均在原点取极小值",
+          "detail": "显然 $f(0,0)=0$。① 沿 $y$ 轴（$x=0$）：$f(0,y)=y^2\\ge 0$，原点取严格极小；② 沿任意斜直线 $y=kx$：$$f(x,kx)=(kx-x^2)(kx-2x^2)=x^2(k-x)(k-2x).$$若 $k=0$，则 $f(x,0)=2x^4\\ge 0$；若 $k\\ne 0$，则当 $|x|<\\frac{|k|}{2}$ 时 $(k-x)(k-2x)>0$，故 $f(x,kx)\\ge 0=f(0,0)$！因此沿**每一条直线**，原点都是局部极小值点！"
+        },
+        {
+          "stepTitle": "沿抛物线 $y=\\frac{3}{2}x^2$ 戳穿二元极值假象",
+          "detail": "在两抛物线 $y=x^2$ 与 $y=2x^2$ 之间的月牙区（例如取曲线路径 $y=\\frac{3}{2}x^2$），恒有$$f\\!\\left(x,\\frac{3}{2}x^2\\right)=\\left(\\frac{1}{2}x^2\\right)\\left(-\\frac{1}{2}x^2\\right)=-\\frac{1}{4}x^4<0\\quad(x\\ne 0),$$而在 $x=0$ 上 $f(0,y)=y^2>0$，原点任一邻域内同时取正值与负值，故 $(0,0)$ **不是**二元极值点！（此时 $\\Delta=AC-B^2=0\\cdot 2-0^2=0$ 判别法失效。）"
+        }
+      ],
+      "finalAnswer": "**选（B）**（沿每条直线均取极小，但非二元极值点）。",
+      "takeaway": "这就是微积分史上大名鼎鼎的**皮亚诺反例**（见配图）：记住它，彻底杜绝「用所有直线路径代替二元邻域」的直觉误区！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.169",
+        "pdfPage": 182,
+        "itemRef": "强化例 13.26"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_extrema_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-49",
+      "stage": "intensive",
+      "section": "五、无条件极值、条件极值与闭区域最值（强化例 13.25~13.32）",
+      "kind": "example",
+      "title": "【强化例 13.27】若闭域内处处 $u_{xy}''\\ne 0$ 且 $u_{xx}''u_{yy}''=0$，最值必全在边界上！",
+      "examWeight": "core",
+      "problem": "设 $u(x,y)$ 在有界闭区域 $D$ 上连续，在 $D$ 内部具有二阶连续偏导数，且在 $D$ 内部处处满足 $u_{xy}''\\ne 0$ 与 $u_{xx}'' u_{yy}''=0$，则 $u(x,y)$ 在 $D$ 上的最大值和最小值（ ）\n（A）都在 $D$ 的内部取得　（B）都在 $D$ 的边界上取得　（C）一个在内部取得，一个在边界上取得　（D）无法确定",
+      "steps": [
+        {
+          "stepTitle": "计算区域内部每一点的判别式 $\\Delta=AC-B^2$",
+          "detail": "在 $D$ 内部任一点 $(x,y)$，由题设直接算得$$\\Delta=u_{xx}'' u_{yy}''-(u_{xy}'')^2=0-(u_{xy}'')^2<0.$$"
+        },
+        {
+          "stepTitle": "反证内部无极值点，故最值全落边界",
+          "detail": "假设 $u(x,y)$ 在 $D$ 内部某点 $P_0$ 取最值，则 $P_0$ 必是无条件极值点（从而为驻点），但该点 $\\Delta<0$ 表明 $P_0$ 必非极值点，矛盾！又 $u$ 在有界闭区域 $D$ 连续必取到最大值与最小值，因此最大、最小值点**全部只能在边界 $\\partial D$ 上取得**。"
+        }
+      ],
+      "finalAnswer": "**选（B）**（最大值和最小值都在 $D$ 的边界上取得）。",
+      "takeaway": "看到闭区域 $D$ 内部处处满足 $AC-B^2<0$（例如一切满足 $u_{xx}''+u_{yy}''=0$ 非常数调和函数或 $u_{xx}'' u_{yy}''\\le 0,u_{xy}''\\ne 0$），立刻反应「极值原理：内部绝无极值，最值全在边界」！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.169-170",
+        "pdfPage": 182,
+        "itemRef": "强化例 13.27"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_extrema_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-50",
+      "stage": "intensive",
+      "section": "五、无条件极值、条件极值与闭区域最值（强化例 13.25~13.32）",
+      "kind": "example",
+      "title": "【强化例 13.28】乘积函数 $z=f(x)f(y)$ 在 $(0,0)$ 取极大值的充分条件辨析",
+      "examWeight": "core",
+      "problem": "设二阶可导函数 $f(x)$ 满足 $f'(0)=0$，记 $z=f(x)f(y)$，则 $(0,0)$ 为 $z$ 的极大值点的充分条件是（ ）\n（A）$f(0)<0,\\;f''(0)>0$　（B）$f(0)<0,\\;f''(0)<0$　（C）$f(0)>0,\\;f''(0)>0$　（D）$f(0)=0,\\;f''(0)<0$",
+      "steps": [
+        {
+          "stepTitle": "检验驻点并计算 $(0,0)$ 处的 $A,B,C$",
+          "detail": "求偏导：$z_x'=f'(x)f(y),\\;z_y'=f(x)f'(y)$，代入 $(0,0)$ 得 $z_x'(0,0)=z_y'(0,0)=0$（为驻点）。再算二阶偏导：$$A=z_{xx}''(0,0)=f''(0)f(0),\\qquad B=z_{xy}''(0,0)=[f'(0)]^2=0,\\qquad C=z_{yy}''(0,0)=f(0)f''(0).$$"
+        },
+        {
+          "stepTitle": "代入充分条件 $\\Delta=AC-B^2>0$ 且 $A<0$",
+          "detail": "$\\Delta=AC-B^2=\\bigl[f(0)f''(0)\\bigr]^2$，要使 $\\Delta>0$ 且 $A<0$，即要求$$f(0)f''(0)<0,$$也就是说 $f(0)$ 与 $f''(0)$ **异号**！对照四个选项，只有（A）满足 $f(0)<0,\\;f''(0)>0$（注：若 $f(0)>0,f''(0)<0$ 亦充分，而（D）$f(0)=0$ 时 $z\\approx\\frac{1}{4}[f''(0)]^2 x^2 y^2\\ge 0$ 反而是极小值！）。"
+        }
+      ],
+      "finalAnswer": "**选（A）**（$f(0)<0,\\;f''(0)>0$）。",
+      "takeaway": "别凭直觉选「$f''(0)<0$」！因为 $A=f(0)f''(0)$ 乘上了 $f(0)$ 的符号：当 $f(0)<0$ 时，反而是 $f''(0)>0$ 才让 $A<0$ 取极大值！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.170",
+        "pdfPage": 183,
+        "itemRef": "强化例 13.28"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_extrema_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-51",
+      "stage": "intensive",
+      "section": "五、无条件极值、条件极值与闭区域最值（强化例 13.25~13.32）",
+      "kind": "example",
+      "title": "【强化例 13.29】条件极值梯度平行恒等式 $f_x'g_y'=f_y'g_x'$ 推出非零关系",
+      "examWeight": "core",
+      "problem": "设 $f(x,y)$ 与 $g(x,y)$ 均为可微函数，且 $g_y'(x_0,y_0)\\ne 0$。已知 $(x_0,y_0)$ 是 $f(x,y)$ 在约束条件 $g(x,y)=0$ 下的一个极值点，下列选项正确的是（ ）\n（A）若 $f_x'(x_0,y_0)=0$，则 $f_y'(x_0,y_0)=0$　（B）若 $f_x'(x_0,y_0)=0$，则 $f_y'(x_0,y_0)\\ne 0$\n（C）若 $f_x'(x_0,y_0)\\ne 0$，则 $f_y'(x_0,y_0)=0$　（D）若 $f_x'(x_0,y_0)\\ne 0$，则 $f_y'(x_0,y_0)\\ne 0$",
+      "steps": [
+        {
+          "stepTitle": "由拉格朗日乘数法（或条件极值二维行列式）消去 $\\lambda$",
+          "detail": "构造 $F(x,y,\\lambda)=f(x,y)+\\lambda g(x,y)$，在极值点 $(x_0,y_0)$ 处满足$$\\begin{cases}f_x'(x_0,y_0)+\\lambda g_x'(x_0,y_0)=0,\\\\f_y'(x_0,y_0)+\\lambda g_y'(x_0,y_0)=0.\\end{cases}$$因 $g_y'(x_0,y_0)\\ne 0$，解出 $\\lambda=-\\frac{f_y'(x_0,y_0)}{g_y'(x_0,y_0)}$ 代入第一式即得梯度共线恒等式（等价于 $\\begin{vmatrix}f_x'&f_y'\\\\g_x'&g_y'\\end{vmatrix}=0$）：$$f_x'(x_0,y_0)\\,g_y'(x_0,y_0)=f_y'(x_0,y_0)\\,g_x'(x_0,y_0).$$"
+        },
+        {
+          "stepTitle": "逐项逻辑排错",
+          "detail": "① 若 $f_x'(x_0,y_0)=0$，则右端 $f_y' g_x'=0$，可能是 $g_x'=0$ 而 $f_y'$ 任意（可为 $0$ 也可非 $0$），排除（A）（B）；\n② 若 $f_x'(x_0,y_0)\\ne 0$，结合已知 $g_y'(x_0,y_0)\\ne 0$，左端非零，从而右端 $f_y'(x_0,y_0)\\,g_x'(x_0,y_0)\\ne 0$，必有 $f_y'(x_0,y_0)\\ne 0$（且 $g_x'(x_0,y_0)\\ne 0$）！故选（D）。"
+        }
+      ],
+      "finalAnswer": "**选（D）**（若 $f_x'(x_0,y_0)\\ne 0$，则 $f_y'(x_0,y_0)\\ne 0$）。",
+      "takeaway": "二维单约束条件极值的一阶必要条件，最本质的写法就是雅可比行列式为零：$f_x' g_y'=f_y' g_x'$（等价于隐函数求导 $f_x'+f_y'(-g_x'/g_y')=0$）！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.171-172",
+        "pdfPage": 184,
+        "itemRef": "强化例 13.29"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_extrema_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-52",
+      "stage": "intensive",
+      "section": "五、无条件极值、条件极值与闭区域最值（强化例 13.25~13.32）",
+      "kind": "example",
+      "title": "【强化例 13.30】斜椭圆 $5x^2+4xy+2y^2=1$ 距原点最值：拉格朗日 + 欧拉齐次定理秒化特征值！",
+      "examWeight": "core",
+      "problem": "求 $u=\\sqrt{x^2+y^2}$ 在约束条件 $5x^2+4xy+2y^2=1$ 下的最大值与最小值。",
+      "steps": [
+        {
+          "stepTitle": "单调等价化简目标函数为 $x^2+y^2$ 并构造拉格朗日函数",
+          "detail": "等价于求 $x^2+y^2$ 在约束 $f(x,y):=5x^2+4xy+2y^2=1$（旋转斜椭圆，有界闭集必有最值）下的最值。构造 $F(x,y,\\lambda)=x^2+y^2+\\lambda(5x^2+4xy+2y^2-1)$，令$$\\begin{cases}F_x'=2x+\\lambda f_x'=0,&\\text{①}\\\\F_y'=2y+\\lambda f_y'=0,&\\text{②}\\\\f(x,y)-1=0.&\\text{③}\\end{cases}$$"
+        },
+        {
+          "stepTitle": "神级组合 ①$\\times x+$②$\\times y$ 结合 $2$ 次齐次欧拉定理直接得 $x^2+y^2=-\\lambda$！",
+          "detail": "因 $f(x,y)$ 是 $2$ 次齐次函数，由欧拉定理有 $xf_x'+yf_y'=2f(x,y)=2$。于是 ①$\\times x+$②$\\times y$ 立得$$2(x^2+y^2)+\\lambda(xf_x'+yf_y')=0 \\implies 2(x^2+y^2)+2\\lambda=0 \\implies x^2+y^2=-\\lambda!$$求目标函数 $x^2+y^2$ 的最值瞬间转化为求 $-\\lambda$ 的最值！"
+        },
+        {
+          "stepTitle": "齐次线性方程组非零解 $\\iff$ 系数行列式为零，秒解 $\\lambda$",
+          "detail": "由 ①② 展开得 $\\begin{cases}(1+5\\lambda)x+2\\lambda y=0,\\\\2\\lambda x+(1+2\\lambda)y=0.\\end{cases}$ 因 $(x,y)\\ne(0,0)$，系数行列式必为零：$$\\begin{vmatrix}1+5\\lambda & 2\\lambda\\\\ 2\\lambda & 1+2\\lambda\\end{vmatrix}=6\\lambda^2+7\\lambda+1=(6\\lambda+1)(\\lambda+1)=0 \\implies \\lambda_1=-1,\\quad \\lambda_2=-\\frac{1}{6}.$$故 $x^2+y^2=-\\lambda$ 取最大 $1$、最小 $\\frac{1}{6}$，开方得 $u_{\\max}=1$、$u_{\\min}=\\frac{\\sqrt{6}}{6}$！（线代视角：约束矩阵 $A=\\begin{pmatrix}5&2\\\\2&2\\end{pmatrix}$ 特征值为 $6$ 和 $1$，直接给出 $u^2=\\frac{1}{\\mu}\\in[\\frac{1}{6},1]$！）"
+        }
+      ],
+      "finalAnswer": "最大值为 $1$，最小值为 $\\dfrac{\\sqrt{6}}{6}$。",
+      "takeaway": "**二次型约束 + $x^2+y^2$ 目标的跨学科秒杀大招**：高数用「欧拉定理得 $x^2+y^2=-\\lambda$ + 行列式为零」，线代直接算对称矩阵特征值 $\\mu_{\\min},\\mu_{\\max}$ 取倒数开方，两种方法 10 秒互验！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.172",
+        "pdfPage": 185,
+        "itemRef": "强化例 13.30"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_extrema_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-53",
+      "stage": "intensive",
+      "section": "五、无条件极值、条件极值与闭区域最值（强化例 13.25~13.32）",
+      "kind": "example",
+      "title": "【强化例 13.31】闭圆盘 $x^2+y^2\\le 16$ 上求 $3(x^2+y^2)-x^3$ 最值（含鞍点补注 #46）",
+      "examWeight": "core",
+      "problem": "求函数 $f(x,y)=3(x^2+y^2)-x^3$ 在有界闭圆盘 $D=\\{(x,y)\\mid x^2+y^2\\le 16\\}$ 上的最大值与最小值。",
+      "steps": [
+        {
+          "stepTitle": "第一步：检查区域 $D$ 内部所有驻点（严谨补注 #46）",
+          "detail": "由强化例13.25 解得 $f_x'=3x(2-x)=0,\\;f_y'=6y=0$ 的两个驻点 $(0,0)$ 与 $(2,0)$ **均落在圆盘内部 $x^2+y^2<16$**！计算函数值：$f(0,0)=0$（极小值），$f(2,0)=4$（注：原书仅列 $f(0,0)=0$ 是因强化例13.25 已证明 $(2,0)$ 为鞍点非极值；完整解答建议一并列出 $f(2,0)=4$ 参与比较，绝无遗漏！）。"
+        },
+        {
+          "stepTitle": "第二步：在圆周边界 $x^2+y^2=16$ 上直接代换化为一元函数",
+          "detail": "在圆周边界 $x^2+y^2=16$ 上，直接代入消去 $y^2$（$x\\in[-4,4]$）：$$f(x,y)=3\\cdot 16-x^3=48-x^3,\\qquad x\\in[-4,4].$$此一元函数在 $[-4,4]$ 上严格单调递减！故边界最大值在 $x=-4,y=0$ 处取得：$f(-4,0)=48-(-64)=112$；边界最小值在 $x=4,y=0$ 处取得：$f(4,0)=48-64=-16$。"
+        },
+        {
+          "stepTitle": "全局比较得出最值",
+          "detail": "比较所有候选值 $\\{0,\\;4,\\;112,\\;-16\\}$，得最大值 $f(-4,0)=112$，最小值 $f(4,0)=-16$。"
+        }
+      ],
+      "finalAnswer": "最大值为 $112$（在 $(-4,0)$ 处），最小值为 $-16$（在 $(4,0)$ 处）。",
+      "takeaway": "在圆盘边界 $x^2+y^2=R^2$ 上，一旦目标函数里直接含 $x^2+y^2$，**立刻代入常数 $R^2$ 降维为一元闭区间最值**，3 秒出边界端点值！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.173",
+        "pdfPage": 186,
+        "itemRef": "强化例 13.31"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_extrema_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-e-54",
+      "stage": "intensive",
+      "section": "五、无条件极值、条件极值与闭区域最值（强化例 13.25~13.32）",
+      "kind": "example",
+      "title": "【强化例 13.32】压轴综合：全微分充要条件 $P_y'=Q_x'$ 导出二阶常系数 ODE 求 $f(u)$",
+      "examWeight": "core",
+      "problem": "设函数 $f(u)$ 在 $(0,+\\infty)$ 内具有三阶连续导数，已知 $\\mathrm{d}F(x,y)=\\dfrac{f(xy)}{x^2 y}\\,\\mathrm{d}x+\\dfrac{f''(xy)}{x y^2}\\,\\mathrm{d}y$（$xy>0$）为某二元函数 $F(x,y)$ 的全微分。（1）证明：存在常数 $C$ 使 $\\dfrac{f''(u)}{u}-\\dfrac{f(u)}{u}=C$；（2）若 $f(1)=1,\\;f'(1)=-1,\\;f''(1)=0$，求 $f(u)$。",
+      "steps": [
+        {
+          "stepTitle": "（1）利用 $P_y'=Q_x'$ 化为全导数恒等式并积分",
+          "detail": "记 $P(x,y)=\\frac{f(xy)}{x^2 y}$，$Q(x,y)=\\frac{f''(xy)}{x y^2}$。在第一象限（单连通，$xy>0$）由全微分必要条件 $\\frac{\\partial P}{\\partial y}=\\frac{\\partial Q}{\\partial x}$ 计算：$$\\frac{\\partial P}{\\partial y}=\\frac{x f'(xy)\\cdot x^2 y-f(xy)\\cdot x^2}{(x^2 y)^2}=\\frac{xy f'(xy)-f(xy)}{x^2 y^2},$$$$\\frac{\\partial Q}{\\partial x}=\\frac{y f'''(xy)\\cdot x y^2-f''(xy)\\cdot y^2}{(x y^2)^2}=\\frac{xy f'''(xy)-f''(xy)}{x^2 y^2}.$$令 $u=xy>0$，由 $P_y'=Q_x'$ 消去 $x^2 y^2$ 后两边同除以 $u^2$，恰好凑成两个商导数：$$\\frac{u f'''(u)-f''(u)}{u^2}=\\frac{u f'(u)-f(u)}{u^2}\\iff\\left(\\frac{f''(u)}{u}\\right)'=\\left(\\frac{f(u)}{u}\\right)'.$$对 $u\\in(0,+\\infty)$ 两边积分，即证存在常数 $C$ 使$$\\frac{f''(u)}{u}-\\frac{f(u)}{u}=C.$$"
+        },
+        {
+          "stepTitle": "（2）代入初值定 $C$ 并求解二阶常系数非齐次线性 ODE",
+          "detail": "将 $u=1,\\;f(1)=1,\\;f''(1)=0$ 代入（1）式得 $C=\\frac{0}{1}-\\frac{1}{1}=-1$，方程化为$$f''(u)-f(u)=-u.$$特征方程 $r^2-1=0\\implies r=\\pm 1$，齐次通解 $C_1\\mathrm{e}^u+C_2\\mathrm{e}^{-u}$；观察特解 $f^*(u)=u$，故通解为$$f(u)=C_1\\mathrm{e}^u+C_2\\mathrm{e}^{-u}+u,\\qquad f'(u)=C_1\\mathrm{e}^u-C_2\\mathrm{e}^{-u}+1.$$代入 $f(1)=1,\\;f'(1)=-1$：$$\\begin{cases}C_1\\mathrm{e}+C_2\\mathrm{e}^{-1}+1=1,\\\\C_1\\mathrm{e}-C_2\\mathrm{e}^{-1}+1=-1,\\end{cases}\\implies C_1=-\\mathrm{e}^{-1},\\;C_2=\\mathrm{e}.$$最终得$$f(u)=\\mathrm{e}^{1-u}-\\mathrm{e}^{u-1}+u\\quad(u>0).$$"
+        }
+      ],
+      "finalAnswer": "（1）证得 $\\dfrac{f''(u)}{u}-\\dfrac{f(u)}{u}=C$；（2）$f(u)=\\mathrm{e}^{1-u}-\\mathrm{e}^{u-1}+u\\;(u>0)$。",
+      "takeaway": "经典真题级压轴模板：**「多元全微分 $P_y'=Q_x'$ + 凑商导数 $(\\frac{g(u)}{u})'$ + 二阶常系数 ODE」**跨讲综合，看到分子出现 $u g'(u)-g(u)$ 立刻除 $u^2$ 凑成 $(\\frac{g(u)}{u})'$！",
+      "source": {
+        "book": "27张宇《高等数学 18 讲》（强化）",
+        "printedPage": "P.173-174",
+        "pdfPage": 186,
+        "itemRef": "强化例 13.32"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_extrema_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-s-01",
+      "stage": "both",
+      "section": "题型总结（一）：概念、极限、偏导、全微分与 PDE 决策总图",
+      "kind": "summary",
+      "title": "第 13 讲（上）：二元极限、概念反例、隐函数与 PDE 化简全题型决策总表",
+      "examWeight": "core",
+      "overview": "本讲前半部分覆盖多元微分学的全部**概念辨析与计算技能**，核心抓手只有四条：① 极限证存在靠**夹逼/极坐标/整体换元**，证不存在靠**直线族 $y=kx$ / 配阶曲线 $y=-x^2+x^3$ / 两累次极限不等**；② 概念辨析靠**五大概念菱形图 + 六大经典反例**；③ 求导算全微分靠**位置记号 $f_1',f_2'$ + 一阶全微分形式不变性 + 16 式全微分大观**；④ 偏微分方程靠**线性算子因式分解 / 径向 $u_{xx}''+u_{yy}''=\\frac{1}{r^2}f''(\\ln r)$ / 直接积分加 $C(y)$**。",
+      "patterns": [
+        {
+          "typeName": "题型 1：二重极限存在性判定与计算",
+          "triggers": "求 $\\lim\\limits_{(x,y)\\to(0,0)}f(x,y)$、连续定参、或比较二重极限与累次极限",
+          "method": "先看分子分母齐次次数差：分子高次用均值不等式/极坐标夹逼证为 $0$；同次试直线族 $y=kx$；分母可为零线（如 $x^2+y$）取配阶曲线 $y=-x^2+x^3$；只含 $u=x^2+y^2$ 时整体换元降为一元极限。",
+          "pitfall": "所有直线路径极限皆为 $0$ 绝不等于二重极限存在！两累次极限相等也推不出二重极限存在！",
+          "relatedRefs": "例 13.1, 例 13.2, 强化例 13.1, 强化例 13.2, 强化例 13.3, 强化例 13.4, 强化例 13.5, 强化例 13.6"
+        },
+        {
+          "typeName": "题型 2：连续、偏导存在、可微与偏导连续辨析",
+          "triggers": "含分段点/绝对值的偏导与可微判定，或选择题概念逻辑推理",
+          "method": "具体点偏导用「先代值再求导」；可微必走三步法（先验两偏导存在，再验 $\\lim\\frac{\\Delta z-A\\Delta x-B\\Delta y}{\\rho}=0$）；概念命题排错直接对照表 13-2 六大反例现象。",
+          "pitfall": "切忌把「偏导连续」当可微必要条件（反例强化例 13.12），也切忌默认混合偏导相等 $f_{xy}''=f_{yx}''$（反例强化例 13.13）。",
+          "relatedRefs": "例 13.3, 例 13.8, 强化例 13.7, 强化例 13.8, 强化例 13.9, 强化例 13.10, 强化例 13.11, 强化例 13.12, 强化例 13.13"
+        },
+        {
+          "typeName": "题型 3：全微分定参、反凑原函数与梯度",
+          "triggers": "已知 $P\\,\\mathrm{d}x+Q\\,\\mathrm{d}y$ 为全微分求参数、求原函数或结合 ODE 压轴",
+          "method": "单连通域内直接列 $P_y'=Q_x'$ 定参；熟记表 13-1 全部 16 式全微分反凑原函数；压轴大题见 $u g'(u)-g(u)$ 立即除 $u^2$ 凑成 $(\\frac{g(u)}{u})'$。",
+          "pitfall": "注意强化 P.158 注(2) 印刷勘误 #44（$4x^6 y$ 应为 $4x^2 y$）；确认区域是否含原点奇点（单连通条件）。",
+          "relatedRefs": "例 13.7, 强化例 13.14, 强化例 13.32"
+        },
+        {
+          "typeName": "题型 4：复合函数二阶偏导、隐函数与隐函数方程组",
+          "triggers": "抽象复合 $f(u,v)$ 二阶导、隐方程 $F(x,y,z)=0$ 或方程组求导",
+          "method": "严守位置记号 $f_1',f_2'$；求定点二阶偏导在一阶后立刻先代一个坐标；求 $\\mathrm{d}z$ 优先全微分形式不变性；方程组定点求导直接两边求导后代数值解线性组；见 $xz_x'+yz_y'$ 秒查 $k$ 次齐次欧拉定理。",
+          "pitfall": "二阶导时漏对 $f_1'(u,v)$ 再用链式法则；隐函数公式丢负号；方程组忘记证特解唯一性（强化例 13.17）。",
+          "relatedRefs": "例 13.4, 例 13.5, 例 13.9, 例 13.10, 例 13.11, 例 13.12, 例 13.13, 例 13.14, 例 13.15, 例 13.16, 强化例 13.15, 强化例 13.16, 强化例 13.17, 强化例 13.18, 强化例 13.19, 强化例 13.20"
+        },
+        {
+          "typeName": "题型 5：偏微分方程（PDE）变量替换化简与求解",
+          "triggers": "已知/待定线性替换化简二阶 PDE、径向拉普拉斯方程、一阶线性 PDE",
+          "method": "常系数二阶算子先因式分解；待定参数必须同时检验保留项系数非零（防退化）；径向 $f(\\ln r)$ 记 $u_{xx}''+u_{yy}''=r^{-2}f''(\\ln r)$；直接积分必写任意函数 $C(y)$。",
+          "pitfall": "强化例 13.22 漏舍退化增根 $a=-2$；积分把 $C(y)$ 误写成常数 $C$。",
+          "relatedRefs": "例 13.6, 强化例 13.21, 强化例 13.22, 强化例 13.23, 强化例 13.24"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 13-3：第 13 讲前半部分（概念·计算·PDE）高频触发词与首选工具速查",
+          "headers": [
+            "题目特征 / 触发词",
+            "第一反应首选工具",
+            "典型避坑要点",
+            "核心母题"
+          ],
+          "rows": [
+            [
+              "分母含 $x^2+y$（可为零线）",
+              "曲线配阶路径 $y=-x^2+cx^3$",
+              "所有直线全为 $0$ 仍可能不存在",
+              "强化例 13.2"
+            ],
+            [
+              "含绝对值求点 $(x_0,y_0)$ 偏导",
+              "先代固定坐标值，再一元求导",
+              "避免硬套求导公式破坏分段结构",
+              "例 13.3, 例 13.5"
+            ],
+            [
+              "求定点 $\\left.\\frac{\\partial^2 z}{\\partial x\\partial y}\\right|_{(0,0)}$",
+              "求完 $z_x'$ 立刻代 $x=0$ 再对 $y$ 导",
+              "大幅消元，免写无用交叉项",
+              "例 13.9, 强化例 13.16"
+            ],
+            [
+              "隐函数求 $\\mathrm{d}z$ 或 $xz_x'+yz_y'$",
+              "全微分形式不变性 / 欧拉齐次定理",
+              "全微分免背负号；欧拉 3 秒破 $k$ 次齐次",
+              "例 13.12, 强化例 13.15, 强化例 13.20"
+            ],
+            [
+              "待定替换 $(u,v)$ 化简 PDE",
+              "二阶算子因式分解 + 验雅可比 $J\\ne 0$",
+              "必须舍去使保留项归零的退化参数",
+              "强化例 13.21, 强化例 13.22"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "多元微分计算题表面繁琐，本质全是「位置记号 + 全微分不变性 + 算子因式分解」三大模板的组合，每一步先代值能直接省下 50% 草稿量！",
+      "source": {
+        "book": "27张宇《基础30讲·高数》+《高数18讲》（强化）",
+        "printedPage": "基础 P.304-324 / 强化 P.145-166",
+        "pdfPage": 309,
+        "itemRef": "第 13 讲前半部分体系总汇"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_calc_pde",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-s-02",
+      "stage": "both",
+      "section": "题型总结（二）：多元极值、拉格朗日条件最值与闭区域最值总表",
+      "kind": "summary",
+      "title": "第 13 讲（下）：无条件极值、拉格朗日条件最值与闭区域最值解题总表",
+      "examWeight": "core",
+      "overview": "极值与最值是高数第 13 讲在考研真题中**大题出题率最高**的压轴板块，请严格区分三大场景：① **无条件极值**（内点驻点 $\\to$ $A,B,C$ 与 $\\Delta=AC-B^2$，$\\Delta=0$ 转用定义；隐函数极值直接对一阶隐方程再求导）；② **条件最值**（拉格朗日乘数法 + 齐次欧拉特征值法 + 光滑距离垂线原理，**不封闭弧必查端点**）；③ **有界闭区域最值**（内部驻点 $\\cup$ 边界消元/拉格朗日 $\\cup$ 角点端点，全局比大小，无须对每个内点都算 $\\Delta$）。",
+      "patterns": [
+        {
+          "typeName": "题型 6：显式与隐式函数无条件极值",
+          "triggers": "求 $z=f(x,y)$ 或 $F(x,y,z)=0$ 的极值、极值概念辨析",
+          "method": "先求全部驻点（隐函数需证超越方程根唯一性！），再算 $A,B,C$ 判 $\\Delta=AC-B^2$；隐函数求 $A,B,C$ 直接对一阶隐方程再求导并把 $z_x'=z_y'=0$ 划零；$\\Delta=0$ 用配方保号或路径异号。",
+          "pitfall": "二元极大值点仅推得 $f_{xx}''\\le 0,f_{yy}''\\le 0$（可取等号）；沿每条直线取极小推不出二元极小（皮亚诺反例强化例 13.26）；乘积 $f(x)f(y)$ 别忘乘 $f(0)$ 符号。",
+          "relatedRefs": "例 13.17, 例 13.18, 例 13.19, 强化例 13.25, 强化例 13.26, 强化例 13.27, 强化例 13.28"
+        },
+        {
+          "typeName": "题型 7：拉格朗日条件最值、垂线原理与二次型齐次消元",
+          "triggers": "在等式约束 $\\varphi=0$（或双约束）下求最值、曲线到直线/原点最近最远距离",
+          "method": "先作单调等价简化（$\\sqrt{u}\\to u,\\;|u|\\to u^2,\\;u_1 u_2\\to\\ln u_1+\\ln u_2$）；二次型约束求 $x^2+y^2$ 用欧拉定理得 $x^2+y^2=-\\lambda$ 再令系数行列式为零；光滑曲线到定直线距离可用法向量平行（垂线原理）秒解。",
+          "pitfall": "一旦约束附带不等式（如 $a\\le 0,b\\ge 0$），约束变成**不封闭弧段**，拉格朗日法绝对解不出端点，必须手算端点值！",
+          "relatedRefs": "例 13.20, 例 13.21, 强化例 13.29, 强化例 13.30"
+        },
+        {
+          "typeName": "题型 8：有界闭区域 $D$ 上连续函数的最值",
+          "triggers": "求 $f(x,y)$ 在 $x^2+y^2\\le R^2$、椭圆域或多边形闭区域 $D$ 上的最大值与最小值",
+          "method": "① 求 $D$ 内部所有驻点（与不可偏导点）函数值（不必逐一算 $\\Delta$，全放入候选表即可）；② 边界能显式消元（如圆周直接代入 $x^2+y^2=R^2$ 或椭圆代入 $x^2=1-y^2/4$）优先化一元闭区间最值，否则用拉格朗日法；③ 纳入所有边界角点/交点，全局取最大最小。",
+          "pitfall": "遗漏内部多个驻点中的某一个（如强化例 13.31 的 $(2,0)$ 虽为鞍点，规范解答应说明），或消元后忘记写出剩余自变量的闭区间范围（如 $y\\in[-2,2]$）。",
+          "relatedRefs": "例 13.22, 强化例 13.31"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 13-4：多元极值与最值三大题型核心步骤与提速策略对比",
+          "headers": [
+            "极值/最值类型",
+            "标准操作路线",
+            "核心提速绝招",
+            "头号失分红线"
+          ],
+          "rows": [
+            [
+              "无条件极值（显/隐式）",
+              "驻点 $\\to A,B,C \\to \\Delta=AC-B^2$",
+              "隐函数直接对一阶方程再导并划去 $z_x',z_y'$",
+              "漏证隐方程根唯一；$\\Delta=0$ 乱下结论"
+            ],
+            [
+              "等式条件最值",
+              "构造 $L=f+\\lambda\\varphi+\\mu\\psi \\to \\nabla L=\\mathbf{0}$",
+              "目标去根号；二次型配欧拉定理；距离用垂线原理",
+              "带不等式限制的不封闭弧**漏查端点**"
+            ],
+            [
+              "有界闭区域最值",
+              "内点驻点 $\\cup$ 边界最值 $\\cup$ 角点比较",
+              "边界能消元（如 $x^2+y^2=16$）绝不强列拉格朗日",
+              "内部多驻点漏列；消元后丢自变量闭区间端点"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "极值大题想拿满分只需守住三句口诀：「**隐方程要证根唯一，不封闭弧必查两端点，闭区域边界能消元就不硬拉格朗日**」！",
+      "source": {
+        "book": "27张宇《基础30讲·高数》+《高数18讲》（强化）",
+        "printedPage": "基础 P.324-331 / 强化 P.168-174",
+        "pdfPage": 329,
+        "itemRef": "第 13 讲极值与最值体系总汇"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_zy18_extrema_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-c13-s-03",
+      "stage": "both",
+      "section": "题型总结（三）：第 13 讲原书勘误与严谨补注台账（#43~#47）",
+      "kind": "summary",
+      "title": "第 13 讲原书印刷勘误与严谨性补注台账（累计 #43~#47，SymPy 全核验）",
+      "examWeight": "core",
+      "overview": "本讲在逐页核对 27 张宇《基础 30 讲·高数》P.304-331 上（共 22 例）与《高数 18 讲》P.145-174（共 32 例）并由 SymPy 1.14.0 全量验算时，共捕获 **1 处明确原书印刷错误**（#44）及 **4 处解答过程严谨性补注**（#43、#45、#46、#47），按编号纳入全站勘误总账。",
+      "patterns": [
+        {
+          "typeName": "台账 #44（实锤印刷错）：强化 18 讲 P.158 注(2) 幂次多印",
+          "triggers": "阅读强化 P.158 全微分公式大观 注(2) 梯度示例",
+          "method": "原书题干把 $\\mathrm{d}u$ 第二项分子印成 $4x^6 y$，而紧跟其后的 $\\operatorname{grad} u$ 结果却印的是 $-\\frac{4x^2 y}{(x^2+y^2)^2}$。经 SymPy 验算，$4x^6 y$ 根本无法凑成全微分，正确应为 $4x^2 y$，此时 $a=4$ 且原函数 $u=\\frac{2x^2}{x^2+y^2}+C$。",
+          "pitfall": "若照原书印错的 $4x^6 y$ 去算 $P_y'=Q_x'$，永远解不出常数 $a$！",
+          "relatedRefs": "强化例 13.14"
+        },
+        {
+          "typeName": "台账 #43 & #45（严谨补注）：隐函数超越方程实根唯一性证明",
+          "triggers": "例 13.19 解 $\\ln z-\\frac{2}{z}+2=0$ 与强化例 13.17 解 $\\frac{1}{2}z^2+\\ln\\frac{z}{2}-z=0$",
+          "method": "原书均仅观察出特解 $z=1$（或 $z=2$）而未证无其他根；规范解答应各补一行导数保号：$g'(z)=\\frac{1}{z}+\\frac{2}{z^2}>0$ 与 $h'(z)=z+\\frac{1}{z}-1\\ge 1>0$，一步封死唯一性。",
+          "pitfall": "考研解答题若只写「易知 $z=1$」而不说明单调唯一，极易被扣 1~2 分步骤严谨分！",
+          "relatedRefs": "例 13.19, 强化例 13.17"
+        },
+        {
+          "typeName": "台账 #46 & #47（严谨补注）：闭区域多驻点说明与 PDE 连通定义域",
+          "triggers": "强化例 13.31 圆盘内部双驻点与强化例 13.24 含 $\\tan y$ 的解域",
+          "method": "强化例 13.31 闭圆盘内含 $(0,0)$ 和 $(2,0)$ 两个驻点，补明 $(2,0)$ 为鞍点且 $f(2,0)=4$ 不影响最值；强化例 13.24 补明连通无奇点带域 $y\\in(-\\frac{\\pi}{2},\\frac{\\pi}{2})$ 以严格满足 $f>0$。",
+          "pitfall": "写闭区域最值表时遗漏域内驻点或忽略对数/正切奇点边界。",
+          "relatedRefs": "强化例 13.24, 强化例 13.25, 强化例 13.31"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 13-5：高数第 13 讲勘误与严谨补注台账（#43~#47）",
+          "headers": [
+            "编号",
+            "出处位置",
+            "类型",
+            "原书写法",
+            "修正 / 严谨补注（已 SymPy 验算）"
+          ],
+          "rows": [
+            [
+              "#43",
+              "基础 P.327 例 13.19",
+              "严谨补注",
+              "直接由 $\\ln z-\\frac{2}{z}+2=0$ 写出 $z=1$",
+              "补证 $g'(z)=\\frac{1}{z}+\\frac{2}{z^2}>0\\;(z>0)$，严格保证 $z=1$ 唯一"
+            ],
+            [
+              "#44",
+              "强化 P.158 四·注(2)",
+              "**印刷错误**",
+              "$\\mathrm{d}u=\\frac{axy^2}{(x^2+y^2)^2}\\mathrm{d}x-\\frac{4x^6 y}{(x^2+y^2)^2}\\mathrm{d}y$",
+              "第二项分子 $4x^6 y$ 实为 **$4x^2 y$**（与下文 $\\operatorname{grad}u$ 一致），$a=4$"
+            ],
+            [
+              "#45",
+              "强化 P.159 强化例 13.17",
+              "严谨补注",
+              "「易知 $z=2,\\;y=\\mathrm{e}^2$」",
+              "补证 $h'(z)=z+\\frac{1}{z}-1\\ge 1>0\\;(z>0)$，保证 $z=2$ 为唯一正根"
+            ],
+            [
+              "#46",
+              "强化 P.173 强化例 13.31",
+              "严谨补注",
+              "闭圆盘内仅列出 $f(0,0)=0$ 参与比较",
+              "域内另一驻点 $(2,0)$ 虽由强化例 13.25 知为鞍点，仍建议标明 $f(2,0)=4$"
+            ],
+            [
+              "#47",
+              "强化 P.166 强化例 13.24",
+              "严谨补注",
+              "直接写 $f(x,y)=\\mathrm{e}^{-x}(1-\\ln|\\cos y|)$",
+              "补明在含原点连通带域 $y\\in(-\\frac{\\pi}{2},\\frac{\\pi}{2})$ 上满足 $\\cos y>0$ 且 $f>0$"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "全书刷题时养成随手用 $P_y'=Q_x'$、单调性求导和边界检验证伪的习惯，就能一眼识破印刷错误并补齐阅卷评分点！",
+      "source": {
+        "book": "27张宇《基础30讲·高数》+《高数18讲》（强化）",
+        "printedPage": "基础 P.327 / 强化 P.158, P.159, P.166, P.173",
+        "pdfPage": 332,
+        "itemRef": "第 13 讲勘误与严谨台账 #43~#47"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_c13_total_diff_16",
+        "verified": true
+      }
+    }
+  ]
+}
