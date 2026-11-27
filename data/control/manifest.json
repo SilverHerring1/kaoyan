@@ -10,11 +10,17 @@
   ],
   "referenceBooks": [
     "胡寿松主编《自动控制原理》(第七版) & 《题海与考研指导》(第三版)",
-    "刘豹、唐万生《现代控制理论》(第3版) & 习题解答"
+    "刘豹、唐万生《现代控制理论》(第3版) & 习题解答",
+    "浙江大学 845《自动控制原理》1995–2026 历年考研真题及答案册"
+  ],
+  "groups": [
+    { "id": "textbook", "label": "教材与辅导（全 9 章）" },
+    { "id": "exam", "label": "历年真题专题（3 单元）" }
   ],
   "chapters": [
     {
       "id": "ch01",
+      "group": "textbook",
       "num": "第 1 章",
       "title": "概述（自动控制的一般概念）",
       "syllabusCode": "大纲(1)",
@@ -26,6 +32,7 @@
     },
     {
       "id": "ch02",
+      "group": "textbook",
       "num": "第 2 章",
       "title": "连续时间控制系统的数学模型",
       "syllabusCode": "大纲(2)",
@@ -37,6 +44,7 @@
     },
     {
       "id": "ch03",
+      "group": "textbook",
       "num": "第 3 章",
       "title": "连续时间控制系统的时域分析",
       "syllabusCode": "大纲(3)",
@@ -48,6 +56,7 @@
     },
     {
       "id": "ch04",
+      "group": "textbook",
       "num": "第 4 章",
       "title": "连续时间控制系统的稳定性与稳态误差",
       "syllabusCode": "大纲(3)",
@@ -59,6 +68,7 @@
     },
     {
       "id": "ch05",
+      "group": "textbook",
       "num": "第 5 章",
       "title": "根轨迹分析法",
       "syllabusCode": "大纲(4)",
@@ -70,6 +80,7 @@
     },
     {
       "id": "ch06",
+      "group": "textbook",
       "num": "第 6 章",
       "title": "频率特性分析法与超前/滞后校正",
       "syllabusCode": "大纲(5)-(6)",
@@ -81,6 +92,7 @@
     },
     {
       "id": "ch07",
+      "group": "textbook",
       "num": "第 7 章",
       "title": "线性离散时间控制系统分析与综合",
       "syllabusCode": "大纲(7)",
@@ -92,6 +104,7 @@
     },
     {
       "id": "ch08",
+      "group": "textbook",
       "num": "第 8 章",
       "title": "线性定常系统的状态空间分析与综合",
       "syllabusCode": "大纲(8)",
@@ -103,6 +116,7 @@
     },
     {
       "id": "ch09",
+      "group": "textbook",
       "num": "第 9 章",
       "title": "非线性控制系统分析",
       "syllabusCode": "大纲(9)",
@@ -111,6 +125,45 @@
       "syllabusReq": "【2027 考纲明确要求】掌握非线性控制系统基本概念与描述函数法，掌握李亚普诺夫稳定性分析方法（相平面法作拓展了解）。",
       "file": "ch09.json",
       "ready": true
+    },
+    {
+      "id": "exam-01",
+      "group": "exam",
+      "num": "真题 · 单元 1",
+      "title": "2010–2026 历年考情全景与 12 大超级母题总览",
+      "syllabusCode": "真题考情总览",
+      "examWeight": "core",
+      "pages": "浙大 845 真题 2010–2026（17 年全景）",
+      "syllabusReq": "基于 2010–2026 共 17 套浙大 845 考研真题原卷逐题统计，提炼 9 大章节考频与 ROI、近 4 年（2023–2026）命题新风向、原题复刻台账、禁用计算器速算常数及 12 道高频超级母题标准满分模板。",
+      "kinds": ["formula", "conclusion", "example", "summary"],
+      "file": "exam-01.json",
+      "ready": true
+    },
+    {
+      "id": "exam-02",
+      "group": "exam",
+      "num": "真题 · 单元 2",
+      "title": "2020–2022 历年真题逐题精解（3 套卷）",
+      "syllabusCode": "真题 2020–2022",
+      "examWeight": "core",
+      "pages": "2020 / 2021 / 2022 真题及答案册",
+      "syllabusReq": "完整覆盖 2020、2021（首年禁用计算器）、2022 共 3 套浙大 845 真题全部大题，逐题 SymPy 验算并标注原答案册勘误与方法拓展。",
+      "kinds": ["formula", "conclusion", "example", "summary"],
+      "file": "exam-02.json",
+      "ready": false
+    },
+    {
+      "id": "exam-03",
+      "group": "exam",
+      "num": "真题 · 单元 3",
+      "title": "2023–2026 最新真题逐题精解（4 套卷）",
+      "syllabusCode": "真题 2023–2026",
+      "examWeight": "core",
+      "pages": "2023 / 2024 / 2025 / 2026 最新原卷",
+      "syllabusReq": "完整覆盖 2023–2026 最新 4 套浙大 845 真题全部大题（含 2023/2025 无独立答案册年份的 SymPy 独立严谨全解与 2024/2026 答案核对），深度锁定非线性、离散设计与现代控制新风向。",
+      "kinds": ["formula", "conclusion", "example", "summary"],
+      "file": "exam-03.json",
+      "ready": false
     }
   ]
 }

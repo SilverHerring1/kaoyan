@@ -59,6 +59,8 @@ function buildChapterRefIndex(items) {
   const byId = new Map();
   const mathEx = new Map();
   const proofReal = new Map();
+  const examReal = new Map();
+  const motherEx = new Map();
   const ctrlEx = new Map();
   const exercises = new Map();
   const tables = new Map();
@@ -114,6 +116,24 @@ function buildChapterRefIndex(items) {
       }
     }
 
+    // 1b. Control real-exam & mother-problem refs: 2026-T1, 母题 1
+    if (item.kind === 'example') {
+      const pmExam = title.match(/(?:【\s*)?(20\d{2}-T\d+)/i);
+      if (pmExam) examReal.set(pmExam[1].toUpperCase(), item);
+      const pmMother = title.match(/(?:【\s*)?母题\s*(\d+)/);
+      if (pmMother) motherEx.set(pmMother[1], item);
+    }
+    const reExamAll = /\b(20\d{2}-T\d+)\b/gi;
+    let mex;
+    while ((mex = reExamAll.exec(combined)) !== null) {
+      setIfEmpty(examReal, mex[1].toUpperCase(), item);
+    }
+    const reMotherAll = /母题\s*(\d+)/g;
+    let mmot;
+    while ((mmot = reMotherAll.exec(combined)) !== null) {
+      setIfEmpty(motherEx, mmot[1], item);
+    }
+
     // 2. Control main-text & study-guide examples: 例 2-1a / 例 2-21~2-23
     const isMain = /自动控制原理/.test(book) || /主教材/.test(title);
     const isGuide = /学习辅导/.test(book) || /学习辅导/.test(title);
@@ -160,25 +180,27 @@ function buildChapterRefIndex(items) {
       }
     }
 
-    // 4. Tables: 表 2-1, 表 2-4, 辅导表 2-2
+    // 4. Tables: 表 2-1, 表 2-4, 辅导表 2-2, 表 E1-1
     if (Array.isArray(item.tables)) {
       for (const tbl of item.tables) {
         const cap = String(tbl.caption || '');
-        const mt = cap.match(/表\s*(\d+-\d+)/);
+        const mt = cap.match(/表\s*([A-Z]?\d+-\d+)/i);
         if (mt) {
+          const code = mt[1].toUpperCase();
           const isGuideTbl = /学习辅导|辅导表/.test(cap);
-          if (isGuideTbl) setIfEmpty(tables, `guide:${mt[1]}`, item);
-          else setIfEmpty(tables, `main:${mt[1]}`, item);
-          setIfEmpty(tables, `any:${mt[1]}`, item);
+          if (isGuideTbl) setIfEmpty(tables, `guide:${code}`, item);
+          else setIfEmpty(tables, `main:${code}`, item);
+          setIfEmpty(tables, `any:${code}`, item);
         }
       }
     }
-    const reTblRef = /(辅导)?表\s*(\d+-\d+)/g;
+    const reTblRef = /(辅导)?表\s*([A-Z]?\d+-\d+)/gi;
     let mtr;
     while ((mtr = reTblRef.exec(itemRef)) !== null) {
-      if (mtr[1] || isGuide) setIfEmpty(tables, `guide:${mtr[2]}`, item);
-      else setIfEmpty(tables, `main:${mtr[2]}`, item);
-      setIfEmpty(tables, `any:${mtr[2]}`, item);
+      const code = mtr[2].toUpperCase();
+      if (mtr[1] || isGuide) setIfEmpty(tables, `guide:${code}`, item);
+      else setIfEmpty(tables, `main:${code}`, item);
+      setIfEmpty(tables, `any:${code}`, item);
     }
 
     // 5. Equations (prioritize formula cards first, then others): 式(2-41)~(2-62) or 式(1-3)
@@ -206,7 +228,7 @@ function buildChapterRefIndex(items) {
     }
   }
 
-  return { byId, mathEx, proofReal, ctrlEx, exercises, tables, equations };
+  return { byId, mathEx, proofReal, examReal, motherEx, ctrlEx, exercises, tables, equations };
 }
 
 function resolveRefToken(token, refIndex, currentItem) {
@@ -217,6 +239,15 @@ function resolveRefToken(token, refIndex, currentItem) {
   // Direct card ID (e.g. ctrl-ch02-e-34)
   if (refIndex.byId.has(clean)) {
     target = refIndex.byId.get(clean);
+  }
+  // Control 845 real exam: 2026-T1
+  else if (/^20\d{2}-T\d+$/i.test(clean)) {
+    target = refIndex.examReal?.get(clean.toUpperCase());
+  }
+  // Control 845 mother problem: 母题 1 / 母题12
+  else if (/^母题\s*\d+$/.test(clean)) {
+    const m = clean.match(/^母题\s*(\d+)$/);
+    if (m) target = refIndex.motherEx?.get(m[1]);
   }
   // Proof real exam: 真题 2026 / 真题 2020-1
   else if (/^真题\s*\d{4}(?:-[123])?$/.test(clean)) {
@@ -269,13 +300,14 @@ function resolveRefToken(token, refIndex, currentItem) {
   else if (/^[AB]\d+-\d+$/.test(clean)) {
     target = refIndex.exercises.get(`code:${clean}`);
   }
-  // Table: (主教材|辅导)?表 2-1
-  else if (/^(?:主教材\s*|辅导\s*)?表\s*\d+-\d+$/.test(clean)) {
-    const m = clean.match(/^(主教材|辅导)?\s*表\s*(\d+-\d+)$/);
+  // Table: (主教材|辅导)?表 2-1 / 表 E1-1
+  else if (/^(?:主教材\s*|辅导\s*)?表\s*[A-Z]?\d+-\d+$/i.test(clean)) {
+    const m = clean.match(/^(主教材|辅导)?\s*表\s*([A-Z]?\d+-\d+)$/i);
     if (m) {
-      if (m[1] === '辅导') target = refIndex.tables.get(`guide:${m[2]}`);
-      else if (m[1] === '主教材') target = refIndex.tables.get(`main:${m[2]}`);
-      else target = refIndex.tables.get(`main:${m[2]}`) || refIndex.tables.get(`any:${m[2]}`);
+      const code = m[2].toUpperCase();
+      if (m[1] === '辅导') target = refIndex.tables.get(`guide:${code}`);
+      else if (m[1] === '主教材') target = refIndex.tables.get(`main:${code}`);
+      else target = refIndex.tables.get(`main:${code}`) || refIndex.tables.get(`any:${code}`);
     }
   }
   // Equation: 式(2-62) / 式 1-3
@@ -289,7 +321,7 @@ function resolveRefToken(token, refIndex, currentItem) {
 }
 
 const MATH_SPLIT_RE = /(\$\$[\s\S]*?\$\$|\$(?!\s)[^$\n]+?\$|\\\([\s\S]*?\\\)|\\\[[\s\S]*?\\\])/g;
-const REF_TOKEN_RE = /`((?:ctrl|m1)-[a-z0-9-]+)`|真题\s*\d{4}(?:-[123])?|(?:主教材\s*|学习辅导\s*|辅导\s*|主|辅|基础\s*|强化\s*)?例\s*\d+(?:\.\d+|-\d+[a-z]?)(?!\d)|(?:课后)?习题\s*\d+-\d+|\b[AB]\d+-\d+\b|(?:主教材\s*|辅导\s*)?表\s*\d+-\d+|式\s*[（(]?\s*\d+-\d+'?\s*[）)]?/gi;
+const REF_TOKEN_RE = /`((?:ctrl|m1)-[a-z0-9-]+)`|\b20\d{2}-T\d+\b|母题\s*\d+|真题\s*\d{4}(?:-[123])?|(?:主教材\s*|学习辅导\s*|辅导\s*|主|辅|基础\s*|强化\s*)?例\s*\d+(?:\.\d+|-\d+[a-z]?)(?!\d)|(?:课后)?习题\s*\d+-\d+|\b[AB]\d+-\d+\b|(?:主教材\s*|辅导\s*)?表\s*[A-Z]?\d+-\d+|式\s*[（(]?\s*\d+-\d+'?\s*[）)]?/gi;
 
 function linkRefsInProseHtml(html, refCtx) {
   if (!refCtx?.refIndex) return html;
@@ -345,11 +377,11 @@ function renderRelatedRefs(rawRefs, refCtx) {
     if (idx % 2 === 1) return escapeHtml(part);
     const tok = part.trim();
     if (!tok) return '';
-    // Update carried prefix like 主例 / 辅例 / 强化例 / 基础例 / 习题 / 例 / 式
-    const pm = tok.match(/^(主教材\s*|学习辅导\s*|辅导\s*|主|辅|强化\s*|基础\s*)?(例|习题|表|式)/);
+    // Update carried prefix like 主例 / 辅例 / 强化例 / 基础例 / 习题 / 例 / 式 / 母题
+    const pm = tok.match(/^(主教材\s*|学习辅导\s*|辅导\s*|主|辅|强化\s*|基础\s*)?(例|习题|表|式|母题)/);
     if (pm) {
       activePrefix = (pm[1] || '') + pm[2];
-    } else if (/^[AB]\d+-\d+/.test(tok)) {
+    } else if (/^[AB]\d+-\d+|^20\d{2}-T\d+/i.test(tok)) {
       activePrefix = '';
     }
     // Extract first concrete target from a token or range (e.g. "主例2-1~2-7" -> "主例2-1", "2-15" -> activePrefix + "2-15")
@@ -669,7 +701,10 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
   }
 
   function getSubjectKinds() {
-    const kinds = state.manifest?.kinds;
+    const chMeta = getActiveChapterMeta();
+    const kinds = Array.isArray(chMeta?.kinds) && chMeta.kinds.length
+      ? chMeta.kinds
+      : state.manifest?.kinds;
     if (Array.isArray(kinds) && kinds.length) {
       return kinds.filter(k => Boolean(KIND_META[k]));
     }
@@ -1012,6 +1047,11 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
   function renderRoadmapPanel(chMeta) {
     const manifest = state.manifest;
     const readyChapters = (manifest.chapters || []).filter(c => c.ready);
+    const sameGroupReady = chMeta.group ? readyChapters.filter(c => c.group === chMeta.group) : [];
+    const jumpTarget = sameGroupReady[0] || readyChapters[0] || null;
+    const jumpLabel = sameGroupReady.length
+      ? `先看本组已上线单元（${jumpTarget.num}）`
+      : (jumpTarget ? `先看已上线单元（${jumpTarget.num}）` : '');
     return `
       <section class="card stem-roadmap-card">
         <div class="stem-roadmap-top">
@@ -1023,9 +1063,9 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
             </div>
             <h2 class="stem-chapter-heading">${escapeHtml(chMeta.num)} · ${escapeHtml(chMeta.title)}</h2>
           </div>
-          ${readyChapters.length ? `
-            <button type="button" class="btn btn-primary" data-jump-chapter="${escapeHtml(readyChapters[0].id)}">
-              先看已上线试点章（${escapeHtml(readyChapters[0].num)}）
+          ${jumpTarget ? `
+            <button type="button" class="btn btn-primary" data-jump-chapter="${escapeHtml(jumpTarget.id)}">
+              ${escapeHtml(jumpLabel)}
             </button>
           ` : ''}
         </div>

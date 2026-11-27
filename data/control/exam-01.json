@@ -1,0 +1,1040 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "control",
+  "chapterId": "exam-01",
+  "title": "真题 · 单元 1　2010–2026 历年考情全景与 12 大超级母题总览",
+  "sourceMeta": "基于 2010–2026 共 17 套浙大 845 真题原卷逐页统计 + 2027 官方考试大纲 + 孙优贤教材全 9 章交叉映射",
+  "basicRequirements": {
+    "master": "熟练掌握 12 大超级母题的标准满分模板、近 4 年（2023–2026）非线性/离散/状态空间必考套路及禁用计算器速算常数。",
+    "understand": "理解 2010–2026 真题原题复刻规律与 9 大章节分值分布，建立「高 ROI 优先」的四阶段反焦虑复习节奏。",
+    "familiar": "明确 2027 考纲不考项（相平面法、LQR、内模控制）与低频项（繁琐频域试凑校正），果断做减法。"
+  },
+  "items": [
+    {
+      "id": "ctrl-exam01-f-01",
+      "kind": "formula",
+      "examWeight": "core",
+      "section": "一、高频核心公式（时域、劳斯与稳态误差）",
+      "title": "845 高频公式总览（一）：二阶时域指标、左移劳斯判据与稳态误差铁律",
+      "prompt": "默写欠阻尼二阶系统 $(\\sigma\\%,t_p,t_s)$ 公式、三阶赫尔维茨速判条件、虚轴左移劳斯变换以及 $K_p,K_v,K_a$ 稳态误差公式：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{标准二阶指标：}\\;\\Phi(s)=\\frac{\\omega_n^2}{s^2+2\\zeta\\omega_n s+\\omega_n^2},\\quad \\sigma\\%=\\mathrm{e}^{-\\frac{\\pi\\zeta}{\\sqrt{1-\\zeta^2}}}\\times 100\\%,\\quad t_p=\\frac{\\pi}{\\omega_n\\sqrt{1-\\zeta^2}}\\\\\n&\\qquad\\qquad\\qquad t_s\\approx\\frac{3.5}{\\zeta\\omega_n}\\;(5\\%)\\;\\text{或}\\;\\frac{4.4}{\\zeta\\omega_n}\\;(2\\%)\\qquad\\text{（教材近似亦可写 }\\frac{3}{\\zeta\\omega_n},\\,\\frac{4}{\\zeta\\omega_n}\\text{，标明即可）}\\\\\n&\\text{三阶速判与左移劳斯：}\\;a_0s^3+a_1s^2+a_2s+a_3=0\\text{ 稳}\\Leftrightarrow a_i>0\\text{ 且 }a_1a_2>a_0a_3\\\\\n&\\qquad\\qquad\\qquad\\text{要求所有闭环极点 }\\operatorname{Re}(s)<-\\sigma\\implies\\text{令 }s=z-\\sigma\\text{ 代入特征式列劳斯表首列全正！}\\\\\n&\\text{单位负反馈稳态误差（前提：闭环稳定！）：}\\;e_{ss}(\\text{阶跃})=\\frac{A}{1+K_p},\\quad e_{ss}(\\text{斜坡})=\\frac{A}{K_v},\\quad e_{ss}(\\text{抛物线})=\\frac{A}{K_a}\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "$K_p,K_v,K_a$",
+          "desc": "静态位置/速度/加速度误差系数，分别等于 $\\lim_{s\\to 0}G(s)$、$\\lim_{s\\to 0}sG(s)$、$\\lim_{s\\to 0}s^2G(s)$"
+        },
+        {
+          "sym": "$s=z-\\sigma$",
+          "desc": "虚轴左移坐标变换（真题 2021-T8、2023-T5 均考 $\\sigma=1$），将「极点全在 $-\\sigma$ 左侧」化为常规劳斯判稳"
+        }
+      ],
+      "conditions": "① 二阶指标公式仅严格适用于**无闭环零点**的欠阻尼二阶系统（含闭环零点如 2026-T2 须回拉氏反变换精确求 $y(t)$）；② 终值定理求稳态误差**必须先确认闭环稳定**！",
+      "pitfalls": "考场最惨丢分点：2023-T3、2026-T1 这类含参数求稳态误差范围的题，只算误差不等式却忘列劳斯/赫尔维茨稳定条件取交集，直接丢一半分数！",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 275\" role=\"img\" aria-label=\"2010至2026年浙大845自动控制原理各章考频与典型分值分布图\">\n  <title>2010–2026 浙大 845 十七年真题九大章节考频与近年单卷分值区间</title>\n  <rect x=\"0\" y=\"0\" width=\"720\" height=\"275\" rx=\"12\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"360\" y=\"28\" text-anchor=\"middle\" font-size=\"13.5\" font-weight=\"700\" fill=\"#0f172a\">浙大 845 十七年真题（2010–2026）九章出现年数 &amp; 近年单卷分值占比</text>\n\n  <!-- Grid & labels -->\n  <g font-size=\"11\" fill=\"#334155\">\n    <!-- Row helper: y = 52 + i*23 -->\n    <text x=\"148\" y=\"56\" text-anchor=\"end\" font-weight=\"700\">Ch08 状态空间综合</text>\n    <rect x=\"158\" y=\"44\" width=\"340\" height=\"16\" rx=\"4\" fill=\"#dc2626\"/>\n    <text x=\"506\" y=\"56\" font-weight=\"700\" fill=\"#b91c1c\">17/17 年 · 25–45 分（第一大头）</text>\n\n    <text x=\"148\" y=\"79\" text-anchor=\"end\" font-weight=\"700\">Ch07 离散控制系统</text>\n    <rect x=\"158\" y=\"67\" width=\"340\" height=\"16\" rx=\"4\" fill=\"#ea580c\"/>\n    <text x=\"506\" y=\"79\" font-weight=\"700\" fill=\"#c2410c\">17/17 年 · 20–35 分（近3年飙升）</text>\n\n    <text x=\"148\" y=\"102\" text-anchor=\"end\" font-weight=\"700\">Ch04 稳定与稳态误差</text>\n    <rect x=\"158\" y=\"90\" width=\"340\" height=\"16\" rx=\"4\" fill=\"#2563eb\"/>\n    <text x=\"506\" y=\"102\" font-weight=\"700\" fill=\"#1d4ed8\">17/17 年 · 15–25 分（送分王）</text>\n\n    <text x=\"148\" y=\"125\" text-anchor=\"end\" font-weight=\"700\">Ch03 时域动态分析</text>\n    <rect x=\"158\" y=\"113\" width=\"340\" height=\"16\" rx=\"4\" fill=\"#2563eb\"/>\n    <text x=\"506\" y=\"125\" fill=\"#1e40af\">17/17 年 · 15–30 分（二阶+Φ(t)）</text>\n\n    <text x=\"148\" y=\"148\" text-anchor=\"end\" font-weight=\"600\">Ch06 频域分析法</text>\n    <rect x=\"158\" y=\"136\" width=\"300\" height=\"16\" rx=\"4\" fill=\"#0284c7\"/>\n    <text x=\"466\" y=\"148\" fill=\"#0369a1\">15/17 年 · 15–20 分（Bode+奈氏）</text>\n\n    <text x=\"148\" y=\"171\" text-anchor=\"end\" font-weight=\"600\">Ch02 数学模型</text>\n    <rect x=\"158\" y=\"159\" width=\"300\" height=\"16\" rx=\"4\" fill=\"#0284c7\"/>\n    <text x=\"466\" y=\"171\" fill=\"#0369a1\">15/17 年 · 10–20 分（框图+建模）</text>\n\n    <text x=\"148\" y=\"194\" text-anchor=\"end\" font-weight=\"600\">Ch05 根轨迹分析法</text>\n    <rect x=\"158\" y=\"182\" width=\"280\" height=\"16\" rx=\"4\" fill=\"#0d9488\"/>\n    <text x=\"446\" y=\"194\" fill=\"#0f766e\">14/17 年 · 15–20 分（圆弧+参数）</text>\n\n    <text x=\"148\" y=\"217\" text-anchor=\"end\" font-weight=\"700\" fill=\"#7c3aed\">Ch09 非线性控制 ★</text>\n    <rect x=\"158\" y=\"205\" width=\"160\" height=\"16\" rx=\"4\" fill=\"#7c3aed\"/>\n    <rect x=\"322\" y=\"205\" width=\"80\" height=\"16\" rx=\"4\" fill=\"#ddd6fe\" stroke=\"#7c3aed\" stroke-dasharray=\"3,2\"/>\n    <text x=\"410\" y=\"217\" font-weight=\"700\" fill=\"#6d28d9\">总8/17年 · 近4年4/4必考（10–25分）</text>\n\n    <text x=\"148\" y=\"240\" text-anchor=\"end\">Ch01 概述与概念</text>\n    <rect x=\"158\" y=\"228\" width=\"140\" height=\"16\" rx=\"4\" fill=\"#64748b\"/>\n    <text x=\"306\" y=\"240\" fill=\"#475569\">7/17 年 · 0–15 分（工艺框图/LTI）</text>\n  </g>\n  <text x=\"360\" y=\"264\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#64748b\">注：数据严格统计自 2010–2026 共 17 套浙大 845 真题原卷；2021 起正式禁用计算器，2023 起 Ch09 连续 4 年必考</text>\n</svg>",
+      "source": {
+        "book": "浙大 845 真题（2010–2026）× 孙优贤教材 Ch03–Ch04",
+        "printedPage": "2010–2026 全17年",
+        "pdfPage": 1,
+        "itemRef": "时域与稳态高频母式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ctrl_exam01_formulas_and_mothers_1_6",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-exam01-f-02",
+      "kind": "formula",
+      "examWeight": "core",
+      "section": "一、高频核心公式（根轨迹与频域分析）",
+      "title": "845 高频公式总览（二）：圆弧根轨迹、II 型最大相角裕度与纯滞后 $\\tau_{\\max}$",
+      "prompt": "默写「二极点+一实零点」圆弧根轨迹圆心半径公式、II 型系统最大相位裕度频率、幅值裕度增益比公式及纯滞后最大允许滞后时间：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{二极点 + 一实零点圆弧根轨迹：}\\;G(s)H(s)=\\frac{K^*(s+z)}{(s+p_1)(s+p_2)}\\implies\\text{圆心 }(-z,0),\\quad R=\\sqrt{(z-p_1)(z-p_2)}\\\\\n&\\qquad\\text{（若为一对共轭复极点 }p_{1,2}=-\\alpha\\pm\\mathrm{j}\\beta\\text{，则半径 }R=|p_1+z|=\\sqrt{(z-\\alpha)^2+\\beta^2}\\text{，见 母题 5！）}\\\\\n&\\text{II 型系统最大相位裕度：}\\;G(s)=\\frac{K(bs+1)}{s^2(as+1)}\\;(b>a>0)\\implies \\omega_m=\\frac{1}{\\sqrt{ab}},\\quad \\gamma_{\\max}=\\arcsin\\frac{b-a}{b+a}\\\\\n&\\text{幅值裕度与临界增益速算：}\\;h=\\frac{1}{|G(\\mathrm{j}\\omega_g)|}=\\frac{K_{\\max}}{K},\\quad h(\\text{dB})=20\\lg\\frac{K_{\\max}}{K}\\qquad\\text{（}K=\\tfrac{1}{2}K_{\\max}\\Rightarrow 6.02\\,\\text{dB！）}\\\\\n&\\text{纯滞后 }\\mathrm{e}^{-\\tau s}\\text{ 稳定边界：解 }|G_0(\\mathrm{j}\\omega_c)|=1\\text{ 得 }\\omega_c\\implies \\tau_{\\max}=\\frac{\\pi+\\angle G_0(\\mathrm{j}\\omega_c)}{\\omega_c}=\\frac{\\gamma_0(\\text{rad})}{\\omega_c}\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "$\\gamma_0(\\text{rad})$",
+          "desc": "不含滞后原系统的相位裕度，**务必换算成弧度**再除以 $\\omega_c$！"
+        },
+        {
+          "sym": "$\\omega_c,\\;\\omega_g$",
+          "desc": "$\\omega_c$ 为幅值穿越（剪切）频率 $|G(\\mathrm{j}\\omega_c)|=1$；$\\omega_g$ 为相位穿越频率 $\\angle G(\\mathrm{j}\\omega_g)=-180^\\circ$"
+        }
+      ],
+      "conditions": "圆弧公式要求极点在复平面共轭对称或位于实轴且零点在实轴；$h=K_{\\max}/K$ 适用于单调穿越负实轴的常规最小相位系统（条件稳定系统须画完整奈氏图判稳）。",
+      "pitfalls": "① 纯滞后求 $\\tau_{\\max}$ 时最易把度数（如 $45^\\circ$）直接除以 $\\omega_c$ 忘记乘 $\\frac{\\pi}{180^\\circ}$；② 最小相位 Bode 图由低频延长线过 $\\omega=1$ 读出 $L(1)=20\\lg K$，切勿直接用拐点后的实线读 $K$！",
+      "source": {
+        "book": "浙大 845 真题（2014/2015/2020/2021/2023/2024/2026）",
+        "printedPage": "Ch05–Ch06 跨年真题",
+        "pdfPage": 1,
+        "itemRef": "根轨迹与频域高频母式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ctrl_exam01_formulas_and_mothers_1_6",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-exam01-f-03",
+      "kind": "formula",
+      "examWeight": "core",
+      "section": "一、高频核心公式（离散控制系统）",
+      "title": "845 高频公式总览（三）：ZOH 脉冲传函、二阶快捷稳域与 $D(z)$ 极点映射",
+      "prompt": "默写 ZOH 开环脉冲传函公式、二阶离散特征方程快捷稳定三不等式、$s\\to z$ 极点映射公式及连续状态方程 ZOH 离散化公式：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{ZOH 串联脉冲传函：}\\;G(z)=(1-z^{-1})\\mathcal{Z}\\!\\left[\\frac{G_p(s)}{s}\\right],\\qquad\\text{双线性 W 变换：}\\;z=\\frac{w+1}{w-1}\\\\\n&\\text{二阶离散特征式 }D(z)=z^2+a_1z+a_2=0\\text{ 稳定充要条件：}\\;D(1)=1+a_1+a_2>0,\\;\\;D(-1)=1-a_1+a_2>0,\\;\\;|a_2|<1\\\\\n&\\text{连续指标 }\\to\\text{ 离散期望极点：}\\;s_{1,2}=-\\zeta\\omega_n\\pm\\mathrm{j}\\omega_n\\sqrt{1-\\zeta^2}\\implies z_{1,2}=\\mathrm{e}^{-\\zeta\\omega_n T}\\big(\\cos(\\omega_d T)\\pm\\mathrm{j}\\sin(\\omega_d T)\\big)\\\\\n&\\text{连续状态空间 ZOH 离散化：}\\;\\boldsymbol{x}(k+1)=\\boldsymbol{G}(T)\\boldsymbol{x}(k)+\\boldsymbol{H}(T)u(k),\\quad \\boldsymbol{G}(T)=\\mathrm{e}^{\\boldsymbol{A}T},\\quad \\boldsymbol{H}(T)=\\int_0^T\\mathrm{e}^{\\boldsymbol{A}t}\\boldsymbol{B}\\,\\mathrm{d}t\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "$\\omega_d=\\omega_n\\sqrt{1-\\zeta^2}$",
+          "desc": "阻尼自然频率；2026-T6 给定 $\\zeta=0.5,T_s=4\\,\\text{s},T=1\\,\\text{s}$ 即由此直接算出期望极点"
+        },
+        {
+          "sym": "$\\boldsymbol{H}(T)=\\boldsymbol{A}^{-1}(\\mathrm{e}^{\\boldsymbol{A}T}-\\boldsymbol{I})\\boldsymbol{B}$",
+          "desc": "仅当 $\\boldsymbol{A}$ 非奇异可逆时可用该快捷式；若 $\\boldsymbol{A}$ 奇异必须老老实实逐项积分 $\\int_0^T\\mathrm{e}^{\\boldsymbol{A}t}\\boldsymbol{B}\\,\\mathrm{d}t$"
+        }
+      ],
+      "conditions": "设计数字控制器 $D(z)$ 采用零极点对消法时，**严禁对消单位圆外或圆上的不稳定零极点**（如 $z=1.2$ 在圆外，2018-T8 与 2025-T6 绝不可把 $z-1.2$ 放进 $D(z)$ 分子去对消！）。",
+      "pitfalls": "① 2024-T6 考的就是二阶稳定三不等式画 $(a_1,a_2)$ 稳定三角形（顶点 $(-2,1),(2,1),(0,-1)$），秒背比 W 变换快 3 倍；② 含多采样开关框图（2025-T4）先用节点方程写出 $E_1^*, E_2^*$ 再解 $Y(z)$。",
+      "source": {
+        "book": "浙大 845 真题（2018/2022/2024/2025/2026）",
+        "printedPage": "Ch07 跨年真题",
+        "pdfPage": 1,
+        "itemRef": "离散系统高频母式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ctrl_exam01_mothers_7_12",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-exam01-f-04",
+      "kind": "formula",
+      "examWeight": "core",
+      "section": "一、高频核心公式（状态空间分析与综合）",
+      "title": "845 高频公式总览（四）：状态转移矩阵、PBH/对偶原理与降维观测器分块公式",
+      "prompt": "默写 $\\Phi(t)$ 正反算关系、PBH 能控/能观判据、对偶系统关系、状态反馈极点配置及 $\\boldsymbol{C}=[1,0,\\dots,0]$ 时的最简降维观测器设计公式：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{状态转移阵与传函：}\\;\\Phi(t)=\\mathrm{e}^{\\boldsymbol{A}t}=\\mathcal{L}^{-1}\\big[(s\\boldsymbol{I}-\\boldsymbol{A})^{-1}\\big],\\quad \\boldsymbol{A}=\\dot{\\Phi}(0),\\quad G(s)=\\boldsymbol{C}\\Phi(s)\\boldsymbol{B}+D\\\\\n&\\text{PBH 判据：}(\\boldsymbol{A},\\boldsymbol{B})\\text{ 能控}\\Leftrightarrow \\forall\\lambda\\in\\lambda(\\boldsymbol{A}),\\;\\operatorname{rank}[\\lambda\\boldsymbol{I}-\\boldsymbol{A},\\;\\boldsymbol{B}]=n\\Leftrightarrow \\nexists\\boldsymbol{v}\\ne\\boldsymbol{0}:\\boldsymbol{v}^T\\boldsymbol{A}=\\lambda\\boldsymbol{v}^T,\\;\\boldsymbol{v}^T\\boldsymbol{B}=\\boldsymbol{0}\\\\\n&\\text{对偶原理：}\\Sigma_1(\\boldsymbol{A},\\boldsymbol{B},\\boldsymbol{C})\\text{ 与 }\\Sigma_2(\\boldsymbol{A}^T,\\boldsymbol{C}^T,\\boldsymbol{B}^T)\\text{ 能控}\\leftrightarrow\\text{能观互换，且单变量传函 }G_2(s)=G_1^T(s)=G_1(s)\\\\\n&\\text{降维观测器（当 }\\boldsymbol{C}=[1\\;\\;0\\;\\;\\cdots\\;\\;0]\\text{ 时 }\\boldsymbol{T}=\\boldsymbol{I}\\text{ 直接分块 }\\boldsymbol{A}=\\begin{bmatrix}A_{11}&A_{12}\\\\A_{21}&A_{22}\\end{bmatrix}\\text{）：}\\\\\n&\\qquad\\text{选 }(n-1)\\times 1\\text{ 阵 }\\boldsymbol{L}\\text{ 配置 }\\det\\big(s\\boldsymbol{I}-(A_{22}-\\boldsymbol{L}A_{12})\\big)=D_o^*(s),\\quad \\text{分离原理：}\\Phi_{\\text{带观测器}}(s)\\equiv \\boldsymbol{C}(s\\boldsymbol{I}-\\boldsymbol{A}+\\boldsymbol{B}\\boldsymbol{K})^{-1}\\boldsymbol{B}\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "$n-m$",
+          "desc": "最小维（降维）观测器的阶次：$n$ 为状态维数，$m=\\operatorname{rank}\\boldsymbol{C}$ 为独立输出个数（如 3 阶 SISO 系统为 $3-1=2$ 维）"
+        },
+        {
+          "sym": "$\\boldsymbol{u}=\\boldsymbol{v}-\\boldsymbol{K}\\boldsymbol{x}$",
+          "desc": "线性状态反馈控制律；若求消除阶跃稳态误差的前馈比例增益 $K_r$，令闭环直流增益 $\\Phi(0)K_r=1$ 即可"
+        }
+      ],
+      "conditions": "状态反馈可任意配置闭环极点 $\\Leftrightarrow$ 系统完全能控；可设计任意极点全维/降维状态观测器 $\\Leftrightarrow$ 系统完全能观。",
+      "pitfalls": "① 2023-T10 与 2025-T9 均直接给 $\\boldsymbol{C}=[1\\;0\\;0]$，此时输出 $y=x_1$ 直接可测，**取变换阵 $\\boldsymbol{T}=\\boldsymbol{I}$ 分块即得 $(A_{22}-\\boldsymbol{L}A_{12})$**，千万别傻算复杂变换阵；② 病理采样周期：离散化后复共轭特征值虚部差 $\\omega_1-\\omega_2=\\frac{2k\\pi}{T}\\;(k\\in\\mathbb{Z}_+)$ 时丧失能控性（2022-T4）！",
+      "source": {
+        "book": "浙大 845 真题（2015/2022/2023/2024/2025/2026）",
+        "printedPage": "Ch08 跨年真题",
+        "pdfPage": 1,
+        "itemRef": "状态空间高频母式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ctrl_exam01_mothers_7_12",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-exam01-f-05",
+      "kind": "formula",
+      "examWeight": "core",
+      "section": "一、高频核心公式（非线性控制——近 4 年必考）",
+      "title": "845 高频公式总览（五）：描述函数谐波平衡与李雅普诺夫一/二法判据",
+      "prompt": "默写描述函数定义式、典型非线性（理想继电、立方特性 $x=e^3$）描述函数、自激振荡方程与稳定性判据，以及李雅普诺夫间接法与直接法：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\text{描述函数定义（输入 }e(t)=A\\sin\\omega t\\text{）：}\\;N(A)=\\frac{B_1+\\mathrm{j}A_1}{A}=\\frac{1}{\\pi A}\\int_0^{2\\pi}f(A\\sin\\psi)(\\sin\\psi+\\mathrm{j}\\cos\\psi)\\,\\mathrm{d}\\psi\\\\\n&\\text{高频速背：理想继电（幅 }M\\text{）}\\;N(A)=\\frac{4M}{\\pi A};\\qquad \\text{立方特性 }x=e^3\\implies N(A)=\\frac{3}{4}A^2\\quad\\text{（2024-T9！）}\\\\\n&\\text{谐波平衡自激振荡：}\\;1+N(A)G(\\mathrm{j}\\omega)=0\\;\\Longleftrightarrow\\;G(\\mathrm{j}\\omega)=-\\frac{1}{N(A)}\\quad\\text{（实虚部分离联立求 }A,\\omega\\text{）}\\\\\n&\\text{极限环稳定判据：沿 }A\\text{ 增大方向，}-\\frac{1}{N(A)}\\text{ 由 }G(\\mathrm{j}\\omega)\\text{ 的不稳定包围区穿向稳定未包围区}\\implies\\text{稳定自激振荡！}\\\\\n&\\text{李雅普诺夫第一法（间接法）：求平衡点 }\\boldsymbol{f}(\\boldsymbol{x}_e)=\\boldsymbol{0}\\to\\boldsymbol{J}=\\left.\\frac{\\partial\\boldsymbol{f}}{\\partial\\boldsymbol{x}}\\right|_{\\boldsymbol{x}_e}\\to\\text{全 }\\operatorname{Re}(\\lambda_i)<0\\text{ 渐近稳；有 }>0\\text{ 不稳}\\\\\n&\\text{李雅普诺夫第二法（直接法）：找正定 }V(\\boldsymbol{x})\\text{（Sylvester 顺序主子式全正），}\\dot{V}<0\\text{ 渐近稳；}\\dot{V}\\le 0\\text{ 稳；}\\dot{V}>0\\text{ 不稳}\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "$-1/N(A)$",
+          "desc": "负倒描述函数曲线；对于实值单值奇函数，$N(A)$ 纯实，$-1/N(A)$ 落在负实轴上"
+        },
+        {
+          "sym": "$\\boldsymbol{A}^T\\boldsymbol{P}+\\boldsymbol{P}\\boldsymbol{A}=-\\boldsymbol{Q}$",
+          "desc": "线性定常系统李雅普诺夫代数方程（2021-T1 考题），取 $\\boldsymbol{Q}=\\boldsymbol{I}$ 解出对称阵 $\\boldsymbol{P}$ 判正定"
+        }
+      ],
+      "conditions": "描述函数法要求线性部分 $G(s)$ 具有充分低通滤波特性且无外输入；第一法当 $\\boldsymbol{J}$ 存在实部为零的特征值（纯虚根或零根）时失效，必须转用第二法！",
+      "pitfalls": "① 2024-T9 考到 $x=e^3$（原书表 9-1 未直接列出），用三角恒等式 $\\sin^3\\psi=\\frac{3}{4}\\sin\\psi-\\frac{1}{4}\\sin 3\\psi$ 一眼读出基波系数 $\\frac{3}{4}A^3\\implies N(A)=\\frac{3}{4}A^2$，超快！② 2026-T9 给了复数描述函数 $N(A)$，直接算 $-1/N(A)$ 分母有理化再令实虚部等于 $G(\\mathrm{j}\\omega)$！",
+      "source": {
+        "book": "浙大 845 真题（2021/2023/2024/2025/2026）× Ch09",
+        "printedPage": "Ch09 近4年必考",
+        "pdfPage": 1,
+        "itemRef": "非线性控制高频母式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ctrl_exam01_mothers_7_12",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-exam01-f-06",
+      "kind": "formula",
+      "examWeight": "core",
+      "section": "一、禁用计算器考场速算常数表",
+      "title": "2021 起禁用计算器：845 考场必背速算常数与近似对照总表（表 E1-1）",
+      "prompt": "默写常见阻尼比对应超调量、高频自然对数/指数近似、分贝速算值以及高频周期-角频率换算：",
+      "formulaLatex": "$$\\begin{aligned}\n&\\zeta=0.707\\;\\Big(\\frac{\\sqrt{2}}{2}\\Big)\\iff\\sigma\\%=4.3\\%\\qquad \\zeta=0.5\\iff\\sigma\\%=16.3\\%\\qquad \\zeta=0.69\\iff\\sigma\\%=5\\%\\\\\n&\\ln 2\\approx 0.693,\\quad \\ln 0.05\\approx -3.00,\\quad \\ln 0.02\\approx -3.91,\\quad \\mathrm{e}^{-1}\\approx 0.368,\\quad \\mathrm{e}^{-2}\\approx 0.135\\\\\n&20\\lg 2\\approx 6.02\\,\\text{dB},\\quad 20\\lg\\sqrt{2}\\approx 3.01\\,\\text{dB},\\quad 20\\lg 5\\approx 13.98\\,\\text{dB},\\quad T=0.314\\,\\text{s}\\approx\\frac{\\pi}{10}\\implies\\omega=20\\,\\text{rad/s}\n\\end{aligned}$$",
+      "symbols": [
+        {
+          "sym": "$\\zeta=0.707$",
+          "desc": "工程最佳阻尼比：845 历年真题出镜率第一（2010/2011/2014/2018/2020 反复出现 $\\sigma\\%\\le 4.3\\%$ 或 $5\\%$）"
+        },
+        {
+          "sym": "$T=0.314\\,\\text{s}$",
+          "desc": "2021-T3（$T=\\frac{\\pi}{10}$）与 2026-T4（$T=0.314\\,\\text{s}$）均直接对应 $\\omega=20\\,\\text{rad/s}$"
+        }
+      ],
+      "conditions": "自 2021 年起 845 卷面明确标明「计算器：禁用」，遇到非常规数值（如 $\\mathrm{e}^{-0.75}=0.472$）考题会直接给出参考数据；上述基础常数则默认考生熟记。",
+      "pitfalls": "切勿把 $20\\lg 2\\approx 6.02\\,\\text{dB}$ 与功率分贝 $10\\lg 2\\approx 3.01\\,\\text{dB}$ 搞混！控制原理 Bode 图与幅值裕度一律乘 $20$。",
+      "tables": [
+        {
+          "caption": "表 E1-1　浙大 845 禁用计算器考场速算常数总表",
+          "headers": [
+            "类别",
+            "高频表达式 / 参数",
+            "速算近似值",
+            "真题实测出处"
+          ],
+          "rows": [
+            [
+              "阻尼比 $\\leftrightarrow$ 超调",
+              "$\\zeta=0.707\\;(\\frac{\\sqrt{2}}{2})$ / $0.69$ / $0.6$ / $0.5$",
+              "$\\sigma\\%=4.3\\%$ / $5.0\\%$ / $9.5\\%$ / $16.3\\%$",
+              "2014-T4, 2018-T9, 2020-T6, 2024-T3"
+            ],
+            [
+              "分贝速算",
+              "$20\\lg 2$ / $20\\lg\\sqrt{2}$ / $20\\lg 4$ / $20\\lg 5$",
+              "$6.02$ / $3.01$ / $12.04$ / $13.98\\,\\text{dB}$",
+              "2015-T4, 2020-T2, 2024-T5, 2026-T5"
+            ],
+            [
+              "对数与指数",
+              "$\\ln 0.05$ / $\\ln 0.02$ / $\\mathrm{e}^{-1}$ / $1-\\mathrm{e}^{-1}$",
+              "$-3.00$ / $-3.91$ / $0.368$ / $0.632$",
+              "2023-T7, 2023-T9 (0.368/0.632!), 2026-T6"
+            ],
+            [
+              "振荡周期换算",
+              "$T=0.314\\,\\text{s}\\approx\\frac{\\pi}{10}$",
+              "$\\omega=\\frac{2\\pi}{T}=20\\,\\text{rad/s}$",
+              "2021-T3, 2026-T4"
+            ]
+          ]
+        }
+      ],
+      "source": {
+        "book": "浙大 845 真题（2021–2026 禁用计算器卷面统计）",
+        "printedPage": "2021–2026",
+        "pdfPage": 1,
+        "itemRef": "考场速算常数表"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ctrl_exam01_formulas_and_mothers_1_6",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-exam01-c-01",
+      "kind": "conclusion",
+      "examWeight": "core",
+      "section": "二、考情核心结论（真题复刻实锤）",
+      "title": "结论 1：浙大 845 真题母题复用率极高——7 组原题/母题直接复刻实锤台账（表 E1-2）",
+      "summary": "逐页比对 2010–2026 共 17 套浙大 845 原卷发现：**浙大自控命题组对经典母题的复刻频率高到惊人**，甚至出现隔 2 年或隔 7 年「连矩阵数字和期望极点都完全不改」的直接重考！这证明只要刷透近 10 年真题与孙优贤教材例题，卷面 **70%~80% 的基本盘完全可预测、可稳拿**。",
+      "conditions": "表格中每一组复刻对照均经 2010–2026 真题原卷逐页目视核对并由 SymPy 校验一致，绝非道听途说。",
+      "pitfalls": "千万不要只刷 1 遍真题对完答案就扔！真正提分的动作是把表 E1-2 里的母题按「条件变体 + 求解步骤」吃透，做到换个系数 5 分钟满分。",
+      "tables": [
+        {
+          "caption": "表 E1-2　2010–2026 浙大 845 真题「原题/同源母题复刻」实锤对照表",
+          "headers": [
+            "复刻年份组合",
+            "核心考题内容",
+            "相似程度",
+            "对应母题"
+          ],
+          "rows": [
+            [
+              "2025-T9 vs 2023-T10",
+              "$\\boldsymbol{A}=\\begin{bmatrix}0&1&0\\\\0&0&1\\\\0&-2&-3\\end{bmatrix},\\boldsymbol{C}=[1\\;0\\;0]$，极点配置 + $-5,-5$ 二维观测器 + 闭环传函",
+              "**几乎原题复刻（连数字都相同！）**",
+              "母题 11"
+            ],
+            [
+              "2025-T6 vs 2018-T8",
+              "对象 $G(z)=\\frac{z+0.5}{(z-1)(z-1.2)}$ 设计 $D(z)$ 使闭环极点为 $0.2\\pm\\mathrm{j}0.3$",
+              "**完全同题复刻（连极点都相同！）**",
+              "母题 7"
+            ],
+            [
+              "2026-T4 vs 2021-T3",
+              "阶跃有超调稳态值 $1$、斜坡有限误差、倍增 $K$ 后周期 $0.314\\,\\text{s}$ 等幅振荡求 $K,a,b$",
+              "**核心模型与周期完全同源**",
+              "母题 2"
+            ],
+            [
+              "2021-T4 vs 2016-T7",
+              "时间常数 $0.5,\\,1,\\,0.25$，$t_s=4\\,\\text{s}\\,(2\\%)$ 主导极点求 $K$ 并校验极点",
+              "**几乎原题复刻**",
+              "母题 4"
+            ],
+            [
+              "2024-T5 vs 2020-T2 vs 2015-T4",
+              "已知临界稳定增益 $K_{\\max}$，求 $K=\\frac{1}{2}K_{\\max}$ 时的幅值裕度（$6.02\\,\\text{dB}$）",
+              "**三度复考送分母题**",
+              "母题 6"
+            ],
+            [
+              "2021-T6 vs 2014-T3",
+              "II 型系统 $G(s)=\\frac{K(bs+1)}{s^2(as+1)}$ 求最大相位裕度对应 $K$",
+              "**具体数字→一般字母升级复考**",
+              "母题 6"
+            ],
+            [
+              "2024-T7 vs 2015-T5",
+              "证明状态空间 PBH 能控性充要条件（秩判据 / 左特征向量判据）",
+              "**同源教材核心定理证明**",
+              "母题 10"
+            ]
+          ]
+        }
+      ],
+      "source": {
+        "book": "浙大 845 真题 2010–2026 逐页核对统计",
+        "printedPage": "2010–2026 全卷",
+        "pdfPage": 1,
+        "itemRef": "原题复刻实锤台账"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ctrl_exam01_mothers_7_12",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-exam01-c-02",
+      "kind": "conclusion",
+      "examWeight": "core",
+      "section": "二、考情核心结论（近 4 年命题新风向）",
+      "title": "结论 2：2023–2026 近四年命题四大新风向（非线性复活 + 离散升级 + 现控重证明）",
+      "summary": "对比 2010–2020（允许计算器时代）与 2023–2026（新考纲 + 禁用计算器时代），卷面重心发生四次明确位移：① **Ch09 非线性控制全面复活，连续 4 年 100% 必考**（10–25 分，只考描述函数 + 李雅普诺夫）；② **Ch07 离散系统从基础求 $Y(z)$ 升级为「$D(z)$ 极点配置 + 连续指标映射 + ZOH 离散化」**（20–35 分）；③ **Ch08 状态空间除压轴设计外，频繁加入 PBH/对偶定理证明与零极点消阶巧算**（25–45 分）；④ **经典 Ch2–Ch6 更重跨章串联与定性概念辨析**，告别繁琐手算。",
+      "conditions": "适用于备考 2027 浙大 845 考生制定复习权重，务必以 2023–2026 四套最新卷为最高风向标。",
+      "pitfalls": "最大复习误区是轻信旧版攻略「845 不考第 9 章非线性」或「离散只背 Z 变换表就行」——2024 年第 9 章连考两道大题，2025 年离散占了整整 4 道大题！",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 245\" role=\"img\" aria-label=\"2023至2026近四年浙大845命题四大新风向结构图\">\n  <title>2023–2026 浙大 845 最新命题四大风向与典型真题锚点</title>\n  <defs>\n    <marker id=\"ctrl_ex01_arr1\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#475569\"/>\n    </marker>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"720\" height=\"245\" rx=\"12\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"360\" y=\"28\" text-anchor=\"middle\" font-size=\"13.5\" font-weight=\"700\" fill=\"#0f172a\">2023–2026 近四年浙大 845 命题四大新风向（禁用计算器时代）</text>\n\n  <!-- Card 1 -->\n  <rect x=\"18\" y=\"44\" width=\"332\" height=\"84\" rx=\"9\" fill=\"#ffffff\" stroke=\"#7c3aed\" stroke-width=\"1.5\"/>\n  <rect x=\"18\" y=\"44\" width=\"332\" height=\"24\" rx=\"9\" fill=\"#ede9fe\"/>\n  <text x=\"184\" y=\"60\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#5b21b6\">风向 ①：Ch09 非线性连续 4 年 100% 必考</text>\n  <text x=\"30\" y=\"84\" font-size=\"10.8\" fill=\"#1e293b\">• 2023 T11 继电内反馈描述函数 · 2024 T9+T10 双大题</text>\n  <text x=\"30\" y=\"102\" font-size=\"10.8\" fill=\"#1e293b\">• 2025 T10 李氏第一法 · 2026 T9 复描述函数自激振荡</text>\n  <text x=\"30\" y=\"120\" font-size=\"10.3\" font-weight=\"700\" fill=\"#6d28d9\">⇒ 只考描述函数 + 李雅普诺夫，不考相平面法！</text>\n\n  <!-- Card 2 -->\n  <rect x=\"370\" y=\"44\" width=\"332\" height=\"84\" rx=\"9\" fill=\"#ffffff\" stroke=\"#ea580c\" stroke-width=\"1.5\"/>\n  <rect x=\"370\" y=\"44\" width=\"332\" height=\"24\" rx=\"9\" fill=\"#ffedd5\"/>\n  <text x=\"536\" y=\"60\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#9a3412\">风向 ②：Ch07 离散从「求 Y(z)」转向「综合设计」</text>\n  <text x=\"382\" y=\"84\" font-size=\"10.8\" fill=\"#1e293b\">• D(z) 极点配置：2022 T6 / 2025 T6 / 2026 T6（映射 ζ,Ts）</text>\n  <text x=\"382\" y=\"102\" font-size=\"10.8\" fill=\"#1e293b\">• 连续-离散联动：2024 T3（加ZOH求T）、2025 T5（离散化）</text>\n  <text x=\"382\" y=\"120\" font-size=\"10.3\" font-weight=\"700\" fill=\"#c2410c\">⇒ 熟练 z = e^(sT) 映射 + 二阶稳定三角形 + 零极对消</text>\n\n  <!-- Card 3 -->\n  <rect x=\"18\" y=\"142\" width=\"332\" height=\"84\" rx=\"9\" fill=\"#ffffff\" stroke=\"#dc2626\" stroke-width=\"1.5\"/>\n  <rect x=\"18\" y=\"142\" width=\"332\" height=\"24\" rx=\"9\" fill=\"#fee2e2\"/>\n  <text x=\"184\" y=\"158\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#991b1b\">风向 ③：Ch08 新增「教材定理证明 + 消阶/串联」</text>\n  <text x=\"30\" y=\"182\" font-size=\"10.8\" fill=\"#1e293b\">• 定理证明：2024 T7（PBH左特征向量）、2025 T7（对偶）</text>\n  <text x=\"30\" y=\"200\" font-size=\"10.8\" fill=\"#1e293b\">• 结构巧算：2024 T8 零极对消 · 2025 T8 消阶 · 2026 T8 串联</text>\n  <text x=\"30\" y=\"218\" font-size=\"10.3\" font-weight=\"700\" fill=\"#b91c1c\">⇒ 降维观测器压轴连续复刻（2023 T10 = 2025 T9）</text>\n\n  <!-- Card 4 -->\n  <rect x=\"370\" y=\"142\" width=\"332\" height=\"84\" rx=\"9\" fill=\"#ffffff\" stroke=\"#2563eb\" stroke-width=\"1.5\"/>\n  <rect x=\"370\" y=\"142\" width=\"332\" height=\"24\" rx=\"9\" fill=\"#dbeafe\"/>\n  <text x=\"536\" y=\"158\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#1e40af\">风向 ④：经典 Ch2–Ch6 强调「跨章串联 + 定性辨析」</text>\n  <text x=\"382\" y=\"182\" font-size=\"10.8\" fill=\"#1e293b\">• 2024 T1 看曲线判反馈极性 · 2026 T2 带零点 Ts 精确算</text>\n  <text x=\"382\" y=\"200\" font-size=\"10.8\" fill=\"#1e293b\">• 2023 T8 闭环零极反推圆弧根轨迹 + Bode 图</text>\n  <text x=\"382\" y=\"218\" font-size=\"10.3\" font-weight=\"700\" fill=\"#1d4ed8\">⇒ 频域繁琐手算校正退出，重概念与干净代数推演</text>\n</svg>",
+      "source": {
+        "book": "浙大 845 真题 2023–2026 & 2027 官方考纲",
+        "printedPage": "2023–2026",
+        "pdfPage": 1,
+        "itemRef": "近四年命题风向"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-exam01-c-03",
+      "kind": "conclusion",
+      "examWeight": "core",
+      "section": "二、考情核心结论（减负清单）",
+      "title": "结论 3：845「大胆做减法」清单——砍掉 30% 低 ROI 负担，专注高分核心",
+      "summary": "对照 2027 官方考纲与 17 年真题实录，以下 **四大块内容可直接跳过或仅作概念了解**，瞬间卸掉 30% 无效焦虑：① **Ch09 相平面法**（等倾线/相轨迹作图/开关线归零时间——2027 考纲未列，17 年零考）；② **Ch08 8.4 最优控制（LQR/黎卡提方程）与 8.7 内模控制**（考纲不作要求，17 年零考）；③ **Ch06 频域串联超前/滞后/滞后-超前多轮试凑硬算设计**（17 年几乎未考繁琐手算，仅需记清超前最大相角公式 $\\sin\\varphi_m=\\frac{a-1}{a+1}$ 与定性作用）；④ **Ch07 复杂多拍最少拍无波纹长推导与离散伪频域校正**（掌握单位圆外零极点吸收原则与 $D(z)$ 极点配置即可）。",
+      "conditions": "本清单严格基于 2026-09-29 发布的《2027 年浙大 845 考试大纲》与 2010–2026 实测真题，仅针对 845 考研冲刺取舍。",
+      "pitfalls": "「做减法」绝不等于跳过 Ch09 描述函数/李雅普诺夫或 Ch08 降维观测器——那些恰恰是最高 ROI 的核心得分点！",
+      "source": {
+        "book": "2027 浙大 845 官方考试大纲 & 17年真题统计",
+        "printedPage": "考纲 P.1-2",
+        "pdfPage": 1,
+        "itemRef": "考纲减负清单"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-exam01-c-04",
+      "kind": "conclusion",
+      "examWeight": "core",
+      "section": "二、考情核心结论（防丢分铁律）",
+      "title": "结论 4：禁用计算器时代考场「6 条防扣冤枉分铁律」",
+      "summary": "统计近年失分重灾区，以下 6 条红线每守住一条就是白捡 5–10 分：① **算稳态误差前必须先用劳斯/赫尔维茨判闭环稳定**并取交集（2023-T3、2026-T1）；② **纯滞后 $\\tau_{\\max}=\\gamma/\\omega_c$ 与三角运算务必统一用弧度制**；③ **状态反馈只改极点不改零点**，若题干要求闭环传函降阶（2024-T8），必须把多余极点故意配到开环零点上实现零极点对消；④ **多采样开关框图先判相邻两环节间有无开关**（无开关先 $s$ 域相乘再 Z 变换）；⑤ **非单位反馈系统先看清题干定义的是「偏差 $E=R-HY$」还是「系统误差 $R-Y$」**；⑥ **每算完劳斯临界点、极点配置 $\\boldsymbol{K}$ 或描述函数 $(A,\\omega)$，立刻代回原方程 10 秒验算**！",
+      "conditions": "全卷 9–11 道大题，每道大题均适用。",
+      "pitfalls": "考场最容易在简单题（如 T1 漏稳定上界、T5 裕度忘负号）丢冤枉分，反而比难题失分更致命。",
+      "source": {
+        "book": "浙大 845 2020–2026 常见失分复盘",
+        "printedPage": "近7年真题",
+        "pdfPage": 1,
+        "itemRef": "考场六大铁律"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-exam01-c-05",
+      "kind": "conclusion",
+      "examWeight": "core",
+      "section": "二、考情核心结论（破局复习路线）",
+      "title": "结论 5：四阶段「高 ROI 优先」反焦虑复习路线图（拒绝从 P.1 死磕）",
+      "summary": "破解「教材厚、感觉好难」的最佳策略是**打乱教材顺序，先拿最爽的 45 分建立正反馈**：① **阶段 1（7–10 天）**：**Ch04 劳斯+稳态误差** → **Ch09 描述函数+李氏** → **Ch01/02 核心框图**（学完立刻能秒杀近 4 年多道真题！）；② **阶段 2（12–16 天）**：集中打穿两大分仓 **Ch08 状态空间** + **Ch07 离散系统**（直接锁定 100+ 分）；③ **阶段 3（10–12 天）**：打通经典三板斧 **Ch03 二阶/$\\Phi(t)$** + **Ch05 圆弧/参数根轨迹** + **Ch06 Bode 反求/奈氏/纯滞后**（冲刺 125+）；④ **阶段 4（考前）**：2015–2019 按 12 大母题专刷，**2020–2026 近 7 套严格禁用计算器 3 小时全真模考**！",
+      "conditions": "每阶段配合本工作台「845 教材与辅导（全 9 章）」的公式默写遮罩与例题折叠自测使用，效率翻倍。",
+      "pitfalls": "切忌在 Ch02 偏门物理机理建模或 Ch06 频域试凑校正上死磕一两周导致心态崩盘、后面 Ch07–Ch09 没时间学！",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 215\" role=\"img\" aria-label=\"845反焦虑四阶段ROI复习路线图\">\n  <title>浙大 845 四阶段「高 ROI 优先」反焦虑破局复习路线图</title>\n  <defs>\n    <marker id=\"ctrl_ex01_arr2\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#1d4ed8\"/>\n    </marker>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"720\" height=\"215\" rx=\"12\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"360\" y=\"28\" text-anchor=\"middle\" font-size=\"13.5\" font-weight=\"700\" fill=\"#0f172a\">845「先拿爽分，再啃大头」4 阶段反焦虑复习路线图（拒绝从 P.1 死磕到 P.423）</text>\n\n  <!-- Stage 1 -->\n  <rect x=\"16\" y=\"48\" width=\"156\" height=\"132\" rx=\"9\" fill=\"#ffffff\" stroke=\"#059669\" stroke-width=\"1.6\"/>\n  <rect x=\"16\" y=\"48\" width=\"156\" height=\"26\" rx=\"9\" fill=\"#d1fae5\"/>\n  <text x=\"94\" y=\"65\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#065f46\">阶段 1（7–10天）</text>\n  <text x=\"94\" y=\"90\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#0f172a\">速抢 45 分基础盘</text>\n  <text x=\"26\" y=\"110\" font-size=\"10.2\" fill=\"#334155\">1. Ch04 劳斯+稳态误差</text>\n  <text x=\"26\" y=\"126\" font-size=\"10.2\" fill=\"#334155\">2. Ch09 描述函数+李氏</text>\n  <text x=\"26\" y=\"142\" font-size=\"10.2\" fill=\"#334155\">3. Ch01/02 框图+建模</text>\n  <text x=\"94\" y=\"168\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#059669\">立刻能做2026 T1/T9</text>\n\n  <line x1=\"172\" y1=\"114\" x2=\"192\" y2=\"114\" stroke=\"#1d4ed8\" stroke-width=\"2\" marker-end=\"url(#ctrl_ex01_arr2)\"/>\n\n  <!-- Stage 2 -->\n  <rect x=\"196\" y=\"48\" width=\"156\" height=\"132\" rx=\"9\" fill=\"#ffffff\" stroke=\"#dc2626\" stroke-width=\"1.6\"/>\n  <rect x=\"196\" y=\"48\" width=\"156\" height=\"26\" rx=\"9\" fill=\"#fee2e2\"/>\n  <text x=\"274\" y=\"65\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#991b1b\">阶段 2（12–16天）</text>\n  <text x=\"274\" y=\"90\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#0f172a\">吃下两大分仓(+60分)</text>\n  <text x=\"206\" y=\"110\" font-size=\"10.2\" fill=\"#334155\">1. Ch08 极点配置+观测器</text>\n  <text x=\"206\" y=\"126\" font-size=\"10.2\" fill=\"#334155\">2. Ch08 PBH/对偶证明</text>\n  <text x=\"206\" y=\"142\" font-size=\"10.2\" fill=\"#334155\">3. Ch07 离散+D(z)配置</text>\n  <text x=\"274\" y=\"168\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#dc2626\">跳过LQR/内模/相平面</text>\n\n  <line x1=\"352\" y1=\"114\" x2=\"372\" y2=\"114\" stroke=\"#1d4ed8\" stroke-width=\"2\" marker-end=\"url(#ctrl_ex01_arr2)\"/>\n\n  <!-- Stage 3 -->\n  <rect x=\"376\" y=\"48\" width=\"156\" height=\"132\" rx=\"9\" fill=\"#ffffff\" stroke=\"#2563eb\" stroke-width=\"1.6\"/>\n  <rect x=\"376\" y=\"48\" width=\"156\" height=\"26\" rx=\"9\" fill=\"#dbeafe\"/>\n  <text x=\"454\" y=\"65\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1e40af\">阶段 3（10–12天）</text>\n  <text x=\"454\" y=\"90\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#0f172a\">打通经典冲 125+</text>\n  <text x=\"386\" y=\"110\" font-size=\"10.2\" fill=\"#334155\">1. Ch03 二阶+Φ(t)</text>\n  <text x=\"386\" y=\"126\" font-size=\"10.2\" fill=\"#334155\">2. Ch05 圆弧/参数根轨迹</text>\n  <text x=\"386\" y=\"142\" font-size=\"10.2\" fill=\"#334155\">3. Ch06 Bode反求+奈氏</text>\n  <text x=\"454\" y=\"168\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#2563eb\">略看繁琐手算频域校正</text>\n\n  <line x1=\"532\" y1=\"114\" x2=\"552\" y2=\"114\" stroke=\"#1d4ed8\" stroke-width=\"2\" marker-end=\"url(#ctrl_ex01_arr2)\"/>\n\n  <!-- Stage 4 -->\n  <rect x=\"556\" y=\"48\" width=\"148\" height=\"132\" rx=\"9\" fill=\"#ffffff\" stroke=\"#7c3aed\" stroke-width=\"1.6\"/>\n  <rect x=\"556\" y=\"48\" width=\"148\" height=\"26\" rx=\"9\" fill=\"#ede9fe\"/>\n  <text x=\"630\" y=\"65\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#5b21b6\">阶段 4（冲刺模考）</text>\n  <text x=\"630\" y=\"90\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#0f172a\">限时实战冲 135+</text>\n  <text x=\"566\" y=\"110\" font-size=\"10.2\" fill=\"#334155\">1. 15–19 按12母题专刷</text>\n  <text x=\"566\" y=\"126\" font-size=\"10.2\" fill=\"#334155\">2. 20–26 禁计算器3h模考</text>\n  <text x=\"566\" y=\"142\" font-size=\"10.2\" fill=\"#334155\">3. 标星错题 2 轮清零</text>\n  <text x=\"630\" y=\"168\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#7c3aed\">配合工作台真题精解</text>\n\n  <text x=\"360\" y=\"201\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#64748b\">实操心法：每学完一章立刻用工作台「公式默写遮罩」+「例题折叠自测」闭环过一遍，把模糊感彻底清零</text>\n</svg>",
+      "source": {
+        "book": "845 实战复习规划（配套工作区复习资料）",
+        "printedPage": "全9章统筹",
+        "pdfPage": 1,
+        "itemRef": "四阶段复习路线"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-exam01-e-01",
+      "kind": "example",
+      "examWeight": "core",
+      "section": "三、12 大压箱底超级母题（基础送分盘：母题 1–4）",
+      "title": "【母题 1】微分方程画方块图 + 赫尔维茨稳定与斜坡稳态误差交集（2026-T1 原型）",
+      "problem": "一位置控制系统微分方程为 $\\ddot{P}(t)+2\\dot{P}(t)+4P(t)=\\theta(t)$，$v_1(t)=r(t)-P(t)$，$\\dot{\\theta}(t)=0.5v_2(t)$，$v_2(t)=Kv_1(t)$（$K>0$）。（1）写出各环节传递函数与系统开环传函 $G(s)$；（2）要求系统对单位斜坡输入 $r(t)=t$ 的稳态误差不大于 $1$，求放大器增益 $K$ 的取值范围。",
+      "steps": [
+        {
+          "stepTitle": "第一步：零初始条件拉氏变换列各环节传函（画框图依据）",
+          "detail": "$\\dfrac{P(s)}{\\Theta(s)}=\\dfrac{1}{s^2+2s+4}$，$V_1(s)=R(s)-P(s)$（单位负反馈比较点），$V_2(s)=KV_1(s)$，$\\dfrac{\\Theta(s)}{V_2(s)}=\\dfrac{0.5}{s}$。串联得开环传函 $G(s)=\\dfrac{0.5K}{s(s^2+2s+4)}$（I 型单位负反馈系统）。"
+        },
+        {
+          "stepTitle": "第二步：先列闭环特征方程并用赫尔维茨/劳斯求稳定范围（绝不可漏！）",
+          "detail": "闭环特征方程为 $D(s)=s^3+2s^2+4s+0.5K=0$。由三阶系统赫尔维茨稳定充要条件：各系数为正（$K>0$）且 $a_1a_2>a_0a_3\\implies 2\\times 4>1\\times 0.5K\\implies 0<K<16$。"
+        },
+        {
+          "stepTitle": "第三步：算速度误差系数 $K_v$ 并与稳定区间取交集",
+          "detail": "在闭环稳定前提下，$K_v=\\displaystyle\\lim_{s\\to 0}sG(s)=\\dfrac{0.5K}{4}=\\dfrac{K}{8}$，单位斜坡稳态误差 $e_{ss}=\\dfrac{1}{K_v}=\\dfrac{8}{K}\\le 1\\implies K\\ge 8$。与稳定条件 $0<K<16$ 取交集，得 $8\\le K<16$。"
+        }
+      ],
+      "finalAnswer": "（1）$G(s)=\\dfrac{0.5K}{s(s^2+2s+4)}$；（2）$8\\le K<16$",
+      "takeaway": "2026 年第一题就是送分题！核心扣分点只有一个：**忘记算 $K<16$ 稳定上界**。记住「稳态误差题必先判稳」铁律！",
+      "source": {
+        "book": "浙大 845 真题 2026-T1（同型 2010-T1/2014-T8）",
+        "printedPage": "2026 P.3",
+        "pdfPage": 3,
+        "itemRef": "母题 1 / 2026-T1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ctrl_exam01_formulas_and_mothers_1_6",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-exam01-e-02",
+      "kind": "example",
+      "examWeight": "core",
+      "section": "三、12 大压箱底超级母题（基础送分盘：母题 1–4）",
+      "title": "【母题 2】由阶跃超调、斜坡误差与等幅振荡周期反求系统参数（2021-T3 / 2026-T4 同源）",
+      "problem": "单位负反馈系统开环传递函数为 $G(s)=\\dfrac{K}{(s+40)(s+a)(s+b)}\\;(K>0)$。已知：输入单位阶跃时响应有超调且稳态值为 $1$；输入单位斜坡时存在有限非零稳态误差；当增益增大为 $4K$ 时，系统对单位脉冲输入的稳态响应为周期 $T=\\dfrac{\\pi}{10}\\,\\text{s}$ 的等幅正弦振荡。求 $K,a,b$ 的值。",
+      "steps": [
+        {
+          "stepTitle": "第一步：由阶跃无差 + 斜坡有限误差立刻锁定系统为 I 型",
+          "detail": "单位负反馈下「阶跃稳态值为 $1$（即 $e_{ss}=0$）且斜坡有有限非零稳态误差」$\\Longleftrightarrow$ 系统必为 **I 型系统**（开环恰含一个积分环节 $s$），故 $a,b$ 中必有一个为 $0$、另一个大于 $0$。不妨取 $a=0,\\;b>0$，则 $G(s)=\\dfrac{K}{s(s+40)(s+b)}$。"
+        },
+        {
+          "stepTitle": "第二步：由 $4K$ 时的等幅振荡周期秒定 $\\omega$ 并代入特征方程",
+          "detail": "周期 $T=\\dfrac{\\pi}{10}\\implies\\omega=\\dfrac{2\\pi}{T}=20\\,\\text{rad/s}$。增益为 $4K$ 时特征方程为 $s^3+(40+b)s^2+40bs+4K=0$，存在一对纯虚根 $s=\\pm\\mathrm{j}20$，代入 $s=\\mathrm{j}20$ 分离实虚部：虚部 $-20^3+40b\\cdot 20=0\\implies 800b=8000\\implies b=10$；实部 $-(40+b)\\cdot 20^2+4K=0\\implies 4K=50\\times 400=20000\\implies K=5000$！"
+        },
+        {
+          "stepTitle": "第三步：校验原系统在 $K=5000$ 处稳定且欠阻尼有超调",
+          "detail": "原特征方程 $s^3+50s^2+400s+5000=0$，赫尔维茨 $50\\times 400=20000>5000$（稳定，因增益仅为临界值的 $1/4$！）；求根或观察判别式知存在共轭复根故阶跃响应确有超调。"
+        }
+      ],
+      "finalAnswer": "$a=0,\\;b=10$（或 $a=10,b=0$），$K=5000$",
+      "takeaway": "2021-T3 与 2026-T4 完全同源！看到「增益变 $mK$ 等幅振荡周期 $T=0.314\\,\\text{s}$」，立刻 $s=\\mathrm{j}\\frac{2\\pi}{T}=\\mathrm{j}20$ 代入特征方程令实虚部为零，比列劳斯表快一倍且零出错！",
+      "source": {
+        "book": "浙大 845 真题 2021-T3（同源 2026-T4）",
+        "printedPage": "2021 P.45",
+        "pdfPage": 45,
+        "itemRef": "母题 2 / 2021-T3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ctrl_exam01_formulas_and_mothers_1_6",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-exam01-e-03",
+      "kind": "example",
+      "examWeight": "core",
+      "section": "三、12 大压箱底超级母题（基础送分盘：母题 1–4）",
+      "title": "【母题 3】虚轴左移变换 $s=z-\\sigma$ 配劳斯判据求相对稳定裕度（2023-T5 原型）",
+      "problem": "设单位负反馈系统的开环传递函数为 $G(s)=\\dfrac{K}{(s+1)(s+1.5)(s+2)}$，若希望闭环系统所有特征根都具有小于 $-1$ 的实部，求正增益 $K$ 的取值范围（或最大值边界）。",
+      "steps": [
+        {
+          "stepTitle": "第一步：写出闭环特征方程并作左移变换 $s=z-1$",
+          "detail": "特征方程为 $(s+1)(s+1.5)(s+2)+K=0$。要求所有根满足 $\\operatorname{Re}(s)<-1\\Longleftrightarrow \\operatorname{Re}(z)<0$，令 $s=z-1$ 直接代入（注意不要先展开再代，直接代因子最爽！）：$z(z+0.5)(z+1)+K=0\\implies z^3+1.5z^2+0.5z+K=0$！"
+        },
+        {
+          "stepTitle": "第二步：对 $z$ 多项式直接套三阶赫尔维茨/劳斯条件",
+          "detail": "各系数全正得 $K>0$，且 $a_1a_2>a_0a_3\\implies 1.5\\times 0.5>1\\times K\\implies K<0.75$！"
+        },
+        {
+          "stepTitle": "第三步：代回边界值 $K=0.75$ 秒验",
+          "detail": "$K=0.75$ 时 $z^3+1.5z^2+0.5z+0.75=(z+1.5)(z^2+0.5)=0$，根为 $z=-1.5,\\;\\pm\\mathrm{j}\\frac{\\sqrt{2}}{2}$，对应 $s=-2.5,\\;-1\\pm\\mathrm{j}\\frac{\\sqrt{2}}{2}$ 恰好落在 $\\operatorname{Re}(s)=-1$ 线上！故满足严格小于 $-1$ 的条件为 $0<K<0.75$（边界上确界 $0.75$）。"
+        }
+      ],
+      "finalAnswer": "$0<K<0.75$（临界上界 $K_{\\sup}=0.75$）",
+      "takeaway": "看这一招有多丝滑：**千万别先把 $(s+1)(s+1.5)(s+2)$ 展开再换 $z-1$**！直接把 $s=z-1$ 塞进每个一次因式瞬间变成 $z(z+0.5)(z+1)+K=0$，三秒心算出 $0.75$！（2021-T8 问 $|z|<\\mathrm{e}^{-1}$ 内特征根个数也是同一招 $s=z-1$ 列劳斯看首列变号次数！）",
+      "source": {
+        "book": "浙大 845 真题 2023-T5（同型 2021-T8）",
+        "printedPage": "2023 P.2",
+        "pdfPage": 2,
+        "itemRef": "母题 3 / 2023-T5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ctrl_exam01_formulas_and_mothers_1_6",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-exam01-e-04",
+      "kind": "example",
+      "examWeight": "core",
+      "section": "三、12 大压箱底超级母题（基础送分盘：母题 1–4）",
+      "title": "【母题 4】高阶系统主导极点近似降阶求增益与极点校核（2016-T7 / 2021-T4 同源）",
+      "problem": "单位负反馈系统开环传递函数为 $G(s)=\\dfrac{K}{(s+1)(0.5s+1)(0.25s+1)}\\;(K>0)$。（1）求闭环稳定时 $K$ 的范围；（2）若要求调节时间 $t_s\\le 4\\,\\text{s}\\;(2\\%)$，试通过主导极点近似确定 $K$ 的值，并求此时闭环全部极点以检验近似是否合理。",
+      "steps": [
+        {
+          "stepTitle": "第一步：化首一特征方程并由三阶赫尔维茨求稳定范围",
+          "detail": "闭环特征方程 $(s+1)(s+2)(s+4)+8K=0\\implies s^3+7s^2+14s+(8+8K)=0$。由 $a_1a_2>a_0a_3\\implies 7\\times 14=98>8+8K\\implies 0<K<11.25$。"
+        },
+        {
+          "stepTitle": "第二步：构造含主导共轭极点与远实极点的期望分解求 $K$",
+          "detail": "要求 $t_s\\approx\\dfrac{4}{\\zeta\\omega_n}\\le 4\\,\\text{s}\\implies \\zeta\\omega_n\\ge 1$。注意到三极点实部之和恒为 $-7$（韦达定理！）：若取主导极点实部为 $-1$（即 $s_{1,2}=-1\\pm\\mathrm{j}\\omega_d$），则第三个实极点必为 $s_3=-7-(-2)=-5$！代入 $s=-5$ 进特征方程：$(-5+1)(-5+2)(-5+4)+8K=0\\implies (-4)(-3)(-1)+8K=0\\implies 8K=12\\implies K=1.5$！"
+        },
+        {
+          "stepTitle": "第三步：求 $K=1.5$ 时全部极点并检验主导条件",
+          "detail": "$K=1.5$ 时特征方程为 $(s+5)(s^2+2s+4)=0$，全部闭环极点为 $s_{1,2}=-1\\pm\\mathrm{j}\\sqrt{3}$ 与 $s_3=-5$！恰好满足远极点距虚轴距离 $|{-5}|=5\\times|{-1}|$（达到 5 倍主导极点判据！），且 $\\zeta=0.5,\\;\\omega_n=2,\\;t_s\\approx\\frac{4}{1}=4\\,\\text{s}$ 满足要求。"
+        }
+      ],
+      "finalAnswer": "（1）$0<K<11.25$；（2）取 $K=1.5$，闭环极点为 $-1\\pm\\mathrm{j}\\sqrt{3}$ 与 $-5$（满足 5 倍主导极点条件）",
+      "takeaway": "利用韦达定理「极点之和 $=-a_1=-7$」一步锁死远极点 $s_3=-5$，再代入特征方程秒出 $K=1.5$，这招比把原系统强行删掉小惯性环节再拼凑精准十倍！",
+      "source": {
+        "book": "浙大 845 真题 2021-T4 / 2016-T7",
+        "printedPage": "2021 P.45 / 2016 P.27",
+        "pdfPage": 45,
+        "itemRef": "母题 4 / 2021-T4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ctrl_exam01_formulas_and_mothers_1_6",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-exam01-e-05",
+      "kind": "example",
+      "examWeight": "core",
+      "section": "三、12 大压箱底超级母题（根轨迹与频域：母题 5–6）",
+      "title": "【母题 5】复极点圆弧根轨迹 + 任意实参数 $a$ 稳定与阻尼比范围（2026-T3 原型）",
+      "problem": "已知单位负反馈开环传递函数 $G(s)=\\dfrac{K(s+a)}{s^2+4s+8}\\;(K>0,\\;a\\in\\mathbb{R})$。（1）当 $a=1$ 时求根轨迹（圆弧方程与实轴会合点）；（2）对固定实数 $a$，求使闭环稳定的 $K>0$ 范围；（3）当 $K=2$ 时，求使闭环阻尼比 $\\zeta<0.1$ 的 $a$ 范围。",
+      "steps": [
+        {
+          "stepTitle": "第（1）题：$a=1$ 时的圆弧根轨迹秒算",
+          "detail": "开环极点 $p_{1,2}=-2\\pm\\mathrm{j}2$，开环零点 $z=-1$。实轴根轨迹为 $(-\\infty,-1]$。由圆弧根轨迹定理，复平面根轨迹为以零点 $(-1,0)$ 为圆心、半径 $R=|p_1-(-1)|=\\sqrt{(-2+1)^2+2^2}=\\sqrt{5}$ 的圆弧：$(x+1)^2+y^2=5$！与实轴负向会合点为 $s=-1-\\sqrt{5}\\approx -3.236$，之后一支趋于 $-1$，另一支趋于 $-\\infty$。"
+        },
+        {
+          "stepTitle": "第（2）题：对任意实数 $a$ 用二阶稳定充要条件分类讨论 $K>0$",
+          "detail": "闭环特征方程为 $s^2+(4+K)s+(8+Ka)=0$。二阶系统稳定 $\\Leftrightarrow$ 一次项与常数项同为正。因 $K>0$ 恒有 $4+K>0$，故仅需 $8+Ka>0$：① 若 $a\\ge 0$，对任意 $K>0$ 均稳定；② 若 $a<0$，须满足 $0<K<-\\dfrac{8}{a}$。"
+        },
+        {
+          "stepTitle": "第（3）题：$K=2$ 时由 $0<\\zeta<0.1$（含稳定前提）解 $a$",
+          "detail": "$K=2$ 时特征方程为 $s^2+6s+(8+2a)=0$。先保稳定：$8+2a>0\\Rightarrow a>-4$。此时 $\\omega_n=\\sqrt{8+2a}$，$\\zeta=\\dfrac{6}{2\\sqrt{8+2a}}=\\dfrac{3}{\\sqrt{8+2a}}$。由 $\\zeta<0.1$ 得 $\\sqrt{8+2a}>30\\implies 8+2a>900\\implies a>446$！"
+        }
+      ],
+      "finalAnswer": "（1）圆弧 $(x+1)^2+y^2=5$，会合点 $-1-\\sqrt{5}$；（2）$a\\ge 0$ 时 $K>0$；$a<0$ 时 $0<K<-8/a$；（3）$a>446$",
+      "takeaway": "2026-T3 三问层层递进但每一步都是标准公式：特别注意第（2）问 $a$ 取遍 $\\mathbb{R}$ 必须按 $a\\ge 0$ 与 $a<0$ 分类讨论！",
+      "source": {
+        "book": "浙大 845 真题 2026-T3（圆弧同型 2023-T8）",
+        "printedPage": "2026 P.3-4",
+        "pdfPage": 3,
+        "itemRef": "母题 5 / 2026-T3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ctrl_exam01_formulas_and_mothers_1_6",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-exam01-e-06",
+      "kind": "example",
+      "examWeight": "core",
+      "section": "三、12 大压箱底超级母题（根轨迹与频域：母题 5–6）",
+      "title": "【母题 6】II 型系统最大相位裕度 + 纯滞后奈氏稳定 $\\tau_{\\max}$（2021-T6 & T7 联解）",
+      "problem": "（1）单位负反馈系统开环传函 $G(s)=\\dfrac{K(bs+1)}{s^2(as+1)}\\;(b>a>0,\\;K>0)$，求 $K$ 变化时系统相位裕度的最大值 $\\gamma_{\\max}$ 及对应 $K$；（2）单位负反馈纯滞后系统 $G(s)=\\dfrac{\\sqrt{2}}{s(s+1)}\\mathrm{e}^{-\\tau s}\\;(\\tau>0)$，求闭环稳定的 $\\tau$ 范围。",
+      "steps": [
+        {
+          "stepTitle": "第（1）题：求相位表达式极值点 $\\omega_m=\\frac{1}{\\sqrt{ab}}$ 并反算 $K$",
+          "detail": "$\\angle G(\\mathrm{j}\\omega)=-180^\\circ+\\arctan(b\\omega)-\\arctan(a\\omega)$，故 $\\gamma(\\omega)=\\arctan(b\\omega)-\\arctan(a\\omega)$。令 $\\dfrac{\\mathrm{d}\\gamma}{\\mathrm{d}\\omega}=\\dfrac{b}{1+b^2\\omega^2}-\\dfrac{a}{1+a^2\\omega^2}=0\\implies \\omega_m=\\dfrac{1}{\\sqrt{ab}}$！此时 $\\tan\\gamma_{\\max}=\\dfrac{b\\omega_m-a\\omega_m}{1+ab\\omega_m^2}=\\dfrac{b-a}{2\\sqrt{ab}}\\implies \\gamma_{\\max}=\\arcsin\\dfrac{b-a}{b+a}$。再令 $|G(\\mathrm{j}\\omega_m)|=1\\implies K=\\omega_m^2\\sqrt{\\dfrac{1+a^2\\omega_m^2}{1+b^2\\omega_m^2}}=\\dfrac{1}{ab}\\sqrt{\\dfrac{a}{b}}=\\dfrac{1}{b\\sqrt{ab}}$。"
+        },
+        {
+          "stepTitle": "第（2）题：求原系统剪切频率 $\\omega_c$ 与相位裕度，转弧度定 $\\tau_{\\max}$",
+          "detail": "纯滞后模恒为 $1$，令 $|G_0(\\mathrm{j}\\omega_c)|=\\dfrac{\\sqrt{2}}{\\omega_c\\sqrt{\\omega_c^2+1}}=1\\implies \\omega_c^4+\\omega_c^2-2=0\\implies \\omega_c=1\\,\\text{rad/s}$。原系统相角 $\\angle G_0(\\mathrm{j}1)=-90^\\circ-45^\\circ=-135^\\circ$，故原相位裕度 $\\gamma_0=45^\\circ=\\dfrac{\\pi}{4}\\,\\text{rad}$。为保闭环稳定须 $\\gamma_0-\\omega_c\\tau>0\\implies 0<\\tau<\\dfrac{\\pi}{4}\\,\\text{s}$。"
+        }
+      ],
+      "finalAnswer": "（1）$\\gamma_{\\max}=\\arcsin\\dfrac{b-a}{b+a}$（或 $\\arctan\\dfrac{b-a}{2\\sqrt{ab}}$），此时 $K=\\dfrac{1}{b\\sqrt{ab}}$；（2）$0<\\tau<\\dfrac{\\pi}{4}$",
+      "takeaway": "频域两大经典计算母题（2014-T3/2021-T6 & 2016-T9/2021-T7）一次打通：记死 $\\omega_m=\\frac{1}{\\sqrt{ab}}$ 与 $\\tau_{\\max}=\\frac{\\gamma_0(\\text{rad})}{\\omega_c}$！",
+      "source": {
+        "book": "浙大 845 真题 2021-T6 & 2021-T7",
+        "printedPage": "2021 P.46",
+        "pdfPage": 46,
+        "itemRef": "母题 6 / 2021-T6"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ctrl_exam01_formulas_and_mothers_1_6",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-exam01-e-07",
+      "kind": "example",
+      "examWeight": "core",
+      "section": "三、12 大压箱底超级母题（离散与状态空间：母题 7–11）",
+      "title": "【母题 7】离散控制器 $D(z)$ 极点配置（避开单位圆外零极点对消，2018-T8 / 2025-T6 原题）",
+      "problem": "单位负反馈离散系统受控对象差分方程为 $y(k+2)-2.2y(k+1)+1.2y(k)=u(k+1)+0.5u(k)$，设计数字控制器 $D(z)$ 使闭环极点位于 $z_{1,2}=0.2\\pm\\mathrm{j}0.3$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：写出对象脉冲传递函数并甄别圆内/圆外零极点",
+          "detail": "$G(z)=\\dfrac{z+0.5}{z^2-2.2z+1.2}=\\dfrac{z+0.5}{(z-1)(z-1.2)}$。**关键安检**：零点 $z=-0.5$ 在单位圆内（可安全对消！），但极点 $z=1$（圆上）与 $z=1.2$（圆外不稳定！）均**严禁放进 $D(z)$ 分子去对消**！"
+        },
+        {
+          "stepTitle": "第二步：设最简一阶控制器 $D(z)=\\dfrac{k_1z+k_0}{z+0.5}$ 消去圆内零点并匹配期望特征式",
+          "detail": "令 $D(z)=\\dfrac{k_1z+k_0}{z+0.5}$，则开环传函 $D(z)G(z)=\\dfrac{k_1z+k_0}{(z-1)(z-1.2)}$，闭环特征多项式为 $D_{cl}(z)=(z-1)(z-1.2)+k_1z+k_0=z^2+(k_1-2.2)z+(1.2+k_0)$。"
+        },
+        {
+          "stepTitle": "第三步：对照期望特征式解出控制器系数",
+          "detail": "期望特征多项式 $(z-0.2-\\mathrm{j}0.3)(z-0.2+\\mathrm{j}0.3)=z^2-0.4z+0.13$。逐项对比系数：$k_1-2.2=-0.4\\implies k_1=1.8$；$1.2+k_0=0.13\\implies k_0=-1.07$。故 $D(z)=\\dfrac{1.8z-1.07}{z+0.5}$！"
+        }
+      ],
+      "finalAnswer": "$D(z)=\\dfrac{1.8z-1.07}{z+0.5}$",
+      "takeaway": "2018-T8 与 2025-T6 原题复刻！记住黄金原则：**只消圆内稳定零极点，绝不消圆外不稳定极点 $z=1.2$**（否则系统内部发散直接扣光设计分）！",
+      "source": {
+        "book": "浙大 845 真题 2025-T6 / 2018-T8",
+        "printedPage": "2025 P.3 / 2018 P.35",
+        "pdfPage": 3,
+        "itemRef": "母题 7 / 2025-T6"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ctrl_exam01_mothers_7_12",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-exam01-e-08",
+      "kind": "example",
+      "examWeight": "core",
+      "section": "三、12 大压箱底超级母题（离散与状态空间：母题 7–11）",
+      "title": "【母题 8】连续状态空间 ZOH 离散化与病理采样周期 $T$（2022-T4 原型）",
+      "problem": "已知连续状态方程 $\\dot{\\boldsymbol{x}}=\\begin{bmatrix}0&1\\\\-4&0\\end{bmatrix}\\boldsymbol{x}+\\begin{bmatrix}0\\\\1\\end{bmatrix}u$，经零阶保持器以周期 $T>0$ 离散化为 $\\boldsymbol{x}(k+1)=\\boldsymbol{G}(T)\\boldsymbol{x}(k)+\\boldsymbol{H}(T)u(k)$，求使离散系统不完全能控的采样周期 $T$ 的取值集合。",
+      "steps": [
+        {
+          "stepTitle": "第一步：计算状态转移阵 $\\boldsymbol{G}(T)=\\mathrm{e}^{\\boldsymbol{A}T}$ 与 $\\boldsymbol{H}(T)$",
+          "detail": "$(s\\boldsymbol{I}-\\boldsymbol{A})^{-1}=\\dfrac{1}{s^2+4}\\begin{bmatrix}s&1\\\\-4&s\\end{bmatrix}\\implies \\boldsymbol{G}(T)=\\begin{bmatrix}\\cos 2T&\\frac{1}{2}\\sin 2T\\\\-2\\sin 2T&\\cos 2T\\end{bmatrix}$。又 $\\boldsymbol{H}(T)=\\displaystyle\\int_0^T\\begin{bmatrix}\\frac{1}{2}\\sin 2t\\\\\\cos 2t\\end{bmatrix}\\mathrm{d}t=\\begin{bmatrix}\\frac{1-\\cos 2T}{4}\\\\\\frac{1}{2}\\sin 2T\\end{bmatrix}$。"
+        },
+        {
+          "stepTitle": "第二步：列离散能控性矩阵行列式令其为零",
+          "detail": "先算 $\\boldsymbol{G}\\boldsymbol{H}=\\begin{bmatrix}\\frac{1}{4}(\\cos 2T-\\cos 4T)\\\\\\frac{1}{2}(\\sin 4T-\\sin 2T)\\end{bmatrix}$，再求离散能控性矩阵 $\\boldsymbol{Q}_c=[\\boldsymbol{H},\\;\\boldsymbol{G}\\boldsymbol{H}]$ 的行列式，经三角化简得 $\\det\\boldsymbol{Q}_c=-\\dfrac{1}{4}\\sin 2T\\,(1-\\cos 2T)=-\\sin^3 T\\cos T$！令 $\\det\\boldsymbol{Q}_c=0$（$T>0$），得 $\\sin 2T=0\\implies 2T=k\\pi\\implies T=\\dfrac{k\\pi}{2}\\;(k=1,2,3,\\dots)$！"
+        },
+        {
+          "stepTitle": "第三步：用教材病理采样周期定理一步互验",
+          "detail": "连续矩阵 $\\boldsymbol{A}$ 的共轭复特征值为 $\\lambda_{1,2}=\\pm\\mathrm{j}2$，虚部差 $\\Delta\\omega=2-(-2)=4$。由定理 $\\Delta\\omega\\cdot T=2k\\pi\\implies T=\\dfrac{2k\\pi}{4}=\\dfrac{k\\pi}{2}\\;(k\\in\\mathbb{Z}_+)$，与行列式法分毫不差！"
+        }
+      ],
+      "finalAnswer": "$T=\\dfrac{k\\pi}{2}\\;(k=1,2,3,\\dots)$",
+      "takeaway": "考试遇到病理采样周期题：直接算 $\\det[\\boldsymbol{H},\\boldsymbol{G}\\boldsymbol{H}]=0$ 拿满分过程分，再用 $\\Delta\\omega\\cdot T=2k\\pi$ 1 秒验证不丢根！",
+      "source": {
+        "book": "浙大 845 真题 2022-T4（教材 Ch08 经典母题）",
+        "printedPage": "2022 P.48",
+        "pdfPage": 48,
+        "itemRef": "母题 8 / 2022-T4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ctrl_exam01_mothers_7_12",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-exam01-e-09",
+      "kind": "example",
+      "examWeight": "core",
+      "section": "三、12 大压箱底超级母题（离散与状态空间：母题 7–11）",
+      "title": "【母题 9】已知状态转移矩阵 $\\Phi(t)$ 反求系统传递函数（2023-T1 原型）",
+      "problem": "已知线性定常系统 $\\dot{\\boldsymbol{x}}=\\boldsymbol{A}\\boldsymbol{x}+\\boldsymbol{B}\\boldsymbol{u},\\;y=\\boldsymbol{C}\\boldsymbol{x}$，其中 $\\boldsymbol{B}=\\begin{bmatrix}1&1\\\\1&1\\end{bmatrix},\\;\\boldsymbol{C}=[1\\;\\;1]$，状态转移矩阵为 $\\Phi(t)=\\begin{bmatrix}2\\mathrm{e}^{-t}-\\mathrm{e}^{-2t}&\\mathrm{e}^{-t}-\\mathrm{e}^{-2t}\\\\-2\\mathrm{e}^{-t}+2\\mathrm{e}^{-2t}&-\\mathrm{e}^{-t}+2\\mathrm{e}^{-2t}\\end{bmatrix}$，求系统传递函数矩阵 $\\boldsymbol{G}(s)$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：直接对 $\\Phi(t)$ 取拉普拉斯变换得 $\\Phi(s)$（无需先求 $\\boldsymbol{A}$ 再求逆！）",
+          "detail": "$\\Phi(s)=\\mathcal{L}[\\Phi(t)]=\\begin{bmatrix}\\frac{2}{s+1}-\\frac{1}{s+2}&\\frac{1}{s+1}-\\frac{1}{s+2}\\\\\\frac{-2}{s+1}+\\frac{2}{s+2}&\\frac{-1}{s+1}+\\frac{2}{s+2}\\end{bmatrix}=\\dfrac{1}{(s+1)(s+2)}\\begin{bmatrix}s+3&1\\\\-2&s\\end{bmatrix}$。"
+        },
+        {
+          "stepTitle": "第二步：代入 $\\boldsymbol{G}(s)=\\boldsymbol{C}\\Phi(s)\\boldsymbol{B}$ 一步矩阵乘法出结果",
+          "detail": "先算 $\\boldsymbol{C}\\Phi(s)=\\dfrac{1}{(s+1)(s+2)}[s+1,\\;\\;s+1]=\\left[\\dfrac{1}{s+2},\\;\\;\\dfrac{1}{s+2}\\right]$！（瞬间约去 $s+1$！）再右乘 $\\boldsymbol{B}=\\begin{bmatrix}1&1\\\\1&1\\end{bmatrix}$ 得 $\\boldsymbol{G}(s)=\\left[\\dfrac{2}{s+2},\\;\\;\\dfrac{2}{s+2}\\right]$！"
+        }
+      ],
+      "finalAnswer": "$\\boldsymbol{G}(s)=\\left[\\dfrac{2}{s+2},\\;\\;\\dfrac{2}{s+2}\\right]$",
+      "takeaway": "超级省时巧算：由 $\\Phi(t)$ 求传函直接算 $\\boldsymbol{C}\\mathcal{L}[\\Phi(t)]\\boldsymbol{B}$ 即可，千万别绕路先求 $\\boldsymbol{A}=\\dot{\\Phi}(0)$ 再求 $(s\\boldsymbol{I}-\\boldsymbol{A})^{-1}$！（且本题 $\\boldsymbol{C}\\Phi(s)$ 直接消掉极点 $s=-1$，说明对应模态不可观！）",
+      "source": {
+        "book": "浙大 845 真题 2023-T1（同型 2011-T9）",
+        "printedPage": "2023 P.1",
+        "pdfPage": 1,
+        "itemRef": "母题 9 / 2023-T1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ctrl_exam01_mothers_7_12",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-exam01-e-10",
+      "kind": "example",
+      "examWeight": "core",
+      "section": "三、12 大压箱底超级母题（离散与状态空间：母题 7–11）",
+      "title": "【母题 10】Ch08 两大必背核心定理证明：PBH 左特征向量判据与对偶原理（2024-T7 / 2025-T7）",
+      "problem": "（1）证明：线性定常系统 $\\dot{\\boldsymbol{x}}=\\boldsymbol{A}\\boldsymbol{x}+\\boldsymbol{b}u$ 状态完全能控的充要条件是不存在非零向量 $\\boldsymbol{v}$ 同时满足 $\\boldsymbol{v}^T\\boldsymbol{A}=\\lambda\\boldsymbol{v}^T$ 与 $\\boldsymbol{v}^T\\boldsymbol{b}=0$（$\\lambda$ 为 $\\boldsymbol{A}$ 的特征值）；（2）证明：对偶系统 $\\Sigma_1(\\boldsymbol{A},\\boldsymbol{B},\\boldsymbol{C})$ 与 $\\Sigma_2(\\boldsymbol{A}^T,\\boldsymbol{C}^T,\\boldsymbol{B}^T)$ 的能控性与能观性互偶，且 SISO 情形传递函数相同。",
+      "steps": [
+        {
+          "stepTitle": "第（1）题：用反证法证「不能控 $\\Leftrightarrow$ 存在与 $\\boldsymbol{b}$ 正交的左特征向量」",
+          "detail": "**必要性（反证）**：若存在非零 $\\boldsymbol{v}$ 使 $\\boldsymbol{v}^T\\boldsymbol{A}=\\lambda\\boldsymbol{v}^T$ 且 $\\boldsymbol{v}^T\\boldsymbol{b}=0$，则递推得 $\\boldsymbol{v}^T\\boldsymbol{A}^k\\boldsymbol{b}=\\lambda^k\\boldsymbol{v}^T\\boldsymbol{b}=0\\;(k=0,1,\\dots,n-1)$，即 $\\boldsymbol{v}^T[\\boldsymbol{b},\\boldsymbol{A}\\boldsymbol{b},\\dots,\\boldsymbol{A}^{n-1}\\boldsymbol{b}]=\\boldsymbol{0}^T$，能控阵不满秩，不能控！**充分性（反证）**：若不能控，由能控性结构分解存在非奇异变换 $\\boldsymbol{P}$ 将系统化为 $\\bar{\\boldsymbol{A}}=\\begin{bmatrix}A_{11}&A_{12}\\\\0&A_{22}\\end{bmatrix},\\;\\bar{\\boldsymbol{b}}=\\begin{bmatrix}b_1\\\\0\\end{bmatrix}$（$A_{22}$ 为 $r\\times r$ 不能控块，$r\\ge 1$）。取 $A_{22}$ 任一左特征向量 $\\boldsymbol{w}^T\\ne\\boldsymbol{0}^T$（$\\boldsymbol{w}^TA_{22}=\\lambda\\boldsymbol{w}^T$），构造 $\\bar{\\boldsymbol{v}}^T=[\\boldsymbol{0}^T,\\;\\boldsymbol{w}^T]$，易验 $\\bar{\\boldsymbol{v}}^T\\bar{\\boldsymbol{A}}=\\lambda\\bar{\\boldsymbol{v}}^T$ 且 $\\bar{\\boldsymbol{v}}^T\\bar{\\boldsymbol{b}}=0$。再令 $\\boldsymbol{v}^T=\\bar{\\boldsymbol{v}}^T\\boldsymbol{P}^{-1}\\ne\\boldsymbol{0}^T$ 即得所求左特征向量！"
+        },
+        {
+          "stepTitle": "第（2）题：对偶原理与传函恒等证明",
+          "detail": "$\\Sigma_1$ 能控阵 $\\boldsymbol{Q}_{c1}=[\\boldsymbol{B},\\boldsymbol{A}\\boldsymbol{B},\\dots,\\boldsymbol{A}^{n-1}\\boldsymbol{B}]$，$\\Sigma_2$ 能观阵 $\\boldsymbol{Q}_{o2}=\\begin{bmatrix}\\boldsymbol{B}^T\\\\\\boldsymbol{B}^T\\boldsymbol{A}^T\\\\\\vdots\\\\\\boldsymbol{B}^T(\\boldsymbol{A}^T)^{n-1}\\end{bmatrix}=\\boldsymbol{Q}_{c1}^T$，因转置不改变矩阵秩，$\\operatorname{rank}\\boldsymbol{Q}_{c1}=\\operatorname{rank}\\boldsymbol{Q}_{o2}$，故 $\\Sigma_1$ 能控 $\\Leftrightarrow\\Sigma_2$ 能观（同理 $\\boldsymbol{Q}_{o1}^T=\\boldsymbol{Q}_{c2}$ 得 $\\Sigma_1$ 能观 $\\Leftrightarrow\\Sigma_2$ 能控）。对于传函：$\\boldsymbol{G}_2(s)=\\boldsymbol{B}^T(s\\boldsymbol{I}-\\boldsymbol{A}^T)^{-1}\\boldsymbol{C}^T=\\big[\\boldsymbol{C}(s\\boldsymbol{I}-\\boldsymbol{A})^{-1}\\boldsymbol{B}\\big]^T=\\boldsymbol{G}_1^T(s)$；在 SISO 标量情形 $\\boldsymbol{G}_1^T(s)=G_1(s)$，故传递函数完全相同！（若为 MIMO 则互为转置！）"
+        }
+      ],
+      "finalAnswer": "（1）由能控性分解与反证法证毕；（2）$\\boldsymbol{Q}_{o2}=\\boldsymbol{Q}_{c1}^T$、$\\boldsymbol{Q}_{c2}=\\boldsymbol{Q}_{o1}^T$ 得能控能观互偶，且 SISO 时 $G_2(s)=G_1^T(s)=G_1(s)$（MIMO 互为转置）",
+      "takeaway": "2024-T7 与 2025-T7 连续两年直接考 Ch08 教材定理证明！把这两段不到 10 行的「能控分解构造 + 矩阵转置保秩」模板背熟，考场 5 分钟拿满分！",
+      "source": {
+        "book": "浙大 845 真题 2024-T7 & 2025-T7（同型 2015-T5）",
+        "printedPage": "2024 P.4 / 2025 P.3",
+        "pdfPage": 4,
+        "itemRef": "母题 10 / 2024-T7"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ctrl_exam01_mothers_7_12",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-exam01-e-11",
+      "kind": "example",
+      "examWeight": "core",
+      "section": "三、12 大压箱底超级母题（压轴王炸：母题 11–12）",
+      "title": "【母题 11】26 分压轴标准模板：状态反馈极点配置 + 二维降维观测器 + 分离定理（2023-T10 = 2025-T9）",
+      "problem": "已知系统 $\\dot{\\boldsymbol{x}}=\\begin{bmatrix}0&1&0\\\\0&0&1\\\\0&-2&-3\\end{bmatrix}\\boldsymbol{x}+\\begin{bmatrix}0\\\\0\\\\1\\end{bmatrix}u,\\;y=[1\\;\\;0\\;\\;0]\\boldsymbol{x}$。（1）能否用状态反馈 $u=v-\\boldsymbol{K}\\boldsymbol{x}$ 将闭环极点配至 $-3,\\;-0.5\\pm\\mathrm{j}0.5\\sqrt{3}$？若能求 $\\boldsymbol{K}$；（2）能否设计极点均在 $-5,-5$ 的二维降维观测器（取变换阵 $\\boldsymbol{T}=\\boldsymbol{I}$）？若能写出观测器方程；（3）求带二维观测器的状态反馈闭环传函。",
+      "steps": [
+        {
+          "stepTitle": "第（1）题：一眼识别能控标准型并直接比较系数求 $\\boldsymbol{K}$",
+          "detail": "系统已是能控标准型（验证 $\\det\\boldsymbol{Q}_c=-1\\ne 0$ 完全能控）。期望特征式 $(s+3)(s^2+s+1)=s^3+4s^2+4s+3$。原特征式 $s^3+3s^2+2s$，状态反馈后特征式 $s^3+(3+k_3)s^2+(2+k_2)s+k_1$，逐项对比秒出 $\\boldsymbol{K}=[k_1,k_2,k_3]=[3,\\;\\;2,\\;\\;1]$！"
+        },
+        {
+          "stepTitle": "第（2）题：验能观后取 $\\boldsymbol{T}=\\boldsymbol{I}$ 直接分块设计二维观测器",
+          "detail": "算得 $\\det\\boldsymbol{Q}_o=1\\ne 0$（完全能观）。因 $y=x_1$ 直接可测，将状态分为 $\\bar{x}_1=x_1$ 与 $\\bar{\\boldsymbol{x}}_2=[x_2,x_3]^T$，分块得 $A_{11}=0,\\;A_{12}=[1\\;\\;0],\\;A_{21}=\\begin{bmatrix}0\\\\0\\end{bmatrix},\\;A_{22}=\\begin{bmatrix}0&1\\\\-2&-3\\end{bmatrix},\\;B_1=0,\\;B_2=\\begin{bmatrix}0\\\\1\\end{bmatrix}$。设增益 $\\boldsymbol{L}=\\begin{bmatrix}l_1\\\\l_2\\end{bmatrix}$，计算 $A_{22}-\\boldsymbol{L}A_{12}=\\begin{bmatrix}-l_1&1\\\\-2-l_2&-3\\end{bmatrix}$，其特征多项式为 $s^2+(l_1+3)s+(3l_1+l_2+2)$。令其等于期望 $(s+5)^2=s^2+10s+25$，解得 $l_1=7,\\;l_2=2$！引入中间变量 $\\boldsymbol{z}=\\hat{\\bar{\\boldsymbol{x}}}_2-\\boldsymbol{L}y$ 即得无微分二维观测器：$\\dot{\\boldsymbol{z}}=\\begin{bmatrix}-7&1\\\\-4&-3\\end{bmatrix}\\boldsymbol{z}+\\begin{bmatrix}-47\\\\-34\\end{bmatrix}y+\\begin{bmatrix}0\\\\1\\end{bmatrix}u,\\;\\hat{\\bar{\\boldsymbol{x}}}_2=\\boldsymbol{z}+\\begin{bmatrix}7\\\\2\\end{bmatrix}y$。"
+        },
+        {
+          "stepTitle": "第（3）题：分离原理一秒出闭环传函",
+          "detail": "由分离原理，带观测器的状态反馈闭环传函与直接状态反馈完全一致（观测器极点 $(s+5)^2$ 对输入-输出完全不可控而对消）：$\\Phi(s)=\\dfrac{1}{s^3+4s^2+4s+3}$！"
+        }
+      ],
+      "finalAnswer": "（1）$\\boldsymbol{K}=[3,\\;2,\\;1]$；（2）$\\boldsymbol{L}=\\begin{bmatrix}7\\\\2\\end{bmatrix}$，$\\dot{\\boldsymbol{z}}=\\begin{bmatrix}-7&1\\\\-4&-3\\end{bmatrix}\\boldsymbol{z}+\\begin{bmatrix}-47\\\\-34\\end{bmatrix}y+\\begin{bmatrix}0\\\\1\\end{bmatrix}u$，$\\hat{\\bar{\\boldsymbol{x}}}_2=\\boldsymbol{z}+\\begin{bmatrix}7\\\\2\\end{bmatrix}y$；（3）$\\Phi(s)=\\dfrac{1}{s^3+4s^2+4s+3}$",
+      "takeaway": "2023-T10（26 分！）和 2025-T9 原封不动连考两次的超级大头！看清整个过程全是小学加减法级别的矩阵分块计算，唯一要留神的是无微分观测器里 $\\boldsymbol{F}\\boldsymbol{L}=(A_{22}-\\boldsymbol{L}A_{12})\\boldsymbol{L}=\\begin{bmatrix}-47\\\\-34\\end{bmatrix}$ 别算错负号！",
+      "source": {
+        "book": "浙大 845 真题 2023-T10 = 2025-T9（原题复刻！）",
+        "printedPage": "2023 P.4 / 2025 P.3-4",
+        "pdfPage": 4,
+        "itemRef": "母题 11 / 2023-T10"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ctrl_exam01_mothers_7_12",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-exam01-e-12",
+      "kind": "example",
+      "examWeight": "core",
+      "section": "三、12 大压箱底超级母题（压轴王炸：母题 11–12）",
+      "title": "【母题 12】非线性双板斧：$x=e^3$ 描述函数自激振荡 + 李雅普诺夫间接/直接法（2024-T9/T10 & 2025-T10）",
+      "problem": "（1）单位负反馈非线性系统前向串联非线性 $x=e^3$ 与线性部分 $G(s)=\\dfrac{1}{s(s+1)(s+2)}$，用描述函数法求自激振荡振幅 $A$、频率 $\\omega$ 并判断稳定性（2024-T9）；（2）用李雅普诺夫第二法分析 $\\dot{x}_1=x_2+cx_1(x_1^2+x_2^2),\\;\\dot{x}_2=-x_1+cx_2(x_1^2+x_2^2)$ 在原点平衡点的稳定性（2024-T10）。",
+      "steps": [
+        {
+          "stepTitle": "第（1）题：用 $\\sin^3\\psi$ 降幂秒算 $N(A)=\\frac{3}{4}A^2$ 并联立谐波平衡",
+          "detail": "输入 $e(t)=A\\sin\\psi$，输出 $x=A^3\\sin^3\\psi=A^3\\left(\\dfrac{3}{4}\\sin\\psi-\\dfrac{1}{4}\\sin 3\\psi\\right)$，直接读出基波系数 $B_1=\\dfrac{3}{4}A^3,\\;A_1=0\\implies N(A)=\\dfrac{3}{4}A^2$，负倒曲线 $-\\dfrac{1}{N(A)}=-\\dfrac{4}{3A^2}$（沿负实轴自 $-\\infty$ 随 $A$ 增大向右移向 $0^-$）。又 $G(\\mathrm{j}\\omega)=\\dfrac{1}{-3\\omega^2+\\mathrm{j}\\omega(2-\\omega^2)}$，令虚部为零得 $\\omega=\\sqrt{2}\\,\\text{rad/s}$，交点实部 $G(\\mathrm{j}\\sqrt{2})=-\\dfrac{1}{6}$。联立 $-\\dfrac{4}{3A^2}=-\\dfrac{1}{6}\\implies A^2=8\\implies A=2\\sqrt{2}$！稳定性判定：沿 $A$ 增大方向，$-\\frac{1}{N(A)}$ 从 $-\\infty$（未包围的稳定区）穿向 $0^-$（被 $G(\\mathrm{j}\\omega)$ 包围的不稳定区）$\\implies$ 该自激振荡**不稳定**！"
+        },
+        {
+          "stepTitle": "第（2）题：构造最简正定二次型 $V=x_1^2+x_2^2$ 按参数 $c$ 符号分类",
+          "detail": "显然 $(0,0)$ 为唯一平衡点。取正定且径向无界的 $V(x_1,x_2)=x_1^2+x_2^2$，求导得 $\\dot{V}=2x_1\\dot{x}_1+2x_2\\dot{x}_2=2x_1x_2+2cx_1^2(x_1^2+x_2^2)-2x_1x_2+2cx_2^2(x_1^2+x_2^2)=2c(x_1^2+x_2^2)^2$！交叉项 $2x_1x_2$ 完美抵消！因此：① $c<0$ 时 $\\dot{V}$ 负定且 $V$ 径向无界 $\\Rightarrow$ 原点**大范围渐近稳定**；② $c=0$ 时 $\\dot{V}\\equiv 0\\Rightarrow$ 原点**李雅普诺夫意义下稳定**（等幅圆周轨迹，非渐近稳）；③ $c>0$ 时 $\\dot{V}$ 正定 $\\Rightarrow$ 原点**不稳定**！"
+        }
+      ],
+      "finalAnswer": "（1）$\\omega=\\sqrt{2}\\,\\text{rad/s},\\;A=2\\sqrt{2}$，自激振荡**不稳定**；（2）$c<0$ 大范围渐近稳定；$c=0$ 李氏稳定（非渐近）；$c>0$ 不稳定",
+      "takeaway": "2024 年最后两道大题（20–25 分）加起来居然不到 10 行推导！这就是为什么强烈建议你**第一阶段就先把第 9 章拿下**——投入产出比全书最高！",
+      "source": {
+        "book": "浙大 845 真题 2024-T9 & 2024-T10",
+        "printedPage": "2024 P.4-5",
+        "pdfPage": 4,
+        "itemRef": "母题 12 / 2024-T9"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "ctrl_exam01_mothers_7_12",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-exam01-s-01",
+      "kind": "summary",
+      "examWeight": "core",
+      "section": "四、题型总结（一）：全 9 章 17 年考情总表",
+      "title": "2010–2026 浙大 845 全九章考情全景、重点映射与减负总表（表 E1-3）",
+      "overview": "本表将 **2010–2026 共 17 套真题原卷** 的真实统计结果与工作台已建好的「教材与辅导（全 9 章 · 640 条）」一一对齐，帮助你精准分配时间：**抓大放小，每一小时都花在必考高分板块上**。",
+      "patterns": [
+        {
+          "typeName": "核心第一梯队（每年稳占 80–110 分，决定上线与高分）",
+          "triggers": "Ch08 状态空间综合 + Ch07 离散系统 + Ch04 稳定与稳态误差 + Ch09 非线性控制（新必考）",
+          "method": "这 4 章公式高度结构化、步骤死板、复用率最高。先拿下 Ch04 与 Ch09 建立信心，再彻底吃透 Ch08（极点配置+降维观测器+PBH/对偶）与 Ch07（脉冲传函+$D(z)$极点配置+离散化）。",
+          "pitfall": "不要被第 8、9 章的名字吓住——它们比第 2 章复杂物理建模和第 6 章频域校正简单规范得多！",
+          "relatedRefs": "母题 1, 母题 3, 母题 7, 母题 8, 母题 10, 母题 11, 母题 12"
+        },
+        {
+          "typeName": "核心第二梯队（稳守 45–60 分，冲刺 125–135+）",
+          "triggers": "Ch02 数学模型 + Ch03 时域分析 + Ch05 根轨迹 + Ch06 频域分析",
+          "method": "聚焦高频跨章题型：框图+建模、二阶指标与主导极点、$\\Phi(t)$ 正反算、圆弧/参数根轨迹、Bode 图反求传函、奈氏与纯滞后 $\\tau_{\\max}$。",
+          "pitfall": "避免陷入低 ROI 的多轮频域超前/滞后试凑手算与偏门热力/液位机理建模。",
+          "relatedRefs": "母题 2, 母题 4, 母题 5, 母题 6, 母题 9"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 E1-3　浙大 845 十七年真题（2010–2026）九章考频、必学核心与可略看清单",
+          "headers": [
+            "章节",
+            "17年考频 / 近年分值",
+            "高频必会题型（真题直指）",
+            "可大胆略看 / 减负项"
+          ],
+          "rows": [
+            [
+              "Ch01 概述",
+              "7/17 年 · 0–15 分",
+              "工艺图→方块图、前馈-反馈框图、LTI 证明",
+              "发展史与纯文字分类"
+            ],
+            [
+              "Ch02 数学模型",
+              "15/17 年 · 10–20 分",
+              "RC/机械/微分方程建框图、梅逊化简、工作点线性化",
+              "偏门热力/复杂液压细节"
+            ],
+            [
+              "Ch03 时域分析",
+              "17/17 年 · 15–30 分",
+              "二阶指标正反算、带零点 $T_s$、主导极点、$\\Phi(t)$ 正反算",
+              "ISE/ITAE 积分指标硬算"
+            ],
+            [
+              "Ch04 稳定与误差",
+              "17/17 年 · 15–25 分",
+              "劳斯/赫尔维茨、左移 $s=z-\\sigma$、临界振荡、给定+扰动误差",
+              "全章高 ROI，无废话！"
+            ],
+            [
+              "Ch05 根轨迹",
+              "14/17 年 · 15–20 分",
+              "常规 8 法则、圆弧根轨迹、参数/状态阵根轨迹、$0^\\circ$ 根轨迹",
+              "纯滞后复杂根轨迹作图"
+            ],
+            [
+              "Ch06 频域分析",
+              "15/17 年 · 15–20 分",
+              "Bode 反求传函 + 裕度、奈氏判稳、纯滞后 $\\tau_{\\max}$、II 型 $\\gamma_{\\max}$",
+              "频域超前/滞后多轮试凑手算"
+            ],
+            [
+              "Ch07 离散系统",
+              "17/17 年 · 20–35 分",
+              "多开关 $Y(z)$、ZOH、二阶稳域/W 判稳、$D(z)$ 极点配置、离散化",
+              "离散伪频域与复杂多拍无波纹"
+            ],
+            [
+              "Ch08 状态空间",
+              "17/17 年 · 25–45 分",
+              "能控能观、极点配置、全维/降维观测器、PBH/对偶证明、消阶",
+              "8.4 最优控制 LQR、8.7 内模控制"
+            ],
+            [
+              "Ch09 非线性 ★",
+              "近4年 4/4 · 10–25 分",
+              "描述函数自激振荡与稳定性、李雅普诺夫第一法与第二法",
+              "相平面法（2027 考纲不考！）"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "看清这张表就不再慌了：150 分卷面几乎全部由这 9 行第 3 列拼成，第 4 列全部放心做减法！",
+      "source": {
+        "book": "浙大 845 2010–2026 真题统计 × 2027 考纲",
+        "printedPage": "全17年汇总",
+        "pdfPage": 1,
+        "itemRef": "九章考情全景表"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-exam01-s-02",
+      "kind": "summary",
+      "examWeight": "core",
+      "section": "四、题型总结（二）：近 7 年（2020–2026）逐卷索引矩阵",
+      "title": "2020–2026 近七年浙大 845 逐年真题卷面结构与高频考点速查矩阵（表 E1-4）",
+      "overview": "近 7 年（尤其是 2021 禁用计算器及 2023 非线性回归后的近 4 年）是备考 2027 浙大 845 最有价值的黄金样本。下表按年份逐题索引，后续将与「真题 · 单元 2（2020–2022 全解）」与「真题 · 单元 3（2023–2026 全解）」全面打通。",
+      "patterns": [
+        {
+          "typeName": "2020–2022（过渡期：2021 起禁用计算器）",
+          "triggers": "题量 9–10 题，开始强化状态空间指标综合、离散 $D(z)$ 设计与病理采样周期",
+          "method": "按「限时 3 小时 + 禁用计算器」模考，重点消化 2021-T3/T4/T6/T7/T8/T9 与 2022-T2/T4/T6/T7/T9。",
+          "pitfall": "2020 是最后一年可用计算器，个别数值计算偏繁；2021 起数值全部趋于清爽代数化。",
+          "relatedRefs": "母题 2, 母题 4, 母题 6, 母题 8"
+        },
+        {
+          "typeName": "2023–2026（最新命题定型期：非线性 + 离散 + 现控三驾马车）",
+          "triggers": "题量 9–11 题，每年必含 Ch09 非线性（1–2 题）、Ch07 离散设计、Ch08 压轴/证明",
+          "method": "逐题二刷甚至三刷！尤其是 2023-T5/T8/T10/T11、2024-T3/T6/T7/T8/T9/T10、2025-T4/T5/T6/T7/T9/T10、2026-T1~T9 全卷。",
+          "pitfall": "切勿跳过 2023 与 2025 无独立官方答案册的年份——将在单元 3 中提供 100% SymPy 验算的逐题标准全解！",
+          "relatedRefs": "母题 1, 母题 3, 母题 5, 母题 7, 母题 9, 母题 10, 母题 11, 母题 12"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 E1-4　2020–2026 近七年浙大 845 真题逐卷核心考点矩阵",
+          "headers": [
+            "年份",
+            "计算器 / 题量",
+            "经典控制（Ch1–Ch6）核心题",
+            "离散与现代/非线性（Ch7–Ch9）核心题"
+          ],
+          "rows": [
+            [
+              "2020",
+              "可用 · 10 题",
+              "线性化/稳态误差、根轨迹幅值裕度、Bode→奈氏、MIMO 解耦、方波误差",
+              "ZOH 离散 $K_v$、状态阵参数根轨迹、状态反馈指标、非零初值状态图"
+            ],
+            [
+              "2021",
+              "禁用 · 9 题",
+              "框图误差、$4K$ 周期 $\\frac{\\pi}{10}$ 反求、主导极点定 $K$、II 型 $\\gamma_{\\max}$、纯滞后 $\\tau_{\\max}$",
+              "线性李氏方程判稳、$|z|<\\mathrm{e}^{-1}$ 左移劳斯、状态反馈+消阶跃稳态误差"
+            ],
+            [
+              "2022",
+              "禁用 · 10 题",
+              "前馈框图、LTI 证明、主导极点降阶、奈氏实轴交点判稳、RC 示波器椭圆",
+              "对角规范型反求、病理采样周期 $T$、$D(z)$ 极点配置、ZOH 连续输出、状态反馈+观测器"
+            ],
+            [
+              "2023",
+              "禁用 · 11 题",
+              "$\\Phi(t)$ 求传函、$\\alpha$ 误差与稳定、左移劳斯、临界vs过阻尼证明、圆弧根轨迹+Bode",
+              "斐波那契差分、离散状态图、**26分状态反馈+降维观测器**、继电描述函数"
+            ],
+            [
+              "2024",
+              "禁用 · 10 题",
+              "阶跃判反馈极性、给定+扰动误差、状态阵 $\\frac{1}{a}$ 根轨迹、$\\frac{1}{2}K_{\\max}$ 裕度",
+              "二阶+ZOH 求 $T$、二阶离散稳域图、**PBH 证明**、零极对消反馈、**$x=e^3$ 描述函数+李氏直接法**"
+            ],
+            [
+              "2025",
+              "禁用 · 10 题",
+              "双回路耦合稳域、能观标准型传函+等幅振荡",
+              "采样序列、双开关 $Y(z)$、反求 $(A,B)$ 离散化、**$D(z)$ 复刻 18-T8**、**对偶证明**、消阶求 $b$、**压轴复刻 23-T10**、李氏间接法"
+            ],
+            [
+              "2026",
+              "禁用 · 9 题",
+              "位置方程框图+稳态、带零点 $T_s$、圆弧根轨迹+$a$ 范围、$2K$ 振荡反求、Bode 反求+裕度",
+              "**$D(z)$ 满足 $\\zeta,T_s$ 映射配置**、状态图求 $\\Phi(t)$、串联能控能观、**复描述函数自激振荡**"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "从 2020 到 2026 趋势一目了然：右列（Ch7 + Ch8 + Ch9）的分量已经稳定超过全卷 50%，是决胜高分的核心引擎！",
+      "source": {
+        "book": "浙大 845 真题 2020–2026 原卷逐题汇总",
+        "printedPage": "2020–2026",
+        "pdfPage": 1,
+        "itemRef": "近七年真题索引矩阵"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "ctrl-exam01-s-03",
+      "kind": "summary",
+      "examWeight": "core",
+      "section": "四、题型总结（三）：考场 180 分钟实战时间与验算策略",
+      "title": "845 考场 180 分钟时间分配、答题规范与 12 母题冲刺自查清单",
+      "overview": "845 满卷 150 分、考试时间 180 分钟，共 9–11 道全主观计算/证明大题（无选择题兜底，过程分极重！）。合理控时 + 10 秒验算习惯，能帮你把平时水平稳定兑现为考场 **125–140 分**。",
+      "patterns": [
+        {
+          "typeName": "前 50 分钟：闪电清扫送分题（先落袋 50–60 分定心）",
+          "triggers": "方程画框图、劳斯/左移劳斯、稳态误差、描述函数、李雅普诺夫、Bode 反求传函",
+          "method": "快速通览全卷，优先拿下最熟的 4–5 道常规送分题，每题 8–12 分钟，一步到位写清公式与过程。",
+          "pitfall": "不要一上来就在某道需要分类讨论或复杂证明的题上卡死 25 分钟导致后半场慌乱。",
+          "relatedRefs": "母题 1, 母题 2, 母题 3, 母题 6, 母题 12"
+        },
+        {
+          "typeName": "中 90 分钟：稳啃三大分仓主菜（拿下 70–80 分核心大头）",
+          "triggers": "状态反馈 + 降维/全维观测器大题、离散 $D(z)$ 设计/多开关 $Y(z)$、圆弧/参数根轨迹、二阶/主导极点综合",
+          "method": "步骤写全写清（比如先显式写出 $\\det\\boldsymbol{Q}_c\\ne 0$ 验能控再配极点，先写明分离原理再写闭环传函），每步都有清晰采分点。",
+          "pitfall": "降维观测器计算 $\\boldsymbol{F}\\boldsymbol{L}$ 与特征式展开时草稿纸分区工整列竖式，避免抄错符号。",
+          "relatedRefs": "母题 4, 母题 5, 母题 7, 母题 8, 母题 9, 母题 10, 母题 11"
+        },
+        {
+          "typeName": "末 40 分钟：攻坚难点 + 全卷 10 秒极速反代验算",
+          "triggers": "剩余证明/参数讨论小题 + 全部已做题目的关键数值校验",
+          "method": "① 劳斯临界值代回原式验纯虚根；② 状态反馈 $\\boldsymbol{K}$ 算 $\\operatorname{tr}(\\boldsymbol{A}-\\boldsymbol{B}\\boldsymbol{K})=\\sum\\lambda_i^*$（迹检验 3 秒查错！）；③ 离散稳定校验 $D(1)>0,D(-1)>0$；④ 稳态误差复查是否已取稳定交集。",
+          "pitfall": "很多考生以为「没时间验算」，其实「矩阵迹 = 特征值之和」这种 3 秒验算往往能直接救回 15 分压轴题！",
+          "relatedRefs": "表 E1-1, 表 E1-2"
+        }
+      ],
+      "takeaway": "记住考场三秒救命验算神技：**极点配置查迹 $\\operatorname{tr}(\\boldsymbol{A}-\\boldsymbol{B}\\boldsymbol{K})=\\sum\\lambda_i^*$，劳斯临界代 $s=\\mathrm{j}\\omega$，稳态误差查稳定交集，描述函数查 $A$ 增向穿出包围区**！",
+      "source": {
+        "book": "浙大 845 实战应试规范总汇",
+        "printedPage": "考场策略",
+        "pdfPage": 1,
+        "itemRef": "考场控时与验算"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    }
+  ]
+}

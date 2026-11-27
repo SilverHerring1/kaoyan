@@ -2216,6 +2216,125 @@ def run_all_checks() -> list[tuple[str, bool, str]]:
           and Az_b16.T * P_b16 * Az_b16 - P_b16 == -sp.eye(2) and P_b16[0, 0] > 0 and P_b16.det() > 0,
           "Confirmed B9-15 eigs={+1,-2} STRICTLY UNSTABLE (Appendix P.263 erroneously called it Lyapunov stable!)")
 
+    # =====================================================================
+    # Control Exam-01: 2010-2026 Overview + 12 Mother Problems Verification
+    # =====================================================================
+    # 1. Table E1-1 quick-calc constants + Mothers 1-6
+    def _ov(z_val: float) -> float:
+        return math.exp(-math.pi * z_val / math.sqrt(1 - z_val**2)) * 100.0
+
+    ok_const = (
+        abs(_ov(math.sqrt(2) / 2) - 4.321) < 0.02
+        and abs(_ov(0.69) - 5.0) < 0.1
+        and abs(_ov(0.6) - 9.48) < 0.05
+        and abs(_ov(0.5) - 16.30) < 0.05
+        and abs(20 * math.log10(2) - 6.0206) < 0.001
+        and abs(20 * math.log10(math.sqrt(2)) - 3.0103) < 0.001
+        and abs(20 * math.log10(5) - 13.9794) < 0.001
+        and abs(math.log(0.05) - (-2.9957)) < 0.001
+        and abs(math.log(0.02) - (-3.9120)) < 0.001
+        and abs(math.exp(-1) - 0.3679) < 0.001
+        and abs(math.exp(-2) - 0.1353) < 0.001
+    )
+    # Mother 1 (2026-T1): G(s)=0.5K/(s(s^2+2s+4)) -> 8<=K<16
+    s_e, K_e, b_e, a_e, w_e, z_e = sp.symbols("s_e K_e b_e a_e w_e z_e", positive=True)
+    m1_kv = sp.limit(s_e * sp.Rational(1, 2) * K_e / (s_e * (s_e**2 + 2 * s_e + 4)), s_e, 0)
+    # Mother 2 (2021-T3): s^3+(40+b)s^2+40bs+4K at s=20j -> b=10, K=5000
+    m2_expr = sp.expand((20 * sp.I)**3 + (40 + b_e) * (20 * sp.I)**2 + 40 * b_e * (20 * sp.I) + 4 * K_e)
+    m2_sol = sp.solve([sp.re(m2_expr), sp.im(m2_expr)], [b_e, K_e])
+    m2_roots = [complex(r.evalf()) for r in sp.roots(s_e**3 + 50 * s_e**2 + 400 * s_e + 5000, s_e).keys()]
+    # Mother 3 (2023-T5): (s+1)(s+1.5)(s+2)+K with s=z-1 -> z^3+1.5z^2+0.5z+K, K_sup=0.75
+    m3_poly = sp.expand((z_e) * (z_e + sp.Rational(1, 2)) * (z_e + 1) + sp.Rational(3, 4))
+    m3_fac = sp.factor(m3_poly)
+    # Mother 4 (2021-T4): (s+1)(s+2)(s+4)+8K at K=1.5 -> (s+5)(s^2+2s+4)
+    m4_poly = sp.expand((s_e + 1) * (s_e + 2) * (s_e + 4) + 8 * sp.Rational(3, 2))
+    # Mother 5 (2026-T3): p1,2=-2+-2j, z=-1 -> R=sqrt(5); K=2, zeta=3/sqrt(8+2a)<0.1 -> a>446
+    m5_R = sp.sqrt((-2 + 1)**2 + 2**2)
+    m5_a_bound = sp.solve(sp.Eq(3 / sp.sqrt(8 + 2 * a_e), sp.Rational(1, 10)), a_e)[0]
+    # Mother 6 (2021-T6 & T7): gamma_max at w_m=1/sqrt(ab), K=1/(b*sqrt(ab)); pure delay tau_max=pi/4
+    m6_gamma = sp.atan(b_e * w_e) - sp.atan(a_e * w_e)
+    m6_dw = sp.simplify(sp.diff(m6_gamma, w_e).subs(w_e, 1 / sp.sqrt(a_e * b_e)))
+    m6_K = sp.simplify((1 / (a_e * b_e)) * sp.sqrt((1 + a_e / b_e) / (1 + b_e / a_e)))
+    m6_G0_1 = sp.simplify(sp.sqrt(2) / (sp.I * (1 + sp.I)))
+    check("ctrl_exam01_formulas_and_mothers_1_6",
+          ok_const
+          and m1_kv == K_e / 8
+          and m2_sol == {b_e: 10, K_e: 5000} and all(r.real < 0 for r in m2_roots) and any(abs(r.imag) > 1 for r in m2_roots)
+          and sp.expand(m3_fac - (z_e + sp.Rational(3, 2)) * (z_e**2 + sp.Rational(1, 2))) == 0
+          and sp.expand(m4_poly - (s_e + 5) * (s_e**2 + 2 * s_e + 4)) == 0
+          and m5_R == sp.sqrt(5) and m5_a_bound == 446
+          and m6_dw == 0 and sp.simplify(m6_K - 1 / (b_e * sp.sqrt(a_e * b_e))) == 0
+          and sp.Abs(m6_G0_1) == 1 and sp.arg(m6_G0_1) == -3 * sp.pi / 4,
+          "Verified Exam-01 Table E1-1 constants & Mothers 1-6 (2026-T1, 2021-T3, 2023-T5, 2021-T4, 2026-T3, 2021-T6/T7)")
+
+    # 2. Mothers 7-12 (2025-T6, 2022-T4, 2023-T1, 2024/25-T7, 2023-T10=2025-T9, 2024-T9/T10)
+    # Mother 7 (2025-T6 = 2018-T8): (z-1)(z-1.2) + 1.8z - 1.07 == (z-(0.2+0.3j))(z-(0.2-0.3j))
+    z_m7 = sp.Symbol("z_m7")
+    m7_cl = sp.expand((z_m7 - 1) * (z_m7 - sp.Rational(6, 5)) + sp.Rational(9, 5) * z_m7 - sp.Rational(107, 100))
+    m7_des = sp.expand((z_m7 - (sp.Rational(1, 5) + sp.Rational(3, 10) * sp.I)) * (z_m7 - (sp.Rational(1, 5) - sp.Rational(3, 10) * sp.I)))
+    # Mother 8 (2022-T4): A=[[0,1],[-4,0]], B=[0,1]^T -> G*H & det([H, G*H]) = -1/4*sin(2T)*(1-cos(2T)) = -sin^3(T)*cos(T)
+    T_m8 = sp.Symbol("T_m8", positive=True)
+    A_m8 = sp.Matrix([[0, 1], [-4, 0]])
+    B_m8 = sp.Matrix([0, 1])
+    G_m8 = sp.simplify(sp.exp(A_m8 * T_m8))
+    H_m8 = sp.simplify(A_m8.inv() * (G_m8 - sp.eye(2)) * B_m8)
+    GH_m8 = sp.simplify(G_m8 * H_m8)
+    GH_m8_expected = sp.Matrix([sp.Rational(1, 4) * (sp.cos(2 * T_m8) - sp.cos(4 * T_m8)), sp.Rational(1, 2) * (sp.sin(4 * T_m8) - sp.sin(2 * T_m8))])
+    det_m8 = sp.trigsimp(sp.Matrix.hstack(H_m8, GH_m8).det())
+    det_m8_expected = -sp.Rational(1, 4) * sp.sin(2 * T_m8) * (1 - sp.cos(2 * T_m8))
+    # Mother 9 (2023-T1): Phi(t) -> C*Phi(s)*B = [2/(s+2), 2/(s+2)]
+    Phi_s_m9 = sp.Matrix([
+        [2 / (s_e + 1) - 1 / (s_e + 2), 1 / (s_e + 1) - 1 / (s_e + 2)],
+        [-2 / (s_e + 1) + 2 / (s_e + 2), -1 / (s_e + 1) + 2 / (s_e + 2)],
+    ])
+    B_m9 = sp.Matrix([[1, 1], [1, 1]])
+    C_m9 = sp.Matrix([[1, 1]])
+    G_m9 = sp.simplify(C_m9 * Phi_s_m9 * B_m9)
+    # Mother 10 (PBH + Duality sanity on symbolic 2x2)
+    a11, a12, a22, b1_s = sp.symbols("a11 a12 a22 b1_s")
+    A_m10 = sp.Matrix([[a11, a12], [0, a22]])
+    B_m10 = sp.Matrix([b1_s, 0])
+    v_m10 = sp.Matrix([[0, 1]])
+    ok_m10 = (v_m10 * A_m10 == a22 * v_m10) and (v_m10 * B_m10 == sp.Matrix([[0]]))
+    # Mother 11 (2023-T10 = 2025-T9): 26pt state feedback + 2D reduced observer
+    A_m11 = sp.Matrix([[0, 1, 0], [0, 0, 1], [0, -2, -3]])
+    B_m11 = sp.Matrix([0, 0, 1])
+    C_m11 = sp.Matrix([[1, 0, 0]])
+    Qc_m11 = sp.Matrix.hstack(B_m11, A_m11 * B_m11, A_m11**2 * B_m11)
+    Qo_m11 = sp.Matrix.vstack(C_m11, C_m11 * A_m11, C_m11 * A_m11**2)
+    K_m11 = sp.Matrix([[3, 2, 1]])
+    Acl_m11 = A_m11 - B_m11 * K_m11
+    char_m11 = sp.expand((s_e * sp.eye(3) - Acl_m11).det())
+    tf_m11 = sp.simplify((C_m11 * (s_e * sp.eye(3) - Acl_m11).inv() * B_m11)[0, 0])
+    A12_m11 = sp.Matrix([[1, 0]])
+    A22_m11 = sp.Matrix([[0, 1], [-2, -3]])
+    L_m11 = sp.Matrix([7, 2])
+    F_m11 = A22_m11 - L_m11 * A12_m11
+    obs_char_m11 = sp.expand((s_e * sp.eye(2) - F_m11).det())
+    FL_m11 = F_m11 * L_m11
+    # Mother 12 (2024-T9 & T10): x=e^3 DF & Lyapunov V=x1^2+x2^2
+    psi_m12, x1_m12, x2_m12, c_m12 = sp.symbols("psi_m12 x1_m12 x2_m12 c_m12", real=True)
+    N_m12 = sp.simplify((1 / (sp.pi * A_amp)) * sp.integrate((A_amp * sp.sin(psi_m12))**3 * sp.sin(psi_m12), (psi_m12, 0, 2 * sp.pi)))
+    G_m12 = sp.simplify(1 / (sp.I * sp.sqrt(2) * (1 + sp.I * sp.sqrt(2)) * (2 + sp.I * sp.sqrt(2))))
+    Vdot_m12 = sp.factor(
+        2 * x1_m12 * (x2_m12 + c_m12 * x1_m12 * (x1_m12**2 + x2_m12**2))
+        + 2 * x2_m12 * (-x1_m12 + c_m12 * x2_m12 * (x1_m12**2 + x2_m12**2))
+    )
+    check("ctrl_exam01_mothers_7_12",
+          m7_cl == m7_des
+          and sp.simplify(GH_m8 - GH_m8_expected) == sp.zeros(2, 1)
+          and sp.trigsimp(det_m8 - det_m8_expected) == 0 and sp.trigsimp(det_m8 + sp.sin(T_m8)**3 * sp.cos(T_m8)) == 0
+          and G_m9 == sp.Matrix([[2 / (s_e + 2), 2 / (s_e + 2)]])
+          and ok_m10
+          and Qc_m11.det() == -1 and Qo_m11.det() == 1
+          and char_m11 == sp.expand((s_e + 3) * (s_e**2 + s_e + 1))
+          and sp.simplify(tf_m11 - 1 / (s_e**3 + 4 * s_e**2 + 4 * s_e + 3)) == 0
+          and obs_char_m11 == sp.expand((s_e + 5)**2) and FL_m11 == sp.Matrix([-47, -34])
+          and N_m12 == sp.Rational(3, 4) * A_amp**2 and G_m12 == sp.Rational(-1, 6)
+          and (-1 / N_m12.subs(A_amp, 2 * sp.sqrt(2))) == sp.Rational(-1, 6)
+          and Vdot_m12 == 2 * c_m12 * (x1_m12**2 + x2_m12**2)**2,
+          "Verified Mothers 7-12 (2025-T6, 2022-T4 exact -1/4*sin(2T)*(1-cos(2T)), 2023-T1, PBH, 2023-T10=2025-T9 FL=[-47,-34], 2024-T9/T10)")
+
     return results
 
 

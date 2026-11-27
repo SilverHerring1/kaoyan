@@ -14,7 +14,7 @@ from pathlib import Path
 WORKSPACE_DIR = Path(r"D:\Documents\antigravity-workspace\kaoyan-english-sprint")
 DEFAULT_REPO_DIR = Path(r"D:\Documents\GitHub\kaoyan")
 
-EXCLUDE_TOP = {".git", ".env", ".env.local", "__pycache__", ".venv", "tmp", "status.md", "AGENTS.md"}
+EXCLUDE_TOP = {".git", ".env", ".env.local", "__pycache__", ".venv", "tmp", "status.md", "AGENTS.md", "845_自控真题与教材实战复习资料.md"}
 EXCLUDE_FILENAMES = {"CONTENT_SPEC.md"}
 EXCLUDE_REL_PREFIXES = ("data/raw", "scripts/__pycache__")
 STALE_FILES_TO_REMOVE = (".github/workflows/pages.yml",)
