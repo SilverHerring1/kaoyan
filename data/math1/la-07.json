@@ -1,0 +1,1220 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "la-07",
+  "title": "线代 · 第 7 讲　特征值与特征向量",
+  "sourceMeta": "深度整合《27 张宇基础30讲·线代》第5讲前半（P.139-151,169-173）+《27 张宇线代9讲》第7讲（P.72-78 全 4 例）+《27 没咋了线代强化讲义》3.1/3.2/3.6节（P.64-68,81-83）+《线代独家大总结》P.19-20，100% 逐页核图与 SymPy 验算",
+  "basicRequirements": {
+    "master": "熟练掌握特征值与特征向量定义及具体矩阵两步求法（含秩 1 偏移与三次试根法）、迹/行列式/各阶主子式之和恒等式、与 A 相关 8 类常用矩阵特征值与特征向量联动、零化多项式单向铁律及秩 1 矩阵全套谱公式。",
+    "understand": "理解特征向量 9 大性质（重数不等式 1 ≤ p ≤ k、同值闭合 vs 异值非零组合绝非特征向量）、A 与 A^T 异值双正交定理及从矩阵方程 AB=O、AB=-cB、CA^T=dC、行和相等中反读特征信息的化归思想。",
+    "familiar": "熟悉特征向量逆命题真假辨析、A 不可逆时 A^* 特征值陷阱、谢尔曼-莫里森逆公式、可交换矩阵公共特征向量定理及哈密顿-凯莱降次应用。"
+  },
+  "items": [
+    {
+      "id": "m1-la07-f-01",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "一、特征值与特征向量的定义及具体求法",
+      "title": "特征值与特征向量定义（$A\\xi=\\lambda\\xi,\\;\\xi\\ne 0$）、特征方程与两步求法",
+      "formulaLatex": "$$A\\xi=\\lambda\\xi\\;(\\xi\\ne 0)\\;\\Longleftrightarrow\\;(\\lambda E-A)\\xi=0\\;(\\xi\\ne 0);\\qquad |\\lambda E-A|=0$$",
+      "conditions": "特征值/特征向量仅对**方阵**定义（非方阵可转而研究 $A^TA$ 或 $AA^T$）；特征向量必为**非零向量**（$\\xi\\ne 0$），但特征值**可以为 $0$**（$0$ 是特征值 $\\Leftrightarrow |A|=0$）。上下三角阵、对角阵的特征值直接就是主对角线元素！",
+      "pitfalls": "① 写全部特征向量时，必须注明线性组合系数「$k_1,k_2$ 不全为零」（或单根 $k\\ne 0$），遗漏非零约束会丢步骤分！ ② 算 $|\\lambda E-A|$ 切忌死硬展开三次多项式：优先用行/列加减凑出公因子 $(\\lambda-\\lambda_0)$ 再按行/列展开，可防 90% 的计算翻车！",
+      "figureSvg": "<svg viewBox=\"0 0 640 250\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"特征值与特征向量的几何伸缩与不同特征值组合失效示意图\">\n  <title>特征值与特征向量几何图解：不变直线伸缩 vs 跨特征空间组合偏离</title>\n  <defs>\n    <marker id=\"m1_la07_arr_axis\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#64748b\"/>\n    </marker>\n    <marker id=\"m1_la07_arr_blue\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#2563eb\"/>\n    </marker>\n    <marker id=\"m1_la07_arr_red\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#dc2626\"/>\n    </marker>\n    <marker id=\"m1_la07_arr_green\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#059669\"/>\n    </marker>\n    <marker id=\"m1_la07_arr_amber\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#d97706\"/>\n    </marker>\n  </defs>\n  <rect x=\"4\" y=\"4\" width=\"632\" height=\"242\" rx=\"10\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"320\" y=\"25\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">特征方程 Aξ = λξ 的几何直觉：不变子空间纯伸缩 vs 异值组合偏转</text>\n\n  <!-- Left panel: Invariant eigendirection vs general vector -->\n  <g transform=\"translate(18, 40)\">\n    <rect x=\"0\" y=\"0\" width=\"295\" height=\"192\" rx=\"8\" fill=\"#ffffff\" stroke=\"#bfdbfe\" stroke-width=\"1.2\"/>\n    <text x=\"148\" y=\"20\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1d4ed8\">① 特征向量：沿不变直线纯伸缩</text>\n    <!-- Axes -->\n    <line x1=\"25\" y1=\"158\" x2=\"275\" y2=\"158\" stroke=\"#94a3b8\" stroke-width=\"1.2\" marker-end=\"url(#m1_la07_arr_axis)\"/>\n    <line x1=\"58\" y1=\"180\" x2=\"58\" y2=\"34\" stroke=\"#94a3b8\" stroke-width=\"1.2\" marker-end=\"url(#m1_la07_arr_axis)\"/>\n    <!-- Invariant line -->\n    <line x1=\"36\" y1=\"172\" x2=\"268\" y2=\"56\" stroke=\"#93c5fd\" stroke-width=\"1.2\" stroke-dasharray=\"5,4\"/>\n    <text x=\"234\" y=\"48\" font-size=\"9.5\" fill=\"#3b82f6\">特征子空间 span{ξ}</text>\n    <!-- Aξ = λξ -->\n    <line x1=\"58\" y1=\"158\" x2=\"226\" y2=\"74\" stroke=\"#2563eb\" stroke-width=\"2.6\" marker-end=\"url(#m1_la07_arr_blue)\"/>\n    <line x1=\"58\" y1=\"158\" x2=\"142\" y2=\"116\" stroke=\"#1e40af\" stroke-width=\"3.2\" marker-end=\"url(#m1_la07_arr_blue)\"/>\n    <text x=\"148\" y=\"130\" font-size=\"10.5\" font-weight=\"700\" fill=\"#1e3a8a\">ξ</text>\n    <text x=\"224\" y=\"92\" font-size=\"10.5\" font-weight=\"700\" fill=\"#2563eb\">Aξ = λξ (共线!)</text>\n    <!-- General vector v and Av -->\n    <line x1=\"58\" y1=\"158\" x2=\"112\" y2=\"72\" stroke=\"#64748b\" stroke-width=\"2\" marker-end=\"url(#m1_la07_arr_axis)\"/>\n    <line x1=\"58\" y1=\"158\" x2=\"178\" y2=\"52\" stroke=\"#dc2626\" stroke-width=\"2\" stroke-dasharray=\"4,2\" marker-end=\"url(#m1_la07_arr_red)\"/>\n    <path d=\"M 90 108 A 56 56 0 0 1 112 112\" fill=\"none\" stroke=\"#dc2626\" stroke-width=\"1.3\"/>\n    <text x=\"88\" y=\"64\" font-size=\"10\" fill=\"#475569\">普通向量 v</text>\n    <text x=\"166\" y=\"45\" font-size=\"10\" font-weight=\"700\" fill=\"#dc2626\">Av (方向偏转)</text>\n    <text x=\"148\" y=\"182\" text-anchor=\"middle\" font-size=\"9.3\" fill=\"#475569\">ξ ≠ 0 强制要求：零向量无法界定唯一伸缩倍率 λ</text>\n  </g>\n\n  <!-- Right panel: Why k1*xi1 + k2*xi2 fails when lambda1 != lambda2 -->\n  <g transform=\"translate(327, 40)\">\n    <rect x=\"0\" y=\"0\" width=\"295\" height=\"192\" rx=\"8\" fill=\"#ffffff\" stroke=\"#fecaca\" stroke-width=\"1.2\"/>\n    <text x=\"148\" y=\"20\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#b91c1c\">② 异值组合 k₁ξ₁ + k₂ξ₂ 绝非特征向量</text>\n    <!-- Origin O=(56,158) -->\n    <line x1=\"25\" y1=\"158\" x2=\"275\" y2=\"158\" stroke=\"#94a3b8\" stroke-width=\"1.2\" marker-end=\"url(#m1_la07_arr_axis)\"/>\n    <line x1=\"56\" y1=\"178\" x2=\"56\" y2=\"34\" stroke=\"#94a3b8\" stroke-width=\"1.2\" marker-end=\"url(#m1_la07_arr_axis)\"/>\n    <!-- xi1 (along x, lambda1=2) and xi2 (along y, lambda2=0.5) -->\n    <line x1=\"56\" y1=\"158\" x2=\"128\" y2=\"158\" stroke=\"#059669\" stroke-width=\"2.5\" marker-end=\"url(#m1_la07_arr_green)\"/>\n    <line x1=\"56\" y1=\"158\" x2=\"56\" y2=\"86\" stroke=\"#2563eb\" stroke-width=\"2.5\" marker-end=\"url(#m1_la07_arr_blue)\"/>\n    <text x=\"115\" y=\"172\" font-size=\"9.5\" font-weight=\"700\" fill=\"#047857\">ξ₁ (λ₁=2)</text>\n    <text x=\"64\" y=\"88\" font-size=\"9.5\" font-weight=\"700\" fill=\"#1d4ed8\">ξ₂ (λ₂=0.5)</text>\n    <!-- xi1 + xi2 -->\n    <line x1=\"56\" y1=\"158\" x2=\"128\" y2=\"86\" stroke=\"#d97706\" stroke-width=\"2.3\" marker-end=\"url(#m1_la07_arr_amber)\"/>\n    <line x1=\"128\" y1=\"158\" x2=\"128\" y2=\"86\" stroke=\"#cbd5e1\" stroke-dasharray=\"3,3\"/>\n    <line x1=\"56\" y1=\"86\" x2=\"128\" y2=\"86\" stroke=\"#cbd5e1\" stroke-dasharray=\"3,3\"/>\n    <text x=\"132\" y=\"82\" font-size=\"9.8\" font-weight=\"700\" fill=\"#b45309\">ξ₁ + ξ₂</text>\n    <!-- A(xi1 + xi2) = 2*xi1 + 0.5*xi2 -> (56+144=200, 158-36=122) -->\n    <line x1=\"56\" y1=\"158\" x2=\"200\" y2=\"122\" stroke=\"#dc2626\" stroke-width=\"2.6\" marker-end=\"url(#m1_la07_arr_red)\"/>\n    <line x1=\"200\" y1=\"158\" x2=\"200\" y2=\"122\" stroke=\"#fca5a5\" stroke-dasharray=\"3,3\"/>\n    <line x1=\"56\" y1=\"122\" x2=\"200\" y2=\"122\" stroke=\"#fca5a5\" stroke-dasharray=\"3,3\"/>\n    <text x=\"196\" y=\"114\" font-size=\"9.8\" font-weight=\"700\" fill=\"#dc2626\">A(ξ₁+ξ₂) = 2ξ₁+0.5ξ₂</text>\n    <text x=\"190\" y=\"142\" font-size=\"9.2\" fill=\"#991b1b\">伸缩倍率不同 → 必偏角!</text>\n    <rect x=\"20\" y=\"34\" width=\"256\" height=\"22\" rx=\"4\" fill=\"#fef2f2\" stroke=\"#fecaca\"/>\n    <text x=\"148\" y=\"49\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#991b1b\">同值组合 k₁ξ₁+k₂ξ₂ (≠0) 仍在原特征空间；异值必脱离</text>\n  </g>\n</svg>",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.140 / 强化 P.72 / 没咋了 P.64",
+        "pdfPage": 146,
+        "itemRef": "特征值与特征向量定义"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "设 $A$ 为 $n$ 阶**方阵**，若存在数 $\\lambda$ 及**非零** $n$ 维列向量 $\\xi$ 使 $A\\xi=\\lambda\\xi$，则称 $\\lambda$ 为特征值、$\\xi$ 为对应特征向量。几何意义：$A$ 作用在 $\\xi$ 所在不变直线上只作 $\\lambda$ 倍纯伸缩、不偏转方向！具体矩阵求法两步：① 解特征方程 $|\\lambda E-A|=0$ 得全部 $n$ 个特征值（复域上重根按重数计，称为**代数重数 $k$**）；② 对每个 $\\lambda_i$ 求齐次方程组 $(\\lambda_i E-A)x=0$ 的基础解系（所含向量个数 $p=n-r(\\lambda_i E-A)$ 称为**几何重数 $p$**），其全体非零线性组合即为 $\\lambda_i$ 的全部特征向量。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「特征值可为零，特征向量绝不可为零！具体求法先算 $|\\lambda E-A|=0$，再解 $(\\lambda E-A)x=0$ 别忘系数不全为零！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la07-f-02",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "一、迹、行列式与各阶主子式之和恒等式",
+      "title": "特征值和、积、各阶主子式之和及三次特征多项式试根定理",
+      "formulaLatex": "$$\\sum_{i=1}^{n}\\lambda_i=\\operatorname{tr}(A)=\\sum_{i=1}^{n}a_{ii};\\quad \\prod_{i=1}^{n}\\lambda_i=|A|;\\quad |\\lambda E-A|=\\lambda^3-\\operatorname{tr}(A)\\lambda^2+(A_{11}+A_{22}+A_{33})\\lambda-|A|$$",
+      "conditions": "上述三组恒等式对**任意方阵**（无论是否可逆、是否可对角化）均恒成立，是在复数域计数重根下的精确等式。",
+      "pitfalls": "切勿混淆「$k$ 阶主子式」（行标与列标**完全相同**）与「$k$ 阶顺序主子式」（只取左上角 $1,\\dots,k$ 行列）——3 阶阵有 $\\binom{3}{2}=3$ 个 2 阶主子式（即 $A_{11},A_{22},A_{33}$），而不是 1 个！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 线代独家大总结",
+        "printedPage": "基础 P.142-146 / 强化 P.72-73 / 大总结 P.19",
+        "pdfPage": 151,
+        "itemRef": "迹行列式与主子式之和"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la07_core_identities",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "对任意 $n$ 阶方阵 $A$，将 $|\\lambda E-A|=\\prod(\\lambda-\\lambda_i)$ 展开并按韦达定理对比系数：① **1 阶主子式之和** $\\operatorname{tr}(A)=\\sum\\lambda_i$；② **$k$ 阶主子式之和** $=$ 任意 $k$ 个特征值乘积之和（3 阶特例：2 阶主子式之和 $A_{11}+A_{22}+A_{33}=\\lambda_1\\lambda_2+\\lambda_1\\lambda_3+\\lambda_2\\lambda_3=\\operatorname{tr}(A^*)$，**即使 $A$ 不可逆亦恒成立！**）；③ **$n$ 阶主子式** $|A|=\\prod\\lambda_i$。若特征多项式已展开为首一整系数 $f(\\lambda)=\\lambda^3+a_2\\lambda^2+a_1\\lambda+a_0$，则有理根必为 $a_0$ 的整数因子（优先试 $0,1,-1$：常数项为 $0\\Rightarrow$ 根 $0$；系数和为 $0\\Rightarrow$ 根 $1$；奇偶次系数和相等 $\\Rightarrow$ 根 $-1$）。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「迹是和、行列式是积、伴随迹是两两积之和；三次试根先查 0、1、−1，再扫常数项因子！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la07-f-03",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、与 A 相关常用矩阵的特征值与特征向量联动",
+      "title": "与 $A$ 相关的 8 类常用矩阵特征值与特征向量变换总公式（含 $A^T$ 特例）",
+      "formulaLatex": "$$\\begin{array}{c|cccccc|c|c} \\text{矩阵} & A & kA+bE & A^k & f(A) & A^{-1} & A^*\\,(|A|\\ne 0) & P^{-1}f(A)P & A^T \\\\ \\hline \\text{特征值} & \\lambda & k\\lambda+b & \\lambda^k & f(\\lambda) & \\frac{1}{\\lambda} & \\frac{|A|}{\\lambda} & f(\\lambda) & \\lambda \\\\ \\text{特征向量} & \\xi & \\xi & \\xi & \\xi & \\xi & \\xi & P^{-1}\\xi & \\text{另求!} \\end{array}$$",
+      "conditions": "表中 $A^{-1}$ 要求 $|A|\\ne 0$（$\\lambda\\ne 0$）；$A^*$ 列若写作 $|A|/\\lambda$ 同样要求 $|A|\\ne 0$（一般情况 $A^*$ 的特征值为其余 $n-1$ 个特征值之积 $\\prod_{j\\ne i}\\lambda_j$，见结论 2 勘误补注！）；$f(x)$ 为多项式。",
+      "pitfalls": "① 最高频审题错：问 $P^{-1}AP$ 的特征向量是 $P^{-1}\\xi$，问 $PAP^{-1}$ 的特征向量是 $P\\xi$，问 $(P^{-1}AP)^T$（$A$ 对称时）的特征向量则是 $P^T\\xi$（基础习题 5.2）！ ② 若 $|A|=0$ 且 $r(A)=n-1$，不能套 $\\frac{|A|}{\\lambda}$ 说 $A^*$ 特征值全为 $0$——此时 $A^*$ 仍有唯一非零特征值 $\\prod_{j=2}^{n}\\lambda_j=\\operatorname{tr}(A^*)$！",
+      "figureSvg": "<svg viewBox=\"0 0 640 265\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"与矩阵A相关的常用矩阵特征值与特征向量变换总览图\">\n  <title>矩阵变换的特征值与特征向量联动图谱（同特征向量家族 vs 相似与转置特例）</title>\n  <defs>\n    <marker id=\"m1_la07_w_blue\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#2563eb\"/>\n    </marker>\n    <marker id=\"m1_la07_w_purple\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#7c3aed\"/>\n    </marker>\n    <marker id=\"m1_la07_w_red\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#dc2626\"/>\n    </marker>\n  </defs>\n  <rect x=\"4\" y=\"4\" width=\"632\" height=\"257\" rx=\"10\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"320\" y=\"25\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">与 A 相关的矩阵特征值 / 特征向量联动罗盘（一图避开所有易错坑）</text>\n\n  <!-- Center core: A -->\n  <rect x=\"242\" y=\"102\" width=\"156\" height=\"58\" rx=\"10\" fill=\"#1d4ed8\"/>\n  <text x=\"320\" y=\"124\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#ffffff\">原矩阵 A</text>\n  <text x=\"320\" y=\"143\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#dbeafe\">特征值 λ · 特征向量 ξ</text>\n\n  <!-- Left column: Same eigenvector ξ family -->\n  <rect x=\"18\" y=\"42\" width=\"182\" height=\"44\" rx=\"7\" fill=\"#eff6ff\" stroke=\"#93c5fd\" stroke-width=\"1.2\"/>\n  <text x=\"109\" y=\"60\" text-anchor=\"middle\" font-size=\"10.8\" font-weight=\"700\" fill=\"#1e40af\">kA + bE  /  Aᵏ  /  f(A)</text>\n  <text x=\"109\" y=\"77\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#2563eb\">λ → f(λ)   |   特征向量仍为 ξ</text>\n  <line x1=\"242\" y1=\"114\" x2=\"202\" y2=\"66\" stroke=\"#2563eb\" stroke-width=\"1.7\" marker-end=\"url(#m1_la07_w_blue)\"/>\n\n  <rect x=\"18\" y=\"108\" width=\"182\" height=\"46\" rx=\"7\" fill=\"#eff6ff\" stroke=\"#93c5fd\" stroke-width=\"1.2\"/>\n  <text x=\"109\" y=\"126\" text-anchor=\"middle\" font-size=\"10.8\" font-weight=\"700\" fill=\"#1e40af\">逆矩阵 A⁻¹ (|A| ≠ 0)</text>\n  <text x=\"109\" y=\"144\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#2563eb\">λ → 1/λ   |   特征向量仍为 ξ</text>\n  <line x1=\"242\" y1=\"131\" x2=\"202\" y2=\"131\" stroke=\"#2563eb\" stroke-width=\"1.7\" marker-end=\"url(#m1_la07_w_blue)\"/>\n\n  <rect x=\"18\" y=\"176\" width=\"182\" height=\"54\" rx=\"7\" fill=\"#eff6ff\" stroke=\"#93c5fd\" stroke-width=\"1.2\"/>\n  <text x=\"109\" y=\"194\" text-anchor=\"middle\" font-size=\"10.8\" font-weight=\"700\" fill=\"#1e40af\">伴随矩阵 A* (若 |A| ≠ 0)</text>\n  <text x=\"109\" y=\"210\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#2563eb\">λ → |A|/λ   |   特征向量仍为 ξ</text>\n  <text x=\"109\" y=\"224\" text-anchor=\"middle\" font-size=\"8.6\" fill=\"#dc2626\">坑：|A|=0 且 r=n−1 时有非零特征值 tr(A*)</text>\n  <line x1=\"242\" y1=\"148\" x2=\"202\" y2=\"200\" stroke=\"#2563eb\" stroke-width=\"1.7\" marker-end=\"url(#m1_la07_w_blue)\"/>\n\n  <!-- Right column: Transformed or Different eigenvector -->\n  <rect x=\"440\" y=\"42\" width=\"182\" height=\"54\" rx=\"7\" fill=\"#f5f3ff\" stroke=\"#c4b5fd\" stroke-width=\"1.2\"/>\n  <text x=\"531\" y=\"60\" text-anchor=\"middle\" font-size=\"10.8\" font-weight=\"700\" fill=\"#5b21b6\">相似阵 P⁻¹AP (含 P⁻¹f(A)P)</text>\n  <text x=\"531\" y=\"76\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#6d28d9\">λ 不变 (或 f(λ))</text>\n  <text x=\"531\" y=\"90\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#7c3aed\">特征向量变为 P⁻¹ξ !</text>\n  <line x1=\"398\" y1=\"116\" x2=\"438\" y2=\"70\" stroke=\"#7c3aed\" stroke-width=\"1.7\" marker-end=\"url(#m1_la07_w_purple)\"/>\n\n  <rect x=\"440\" y=\"114\" width=\"182\" height=\"62\" rx=\"7\" fill=\"#fef2f2\" stroke=\"#fca5a5\" stroke-width=\"1.3\"/>\n  <text x=\"531\" y=\"132\" text-anchor=\"middle\" font-size=\"10.8\" font-weight=\"700\" fill=\"#991b1b\">转置阵 Aᵀ（最高频陷阱！）</text>\n  <text x=\"531\" y=\"148\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#b91c1c\">λ 完全相同，特征向量另求！</text>\n  <text x=\"531\" y=\"164\" text-anchor=\"middle\" font-size=\"9\" font-weight=\"700\" fill=\"#dc2626\">强化必杀：λ₁≠λ₂ ⇒ αᵀβ = 0 (双正交)</text>\n  <line x1=\"398\" y1=\"138\" x2=\"438\" y2=\"145\" stroke=\"#dc2626\" stroke-width=\"1.7\" marker-end=\"url(#m1_la07_w_red)\"/>\n\n  <!-- Bottom note: Zeroing polynomial -->\n  <rect x=\"218\" y=\"192\" width=\"404\" height=\"54\" rx=\"7\" fill=\"#fffbeb\" stroke=\"#fcd34d\" stroke-width=\"1.2\"/>\n  <text x=\"420\" y=\"210\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#92400e\">零化多项式单向铁律：f(A) = O ⇒ 任意特征值满足 f(λ) = 0</text>\n  <text x=\"420\" y=\"226\" text-anchor=\"middle\" font-size=\"9.3\" fill=\"#b45309\">反之 f(λ)=0 的根只是候选集（可能不全部出现！） · 哈密顿-凯莱：f_A(A) = O</text>\n  <text x=\"420\" y=\"240\" text-anchor=\"middle\" font-size=\"9\" fill=\"#78350f\">逆命题警报：Aᵏ 特征向量 ⇏ A 特征向量（仅单射线性变换 aA+bE (a≠0) 双向等价！）</text>\n</svg>",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.148-149 / 强化 P.73 / 没咋了 P.66",
+        "pdfPage": 84,
+        "itemRef": "常用矩阵特征值与特征向量表"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la07_core_identities",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "由定义 $A\\xi=\\lambda\\xi$ 可一步推全表：① $f(A)\\xi=f(\\lambda)\\xi$；② $A$ 可逆时左乘 $A^{-1}$ 得 $A^{-1}\\xi=\\frac{1}{\\lambda}\\xi$，左乘 $A^*$ 得 $A^*\\xi=\\frac{|A|}{\\lambda}\\xi$；③ 相似阵 $(P^{-1}f(A)P)(P^{-1}\\xi)=f(\\lambda)(P^{-1}\\xi)$，故**相似阵特征值不变，特征向量左乘 $P^{-1}$**！④ 转置阵 $|\\lambda E-A^T|=|\\lambda E-A|$ 特征值全同，但 $(\\lambda E-A^T)x=0$ 系数阵已变，特征向量必须另求！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「数乘幂多项、逆阵与伴随，特征向量统统是 $\\xi$；相似左乘 $P^{-1}$，唯独转置 $A^T$ 要另算！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la07-f-04",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、零化多项式与哈密顿-凯莱定理",
+      "title": "零化多项式单向铁律（$f(A)=O\\Rightarrow f(\\lambda)=0$）与哈密顿-凯莱定理",
+      "formulaLatex": "$$f(A)=O\\;\\Longrightarrow\\;f(\\lambda)=0\\;\\text{（单向，根仅为候选超集！）};\\qquad f_A(\\lambda)=|\\lambda E-A|\\;\\Longrightarrow\\;f_A(A)=O$$",
+      "conditions": "零化法则对任意方阵成立，但**切忌逆推**——$f(\\lambda)=0$ 的根只是 $A$ 特征值的候选集合，未必每个根都是 $A$ 的特征值（如 $E$ 满足 $A^2-A=O$，但 $0$ 并非 $E$ 的特征值！）。",
+      "pitfalls": "若题设给 $A^2-A=O$，绝不能直接断言「$A$ 的特征值是 $0$ 和 $1$」，正确表述只能是「$A$ 的特征值**只能取自** $\\{0,1\\}$」（可能全为 $0$ 或全为 $1$）！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.149-150 / 强化 P.73 / 没咋了 P.66",
+        "pdfPage": 84,
+        "itemRef": "零化多项式与哈密顿凯莱定理"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la07_core_identities",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "① **零化法则**：若 $f(A)=O$ 且 $A\\xi=\\lambda\\xi\\;(\\xi\\ne 0)$，则 $0=f(A)\\xi=f(\\lambda)\\xi\\implies f(\\lambda)=0$。常用于锁定抽象阵特征值范围并证某线性组合可逆（如 $A^2=A\\Rightarrow\\lambda\\in\\{0,1\\}\\Rightarrow A+E$ 特征值 $\\in\\{1,2\\}\\ne 0\\Rightarrow$ 可逆！）。② **哈密顿-凯莱定理**：任意方阵 $A$ 自身恒满足其特征方程 $f_A(A)=A^n+a_{n-1}A^{n-1}+\\dots+a_1A+a_0E=O$，可用于把高次矩阵多项式降次到 $\\le n-1$ 次！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「矩阵吃掉多项式变零，特征值必落根池里；但根池里的数不必全上场，具体谁上场看秩与迹！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la07-f-05",
+      "kind": "formula",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、秩 1 矩阵谱结构与谢尔曼-莫里森逆公式",
+      "title": "秩 1 矩阵 $A=\\alpha\\beta^T$ 全套谱公式、高次幂与 $(kE+\\alpha\\beta^T)^{-1}$",
+      "formulaLatex": "$$A=\\alpha\\beta^T\\;(\\alpha,\\beta\\ne 0)\\;\\Longrightarrow\\;\\lambda=\\operatorname{tr}(A),\\underbrace{0,\\dots,0}_{n-1};\\quad A^n=l^{n-1}A\\;(l=\\beta^T\\alpha);\\quad (kE+\\alpha\\beta^T)^{-1}=\\frac{1}{k}\\left(E-\\frac{\\alpha\\beta^T}{k+l}\\right)$$",
+      "conditions": "$\\alpha,\\beta$ 为 $n$ 维非零列向量；$A$ 可相似对角化 $\\Longleftrightarrow \\operatorname{tr}(A)=\\beta^T\\alpha\\ne 0$。",
+      "pitfalls": "① 对 $A=c\\beta\\alpha^T+kE$（注意谁在前谁在后！），非零偏移特征值 $k+c(\\alpha^T\\beta)$ 的特征向量是**左边的列向量 $\\beta$**，不是 $\\alpha$（没咋了 3.2.1 例 5 经典坑）！ ② 特别记牢：对任意列向量 $\\alpha$，实对称阵 $E+\\alpha\\alpha^T$ 的特征值为 $1+\\|\\alpha\\|^2\\ge 1$ 及 $n-1$ 个 $1$，**无条件正定且无条件可逆**（秒杀没咋了 3.2.1 例 4）！",
+      "figureSvg": "<svg viewBox=\"0 0 640 235\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"秩1矩阵特征值谱解剖与代数几何重数不等式图\">\n  <title>秩 1 矩阵全套秒杀模板与代数/几何重数关系图</title>\n  <defs>\n    <marker id=\"m1_la07_r_teal\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#0d9488\"/>\n    </marker>\n    <marker id=\"m1_la07_r_amber\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#d97706\"/>\n    </marker>\n  </defs>\n  <rect x=\"4\" y=\"4\" width=\"632\" height=\"227\" rx=\"10\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"320\" y=\"25\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">秩 1 矩阵 A = αβᵀ 谱结构全景 &amp; 代数重数 vs 几何重数不等式</text>\n\n  <!-- Left: Rank-1 anatomy -->\n  <g transform=\"translate(18, 40)\">\n    <rect x=\"0\" y=\"0\" width=\"322\" height=\"178\" rx=\"8\" fill=\"#ffffff\" stroke=\"#99f6e4\" stroke-width=\"1.3\"/>\n    <text x=\"161\" y=\"20\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#0f766e\">秩 1 矩阵 A = αβᵀ (α, β ≠ 0) 超级工具箱</text>\n    <rect x=\"14\" y=\"30\" width=\"294\" height=\"28\" rx=\"5\" fill=\"#f0fdfa\" stroke=\"#5eead4\"/>\n    <text x=\"161\" y=\"48\" text-anchor=\"middle\" font-size=\"10.2\" font-weight=\"700\" fill=\"#115e59\">迹 l = tr(A) = βᵀα = αᵀβ  ⇒  A² = l·A, Aⁿ = lⁿ⁻¹A</text>\n\n    <!-- Branch 1: l != 0 -->\n    <rect x=\"14\" y=\"68\" width=\"140\" height=\"58\" rx=\"6\" fill=\"#ecfdf5\" stroke=\"#6ee7b7\"/>\n    <text x=\"84\" y=\"84\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#047857\">情形 1：tr(A) = l ≠ 0</text>\n    <text x=\"84\" y=\"99\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#065f46\">λ = l (单), 0 (n−1 重)</text>\n    <text x=\"84\" y=\"114\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#059669\">可对角化！ξ(l) = α</text>\n\n    <!-- Branch 2: l = 0 -->\n    <rect x=\"168\" y=\"68\" width=\"140\" height=\"58\" rx=\"6\" fill=\"#fef2f2\" stroke=\"#fca5a5\"/>\n    <text x=\"238\" y=\"84\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#b91c1c\">情形 2：tr(A) = 0</text>\n    <text x=\"238\" y=\"99\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#991b1b\">A² = O, λ 全为 0 (n 重)</text>\n    <text x=\"238\" y=\"114\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#dc2626\">不可对角化！(A ≠ O)</text>\n\n    <!-- Sherman-Morrison box -->\n    <rect x=\"14\" y=\"135\" width=\"294\" height=\"34\" rx=\"6\" fill=\"#eef2ff\" stroke=\"#a5b4fc\"/>\n    <text x=\"161\" y=\"150\" text-anchor=\"middle\" font-size=\"9.8\" font-weight=\"700\" fill=\"#3730a3\">谢尔曼-莫里森逆公式 (k ≠ 0 且 k + βᵀα ≠ 0)：</text>\n    <text x=\"161\" y=\"164\" text-anchor=\"middle\" font-size=\"9.6\" font-weight=\"700\" fill=\"#4338ca\">(kE + αβᵀ)⁻¹ = (1/k)[E − αβᵀ / (k + βᵀα)]</text>\n  </g>\n\n  <!-- Right: Algebraic vs Geometric multiplicity -->\n  <g transform=\"translate(354, 40)\">\n    <rect x=\"0\" y=\"0\" width=\"268\" height=\"178\" rx=\"8\" fill=\"#ffffff\" stroke=\"#fde68a\" stroke-width=\"1.3\"/>\n    <text x=\"134\" y=\"20\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#b45309\">代数重数 k vs 几何重数 p = n − r(λE−A)</text>\n\n    <!-- Visual inequality bar -->\n    <rect x=\"18\" y=\"34\" width=\"232\" height=\"32\" rx=\"6\" fill=\"#fffbeb\" stroke=\"#fbbf24\"/>\n    <text x=\"134\" y=\"54\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#92400e\">1  ≤  几何重数 p  ≤  代数重数 k</text>\n\n    <g transform=\"translate(18, 76)\">\n      <rect x=\"0\" y=\"0\" width=\"232\" height=\"40\" rx=\"6\" fill=\"#ecfdf5\" stroke=\"#6ee7b7\"/>\n      <text x=\"116\" y=\"16\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#047857\">若对每个特征值都有 p = k（拉满上限）</text>\n      <text x=\"116\" y=\"32\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#065f46\">Σpᵢ = Σkᵢ = n ⇒ 恰有 n 个无关特征向量 ⇒ A ~ Λ</text>\n    </g>\n\n    <g transform=\"translate(18, 124)\">\n      <rect x=\"0\" y=\"0\" width=\"232\" height=\"44\" rx=\"6\" fill=\"#fef2f2\" stroke=\"#fca5a5\"/>\n      <text x=\"116\" y=\"16\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#b91c1c\">极端特例：A 仅有 1 个线性无关特征向量</text>\n      <text x=\"116\" y=\"30\" text-anchor=\"middle\" font-size=\"9.1\" fill=\"#991b1b\">必仅含 1 个 n 重特征值 λ₀ 且 r(λ₀E − A) = n − 1</text>\n      <text x=\"116\" y=\"41\" text-anchor=\"middle\" font-size=\"8.6\" fill=\"#7f1d1d\">（强化例 8.10：单块若尔当阵 Jₙ(λ₀)！）</text>\n    </g>\n  </g>\n</svg>",
+      "source": {
+        "book": "27 张宇基础30讲 & 27 没咋了强化讲义 & 线代独家大总结",
+        "printedPage": "基础 P.149 / 没咋了 P.67-68 / 大总结 P.19",
+        "pdfPage": 72,
+        "itemRef": "秩1矩阵谱与谢尔曼莫里森公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la07_rank1_suite",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "秩 1 矩阵是考研线代绝对的出题王炸：① 迹 $l=\\operatorname{tr}(A)=\\alpha^T\\beta=\\beta^T\\alpha$；② 特征值必为 $l$（单根或重根）与 $n-1$ 个 $0$，其中 $\\lambda=l$（$l\\ne 0$ 时）对应特征向量就是列向量 **$\\alpha$**（因为 $A\\alpha=\\alpha(\\beta^T\\alpha)=l\\alpha$！），$\\lambda=0$ 对应 $\\beta^Tx=0$ 的全部非零解；③ 偏移阵 $kE+\\alpha\\beta^T$ 特征值为 $k+l, k,\\dots,k$，行列式 $=k^{n-1}(k+l)$，当 $k\\ne 0$ 且 $k+l\\ne 0$ 时可逆且逆矩阵由谢尔曼-莫里森公式一步写出！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「见成比例阵立刻拆 $A=\\alpha\\beta^T$：迹是内积 $\\beta^T\\alpha$，列向量 $\\alpha$ 扛非零特征值，正交于 $\\beta$ 的 $n-1$ 个向量扛零特征值！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la07-f-06",
+      "kind": "formula",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、矩阵方程与行和相等特征值速求模型",
+      "title": "行和相等（$A\\mathbf{1}=k\\mathbf{1}$）、$AB=O$、$AB=C$ 列分块及分块三角阵特征值",
+      "formulaLatex": "$$\\sum_{j=1}^{n}a_{ij}=k\\;\\Longleftrightarrow\\;A\\mathbf{1}=k\\mathbf{1}\\;\\Longrightarrow\\;A^n\\mathbf{1}=k^n\\mathbf{1},\\;A^{-1}\\mathbf{1}=\\frac{1}{k}\\mathbf{1};\\qquad \\left|\\lambda E-\\begin{bmatrix}A&C\\\\O&B\\end{bmatrix}\\right|=|\\lambda E-A|\\cdot|\\lambda E-B|$$",
+      "conditions": "列和相等为 $k$ 等价于 $A^T\\mathbf{1}=k\\mathbf{1}$，同样有特征值 $k$，但此时 $\\mathbf{1}$ 是 **$A^T$** 的特征向量而非 $A$ 的（除非 $A$ 对称）！",
+      "pitfalls": "遇到 $CA^T=dC$ 千万别直接把 $C$ 的列当成 $A$ 的特征向量！必须先整体转置化为 $AC^T=dC^T$，从而 **$C^T$ 的非零列（即 $C$ 的非零行转置）**才是 $A$ 属于 $d$ 的特征向量！",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.77 / 没咋了 P.81",
+        "pdfPage": 88,
+        "itemRef": "矩阵方程与行和相等特征值模型"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la07_adv_examples",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "强化 9 讲「利用矩阵方程命题」四大化归经典模板：① **$AB=O$** $\\Rightarrow B$ 的每个非零列都是 $A$ 属于 $\\lambda=0$ 的特征向量；② **$AB=C$ 按列分块** $\\Rightarrow$ 若 $\\gamma_i=\\lambda_i\\beta_i\\;(\\beta_i\\ne 0)$，则 $\\beta_i$ 是 $A$ 属于 $\\lambda_i$ 的特征向量（特别 $(A+cE)B=O\\Rightarrow AB=-cB$，$B$ 的非零列全属 $\\lambda=-c$！）；③ **行和相等为 $k$** $\\Rightarrow k$ 为特征值、$\\mathbf{1}=[1,\\dots,1]^T$ 为特征向量，且 $A^n$ 行和为 $k^n$、$A^{-1}$ 行和为 $1/k$、$A^*$ 列和（或对称时行和）为 $|A|/k$；④ **分块上下三角阵**特征值就是对角块 $A,B$ 特征值的并集！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「行和为 $k$ 乘全 1 向量，$AB=-cB$ 藏着特征值 $-c$，$CA^T=dC$ 两边转置得 $AC^T=dC^T$！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la07-c-01",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "四、特征向量的 9 大核心性质全景",
+      "title": "特征向量 9 大性质（含重数上界 $1\\le p\\le k$、同值闭合 vs 异值排斥、唯一向量锁 $n$ 重根）",
+      "conditions": "性质 ①–⑦ 对任意 $n$ 阶方阵在复数域上成立；实矩阵若在实数域讨论「仅有 1 个实特征向量」，需先确认实特征值个数（或确认无共轭虚根，见强化例 8.10 严谨补注）。",
+      "pitfalls": "同一特征值的两个特征向量「可能线性相关，也可能线性无关」（切忌与不同特征值必线性无关混为一谈！）；不同特征值的线性组合只有当所有非零系数都落在同一个特征空间里时才能成为特征向量！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.146-148 / 强化 P.75-76 / 没咋了 P.64-65",
+        "pdfPage": 86,
+        "itemRef": "特征向量九大核心性质"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "summary": "综合强化 9 讲 P.75–76 全部特征向量性质：① 单根恰有 $1$ 个线性无关特征向量；② $k$ 重特征值 $\\lambda$ 的几何重数满足 **$1\\le p=n-r(\\lambda E-A)\\le k$**（若已有 $k$ 个线性无关特征向量，则 $\\lambda$ 至少是 $k$ 重根！）；③ 属于不同特征值的特征向量必线性无关（推广：各特征子空间的基合在一起仍线性无关！）；④ 同特征值的非零线性组合仍是该特征值的特征向量；⑤ **不同特征值的特征向量作非零线性组合（$k_1,k_2\\ne 0$）绝不是 $A$ 的任何特征值的特征向量**；⑥ 一个特征向量不能属于两个不同的特征值；⑦ **若 $A$ 仅有 $1$ 个线性无关特征向量，则 $A$ 只能有唯一一个 $n$ 重特征值 $\\lambda_0$ 且 $r(\\lambda_0 E-A)=n-1$**！"
+    },
+    {
+      "id": "m1-la07-c-02",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、A 与 A^T 双正交定理及伴随阵不可逆勘误补注",
+      "title": "$A$ 与 $A^T$ 异值特征向量双正交定理（$\\alpha^T\\beta=0$）与 $A^*$ 特征值勘误补注",
+      "conditions": "双正交定理对任意实方阵 $A$ 均成立，无需 $A$ 对称！",
+      "pitfalls": "当 $r(A)=n-1$ 时，千万别因为 $|A|=0$ 就误以为 $A^*=O$ 或 $A^*$ 特征值全为 $0$！（例如 $A=\\operatorname{diag}(0,2,3)$ 有 $A^*=\\operatorname{diag}(6,0,0)$，非零特征值为 $6$！）",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.73 / 没咋了 P.66(勘误补注)",
+        "pdfPage": 84,
+        "itemRef": "双正交定理与伴随阵特征值勘误"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la07_core_identities",
+        "verified": true
+      },
+      "summary": "① **双正交定理（强化 P.73）**：设 $\\alpha$ 是 $A$ 属于 $\\lambda_1$ 的特征向量，$\\beta$ 是 $A^T$ 属于 $\\lambda_2$ 的特征向量，若 **$\\lambda_1\\ne\\lambda_2$**，则必有 **$\\alpha^T\\beta=0$（即 $\\alpha\\perp\\beta$）**！（一行证明：$\\lambda_1\\alpha^T\\beta=(A\\alpha)^T\\beta=\\alpha^T(A^T\\beta)=\\lambda_2\\alpha^T\\beta\\implies (\\lambda_1-\\lambda_2)\\alpha^T\\beta=0$；特例 $A^T=A$ 即实对称阵异值特征向量正交！）② **【原书勘误与严谨补注 · 没咋了 P.66 表格】**：原表写 $A^*$ 特征值为 $\\frac{|A|}{\\lambda}$ 并仅注「需注意 $\\lambda\\ne 0$」，易误导考生以为只要某特征值 $\\lambda=0$ 则公式失效或 $A^*$ 特征值全为 $0$。严谨结论：$A^*$ 的特征值一般为其余 $n-1$ 个特征值之积 $\\mu_i=\\prod_{j\\ne i}\\lambda_j$；当 $|A|\\ne 0$ 时才可简写为 $|A|/\\lambda_i$；当 $|A|=0$ 且 $r(A)=n-1$ 时，$A$ 恰有一个 $0$ 特征值，此时 $A^*$ 仍有非零特征值 $\\operatorname{tr}(A^*)=\\prod_{j=2}^{n}\\lambda_j$！"
+    },
+    {
+      "id": "m1-la07-c-03",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、特征向量逆命题真假全景辨析",
+      "title": "「$\\alpha$ 是 $g(A)$ 的特征向量 $\\stackrel{?}{\\Longrightarrow} \\alpha$ 是 $A$ 的特征向量」四命题秒判",
+      "conditions": "判断「由 $g(A)\\alpha=\\mu\\alpha$ 能否反推 $A\\alpha=\\lambda\\alpha$」，核心只看 $A$ 能否表示为 $g(A)$ 的多项式/单值线性函数！",
+      "pitfalls": "考题若没说「$A$ 可逆」，由「$\\alpha$ 是 $A^*$ 的特征向量」**推不出**「$\\alpha$ 是 $A$ 的特征向量」！（没咋了 3.1.5 例 3 经典压轴陷阱！）",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.66 例3",
+        "pdfPage": 71,
+        "itemRef": "特征向量逆命题真假辨析"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la07_mzl_examples",
+        "verified": true
+      },
+      "summary": "已知 $\\alpha\\ne 0$ 是 $A$ 的特征向量可正向推出 $\\alpha$ 是 $kA+bE,\\;A^k,\\;f(A),\\;A^{-1},\\;A^*$ 的特征向量，但**逆向命题几乎全假**！① **仅一次线性变换 $aA+bE\\;(a\\ne 0)$ 双向等价**：$(aA+bE)\\alpha=\\mu\\alpha\\Leftrightarrow A\\alpha=\\frac{\\mu-b}{a}\\alpha$；② **$A^{-1}$ 可逆时双向等价**：$A^{-1}\\alpha=\\mu\\alpha\\Leftrightarrow A\\alpha=\\frac{1}{\\mu}\\alpha$；③ **$A^k\\;(k\\ge 2)$ 逆推为假**：反例 $A=\\operatorname{diag}(1,-1)$ 有 $A^2=E$，$[1,1]^T$ 是 $A^2$ 特征向量但非 $A$ 特征向量（或 $A=\\begin{bmatrix}0&-1\\\\1&0\\end{bmatrix}$、三次旋转阵对 $A^3=E$）；④ **$A^*$ 逆推为假**：若 $r(A)\\le n-2$ 则 $A^*=O$，任意非零向量都是 $A^*$ 特征向量，显然未必是 $A$ 的（若已知 $A$ 可逆则双向等价！）；⑤ **$A^T$ 正逆皆假**（除非 $A$ 对称或正交等特例）。"
+    },
+    {
+      "id": "m1-la07-c-04",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、可交换阵公共特征向量与公共非零解结论",
+      "title": "可交换阵公共特征向量定理（强化 P.75 ⑧）与 $r(A)+r(B)<n$ 公共非零解（P.76 ⑨）",
+      "conditions": "结论 ① 中「$A$ 有 $n$ 个互不相同的特征值」不可省略！若 $A$ 有重根（如 $A=E$ 满足 $AB=BA$ 对任意 $B$ 成立），则 $A$ 的特征向量（全体非零向量）显然不必都是 $B$ 的特征向量！",
+      "pitfalls": "反过来，即使 $A$ 有 $n$ 个互不相同特征值且 $AB=BA$，也只保证「$A$ 的特征向量 $\\subseteq B$ 的特征向量」，但 **$B$ 可以有重根**，故 $B$ 可能有额外特征向量不是 $A$ 的特征向量！",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.75-76 ⑧⑨ / 没咋了 P.85",
+        "pdfPage": 86,
+        "itemRef": "可交换公共特征向量与公共非零解"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la07_core_identities",
+        "verified": true
+      },
+      "summary": "① **可交换与公共特征向量**：设 $n$ 阶阵 $A,B$ 满足 **$AB=BA$**，且 **$A$ 有 $n$ 个互不相同的特征值**，则 **$A$ 的每一个特征向量也都是 $B$ 的特征向量**！（证明：由 $A\\alpha=\\lambda\\alpha$ 得 $A(B\\alpha)=B(A\\alpha)=\\lambda(B\\alpha)$；若 $B\\alpha=0$ 则 $B\\alpha=0\\cdot\\alpha$ 成立，若 $B\\alpha\\ne 0$ 则因 $\\lambda$ 为单根、特征子空间 1 维，必有 $B\\alpha=\\mu\\alpha$！）② **公共非零解**：若同列数矩阵满足 **$r(A)+r(B)<n$**，则 $Ax=0$ 与 $Bx=0$ 至少存在一个公共非零解 $\\xi$（因为 $r\\begin{bmatrix}A\\\\B\\end{bmatrix}\\le r(A)+r(B)<n$）。"
+    },
+    {
+      "id": "m1-la07-c-05",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "四、不可逆条件与特征值秒译枢纽",
+      "title": "「$aA+bE$ 不可逆 $\\Longleftrightarrow \\lambda=-b/a$ 是特征值」秒译规则与零特征值枢纽",
+      "conditions": "提出非零因子 $|A|$ 前务必核实题干是否给出 $|A|\\ne 0$（或 $A$ 可逆）！",
+      "pitfalls": "若题干没说 $A$ 可逆，由 $|A^2+2A|=0$ 只能推出「$0$ 或 $-2$ 至少有一个是 $A$ 的特征值」，绝不可直接断言 $-2$ 必是特征值！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲",
+        "printedPage": "基础 P.145 / 强化 P.74",
+        "pdfPage": 151,
+        "itemRef": "不可逆条件与特征值秒译"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "summary": "遇到以下任一表述，1 秒条件反射翻译为特征值方程：① $|aA+bE|=0$（$a\\ne 0$）$\\Longleftrightarrow aA+bE$ 不可逆 $\\Longleftrightarrow (aA+bE)x=0$ 有非零解 $\\Longleftrightarrow r(aA+bE)<n \\Longleftrightarrow -\\frac{b}{a}$ 是 $A$ 的特征值！② 特别地，$|A|=0\\Leftrightarrow r(A)<n\\Leftrightarrow Ax=0$ 有非零解 $\\Leftrightarrow 0$ 是 $A$ 的特征值；③ 若 $|A^2+2A|=0$ 且已知 $|A|\\ne 0$，立刻提取 $|A|\\cdot|A+2E|=0\\Rightarrow |A+2E|=0\\Rightarrow -2$ 是 $A$ 的特征值！"
+    },
+    {
+      "id": "m1-la07-e-01",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础核心例题（基础 30 讲）",
+      "title": "【例 5.1】3 阶具体矩阵求全部特征值与特征向量（标准法 + 秩 1 偏移秒杀！）",
+      "problem": "求矩阵 $A=\\begin{bmatrix}2&2&-2\\\\2&5&-4\\\\-2&-4&5\\end{bmatrix}$ 的特征值与全部特征向量。",
+      "steps": [
+        {
+          "stepTitle": "秒杀洞见：一眼识别 $A-E$ 为秩 1 阵！",
+          "detail": "观察 $A-E=\\begin{bmatrix}1&2&-2\\\\2&4&-4\\\\-2&-4&4\\end{bmatrix}=\\begin{bmatrix}1\\\\2\\\\-2\\end{bmatrix}[1,2,-2]$，其秩为 $1$、迹为 $1+4+4=9$！故 $A-E$ 特征值为 $9,0,0$，立刻得 **$A$ 的特征值为 $10,1,1$**！且 $\\lambda_3=10$ 对应特征向量直接是列向量 $\\xi_3=[1,2,-2]^T$！（标准算法：$|\\lambda E-A|=(\\lambda-1)(\\lambda^2-11\\lambda+10)=(\\lambda-1)^2(\\lambda-10)=0$，结果完全一致。）"
+        },
+        {
+          "stepTitle": "第二步：解齐次方程组求全部特征向量",
+          "detail": "① 当 $\\lambda_1=\\lambda_2=1$ 时，$(E-A)x=0$ 即 $x_1+2x_2-2x_3=0$，得基础解系 $\\xi_1=[-2,1,0]^T,\\;\\xi_2=[2,0,1]^T$，全部特征向量为 $k_1\\xi_1+k_2\\xi_2$（$k_1,k_2$ 不全为 $0$）；② 当 $\\lambda_3=10$ 时，$(10E-A)x=0$（因 $A$ 实对称且 $10$ 为单根，直接由 $\\xi_3\\perp\\xi_1,\\xi_2$ 亦秒得 $[1,2,-2]^T$！），全部特征向量为 $k_3[1,2,-2]^T\\;(k_3\\ne 0)$。"
+        }
+      ],
+      "finalAnswer": "特征值 $\\lambda_1=\\lambda_2=1$，对应特征向量 $k_1[-2,1,0]^T+k_2[2,0,1]^T$（$k_1,k_2$ 不全为 $0$）；特征值 $\\lambda_3=10$，对应特征向量 $k_3[1,2,-2]^T$（$k_3\\ne 0$）",
+      "takeaway": "具体矩阵求特征值先扫一眼「减去某常数倍 $E$ 后各行是否成比例（秩 1 阵）」——一旦命中，特征值和单根特征向量 5 秒口算！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.140-141",
+        "pdfPage": 146,
+        "itemRef": "例 5.1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la07_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la07-e-02",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础核心例题（基础 30 讲）",
+      "title": "【基础 P.142–144 试根法三例】三次特征多项式试根与带余除法全解（含无理根）",
+      "problem": "求以下三个 3 阶特征方程的全部特征值：① $A_1=\\begin{bmatrix}2&-2&0\\\\-2&1&-2\\\\0&-2&0\\end{bmatrix}$；② $A_2=\\begin{bmatrix}5&6&-10\\\\-6&1&6\\\\-2&3&0\\end{bmatrix}$；③ $f(\\lambda)=\\lambda^3-4\\lambda^2+3\\lambda+2=0$。",
+      "steps": [
+        {
+          "stepTitle": "① $A_1$：系数和为 0 试出根 1",
+          "detail": "直接展开 $|\\lambda E-A_1|=\\lambda^3-3\\lambda^2-6\\lambda+8$；因系数和 $1-3-6+8=0$，故 $\\lambda=1$ 为根，长除得 $(\\lambda-1)(\\lambda^2-2\\lambda-8)=(\\lambda-1)(\\lambda+2)(\\lambda-4)=0$，特征值为 $-2,1,4$！"
+        },
+        {
+          "stepTitle": "② $A_2$ 与 ③：试根 + 二次求根公式解无理特征值",
+          "detail": "对 $A_2$ 展开 $|\\lambda E-A_2|=\\lambda^3-6\\lambda^2+3\\lambda+2$，系数和 $1-6+3+2=0\\Rightarrow\\lambda=1$ 为根，分解得 $(\\lambda-1)(\\lambda^2-5\\lambda-2)=0$，三特征值为 $1,\\;\\frac{5\\pm\\sqrt{33}}{2}$！对 ③ 首一整系数方程，有理根只可能在常数项 $2$ 的因子 $\\pm 1,\\pm 2$ 中，试得 $f(2)=8-16+6+2=0$，分解得 $(\\lambda-2)(\\lambda^2-2\\lambda-1)=0$，三特征值为 $2,\\;1\\pm\\sqrt{2}$！"
+        }
+      ],
+      "finalAnswer": "① $-2,1,4$；② $1,\\;\\frac{5+\\sqrt{33}}{2},\\;\\frac{5-\\sqrt{33}}{2}$；③ $2,\\;1+\\sqrt{2},\\;1-\\sqrt{2}$",
+      "takeaway": "展开成三次多项式绝不要慌！按「$0 \\to 1 \\to -1 \\to$ 常数项整数因子」顺序 10 秒试出 1 个有理根，再用大除法降为二次方程，哪怕有无理根也手到擒来！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.142-144",
+        "pdfPage": 148,
+        "itemRef": "基础特征多项式试根三例"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la07_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la07-e-03",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础核心例题（基础 30 讲）",
+      "title": "【例 5.2 + 例 5.3】秩 1 矩阵谱证明 & 幂等阵 $A^2=A$ 证 $E+A$ 可逆",
+      "problem": "(1) 证明：对秩为 $1$ 的 $n$ 阶阵 $A=\\alpha\\beta^T$，其特征值为 $\\lambda_1=\\dots=\\lambda_{n-1}=0,\\;\\lambda_n=\\operatorname{tr}(A)=\\beta^T\\alpha$。(2) 设 $n$ 阶阵满足 $A^2=A$，求 $A$ 特征值可能取值，并证 $E+A$ 可逆。",
+      "steps": [
+        {
+          "stepTitle": "(1) 零空间维数 + 迹恒等式两行证毕",
+          "detail": "因 $r(A)=1$，齐次方程组 $Ax=0$ 有 $n-1$ 个线性无关解 $\\alpha_1,\\dots,\\alpha_{n-1}$，即 $A\\alpha_i=0\\cdot\\alpha_i$，故 $0$ 至少是 $A$ 的 $n-1$ 重特征值！再由 $\\sum_{i=1}^{n}\\lambda_i=\\operatorname{tr}(A)=\\beta^T\\alpha$，立刻锁定剩余唯一特征值 $\\lambda_n=\\beta^T\\alpha$！"
+        },
+        {
+          "stepTitle": "(2) 零化多项式锁特征值池，排除 0 特征值证可逆",
+          "detail": "由 $A^2-A=O\\implies \\lambda^2-\\lambda=0\\implies A$ 的特征值只能取 $0$ 或 $1$。从而 $E+A$ 的特征值只能取 $1+0=1$ 或 $1+1=2$，均非 $0$！故 $|E+A|=\\prod(1+\\lambda_i)\\ne 0$，即 $E+A$ 可逆！（或用显式逆 $(E+A)(E-\\frac{1}{2}A)=E$ 直接验证！）"
+        }
+      ],
+      "finalAnswer": "(1) 证毕；(2) $A$ 特征值可能取值为 $0$ 或 $1$，$E+A$ 特征值仅取 $1$ 或 $2$ 故必可逆",
+      "takeaway": "证明抽象矩阵 $f(A)$ 可逆的通天大道：先由零化多项式锁定 $A$ 的特征值候选集，再证明 $f(\\lambda)$ 在该集合上永不为 $0$！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.149-150",
+        "pdfPage": 155,
+        "itemRef": "例 5.2 与 例 5.3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la07_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la07-e-04",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础核心例题（基础 30 讲）",
+      "title": "【例 5.4 + 例 5.5】特征值秒算主对角代数余子式和 & 行和相等求伴随列和",
+      "problem": "(1) 已知 3 阶阵 $A$ 特征值为 $1,2,3$，求 $A_{11}+A_{22}+A_{33}$。(2) 设 3 阶阵 $A$ 每行元素之和均为 $2$，且 $|A|=3$，求 $A_{11}+A_{21}+A_{31}$。",
+      "steps": [
+        {
+          "stepTitle": "(1) 主对角代数余子式之和 = 伴随阵的迹",
+          "detail": "$A_{11}+A_{22}+A_{33}=\\operatorname{tr}(A^*)=\\lambda_1\\lambda_2+\\lambda_1\\lambda_3+\\lambda_2\\lambda_3=1\\times 2+1\\times 3+2\\times 3=11$！"
+        },
+        {
+          "stepTitle": "(2) 行和相等转为 $A\\mathbf{1}=2\\mathbf{1}$，左乘 $A^*$ 秒出第一行和",
+          "detail": "每行元素之和为 $2\\Longleftrightarrow A\\mathbf{1}=2\\mathbf{1}$（$\\mathbf{1}=[1,1,1]^T$）。两边左乘 $A^*$ 得 $|A|\\mathbf{1}=2A^*\\mathbf{1}\\implies A^*\\mathbf{1}=\\frac{|A|}{2}\\mathbf{1}=\\frac{3}{2}\\mathbf{1}$！而 $A^*=\\begin{bmatrix}A_{11}&A_{21}&A_{31}\\\\A_{12}&A_{22}&A_{32}\\\\A_{13}&A_{23}&A_{33}\\end{bmatrix}$ 的第 1 行之和恰为 $A_{11}+A_{21}+A_{31}$，故立得 $\\frac{3}{2}$！（注意伴随矩阵有**转置**，第 1 行是原阵第 1 列的代数余子式！）"
+        }
+      ],
+      "finalAnswer": "(1) $11$；(2) $\\frac{3}{2}$",
+      "takeaway": "牢记 $A^*$ 元素的**转置下标**：$A^*$ 的第 $j$ 行元素正是原阵 $A$ 第 $j$ 列的代数余子式 $A_{1j},A_{2j},A_{3j}$！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.150-151",
+        "pdfPage": 156,
+        "itemRef": "例 5.4 与 例 5.5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la07_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la07-e-05",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础精选习题（基础 30 讲）",
+      "title": "【基础习题 5.1 + 5.2】$(\\frac{1}{3}A^2)^{-1}$ 特征值 & $(P^{-1}AP)^T$ 特征向量陷阱！",
+      "problem": "(1) 设 $\\lambda=2$ 是可逆阵 $A$ 的特征值，求 $(\\frac{1}{3}A^2)^{-1}$ 的一个特征值。(2) 设 $A$ 为 $n$ 阶实对称阵，$P$ 可逆，$\\alpha$ 是 $A$ 属于 $\\lambda$ 的特征向量，则 $(P^{-1}AP)^T$ 属于 $\\lambda$ 的特征向量是 $(\\quad)$。  (A) $P^{-1}\\alpha$　(B) $P^T\\alpha$　(C) $P\\alpha$　(D) $(P^{-1})^T\\alpha$",
+      "steps": [
+        {
+          "stepTitle": "(1) 复合变换直接代入 $\\lambda=2$",
+          "detail": "$\\frac{1}{3}A^2$ 有特征值 $\\frac{1}{3}\\cdot 2^2=\\frac{4}{3}$，取逆立得特征值 $\\frac{3}{4}$。"
+        },
+        {
+          "stepTitle": "(2) 穿脱原则展开 $(P^{-1}AP)^T$（绝不可盲选 $P^{-1}\\alpha$！）",
+          "detail": "因 $A^T=A$，有 $(P^{-1}AP)^T=P^TA^T(P^{-1})^T=P^TA(P^T)^{-1}$！将该矩阵右乘 $P^T\\alpha$：$\\big[P^TA(P^T)^{-1}\\big](P^T\\alpha)=P^TA\\alpha=P^T(\\lambda\\alpha)=\\lambda(P^T\\alpha)$！故特征向量是 **$P^T\\alpha$**，选 (B)！"
+        }
+      ],
+      "finalAnswer": "(1) $\\frac{3}{4}$；(2) (B) $P^T\\alpha$",
+      "takeaway": "凡遇复杂相似/转置复合阵求特征向量，**把原式用穿脱原则拆开后，把四个选项直接右乘试算**，3 秒零失误！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.169,171",
+        "pdfPage": 175,
+        "itemRef": "基础习题 5.1 与 5.2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la07_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la07-e-06",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础精选习题（基础 30 讲）",
+      "title": "【基础习题 5.6】4 阶实矩阵已知 $A^*$ 全部特征值反求 $|A^3+2A^2-A-3E|$",
+      "problem": "设 $A$ 是 4 阶实矩阵，$A^*$ 是 $A$ 的伴随矩阵，已知 $A^*$ 有特征值 $1,-1,2,-4$，求 $|A^3+2A^2-A-3E|$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：由 $|A^*|=|A|^{n-1}$ 唯一锁定实行列式 $|A|=2$",
+          "detail": "$|A^*|=1\\times(-1)\\times 2\\times(-4)=8\\ne 0$，故 $A$ 可逆。因 $n=4$，有 $|A|^3=|A^*|=8$；又 $A$ 为实矩阵，唯一实解为 **$|A|=2$**！（若是 3 阶阵得 $|A|^2=c$ 时还需注意正负号讨论！）"
+        },
+        {
+          "stepTitle": "第二步：由 $\\lambda_A=|A|/\\lambda_{A^*}$ 还原 $A$ 的特征值并求多项式行列式",
+          "detail": "$A$ 的特征值为 $\\frac{2}{1}=2,\\;\\frac{2}{-1}=-2,\\;\\frac{2}{2}=1,\\;\\frac{2}{-4}=-\\frac{1}{2}$。记 $f(\\lambda)=\\lambda^3+2\\lambda^2-\\lambda-3$，分别代入：$f(2)=11,\\;f(-2)=-1,\\;f(1)=-1,\\;f(-\\frac{1}{2})=-\\frac{1}{8}+\\frac{1}{2}+\\frac{1}{2}-3=-\\frac{17}{8}$。全部相乘得 $|f(A)|=11\\times(-1)\\times(-1)\\times(-\\frac{17}{8})=-\\frac{187}{8}$！"
+        }
+      ],
+      "finalAnswer": "$-\\frac{187}{8}$",
+      "takeaway": "由 $A^*$ 特征值反推 $A$ 特征值固定两步走：① 先乘积得 $|A^*|=|A|^{n-1}$ 解出 $|A|$（奇次幂唯一，偶次幂看符号条件）；② 用 $\\lambda=|A|/\\lambda^*$ 还原！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.170,172",
+        "pdfPage": 176,
+        "itemRef": "基础习题 5.6"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la07_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la07-e-07",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础精选习题（基础 30 讲）",
+      "title": "【基础习题 5.9 + 5.10】已知 $A^{-1}$ 与 $A^*$ 的特征向量免求逆/伴随直接反求参数",
+      "problem": "(1) 已知 $\\alpha=[1,k,1]^T$ 是 $A^{-1}$ 的特征向量，$A=\\begin{bmatrix}2&1&1\\\\1&2&1\\\\1&1&2\\end{bmatrix}$，求 $k$ 及 $\\alpha$ 对应的 $A^{-1}$ 的特征值。(2) 设 $A=\\begin{bmatrix}a&-1&c\\\\5&b&3\\\\1-c&0&-a\\end{bmatrix}$，$|A|=-1$，$A^*$ 有特征值 $\\lambda_0$ 及特征向量 $\\xi=[-1,-1,1]^T$，求 $a,b,c,\\lambda_0$。",
+      "steps": [
+        {
+          "stepTitle": "(1) 千万别求 $A^{-1}$！直接转化为 $A\\alpha=\\mu\\alpha$",
+          "detail": "$A^{-1}\\alpha=\\lambda\\alpha\\Leftrightarrow A\\alpha=\\frac{1}{\\lambda}\\alpha=\\mu\\alpha$。代算 $A\\alpha=[3+k,2+2k,3+k]^T=\\mu[1,k,1]^T\\implies \\mu=3+k$ 且 $2+2k=k(3+k)\\Rightarrow k^2+k-2=0\\implies k=1$ 或 $k=-2$。当 $k=1$ 时 $\\mu=4\\Rightarrow\\lambda=\\frac{1}{4}$；当 $k=-2$ 时 $\\mu=1\\Rightarrow\\lambda=1$！"
+        },
+        {
+          "stepTitle": "(2) 千万别算 $A^*$！两边左乘 $A$ 得 $\\lambda_0 A\\xi=|A|\\xi=-\\xi$",
+          "detail": "由 $A^*\\xi=\\lambda_0\\xi$ 左乘 $A$ 得 $|A|\\xi=\\lambda_0 A\\xi$，即 $\\lambda_0\\begin{bmatrix}-a+1+c\\\\-5-b+3\\\\-1+c-a\\end{bmatrix}=\\begin{bmatrix}1\\\\1\\\\-1\\end{bmatrix}$。第 1 式减第 3 式立得 $2\\lambda_0=2\\Rightarrow\\lambda_0=1$；再相加得 $2(c-a)=0\\Rightarrow c=a$；第 2 式得 $-2-b=1\\Rightarrow b=-3$。最后代回 $|A|=a-3=-1\\Rightarrow a=c=2$！"
+        }
+      ],
+      "finalAnswer": "(1) $k=1$ 时 $\\lambda=\\frac{1}{4}$；$k=-2$ 时 $\\lambda=1$；(2) $a=2,\\;b=-3,\\;c=2,\\;\\lambda_0=1$",
+      "takeaway": "黄金省算铁律：题给 $A^{-1}\\alpha=\\lambda\\alpha$ 或 $A^*\\xi=\\lambda_0\\xi$，**永远两边左乘 $A$ 化回 $A\\xi=\\dots$**，一秒免去求逆阵与伴随阵的巨量运算！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.170,173",
+        "pdfPage": 176,
+        "itemRef": "基础习题 5.9 与 5.10"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la07_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la07-e-08",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 4 例精解",
+      "title": "【强化例 7.1】$|A|=3,\\;|A^2+2A|=0,\\;|2A^2+A|=0$ 速求 $A_{11}+A_{22}+A_{33}$",
+      "problem": "设 $A$ 是 3 阶矩阵，$|A|=3$，且满足 $|A^2+2A|=0,\\;|2A^2+A|=0$，求 $A_{11}+A_{22}+A_{33}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：提公因式 $|A|\\ne 0$ 秒译出两个特征值",
+          "detail": "① $|A^2+2A|=|A|\\cdot|A+2E|=0$，因 $|A|=3\\ne 0$，得 $|A+2E|=0\\implies\\lambda_1=-2$；② $|2A^2+A|=8|A|\\cdot|A+\\frac{1}{2}E|=0\\implies |A+\\frac{1}{2}E|=0\\implies\\lambda_2=-\\frac{1}{2}$。"
+        },
+        {
+          "stepTitle": "第二步：由行列式求第 3 特征值，再算伴随迹",
+          "detail": "由 $\\lambda_1\\lambda_2\\lambda_3=|A|=3\\implies (-2)(-\\frac{1}{2})\\lambda_3=3\\implies\\lambda_3=3$。故 $A^*$ 的特征值为 $\\frac{3}{-2}=-\\frac{3}{2},\\;\\frac{3}{-1/2}=-6,\\;\\frac{3}{3}=1$，从而 $A_{11}+A_{22}+A_{33}=\\operatorname{tr}(A^*)=-\\frac{3}{2}-6+1=-\\frac{13}{2}$！"
+        }
+      ],
+      "finalAnswer": "$-\\frac{13}{2}$",
+      "takeaway": "看到 $|A|=c\\ne 0$ 搭配 $|A^2+kA|=0$，立即拆 $|A||A+kE|=0$ 剥离出特征值 $-k$，再配迹/行列式闭环！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.74",
+        "pdfPage": 85,
+        "itemRef": "强化例 7.1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la07_adv_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la07-e-09",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 4 例精解",
+      "title": "【强化例 7.2】$B=P^{-1}A^{100}P$，一步联动锁定 $B+E$ 的线性无关特征向量",
+      "problem": "设 $A=\\begin{bmatrix}1&2\\\\5&4\\end{bmatrix},\\;P=\\begin{bmatrix}1&1\\\\0&1\\end{bmatrix},\\;B=P^{-1}A^{100}P$，则 $B+E$ 的线性无关的特征向量可以为 $(\\quad)$。  (A) $\\begin{bmatrix}0\\\\1\\end{bmatrix},\\begin{bmatrix}7\\\\5\\end{bmatrix}$　(B) $\\begin{bmatrix}-2\\\\1\\end{bmatrix},\\begin{bmatrix}-3\\\\5\\end{bmatrix}$　(C) $\\begin{bmatrix}1\\\\-1\\end{bmatrix},\\begin{bmatrix}2\\\\5\\end{bmatrix}$　(D) $\\begin{bmatrix}0\\\\1\\end{bmatrix},\\begin{bmatrix}3\\\\2\\end{bmatrix}$",
+      "steps": [
+        {
+          "stepTitle": "第一步：认出 $B+E=P^{-1}(A^{100}+E)P$，特征向量即 $P^{-1}\\xi$",
+          "detail": "$A^{100}+E$ 与 $A$ 拥有完全相同的特征向量 $\\xi$；左乘 $P^{-1}$ 右乘 $P$ 后，$B+E$ 的特征向量恰好就是 **$P^{-1}\\xi$**，根本不需要算 $A^{100}$！"
+        },
+        {
+          "stepTitle": "第二步：求 $A$ 的特征向量再左乘 $P^{-1}$",
+          "detail": "$|\\lambda E-A|=(\\lambda-1)(\\lambda-4)-10=(\\lambda+1)(\\lambda-6)=0\\implies\\lambda_1=-1,\\lambda_2=6$。解得 $A$ 对应特征向量 $\\xi_1=[-1,1]^T,\\;\\xi_2=[2,5]^T$。又 $P^{-1}=\\begin{bmatrix}1&-1\\\\0&1\\end{bmatrix}$，故 $P^{-1}\\xi_1=[-2,1]^T,\\;P^{-1}\\xi_2=[-3,5]^T$，选 (B)！"
+        }
+      ],
+      "finalAnswer": "(B) $\\begin{bmatrix}-2\\\\1\\end{bmatrix},\\;\\begin{bmatrix}-3\\\\5\\end{bmatrix}$",
+      "takeaway": "看到高次幂 $P^{-1}A^{100}P+E$ 求特征向量，1 秒透视：**多项式不改特征向量，相似变换只左乘 $P^{-1}$**！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.74",
+        "pdfPage": 85,
+        "itemRef": "强化例 7.2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la07_adv_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la07-e-10",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 4 例精解",
+      "title": "【强化例 7.3】$P^{-1}AP=\\operatorname{diag}(1,3,3)$ 识别不合法的可逆矩阵 $P$",
+      "problem": "已知 $P^{-1}AP=\\operatorname{diag}(1,3,3)$，$\\alpha_1$ 是 $A$ 属于 $\\lambda=1$ 的特征向量，$\\alpha_2,\\alpha_3$ 是 $A$ 属于 $\\lambda=3$ 的线性无关特征向量，则矩阵 $P$ **不可以**是 $(\\quad)$。  (A) $[\\alpha_1,-2\\alpha_2,\\alpha_3]$　(B) $[\\alpha_1,\\alpha_2+\\alpha_3,\\alpha_2-2\\alpha_3]$　(C) $[\\alpha_1,\\alpha_3,\\alpha_2]$　(D) $[\\alpha_1+\\alpha_2,\\alpha_1-\\alpha_2,\\alpha_3]$",
+      "steps": [
+        {
+          "stepTitle": "核心法则：$P=[\\gamma_1,\\gamma_2,\\gamma_3]$ 各列必须与对角阵 $(1,3,3)$ 严格对号入座！",
+          "detail": "由 $AP=P\\Lambda$，第 1 列必为 $\\lambda=1$ 的特征向量，第 2、3 列必为 $\\lambda=3$ 的线性无关特征向量。"
+        },
+        {
+          "stepTitle": "逐项排雷锁定 (D)",
+          "detail": "(A) 非零数乘 $-2\\alpha_2$ 仍属 $\\lambda=3$ ✓；(B) $\\alpha_2+\\alpha_3,\\alpha_2-2\\alpha_3$ 是同特征值 $\\lambda=3$ 的线性无关组合 ✓；(C) 同特征值 $\\lambda=3$ 的两列可任意互换 ✓；(D) $\\alpha_1$ 属 $\\lambda=1$、$\\alpha_2$ 属 $\\lambda=3$，**异值非零组合 $\\alpha_1\\pm\\alpha_2$ 绝不是 $A$ 的特征向量**，故 (D) 错误！"
+        }
+      ],
+      "finalAnswer": "(D) $[\\alpha_1+\\alpha_2,\\;\\alpha_1-\\alpha_2,\\;\\alpha_3]$",
+      "takeaway": "同特征值的特征向量可任意作可逆线性组合或互换位置；**跨特征值的非零组合绝对禁止！**",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.76",
+        "pdfPage": 87,
+        "itemRef": "强化例 7.3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la07_adv_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la07-e-11",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 4 例精解（融合没咋了 3.6.2 例 4 进阶追问！）",
+      "title": "【强化例 7.4 + 没咋了 3.6.2 例 4】$(A+2E)B=O,\\;CA^T=2C$ 求谱、反求 $A$ 并秒证 $A^{100}x_0$ 与 $x_0$ 共线！",
+      "problem": "设 3 阶阵 $A,B,C$ 满足 $(A+2E)B=O$（即 $AB=-2B$）且 $CA^T=2C$，其中 $B=\\begin{bmatrix}1&2&3\\\\-1&1&0\\\\2&-1&1\\end{bmatrix},\\;C=\\begin{bmatrix}1&-2&1\\\\-2&4&-2\\\\-1&2&-1\\end{bmatrix}$。(1) 求 $A$ 的全部特征值与特征向量；(2) 反求矩阵 $A$，并证明对任意 3 维列向量 $x_0$，$A^{100}x_0$ 与 $x_0$ 必线性相关！（李艳芳 900 题）",
+      "steps": [
+        {
+          "stepTitle": "(1) 按列分块提取 $\\lambda=-2$（二重）与转置提取 $\\lambda=2$（单根）",
+          "detail": "① 由 $AB=-2B$，记 $B=[\\beta_1,\\beta_2,\\beta_3]$，则 $A\\beta_i=-2\\beta_i$。观察 $\\beta_3=\\beta_1+\\beta_2$ 且 $\\beta_1,\\beta_2$ 线性无关，故 $\\beta_1=[1,-1,2]^T,\\;\\beta_2=[2,1,-1]^T$ 是 $\\lambda=-2$ 的 2 个线性无关特征向量，从而 $\\lambda=-2$ 至少二重！② 对 $CA^T=2C$ 两边转置得 **$AC^T=2C^T$**，$C^T$ 各列成比例于 $\\alpha_1=[1,-2,1]^T$，故 $\\alpha_1$ 是 $\\lambda=2$ 的特征向量！因 3 阶阵仅 3 个特征值，锁定 $\\lambda_1=\\lambda_2=-2,\\;\\lambda_3=2$！"
+        },
+        {
+          "stepTitle": "(2) 反求 $A=P\\Lambda P^{-1}$ 及神级推论 $A^2=4E$！",
+          "detail": "令 $P=[\\beta_1,\\beta_2,\\alpha_1]=\\begin{bmatrix}1&2&1\\\\-1&1&-2\\\\2&-1&1\\end{bmatrix}$，算出 $A=P\\operatorname{diag}(-2,-2,2)P^{-1}=\\begin{bmatrix}-\\frac{3}{2}&-\\frac{5}{2}&-\\frac{3}{2}\\\\-1&3&3\\\\\\frac{1}{2}&-\\frac{5}{2}&-\\frac{7}{2}\\end{bmatrix}$。更绝妙的是，无需算 $A$ 即可证第 (2) 问：由 $P^{-1}AP=\\operatorname{diag}(-2,-2,2)\\implies P^{-1}A^2P=\\operatorname{diag}(4,4,4)=4E\\implies \\mathbf{A^2=4E}$！于是 $A^{100}=(A^2)^{50}=4^{50}E=2^{100}E$，对任意 $x_0$ 恒有 $A^{100}x_0=2^{100}x_0$，必线性相关！"
+        }
+      ],
+      "finalAnswer": "(1) $\\lambda=-2,-2$ 对应 $k_1[1,-1,2]^T+k_2[2,1,-1]^T$（不全为 0）；$\\lambda=2$ 对应 $k_3[1,-2,1]^T\\;(k_3\\ne 0)$；(2) $A=\\frac{1}{2}\\begin{bmatrix}-3&-5&-3\\\\-2&6&6\\\\1&-5&-7\\end{bmatrix}$，且因 $A^2=4E\\Rightarrow A^{100}=2^{100}E$ 故恒共线！",
+      "takeaway": "一道题吃透三大神技：① $AB=-2B$ 按列读、$CA^T=2C$ 先转置再按列读；② 特征值只有 $\\pm c$ 且可对角化 $\\implies A^2=c^2E$，任意偶次幂直接坍缩为数量矩阵！",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.77-78 / 没咋了 P.81,83",
+        "pdfPage": 88,
+        "itemRef": "强化例 7.4 与 没咋了 3.6.2 例 4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la07_adv_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la07-e-12",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化讲义精选（特征值变换与逆推排坑）",
+      "title": "【没咋了 3.1.5 例 1】主对角全 0 的 3 阶实对称阵仅凭一个 $A\\alpha=2\\alpha$ 唯一锁定 $A$！",
+      "problem": "设 $A$ 是 3 阶实对称矩阵，其主对角元素都是 $0$，且向量 $\\alpha=[1,2,-1]^T$ 满足 $A\\alpha=2\\alpha$，求矩阵 $A$。",
+      "steps": [
+        {
+          "stepTitle": "设出仅 3 个未知数的对称阵直接展开 $A\\alpha=2\\alpha$",
+          "detail": "因 $A$ 实对称且主对角全 $0$，仅含 3 个独立未知数：$A=\\begin{bmatrix}0&x&y\\\\x&0&z\\\\y&z&0\\end{bmatrix}$。代入 $A\\alpha=2\\alpha$ 得线性方程组 $\\begin{cases}2x-y=2\\\\x-z=4\\\\y+2z=-2\\end{cases}$！"
+        },
+        {
+          "stepTitle": "唯一解出 $(x,y,z)=(2,2,-2)$",
+          "detail": "由第 1 式 $y=2x-2$、第 2 式 $z=x-4$ 代入第 3 式得 $(2x-2)+2(x-4)=-2\\Rightarrow 4x=8\\Rightarrow x=2,y=2,z=-2$，唯一确定 $A=\\begin{bmatrix}0&2&2\\\\2&0&-2\\\\2&-2&0\\end{bmatrix}$！"
+        }
+      ],
+      "finalAnswer": "$A=\\begin{bmatrix}0&2&2\\\\2&0&-2\\\\2&-2&0\\end{bmatrix}$",
+      "takeaway": "遇到「3 阶实对称 + 主对角已知」，别绕远路去搞谱分解！一共只剩 3 个未知数，一个向量方程恰好给出 3 个方程一步解穿！",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.66 例1",
+        "pdfPage": 71,
+        "itemRef": "没咋了 3.1.5 例 1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la07_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la07-e-13",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化讲义精选（特征值变换与逆推排坑）",
+      "title": "【没咋了 3.1.5 例 2】（李林 6 套卷）$B(E-A)=A$ 用矩阵有理函数秒求 $\\operatorname{tr}(A+B)$",
+      "problem": "设 $A,B$ 均为 3 阶矩阵，$A$ 的特征值为 $0,\\frac{1}{2},\\frac{1}{3}$，且 $B(E-A)=A$，求 $\\operatorname{tr}(A+B)$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：由 $1$ 非 $A$ 的特征值确证 $E-A$ 可逆，显式解出 $B$",
+          "detail": "$E-A$ 的特征值为 $1,\\frac{1}{2},\\frac{2}{3}$，全非 $0$，故 $E-A$ 可逆！解得 $B=A(E-A)^{-1}$，从而 $A+B=A+A(E-A)^{-1}=A(2E-A)(E-A)^{-1}$。"
+        },
+        {
+          "stepTitle": "第二步：有理函数 $g(\\lambda)=\\lambda+\\frac{\\lambda}{1-\\lambda}$ 逐点映射特征值求和",
+          "detail": "因 $A$ 与 $(E-A)^{-1}$ 可交换且共特征向量（或直接看 $B=(E-A)^{-1}-E$！），$A+B=A+(E-A)^{-1}-E$ 的特征值为 $g(\\lambda)=\\lambda+\\frac{1}{1-\\lambda}-1=\\frac{2\\lambda-\\lambda^2}{1-\\lambda}$。分别代入 $\\lambda=0,\\frac{1}{2},\\frac{1}{3}$ 得 $0,\\;\\frac{3}{2},\\;\\frac{5}{6}$，故 $\\operatorname{tr}(A+B)=0+\\frac{3}{2}+\\frac{5}{6}=\\frac{7}{3}$！"
+        }
+      ],
+      "finalAnswer": "$\\frac{7}{3}$",
+      "takeaway": "遇 $B(E-A)=A$ 切记拆凑 $B=(E-A)^{-1}-E$——立刻避免分式乘积，一眼看出 $A+B=A+(E-A)^{-1}-E$ 的特征值就是 $\\lambda+\\frac{1}{1-\\lambda}-1$！",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.66 例2",
+        "pdfPage": 71,
+        "itemRef": "没咋了 3.1.5 例 2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la07_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la07-e-14",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化讲义精选（特征值变换与逆推排坑）",
+      "title": "【没咋了 3.1.5 例 3】特征向量四大逆命题真假精判（仅 $A+E$ 成立！）",
+      "problem": "设 $A$ 为 3 阶矩阵，下列命题正确的有 $(\\quad)$：① 若 $\\alpha$ 为 $A^3$ 的特征向量，则 $\\alpha$ 必为 $A$ 的特征向量；② 若 $\\alpha$ 为 $A+E$ 的特征向量，则 $\\alpha$ 必为 $A$ 的特征向量；③ 若 $\\alpha$ 为 $A^*$ 的特征向量，则 $\\alpha$ 必为 $A$ 的特征向量；④ 若 $\\alpha$ 为 $A^T$ 的特征向量，则 $\\alpha$ 必为 $A$ 的特征向量。  (A) $1$ 个　(B) $2$ 个　(C) $3$ 个　(D) $4$ 个",
+      "steps": [
+        {
+          "stepTitle": "逐一严审四大命题（牢记最小反例！）",
+          "detail": "① **假**：取 3 阶置换阵 $A=\\begin{bmatrix}0&1&0\\\\0&0&1\\\\1&0&0\\end{bmatrix}$ 满足 $A^3=E$，$e_1=[1,0,0]^T$ 是 $A^3=E$ 的特征向量，但 $Ae_1=e_3$ 与 $e_1$ 不共线！② **真**：$(A+E)\\alpha=\\mu\\alpha\\Leftrightarrow A\\alpha=(\\mu-1)\\alpha$，且 $\\alpha\\ne 0$，必成立！③ **假**：题干未说 $A$ 可逆！取 $A=\\operatorname{diag}(1,0,0)$ 则 $A^*=O$，$[1,1,1]^T$ 是 $A^*$ 特征向量却不是 $A$ 的！④ **假**：取 $A=\\begin{bmatrix}1&1&0\\\\0&2&0\\\\0&0&3\\end{bmatrix}$，$[0,1,0]^T$ 是 $A^T$ 属于 $2$ 的特征向量，但 $A[0,1,0]^T=[1,2,0]^T$ 不是 $A$ 的特征向量！"
+        }
+      ],
+      "finalAnswer": "(A) $1$ 个（仅 ② 正确）",
+      "takeaway": "做选择题遇到 ③「$A^*$ 特征向量 $\\Rightarrow A$ 特征向量」，第一步永远先盯死题干有没有给「**$A$ 可逆**」四个字！",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.66 例3",
+        "pdfPage": 71,
+        "itemRef": "没咋了 3.1.5 例 3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la07_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la07-e-15",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化讲义精选（秩 1 矩阵专题四大母题）",
+      "title": "【没咋了 3.2.1 例 1 + 例 2】秩 1 矩阵 $A^n$ 秒算 & 谢尔曼-莫里森逆 $(E+\\alpha\\beta^T)^{-1}$ 证明",
+      "problem": "(1) 设 $\\alpha=(1,2,3)^T,\\;\\beta=(1,\\frac{1}{2},\\frac{1}{3})^T,\\;A=\\alpha\\beta^T$，求 $A^n$。(2) 设 $\\alpha,\\beta$ 是 $n$ 维列向量，且 $\\alpha^T\\beta=2$，证明 $A=E+\\alpha\\beta^T$ 可逆，并求 $A^{-1}$。",
+      "steps": [
+        {
+          "stepTitle": "(1) 算迹 $l=\\beta^T\\alpha=3$，一行出 $A^n=3^{n-1}A$",
+          "detail": "$l=\\beta^T\\alpha=1\\times 1+2\\times\\frac{1}{2}+3\\times\\frac{1}{3}=3$，故 $A^n=l^{n-1}A=3^{n-1}\\begin{bmatrix}1&\\frac{1}{2}&\\frac{1}{3}\\\\2&1&\\frac{2}{3}\\\\3&\\frac{3}{2}&1\\end{bmatrix}$！"
+        },
+        {
+          "stepTitle": "(2) 特征值判可逆 + 待定系数法求 $(E+\\alpha\\beta^T)^{-1}$",
+          "detail": "$\\alpha\\beta^T$ 的特征值为 $\\alpha^T\\beta=2$ 与 $n-1$ 个 $0$，故 $A=E+\\alpha\\beta^T$ 的特征值为 $3,1,\\dots,1$，行列式 $|A|=3\\ne 0$，必可逆！因 $(\\alpha\\beta^T)^2=2\\alpha\\beta^T$，设 $A^{-1}=E+k\\alpha\\beta^T$，乘积 $(E+\\alpha\\beta^T)(E+k\\alpha\\beta^T)=E+(1+k+2k)\\alpha\\beta^T=E\\implies 1+3k=0\\implies k=-\\frac{1}{3}$，故 $A^{-1}=E-\\frac{1}{3}\\alpha\\beta^T$！"
+        }
+      ],
+      "finalAnswer": "(1) $3^{n-1}\\alpha\\beta^T$；(2) $|A|=3\\ne 0$ 可逆，且 $A^{-1}=E-\\frac{1}{3}\\alpha\\beta^T$",
+      "takeaway": "求 $(kE+\\alpha\\beta^T)^{-1}$ 的待定系数法（设 $aE+b\\alpha\\beta^T$）通用无敌，比背公式更不容易算错符号！",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.67 例1-2",
+        "pdfPage": 72,
+        "itemRef": "没咋了 3.2.1 例 1 与 例 2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la07_rank1_suite",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la07-e-16",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化讲义精选（秩 1 矩阵专题四大母题）",
+      "title": "【没咋了 3.2.1 例 4】$B=\\alpha\\alpha^T$ 时 $r(AB+A)=2$ 巧用 $E+\\alpha\\alpha^T$ 恒可逆一秒保秩！",
+      "problem": "设矩阵 $A=\\begin{bmatrix}1&-2&5\\\\2&-5&1+a\\\\-3&5&2-a\\end{bmatrix}$，$\\alpha$ 为 3 维列向量，$B=\\alpha\\alpha^T$，若 $r(AB+A)=2$，则 $a=\\_\\_\\_\\_$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：合并 $AB+A=A(B+E)$ 并秒证 $E+\\alpha\\alpha^T$ 恒可逆！",
+          "detail": "$AB+A=A(\\alpha\\alpha^T+E)$。无论 $\\alpha$ 取何实向量（即使 $\\alpha=0$！），秩 $\\le 1$ 实对称阵 $\\alpha\\alpha^T$ 的特征值为 $\\|\\alpha\\|^2\\ge 0,0,0$，故 $E+\\alpha\\alpha^T$ 的特征值为 $1+\\|\\alpha\\|^2\\ge 1,1,1$，行列式 $=1+\\|\\alpha\\|^2\\ge 1>0$，**恒可逆**！"
+        },
+        {
+          "stepTitle": "第二步：右乘可逆阵保秩 $r(A)=2$，求 $|A|=0$ 并验秩",
+          "detail": "由 $r(A(E+\\alpha\\alpha^T))=r(A)=2$，需 $|A|=0$。初等行变换 $r_2-2r_1,\\;r_3+3r_1$ 得 $\\begin{bmatrix}1&-2&5\\\\0&-1&a-9\\\\0&-1&17-a\\end{bmatrix}\\xrightarrow{r_3-r_2}\\begin{bmatrix}1&-2&5\\\\0&-1&a-9\\\\0&0&26-2a\\end{bmatrix}$。前两行显然线性无关，故 $r(A)=2\\Longleftrightarrow 26-2a=0\\Longleftrightarrow a=13$！"
+        }
+      ],
+      "finalAnswer": "$13$",
+      "takeaway": "看到完全未知的实向量 $\\alpha$ 拼出 $E+\\alpha\\alpha^T$（或 $kE+\\alpha\\alpha^T,\\;k>0$），1 秒条件反射：**它恒正定、恒可逆，乘在谁旁边直接消掉不改秩！**",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.68 例4",
+        "pdfPage": 73,
+        "itemRef": "没咋了 3.2.1 例 4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la07_rank1_suite",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la07-e-17",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化讲义精选（秩 1 矩阵专题四大母题）",
+      "title": "【没咋了 3.2.1 例 5】（李永乐 6 套卷）$A=2\\beta\\alpha^T+7E$ 秒定最小特征值的特征向量",
+      "problem": "已知 $\\alpha=(1,-3,2)^T,\\;\\beta=(0,1,-1)^T$，矩阵 $A=2\\beta\\alpha^T+7E$，则矩阵 $A$ 的最小特征值的特征向量是 $(\\quad)$。  (A) $\\alpha$　(B) $\\beta$　(C) $\\alpha+\\beta$　(D) $\\alpha-\\beta$",
+      "steps": [
+        {
+          "stepTitle": "第一步：算内积 $\\alpha^T\\beta=-5$ 锁定全部特征值",
+          "detail": "秩 1 阵 $2\\beta\\alpha^T$ 的迹为 $2\\alpha^T\\beta=2(0-3-2)=-10$，故 $2\\beta\\alpha^T$ 的特征值为 $-10,0,0$，进而 $A=2\\beta\\alpha^T+7E$ 的特征值为 **$-3,7,7$**，最小特征值为 $-3$！"
+        },
+        {
+          "stepTitle": "第二步：直接用 $A\\beta$ 验算，警惕 $\\alpha$ 与 $\\beta$ 的左右顺序！",
+          "detail": "$A\\beta=(2\\beta\\alpha^T+7E)\\beta=2\\beta(\\alpha^T\\beta)+7\\beta=2(-5)\\beta+7\\beta=-3\\beta$！故 $\\lambda=-3$ 对应的特征向量就是 **$\\beta$**，选 (B)！（注意 $\\alpha^T\\alpha=14\\ne 0$，代入 $A\\alpha=28\\beta+7\\alpha$ 显然不是 $\\alpha$ 的倍数！）"
+        }
+      ],
+      "finalAnswer": "(B) $\\beta$",
+      "takeaway": "秩 1 阵 $u v^T$ 中，非零迹特征值的特征向量永远是**左边站着的列向量 $u$**（本题是 $\\beta$），千万别被题目先给 $\\alpha$ 后给 $\\beta$ 的顺序带偏！",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.68 例5",
+        "pdfPage": 73,
+        "itemRef": "没咋了 3.2.1 例 5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la07_rank1_suite",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la07-e-18",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化讲义精选（反求矩阵四大隐含特征值信息拆解）",
+      "title": "【没咋了 3.6.1 例 1】从非齐次通解、列线性关系与列和为 0 中反读全部特征值与特征向量！",
+      "problem": "试从以下条件中读出 3 阶阵 $A$ 的特征值与特征向量：(1) $Ax=b$ 通解为 $k_1(-1,1,0)^T+k_2(2,0,1)^T+(1,1,-2)^T$，其中 $b=(6,6,-12)^T$；(2) 3 阶实对称阵 $A=[\\alpha_1,\\alpha_2,\\alpha_3]$ 有二重特征值 $1$ 且 $\\alpha_1+2\\alpha_2-\\alpha_3=0$；(3) 3 阶实对称阵 $A$ 有二重特征值 $1$ 且每列元素之和均为 $0$。",
+      "steps": [
+        {
+          "stepTitle": "(1) 齐次基础解系给 $\\lambda=0$（二重），特解对比 $b$ 惊喜发现 $A\\eta=6\\eta$！",
+          "detail": "基础解系 $\\xi_1=(-1,1,0)^T,\\;\\xi_2=(2,0,1)^T$ 满足 $A\\xi_1=A\\xi_2=0\\Rightarrow\\lambda_1=\\lambda_2=0$；再看特解 $\\eta=(1,1,-2)^T$ 满足 $A\\eta=b=(6,6,-12)^T=6(1,1,-2)^T=6\\eta\\Rightarrow\\lambda_3=6$ 且特征向量为 $(1,1,-2)^T$！"
+        },
+        {
+          "stepTitle": "(2) & (3) 齐次零解 + 实对称正交性锁定全部特征向量",
+          "detail": "在 (2) 中，$\\alpha_1+2\\alpha_2-\\alpha_3=0\\Longleftrightarrow A[1,2,-1]^T=0\\Rightarrow\\lambda_3=0$ 对应特征向量 $[1,2,-1]^T$；再由实对称阵异值特征向量正交，$\\lambda_1=\\lambda_2=1$ 的特征向量为 $x_1+2x_2-x_3=0$ 的基础解系！在 (3) 中，列和为 $0$ 且 $A$ 对称 $\\Rightarrow$ 行和亦为 $0\\Rightarrow A[1,1,1]^T=0\\Rightarrow\\lambda_3=0$ 对应 $[1,1,1]^T$，$\\lambda_1=\\lambda_2=1$ 对应 $x_1+x_2+x_3=0$ 的基础解系！"
+        }
+      ],
+      "finalAnswer": "(1) $\\lambda=0,0,6$；(2) $\\lambda=1,1,0$（$\\xi_3=[1,2,-1]^T$）；(3) $\\lambda=1,1,0$（$\\xi_3=[1,1,1]^T$）",
+      "takeaway": "反求矩阵的第一大关就是**翻译隐含特征信息**：非齐次特解比对 $b$ 看成比例、列向量线性关系写成 $Ax=0$、行和/列和相等立刻配全 $1$ 向量！",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.81 例1",
+        "pdfPage": 86,
+        "itemRef": "没咋了 3.6.1 例 1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la07_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la07-e-19",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础精选习题（基础 30 讲）",
+      "title": "【基础习题 5.5】由三组不可逆表述秒定 3 阶阵特征值并求 $|A^*-E|$",
+      "problem": "设 $A$ 是 3 阶矩阵，已知 $-3E+A$ 不可逆，$|2E+A|=0$，$(E-A)x=0$ 有非零解，求 $|A^*-E|$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：三种等价表述一秒译出 3 个互异特征值",
+          "detail": "$-3E+A$ 不可逆 $\\Rightarrow\\lambda_1=3$；$|2E+A|=0\\Rightarrow\\lambda_2=-2$；$(E-A)x=0$ 有非零解 $\\Rightarrow\\lambda_3=1$。3 个特征值互异且全非零，故 $|A|=3\\times(-2)\\times 1=-6$。"
+        },
+        {
+          "stepTitle": "第二步：算 $A^*$ 特征值再平移减 1 相乘",
+          "detail": "$A^*$ 特征值为 $\\frac{-6}{3}=-2,\\;\\frac{-6}{-2}=3,\\;\\frac{-6}{1}=-6$；从而 $A^*-E$ 的特征值为 $-3,\\;2,\\;-7$，行列式 $|A^*-E|=(-3)\\times 2\\times(-7)=42$！"
+        }
+      ],
+      "finalAnswer": "$42$",
+      "takeaway": "一道题集齐考研最常见的三种「伪装特征值」话术：矩阵不可逆、行列式为零、齐次方程有非零解——本质全是 $|\\lambda E-A|=0$！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.170-172",
+        "pdfPage": 176,
+        "itemRef": "基础习题 5.5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la07_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la07-e-20",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化讲义精选（秩 1 矩阵专题）",
+      "title": "【没咋了 3.2.1 例 3】秩 1 阵 $A$ 与其平移阵 $B=A+E$ 特征值、特征向量联动秒解",
+      "problem": "设 $A=\\begin{bmatrix}2&1&3\\\\4&2&6\\\\6&3&9\\end{bmatrix},\\;B=\\begin{bmatrix}3&1&3\\\\4&3&6\\\\6&3&10\\end{bmatrix}$，求 $A$ 与 $B$ 的全部特征值与特征向量。",
+      "steps": [
+        {
+          "stepTitle": "第一步：识别 $r(A)=1$ 与 $B=A+E$，零运算写出全部特征值",
+          "detail": "$A=\\begin{bmatrix}1\\\\2\\\\3\\end{bmatrix}[2,1,3]$，迹 $l=2+2+9=13$，故 $A$ 特征值为 $13,0,0$！又 $B=A+E$，故 $B$ 的特征值就是 **$14,1,1$**，且 **$B$ 与 $A$ 拥有完全相同的特征向量**！"
+        },
+        {
+          "stepTitle": "第二步：直接读出两套特征向量",
+          "detail": "对 $A$ 的 $\\lambda=13$（及 $B$ 的 $\\lambda=14$），特征向量即左列向量 $k_1[1,2,3]^T\\;(k_1\\ne 0)$；对 $A$ 的 $\\lambda=0$（及 $B$ 的 $\\lambda=1$），解 $2x_1+x_2+3x_3=0$ 得 $k_2[-1,2,0]^T+k_3[-3,0,2]^T$（$k_2,k_3$ 不全为 $0$）！"
+        }
+      ],
+      "finalAnswer": "$A$ 特征值 $13,0,0$、$B$ 特征值 $14,1,1$；二者共用特征向量：$k_1[1,2,3]^T\\;(k_1\\ne 0)$ 与 $k_2[-1,2,0]^T+k_3[-3,0,2]^T$（不全为 $0$）",
+      "takeaway": "遇到像 $B$ 这样「非对角线成比例、对角线比成比例值统一多 $k$」的矩阵，立刻写成 $B=\\alpha\\beta^T+kE$，免算三阶行列式！",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.68 例3",
+        "pdfPage": 73,
+        "itemRef": "没咋了 3.2.1 例 3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la07_rank1_suite",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la07-s-01",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "四、题型总结（一）：第 7 讲题型破题路由总表",
+      "title": "特征值与特征向量 7 大核心题型破题路由总表（表 L7-1）",
+      "overview": "第 7 讲既考具体数字阵特征方程快算，又考抽象矩阵的变换、零化多项式、秩 1 拆解与矩阵方程反读信息，按题型特征直走最短路径：",
+      "patterns": [
+        {
+          "typeName": "三步快算具体矩阵特征值法",
+          "triggers": "3 阶具体数字阵求特征值与特征向量",
+          "method": "① 先看是否 $A-kE$ 为秩 1 阵或行/列和相等（5 秒口算）；② 否则做行/列变换在 $|\\lambda E-A|$ 中造公因子 $(\\lambda-\\lambda_0)$；③ 万不得已展开三次式，用「$0,1,-1$ 及常数项因子」试根大除！",
+          "pitfall": "算完特征值务必用两把验证尺验算：$\\sum\\lambda_i=\\operatorname{tr}(A)$ 且 $\\prod\\lambda_i=|A|$，发现不平立即查错！",
+          "relatedRefs": "例 5.1, 基础特征多项式试根三例, 没咋了 3.2.1 例 3"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 L7-1　第 7 讲特征值与特征向量 7 大题型破题路由",
+          "headers": [
+            "题干特征 / 信号词",
+            "第一反应核心手段",
+            "避坑 / 加速要点",
+            "代表例题"
+          ],
+          "rows": [
+            [
+              "具体 3 阶阵求 $\\lambda,\\xi$",
+              "先查 $A-kE$ 秩 1 或行和相等；次用行列凑公因式/试根",
+              "用 $\\sum\\lambda_i=\\operatorname{tr}(A)$ 复核；写全解别漏「不全为 0」",
+              "例 5.1、没咋了 3.2.1 例 3"
+            ],
+            [
+              "给 $|aA+bE|=0$ / 不可逆",
+              "秒译为 $\\lambda=-b/a$；$|A^2+kA|=0$ 先验 $|A|\\ne 0$",
+              "未知 $|A|\\ne 0$ 时不得消去 $|A|$！",
+              "基础习题 5.5、强化例 7.1"
+            ],
+            [
+              "给 $f(A)=O$（零化方程）",
+              "$f(\\lambda)=0$ 锁定特征值候选集，查 $g(\\lambda)\\ne 0$ 证可逆",
+              "候选集根未必全出现，仅能做必要限制",
+              "例 5.3"
+            ],
+            [
+              "求 $f(A),A^{-1},A^*,P^{-1}AP$ 谱",
+              "套联动表；遇 $A^{-1}/A^*$ 特征向量一律左乘 $A$ 免求逆",
+              "$A^T$ 特征向量另求；$(P^{-1}AP)^T$ 先穿脱展开",
+              "强化例 7.2、基础习题 5.2/5.9/5.10"
+            ],
+            [
+              "秩 1 阵 $A=\\alpha\\beta^T$ 或 $+kE$",
+              "谱 $\\beta^T\\alpha,0,\\dots,0$；$A^n=l^{n-1}A$；$E+\\alpha\\alpha^T$ 恒可逆",
+              "非零特征值对应左边列向量 $\\alpha$！",
+              "例 5.2、没咋了 3.2.1 例 1/2/4/5"
+            ],
+            [
+              "给 $AB=-cB$ 或 $CA^T=dC$",
+              "前者按列分块读特征向量，后者先整体转置为 $AC^T=dC^T$",
+              "用线性无关列数下界锁定重数！",
+              "强化例 7.4、没咋了 3.6.1 例 1"
+            ],
+            [
+              "已知行和为 $k$ / 主对角代数余子式和",
+              "$A\\mathbf{1}=k\\mathbf{1}$ 左乘 $A^*$；$\\sum A_{ii}=\\operatorname{tr}(A^*)=\\sum\\lambda_i\\lambda_j$",
+              "注意 $A^*$ 下标转置：$A^*$ 第 1 行是原阵第 1 列余子式！",
+              "例 5.4、例 5.5"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "第 7 讲是整个后半程线代（相似、对角化、二次型）的发动机——务必把「特征值变换表」「秩 1 谱模板」和「矩阵方程读特征向量」练到零卡顿！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "第7讲全章总结",
+        "pdfPage": 83,
+        "itemRef": "表 L7-1 第7讲破题路由表"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la07-s-02",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "四、题型总结（二）：10 类矩阵特征值与特征向量全对照表",
+      "title": "与 $A$ 相关的 10 类矩阵特征值、特征向量与逆命题真假速查表（表 L7-2）",
+      "overview": "将基础、强化、没咋了三书所有常见衍生矩阵的特征值、特征向量及「能否逆推原阵 $A$ 特征向量」汇成一表，专治考场张冠李戴：",
+      "patterns": [
+        {
+          "typeName": "逆命题一键判别口诀",
+          "triggers": "选择题问「已知 $\\alpha$ 是 $g(A)$ 的特征向量，是否必为 $A$ 的特征向量」",
+          "method": "只认两个安全区：① 一次仿射 $aA+bE\\;(a\\ne 0)$ 无条件双向等价；② 可逆下的 $A^{-1}$ 与 $A^*$ 双向等价。凡出现高次幂 $A^k\\;(k\\ge 2)$、未明可逆的 $A^*$ 或转置 $A^T$，一律判假！",
+          "pitfall": "若 $A$ 为实对称阵，则 $A^T=A$ 特例下当然等价，务必看清题干是否给了对称条件！",
+          "relatedRefs": "没咋了 3.1.5 例 3, 强化例 7.2, 基础习题 5.2"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 L7-2　与 $A$ 相关的 10 类矩阵特征值与特征向量速查对照",
+          "headers": [
+            "衍生矩阵",
+            "对应特征值",
+            "对应特征向量",
+            "能否逆推为 $A$ 特征向量？"
+          ],
+          "rows": [
+            [
+              "$kA+bE\\;(k\\ne 0)$",
+              "$k\\lambda+b$",
+              "$\\xi$",
+              "**能**（无条件双向等价！）"
+            ],
+            [
+              "$A^m\\;(m\\ge 2)$",
+              "$\\lambda^m$",
+              "$\\xi$",
+              "**不能**（反例 $A=\\operatorname{diag}(1,-1)$ 或旋转阵）"
+            ],
+            [
+              "$f(A)$（多项式）",
+              "$f(\\lambda)$",
+              "$\\xi$",
+              "一般**不能**（除非 $\\deg f=1$）"
+            ],
+            [
+              "$A^{-1}$（$A$ 可逆）",
+              "$1/\\lambda$",
+              "$\\xi$",
+              "**能**（$A$ 可逆时双向等价）"
+            ],
+            [
+              "$A^*$（$A$ 可逆）",
+              "$|A|/\\lambda$",
+              "$\\xi$",
+              "**能**（$A$ 可逆时双向等价）"
+            ],
+            [
+              "$A^*$（$A$ 不可逆）",
+              "$\\prod_{j\\ne i}\\lambda_j$（仅 $r=n-1$ 有非零根）",
+              "未必同 $\\xi$",
+              "**不能**（$r\\le n-2$ 时 $A^*=O$）"
+            ],
+            [
+              "$P^{-1}AP$",
+              "$\\lambda$",
+              "$P^{-1}\\xi$",
+              "换回 $P\\eta$ 才是 $A$ 特征向量"
+            ],
+            [
+              "$PAP^{-1}$",
+              "$\\lambda$",
+              "$P\\xi$",
+              "换回 $P^{-1}\\eta$ 才是 $A$ 特征向量"
+            ],
+            [
+              "$P^{-1}f(A)P$",
+              "$f(\\lambda)$",
+              "$P^{-1}\\xi$",
+              "一般不能（受 $f$ 与 $P$ 双重影响）"
+            ],
+            [
+              "$A^T$",
+              "$\\lambda$（全同！）",
+              "需另解（异值双正交 $\\alpha^T\\beta=0$）",
+              "**不能**（除非 $A^T=A$ 等特例）"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "这张 10 行表覆盖了 95% 的特征值概念选择题——考前扫一遍「逆推真假」最后一列，直接堵死所有命题陷阱！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.148 / 强化 P.73 / 没咋了 P.66",
+        "pdfPage": 84,
+        "itemRef": "表 L7-2 衍生矩阵特征值速查表"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la07-s-03",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "四、题型总结（三）：第 7 讲考场防错红线清单",
+      "title": "特征值与特征向量 7 大高频失分红线与最小反例（表 L7-3）",
+      "overview": "本讲概念极其精细，差一个定语（可逆 / 非零 / 同特征值 / 实矩阵）就会把真命题变成假命题，务必逐条排雷：",
+      "patterns": [
+        {
+          "typeName": "2 阶最小反例速验法",
+          "triggers": "抽象矩阵特征值/特征向量真假判断拿不准",
+          "method": "随身备好 4 个 2 阶反例：① 零/数量阵 $E$（否零化多项式根全出现）；② 上三角非对称 $\\begin{bmatrix}1&1\\\\0&2\\end{bmatrix}$（否 $A$ 与 $A^T$ 同特征向量）；③ $\\operatorname{diag}(1,-1)$（否 $A^2$ 特征向量 $\\Rightarrow A$ 特征向量）；④ $\\begin{bmatrix}0&1\\\\0&0\\end{bmatrix}$（否 $r(A)=$ 非零特征值个数、否秩 1 必可对角化）。",
+          "pitfall": "千万不要用对称对角阵去验证关于 $A^T$ 的命题，因为对称阵掩盖了 $A$ 与 $A^T$ 的一切差异！",
+          "relatedRefs": "没咋了 3.1.5 例 3, 强化例 7.3, 强化例 7.4"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 L7-3　特征值与特征向量 7 大高频失分红线",
+          "headers": [
+            "红线",
+            "典型错误想法",
+            "正确结论与最小反例"
+          ],
+          "rows": [
+            [
+              "红线 1",
+              "零向量是任意特征值的特征向量",
+              "错！定义硬性要求 $\\xi\\ne 0$，写全体特征向量必标「系数不全为 0」"
+            ],
+            [
+              "红线 2",
+              "$f(A)=O\\Rightarrow f(\\lambda)=0$ 的全部根都是特征值",
+              "错！仅保证特征值落在该根池内（如 $E^2-E=O$，但 $0$ 非 $E$ 特征值）"
+            ],
+            [
+              "红线 3",
+              "$A$ 与 $A^T$ 有相同特征向量",
+              "错！一般仅特征值相同，特征向量需另算（反例 $\\begin{bmatrix}1&1\\\\0&2\\end{bmatrix}$）"
+            ],
+            [
+              "红线 4",
+              "$A$ 不可逆时 $A^*$ 特征值全为 $0$",
+              "错！$r(A)=n-1$ 时 $A^*$ 有唯一非零特征值 $\\operatorname{tr}(A^*)=\\prod_{j=2}^n\\lambda_j$"
+            ],
+            [
+              "红线 5",
+              "$\\alpha_1+\\alpha_2$ 仍是特征向量（不论 $\\lambda_1,\\lambda_2$）",
+              "错！仅当 $\\lambda_1=\\lambda_2$ 且组合非零才成立；$\\lambda_1\\ne\\lambda_2$ 时非零组合绝非特征向量"
+            ],
+            [
+              "红线 6",
+              "$CA^T=dC\\Rightarrow C$ 的列是 $A$ 的特征向量",
+              "错！必须先整体转置得 $AC^T=dC^T$，$C$ 的**行转置**才是 $A$ 的特征向量"
+            ],
+            [
+              "红线 7",
+              "$A=\\alpha\\beta^T$ 中 $\\beta$ 是 $\\operatorname{tr}(A)$ 的特征向量",
+              "错！$A\\alpha=(\\beta^T\\alpha)\\alpha$，左边列向量 **$\\alpha$** 才是，右边 $\\beta$ 是 $A^T$ 的！"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "牢记 7 条红线，第 7 讲的客观题和特征值/特征向量基础得分就能实现 100% 稳拿！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "第7讲防错红线汇总",
+        "pdfPage": 83,
+        "itemRef": "表 L7-3 第7讲防错红线"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,1300 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "la-09",
+  "title": "线代 · 第 9 讲　二次型",
+  "sourceMeta": "深度整合《27 张宇基础30讲·线代》第6讲（P.178-206）+《27 张宇线代9讲》第9讲（P.93-109 全 15 例）+《27 没咋了线代强化讲义》第4章（P.89-110 含 2008/2016/2018/2020/2022/2025 真题）+《线代独家大总结》P.23-25，100% 逐页核图与 SymPy 验算",
+  "basicRequirements": {
+    "master": "熟练掌握二次型唯一对称矩阵表示（含非对称阵对称化）、拉格朗日配方法与正交变换法化标准形/规范形、西尔维斯特惯性定理与实对称阵合同充要条件、正定矩阵六大充要条件、瑞利商与广义瑞利商最值及数一专属六大二次曲面分类。",
+    "understand": "理解矩阵等价、合同、相似与正交相似的严格层级及对称生殖隔离结论，掌握伪配方法与带减号线性相关平方项的真假惯性指数辨析、二次型等于零的半正定拆解法及同时合同对角化两步构造。",
+    "familiar": "熟悉正定矩阵平方根开方与谱分解速算、AB 正定充要条件、双实对称可逆阵乘积未必可对角化反例以及右端为负数的二次曲面符号翻转法则。"
+  },
+  "items": [
+    {
+      "id": "m1-la09-f-01",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "一、二次型定义与唯一对称矩阵表示",
+      "title": "$n$ 元实二次型矩阵表示（$f(x)=x^TAx$）、非对称阵对称化与平方和表示",
+      "formulaLatex": "$$f(x_1,\\dots,x_n)=\\sum_{i=1}^{n}\\sum_{j=1}^{n}a_{ij}x_ix_j=x^TAx\\;(A^T=A);\\quad x^TBx=x^T\\left(\\frac{B+B^T}{2}\\right)x;\\quad \\sum_{k=1}^{m}(\\alpha_k,x)^2=x^T\\left(\\sum_{k=1}^{m}\\alpha_k\\alpha_k^T\\right)x$$",
+      "conditions": "二次型的秩 $r(f)$ 定义为唯一对称阵 $A$ 的秩 $r(A)$；若多项式含一次项或常数项（如 $x^2+xy+3x+1$）则不是二次型！",
+      "pitfalls": "① 经典失分坑（没咋了 4.1 例 3）：$f=x^T\\begin{bmatrix}1&4&0\\\\0&4&0\\\\0&0&0\\end{bmatrix}x$，原阵 $B$ 的秩是 2，但对称化后 $A=\\begin{bmatrix}1&2&0\\\\2&4&0\\\\0&0&0\\end{bmatrix}$ 的秩是 **1**！ ② 注意系数「2 倍」习惯：若题干写 $2x_1x_2$ 则 $a_{12}=a_{21}=1$；若写 $x_1x_2$ 则 $a_{12}=a_{21}=\\frac{1}{2}$，切莫漏除以 2！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.178-180 / 强化 P.93-94 / 没咋了 P.89-90",
+        "pdfPage": 184,
+        "itemRef": "二次型矩阵表示与对称化"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_core_theory",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "含 $n$ 个变量的**二次齐次**多项式称为 $n$ 元二次型（考研仅讨论实二次型）。为保证二次型与矩阵**一一对应**，硬性规定系数阵 $A$ 必须是**实对称矩阵**：主对角元 $a_{ii}$ 是平方项 $x_i^2$ 的系数，非对角元 $a_{ij}=a_{ji}$ 是交叉项 $x_ix_j$ 系数的**一半**！若题干给出 $f=x^TBx$ 且 $B$ 不对称，**切忌把 $B$ 当成二次型矩阵**（连秩都会算错！），必须先对称化为 $A=\\frac{B+B^T}{2}$！若给内积平方和 $f=\\sum_{k=1}^{m}(\\alpha_k,x)^2$，展开即 $x^T(\\sum \\alpha_k\\alpha_k^T)x=x^T(C^TC)x$（$C$ 以 $\\alpha_k^T$ 为行）！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「平方照搬主对角，交叉劈半对称放；见非对称 $x^TBx$ 立刻取半和 $\\frac{B+B^T}{2}$！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la09-f-02",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、合同变换、拉格朗日配方法与正交变换法",
+      "title": "可逆坐标变换（$x=Cy$）、矩阵合同（$C^TAC=B$）及化标准形双路线公式",
+      "formulaLatex": "$$x=Cy\\;(|C|\\ne 0)\\;\\Longrightarrow\\;f=x^TAx=y^T(C^TAC)y\\;(A\\simeq B);\\qquad \\begin{cases}\\text{配方法：}C^TAC=\\operatorname{diag}(d_1,\\dots,d_n)\\;(\\text{仅合同})\\\\ \\text{正交法：}Q^TAQ=Q^{-1}AQ=\\operatorname{diag}(\\lambda_1,\\dots,\\lambda_n)\\;(\\text{既合同又相似})\\end{cases}$$",
+      "conditions": "两种方法都严格要求坐标变换矩阵可逆（$|C|\\ne 0$）；若变量未配满 $n$ 个平方项（如 3 元仅配出 2 项），写变换时必须补齐 $y_3=x_3$ 凑成 3 阶可逆矩阵，且务必反解成 **$x=Cy$** 而非停在 $y=C^{-1}x$！",
+      "pitfalls": "① 切勿把 $y=Px$ 误当成题干要求的 $x=Cy$！配方法直接写出的是 $y=C^{-1}x$，求 $C$ 必须取逆！（矩阵题记牢：$f=y^T(C^TAC)y$ 中的 $C$ 永远满足 $x=Cy$！） ② 正交变换一般**不能**把二次型化为规范形（除非 $A$ 的特征值本身全都属于 $\\{1,-1,0\\}$）！",
+      "figureSvg": "<svg viewBox=\"0 0 640 255\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"配方法与正交变换法化二次型为标准形对比图\">\n  <title>化二次型为标准形双法对比：拉格朗日配方法 vs 正交变换法（含伪配方陷阱）</title>\n  <defs>\n    <marker id=\"m1_la09_c_blue\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#2563eb\"/>\n    </marker>\n    <marker id=\"m1_la09_c_green\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#059669\"/>\n    </marker>\n  </defs>\n  <rect x=\"4\" y=\"4\" width=\"632\" height=\"247\" rx=\"10\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"320\" y=\"25\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">二次型 f(x) = xᵀAx 化标准形双路线对比（合同 CᵀAC vs 正交相似 QᵀAQ）</text>\n\n  <!-- Left: Lagrange Completion -->\n  <g transform=\"translate(18, 40)\">\n    <rect x=\"0\" y=\"0\" width=\"295\" height=\"198\" rx=\"8\" fill=\"#ffffff\" stroke=\"#bfdbfe\" stroke-width=\"1.3\"/>\n    <rect x=\"0\" y=\"0\" width=\"295\" height=\"28\" rx=\"8\" fill=\"#eff6ff\"/>\n    <text x=\"148\" y=\"19\" text-anchor=\"middle\" font-size=\"11.2\" font-weight=\"700\" fill=\"#1d4ed8\">路线 A：拉格朗日配方法（一般可逆变换）</text>\n\n    <text x=\"14\" y=\"48\" font-size=\"10\" font-weight=\"700\" fill=\"#0f172a\">变换形式：x = Cy (|C| ≠ 0)，仅要求可逆</text>\n    <text x=\"14\" y=\"66\" font-size=\"10\" font-weight=\"700\" fill=\"#2563eb\">矩阵语言：CᵀAC = diag(d₁, …, dₙ)（仅合同）</text>\n    <text x=\"14\" y=\"85\" font-size=\"9.4\" fill=\"#334155\">• 含平方项：把含 xᵢ 的所有项一次配完</text>\n    <text x=\"14\" y=\"101\" font-size=\"9.4\" fill=\"#334155\">• 纯交叉项：先令 x₁=y₁+y₂, x₂=y₁−y₂, x₃=y₃</text>\n    <text x=\"14\" y=\"117\" font-size=\"9.4\" fill=\"#334155\">• 系数 dᵢ 一般【不是】A 的特征值，结果不唯一</text>\n    <text x=\"14\" y=\"133\" font-size=\"9.4\" fill=\"#334155\">• 优势：算惯性指数 (p, q)、化规范形最快！</text>\n\n    <rect x=\"12\" y=\"143\" width=\"271\" height=\"46\" rx=\"6\" fill=\"#fef2f2\" stroke=\"#fca5a5\"/>\n    <text x=\"148\" y=\"159\" text-anchor=\"middle\" font-size=\"9.6\" font-weight=\"700\" fill=\"#b91c1c\">红牌警报：「伪配方法」陷阱！</text>\n    <text x=\"148\" y=\"174\" text-anchor=\"middle\" font-size=\"8.8\" fill=\"#991b1b\">如 (x₁+x₂)²+(x₂+x₃)²+(x₁−x₃)² 虽像平方和，但系数阵</text>\n    <text x=\"148\" y=\"185\" text-anchor=\"middle\" font-size=\"8.8\" fill=\"#991b1b\">行列式 = 0（变换不可逆！必须验 |C| ≠ 0！）</text>\n  </g>\n\n  <!-- Right: Orthogonal Transformation -->\n  <g transform=\"translate(327, 40)\">\n    <rect x=\"0\" y=\"0\" width=\"295\" height=\"198\" rx=\"8\" fill=\"#ffffff\" stroke=\"#a7f3d0\" stroke-width=\"1.3\"/>\n    <rect x=\"0\" y=\"0\" width=\"295\" height=\"28\" rx=\"8\" fill=\"#ecfdf5\"/>\n    <text x=\"148\" y=\"19\" text-anchor=\"middle\" font-size=\"11.2\" font-weight=\"700\" fill=\"#047857\">路线 B：正交变换法（刚性旋转/镜像）</text>\n\n    <text x=\"14\" y=\"48\" font-size=\"10\" font-weight=\"700\" fill=\"#0f172a\">变换形式：x = Qy (QᵀQ = E，双料特工！)</text>\n    <text x=\"14\" y=\"66\" font-size=\"10\" font-weight=\"700\" fill=\"#059669\">矩阵语言：QᵀAQ = Q⁻¹AQ = Λ（既合同又相似）</text>\n    <text x=\"14\" y=\"85\" font-size=\"9.4\" fill=\"#334155\">• 几何保长保角：‖x‖ = ‖Qy‖ = ‖y‖，不扭曲形状</text>\n    <text x=\"14\" y=\"101\" font-size=\"9.4\" fill=\"#334155\">• 系数必为 A 的全部特征值 λ₁, …, λₙ（顺序不计唯一）</text>\n    <text x=\"14\" y=\"117\" font-size=\"9.4\" fill=\"#334155\">• Q 的各列是单位正交特征向量（必与 λᵢ 一一对齐）</text>\n    <text x=\"14\" y=\"133\" font-size=\"9.4\" fill=\"#334155\">• 局限：一般【不能】化为规范形（除非 λᵢ ∈ {±1,0}）</text>\n\n    <rect x=\"12\" y=\"143\" width=\"271\" height=\"46\" rx=\"6\" fill=\"#ecfdf5\" stroke=\"#6ee7b7\"/>\n    <text x=\"148\" y=\"159\" text-anchor=\"middle\" font-size=\"9.6\" font-weight=\"700\" fill=\"#047857\">共同不变量（西尔维斯特惯性定理）：</text>\n    <text x=\"148\" y=\"174\" text-anchor=\"middle\" font-size=\"9.1\" fill=\"#065f46\">任意可逆线性变换下，正/负惯性指数 (p, q) 与秩 r=p+q</text>\n    <text x=\"148\" y=\"185\" text-anchor=\"middle\" font-size=\"9.1\" font-weight=\"700\" fill=\"#047857\">完全不变！故实对称阵 A ≃ B ⇔ p_A=p_B 且 q_A=q_B</text>\n  </g>\n</svg>",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.180-188 / 强化 P.95-96 / 没咋了 P.91-94",
+        "pdfPage": 186,
+        "itemRef": "配方法与正交变换法公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_core_theory",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "二次型化标准形（只含平方项、无交叉项）有两大核心方法：① **拉格朗日配方法**：每次选一个非零平方项 $x_i^2$ 把含 $x_i$ 的全部项一次配完；若无平方项仅有交叉项 $a_{ij}x_ix_j$，先作可逆平方差代换 $x_i=y_i+y_j,\\;x_j=y_i-y_j$ 造出平方项再配！所得 $d_i$ 一般**不是**特征值，再作伸缩 $z_i=\\sqrt{|d_i|}y_i$ 即可一步化为**规范形**（系数仅取 $1,-1,0$）！② **正交变换法**：对实对称阵 $A$ 求正交阵 $Q$ 使 $Q^TAQ=\\Lambda$，令 $x=Qy$ 得标准形 $\\lambda_1y_1^2+\\dots+\\lambda_ny_n^2$，几何上是刚性旋转/镜像（保长 $\\|x\\|=\\|y\\|$），系数必为 $A$ 的全部特征值！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「配方只求 $C$ 可逆，快算 $(p,q)$ 化规范；正交既似又合同，特征值稳坐对角线！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la09-f-03",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "三、惯性定理与实对称矩阵合同充要条件",
+      "title": "西尔维斯特惯性定理、规范形唯一性与实对称阵合同充要条件（$A\\simeq B\\Leftrightarrow p_A=p_B,q_A=q_B$）",
+      "formulaLatex": "$$p+q=r(A),\\quad \\text{规范形：}z_1^2+\\dots+z_p^2-z_{p+1}^2-\\dots-z_{p+q}^2\\;\\text{（唯一）};\\qquad A^T=A,\\;B^T=B\\;\\Longrightarrow\\;\\big(A\\simeq B\\Leftrightarrow p_A=p_B\\text{ 且 }q_A=q_B\\big)$$",
+      "conditions": "惯性指数判定合同仅适用于**实对称矩阵**之间；任意非对称矩阵绝不可能与对称矩阵合同（因为 $(C^TAC)^T=C^TA^TC$，对称性在合同变换下严格守恒！）。",
+      "pitfalls": "考场求 $(p,q)$ 优先看哪种更快：① 具体小矩阵交叉项少 $\\to$ **配方法**（但务必确认变换可逆！）；② 矩阵有对称规律（如行和相等、秩 1 偏移）$\\to$ **直接口算特征值正负个数**！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 线代独家大总结",
+        "printedPage": "基础 P.184 / 强化 P.96,100 / 大总结 P.23",
+        "pdfPage": 190,
+        "itemRef": "惯性定理与合同充要条件"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "无论采用何种实可逆线性变换 $x=Cy$ 将二次型化为标准形，系数中**正项个数 $p$（正惯性指数）**与**负项个数 $q$（负惯性指数）**均为严格不变量！因此：① $p=$ 正特征值个数，$q=$ 负特征值个数，$p+q=r(A)$；② 二次型的**规范形是唯一的**（不计项序）；③ 同阶实对称矩阵 $A\\simeq B\\Longleftrightarrow$ 二者正、负惯性指数分别相等 $\\Longleftrightarrow$ 秩与正（或负）惯性指数相同！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「合同看惯性 $(p,q)$，相似看特征值 $\\lambda_i$，等价只看秩 $r$！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la09-f-04",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "四、正定二次型与正定矩阵全套充要/必要条件",
+      "title": "正定矩阵（前提 $A^T=A$）6 大充要条件、2 大必要条件与保正定运算",
+      "formulaLatex": "$$A\\text{ 正定}\\;(A^T=A)\\;\\Longleftrightarrow\\;\\begin{cases}(1)\\;\\forall x\\ne 0,\\;x^TAx>0\\quad (2)\\;\\lambda_i>0\\;(i=1,\\dots,n)\\quad (3)\\;p=n\\\\ (4)\\;\\Delta_k>0\\;(k=1,\\dots,n)\\quad (5)\\;A\\simeq E\\quad (6)\\;\\exists\\text{ 可逆 }D,\\;A=D^TD\\end{cases}$$",
+      "conditions": "证明任何矩阵 $M$ 正定的**第一句必须先交代 $M^T=M$（实对称前提！）**，再验 6 大充要条件之一，否则大题必扣前提分！",
+      "pitfalls": "常见致命误区：$a_{ii}>0$ 且 $|A|>0$ **不充分**（如 $\\operatorname{diag}(1,-1,-1)$ 虽 $|A|=1>0$ 但不定！）；负惯性指数 $q=0$ **不充分**（可能半正定 $p<n$！）；存在矩阵 $C$ 使 $A=C^TC$ 若没写「**$C$ 可逆**」亦不充分（仅保证半正定！）！",
+      "figureSvg": "<svg viewBox=\"0 0 640 250\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"正定二次型六大充要条件与瑞利商极值夹逼图\">\n  <title>正定矩阵六大充要条件枢纽与瑞利商球面最值几何示意</title>\n  <defs>\n    <marker id=\"m1_la09_p_blue\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#2563eb\"/>\n    </marker>\n    <marker id=\"m1_la09_p_red\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#dc2626\"/>\n    </marker>\n  </defs>\n  <rect x=\"4\" y=\"4\" width=\"632\" height=\"242\" rx=\"10\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"320\" y=\"25\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">正定矩阵（前提：Aᵀ = A）六大充要枢纽 &amp; 瑞利商（Rayleigh Quotient）最值定理</text>\n\n  <!-- Left: 6-way PD equivalence hub -->\n  <g transform=\"translate(16, 40)\">\n    <rect x=\"0\" y=\"0\" width=\"338\" height=\"194\" rx=\"8\" fill=\"#ffffff\" stroke=\"#bfdbfe\" stroke-width=\"1.3\"/>\n    <text x=\"169\" y=\"19\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1d4ed8\">① 正定矩阵 6 大充要条件（双向全通）</text>\n\n    <rect x=\"116\" y=\"76\" width=\"106\" height=\"44\" rx=\"8\" fill=\"#1d4ed8\"/>\n    <text x=\"169\" y=\"96\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#ffffff\">A 正定</text>\n    <text x=\"169\" y=\"112\" text-anchor=\"middle\" font-size=\"9\" fill=\"#dbeafe\">前提 Aᵀ = A</text>\n\n    <!-- 6 spokes -->\n    <rect x=\"10\" y=\"30\" width=\"100\" height=\"32\" rx=\"5\" fill=\"#eff6ff\" stroke=\"#93c5fd\"/>\n    <text x=\"60\" y=\"44\" text-anchor=\"middle\" font-size=\"9\" font-weight=\"700\" fill=\"#1e40af\">1. 定义法</text>\n    <text x=\"60\" y=\"57\" text-anchor=\"middle\" font-size=\"8.6\" fill=\"#2563eb\">∀x≠0, xᵀAx &gt; 0</text>\n\n    <rect x=\"119\" y=\"30\" width=\"100\" height=\"32\" rx=\"5\" fill=\"#eff6ff\" stroke=\"#93c5fd\"/>\n    <text x=\"169\" y=\"44\" text-anchor=\"middle\" font-size=\"9\" font-weight=\"700\" fill=\"#1e40af\">2. 特征值法</text>\n    <text x=\"169\" y=\"57\" text-anchor=\"middle\" font-size=\"8.6\" fill=\"#2563eb\">全部 λᵢ &gt; 0</text>\n\n    <rect x=\"228\" y=\"30\" width=\"100\" height=\"32\" rx=\"5\" fill=\"#ecfdf5\" stroke=\"#6ee7b7\"/>\n    <text x=\"278\" y=\"44\" text-anchor=\"middle\" font-size=\"9\" font-weight=\"700\" fill=\"#047857\">3. 顺序主子式</text>\n    <text x=\"278\" y=\"57\" text-anchor=\"middle\" font-size=\"8.6\" fill=\"#059669\">Δ₁, Δ₂, …, Δₙ &gt; 0</text>\n\n    <rect x=\"10\" y=\"136\" width=\"100\" height=\"32\" rx=\"5\" fill=\"#eff6ff\" stroke=\"#93c5fd\"/>\n    <text x=\"60\" y=\"150\" text-anchor=\"middle\" font-size=\"9\" font-weight=\"700\" fill=\"#1e40af\">4. 惯性指数</text>\n    <text x=\"60\" y=\"163\" text-anchor=\"middle\" font-size=\"8.6\" fill=\"#2563eb\">p = n (规范形全+1)</text>\n\n    <rect x=\"119\" y=\"136\" width=\"100\" height=\"32\" rx=\"5\" fill=\"#eff6ff\" stroke=\"#93c5fd\"/>\n    <text x=\"169\" y=\"150\" text-anchor=\"middle\" font-size=\"9\" font-weight=\"700\" fill=\"#1e40af\">5. 合同单位阵</text>\n    <text x=\"169\" y=\"163\" text-anchor=\"middle\" font-size=\"8.6\" fill=\"#2563eb\">A ≃ E (∃可逆 C)</text>\n\n    <rect x=\"228\" y=\"136\" width=\"100\" height=\"32\" rx=\"5\" fill=\"#f5f3ff\" stroke=\"#c4b5fd\"/>\n    <text x=\"278\" y=\"150\" text-anchor=\"middle\" font-size=\"9\" font-weight=\"700\" fill=\"#6d28d9\">6. 乔列斯基分解</text>\n    <text x=\"278\" y=\"163\" text-anchor=\"middle\" font-size=\"8.6\" fill=\"#7c3aed\">A = DᵀD (|D|≠0)</text>\n\n    <line x1=\"110\" y1=\"62\" x2=\"128\" y2=\"76\" stroke=\"#2563eb\" stroke-width=\"1.3\"/>\n    <line x1=\"169\" y1=\"62\" x2=\"169\" y2=\"76\" stroke=\"#2563eb\" stroke-width=\"1.3\"/>\n    <line x1=\"228\" y1=\"62\" x2=\"210\" y2=\"76\" stroke=\"#2563eb\" stroke-width=\"1.3\"/>\n    <line x1=\"110\" y1=\"136\" x2=\"128\" y2=\"120\" stroke=\"#2563eb\" stroke-width=\"1.3\"/>\n    <line x1=\"169\" y1=\"136\" x2=\"169\" y2=\"120\" stroke=\"#2563eb\" stroke-width=\"1.3\"/>\n    <line x1=\"228\" y1=\"136\" x2=\"210\" y2=\"120\" stroke=\"#2563eb\" stroke-width=\"1.3\"/>\n\n    <text x=\"169\" y=\"185\" text-anchor=\"middle\" font-size=\"8.7\" font-weight=\"700\" fill=\"#dc2626\">必要不充分：aᵢᵢ &gt; 0 且 |A| &gt; 0 · A* 正定 ⇏ A 正定（反例 −E₃）</text>\n  </g>\n\n  <!-- Right: Rayleigh quotient geometry -->\n  <g transform=\"translate(366, 40)\">\n    <rect x=\"0\" y=\"0\" width=\"258\" height=\"194\" rx=\"8\" fill=\"#ffffff\" stroke=\"#fde68a\" stroke-width=\"1.3\"/>\n    <text x=\"129\" y=\"19\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#b45309\">② 瑞利商最值与等值椭圆几何</text>\n\n    <!-- Unit circle + tilted ellipse -->\n    <g transform=\"translate(129, 86)\">\n      <!-- Unit circle x^Tx = 1 -->\n      <circle cx=\"0\" cy=\"0\" r=\"34\" fill=\"#eff6ff\" fill-opacity=\"0.55\" stroke=\"#2563eb\" stroke-width=\"1.5\" stroke-dasharray=\"4,2\"/>\n      <!-- Tilted ellipse x^TAx = c -->\n      <ellipse cx=\"0\" cy=\"0\" rx=\"52\" ry=\"22\" transform=\"rotate(-28)\" fill=\"none\" stroke=\"#d97706\" stroke-width=\"2\"/>\n      <!-- Principal eigenvector axes -->\n      <line x1=\"-58\" y1=\"31\" x2=\"58\" y2=\"-31\" stroke=\"#059669\" stroke-width=\"1.5\" marker-end=\"url(#m1_la09_p_blue)\"/>\n      <line x1=\"-18\" y1=\"-34\" x2=\"18\" y2=\"34\" stroke=\"#dc2626\" stroke-width=\"1.5\" marker-end=\"url(#m1_la09_p_red)\"/>\n      <circle cx=\"30\" cy=\"-16\" r=\"3.5\" fill=\"#059669\"/>\n      <circle cx=\"16\" cy=\"30\" r=\"3.5\" fill=\"#dc2626\"/>\n      <text x=\"60\" y=\"-26\" font-size=\"8.8\" font-weight=\"700\" fill=\"#047857\">γ_min (取 λ_min)</text>\n      <text x=\"24\" y=\"42\" font-size=\"8.8\" font-weight=\"700\" fill=\"#dc2626\">γ_max (取 λ_max)</text>\n      <text x=\"-94\" y=\"-34\" font-size=\"8.5\" fill=\"#2563eb\">单位球面 xᵀx = 1</text>\n    </g>\n\n    <rect x=\"12\" y=\"138\" width=\"234\" height=\"46\" rx=\"6\" fill=\"#fffbeb\" stroke=\"#fbbf24\"/>\n    <text x=\"129\" y=\"155\" text-anchor=\"middle\" font-size=\"10.2\" font-weight=\"700\" fill=\"#92400e\">λ_min ≤ xᵀAx / (xᵀx) ≤ λ_max (x ≠ 0)</text>\n    <text x=\"129\" y=\"170\" text-anchor=\"middle\" font-size=\"8.6\" fill=\"#78350f\">广义瑞利商 xᵀAx/(xᵀBx) (B 正定)：令 B=DᵀD, y=Dx</text>\n    <text x=\"129\" y=\"180\" text-anchor=\"middle\" font-size=\"8.6\" fill=\"#b45309\">转化为 (D⁻¹)ᵀAD⁻¹ 的最大/最小特征值（强化例 9.15）</text>\n  </g>\n</svg>",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 线代独家大总结",
+        "printedPage": "基础 P.192-196 / 强化 P.103-104 / 大总结 P.24",
+        "pdfPage": 198,
+        "itemRef": "正定矩阵六大充要条件"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_pd_rayleigh",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "判断或证明实对称矩阵 $A$ 正定，6 条充要条件按题型精准调用：① 具体含参数字阵 $\\to$ **顺序主子式 $\\Delta_1,\\dots,\\Delta_n>0$** 最快；② 抽象特征值/矩阵多项式 $\\to$ **全部 $\\lambda_i>0$**；③ 平方和形式 $\\to$ **定义法 $x^TAx>0$**（查 $f=0\\Leftrightarrow x=0$）；④ 抽象合同/构造证明 $\\to$ **$A=D^TD$ 或 $A\\simeq E$**！必要条件：$a_{ii}>0$ 且 $|A|>0$（快速排错用！）。保正定运算：若 $A,B$ 正定，则 $kA\\;(k>0),\\;A^T,\\;A^{-1},\\;A^*,\\;A^m\\;(m\\in\\mathbb{Z}^+),\\;C^TAC\\;(|C|\\ne 0),\\;A+B,\\;\\operatorname{diag}(A,B)$ 均正定，且存在唯一**正定平方根** $C$ 使 $C^2=A$！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「证正定先写对称！数值用顺序主子式，抽象看特征值全正，平方和验零解唯一！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la09-f-05",
+      "kind": "formula",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "五、瑞利商与广义瑞利商最值定理",
+      "title": "瑞利商（$\\lambda_{\\min}\\le\\frac{x^TAx}{x^Tx}\\le\\lambda_{\\max}$）与广义瑞利商（$\\frac{x^TAx}{x^TBx}$）最值转化公式",
+      "formulaLatex": "$$\\lambda_{\\min}\\le\\frac{x^TAx}{x^Tx}\\le\\lambda_{\\max}\\;(x\\ne 0);\\qquad \\frac{x^TAx}{x^TBx}\\;\\xrightarrow[z=Dx]{B=D^TD}\\;\\frac{z^T\\big((D^{-1})^TAD^{-1}\\big)z}{z^Tz}\\in[\\mu_{\\min},\\;\\mu_{\\max}]$$",
+      "conditions": "标准瑞利商要求 $A^T=A$；广义瑞利商额外要求分母矩阵 $B$ **正定**（确保 $x^TBx>0$ 恒正且存在可逆 $D$ 使 $B=D^TD$）。",
+      "pitfalls": "求不等式 $|x^TMx|\\le a x^Tx$ 对一切 $x$ 成立的最小常数 $a$（没咋了 4.8 例 2），答案是 $a_{\\min}=\\max_i|\\lambda_i(M)|$（取**绝对值最大**的特征值，切莫漏看大负数特征值！）！",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义 & 线代独家大总结",
+        "printedPage": "强化 P.107-109 / 没咋了 P.104-105 / 大总结 P.24",
+        "pdfPage": 118,
+        "itemRef": "瑞利商与广义瑞利商最值"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_pd_rayleigh",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "① **标准瑞利商**：对实对称阵 $A$，令正交变换 $x=Qy$（保范 $x^Tx=y^Ty$），即得 $\\frac{x^TAx}{x^Tx}=\\frac{\\sum\\lambda_iy_i^2}{\\sum y_i^2}\\in[\\lambda_{\\min},\\lambda_{\\max}]$！当且仅当 $x$ 取 $\\lambda_{\\max}$（或 $\\lambda_{\\min}$）的**非零特征向量**时取到最大（小）值！（若限定单位球面 $x^Tx=1$，则最值点为单位特征向量 $\\pm\\gamma_{\\max}$！）② **广义瑞利商（强化例 9.15 新热点！）**：若分母 $B$ 为正定阵，先做分解 $B=D^TD$（或 $C^TBC=E,\\;C=D^{-1}$），作可逆代换 $z=Dx$（即 $x=Cz$），立刻化归为实对称阵 $M=C^TAC=(D^{-1})^TAD^{-1}$ 的标准瑞利商，其极值即 $M$ 的最大/最小特征值（亦即广义特征方程 $|A-\\mu B|=0$ 的最大/最小根！）！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「球面二次型最值直接抄最大最小特征值，最值点就是对应单位特征向量；分母换正定 $B$ 就先 $B=D^TD$ 换元化归！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la09-f-06",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "六、【数一专属】二次型与六大二次曲面分类",
+      "title": "【数一专属】三元二次型 $f(x,y,z)=c$ 与六大二次曲面 $(p,q)$ 分类判定公式",
+      "formulaLatex": "$$f(x,y,z)=c\\;(c>0):\\;\\begin{cases}(3,0)\\Rightarrow\\text{椭球面}\\quad (2,1)\\Rightarrow\\text{单叶双曲面}\\quad (1,2)\\Rightarrow\\text{双叶双曲面}\\\\ (2,0)\\Rightarrow\\text{椭圆柱面}\\quad (1,1)\\Rightarrow\\text{双曲柱面}\\end{cases};\\qquad c=0,\\;(2,1)\\text{ 或 }(1,2)\\Rightarrow\\text{椭圆锥面}$$",
+      "conditions": "仅数一大纲要求！注意：当 $c>0$ 且 $(p,q)=(0,3)$（负定）时方程无实解（虚椭球面）；当 $c<0$ 且原 $f$ 负定时，同乘 $-1$ 后变为 $(3,0)$ 等于正数，反而表示**椭球面**！",
+      "pitfalls": "① 高频翻车陷阱（没咋了 4.3.4 例 7(3)(4)）：见 $x^2+2yz=-1$ 绝不能按 $(2,1)$ 误选单叶双曲面！同乘 $-1$ 化为 $-x^2-2yz=1$，新惯性指数为 $(1,2)\\implies$ **双叶双曲面**！ ② 【原书小勘误 · 基础 P.192 左下蓝字】：将 $f(x_1,x_2,x_3)=1$ 的椭球面误印为「封闭曲线」，应为**封闭曲面**！",
+      "figureSvg": "<svg viewBox=\"0 0 640 288\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"考研数一专属六大二次曲面与正负惯性指数对照矢量图鉴\">\n  <title>数一专属：六大二次曲面与正负惯性指数 (p, q) 完整对照矢量图鉴</title>\n  <defs>\n    <marker id=\"m1_la09_q_ax\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"5\" markerHeight=\"5\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#64748b\"/>\n    </marker>\n  </defs>\n  <rect x=\"4\" y=\"4\" width=\"632\" height=\"280\" rx=\"10\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"320\" y=\"24\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">【数一专属】六大二次曲面矢量图鉴：一眼由 (p, q) 与右端常数定曲面</text>\n\n  <!-- Card 1: Ellipsoid (3,0) f=1 -->\n  <g transform=\"translate(16, 36)\">\n    <rect x=\"0\" y=\"0\" width=\"194\" height=\"104\" rx=\"8\" fill=\"#ffffff\" stroke=\"#bfdbfe\" stroke-width=\"1.2\"/>\n    <text x=\"97\" y=\"16\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#1d4ed8\">① 椭球面 · (p,q) = (3,0)</text>\n    <g transform=\"translate(52, 58)\">\n      <line x1=\"-34\" y1=\"0\" x2=\"36\" y2=\"0\" stroke=\"#94a3b8\" stroke-width=\"1\" marker-end=\"url(#m1_la09_q_ax)\"/>\n      <line x1=\"0\" y1=\"26\" x2=\"0\" y2=\"-28\" stroke=\"#94a3b8\" stroke-width=\"1\" marker-end=\"url(#m1_la09_q_ax)\"/>\n      <ellipse cx=\"0\" cy=\"0\" rx=\"28\" ry=\"18\" fill=\"#dbeafe\" fill-opacity=\"0.55\" stroke=\"#2563eb\" stroke-width=\"1.6\"/>\n      <ellipse cx=\"0\" cy=\"0\" rx=\"28\" ry=\"6.5\" fill=\"none\" stroke=\"#1d4ed8\" stroke-width=\"1.1\" stroke-dasharray=\"3,2\"/>\n      <ellipse cx=\"0\" cy=\"0\" rx=\"10\" ry=\"18\" fill=\"none\" stroke=\"#3b82f6\" stroke-width=\"1\" stroke-dasharray=\"3,2\"/>\n    </g>\n    <text x=\"142\" y=\"48\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#0f172a\">x²/a²+y²/b²+z²/c²=1</text>\n    <text x=\"142\" y=\"65\" text-anchor=\"middle\" font-size=\"8.8\" fill=\"#2563eb\">f = c &gt; 0 (正定)</text>\n    <text x=\"142\" y=\"81\" text-anchor=\"middle\" font-size=\"8.5\" fill=\"#64748b\">封闭有界曲面</text>\n    <text x=\"142\" y=\"95\" text-anchor=\"middle\" font-size=\"8.2\" fill=\"#dc2626\">或负定且 f = c &lt; 0</text>\n  </g>\n\n  <!-- Card 2: Hyperboloid of 1 sheet (2,1) f=1 -->\n  <g transform=\"translate(223, 36)\">\n    <rect x=\"0\" y=\"0\" width=\"194\" height=\"104\" rx=\"8\" fill=\"#ffffff\" stroke=\"#a7f3d0\" stroke-width=\"1.2\"/>\n    <text x=\"97\" y=\"16\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#047857\">② 单叶双曲面 · (p,q) = (2,1)</text>\n    <g transform=\"translate(50, 58)\">\n      <line x1=\"0\" y1=\"28\" x2=\"0\" y2=\"-28\" stroke=\"#94a3b8\" stroke-width=\"1\" marker-end=\"url(#m1_la09_q_ax)\"/>\n      <path d=\"M -22 -22 Q -10 0 -22 22\" fill=\"none\" stroke=\"#059669\" stroke-width=\"1.7\"/>\n      <path d=\"M 22 -22 Q 10 0 22 22\" fill=\"none\" stroke=\"#059669\" stroke-width=\"1.7\"/>\n      <ellipse cx=\"0\" cy=\"-22\" rx=\"22\" ry=\"5\" fill=\"#d1fae5\" fill-opacity=\"0.5\" stroke=\"#059669\" stroke-width=\"1.3\"/>\n      <ellipse cx=\"0\" cy=\"0\" rx=\"14\" ry=\"3.8\" fill=\"none\" stroke=\"#047857\" stroke-width=\"1.1\" stroke-dasharray=\"2,2\"/>\n      <ellipse cx=\"0\" cy=\"22\" rx=\"22\" ry=\"5\" fill=\"none\" stroke=\"#059669\" stroke-width=\"1.3\"/>\n    </g>\n    <text x=\"142\" y=\"48\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#0f172a\">x²/a²+y²/b²−z²/c²=1</text>\n    <text x=\"142\" y=\"65\" text-anchor=\"middle\" font-size=\"8.8\" fill=\"#059669\">f = c &gt; 0 (二正一负)</text>\n    <text x=\"142\" y=\"81\" text-anchor=\"middle\" font-size=\"8.5\" fill=\"#64748b\">束腰连通直纹面</text>\n    <text x=\"142\" y=\"95\" text-anchor=\"middle\" font-size=\"8.2\" fill=\"#047857\">强化例 9.5 考点</text>\n  </g>\n\n  <!-- Card 3: Hyperboloid of 2 sheets (1,2) f=1 -->\n  <g transform=\"translate(430, 36)\">\n    <rect x=\"0\" y=\"0\" width=\"194\" height=\"104\" rx=\"8\" fill=\"#ffffff\" stroke=\"#fecaca\" stroke-width=\"1.2\"/>\n    <text x=\"97\" y=\"16\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#b91c1c\">③ 双叶双曲面 · (p,q) = (1,2)</text>\n    <g transform=\"translate(50, 58)\">\n      <line x1=\"-30\" y1=\"0\" x2=\"32\" y2=\"0\" stroke=\"#94a3b8\" stroke-width=\"1\" marker-end=\"url(#m1_la09_q_ax)\"/>\n      <line x1=\"0\" y1=\"26\" x2=\"0\" y2=\"-26\" stroke=\"#94a3b8\" stroke-width=\"1\" marker-end=\"url(#m1_la09_q_ax)\"/>\n      <!-- Right bowl -->\n      <path d=\"M 26 -19 Q 8 0 26 19\" fill=\"#fee2e2\" fill-opacity=\"0.55\" stroke=\"#dc2626\" stroke-width=\"1.6\"/>\n      <ellipse cx=\"26\" cy=\"0\" rx=\"4.5\" ry=\"19\" fill=\"none\" stroke=\"#dc2626\" stroke-width=\"1.2\"/>\n      <!-- Left bowl -->\n      <path d=\"M -26 -19 Q -8 0 -26 19\" fill=\"#fee2e2\" fill-opacity=\"0.55\" stroke=\"#dc2626\" stroke-width=\"1.6\"/>\n      <ellipse cx=\"-26\" cy=\"0\" rx=\"4.5\" ry=\"19\" fill=\"none\" stroke=\"#dc2626\" stroke-width=\"1.2\"/>\n    </g>\n    <text x=\"142\" y=\"48\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#0f172a\">x²/a²−y²/b²−z²/c²=1</text>\n    <text x=\"142\" y=\"65\" text-anchor=\"middle\" font-size=\"8.8\" fill=\"#dc2626\">f = c &gt; 0 (一正二负)</text>\n    <text x=\"142\" y=\"81\" text-anchor=\"middle\" font-size=\"8.5\" fill=\"#64748b\">左右分离两碗</text>\n    <text x=\"142\" y=\"95\" text-anchor=\"middle\" font-size=\"8.2\" fill=\"#b91c1c\">2008 / 2016 数一真题</text>\n  </g>\n\n  <!-- Card 4: Elliptic Cone (2,1) f=0 -->\n  <g transform=\"translate(16, 150)\">\n    <rect x=\"0\" y=\"0\" width=\"194\" height=\"104\" rx=\"8\" fill=\"#ffffff\" stroke=\"#ddd6fe\" stroke-width=\"1.2\"/>\n    <text x=\"97\" y=\"16\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#6d28d9\">④ 椭圆锥面 · (p,q) = (2,1)</text>\n    <g transform=\"translate(50, 58)\">\n      <line x1=\"0\" y1=\"28\" x2=\"0\" y2=\"-28\" stroke=\"#94a3b8\" stroke-width=\"1\" marker-end=\"url(#m1_la09_q_ax)\"/>\n      <polygon points=\"-20,-22 20,-22 0,0\" fill=\"#ede9fe\" fill-opacity=\"0.6\" stroke=\"#7c3aed\" stroke-width=\"1.4\"/>\n      <polygon points=\"-20,22 20,22 0,0\" fill=\"#ede9fe\" fill-opacity=\"0.6\" stroke=\"#7c3aed\" stroke-width=\"1.4\"/>\n      <ellipse cx=\"0\" cy=\"-22\" rx=\"20\" ry=\"4.5\" fill=\"#ddd6fe\" fill-opacity=\"0.6\" stroke=\"#7c3aed\" stroke-width=\"1.2\"/>\n      <ellipse cx=\"0\" cy=\"22\" rx=\"20\" ry=\"4.5\" fill=\"none\" stroke=\"#7c3aed\" stroke-width=\"1.2\"/>\n      <circle cx=\"0\" cy=\"0\" r=\"2.2\" fill=\"#5b21b6\"/>\n    </g>\n    <text x=\"142\" y=\"48\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#0f172a\">x²/a²+y²/b²−z²/c²=0</text>\n    <text x=\"142\" y=\"65\" text-anchor=\"middle\" font-size=\"8.8\" fill=\"#7c3aed\">右端常数 c = 0！</text>\n    <text x=\"142\" y=\"81\" text-anchor=\"middle\" font-size=\"8.5\" fill=\"#64748b\">(2,1) 或 (1,2) 均可</text>\n    <text x=\"142\" y=\"95\" text-anchor=\"middle\" font-size=\"8.2\" fill=\"#6d28d9\">顶点在原点对顶锥</text>\n  </g>\n\n  <!-- Card 5: Elliptic Cylinder (2,0) f=1 -->\n  <g transform=\"translate(223, 150)\">\n    <rect x=\"0\" y=\"0\" width=\"194\" height=\"104\" rx=\"8\" fill=\"#ffffff\" stroke=\"#fde68a\" stroke-width=\"1.2\"/>\n    <text x=\"97\" y=\"16\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#b45309\">⑤ 椭圆柱面 · (p,q) = (2,0)</text>\n    <g transform=\"translate(50, 58)\">\n      <line x1=\"0\" y1=\"28\" x2=\"0\" y2=\"-28\" stroke=\"#94a3b8\" stroke-width=\"1\" marker-end=\"url(#m1_la09_q_ax)\"/>\n      <rect x=\"-18\" y=\"-20\" width=\"36\" height=\"40\" fill=\"#fef3c7\" fill-opacity=\"0.45\" stroke=\"none\"/>\n      <line x1=\"-18\" y1=\"-20\" x2=\"-18\" y2=\"20\" stroke=\"#d97706\" stroke-width=\"1.6\"/>\n      <line x1=\"18\" y1=\"-20\" x2=\"18\" y2=\"20\" stroke=\"#d97706\" stroke-width=\"1.6\"/>\n      <ellipse cx=\"0\" cy=\"-20\" rx=\"18\" ry=\"5\" fill=\"#fde68a\" fill-opacity=\"0.6\" stroke=\"#d97706\" stroke-width=\"1.3\"/>\n      <ellipse cx=\"0\" cy=\"20\" rx=\"18\" ry=\"5\" fill=\"none\" stroke=\"#d97706\" stroke-width=\"1.3\"/>\n    </g>\n    <text x=\"142\" y=\"48\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#0f172a\">x²/a²+y²/b² = 1 (缺 z)</text>\n    <text x=\"142\" y=\"65\" text-anchor=\"middle\" font-size=\"8.8\" fill=\"#b45309\">r(A) = 2 (含 0 特征值!)</text>\n    <text x=\"142\" y=\"81\" text-anchor=\"middle\" font-size=\"8.5\" fill=\"#64748b\">f = c &gt; 0, 二正一零</text>\n    <text x=\"142\" y=\"95\" text-anchor=\"middle\" font-size=\"8.2\" fill=\"#92400e\">1996 数一 / 基础 6.10</text>\n  </g>\n\n  <!-- Card 6: Hyperbolic Cylinder (1,1) f=1 -->\n  <g transform=\"translate(430, 150)\">\n    <rect x=\"0\" y=\"0\" width=\"194\" height=\"104\" rx=\"8\" fill=\"#ffffff\" stroke=\"#99f6e4\" stroke-width=\"1.2\"/>\n    <text x=\"97\" y=\"16\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#0f766e\">⑥ 双曲柱面 · (p,q) = (1,1)</text>\n    <g transform=\"translate(50, 58)\">\n      <line x1=\"0\" y1=\"28\" x2=\"0\" y2=\"-28\" stroke=\"#94a3b8\" stroke-width=\"1\" marker-end=\"url(#m1_la09_q_ax)\"/>\n      <!-- Left sheet -->\n      <path d=\"M -26 -20 Q -10 -14 -26 -8 L -26 22 Q -10 16 -26 10 Z\" fill=\"#ccfbf1\" fill-opacity=\"0.6\" stroke=\"#0d9488\" stroke-width=\"1.3\"/>\n      <line x1=\"-18\" y1=\"-14\" x2=\"-18\" y2=\"16\" stroke=\"#0f766e\" stroke-width=\"1.4\"/>\n      <!-- Right sheet -->\n      <path d=\"M 26 -20 Q 10 -14 26 -8 L 26 22 Q 10 16 26 10 Z\" fill=\"#ccfbf1\" fill-opacity=\"0.6\" stroke=\"#0d9488\" stroke-width=\"1.3\"/>\n      <line x1=\"18\" y1=\"-14\" x2=\"18\" y2=\"16\" stroke=\"#0f766e\" stroke-width=\"1.4\"/>\n    </g>\n    <text x=\"142\" y=\"48\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#0f172a\">x²/a²−y²/b² = 1 (缺 z)</text>\n    <text x=\"142\" y=\"65\" text-anchor=\"middle\" font-size=\"8.8\" fill=\"#0f766e\">r(A) = 2 (一正一负一零)</text>\n    <text x=\"142\" y=\"81\" text-anchor=\"middle\" font-size=\"8.5\" fill=\"#64748b\">f = c ≠ 0 (均成立)</text>\n    <text x=\"142\" y=\"95\" text-anchor=\"middle\" font-size=\"8.2\" fill=\"#0f766e\">两片平行母线双曲柱</text>\n  </g>\n\n  <!-- Bottom critical reminder bar -->\n  <rect x=\"16\" y=\"261\" width=\"608\" height=\"20\" rx=\"5\" fill=\"#fef2f2\" stroke=\"#fca5a5\"/>\n  <text x=\"320\" y=\"275\" text-anchor=\"middle\" font-size=\"9.3\" font-weight=\"700\" fill=\"#991b1b\">考场必看防翻车：若方程右端为负数 f(x,y,z) = c &lt; 0，先同乘 −1 化为 (−f) = |c| &gt; 0，此时 p 与 q 互换！</text>\n</svg>",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义 & 线代独家大总结",
+        "printedPage": "基础 P.192(勘误) / 强化 P.97 / 没咋了 P.96-98 / 大总结 P.25",
+        "pdfPage": 108,
+        "itemRef": "数一六大二次曲面分类公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_quadric_suite",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "考研数学一高频专属考点（1996 / 2008 / 2016 数一及强化例 9.5）：将三元二次方程 $f(x,y,z)=c$ 经正交变换（刚性旋转不改变曲面几何类型）化为 $\\lambda_1u^2+\\lambda_2v^2+\\lambda_3w^2=c$，只需确定 $(p,q)$ 与右端常数 $c$ 的符号即可 1 秒锁死曲面类型！① **$c>0$**：$(3,0)$ 椭球面、$(2,1)$ 单叶双曲面、$(1,2)$ 双叶双曲面、$(2,0)$ 椭圆柱面、$(1,1)$ 双曲柱面；② **$c=0$**：$(2,1)$ 或 $(1,2)$ 均为**椭圆锥面**；③ **$c<0$（考场第一大坑！）**：必须先方程两边**同乘 $-1$** 化为 $(-f)=|c|>0$，此时新二次型的正负惯性指数与原 $f$ **刚好互换**（$p'=q,\\;q'=p$）！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「先把右端变成正：三正椭球、二正单叶、一正双叶；缺零变柱面，右端为零变锥面！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la09-c-01",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "七、矩阵等价、相似、合同三大关系的严格层级",
+      "title": "等价、相似、合同三大关系层级与「实对称 vs 非对称生殖隔离」结论",
+      "conditions": "一般非对称方阵之间也有合同定义（$C^TAC=B$），但不适用惯性指数判定，考研合同计算仅针对对称阵。",
+      "pitfalls": "见到一道题给一个对称阵 $A$ 和一个非对称阵 $B$（没咋了 4.10.3 例 2），1 秒直接叉掉所有「合同 ($P^TAP=B$)」和「正交相似 ($Q^TAQ=B$)」选项！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.182,184 / 强化 P.102 / 没咋了 P.109-110",
+        "pdfPage": 113,
+        "itemRef": "等价相似合同三大关系层级"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_core_theory",
+        "verified": true
+      },
+      "summary": "对同阶实方阵 $A,B$：① **单向包含**：$A\\sim B\\Rightarrow A\\cong B$（等价），$A\\simeq B\\Rightarrow A\\cong B$（等价），且**正交相似 $Q^TAQ=B\\Longleftrightarrow$ 既相似又合同**（严格地说正交变换同时实现相似与合同）；② **实对称阵专属铁律**：若 $A,B$ **均为实对称矩阵**，则 **$A\\sim B\\Longrightarrow A\\simeq B$**（因为特征值全同 $\\Rightarrow$ 正负特征值个数 $(p,q)$ 必同！），但**反之不成立**（$A\\simeq B\\nRightarrow A\\sim B$，如 $E_2$ 与 $2E_2$ 合同但不相似！）；③ **对称生殖隔离（没咋了 P.94,109）**：若 $A^T=A$ 而 $B^T\\ne B$，则 **$A$ 与 $B$ 绝不可能合同**（因为 $(C^TAC)^T=C^TA^TC=C^TAC$ 永远对称！），但它们**可以相似**（如 $\\begin{bmatrix}1&2\\\\2&1\\end{bmatrix}\\sim\\begin{bmatrix}1&4\\\\1&1\\end{bmatrix}$，特征值均为 $3,-1$！）！"
+    },
+    {
+      "id": "m1-la09-c-02",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、「伪配方法」深度剖析与原书勘误",
+      "title": "平方和形式「伪配方法」真假正定判别（含基础 P.200 习题 6.5 蓝框笔误勘误！）",
+      "conditions": "对于 $m$ 个纯正平方和 $f=\\sum_{k=1}^{m}(a_k^Tx)^2=x^T(C^TC)x$（全为加号！），恒有 $q=0$ 且 $p=r(f)=r(C^TC)=r(C)$！一旦出现**减号**，就绝不能直接读 $r(C)$，必须重新展开或代换配方！",
+      "pitfalls": "牢记区分「全加号平方和（$p=r(C),\\;q=0$）」与「带减号平方组合（必须消去相关项重算 $A$ 或代换！）」——考场极易把 $(x_1+x_2)^2+(x_2+x_3)^2-(x_3-x_1)^2$ 误判为 $p=2,q=1$！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.195,200(勘误) / 强化 P.98 / 没咋了 P.100 例3",
+        "pdfPage": 109,
+        "itemRef": "伪配方法与习题6.5勘误"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_mzl_examples",
+        "verified": true
+      },
+      "summary": "形如 $f(x_1,\\dots,x_n)=(a_1^Tx)^2+\\dots+(a_n^Tx)^2$ 看似已是标准形平方和，但若不是按拉格朗日逐变量消元配出，令 $y=Cx$（$C$ 以各线性形式系数为行）时**必须检验 $|C|\\ne 0$**：① 若 $|C|\\ne 0$，变换可逆，$f=y_1^2+\\dots+y_n^2$ 确为真标准形，**$f$ 正定且 $r(f)=n$**；② 若 $|C|=0$，则是「**伪配方法**」——存在非零解 $x_0$ 使 $Cx_0=0\\Rightarrow f(x_0)=0$，故 **$f$ 仅半正定（不正定）且 $r(f)=r(C)<n$**！③ **高阶变式（没咋了 4.5 例 3）**：若平方项之间还带**减号**且线性相关（如 $(x_1+x_2)^2+(x_2+x_3)^2-(x_3-x_1)^2$），连正惯性指数都绝不能看「两个加号」错答 2——令 $u=x_1+x_2,v=x_2+x_3$ 则第 3 项恰为 $(v-u)^2$，展开得 $u^2+v^2-(v-u)^2=2uv\\implies \\mathbf{p=1,q=1}$！④ **【原书笔误勘误 · 基础 P.200 习题 6.5 注】**：蓝框评析称「这个变换并不是**正交变换**，因为 $C$ 不可逆」——配方法只要求**可逆线性变换**而非正交变换，此处失效根因是 $|C|=0$ 不可逆！"
+    },
+    {
+      "id": "m1-la09-c-03",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、正定乘积、伴随正定与双对称阵乘积对角化辨析",
+      "title": "$AB$ 正定 $\\Leftrightarrow AB=BA$、$A^TA$ 正定 $\\Leftrightarrow r(A)=n$、$A^*$ 正定反例及对称阵乘积对角化陷阱",
+      "conditions": "辨析「$A,B$ 正定」与「$A,B$ 仅实对称可逆」在 $AB$ 性质上的云泥之别，是冲刺 135+ 的绝佳分水岭！",
+      "pitfalls": "切勿把「$A,B$ 正定 $\\Rightarrow AB$ 特征值全正且可对角化」误说成「$AB$ 正定」（缺对称性！）或误推给「$A,B$ 仅实对称可逆」（可能连对角化都失败！）。",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.196 例6.12 / 强化 P.104 / 没咋了 P.107,110",
+        "pdfPage": 115,
+        "itemRef": "正定乘积与对称阵乘积辨析"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_pd_rayleigh",
+        "verified": true
+      },
+      "summary": "① **$AB$ 正定充要条件**：设 $A,B$ 均为 $n$ 阶正定阵，则 $AB$ 正定 $\\Longleftrightarrow (AB)^T=AB \\Longleftrightarrow B^TA^T=AB \\Longleftrightarrow \\mathbf{AB=BA}$！（注意：即使 $AB\\ne BA$，$AB$ 的特征值仍然**全大于 0** 且必可对角化！因为 $A=D^TD\\Rightarrow AB\\sim DBD^T$ 实对称正定！$AB$ 仅因不对称而不算正定阵！）② **格拉姆阵正定**：对任意实阵 $A_{m\\times n}$，实对称阵 $A^TA$ 正定 $\\Longleftrightarrow r(A)=n$（列满秩）。③ **$A^*$ 正定 $\\nRightarrow A$ 正定**：反例 $A=-E_3$（3 阶负定！），但 $A^*=(-E_3)^*=E_3$ 正定（偶数阶如 $-E_2$ 则 $A^*=-E_2$ 负定）！④ **压轴陷阱（没咋了 4.10.3 例 3）**：若 $A,B$ 仅是实对称**可逆**矩阵（均非正定！），则 $AB$ **未必可相似对角化**！最小 2 阶反例：$A=\\begin{bmatrix}0&1\\\\1&0\\end{bmatrix},\\;B=\\begin{bmatrix}1&1\\\\1&0\\end{bmatrix}$ 均实对称可逆，但 $AB=\\begin{bmatrix}1&0\\\\1&1\\end{bmatrix}$ 不可对角化！（但只要其中**至少一方正定**，则 $AB\\sim DBD^T$ 必可相似对角化！）"
+    },
+    {
+      "id": "m1-la09-c-04",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、二次型方程 $f(x)=0$ 求解全策略",
+      "title": "二次型 $f(x)=x^TAx=0$ 求解三大通法（半正定拆方程组 vs 一般不定化标准形）",
+      "conditions": "只有当二次型**半正定或半负定**（$p=0$ 或 $q=0$）时，才满足 $x^TAx=0\\Longleftrightarrow Ax=0$！",
+      "pitfalls": "没咋了 4.6 例 2（李林 6 套卷）求 $x^T(A+E)x=0$：先算 $A$ 特征值为 $3,-1,0\\implies A+E$ 特征值为 $4,0,1$（全 $\\ge 0$ 半正定！），故 $x^T(A+E)x=0\\Longleftrightarrow (A+E)x=0$，1 行秒杀！",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.101 4.6节",
+        "pdfPage": 106,
+        "itemRef": "二次型等于零求解通法"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_mzl_examples",
+        "verified": true
+      },
+      "summary": "遇到求实二次型方程 $f(x_1,\\dots,x_n)=0$ 的全部实解（没咋了 4.6 专题，2018 数一二三真题）：① **全加号平方和 / 半正定法（最常见！）**：若 $f(x)=\\sum_{k=1}^{m}(a_k^Tx)^2=0$（或 $A$ 特征值全 $\\ge 0$），则实平方和为零 $\\Longleftrightarrow$ **每一项同时为零**，立刻化为齐次线性方程组 $Cx=0$（或 $Ax=0$）！② **半负定同理**：特征值全 $\\le 0$ 时，$x^TAx=0\\Longleftrightarrow Ax=0$！③ **一般不定型（既有正特征值又有负特征值）**：绝**不能**等价于 $Ax=0$（如 $x_1^2-x_2^2=0$ 有无穷多非零解 $x_1=\\pm x_2$ 满足 $Ax\\ne 0$！），必须先化标准形再因式分解求零集！"
+    },
+    {
+      "id": "m1-la09-c-05",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、同时合同对角化定理与二次型过渡桥",
+      "title": "同时合同对角化（$P^TAP=E,\\;P^TBP=\\Lambda$）两步构造法与双二次型互化桥",
+      "conditions": "同时合同对角化要求 $A,B$ 中至少有一个**正定**（若两者都不正定则未必可同时合同对角化）。",
+      "pitfalls": "写过渡矩阵 $P=C_1^{-1}C_2$ 时务必核对变量方向：$z=C_1x$ 且 $z=C_2y\\implies C_1x=C_2y\\implies x=C_1^{-1}C_2y$，反过来算 $y=Dx$ 则是 $D=C_2^{-1}C_1$（强化例 9.9 与例 9.11 方向恰好互逆，务必看清题干问 $x=Py$ 还是 $A=D^TBD$！）！",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.99-103 / 没咋了 P.102-103 4.7节",
+        "pdfPage": 110,
+        "itemRef": "同时合同对角化与互化桥"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_mzl_examples",
+        "verified": true
+      },
+      "summary": "① **同时合同对角化（没咋了 4.7 例 4）**：若 $A$ **正定**、$B$ **实对称**，必存在可逆矩阵 $P$ 同时将 $A$ 化为单位阵、将 $B$ 化为对角阵！固定两步：(a) 先对正定阵 $A$ 配方（或正交伸缩）求可逆 $C$ 使 $C^TAC=E$；(b) 此时 $M=C^TBC$ 仍为实对称阵，求正交阵 $Q$ 使 $Q^TMQ=\\Lambda$，则令 **$P=CQ$** 立得 $P^TAP=Q^TEQ=E$ 且 $P^TBP=Q^TMQ=\\Lambda$！② **两个二次型互化 $f(x)\\to g(y)$**：(a) 若要求**正交变换** $x=Qy$（前提 $A\\sim B$），各自正交对角化 $Q_1^TAQ_1=\\Lambda=Q_2^TBQ_2\\implies \\mathbf{Q=Q_1Q_2^T}$；(b) 若仅要求**可逆变换** $x=Py$（前提 $A\\simeq B$），各自配方化为同一规范形 $z=C_1x=C_2y\\implies \\mathbf{P=C_1^{-1}C_2}$！"
+    },
+    {
+      "id": "m1-la09-e-01",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础核心例题（基础 30 讲）",
+      "title": "【例 6.2 + 例 6.3】含平方项与纯交叉项拉格朗日配方法（完整写出可逆阵 $C$！）",
+      "problem": "(1) 用配方法化 $f=x_1^2+2x_1x_2+2x_1x_3-x_2^2-2x_2x_3-x_3^2$ 为标准形并写可逆变换 $x=Cy$。(2) 化纯交叉二次型 $g=x_1x_2+x_1x_3-x_2x_3$ 为规范形并求可逆阵 $C$。",
+      "steps": [
+        {
+          "stepTitle": "(1) 逐变元一次配完，注意补写 $y_3=x_3$ 再反解 $x=Cy$",
+          "detail": "$f=(x_1+x_2+x_3)^2-2x_2^2-4x_2x_3-2x_3^2=(x_1+x_2+x_3)^2-2(x_2+x_3)^2+0\\cdot x_3^2$。令 $\\begin{cases}y_1=x_1+x_2+x_3\\\\y_2=x_2+x_3\\\\y_3=x_3\\end{cases}$，反解得 $x=\\begin{bmatrix}1&-1&0\\\\0&1&-1\\\\0&0&1\\end{bmatrix}y=Cy$（$|C|=1\\ne 0$），标准形 $y_1^2-2y_2^2$！"
+        },
+        {
+          "stepTitle": "(2) 纯交叉项先作平方差代换造平方项，再配方复合两变换！",
+          "detail": "令 $x_1=y_1+y_2,\\;x_2=y_1-y_2,\\;x_3=y_3$，代入得 $g=y_1^2-y_2^2+2y_2y_3=y_1^2-(y_2-y_3)^2+y_3^2$！再令 $z_1=y_1,\\;z_2=y_2-y_3,\\;z_3=y_3$，反解并复合得 $x=\\begin{bmatrix}1&1&1\\\\1&-1&-1\\\\0&0&1\\end{bmatrix}z=Cz$（$|C|=-2\\ne 0$），规范形 $z_1^2-z_2^2+z_3^2$！"
+        }
+      ],
+      "finalAnswer": "(1) $y_1^2-2y_2^2,\\;C=\\begin{bmatrix}1&-1&0\\\\0&1&-1\\\\0&0&1\\end{bmatrix}$；(2) $z_1^2-z_2^2+z_3^2,\\;C=\\begin{bmatrix}1&1&1\\\\1&-1&-1\\\\0&0&1\\end{bmatrix}$",
+      "takeaway": "配方法写矩阵 $C$ 的两大黄金铁律：① 项数不满 $n$ 时必须补自由变元 $y_k=x_k$；② 最终必须反解出 **$x=Cy$**（两次变换复合时 $C=C_1C_2$）！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.185-187",
+        "pdfPage": 191,
+        "itemRef": "例 6.2 与 例 6.3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la09-e-02",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础核心例题（基础 30 讲）",
+      "title": "【例 6.4 + 例 6.5】正交变换化标准形完整示范 & 正交阵列置换/取负对齐特征值",
+      "problem": "(1) 用正交变换化 $f=2x_1^2+5x_2^2+5x_3^2+4x_1x_2-4x_1x_3-8x_2x_3$ 为标准形并求 $Q$。(2) 已知 $f$ 在正交变换 $x=Py$（$P=[e_1,e_2,e_3]$）下标准形为 $2y_1^2+y_2^2-y_3^2$，求在 $x=Qy$（$Q=[e_1,-e_3,e_2]$）下的标准形。",
+      "steps": [
+        {
+          "stepTitle": "(1) 写对称阵 $A$，求特征值 $1,1,10$，同根正交化再全员单位化",
+          "detail": "$A=\\begin{bmatrix}2&2&-2\\\\2&5&-4\\\\-2&-4&5\\end{bmatrix}$（恰为例 5.1 矩阵！），特征值 $\\lambda_1=\\lambda_2=1,\\;\\lambda_3=10$。对二重根 $\\lambda=1$ 取 $\\eta_1=[-2,1,0]^T$，另取与 $\\eta_1$ 正交且满足 $x_1+2x_2-2x_3=0$ 的解 $\\eta_2=[2,4,5]^T$；$\\lambda_3=10$ 得 $\\xi_3=[1,2,-2]^T$。全员单位化拼成 $Q=\\begin{bmatrix}-2/\\sqrt5&2/(3\\sqrt5)&1/3\\\\1/\\sqrt5&4/(3\\sqrt5)&2/3\\\\0&5/(3\\sqrt5)&-2/3\\end{bmatrix}$，化为 $y_1^2+y_2^2+10y_3^2$！"
+        },
+        {
+          "stepTitle": "(2) 列向量与特征值一一锁定，取负不改特征值！",
+          "detail": "$e_1,e_2,e_3$ 依次对应 $2,1,-1$；$-e_3$ 仍对应 $-1$，故 $Q=[e_1,-e_3,e_2]$ 对应对角阵 $\\operatorname{diag}(2,-1,1)$，标准形为 $2y_1^2-y_2^2+y_3^2$！"
+        }
+      ],
+      "finalAnswer": "(1) $y_1^2+y_2^2+10y_3^2$（$Q$ 如上）；(2) $2y_1^2-y_2^2+y_3^2$",
+      "takeaway": "遇到重根正交化，直接把「与第一个特解正交」作为附加方程并入齐次方程组求解（如 $x_1+2x_2-2x_3=0$ 联立 $-2x_1+x_2=0$），1 秒凑出整数组 $[2,4,5]^T$，秒杀传统施密特！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.187-189",
+        "pdfPage": 193,
+        "itemRef": "例 6.4 与 例 6.5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la09-e-03",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础核心例题（基础 30 讲）",
+      "title": "【例 6.6 + 例 6.7】正交变换传递求 $a,b,Q$ & 由负惯性指数为 1 配方锁参 $a\\in[-2,2]$",
+      "problem": "(1) 二次型 $f=x_1^2-4x_1x_2+ax_2^2$ 经正交变换 $x=Qy$ 化为 $g=4y_1^2+4y_1y_2+by_2^2$，求 $a,b$ 及 $Q$。(2) 设 $f=x_1^2-x_2^2+2ax_1x_3+4x_2x_3$ 的负惯性指数为 $1$，求 $a$ 的取值范围。",
+      "steps": [
+        {
+          "stepTitle": "(1) 正交变换即 $Q^TAQ=B$（既合同又相似），迹与行列式定 $a=4,b=1$ 再搭桥 $Q=Q_1Q_2^T$",
+          "detail": "$A=\\begin{bmatrix}1&-2\\\\-2&a\\end{bmatrix},\\;B=\\begin{bmatrix}4&2\\\\2&b\\end{bmatrix}$，由 $1+a=4+b$ 且 $a-4=4b-4\\implies a=4,b=1$！二者特征值均为 $0,5$，分别得 $Q_1=\\frac{1}{\\sqrt5}\\begin{bmatrix}2&1\\\\1&-2\\end{bmatrix}$、$Q_2=\\frac{1}{\\sqrt5}\\begin{bmatrix}1&2\\\\-2&1\\end{bmatrix}$，搭桥得 $Q=Q_1Q_2^T=\\frac{1}{5}\\begin{bmatrix}4&-3\\\\-3&-4\\end{bmatrix}$！"
+        },
+        {
+          "stepTitle": "(2) 配方一步定出 $q=1\\Longleftrightarrow 4-a^2\\ge 0$（别漏等号！）",
+          "detail": "$f=(x_1+ax_3)^2-(x_2-2x_3)^2+(4-a^2)x_3^2$！已有 1 正 1 负，要使负惯性指数 $q=1$，第 3 项系数只需**非负**（大于 0 得 $p=2,q=1$；等于 0 得 $p=1,q=1$，负惯性指数均为 1！），故 $4-a^2\\ge 0\\Longleftrightarrow a\\in[-2,2]$！"
+        }
+      ],
+      "finalAnswer": "(1) $a=4,\\;b=1,\\;Q=\\frac{1}{5}\\begin{bmatrix}4&-3\\\\-3&-4\\end{bmatrix}$；(2) $[-2,2]$",
+      "takeaway": "第 (2) 题是高频丢分点：题干只限制了「负惯性指数为 1」而**未限定秩为 3**，因此第 3 个平方项系数允许等于 $0$，区间端点 $\\pm 2$ 必须闭区间！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.190-191",
+        "pdfPage": 196,
+        "itemRef": "例 6.6 与 例 6.7"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la09-e-04",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础核心例题（基础 30 讲）",
+      "title": "【例 6.8 + 例 6.9】实对称阵合同判定 & 互换 1,2 行再互换 1,2 列「既相似又合同」",
+      "problem": "(1) 设 $A=\\begin{bmatrix}1&2&0\\\\2&1&0\\\\0&0&1\\end{bmatrix}$，求与 $A$ 合同的规范对角阵。(2) 设 $A$ 为 3 阶实对称阵，互换 $A$ 的 1,2 行得 $B$，再互换 $B$ 的 1,2 列得 $C$，则 $A$ 与 $C$ 的关系是 $(\\quad)$。  (A) 合同不相似　(B) 相似不合同　(C) 合同且相似　(D) 既不合同也不相似",
+      "steps": [
+        {
+          "stepTitle": "(1) 配方或特征值立得 $p=2,q=1$",
+          "detail": "$f=x_1^2+x_2^2+x_3^2+4x_1x_2=(x_1+2x_2)^2-3x_2^2+x_3^2$（特征值 $3,1,-1$），故 $p=2,q=1$，合同于 $\\operatorname{diag}(1,1,-1)$！"
+        },
+        {
+          "stepTitle": "(2) 互换初等阵 $E_{12}$ 是天然对称正交阵（$E_{12}^T=E_{12}^{-1}=E_{12}$！）",
+          "detail": "左行右列得 $C=E_{12}AE_{12}$；因 $E_{12}^T=E_{12}^{-1}=E_{12}$，既有 $C=E_{12}^TAE_{12}$（合同）又有 $C=E_{12}^{-1}AE_{12}$（相似），故合同且相似，选 (C)！（若是倍乘/倍加初等阵，对称地左乘 $E^T$ 右乘 $E$ 仅合同、左乘 $E^{-1}$ 右乘 $E$ 仅相似！）"
+        }
+      ],
+      "finalAnswer": "(1) $\\operatorname{diag}(1,1,-1)$；(2) (C) 合同且相似",
+      "takeaway": "记住互换初等阵 $E_{ij}$ 的三重身份：**实对称 + 正交 + 对合**（$E_{ij}=E_{ij}^T=E_{ij}^{-1}$），故同步互换 $i,j$ 行与 $i,j$ 列既是合同变换又是相似变换！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.191-192",
+        "pdfPage": 197,
+        "itemRef": "例 6.8 与 例 6.9"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la09-e-05",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础核心例题（基础 30 讲）",
+      "title": "【例 6.10 + 例 6.12】正定二次型五法一题通解 & 正定充要命题辨析（必避 $A^*$ 反例！）",
+      "problem": "(1) 用顺序主子式、特征值、配方、定义与 $D^TD$ 五法判别 $f=2x_1^2+2x_2^2+2x_3^2+2x_1x_2+2x_1x_3+2x_2x_3$ 的正定性。(2) 设 $A$ 实对称，则 $f=x^TAx$ 正定的充要条件是 $(\\quad)$。  (A) $A^*$ 正定　(B) $A^{-1}$ 正定　(C) 负惯性指数为 $0$　(D) 存在 $n$ 阶实阵 $C$ 使 $A=C^TC$",
+      "steps": [
+        {
+          "stepTitle": "(1) 五法贯通（感受顺序主子式与 $D^TD$ 的极致效率！）",
+          "detail": "对称阵 $A=\\begin{bmatrix}2&1&1\\\\1&2&1\\\\1&1&2\\end{bmatrix}$：① 顺序主子式 $\\Delta_1=2>0,\\;\\Delta_2=3>0,\\;\\Delta_3=4>0$ ✓；② 特征值 $4,1,1$ 全 $>0$ ✓；③ 拉格朗日配方 $2(x_1+\\frac{x_2+x_3}{2})^2+\\frac{3}{2}(x_2+\\frac{x_3}{3})^2+\\frac{4}{3}x_3^2$，$p=3$ ✓；④ 定义法 $f=(x_1+x_2)^2+(x_2+x_3)^2+(x_3+x_1)^2\\ge 0$ 且系数行列式 $\\left|\\begin{smallmatrix}1&1&0\\\\0&1&1\\\\1&0&1\\end{smallmatrix}\\right|=2\\ne 0\\implies f=0\\Leftrightarrow x=0$ ✓；⑤ 同上得 $A=D^TD$ 且 $|D|=2\\ne 0$ ✓！"
+        },
+        {
+          "stepTitle": "(2) 排雷三陷阱锁定 (B)",
+          "detail": "(A) 必要不充分：反例 $A=-E_3$ 负定但 $A^*=E_3$ 正定；(B) 充要 ✓：$A$ 正定 $\\Leftrightarrow A^T=A$ 且 $\\lambda_i>0\\Leftrightarrow (A^{-1})^T=A^{-1}$ 且 $1/\\lambda_i>0\\Leftrightarrow A^{-1}$ 正定；(C) 缺「$p=n$」，可能半正定；(D) 缺「$C$ 可逆」，反例 $C=\\begin{bmatrix}1&1\\\\0&0\\end{bmatrix}$ 得 $A$ 仅半正定！选 (B)！"
+        }
+      ],
+      "finalAnswer": "(1) 五法皆证正定；(2) (B) $A^{-1}$ 是正定矩阵",
+      "takeaway": "一道题把正定 6 大充要与 3 大经典伪充要选项（$A^*$、$q=0$、未要求可逆的 $C^TC$）一网打尽！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.193-196",
+        "pdfPage": 199,
+        "itemRef": "例 6.10 与 例 6.12"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la09-e-06",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础精选习题（基础 30 讲 · 含 1996 数一真题与谱分解秒杀）",
+      "title": "【基础习题 6.7 + 6.10 + 6.12 + 6.13】顺序主子式定参、1996 数一椭圆柱面、谱分解秒杀 6.12 及 $E+\\varepsilon A$ 正定界",
+      "problem": "(1)（6.7）$f=x_1^2+2tx_1x_2-2x_1x_3+x_2^2+4x_2x_3+5x_3^2$ 正定，求 $t$ 范围。(2)（6.10 / 1996 数一）$f=5x_1^2+5x_2^2+cx_3^2-2x_1x_2+6x_1x_3-6x_2x_3$ 秩为 2，求 $c$、特征值及 $f=1$ 的二次曲面。(3)（6.12）$f$ 正交化为 $y_1^2+y_2^2$ 且 $Q$ 第 3 列为 $[\\frac{\\sqrt2}{2},0,\\frac{\\sqrt2}{2}]^T$，求 $A$ 并证 $A+E$ 正定。(4)（6.13）实对称 $A$ 特征值 $\\lambda_1<\\dots<\\lambda_n$，求 $aE+A$ 与 $E+\\varepsilon A\\;(\\varepsilon>0)$ 正定条件。",
+      "steps": [
+        {
+          "stepTitle": "(1) & (2) 顺序主子式锁 $-\\frac{4}{5}<t<0$ & 秩为 2 定 $c=3$ 得椭圆柱面",
+          "detail": "在 (1) 中 $\\Delta_1=1>0,\\;\\Delta_2=1-t^2>0,\\;\\Delta_3=-5t^2-4t>0\\implies -\\frac{4}{5}<t<0$！在 (2) 中 $|A|=0\\Rightarrow c=3$，特征值为 $0,4,9$（$p=2,q=0$），标准方程 $4y_2^2+9y_3^2=1$，为**椭圆柱面**！"
+        },
+        {
+          "stepTitle": "(3) & (4) 谱分解 1 行秒杀 6.12 & 特征值单调保正定界",
+          "detail": "在 (3) 中 $A$ 特征值 $1,1,0$ 且 $\\lambda_3=0$ 的单位特征向量即 $q_3=[\\frac{\\sqrt2}{2},0,\\frac{\\sqrt2}{2}]^T$！**谱分解 1 行秒杀**（无需像原书那样求前两列！）：$A=E-q_3q_3^T=E-\\frac{1}{2}\\begin{bmatrix}1&0&1\\\\0&0&0\\\\1&0&1\\end{bmatrix}=\\frac{1}{2}\\begin{bmatrix}1&0&-1\\\\0&2&0\\\\-1&0&1\\end{bmatrix}$！且 $A+E$ 特征值 $2,2,1>0$ 必正定！在 (4) 中：$aE+A$ 正定 $\\Leftrightarrow a+\\lambda_1>0\\Leftrightarrow a>-\\lambda_1$；$E+\\varepsilon A\\;(\\varepsilon>0)$ 正定 $\\Leftrightarrow 1+\\varepsilon\\lambda_1>0\\Leftrightarrow$ 若 $\\lambda_1\\ge 0$ 则任意 $\\varepsilon>0$，若 $\\lambda_1<0$ 则 $0<\\varepsilon<-\\frac{1}{\\lambda_1}$！"
+        }
+      ],
+      "finalAnswer": "(1) $-\\frac{4}{5}<t<0$；(2) $c=3,\\;\\lambda=0,4,9$，椭圆柱面；(3) $A=\\frac{1}{2}\\begin{bmatrix}1&0&-1\\\\0&2&0\\\\-1&0&1\\end{bmatrix}$；(4) $a>-\\lambda_1$；$\\lambda_1\\ge 0$ 时 $\\varepsilon>0$，$\\lambda_1<0$ 时 $0<\\varepsilon<-\\frac{1}{\\lambda_1}$",
+      "takeaway": "用谱分解 $A=E-q_3q_3^T$ 解基础习题 6.12，直接把原书一整页的正交构造压缩成 1 行心算！",
+      "source": {
+        "book": "27 张宇基础30讲·线代 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.197-206 / 没咋了 P.98 例6",
+        "pdfPage": 203,
+        "itemRef": "基础习题 6.7, 6.10, 6.12, 6.13"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la09-e-07",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 15 例精解（矩阵表示、配方与正交、伪配方）",
+      "title": "【强化例 9.1 + 例 9.2】非对称阵对称化求规范形 & 内积平方和 $\\sum(\\alpha_i,x)^2$ 正定定参",
+      "problem": "(1) 已知 $f(x)=x^T\\begin{bmatrix}1&1&0\\\\0&1&1\\\\0&0&1\\end{bmatrix}x$，求 $f$ 的规范形。(2) 已知 $\\alpha_1=[1,2]^T,\\;\\alpha_2=[a,1]^T,\\;x=[x_1,x_2]^T$，若 $f(x_1,x_2)=\\sum_{i=1}^{2}(\\alpha_i,x)^2$ 正定，求 $a$ 的取值范围。",
+      "steps": [
+        {
+          "stepTitle": "(1) 先对称化 $A=\\frac{B+B^T}{2}$，顺序主子式秒证正定！",
+          "detail": "$A=\\begin{bmatrix}1&\\frac{1}{2}&0\\\\\\frac{1}{2}&1&\\frac{1}{2}\\\\0&\\frac{1}{2}&1\\end{bmatrix}$。各阶顺序主子式：$\\Delta_1=1>0,\\;\\Delta_2=\\frac{3}{4}>0,\\;\\Delta_3=\\frac{1}{2}>0\\implies A$ 正定（$p=3$），故规范形为 $y_1^2+y_2^2+y_3^2$！"
+        },
+        {
+          "stepTitle": "(2) 内积平方和双法秒杀：$A=\\alpha_1\\alpha_1^T+\\alpha_2\\alpha_2^T$ 或直接看系数阵满秩！",
+          "detail": "法一：$A=\\begin{bmatrix}1+a^2&2+a\\\\2+a&5\\end{bmatrix}$，$\\Delta_1=1+a^2>0,\\;\\Delta_2=5(1+a^2)-(2+a)^2=(2a-1)^2>0\\Longleftrightarrow a\\ne\\frac{1}{2}$！法二（更快！）：$f=(x_1+2x_2)^2+(ax_1+x_2)^2$ 正定 $\\Longleftrightarrow \\alpha_1,\\alpha_2$ 线性无关 $\\Longleftrightarrow \\left|\\begin{smallmatrix}1&2\\\\a&1\\end{smallmatrix}\\right|=1-2a\\ne 0\\Longleftrightarrow a\\ne\\frac{1}{2}$！"
+        }
+      ],
+      "finalAnswer": "(1) $y_1^2+y_2^2+y_3^2$；(2) $a\\ne\\frac{1}{2}$",
+      "takeaway": "记住内积平方和 $\\sum_{i=1}^{n}(\\alpha_i,x)^2$ 正定的 1 秒充要判据：**向量组 $\\alpha_1,\\dots,\\alpha_n$ 线性无关**！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.93-94",
+        "pdfPage": 104,
+        "itemRef": "强化例 9.1 与 例 9.2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_adv_part1",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la09-e-08",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 15 例精解（矩阵表示、配方与正交、伪配方）",
+      "title": "【强化例 9.3】合同（$A\\simeq B$）vs 正交相似（$Q^TAQ=B$）双问定参对比经典母题",
+      "problem": "已知 $A=\\begin{bmatrix}4&1&-2\\\\1&1&1\\\\-2&1&a\\end{bmatrix}$ 与 $B=\\begin{bmatrix}k&0&0\\\\0&6&0\\\\0&0&0\\end{bmatrix}$ 合同。(1) 求 $a$ 及 $k$ 的取值范围；(2) 若存在正交阵 $Q$ 使 $Q^TAQ=B$，求 $k$ 及 $Q$。",
+      "steps": [
+        {
+          "stepTitle": "(1) 合同保秩与惯性指数：$|A|=0\\Rightarrow a=4$，配方得 $p=2\\Rightarrow k>0$",
+          "detail": "因 $A\\simeq B$ 且 $|B|=0$，故 $|A|=3a-12=0\\implies a=4$！写二次型配方：$f=4x_1^2+x_2^2+4x_3^2+2x_1x_2-4x_1x_3+2x_2x_3=(2x_1+\\frac{1}{2}x_2-x_3)^2+\\frac{3}{4}(x_2+2x_3)^2$，知 $p=2,q=0$。要使 $B=\\operatorname{diag}(k,6,0)$ 正惯性指数也为 $2$，充要条件为 **$k>0$**！"
+        },
+        {
+          "stepTitle": "(2) 升级为正交相似：特征值严格相等锁死 $k=3$ 并拼单位正交阵 $Q$",
+          "detail": "$|\\lambda E-A|=\\lambda(\\lambda-3)(\\lambda-6)=0\\implies\\lambda_1=3,\\lambda_2=6,\\lambda_3=0$，故 $k=3$！对应单位正交特征向量 $\\eta_1=\\frac{1}{\\sqrt3}[1,1,1]^T,\\;\\eta_2=\\frac{1}{\\sqrt2}[-1,0,1]^T,\\;\\eta_3=\\frac{1}{\\sqrt6}[1,-2,1]^T$，拼 $Q=[\\eta_1,\\eta_2,\\eta_3]$ 即满足 $Q^TAQ=\\operatorname{diag}(3,6,0)$！"
+        }
+      ],
+      "finalAnswer": "(1) $a=4,\\;k\\in(0,+\\infty)$；(2) $k=3,\\;Q=\\begin{bmatrix}\\frac{1}{\\sqrt3}&-\\frac{1}{\\sqrt2}&\\frac{1}{\\sqrt6}\\\\\\frac{1}{\\sqrt3}&0&-\\frac{2}{\\sqrt6}\\\\\\frac{1}{\\sqrt3}&\\frac{1}{\\sqrt2}&\\frac{1}{\\sqrt6}\\end{bmatrix}$",
+      "takeaway": "一道题鲜明对照合同与正交相似的松紧度：**合同只锁定符号（$k>0$），正交相似直接锁死精确特征值（$k=3$）！**",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.95-96",
+        "pdfPage": 106,
+        "itemRef": "强化例 9.3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_adv_part1",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la09-e-09",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 15 例精解（矩阵表示、配方与正交、伪配方）",
+      "title": "【强化例 9.4 + 例 9.5（仅数一）】纯交叉项求正惯性指数 & 数一单叶双曲面双法秒判",
+      "problem": "(1) 求 $f=-2x_1x_2-2x_1x_3+6x_2x_3$ 的正惯性指数。(2)（仅数一）方程 $x_1x_2+x_1x_3-3x_2x_3=1$ 表示何种二次曲面？  (A) 椭球面　(B) 双曲柱面　(C) 双叶双曲面　(D) 单叶双曲面",
+      "steps": [
+        {
+          "stepTitle": "(1) 平方差代换 + 配方速算 $p=1$",
+          "detail": "令 $x_1=y_1+y_2,\\;x_2=y_1-y_2,\\;x_3=y_3$，得 $f=-2y_1^2+2y_2^2+4y_1y_3-8y_2y_3=-2(y_1-y_3)^2+2(y_2-2y_3)^2-6y_3^2$！系数符号 $(-,+,-)\\implies p=1,q=2$！（速查奇招：纯交叉 3 阶阵主对角全 $0\\Rightarrow\\operatorname{tr}(A)=0$，算 $|A|=-6<0\\implies$ 特征值积 $<0$ 且和 $=0\\implies$ 必为 **1 正 2 负**，3 秒出 $p=1$！）"
+        },
+        {
+          "stepTitle": "(2) 发现第 (2) 题正是第 (1) 题除以 $-2$！直接翻转得 $(2,1)\\Rightarrow$ 单叶双曲面！",
+          "detail": "$x_1x_2+x_1x_3-3x_2x_3=-\\frac{1}{2}(-2x_1x_2-2x_1x_3+6x_2x_3)$！由 (1) 知乘 $-1/2$ 后正负惯性指数互换为 **$(p,q)=(2,1)$**（特征值 $\\frac{3}{2},\\frac{-3+\\sqrt{17}}{4}>0,\\frac{-3-\\sqrt{17}}{4}<0$）！又右端常数 $1>0$，故表示**单叶双曲面**，选 (D)！"
+        }
+      ],
+      "finalAnswer": "(1) $p=1$；(2) (D) 单叶双曲面",
+      "takeaway": "3 阶无平方项二次型（$\\operatorname{tr}(A)=0$）秒判 $(p,q)$ 绝技：**只要 $|A|>0$ 必为 $(2,1)$；只要 $|A|<0$ 必为 $(1,2)$**（因三实根之和为 0 不可能全同号！）——免配方 5 秒秒杀！",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.96-98 / 没咋了 P.95 例2",
+        "pdfPage": 107,
+        "itemRef": "强化例 9.4 与 例 9.5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_quadric_suite",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la09-e-10",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 15 例精解（矩阵表示、配方与正交、伪配方）",
+      "title": "【强化例 9.6】伪配方法正定判定：$f=(x_1+x_2)^2+(x_2+x_3)^2+(ax_3+x_1)^2$ 正定 $\\Leftrightarrow a\\ne -1$",
+      "problem": "设二次型 $f(x_1,x_2,x_3)=(x_1+x_2)^2+(x_2+x_3)^2+(ax_3+x_1)^2$ 正定，求 $a$ 的取值范围。",
+      "steps": [
+        {
+          "stepTitle": "检验平方和底层线性变换的可逆性（$|C|\\ne 0$）",
+          "detail": "因 $f\\ge 0$ 恒成立，故 $f$ 正定 $\\Longleftrightarrow f(x)=0$ 只有零解 $\\Longleftrightarrow \\begin{cases}x_1+x_2=0\\\\x_2+x_3=0\\\\x_1+ax_3=0\\end{cases}$ 只有零解！算系数行列式 $|C|=\\begin{vmatrix}1&1&0\\\\0&1&1\\\\1&0&a\\end{vmatrix}=a+1\\ne 0\\Longleftrightarrow a\\ne -1$！当 $a=-1$ 时存在非零向量 $[1,-1,1]^T$ 使 $f=0$，退化为半正定！"
+        }
+      ],
+      "finalAnswer": "$a\\ne -1$",
+      "takeaway": "牢记 3 元 3 平方和正定的 3 秒模板：把括号里的系数直接排成 $3\\times 3$ 行列式，令 $|C|\\ne 0$ 一步到位！",
+      "source": {
+        "book": "27 张宇线代9讲 & 基础30讲",
+        "printedPage": "强化 P.98 / 基础 P.195 例6.11",
+        "pdfPage": 109,
+        "itemRef": "强化例 9.6"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_adv_part1",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la09-e-11",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 15 例精解（正交传递与合同手段）",
+      "title": "【强化例 9.7】正交变换传递性：$x_1^2-x_2x_3\\xrightarrow{x=Qy}y_1y_2+ay_3^2$ 定 $a=1$ 并搭桥求 $Q=Q_1Q_2^T$",
+      "problem": "二次型 $f(x_1,x_2,x_3)=x_1^2-x_2x_3$ 经正交变换 $x=Qy$ 化为 $g(y_1,y_2,y_3)=y_1y_2+ay_3^2$。(1) 求 $a$；(2) 求正交矩阵 $Q$。",
+      "steps": [
+        {
+          "stepTitle": "(1) 由 $Q^TAQ=B$ 得 $A\\sim B$，比迹一秒锁定 $a=1$",
+          "detail": "$A=\\begin{bmatrix}1&0&0\\\\0&0&-\\frac{1}{2}\\\\0&-\\frac{1}{2}&0\\end{bmatrix},\\;B=\\begin{bmatrix}0&\\frac{1}{2}&0\\\\\\frac{1}{2}&0&0\\\\0&0&a\\end{bmatrix}$。因 $\\operatorname{tr}(A)=\\operatorname{tr}(B)\\implies 1=a$！"
+        },
+        {
+          "stepTitle": "(2) 各自正交对角化至同一 $\\Lambda=\\operatorname{diag}(1,\\frac{1}{2},-\\frac{1}{2})$，再搭桥 $Q=Q_1Q_2^T$",
+          "detail": "求出 $Q_1=\\begin{bmatrix}1&0&0\\\\0&-\\frac{1}{\\sqrt2}&\\frac{1}{\\sqrt2}\\\\0&\\frac{1}{\\sqrt2}&\\frac{1}{\\sqrt2}\\end{bmatrix}$ 使 $Q_1^TAQ_1=\\Lambda$，求出 $Q_2=\\begin{bmatrix}0&\\frac{1}{\\sqrt2}&-\\frac{1}{\\sqrt2}\\\\0&\\frac{1}{\\sqrt2}&\\frac{1}{\\sqrt2}\\\\1&0&0\\end{bmatrix}$ 使 $Q_2^TBQ_2=\\Lambda$。故 $Q=Q_1Q_2^T=\\begin{bmatrix}0&0&1\\\\-1&0&0\\\\0&1&0\\end{bmatrix}$！（其实直接观察变量轮换 $x_1=y_3,\\;x_2=-y_1,\\;x_3=y_2$ 即得同一个置换正交阵 $Q$，1 秒验算！）"
+        }
+      ],
+      "finalAnswer": "(1) $a=1$；(2) $Q=\\begin{bmatrix}0&0&1\\\\-1&0&0\\\\0&1&0\\end{bmatrix}$（不唯一）",
+      "takeaway": "正交传递桥 $Q=Q_1Q_2^T$ 通法万能；同时考场上不妨先肉眼扫一眼能否通过简单变量置换+变号（如 $x_1=y_3,x_2=-y_1,x_3=y_2$）1 秒直接写出一个合法正交阵！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.99-100",
+        "pdfPage": 110,
+        "itemRef": "强化例 9.7"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_adv_part1",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la09-e-12",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 15 例精解（正交传递与合同手段）",
+      "title": "【强化例 9.8 + 例 9.9】定向配方凑目标对角阵 $\\operatorname{diag}(2,3,1)$ & 两非对角实对称阵合同过渡 $A=D^TBD$",
+      "problem": "(1) 已知 $A=\\begin{bmatrix}3&2&1\\\\2&2&1\\\\1&1&1\\end{bmatrix},\\;\\Lambda=\\operatorname{diag}(2,3,1)$，求可逆阵 $C$ 使 $C^TAC=\\Lambda$。(2) 已知 $A=\\begin{bmatrix}2&2\\\\2&1\\end{bmatrix},\\;B=\\begin{bmatrix}4&3\\\\3&1\\end{bmatrix}$，求可逆阵 $D$ 使 $A=D^TBD$。",
+      "steps": [
+        {
+          "stepTitle": "(1) 倒着配方（先凑 $x_3$ 再凑 $x_2$）再把目标系数 $2,3,1$ 提出来！",
+          "detail": "$f=3x_1^2+2x_2^2+x_3^2+4x_1x_2+2x_1x_3+2x_2x_3=x_1^2+(x_1+x_2)^2+(x_1+x_2+x_3)^2=2(\\frac{x_1}{\\sqrt2})^2+3(\\frac{x_1+x_2}{\\sqrt3})^2+1\\cdot(x_1+x_2+x_3)^2$！令 $y=\\begin{bmatrix}\\frac{1}{\\sqrt2}&0&0\\\\\\frac{1}{\\sqrt3}&\\frac{1}{\\sqrt3}&0\\\\1&1&1\\end{bmatrix}x$，求逆即得 $C=\\begin{bmatrix}\\sqrt2&0&0\\\\-\\sqrt2&\\sqrt3&0\\\\0&-\\sqrt3&1\\end{bmatrix}$ 满足 $C^TAC=\\operatorname{diag}(2,3,1)$！"
+        },
+        {
+          "stepTitle": "(2) $f,g$ 配方化为同一标准形 $2z_1^2-z_2^2$，令 $D_1x=D_2y\\Rightarrow D=D_2^{-1}D_1$",
+          "detail": "① $f=2(x_1+x_2)^2-x_2^2=2z_1^2-z_2^2$，得 $z=D_1x,\\;D_1=\\begin{bmatrix}1&1\\\\0&1\\end{bmatrix}$；② $g=4(y_1+\\frac{3}{4}y_2)^2-\\frac{5}{4}y_2^2=2(\\sqrt2 y_1+\\frac{3\\sqrt2}{4}y_2)^2-(\\frac{\\sqrt5}{2}y_2)^2=2z_1^2-z_2^2$，得 $z=D_2y,\\;D_2=\\begin{bmatrix}\\sqrt2&\\frac{3\\sqrt2}{4}\\\\0&\\frac{\\sqrt5}{2}\\end{bmatrix}$。令 $D_1x=D_2y\\Rightarrow y=D_2^{-1}D_1x=Dx$，算出 $D=\\begin{bmatrix}\\frac{1}{\\sqrt2}&\\frac{1}{\\sqrt2}-\\frac{3\\sqrt5}{10}\\\\0&\\frac{2}{\\sqrt5}\\end{bmatrix}$ 满足 $x^TAx=y^TBy=x^TD^TBDx\\implies A=D^TBD$！"
+        }
+      ],
+      "finalAnswer": "(1) $C=\\begin{bmatrix}\\sqrt2&0&0\\\\-\\sqrt2&\\sqrt3&0\\\\0&-\\sqrt3&1\\end{bmatrix}$；(2) $D=\\begin{bmatrix}\\frac{1}{\\sqrt2}&\\frac{1}{\\sqrt2}-\\frac{3\\sqrt5}{10}\\\\0&\\frac{2}{\\sqrt5}\\end{bmatrix}$",
+      "takeaway": "配方不一定非要从 $x_1$ 开始！像例 9.8 从系数组合最干净的 $x_3$ 倒着配，瞬间裂成 3 个简洁平方和；目标对角阵给系数 $d_i$ 就把 $\\frac{1}{\\sqrt{d_i}}$ 塞进括号里！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.100-101",
+        "pdfPage": 111,
+        "itemRef": "强化例 9.8 与 例 9.9"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_adv_part1",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la09-e-13",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 15 例精解（合同 vs 相似 + 原书印刷勘误！）",
+      "title": "【强化例 9.10 + 例 9.11（含 P.103 勘误）】合同不相似判别 & 可逆 $P$ 存在但正交 $Q$ 不存在",
+      "problem": "(1) 设 $A=\\begin{bmatrix}2&-1&-1\\\\-1&2&-1\\\\-1&-1&2\\end{bmatrix},\\;B=\\operatorname{diag}(1,1,0)$，判 $A$ 与 $B$ 合同/相似关系。(2) 已知 $f=x_1^2+2x_2^2+2x_3^2+2x_1x_2-2x_1x_3$，$g=y_1^2+y_2^2+y_3^2+2y_2y_3$，求可逆变换 $x=Py$ 将 $f$ 化为 $g$，并判是否存在正交变换 $x=Qy$ 实现转化。",
+      "steps": [
+        {
+          "stepTitle": "(1) $A$ 特征值 $3,3,0$，与 $B$ 特征值 $1,1,0$ 同惯性指数 $(2,0)$ 却不相似！",
+          "detail": "$|\\lambda E-A|=\\lambda(\\lambda-3)^2=0\\implies\\lambda=3,3,0$，与 $B$ 特征值不同故不相似；但二者均有 $p=2,q=0$，故**合同但不相似**，选 (B)！"
+        },
+        {
+          "stepTitle": "(2) 双配方搭桥得 $P$，用 $\\operatorname{tr}(A)=5\\ne 3=\\operatorname{tr}(B)$ 一步否决正交变换！（附原书勘误）",
+          "detail": "① 配方得 $f=(x_1+x_2-x_3)^2+(x_2+x_3)^2=z_1^2+z_2^2$（$z=C_1x,\\;C_1=\\begin{bmatrix}1&1&-1\\\\0&1&1\\\\0&0&1\\end{bmatrix}$），且 $g=y_1^2+(y_2+y_3)^2=z_1^2+z_2^2$（$z=C_2y,\\;C_2=\\begin{bmatrix}1&0&0\\\\0&1&1\\\\0&0&1\\end{bmatrix}$）。令 $C_1x=C_2y\\implies P=C_1^{-1}C_2=\\begin{bmatrix}1&-1&1\\\\0&1&0\\\\0&0&1\\end{bmatrix}$！② 对称阵 $A=\\begin{bmatrix}1&1&-1\\\\1&2&0\\\\-1&0&2\\end{bmatrix},\\;B=\\begin{bmatrix}1&0&0\\\\0&1&1\\\\0&1&1\\end{bmatrix}$，因 $\\operatorname{tr}(A)=5\\ne 3=\\operatorname{tr}(B)\\implies A\\nsim B$，故**不存在**正交阵 $Q$！**【原书印刷勘误 · 强化 P.103 第 5 行】**：原书解答将三元二次型 $g(y_1,y_2,y_3)$ 误印成 `g(y_1, y_2, y_2)`，特此订正。"
+        }
+      ],
+      "finalAnswer": "(1) 合同但不相似；(2) $P=\\begin{bmatrix}1&-1&1\\\\0&1&0\\\\0&0&1\\end{bmatrix}$，因 $\\operatorname{tr}(A)\\ne\\operatorname{tr}(B)$ 不存在正交阵 $Q$",
+      "takeaway": "判别两个二次型能否用「正交变换」互化，1 秒先算**迹 $\\operatorname{tr}(A)$ 与 $\\operatorname{tr}(B)$**——只要迹不等，连特征值都不用算直接宣判不存在！",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.102-103(勘误) / 没咋了 P.109 例1",
+        "pdfPage": 113,
+        "itemRef": "强化例 9.10 与 例 9.11"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_adv_part1",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la09-e-14",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 15 例精解（2025 数三真题 & 格拉姆分解 $D^TD=A$）",
+      "title": "【强化例 9.12（2025 数三）+ 例 9.13】行列式二次型 $|xA+yB|$ 正定定参 & 求格拉姆分解 $D^TD=A$",
+      "problem": "(1)（2025 数三）设 $A=\\begin{bmatrix}1&2\\\\-2&-a\\end{bmatrix},\\;B=\\begin{bmatrix}1&0\\\\1&a\\end{bmatrix}$，若 $f(x,y)=|xA+yB|$ 为正定二次型，求 $a$ 的取值范围。(2) 若可逆阵 $D$ 满足 $D^TD=\\begin{bmatrix}1&-1&1\\\\-1&2&-3\\\\1&-3&6\\end{bmatrix}$，求一个这样的 $D$。",
+      "steps": [
+        {
+          "stepTitle": "(1) 展开 2 阶行列式显化二次型，用 2 阶顺序主子式秒定范围",
+          "detail": "$f(x,y)=\\begin{vmatrix}x+y&2x\\\\-2x+y&-ax+ay\\end{vmatrix}=-a(x^2-y^2)-2x(-2x+y)=(4-a)x^2-2xy+ay^2$！其对称矩阵为 $\\begin{bmatrix}4-a&-1\\\\-1&a\\end{bmatrix}$。正定充要条件：$\\Delta_1=4-a>0$ 且 $\\Delta_2=a(4-a)-1=4a-a^2-1>0\\implies 2-\\sqrt3<a<2+\\sqrt3$！（自动满足 $a<4$！）"
+        },
+        {
+          "stepTitle": "(2) 配方写成 $f=y_1^2+y_2^2+y_3^2$，**变换阵 $y=Dx$ 直接就是所求 $D$（甚至免求逆！）**",
+          "detail": "写二次型 $f=x_1^2+2x_2^2+6x_3^2-2x_1x_2+2x_1x_3-6x_2x_3=(x_1-x_2+x_3)^2+(x_2-2x_3)^2+x_3^2=\\|Dx\\|^2=x^T(D^TD)x$！直接抄下三个括号的系数即得上三角阵 **$D=\\begin{bmatrix}1&-1&1\\\\0&1&-2\\\\0&0&1\\end{bmatrix}$**！（验算 $D^TD=A$ 一步到位！注：若左乘任意正交阵 $Q$ 得 $QD$ 同样满足 $(QD)^T(QD)=D^TD=A$，故 $D$ 不唯一！）"
+        }
+      ],
+      "finalAnswer": "(1) $(2-\\sqrt3,\\;2+\\sqrt3)$；(2) $D=\\begin{bmatrix}1&-1&1\\\\0&1&-2\\\\0&0&1\\end{bmatrix}$（不唯一）",
+      "takeaway": "记住求 $D^TD=A$（Cholesky/格拉姆分解）的 5 秒绝技：**把 $x^TAx$ 拉格朗日配方化成规范平方和 $(d_1^Tx)^2+\\dots+(d_n^Tx)^2$，括号里的系数矩阵直接就是 $D$，根本不用求逆！**",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.104-106 / 没咋了 P.107 例2",
+        "pdfPage": 115,
+        "itemRef": "强化例 9.12 与 例 9.13"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_pd_rayleigh",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la09-e-15",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 15 例精解（正定平方根 + 谱分解 5 秒秒杀！）",
+      "title": "【强化例 9.14】含参实对称阵正交对角化 & 正定矩阵平方根 $C^2=(a+3)E-A$（附谱分解 5 秒捷径！）",
+      "problem": "设 $A=\\begin{bmatrix}a&1&-1\\\\1&a&-1\\\\-1&-1&a\\end{bmatrix}$。(1) 求正交阵 $P$ 使 $P^TAP$ 为对角阵；(2) 求正定矩阵 $C$ 使 $C^2=(a+3)E-A$。",
+      "steps": [
+        {
+          "stepTitle": "(1) 秩 1 偏移秒出特征值 $a-1,a-1,a+2$ 并正交单位化",
+          "detail": "注意到 $A-(a-1)E=\\begin{bmatrix}1&1&-1\\\\1&1&-1\\\\-1&-1&1\\end{bmatrix}=\\begin{bmatrix}-1\\\\-1\\\\1\\end{bmatrix}[-1,-1,1]$（迹为 $3$），立得 $A$ 特征值 $\\lambda_1=\\lambda_2=a-1,\\;\\lambda_3=a+2$！对 $\\lambda=a-1$ 解 $x_1+x_2-x_3=0$ 并正交单位化得 $\\eta_1=\\frac{1}{\\sqrt2}[-1,1,0]^T,\\;\\eta_2=\\frac{1}{\\sqrt6}[1,1,2]^T$；对 $\\lambda=a+2$ 单位化得 $\\eta_3=\\frac{1}{\\sqrt3}[-1,-1,1]^T$，拼 $P=[\\eta_1,\\eta_2,\\eta_3]$ 得 $P^TAP=\\operatorname{diag}(a-1,a-1,a+2)$！"
+        },
+        {
+          "stepTitle": "(2) 矩阵开方取正根 $\\operatorname{diag}(2,2,1)$，**谱分解 $C=2E-\\eta_3\\eta_3^T$ 5 秒碾压暴力三阵连乘！**",
+          "detail": "$(a+3)E-A=P\\operatorname{diag}(4,4,1)P^T$。令正定开方阵 $C=P\\operatorname{diag}(2,2,1)P^T$（显然实对称且特征值 $2,2,1>0$，且 $C^2=(a+3)E-A$！）。**谱分解神技**：无需把原书 P.107 含 $\\sqrt2,\\sqrt6,\\sqrt3$ 的三个大矩阵硬乘！直接写 $C=2E+(1-2)\\eta_3\\eta_3^T=2E-\\frac{1}{3}\\begin{bmatrix}1&1&-1\\\\1&1&-1\\\\-1&-1&1\\end{bmatrix}=\\begin{bmatrix}\\frac{5}{3}&-\\frac{1}{3}&\\frac{1}{3}\\\\-\\frac{1}{3}&\\frac{5}{3}&\\frac{1}{3}\\\\\\frac{1}{3}&\\frac{1}{3}&\\frac{5}{3}\\end{bmatrix}$！"
+        }
+      ],
+      "finalAnswer": "(1) $P=\\begin{bmatrix}-\\frac{\\sqrt2}{2}&\\frac{\\sqrt6}{6}&-\\frac{\\sqrt3}{3}\\\\\\frac{\\sqrt2}{2}&\\frac{\\sqrt6}{6}&-\\frac{\\sqrt3}{3}\\\\0&\\frac{\\sqrt6}{3}&\\frac{\\sqrt3}{3}\\end{bmatrix}$；(2) $C=\\frac{1}{3}\\begin{bmatrix}5&-1&1\\\\-1&5&1\\\\1&1&5\\end{bmatrix}$",
+      "takeaway": "正定阵开平方根 $C^2=M$ 唯一通法：$M=P\\Lambda P^T\\implies C=P\\Lambda^{1/2}P^T$；一旦发现对角阵是二重根+单根（本题 $2,2,1$），立刻切谱分解 $2E-\\eta_3\\eta_3^T$ 省掉 90% 的根号计算！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.106-107",
+        "pdfPage": 117,
+        "itemRef": "强化例 9.14"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_pd_rayleigh",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la09-e-16",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 15 例精解（广义瑞利商压轴新题！）",
+      "title": "【强化例 9.15】广义瑞利商 $\\max_{x\\ne 0}\\frac{f(x)}{g(x)}=2$（矩阵化归通法 + 1 行换元配方法双解！）",
+      "problem": "设 $f(x_1,x_2)=x_1^2-4x_1x_2+4x_2^2$，$g(x_1,x_2)$ 的二次型矩阵为 $B=\\begin{bmatrix}1&-1\\\\-1&2\\end{bmatrix}$。(1) 求可逆阵 $D$ 使 $B=D^TD$；(2) 求 $\\max_{x\\ne 0}\\frac{f(x)}{g(x)}$ 及一个取到最大值的非零向量 $x_0$。",
+      "steps": [
+        {
+          "stepTitle": "(1) 顺序主子式证 $B$ 正定，配方秒出 $D=\\begin{bmatrix}1&-1\\\\0&1\\end{bmatrix}$",
+          "detail": "$B$ 实对称且 $\\Delta_1=1>0,\\;\\Delta_2=1>0\\implies B$ 正定！又 $g=(x_1-x_2)^2+x_2^2$，立得 $D=\\begin{bmatrix}1&-1\\\\0&1\\end{bmatrix}$ 使 $B=D^TD$！"
+        },
+        {
+          "stepTitle": "(2) 矩阵化归法（通用！）+ 1 行初等不等式秒杀法",
+          "detail": "**法一（标准广义瑞利商通法）**：令 $z=Dx$（$x=D^{-1}z,\\;D^{-1}=\\begin{bmatrix}1&1\\\\0&1\\end{bmatrix}$），则 $\\frac{x^TAx}{x^TBx}=\\frac{z^TMz}{z^Tz}$，其中 $M=(D^{-1})^TAD^{-1}=\\begin{bmatrix}1&0\\\\1&1\\end{bmatrix}\\begin{bmatrix}1&-2\\\\-2&4\\end{bmatrix}\\begin{bmatrix}1&1\\\\0&1\\end{bmatrix}=\\begin{bmatrix}1&-1\\\\-1&1\\end{bmatrix}$！算出 $M$ 特征值为 $2,0$，故最大值为 **$\\lambda_{\\max}(M)=2$**！$\\lambda=2$ 的单位特征向量 $z_0=\\frac{1}{\\sqrt2}[-1,1]^T$，回代得 $x_0=D^{-1}z_0=[0,\\;\\frac{1}{\\sqrt2}]^T$（任意非零倍 $[0,k]^T$ 均取最大值 2！）。**法二（1 行检验奇招）**：令 $u=x_1-x_2,v=x_2$，则 $\\frac{f}{g}=\\frac{(u-v)^2}{u^2+v^2}=1-\\frac{2uv}{u^2+v^2}\\le 1+1=2$，当且仅当 $u=-v\\iff x_1=0$ 取等！"
+        }
+      ],
+      "finalAnswer": "(1) $D=\\begin{bmatrix}1&-1\\\\0&1\\end{bmatrix}$；(2) 最大值为 $2$，在 $x_0=k[0,1]^T\\;(k\\ne 0)$ 处取到",
+      "takeaway": "强化 9 讲压轴新题！记住广义瑞利商 $\\frac{x^TAx}{x^TBx}$ 的两步通杀模版：① 对分母正定阵 $B$ 配方拆 $B=D^TD$；② 换元 $z=Dx$ 算 $M=(D^{-1})^TAD^{-1}$ 的最大/最小特征值！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.107-109",
+        "pdfPage": 118,
+        "itemRef": "强化例 9.15"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_pd_rayleigh",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la09-e-17",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化讲义精选（经典陷阱与历年真题）",
+      "title": "【没咋了 4.1 例 3 + 4.3.3 例 3】非对称阵求秩陷阱（真秩 1 非 2！）& 惯性指数与参数 $(a,b)$ 无关",
+      "problem": "(1) 求二次型 $f=x^T\\begin{bmatrix}1&4&0\\\\0&4&0\\\\0&0&0\\end{bmatrix}x$ 的秩。(2) 二次型 $f(x_1,x_2,x_3)=(x_1+2x_2+ax_3)(x_1+4x_2+bx_3)+x_3^2$ 的正惯性指数 $p$ $(\\quad)$。  (A) 与 $a$ 有关，与 $b$ 无关　(B) 与 $a$ 无关，与 $b$ 有关　(C) 与 $a,b$ 均有关　(D) 与 $a,b$ 均无关",
+      "steps": [
+        {
+          "stepTitle": "(1) 必须先对称化，绝不可直接求原矩阵的秩！",
+          "detail": "原矩阵不对称！对称化得 $A=\\begin{bmatrix}1&2&0\\\\2&4&0\\\\0&0&0\\end{bmatrix}$（即 $f=(x_1+2x_2)^2$），故 $r(f)=r(A)=\\mathbf{1}$！"
+        },
+        {
+          "stepTitle": "(2) 整体线性代换消去 $a,b$，一眼验证可逆！",
+          "detail": "令 $y_1=x_1+2x_2+ax_3,\\;y_2=x_1+4x_2+bx_3,\\;y_3=x_3$，变换矩阵行列式 $\\begin{vmatrix}1&2&a\\\\1&4&b\\\\0&0&1\\end{vmatrix}=2\\ne 0$（对一切 $a,b$ 恒可逆！）。于是 $f=y_1y_2+y_3^2$，经平方差可逆变换立得 $p=2,q=1$，**与 $a,b$ 均无关**，选 (D)！"
+        }
+      ],
+      "finalAnswer": "(1) $1$；(2) (D) 与 $a,b$ 均无关",
+      "takeaway": "看到两个线性因式相乘加平方项（形如 $L_1L_2+L_3^2$），第一步永远查 $[L_1,L_2,L_3]$ 系数行列式是否非零——只要可逆，直接变成 $y_1y_2+y_3^2$，$(p,q)=(2,1)$ 秒出！",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.90 例3 / P.95 例3",
+        "pdfPage": 95,
+        "itemRef": "没咋了 4.1 例 3 与 4.3.3 例 3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la09-e-18",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化讲义精选（数一专属二次曲面真题大合集）",
+      "title": "【没咋了 4.3.4 例 4 + 例 5 + 例 7】（2008 / 2016 数一真题）双叶双曲面判正特征值数 & 6 曲面速判（含 $f=-1$ 坑！）",
+      "problem": "(1)（2008 数一）若二次曲面 $x^TAx=1$ 经正交变换后的图形为双叶双曲面，求 $A$ 正特征值个数。(2)（2016 数一）设 $f=x_1^2+x_2^2+x_3^2+4x_1x_2+4x_1x_3+4x_2x_3$，判 $f=2$ 表示何种二次曲面。(3) 速判下列曲面：① $x^2+2yz=-1$；② 已知 $f(x,y,z)$ 负定，判 $f(x,y,z)=-1$；③ $x^2+y^2+z^2+2xy=1$。",
+      "steps": [
+        {
+          "stepTitle": "(1) & (2) 2008 / 2016 数一真题 5 秒秒杀",
+          "detail": "在 (1) 中双叶双曲面且右端 $1>0\\implies (p,q)=(1,2)\\implies$ 恰有 **$1$ 个**正特征值！在 (2) 中 $A=\\begin{bmatrix}1&2&2\\\\2&1&2\\\\2&2&1\\end{bmatrix}=-E+2\\mathbf{1}\\mathbf{1}^T$，秩 1 偏移 1 秒口算特征值 **$5,-1,-1$**（$p=1,q=2$），又右端 $2>0\\implies$ **双叶双曲面**！"
+        },
+        {
+          "stepTitle": "(3) 必看负右端翻转陷阱！",
+          "detail": "① $x^2+2yz=-1\\Longleftrightarrow -x^2-2yz=1$，原 $f$ 特征值 $1,1,-1\\;(2,1)$，取负后为 **$(1,2)\\implies$ 双叶双曲面**！（若忘翻号会误答单叶双曲面！）② $f$ 负定则 $-f$ 正定（$p'=3,q'=0$），故 $f=-1\\Longleftrightarrow -f=1$ 表示**椭球面**！③ $x^2+y^2+z^2+2xy=(x+y)^2+z^2=1$，$(p,q)=(2,0)\\implies$ **椭圆柱面**！"
+        }
+      ],
+      "finalAnswer": "(1) $1$ 个；(2) 双叶双曲面；(3) ① 双叶双曲面，② 椭球面，③ 椭圆柱面",
+      "takeaway": "数一二次曲面题唯一能翻车的地方就是**右端为负数（$f=-1$）**——养成机械动作：见右端 $<0$ 先同乘 $-1$，把 $p$ 与 $q$ 对调后再查表！",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.97-98 例4,5,7",
+        "pdfPage": 102,
+        "itemRef": "没咋了 4.3.4 例 4, 5, 7"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_quadric_suite",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la09-e-19",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化讲义精选（伪配方含减号致命陷阱 + 4.4 例 4 印刷勘误）",
+      "title": "【没咋了 4.5 例 3 + 4.4 例 4（含 P.99 勘误）】带减号相关平方项 $(x_1+x_2)^2+(x_2+x_3)^2-(x_3-x_1)^2$ 真实惯性指数",
+      "problem": "(1) 求二次型 $f=(x_1+x_2)^2+(x_2+x_3)^2-(x_3-x_1)^2$ 的正惯性指数 $p$ 与负惯性指数 $q$。(2)（没咋了 4.4 例 4）设 3 阶实对称阵 $A$ 满足 $\\operatorname{tr}(A)=2$，且 $A$ 的行向量与 $B=\\begin{bmatrix}1&-1&0\\\\1&1&2\\\\1&0&1\\end{bmatrix}$ 的列向量均正交，求 $A$。",
+      "steps": [
+        {
+          "stepTitle": "(1) 千万别看两加一减瞎写 $(2,1)$！代换消去线性相关项露出真面目 $2uv$",
+          "detail": "注意到 $(x_1+x_2)-(x_2+x_3)=x_1-x_3=-(x_3-x_1)$，三个线性式线性相关！令 $u=x_1+x_2,\\;v=x_2+x_3$，则 $f=u^2+v^2-(u-v)^2=2uv$！（核对对称阵 $A=\\begin{bmatrix}0&1&1\\\\1&2&1\\\\1&1&0\\end{bmatrix}$，特征值为 $3,-1,0$！）故真实惯性指数为 **$p=1,\\;q=1$**！"
+        },
+        {
+          "stepTitle": "(2) 由 $AB=O$ 锁定 $r(A)\\le 1$，谱分解 1 秒反求 $A$（附 P.99 印刷勘误！）",
+          "detail": "「$A$ 的行向量与 $B$ 的列向量均正交」$\\Longleftrightarrow AB=O$！算出 $r(B)=2$（$B$ 的两无关列 $[1,1,1]^T,[-1,1,0]^T$ 均为 $A$ 属 $\\lambda=0$ 的特征向量！），由实对称正交性，$\\lambda_3=\\operatorname{tr}(A)=2$ 对应特征向量垂直于这两列，解得 $\\xi_3=[1,1,-2]^T$，单位化 $\\gamma_3=\\frac{1}{\\sqrt6}[1,1,-2]^T$！由谱分解秒出 $A=2\\gamma_3\\gamma_3^T=\\frac{1}{3}\\begin{bmatrix}1&1&-2\\\\1&1&-2\\\\-2&-2&4\\end{bmatrix}$！**【原书印刷勘误 · 没咋了 P.99 4.4 例 4】**：题干对 3 阶矩阵 $A=(a_{ij})_{3\\times 3}$ 误印了 4 个变元 `f(x_1, x_2, x_3, x_4)`，应为 `f(x_1, x_2, x_3)`！"
+        }
+      ],
+      "finalAnswer": "(1) $p=1,\\;q=1$；(2) $A=\\frac{1}{3}\\begin{bmatrix}1&1&-2\\\\1&1&-2\\\\-2&-2&4\\end{bmatrix}$",
+      "takeaway": "看到形如 $L_1^2+L_2^2-L_3^2$ 的「带减号伪平方和」，**必须先查 $L_1,L_2,L_3$ 是否线性相关**——一旦相关，抵消之后 $p$ 与 $q$ 都会大变脸！",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.99-100(含P.99勘误)",
+        "pdfPage": 104,
+        "itemRef": "没咋了 4.5 例 3 与 4.4 例 4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la09-e-20",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化讲义精选（2018 数一二三真题 & 方程 $f=0$）",
+      "title": "【没咋了 4.6 例 1】（2018 数一二三真题）求含参平方和 $f(x_1,x_2,x_3)=0$ 的解与规范形",
+      "problem": "（2018 数一二三）设二次型 $f(x_1,x_2,x_3)=(x_1-x_2+x_3)^2+(x_2+x_3)^2+(x_1+ax_3)^2$。(1) 求 $f(x_1,x_2,x_3)=0$ 的解；(2) 求 $f$ 的规范形。",
+      "steps": [
+        {
+          "stepTitle": "(1) 实平方和 $=0\\Longleftrightarrow$ 三个一次式同时为 $0$，按系数行列式 $|C|$ 分类讨论！",
+          "detail": "$f=0\\Longleftrightarrow \\begin{cases}x_1-x_2+x_3=0\\\\x_2+x_3=0\\\\x_1+ax_3=0\\end{cases}$，系数行列式 $|C|=\\begin{vmatrix}1&-1&1\\\\0&1&1\\\\1&0&a\\end{vmatrix}=a-2$！① 当 $a\\ne 2$ 时 $|C|\\ne 0$，只有唯一零解 $x=[0,0,0]^T$；② 当 $a=2$ 时 $r(C)=2$，通解为 $x=k[-2,-1,1]^T\\;(k\\in\\mathbb{R})$！"
+        },
+        {
+          "stepTitle": "(2) 纯正平方和恒有 $q=0,\\;p=r(C)$，分类一步写出规范形",
+          "detail": "① 当 $a\\ne 2$ 时 $r(C)=3\\implies p=3,q=0$，规范形为 $y_1^2+y_2^2+y_3^2$；② 当 $a=2$ 时 $r(C)=2\\implies p=2,q=0$，规范形为 $y_1^2+y_2^2$！"
+        }
+      ],
+      "finalAnswer": "(1) $a\\ne 2$ 时仅零解 $[0,0,0]^T$；$a=2$ 时通解 $k[-2,-1,1]^T\\;(k\\in\\mathbb{R})$；(2) $a\\ne 2$ 时 $y_1^2+y_2^2+y_3^2$；$a=2$ 时 $y_1^2+y_2^2$",
+      "takeaway": "2018 统考全卷真题！平方和型 $f=\\sum L_i^2=0$ 直接转化成齐次线性方程组 $Cx=0$，且规范形正项个数永远等于 $r(C)$！",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.101 例1",
+        "pdfPage": 106,
+        "itemRef": "没咋了 4.6 例 1 (2018 真题)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la09-e-21",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化讲义精选（同时合同对角化压轴模型）",
+      "title": "【没咋了 4.7 例 4】同时合同对角化：求可逆阵 $P$ 使 $P^TAP=E$ 且 $P^TBP=\\Lambda$",
+      "problem": "设 $f=x^TAx=x_1^2+2x_2^2+2x_1x_2$，$g=x^TBx=-x_1^2+2x_2^2+2x_1x_2$。(1) 求可逆变换 $x=Cy$ 将 $f$ 化为规范形；(2) 求可逆阵 $P$ 与对角阵 $\\Lambda$ 使 $P^TAP=E$ 且 $P^TBP=\\Lambda$。",
+      "steps": [
+        {
+          "stepTitle": "(1) 先对正定阵 $A$ 配方求 $C$ 使 $C^TAC=E$",
+          "detail": "$f=(x_1+x_2)^2+x_2^2=y_1^2+y_2^2$，反解得 $x=\\begin{bmatrix}1&-1\\\\0&1\\end{bmatrix}y=Cy$，满足 $C^TAC=E$！"
+        },
+        {
+          "stepTitle": "(2) 算 $M=C^TBC$ 再正交对角化得 $Q$，复合 $P=CQ$ 同步搞定！",
+          "detail": "算出 $M=C^TBC=\\begin{bmatrix}1&0\\\\-1&1\\end{bmatrix}\\begin{bmatrix}-1&1\\\\1&2\\end{bmatrix}\\begin{bmatrix}1&-1\\\\0&1\\end{bmatrix}=\\begin{bmatrix}-1&2\\\\2&-1\\end{bmatrix}$！求 $M$ 特征值为 $1,-3$，对应正交阵 $Q=\\frac{1}{\\sqrt2}\\begin{bmatrix}1&1\\\\1&-1\\end{bmatrix}$ 使 $Q^TMQ=\\operatorname{diag}(1,-3)$！令 $P=CQ=\\frac{1}{\\sqrt2}\\begin{bmatrix}0&2\\\\1&-1\\end{bmatrix}$，验算 $P^TAP=Q^TEQ=E$ 且 $P^TBP=\\operatorname{diag}(1,-3)$！"
+        }
+      ],
+      "finalAnswer": "(1) $C=\\begin{bmatrix}1&-1\\\\0&1\\end{bmatrix}$；(2) $P=\\frac{1}{\\sqrt2}\\begin{bmatrix}0&2\\\\1&-1\\end{bmatrix},\\;\\Lambda=\\operatorname{diag}(1,-3)$",
+      "takeaway": "记住同时合同对角化的**「先配方化 $E$，再正交化 $C^TBC$」**两步绝招：第 2 步用的正交阵 $Q$ 保持 $Q^TEQ=E$ 纹丝不动，故能同时实现双合同对角化！",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.103 例4",
+        "pdfPage": 108,
+        "itemRef": "没咋了 4.7 例 4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la09-e-22",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化讲义精选（2022 真题瑞利商 & 绝对值瑞利商界）",
+      "title": "【没咋了 4.8 例 1 + 例 2】（2022 数二三 & 李林 6）瑞利商最小值证明 & $|x^T(A^*-A)x|\\le ax^Tx$ 定 $a_{\\min}=10$",
+      "problem": "(1)（2022 数二三）已知 $f=3x_1^2+4x_2^2+3x_3^2+2x_1x_3$，求正交变换化标准形，并证 $\\min_{x\\ne 0}\\frac{f(x)}{x^Tx}=2$。(2)（李林 6）3 阶实对称阵 $A$ 特征值为 $2,3,4$，若对任意 $x$ 有 $|x^TA^*x-x^TAx|\\le a x^Tx$，求 $a$ 的最小值。",
+      "steps": [
+        {
+          "stepTitle": "(1) 正交对角化出特征值 $2,4,4$，夹逼+取等闭环证最小值 2",
+          "detail": "$A=\\begin{bmatrix}3&0&1\\\\0&4&0\\\\1&0&3\\end{bmatrix}$，特征值 $2,4,4$，正交阵 $Q=\\begin{bmatrix}\\frac{1}{\\sqrt2}&0&\\frac{1}{\\sqrt2}\\\\0&1&0\\\\-\\frac{1}{\\sqrt2}&0&\\frac{1}{\\sqrt2}\\end{bmatrix}$ 化为 $2y_1^2+4y_2^2+4y_3^2$。由 $x^Tx=y^Ty$ 得 $\\frac{f(x)}{x^Tx}=\\frac{2y_1^2+4y_2^2+4y_3^2}{y_1^2+y_2^2+y_3^2}\\ge 2$，且当 $y=[1,0,0]^T$（即 $x=\\frac{1}{\\sqrt2}[1,0,-1]^T$）时**取等号**，故最小值为 $2$！（证明最小值务必写出取等点！）"
+        },
+        {
+          "stepTitle": "(2) 算实对称阵 $A^*-A$ 的特征值取最大绝对值！",
+          "detail": "$A$ 实对称 $\\Rightarrow A^*-A$ 亦实对称，其特征值为 $\\frac{24}{2}-2=10,\\;\\frac{24}{3}-3=5,\\;\\frac{24}{4}-4=2$。故 $\\max_{x\\ne 0}\\frac{|x^T(A^*-A)x|}{x^Tx}=\\max\\{|10|,|5|,|2|\\}=10\\implies a_{\\min}=10$！"
+        }
+      ],
+      "finalAnswer": "(1) 标准形 $2y_1^2+4y_2^2+4y_3^2$，最小值 $2$（在 $x=k[1,0,-1]^T$ 取到）；(2) $a_{\\min}=10$",
+      "takeaway": "证明二次型极值（2022 真题）一定要同时具备两句话：① 由瑞利商得 $\\ge\\lambda_{\\min}$；② **显式指出一个非零取等向量 $x_0$**（$\\lambda_{\\min}$ 的特征向量），否则丢分！",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.104-105 例1-2",
+        "pdfPage": 109,
+        "itemRef": "没咋了 4.8 例 1 与 例 2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_pd_rayleigh",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la09-e-23",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化讲义精选（全章收官压轴：等价/相似/合同/正定综合辨析！）",
+      "title": "【没咋了 4.10.3 例 2 + 例 3 + 例 4】对称 vs 非对称相似不合同 & 双实对称可逆阵 $AB$ 不可对角化反例",
+      "problem": "(1) $A=\\begin{bmatrix}1&2\\\\2&1\\end{bmatrix},\\;B=\\begin{bmatrix}1&4\\\\1&1\\end{bmatrix}$，选正确项：(A) 正交相似 (B) 相似 (C) 合同 (D) $A=P^TP$。(2) $A,B$ 均为 $n$ 阶实对称可逆阵，选错误项：(A) $A+B$ 可对角化 (B) $AB$ 可对角化 (C) $A^*+B^*$ 可正交对角化 (D) $A^{-1}+B^{-1}$ 可正交对角化。(3) $A,B$ 为 $n$ 阶实方阵，选正确项：(A)(B) 变换阵 $P/Q$ 唯一 (C) 实对称 $B$ 必有实对称 $A$ 使 $A^2=B$ (D) 正定 $B$ 必有正定 $A$ 使 $A^2=B$。",
+      "steps": [
+        {
+          "stepTitle": "(1) 对称生殖隔离瞬间叉掉 (A)(C)，非正定叉掉 (D)，特征值全同锁死 (B)",
+          "detail": "$A$ 对称、$B$ 非对称 $\\implies$ 绝不合同（排 C）、绝不正交相似（排 A）；$|A|=-3<0$ 非正定（排 D）；二者特征值均为 $3,-1$ 互异 $\\implies A\\sim B$，选 (B)！"
+        },
+        {
+          "stepTitle": "(2) & (3) 揭穿两大顶级高阶伪命题！(B) 反例 $AB=\\begin{bmatrix}1&0\\\\1&1\\end{bmatrix}$；(D) 唯一正确！",
+          "detail": "在 (2) 中，$A+B,\\;A^*+B^*,\\;A^{-1}+B^{-1}$ 均仍为实对称阵，必可正交相似对角化（A、C、D 全真！）；唯独 **(B) 假**！反例取实对称可逆阵 $A=\\begin{bmatrix}0&1\\\\1&0\\end{bmatrix},\\;B=\\begin{bmatrix}1&1\\\\1&0\\end{bmatrix}$，得 $AB=\\begin{bmatrix}1&0\\\\1&1\\end{bmatrix}$ 不可相似对角化！在 (3) 中，(A)(B) 显然不唯一；(C) 假（若 $B=-E$ 有负特征值，实对称阵 $A^2$ 特征值必 $\\ge 0$ 不可能等于 $-E$！）；唯有 **(D) 真**：正定阵 $B=Q\\Lambda Q^T\\;(\\lambda_i>0)$，取 $A=Q\\Lambda^{1/2}Q^T$ 即为正定平方根！"
+        }
+      ],
+      "finalAnswer": "(1) (B)；(2) (B)；(3) (D)",
+      "takeaway": "全线代终极概念试金石：记住「两实对称可逆阵之积 $AB$ 未必可对角化，但只要至少一方正定，$AB$ 必可对角化」和「实矩阵平方 $A^2$ 的特征值不可能为负实数」！",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.109-110 例2,3,4",
+        "pdfPage": 114,
+        "itemRef": "没咋了 4.10.3 例 2, 3, 4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la09_pd_rayleigh",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la09-s-01",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "八、题型总结（一）：第 9 讲二次型破题路由总表",
+      "title": "二次型 8 大核心题型破题路由总表（表 L9-1）",
+      "overview": "第 9 讲是线性代数全 9 讲的集大成收官章（贯通行列式、秩、方程组、特征值、正交对角化），按信号词一步定位最优武器：",
+      "patterns": [
+        {
+          "typeName": "二次型定 $(p,q)$ 三选一最快决策",
+          "triggers": "求二次型的正/负惯性指数或规范形",
+          "method": "① 交叉项少或含简单平方项 $\\to$ **拉格朗日配方法**（最快，但必保每步变换可逆！）；② 3 阶纯交叉项（主对角全 $0$）$\\to$ 直接算 $|A|$：$|A|>0\\Rightarrow(2,1),\\;|A|<0\\Rightarrow(1,2)$；③ 矩阵具对称规律（秩 1 偏移/行和相等）$\\to$ **口算特征值正负个数**！",
+          "pitfall": "千万警惕非对称矩阵 $x^TBx$（先取 $\\frac{B+B^T}{2}$）与带减号线性相关平方项（先消相关项再算 $(p,q)$）！",
+          "relatedRefs": "强化例 9.1, 强化例 9.4 与 例 9.5, 没咋了 4.5 例 3 与 4.4 例 4"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 L9-1　第 9 讲二次型 8 大核心题型破题路由",
+          "headers": [
+            "题干特征 / 信号词",
+            "第一反应核心手段",
+            "避坑 / 加速要点",
+            "代表例题"
+          ],
+          "rows": [
+            [
+              "给非对称 $x^TBx$ 或平方和",
+              "先对称化 $A=\\frac{B+B^T}{2}$；平方和写 $A=C^TC=\\sum\\alpha_k\\alpha_k^T$",
+              "不可直接拿 $B$ 求秩或算特征值！",
+              "强化例 9.1/9.2、没咋了 4.1 例 3"
+            ],
+            [
+              "化标准形/规范形求可逆 $C$",
+              "拉格朗日配方法（无平方项先用 $x_1=y_1+y_2,x_2=y_1-y_2$）",
+              "项数不足补 $y_k=x_k$，最后必反解出 **$x=Cy$**！",
+              "例 6.2/6.3、强化例 9.8"
+            ],
+            [
+              "正交变换化标准形求 $Q$",
+              "写对称阵 $A\\to$ 特征值 $\\to$ 同重根正交化 $\\to$ 全员单位化",
+              "重根凑正交解比套施密特快一倍！",
+              "例 6.4、强化例 9.3"
+            ],
+            [
+              "两二次型互化 $f\\to g$",
+              "可逆变换走双配方 $P=C_1^{-1}C_2$；正交变换走 $Q=Q_1Q_2^T$",
+              "先算 $\\operatorname{tr}(A)\\stackrel{?}{=}\\operatorname{tr}(B)$ 可 1 秒否决正交变换！",
+              "强化例 9.7/9.9/9.11"
+            ],
+            [
+              "正定判别与定参 / 求 $D^TD=A$",
+              "数字定参用顺序主子式 $\\Delta_k>0$；抽象用 $\\lambda_i>0$；平方和验 $|C|\\ne 0$",
+              "求 $D^TD=A$ 直接配方读系数阵 $D$，免求逆！",
+              "强化例 9.6/9.12/9.13、基础习题 6.7"
+            ],
+            [
+              "正定矩阵开方 $C^2=M$",
+              "$M=P\\Lambda P^T\\Rightarrow C=P\\Lambda^{1/2}P^T$",
+              "二重根直接用谱分解 $cE+(d-c)\\eta\\eta^T$ 5 秒秒杀！",
+              "强化例 9.14"
+            ],
+            [
+              "瑞利商 / 广义瑞利商最值",
+              "标准型看 $[\\lambda_{\\min},\\lambda_{\\max}]$；广义型先拆 $B=D^TD$ 转 $M=(D^{-1})^TAD^{-1}$",
+              "证明最值必须**显式写出取等点**！",
+              "强化例 9.15、没咋了 4.8 例 1/2"
+            ],
+            [
+              "【数一】二次曲面分类",
+              "右端先化正（$c<0$ 必翻号 $p\\leftrightarrow q$），再按 $(p,q)$ 查 6 大曲面",
+              "注意缺零变柱面、右端 $c=0$ 变椭圆锥面！",
+              "强化例 9.5、没咋了 4.3.4 例 4/5/7"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "恭喜走完线性代数全 9 讲全部题型路线——用这张表把二次型和前 8 讲的秩、方程组、特征值与正交对角化彻底焊死成一个整体！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "第9讲全章总结",
+        "pdfPage": 104,
+        "itemRef": "表 L9-1 第9讲破题路由表"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la09-s-02",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "八、题型总结（二）：矩阵等价、相似、合同全景对比总表",
+      "title": "线性代数终极收官：矩阵等价 vs 相似 vs 合同 vs 正交相似四维对比表（表 L9-2）",
+      "overview": "考研线代概念选择题的终极Boss永远是「等价、相似、合同」三者互推关系，考前必须把下表烂熟于心：",
+      "patterns": [
+        {
+          "typeName": "四关系单向推演口诀",
+          "triggers": "选择题问两个实方阵满足某种关系能否推出另一种关系",
+          "method": "牢记强弱链条：**正交相似 $\\Longrightarrow$ 相似 + 合同（实对称下：相似 $\\Longrightarrow$ 合同）$\\Longrightarrow$ 等价**；一切逆箭头全都不成立！且非对称阵绝不与对称阵合同！",
+          "pitfall": "注意「实对称阵」这个超级前提！一旦脱离实对称阵，「相似 $\\Rightarrow$ 合同」不再成立（反例 $A=\\operatorname{diag}(1,2),\\;B=\\begin{bmatrix}1&1\\\\0&2\\end{bmatrix}$ 相似却绝不合同！）！",
+          "relatedRefs": "等价相似合同三大关系层级, 强化例 9.10 与 例 9.11, 没咋了 4.10.3 例 2, 3, 4"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 L9-2　矩阵等价、合同、相似与正交相似四维终极对照表",
+          "headers": [
+            "对比维度",
+            "矩阵等价 $A\\cong B$",
+            "矩阵合同 $A\\simeq B$",
+            "矩阵相似 $A\\sim B$",
+            "正交相似 $Q^TAQ=B$"
+          ],
+          "rows": [
+            [
+              "定义式",
+              "$PAQ=B$ ($P,Q$ 可逆)",
+              "$C^TAC=B$ ($C$ 可逆)",
+              "$P^{-1}AP=B$ ($P$ 可逆)",
+              "$Q^TAQ=Q^{-1}AQ=B$"
+            ],
+            [
+              "适用范围",
+              "任意同型 $m\\times n$ 矩阵",
+              "同阶方阵（考研重实对称）",
+              "同阶方阵",
+              "同阶方阵（对角化需对称）"
+            ],
+            [
+              "核心充要判据",
+              "**$r(A)=r(B)$**",
+              "实对称下：**$p_A=p_B$ 且 $q_A=q_B$**",
+              "实对称下：**$\\lambda_A=\\lambda_B$**（一般看若尔当块）",
+              "实对称下同相似（$\\lambda_A=\\lambda_B$）"
+            ],
+            [
+              "标准形",
+              "$\\begin{bmatrix}E_r&O\\\\O&O\\end{bmatrix}$",
+              "规范形 $\\operatorname{diag}(E_p,-E_q,O)$",
+              "对角阵 $\\Lambda$（或若尔当标准形）",
+              "特征值对角阵 $\\operatorname{diag}(\\lambda_1,\\dots,\\lambda_n)$"
+            ],
+            [
+              "不变量",
+              "秩 $r$",
+              "秩 $r$、对称性、正负惯性指数 $(p,q)$",
+              "秩、迹、行列式、特征值、$r((\\lambda E-A)^k)$",
+              "相似+合同全部不变量 + 欧氏长度"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "记住极简三字诀：**等价看秩、合同看符号、相似看特征值！**",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义 & 线代独家大总结",
+        "printedPage": "大总结 P.23 / 没咋了 P.109",
+        "pdfPage": 23,
+        "itemRef": "表 L9-2 等价相似合同对照表"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la09-s-03",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "八、题型总结（三）：二次型 7 大防错红线与数一曲面速查表",
+      "title": "二次型 7 大高频失分红线与数一六大二次曲面速查（表 L9-3）",
+      "overview": "收官清点二次型最容易白丢 5 分的 7 条红线，配数一曲面防错法则一次排尽：",
+      "patterns": [
+        {
+          "typeName": "二次型大题考前 3 秒自检清单",
+          "triggers": "做完二次型大题准备落笔交卷前",
+          "method": "① 写二次型矩阵 $A$ 时核对交叉项是否都除以了 $2$ 且 $A^T=A$；② 写配方法变换矩阵时核对是 **$x=Cy$** 而不是 $y=Cx$ 且 $|C|\\ne 0$；③ 写正交阵 $Q$ 核对各列是否与 $\\Lambda$ 顺序一一对齐且内积为 0、模长为 1；④ 证正定核对第一句是否写了「$A^T=A$」！",
+          "pitfall": "大题中「忘把 $y=Px$ 求逆化成 $x=Cy$」和「证明正定漏写对称性」是阅卷组扣分最狠的两个重灾区！",
+          "relatedRefs": "例 6.2 与 例 6.3, 强化例 9.6, 强化例 9.11, 没咋了 4.3.4 例 4, 5, 7"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 L9-3　二次型 7 大高频失分红线与避坑正解",
+          "headers": [
+            "红线",
+            "典型错误想法",
+            "正确结论与最小反例"
+          ],
+          "rows": [
+            [
+              "红线 1",
+              "直接把非对称 $x^TBx$ 中的 $B$ 当二次型矩阵求秩",
+              "错！必须先对称化 $A=\\frac{B+B^T}{2}$（反例没咋了 4.1 例 3，真秩 1 非 2！）"
+            ],
+            [
+              "红线 2",
+              "看到 $L_1^2+L_2^2+L_3^2$ 就直接断定正定或 $p=3$",
+              "错！伪配方法陷阱！必须验系数行列式 $|C|\\ne 0$（全加号时 $p=r(C)$）"
+            ],
+            [
+              "红线 3",
+              "带减号相关平方项 $L_1^2+L_2^2-L_3^2$ 按加号个数读 $p=2$",
+              "错！一旦线性相关会抵消（如 $(x_1+x_2)^2+(x_2+x_3)^2-(x_3-x_1)^2=2uv$，真 $(p,q)=(1,1)$！）"
+            ],
+            [
+              "红线 4",
+              "$a_{ii}>0$ 且 $|A|>0$（或 $A^*$ 正定）$\\Rightarrow A$ 正定",
+              "错！必要不充分！反例 $\\operatorname{diag}(1,-1,-1)$ 与 $-E_3$（$A^*=E_3$ 正定但 $A$ 负定）"
+            ],
+            [
+              "红线 5",
+              "$A,B$ 正定 $\\Rightarrow AB$ 正定；或 $A,B$ 对称可逆 $\\Rightarrow AB$ 可对角化",
+              "全错！$AB$ 正定 $\\Leftrightarrow AB=BA$；双对称可逆反例 $AB=\\begin{bmatrix}1&0\\\\1&1\\end{bmatrix}$ 连对角化都不行！"
+            ],
+            [
+              "红线 6",
+              "不看右端常数符号直接按 $f$ 的 $(p,q)$ 定二次曲面",
+              "错！若 $f=c<0$ 必须先同乘 $-1$ 使 $p\\leftrightarrow q$ 互换（如负定 $f=-1$ 是椭球面！）"
+            ],
+            [
+              "红线 7",
+              "把配方法写出的 $y=Px$ 直接当成 $x=Cy$ 的变换矩阵",
+              "错！必须反解 $x=P^{-1}y$ 得 $C=P^{-1}$ 才满足 $C^TAC=\\Lambda$！"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "至此考研数学一《线性代数》全 9 讲（基础 30 讲 + 强化 9 讲 + 没咋了强化讲义 + 独家大总结）100% 完结收官！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "第9讲防错红线汇总",
+        "pdfPage": 104,
+        "itemRef": "表 L9-3 第9讲防错红线"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    }
+  ]
+}

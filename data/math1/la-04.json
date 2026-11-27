@@ -1,0 +1,1147 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "la-04",
+  "title": "线代 · 第 4 讲　矩阵的秩",
+  "sourceMeta": "深度整合《27 张宇基础30讲·线代》P.73-75,101-103 +《27 张宇线代9讲》第4讲（P.41-48 全 9 例）+《27 没咋了线代强化讲义》1.8–1.9节（P.28-33）+《线代独家大总结》P.8-9，100% 逐页核图与 SymPy 验算",
+  "basicRequirements": {
+    "master": "熟练掌握矩阵秩的定义与行阶梯求法、秩的核心不等式体系（乘积上界、加减与拼阵、西尔维斯特、弗罗贝尼乌斯、分块秩）、伴随矩阵秩三值公式、实矩阵四秩相等及列满秩/行满秩镜像法则。",
+    "understand": "理解列满秩左消去与行满秩右消去的方程组与格拉姆阵本质，掌握分块矩阵广义初等变换中「同行右乘列消、同列左乘行消」的消零判定准则。",
+    "familiar": "熟悉二次零化多项式（幂等阵、对合阵）、秩 1 矩阵六大推论及秩与基础解系、同解、相似对角化的跨章桥梁公式。"
+  },
+  "items": [
+    {
+      "id": "m1-la04-f-01",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "一、矩阵秩的定义、等价刻画与求法",
+      "title": "矩阵秩的定义（最高阶非零子式）与 $r(A)=r/\\le r/\\ge r$ 三重等价刻画",
+      "formulaLatex": "$$r(A)=r\\;\\Longleftrightarrow\\;\\text{存在 }r\\text{ 阶子式}\\ne 0\\text{ 且所有 }(r+1)\\text{ 阶子式全为 }0;\\qquad r(A_{n\\times n})=n\\Leftrightarrow |A|\\ne 0$$",
+      "conditions": "满足 $0\\le r(A_{m\\times n})\\le\\min\\{m,n\\}$，且 $r(A)=0\\Leftrightarrow A=O$；注意三秩相等：$r(A)=A\\text{ 的行秩}=A\\text{ 的列秩}$。",
+      "pitfalls": "① 经典概念天坑（没咋了 1.8 例 1）：$r(A)=r$ **推不出**「任一 $r$ 阶子式非零」，也**推不出**「任一 $(r-1)$ 阶子式非零」——存在大量全零低阶子式（如 $\\mathrm{diag}(1,1,0)$ 的 1 阶子式 0）！ ② 仅对**方阵**才能写 $|A|=0$；若 $A$ 为非方阵（如 $m<n$），根本不存在行列式 $|A|$！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.73 / 强化 P.42 / 没咋了 P.28",
+        "pdfPage": 79,
+        "itemRef": "矩阵秩的定义与求法"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "在 $m\\times n$ 矩阵 $A$ 中任取 $k$ 行 $k$ 列交点元素按原序构成的 $k$ 阶行列式称为 $A$ 的 $k$ 阶子式。最高阶非零子式的阶数即秩 $r(A)$：① $r(A)\\le r\\Leftrightarrow$ 任意 $(r+1)$ 阶子式全为 $0$；② $r(A)\\ge r\\Leftrightarrow$ **至少存在一个** $r$ 阶子式不为 $0$；③ 具体数字阵求秩通法：作初等行变换化为行阶梯形矩阵，其**非零行数（台阶数）**即 $r(A)$。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「大于等于看存在（有一个非零就行），小于等于看任意（高一阶必须全为零）；数字阵求秩一律行阶梯数台阶！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la04-f-02",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、保秩变换与可逆/满秩矩阵保秩公式",
+      "title": "初等变换、非零数乘、可逆阵及满秩阵乘法保秩公式",
+      "formulaLatex": "$$r(kA)=r(A)\\;(k\\ne 0);\\quad r(PA)=r(AQ)=r(PAQ)=r(A);\\quad r(A_{m\\times n})=n\\Rightarrow r(AB)=r(B);\\quad r(B_{n\\times s})=n\\Rightarrow r(AB)=r(A)$$",
+      "conditions": "公式 ① 需 $k\\ne 0$；公式 ② 需 $P,Q$ 为对应阶数可逆方阵；公式 ③④ 实质是「左乘列满秩 $\\to P A=\\begin{bmatrix}E_n\\\\O\\end{bmatrix}$、右乘行满秩 $\\to BQ=[E_n,O]$」。",
+      "pitfalls": "注意左右不可搞反！右乘列满秩或左乘行满秩均**不一定保秩**（如 $A=[1,0]$ 行满秩，$B=[0,1]^T$ 列满秩，但 $AB=0$ 秩直接塌缩为 0！）。",
+      "source": {
+        "book": "27 张宇线代9讲 & 线代独家大总结",
+        "printedPage": "强化 P.42 / 大总结 P.8-9",
+        "pdfPage": 53,
+        "itemRef": "满秩与可逆阵保秩公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la04_rank_identities",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "① 非零数乘不改变秩；② 设 $P$ 为 $m$ 阶可逆阵、$Q$ 为 $n$ 阶可逆阵，初等变换（左乘 $P$、右乘 $Q$）严格保持秩不变；③ **列满秩左乘保秩**：若 $A_{m\\times n}$ 列满秩（$r(A)=n$），则对任意 $B_{n\\times s}$ 有 $r(AB)=r(B)$；④ **行满秩右乘保秩**：若 $B_{n\\times s}$ 行满秩（$r(B)=n$），则对任意 $A_{m\\times n}$ 有 $r(AB)=r(A)$。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「左乘列满秩，右乘行满秩——记忆口诀：**左列右行，乘谁都不变秩**！（因为中间公共维数 $n$ 刚好满秩，没有压缩信息！）」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la04-f-03",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、秩的核心不等式体系",
+      "title": "乘积上界、加减上下界与拼阵夹逼不等式（秩的核心夹逼母式）",
+      "formulaLatex": "$$r(AB)\\le\\min\\{r(A),r(B)\\};\\qquad |r(A)-r(B)|\\le r(A\\pm B)\\le r([A,B])\\le r(A)+r(B);\\qquad \\max\\{r(A),r(B)\\}\\le r([A,B])$$",
+      "conditions": "乘积式需 $A,B$ 可乘；加减与水平拼阵 $[A,B]$ 需同型（若仅行数相等则 $\\max\\{r(A),r(B)\\}\\le r([A,B])\\le r(A)+r(B)$ 仍成立）。",
+      "pitfalls": "注意拼阵上下限：$\\max\\{r(A),r(B)\\}\\le r([A,B])\\le r(A)+r(B)$，但 $r(A+B)$ **可以严格小于** $\\max\\{r(A),r(B)\\}$（最极端 $B=-A$ 时 $r(A+B)=0$！）。",
+      "figureSvg": "<svg viewBox=\"0 0 640 245\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"矩阵秩的不等式夹逼全景图谱\">\n  <title>矩阵秩的上下界夹逼全景图谱（乘积、和、拼阵、西尔维斯特与弗罗贝尼乌斯）</title>\n  <defs>\n    <marker id=\"m1_la04_arr1\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#2563eb\"/>\n    </marker>\n    <marker id=\"m1_la04_arr2\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#dc2626\"/>\n    </marker>\n    <marker id=\"m1_la04_arr3\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#059669\"/>\n    </marker>\n  </defs>\n  <rect x=\"4\" y=\"4\" width=\"632\" height=\"237\" rx=\"10\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"320\" y=\"25\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">矩阵秩的「上下界夹逼」核心架构图（一图打通所有抽象求秩题）</text>\n\n  <!-- Row 1: Multiplication clamp -->\n  <g transform=\"translate(18, 40)\">\n    <rect x=\"0\" y=\"0\" width=\"604\" height=\"58\" rx=\"8\" fill=\"#ffffff\" stroke=\"#bfdbfe\" stroke-width=\"1.2\"/>\n    <rect x=\"10\" y=\"10\" width=\"90\" height=\"38\" rx=\"6\" fill=\"#eff6ff\" stroke=\"#93c5fd\"/>\n    <text x=\"55\" y=\"27\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1d4ed8\">乘法夹逼</text>\n    <text x=\"55\" y=\"42\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#3b82f6\">A(m×n) B(n×s)</text>\n\n    <rect x=\"112\" y=\"11\" width=\"136\" height=\"36\" rx=\"6\" fill=\"#fef2f2\" stroke=\"#fca5a5\"/>\n    <text x=\"180\" y=\"26\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#b91c1c\">r(A) + r(B) − n</text>\n    <text x=\"180\" y=\"40\" text-anchor=\"middle\" font-size=\"9\" fill=\"#dc2626\">西尔维斯特下界</text>\n\n    <text x=\"262\" y=\"34\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"700\" fill=\"#475569\">≤</text>\n\n    <rect x=\"276\" y=\"11\" width=\"82\" height=\"36\" rx=\"6\" fill=\"#1d4ed8\"/>\n    <text x=\"317\" y=\"33\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#ffffff\">r(AB)</text>\n\n    <text x=\"372\" y=\"34\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"700\" fill=\"#475569\">≤</text>\n\n    <rect x=\"386\" y=\"11\" width=\"112\" height=\"36\" rx=\"6\" fill=\"#ecfdf5\" stroke=\"#6ee7b7\"/>\n    <text x=\"442\" y=\"26\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#047857\">min{r(A), r(B)}</text>\n    <text x=\"442\" y=\"40\" text-anchor=\"middle\" font-size=\"9\" fill=\"#059669\">越乘秩越小</text>\n\n    <line x1=\"502\" y1=\"29\" x2=\"520\" y2=\"29\" stroke=\"#dc2626\" stroke-width=\"1.6\" marker-end=\"url(#m1_la04_arr2)\"/>\n    <text x=\"562\" y=\"24\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#991b1b\">特例 AB=O</text>\n    <text x=\"562\" y=\"39\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#b91c1c\">r(A)+r(B) ≤ n</text>\n  </g>\n\n  <!-- Row 2: Addition & Augmentation clamp -->\n  <g transform=\"translate(18, 108)\">\n    <rect x=\"0\" y=\"0\" width=\"604\" height=\"58\" rx=\"8\" fill=\"#ffffff\" stroke=\"#ddd6fe\" stroke-width=\"1.2\"/>\n    <rect x=\"10\" y=\"10\" width=\"90\" height=\"38\" rx=\"6\" fill=\"#f5f3ff\" stroke=\"#c4b5fd\"/>\n    <text x=\"55\" y=\"27\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#6d28d9\">加减与拼阵</text>\n    <text x=\"55\" y=\"42\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#7c3aed\">A, B 同型</text>\n\n    <rect x=\"112\" y=\"11\" width=\"114\" height=\"36\" rx=\"6\" fill=\"#fef2f2\" stroke=\"#fca5a5\"/>\n    <text x=\"169\" y=\"26\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#b91c1c\">|r(A) − r(B)|</text>\n    <text x=\"169\" y=\"40\" text-anchor=\"middle\" font-size=\"9\" fill=\"#dc2626\">三角反推下界</text>\n\n    <text x=\"236\" y=\"34\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#475569\">≤</text>\n\n    <rect x=\"247\" y=\"11\" width=\"84\" height=\"36\" rx=\"6\" fill=\"#6d28d9\"/>\n    <text x=\"289\" y=\"33\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#ffffff\">r(A ± B)</text>\n\n    <text x=\"341\" y=\"34\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#475569\">≤</text>\n\n    <rect x=\"352\" y=\"11\" width=\"84\" height=\"36\" rx=\"6\" fill=\"#eef2ff\" stroke=\"#a5b4fc\"/>\n    <text x=\"394\" y=\"26\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#3730a3\">r([A, B])</text>\n    <text x=\"394\" y=\"40\" text-anchor=\"middle\" font-size=\"9\" fill=\"#4f46e5\">拼阵夹中间</text>\n\n    <text x=\"446\" y=\"34\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#475569\">≤</text>\n\n    <rect x=\"457\" y=\"11\" width=\"136\" height=\"36\" rx=\"6\" fill=\"#ecfdf5\" stroke=\"#6ee7b7\"/>\n    <text x=\"525\" y=\"26\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#047857\">r(A) + r(B)</text>\n    <text x=\"525\" y=\"40\" text-anchor=\"middle\" font-size=\"9\" fill=\"#059669\">分开加最大（不超总秩）</text>\n  </g>\n\n  <!-- Row 3: Frobenius + Adjugate step -->\n  <g transform=\"translate(18, 176)\">\n    <rect x=\"0\" y=\"0\" width=\"328\" height=\"54\" rx=\"8\" fill=\"#ffffff\" stroke=\"#fde68a\" stroke-width=\"1.2\"/>\n    <text x=\"164\" y=\"19\" text-anchor=\"middle\" font-size=\"10.8\" font-weight=\"700\" fill=\"#b45309\">三连乘弗罗贝尼乌斯不等式</text>\n    <text x=\"164\" y=\"38\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#0f172a\">r(ABC) ≥ r(AB) + r(BC) − r(B)</text>\n    <text x=\"164\" y=\"50\" text-anchor=\"middle\" font-size=\"8.8\" fill=\"#78716c\">特例：r(AB)=r(B) ⇒ r(ABC)=r(BC)（强化例4.7）</text>\n\n    <rect x=\"340\" y=\"0\" width=\"264\" height=\"54\" rx=\"8\" fill=\"#ffffff\" stroke=\"#a7f3d0\" stroke-width=\"1.2\"/>\n    <text x=\"472\" y=\"18\" text-anchor=\"middle\" font-size=\"10.8\" font-weight=\"700\" fill=\"#047857\">伴随矩阵秩的三值阶梯 r(A*)</text>\n    <text x=\"472\" y=\"36\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#0f172a\">r(A)=n → n  |  n−1 → 1  |  &lt;n−1 → 0</text>\n    <text x=\"472\" y=\"49\" text-anchor=\"middle\" font-size=\"8.8\" fill=\"#059669\">双向充要！仅取值 {n, 1, 0}（n≥2）</text>\n  </g>\n</svg>",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 线代独家大总结",
+        "printedPage": "基础 P.73 / 强化 P.43-45 / 大总结 P.8",
+        "pdfPage": 54,
+        "itemRef": "乘积与加减拼阵秩不等式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la04_rank_identities",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "① **越乘越小**：$r(AB)\\le\\min\\{r(A),r(B)\\}$（推广：$r(ABC)\\le r(AB)\\le r(A)$，连续乘积秩单调不增）；② **拼阵与加减夹逼**：$r(A\\pm B)\\le r([A,B])\\le r(A)+r(B)$；③ **逆三角下界**（强化 P.44 注 ②）：令 $A+B=C$ 得 $r(A-B)\\ge |r(A)-r(B)|$，同理 $r(A+B)\\ge |r(A)-r(B)|$，是做秩的下界夹逼（如强化例 4.5）的王牌工具！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「乘法越乘越小，加法分开最大，减法下界绝对差，拼阵稳稳夹中间！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la04-f-04",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、秩的核心不等式体系",
+      "title": "西尔维斯特（Sylvester）秩不等式与 $AB=O$ 黄金推论",
+      "formulaLatex": "$$r(A_{m\\times n}B_{n\\times s})\\ge r(A)+r(B)-n;\\qquad \\text{特别地，若 }A_{m\\times n}B_{n\\times s}=O\\text{，则 }r(A)+r(B)\\le n$$",
+      "conditions": "$n$ 必须是 **$A$ 的列数（= $B$ 的行数）**，切勿误代为 $A$ 的行数 $m$ 或 $B$ 的列数 $s$！",
+      "pitfalls": "若 $A$ 是 $3\\times 4$ 阵、$B$ 是 $4\\times 2$ 阵且 $AB=O$，则 $r(A)+r(B)\\le 4$（不是 $3$ 也不是 $2$！）。",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲",
+        "printedPage": "基础 P.74 / 强化 P.45",
+        "pdfPage": 56,
+        "itemRef": "西尔维斯特不等式与AB=O"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la04_rank_identities",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "由广义初等变换 $\\begin{bmatrix}E_n&O\\\\O&AB\\end{bmatrix}\\to\\begin{bmatrix}B&E_n\\\\O&A\\end{bmatrix}$ 与分块下界立得 $n+r(AB)\\ge r(A)+r(B)$。特例 $AB=O$ 时 $r(AB)=0\\implies r(A)+r(B)\\le n$（其中 $n$ 是中间公共维数：$A$ 的列数 = $B$ 的行数！）。几何与方程组解读：$B$ 的每一列均为 $Ax=0$ 的解，故 $r(B)\\le\\dim\\ker(A)=n-r(A)$；若 $A$ 任一行均与 $B$ 任一列正交，则 $AB=O\\implies r(A)+r(B)\\le n$！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「看到 $AB=O$，第一反应 $r(A)+r(B)\\le n$（中间维数）；看到三阵 $r(A)+r(B)+r(C)=r(ABC)+2n$，立刻连用两次西尔维斯特夹死等号！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la04-f-05",
+      "kind": "formula",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、三连乘与分块矩阵秩公式",
+      "title": "弗罗贝尼乌斯（Frobenius）不等式与分块矩阵秩公式",
+      "formulaLatex": "$$r(ABC)\\ge r(AB)+r(BC)-r(B);\\qquad r\\begin{bmatrix}A&O\\\\O&B\\end{bmatrix}=r\\begin{bmatrix}O&A\\\\B&O\\end{bmatrix}=r(A)+r(B);\\qquad r\\begin{bmatrix}A&C\\\\O&B\\end{bmatrix}\\ge r(A)+r(B)$$",
+      "conditions": "弗罗贝尼乌斯要求 $A_{m\\times n},B_{n\\times s},C_{s\\times t}$ 依次可乘；分块秩等式不要求 $A,B$ 为方阵。",
+      "pitfalls": "致命高频错：以为 $r\\begin{bmatrix}A&C\\\\O&B\\end{bmatrix}$ 恒等于 $r(A)+r(B)$！反例：$A=B=[0], C=[1]$ 时左端秩为 $1$，右端为 $0+0=0$（严格大于！）。",
+      "figureSvg": "<svg viewBox=\"0 0 640 218\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"分块三角矩阵消去交叉块判别图\">\n  <title>分块三角阵求秩核心：交叉块 C 什么时候能被清零？</title>\n  <defs>\n    <marker id=\"m1_la04_be1\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#059669\"/>\n    </marker>\n    <marker id=\"m1_la04_be2\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#dc2626\"/>\n    </marker>\n  </defs>\n  <rect x=\"4\" y=\"4\" width=\"632\" height=\"210\" rx=\"10\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"320\" y=\"25\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">分块矩阵求秩破题铁律：同行靠「列变换」消，同列靠「行变换」消！</text>\n\n  <!-- Case 1: Column elimination works -->\n  <g transform=\"translate(18, 42)\">\n    <rect x=\"0\" y=\"0\" width=\"192\" height=\"158\" rx=\"8\" fill=\"#ffffff\" stroke=\"#86efac\" stroke-width=\"1.4\"/>\n    <text x=\"96\" y=\"20\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#15803d\">✓ 同行右乘型：能清零！</text>\n    <rect x=\"34\" y=\"34\" width=\"124\" height=\"58\" rx=\"6\" fill=\"#f0fdf4\" stroke=\"#4ade80\"/>\n    <text x=\"68\" y=\"56\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#0f172a\">A</text>\n    <text x=\"124\" y=\"56\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#15803d\">AB</text>\n    <text x=\"68\" y=\"80\" text-anchor=\"middle\" font-size=\"12\" fill=\"#64748b\">O</text>\n    <text x=\"124\" y=\"80\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#0f172a\">Aᵀ</text>\n    <line x1=\"78\" y1=\"52\" x2=\"108\" y2=\"52\" stroke=\"#059669\" stroke-width=\"1.6\" marker-end=\"url(#m1_la04_be1)\"/>\n    <text x=\"96\" y=\"109\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#166534\">列变换：C₂ − C₁·B</text>\n    <text x=\"96\" y=\"126\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#334155\">AB 的列可由 A 列表示</text>\n    <text x=\"96\" y=\"146\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#15803d\">秩 = r(A)+r(Aᵀ) = 2r(A)</text>\n  </g>\n\n  <!-- Case 2: Row elimination works -->\n  <g transform=\"translate(224, 42)\">\n    <rect x=\"0\" y=\"0\" width=\"192\" height=\"158\" rx=\"8\" fill=\"#ffffff\" stroke=\"#86efac\" stroke-width=\"1.4\"/>\n    <text x=\"96\" y=\"20\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#15803d\">✓ 同列左乘型：能清零！</text>\n    <rect x=\"34\" y=\"34\" width=\"124\" height=\"58\" rx=\"6\" fill=\"#f0fdf4\" stroke=\"#4ade80\"/>\n    <text x=\"68\" y=\"56\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#0f172a\">A</text>\n    <text x=\"124\" y=\"56\" text-anchor=\"middle\" font-size=\"12\" fill=\"#64748b\">O</text>\n    <text x=\"68\" y=\"80\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#15803d\">BA</text>\n    <text x=\"124\" y=\"80\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#0f172a\">Aᵀ</text>\n    <line x1=\"68\" y1=\"60\" x2=\"68\" y2=\"69\" stroke=\"#059669\" stroke-width=\"1.6\" marker-end=\"url(#m1_la04_be1)\"/>\n    <text x=\"96\" y=\"109\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#166534\">行变换：R₂ − B·R₁</text>\n    <text x=\"96\" y=\"126\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#334155\">BA 的行可由 A 行表示</text>\n    <text x=\"96\" y=\"146\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#15803d\">秩 = r(A)+r(Aᵀ) = 2r(A)</text>\n  </g>\n\n  <!-- Case 3: Trap (强化例4.8(C)) -->\n  <g transform=\"translate(430, 42)\">\n    <rect x=\"0\" y=\"0\" width=\"192\" height=\"158\" rx=\"8\" fill=\"#ffffff\" stroke=\"#fca5a5\" stroke-width=\"1.5\"/>\n    <text x=\"96\" y=\"20\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#b91c1c\">✗ 错位型（例4.8C）：消不掉！</text>\n    <rect x=\"34\" y=\"34\" width=\"124\" height=\"58\" rx=\"6\" fill=\"#fef2f2\" stroke=\"#f87171\"/>\n    <text x=\"68\" y=\"56\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#0f172a\">A</text>\n    <text x=\"124\" y=\"56\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#dc2626\">BA</text>\n    <text x=\"68\" y=\"80\" text-anchor=\"middle\" font-size=\"12\" fill=\"#64748b\">O</text>\n    <text x=\"124\" y=\"80\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#0f172a\">AAᵀ</text>\n    <text x=\"96\" y=\"109\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#991b1b\">同行却左乘 B → 列变换消不动</text>\n    <text x=\"96\" y=\"126\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#991b1b\">同列为 AAᵀ → 行变换也消不动</text>\n    <text x=\"96\" y=\"146\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#b91c1c\">仅保证 ≥ 2r(A)（反例得 3&gt;2）</text>\n  </g>\n</svg>",
+      "source": {
+        "book": "27 张宇线代9讲 & 线代独家大总结 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.46 / 大总结 P.8 / 没咋了 P.29,33",
+        "pdfPage": 57,
+        "itemRef": "弗罗贝尼乌斯与分块秩公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la04_rank_identities",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "① **弗罗贝尼乌斯不等式**：由分块变换 $\\begin{bmatrix}ABC&O\\\\O&B\\end{bmatrix}\\to\\begin{bmatrix}AB&O\\\\B&BC\\end{bmatrix}$ 秒证 $r(ABC)+r(B)\\ge r(AB)+r(BC)$（令 $B=E_n$ 即退化为西尔维斯特不等式！）；② **分块对角/副对角阵**：秩严格等于 $r(A)+r(B)$；③ **含交叉块 $C$ 的分块三角阵**：一般只保证 $\\ge r(A)+r(B)$；当且仅当能用广义初等行/列变换把 $C$ 消为 $O$（例如 **$A$ 行满秩 / $B$ 列满秩 / $A$ 或 $B$ 可逆 / $C=AX+YB$**）时才严格取等号 $r(A)+r(B)$！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「三连乘记口诀：头尾配中间，减掉中间秩——$r(ABC)\\ge r(AB)+r(BC)-r(B)$；分块含交叉块，先问能不能消零！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la04-f-06",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、伴随矩阵秩与二次多项式零化秩等式",
+      "title": "伴随矩阵秩 $r(A^*)$ 三值公式与二次零化式 $r(A-k_1E)+r(A-k_2E)=n$",
+      "formulaLatex": "$$r(A^*)=\\begin{cases}n,&r(A)=n\\\\1,&r(A)=n-1\\\\0,&r(A)<n-1\\end{cases}\\;(n\\ge 2);\\qquad (A-k_1E)(A-k_2E)=O\\;(k_1\\ne k_2)\\implies r(A-k_1E)+r(A-k_2E)=n$$",
+      "conditions": "伴随公式要求 $n\\ge 2$；二次零化式必须要求两根 **$k_1\\ne k_2$**（若 $k_1=k_2$，如 $A^2=O$，只保证 $2r(A)\\le n$ 而一般不等！）。",
+      "pitfalls": "注意 $A^2=O$（$k_1=k_2=0$）时两因子相减得 $O$ 而非 $cE$，因此 $r(A)+r(A)\\le n$ **不能取等号**（如 3 阶阵 $r(A)=1$ 时 $1+1=2<3$）！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.73,103 / 强化 P.47-48 / 没咋了 P.30例5",
+        "pdfPage": 58,
+        "itemRef": "伴随秩与二次零化秩等式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la04_rank_identities",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "① **伴随秩三值阶梯**（双向充要！）：$r(A^*)$ 只能取 $\\{n,1,0\\}$ 三值（$n\\ge 2$）；当 $r(A)=n-1$ 时至少一个 $n-1$ 阶子式非零故 $r(A^*)\\ge 1$，又 $AA^*=|A|E=O\\Rightarrow r(A^*)\\le n-(n-1)=1$，夹逼得 $r(A^*)=1$！② **二次零化加秩恒等于 $n$**：由乘积得 $\\le n$，再由 $r(k_1E-A)+r(A-k_2E)\\ge r((k_1-k_2)E)=n$ 夹逼得恒等！特例：$A^2=A\\Rightarrow r(A)+r(A-E)=n$；$A^2=E\\Rightarrow r(A+E)+r(A-E)=n$！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「伴随秩只认 $n,1,0$ 双向推；两因子相乘为零、系数互异相减出单位阵，两秩之和必精准等于 $n$！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la04-c-01",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "三、列满秩与行满秩的完全镜像法则",
+      "title": "列满秩 vs 行满秩 6 大等价性质、类消去律与「初等行/列变换」防坑铁律",
+      "conditions": "列满秩必有行数 $m\\ge$ 列数 $n$（瘦高阵）；行满秩必有行数 $m\\le$ 列数 $n$（矮胖阵）；方阵 $m=n$ 时两者合一即「可逆矩阵」。",
+      "pitfalls": "高频秒杀陷阱（没咋了 P.30 例 3 李艳芳 900 题）：$A=[0,1]$ 行满秩（$r=1=m$），仅作初等行变换永远只能得到 $[0,k]$，**绝不可能化为 $[1,0]=(E_1,O)$**！必须用初等**列**变换交换两列！",
+      "figureSvg": "<svg viewBox=\"0 0 640 230\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"列满秩与行满秩镜像对照图\">\n  <title>列满秩（左乘保秩 / 左消去）与行满秩（右乘保秩 / 右消去）镜像对照</title>\n  <defs>\n    <marker id=\"m1_la04_fr1\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#1d4ed8\"/>\n    </marker>\n    <marker id=\"m1_la04_fr2\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#7c3aed\"/>\n    </marker>\n  </defs>\n  <rect x=\"4\" y=\"4\" width=\"632\" height=\"222\" rx=\"10\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"320\" y=\"25\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">列满秩 vs 行满秩「完全镜像」速记图（彻底杜绝左右搞反！）</text>\n\n  <!-- Left panel: Column Full Rank -->\n  <g transform=\"translate(18, 40)\">\n    <rect x=\"0\" y=\"0\" width=\"294\" height=\"174\" rx=\"9\" fill=\"#ffffff\" stroke=\"#93c5fd\" stroke-width=\"1.4\"/>\n    <rect x=\"0\" y=\"0\" width=\"294\" height=\"30\" rx=\"9\" fill=\"#eff6ff\"/>\n    <text x=\"147\" y=\"20\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#1d4ed8\">A 列满秩：r(A) = n ≤ m（瘦高阵）</text>\n\n    <!-- Tall matrix visual -->\n    <rect x=\"16\" y=\"42\" width=\"44\" height=\"66\" rx=\"4\" fill=\"#dbeafe\" stroke=\"#2563eb\" stroke-width=\"1.4\"/>\n    <line x1=\"16\" y1=\"84\" x2=\"60\" y2=\"84\" stroke=\"#2563eb\" stroke-dasharray=\"3 2\"/>\n    <text x=\"38\" y=\"67\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1e3a8a\">Eₙ</text>\n    <text x=\"38\" y=\"100\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#64748b\">O</text>\n    <text x=\"38\" y=\"121\" text-anchor=\"middle\" font-size=\"9\" font-weight=\"700\" fill=\"#1d4ed8\">仅需初等行变换</text>\n\n    <g transform=\"translate(76, 44)\" font-size=\"10.2\" fill=\"#1e293b\">\n      <text x=\"0\" y=\"10\" font-weight=\"700\" fill=\"#1d4ed8\">① 左乘不变秩：r(AB) = r(B)</text>\n      <text x=\"0\" y=\"29\" font-weight=\"700\" fill=\"#1d4ed8\">② 左类消去律：AB=AC ⇒ B=C</text>\n      <text x=\"0\" y=\"48\">③ Ax=0 只有零解；Bx=0 ⇔ ABx=0</text>\n      <text x=\"0\" y=\"67\">④ A 的列向量组线性无关</text>\n      <text x=\"0\" y=\"86\">⑤ AᵀA 可逆（存在左逆 (AᵀA)⁻¹Aᵀ）</text>\n    </g>\n\n    <rect x=\"12\" y=\"142\" width=\"270\" height=\"22\" rx=\"5\" fill=\"#fef2f2\" stroke=\"#fca5a5\"/>\n    <text x=\"147\" y=\"157\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#991b1b\">坑：初等行变换可化 [Eₙ;O]，初等列变换不行！</text>\n  </g>\n\n  <!-- Right panel: Row Full Rank -->\n  <g transform=\"translate(328, 40)\">\n    <rect x=\"0\" y=\"0\" width=\"294\" height=\"174\" rx=\"9\" fill=\"#ffffff\" stroke=\"#c4b5fd\" stroke-width=\"1.4\"/>\n    <rect x=\"0\" y=\"0\" width=\"294\" height=\"30\" rx=\"9\" fill=\"#f5f3ff\"/>\n    <text x=\"147\" y=\"20\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#6d28d9\">B 行满秩：r(B) = m ≤ n（矮胖阵）</text>\n\n    <!-- Wide matrix visual -->\n    <rect x=\"14\" y=\"54\" width=\"66\" height=\"42\" rx=\"4\" fill=\"#ede9fe\" stroke=\"#7c3aed\" stroke-width=\"1.4\"/>\n    <line x1=\"56\" y1=\"54\" x2=\"56\" y2=\"96\" stroke=\"#7c3aed\" stroke-dasharray=\"3 2\"/>\n    <text x=\"35\" y=\"79\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#4c1d95\">Eₘ</text>\n    <text x=\"68\" y=\"79\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#64748b\">O</text>\n    <text x=\"47\" y=\"113\" text-anchor=\"middle\" font-size=\"9\" font-weight=\"700\" fill=\"#6d28d9\">仅需初等列变换</text>\n\n    <g transform=\"translate(90, 44)\" font-size=\"10.2\" fill=\"#1e293b\">\n      <text x=\"0\" y=\"10\" font-weight=\"700\" fill=\"#6d28d9\">① 右乘不变秩：r(AB) = r(A)</text>\n      <text x=\"0\" y=\"29\" font-weight=\"700\" fill=\"#6d28d9\">② 右类消去律：AB=CB ⇒ A=C</text>\n      <text x=\"0\" y=\"48\">③ Bx=b 对任意 b 必有解</text>\n      <text x=\"0\" y=\"67\">④ B 的行向量组线性无关</text>\n      <text x=\"0\" y=\"86\">⑤ BBᵀ 可逆（存在右逆 Bᵀ(BBᵀ)⁻¹）</text>\n    </g>\n\n    <rect x=\"12\" y=\"142\" width=\"270\" height=\"22\" rx=\"5\" fill=\"#fef2f2\" stroke=\"#fca5a5\"/>\n    <text x=\"147\" y=\"157\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#991b1b\">坑（李艳芳例3）：初等行变换未必能化 [Eₘ,O]！</text>\n  </g>\n</svg>",
+      "source": {
+        "book": "27 张宇线代9讲 & 线代独家大总结 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.42-43 / 大总结 P.8-9 / 没咋了 P.28-30",
+        "pdfPage": 53,
+        "itemRef": "列满秩与行满秩镜像结论"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la04_rank_identities",
+        "verified": true
+      },
+      "summary": "① **列满秩 $A_{m\\times n}\\;(r(A)=n\\le m)$**：左乘保秩 $r(AB)=r(B)$；**左类消去律** $AB=AC\\Rightarrow B=C$；$Ax=0$ 只有零解且 $ABx=0\\Leftrightarrow Bx=0$；**仅经初等行变换**必可化为 $\\begin{bmatrix}E_n\\\\O\\end{bmatrix}$；$A^TA$ 可逆；② **行满秩 $B_{m\\times n}\\;(r(B)=m\\le n)$**：右乘保秩 $r(AB)=r(A)$；**右类消去律** $AB=CB\\Rightarrow A=C$；$Bx=b$ 对任意 $b$ 必有解；**仅经初等列变换**必可化为 $[E_m,O]$（但仅靠初等行变换**不一定能**化为 $[E_m,O]$！）；$BB^T$ 可逆。"
+    },
+    {
+      "id": "m1-la04-c-02",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "三、实矩阵四秩相等定理",
+      "title": "实矩阵格拉姆四秩相等：$r(A)=r(A^T)=r(A^TA)=r(AA^T)$ 及其同解本质",
+      "conditions": "**严格依赖实矩阵前提**（复矩阵需用共轭转置 $A^HA$，普通转置 $A^TA$ 反例 $A=[1,i]\\Rightarrow r(A)=1$ 但 $AA^T=[0]\\Rightarrow r=0$！）。",
+      "pitfalls": "千万别误推广成 $r(A^2)=r(A)$！反例 $A=\\begin{bmatrix}0&1\\\\0&0\\end{bmatrix}$ 有 $r(A)=1$ 但 $A^2=O\\Rightarrow r(A^2)=0$（因为 $A$ 未必对称！）。仅当 $A$ 为**实对称阵**时才有 $r(A^2)=r(A^TA)=r(A)$！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 线代独家大总结",
+        "printedPage": "基础 P.74,132 / 强化 P.46 / 大总结 P.8",
+        "pdfPage": 57,
+        "itemRef": "实矩阵四秩相等定理"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la04_rank_identities",
+        "verified": true
+      },
+      "summary": "对任意 $m\\times n$ **实矩阵** $A$，均有 $r(A)=r(A^T)=r(A^TA)=r(AA^T)$！证明一步到位：$Ax=0\\Rightarrow A^TAx=0$；反之 $A^TAx=0\\Rightarrow x^TA^TAx=\\|Ax\\|^2=0\\Rightarrow Ax=0$，故 $A^TAx=0$ 与 $Ax=0$ 同解，从而 $r(A^TA)=r(A)$（且 $A^TA$ 与 $A$ 的行向量组等价）；以 $A^T$ 代 $A$ 立得 $r(AA^T)=r(A^T)=r(A)$。"
+    },
+    {
+      "id": "m1-la04-c-03",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、秩为 1 矩阵的六大黄金推论",
+      "title": "秩为 1 矩阵 $r(A)=1\\Leftrightarrow A=\\alpha\\beta^T$ 全景六大秒杀推论",
+      "conditions": "$n\\ge 2$ 阶方阵且 $r(A)=1$（各行/各列成比例且不全为零）。",
+      "pitfalls": "别误认为 $r(A)=1$ 就一定可相似对角化！当且仅当 $\\operatorname{tr}(A)\\ne 0$ 才可对角化；若 $\\operatorname{tr}(A)=0$（如 $\\begin{bmatrix}1&-1\\\\1&-1\\end{bmatrix}$），特征值全为 $0$ 却非零阵，**绝不可对角化**！",
+      "source": {
+        "book": "线代独家大总结 & 27 没咋了强化讲义",
+        "printedPage": "大总结 P.9 / 没咋了 P.23",
+        "pdfPage": 9,
+        "itemRef": "秩1矩阵六大推论"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la04_rank_identities",
+        "verified": true
+      },
+      "summary": "设 $n$ 阶方阵 $A$ 满足 $r(A)=1$，则：① **分解**：存在非零列向量 $\\alpha,\\beta$ 使 $A=\\alpha\\beta^T$；② **高次幂**：$A^k=[\\operatorname{tr}(A)]^{k-1}A$（其中 $\\operatorname{tr}(A)=\\beta^T\\alpha$）；③ **方程组**：$Ax=0$ 基础解系含 $n-1$ 个向量；④ **特征值**：$\\lambda_1=\\cdots=\\lambda_{n-1}=0,\\;\\lambda_n=\\operatorname{tr}(A)$；⑤ **可对角化判别**：$\\operatorname{tr}(A)\\ne 0\\Leftrightarrow A$ 可相似对角化，$\\operatorname{tr}(A)=0\\Leftrightarrow A$ 不可对角化（且 $A^2=O$）；⑥ **行列式速算**：$|kE+A|=k^{n-1}(k+\\operatorname{tr}(A))$（特别 $|E+A|=1+\\operatorname{tr}(A)$）。"
+    },
+    {
+      "id": "m1-la04-c-04",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、幂等阵与对合阵的秩与对角化结论",
+      "title": "幂等阵 $A^2=A$（与对合阵 $A^2=E$）的秩、迹、可逆与对角化全家桶",
+      "conditions": "只要矩阵满足无重根的二次零化多项式 $(A-k_1E)(A-k_2E)=O\\;(k_1\\ne k_2)$，它就必可相似对角化且 $r(A-k_1E)+r(A-k_2E)=n$！",
+      "pitfalls": "仅当 $A^2=A$ 时才有 $r(A)=\\operatorname{tr}(A)$；对合阵 $A^2=E$ 恒有 $r(A)=n$，而 $\\operatorname{tr}(A)=r(A+E)-r(A-E)$！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.48 注(2)",
+        "pdfPage": 59,
+        "itemRef": "幂等阵与对合阵结论"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la04_rank_identities",
+        "verified": true
+      },
+      "summary": "① 若 $n$ 阶方阵满足 **$A^2=A$（幂等阵）**，则：(a) $r(A)+r(A-E)=n$；(b) 特征值只能为 $0$ 或 $1$，且 **$A$ 必可相似对角化**（$A\\sim\\operatorname{diag}(1,\\dots,1,0,\\dots,0)$），从而 **$r(A)=\\operatorname{tr}(A)$**！；(c) $A+E$ 必可逆（因 $-1$ 非特征值，且 $(A+E)^{-1}=E-\\frac{1}{2}A$）；(d) $(A+E)^m=E+(2^m-1)A$；② 若 **$A^2=E$（对合阵）**，则 $r(A+E)+r(A-E)=n$，特征值只能为 $\\pm 1$，且 $A$ 亦必可相似对角化！"
+    },
+    {
+      "id": "m1-la04-c-05",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、秩与方程组/向量组/相似对角化的跨章桥梁",
+      "title": "秩贯通全书的 5 大核心桥梁公式（基础解系、同解、等价向量组与相似重数）",
+      "conditions": "结论 ④⑤ **严格需要 $A$ 可相似对角化（$A\\sim\\Lambda$，如实对称阵恒满足）**！",
+      "pitfalls": "不可对角化阵中，$r(A)$ **可以大于**非零特征值个数！例如 $A=\\begin{bmatrix}0&1\\\\0&0\\end{bmatrix}$ 有 $0$ 个非零特征值，但 $r(A)=1$！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.41,48 公式13-17",
+        "pdfPage": 59,
+        "itemRef": "秩的五大跨章桥梁公式"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "summary": "强化 9 讲 P.48 公式 13–17 将秩与后续 5–8 讲彻底打通：① $Ax=0$ 基础解系向量个数 $s=n-r(A)$；② 齐次方程组 $Ax=0$ 与 $Bx=0$ 同解 $\\Leftrightarrow r(A)=r(B)=r\\begin{bmatrix}A\\\\B\\end{bmatrix}$（三秩相等）；③ 向量组 (I) 与 (II) 等价 $\\Leftrightarrow r(\\text{I})=r(\\text{II})=r(\\text{I},\\text{II})$；④ 若 $A\\sim\\Lambda$，则 $\\lambda_i$ 的代数重数 $n_i=n-r(\\lambda_i E-A)$；⑤ 若 $A\\sim\\Lambda$，则 **$r(A)$ 等于非零特征值的个数（重根按重数算）**！"
+    },
+    {
+      "id": "m1-la04-e-01",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础核心例题（基础 30 讲）",
+      "title": "【例 2.19】含参 $3\\times 4$ 矩阵秩为 2 求参数 $t$（子式法 vs 行变换法）",
+      "problem": "若矩阵 $A=\\begin{bmatrix}1&2&-1&1\\\\2&0&t&0\\\\0&-4&5&-2\\end{bmatrix}$ 的秩为 $2$，则 $t=(\\quad)$。  (A) $0$　(B) $1$　(C) $2$　(D) $3$",
+      "steps": [
+        {
+          "stepTitle": "方法一（3 阶子式全为零秒杀）",
+          "detail": "因 $r(A)=2$，故 $A$ 的全部 3 阶子式均为 $0$。取含 $t$ 的前 3 列 3 阶子式：$\\begin{vmatrix}1&2&-1\\\\2&0&t\\\\0&-4&5\\end{vmatrix}=1(0+4t)-2(10-0)-1(-8-0)=4t-12=0\\implies t=3$（再验证第 1,2,4 列或行变换确认 $r=2$）。"
+        },
+        {
+          "stepTitle": "方法二（初等行变换化阶梯形，严谨一步到位）",
+          "detail": "$\\begin{bmatrix}1&2&-1&1\\\\2&0&t&0\\\\0&-4&5&-2\\end{bmatrix}\\xrightarrow{r_2-2r_1}\\begin{bmatrix}1&2&-1&1\\\\0&-4&t+2&-2\\\\0&-4&5&-2\\end{bmatrix}\\xrightarrow{r_3-r_2}\\begin{bmatrix}1&2&-1&1\\\\0&-4&t+2&-2\\\\0&0&3-t&0\\end{bmatrix}$。因前两行非零且线性无关，故 $r(A)=2\\Leftrightarrow 3-t=0\\Leftrightarrow t=3$！"
+        }
+      ],
+      "finalAnswer": "(D) $3$",
+      "takeaway": "含参矩阵已知秩求参数：**初等行变换化阶梯形**既给必要又给充分条件，避免只算单个子式漏掉秩降为 1 或其他子式非零的风险！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.74",
+        "pdfPage": 80,
+        "itemRef": "例 2.19"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la04_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la04-e-02",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础核心例题（基础 30 讲）",
+      "title": "【例 2.20】$A_{m\\times n}B_{n\\times m}=E_m$ 夹逼定双秩（$r(A)=r(B)=m$）",
+      "problem": "设 $A$ 为 $m\\times n$ 矩阵，$B$ 为 $n\\times m$ 矩阵，$E_m$ 为 $m$ 阶单位矩阵。若 $AB=E_m$，则 $(\\quad)$。  (A) $r(A)=m,r(B)=m$　(B) $r(A)=m,r(B)=n$　(C) $r(A)=n,r(B)=m$　(D) $r(A)=n,r(B)=n$",
+      "steps": [
+        {
+          "stepTitle": "第一步：用 $r(AB)\\le\\min\\{r(A),r(B)\\}$ 建立下界",
+          "detail": "$m=r(E_m)=r(AB)\\le\\min\\{r(A),r(B)\\}\\implies r(A)\\ge m$ 且 $r(B)\\ge m$。"
+        },
+        {
+          "stepTitle": "第二步：结合尺寸上界夹逼锁定",
+          "detail": "又 $A$ 仅 $m$ 行、$B$ 仅 $m$ 列，故 $r(A)\\le\\min\\{m,n\\}\\le m$，$r(B)\\le\\min\\{n,m\\}\\le m$。两头夹死即得 $r(A)=r(B)=m$！（且顺带隐含必有 $m\\le n$；特值验证取 $A=[E_m,O],B=\\begin{bmatrix}E_m\\\\O\\end{bmatrix}$ 一眼选 (A)。）"
+        }
+      ],
+      "finalAnswer": "(A) $r(A)=m,\\;r(B)=m$",
+      "takeaway": "遇到 $AB=E_m$（非方阵乘出单位阵），立刻条件反射：**$m\\le n$、$A$ 行满秩、$B$ 列满秩、$r(A)=r(B)=m$**！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.74",
+        "pdfPage": 80,
+        "itemRef": "例 2.20"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la04_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la04-e-03",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础核心例题（基础 30 讲）",
+      "title": "【基础习题 2.5】三阶行和相等阵满足 $r(A^*)=1$ 求参数关系（必排 $a=b$ 坑！）",
+      "problem": "设 3 阶矩阵 $A=\\begin{bmatrix}a&b&b\\\\b&a&b\\\\b&b&a\\end{bmatrix}$，其中 $b\\ne 0$，已知伴随矩阵 $A^*$ 的秩为 $r(A^*)=1$，求 $a,b$ 应满足的条件。",
+      "steps": [
+        {
+          "stepTitle": "第一步：将 $r(A^*)=1$ 双向翻译为 $r(A)=n-1=2$",
+          "detail": "因 $A$ 为 3 阶矩阵，由伴随秩三值公式：$r(A^*)=1\\Longleftrightarrow r(A)=3-1=2$。"
+        },
+        {
+          "stepTitle": "第二步：先算 $|A|=0$ 得候选值，再逐一验证 $r(A)=2$（排坑核心！）",
+          "detail": "$|A|=(a+2b)(a-b)^2=0\\implies a=b$ 或 $a=-2b$。① 当 $a=b\\ne 0$ 时，$A=b\\begin{bmatrix}1&1&1\\\\1&1&1\\\\1&1&1\\end{bmatrix}$，此时 $r(A)=1\\implies r(A^*)=0$（**舍去！**）；② 当 $a=-2b\\;(b\\ne 0)$ 时，$A=b\\begin{bmatrix}-2&1&1\\\\1&-2&1\\\\1&1&-2\\end{bmatrix}$，左上 2 阶子式 $b^2\\begin{vmatrix}-2&1\\\\1&-2\\end{vmatrix}=3b^2\\ne 0$，恰有 $r(A)=2\\implies r(A^*)=1$！"
+        }
+      ],
+      "finalAnswer": "$a=-2b$（且 $b\\ne 0$）",
+      "takeaway": "看到 $r(A^*)=1$ 绝不能只解 $|A|=0$ 就交卷！必须逐个回代排除 $r(A)\\le n-2$ 的退化参数（如本题 $a=b$ 退化为秩 1 导致 $A^*=O$）！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.75",
+        "pdfPage": 81,
+        "itemRef": "基础习题 2.5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la04_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la04-e-04",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础三大核心秩定理证明（基础 30 讲）",
+      "title": "【例 3.9–3.11】三大基础秩定理严谨证明精粹（乘积、和/拼阵、伴随秩）",
+      "problem": "证明：① $r(AB)\\le\\min\\{r(A),r(B)\\}$；② $r(A+B)\\le r([A,B])\\le r(A)+r(B)$；③ $r(A^*)=n\\;(r=n),\\;1\\;(r=n-1),\\;0\\;(r<n-1)$。",
+      "steps": [
+        {
+          "stepTitle": "① 证 $r(AB)\\le\\min\\{r(A),r(B)\\}$（向量组表示法）",
+          "detail": "将 $B,AB$ 按行分块，$AB$ 的每个行向量均为 $B$ 行向量组的线性组合，由「被表示向量组秩不大」得 $r(AB)\\le r(B)$；对转置 $(AB)^T=B^TA^T$ 同理得 $r(AB)=r(B^TA^T)\\le r(A^T)=r(A)$，合即得证。"
+        },
+        {
+          "stepTitle": "② 证 $r(A+B)\\le r([A,B])\\le r(A)+r(B)$",
+          "detail": "$A+B=[\\alpha_1+\\beta_1,\\dots,\\alpha_s+\\beta_s]$ 的每列均可由 $[A,B]=[\\alpha_1,\\dots,\\alpha_s,\\beta_1,\\dots,\\beta_s]$ 线性表示，故 $r(A+B)\\le r([A,B])$；又将 $A$ 极大无关组（$p$ 个）与 $B$ 极大无关组（$q$ 个）合并可表示 $[A,B]$ 全部列，故 $r([A,B])\\le p+q=r(A)+r(B)$。"
+        },
+        {
+          "stepTitle": "③ 证 $r(A^*)$ 三值阶梯",
+          "detail": "当 $r(A)=n$ 时 $|A^*|=|A|^{n-1}\\ne 0\\Rightarrow r(A^*)=n$；当 $r(A)=n-1$ 时存在非零 $n-1$ 阶子式故 $r(A^*)\\ge 1$，又 $AA^*=|A|E=O\\Rightarrow r(A)+r(A^*)\\le n\\Rightarrow r(A^*)\\le 1$，夹逼得 $r(A^*)=1$；当 $r(A)<n-1$ 时所有 $n-1$ 阶子式全为 $0$，故 $A^*=O\\Rightarrow r(A^*)=0$。"
+        }
+      ],
+      "finalAnswer": "三项核心定理均由「向量线性表示保秩序」与「$AA^*=|A|E$ 夹逼」严密证毕",
+      "takeaway": "基础 30 讲特意把这三个秩证明放在向量组一章，本质上是告诉你：**证明秩的不等式，向量组表示与方程组解空间是底层最通透的工具！**",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.101-103",
+        "pdfPage": 107,
+        "itemRef": "例 3.9-3.11"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la04-e-05",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 9 例精解（列满秩/行满秩与类消去）",
+      "title": "【强化例 4.1】$A_{4\\times 3}$ 列满秩与 3 阶阵 $B$：秒判 $ABx=0$ 与 $Bx=0$ 同解",
+      "problem": "设 $A$ 为 $4\\times 3$ 矩阵，$B$ 为 3 阶方阵，若 $r(A)=3$，则 $(\\quad)$。  (A) $ABx=0$ 与 $Bx=0$ 同解　(B) $ABx=0$ 与 $Ax=0$ 同解　(C) $B^TA^Tx=0$ 与 $A^Tx=0$ 同解　(D) $B^TA^Tx=0$ 与 $B^Tx=0$ 同解",
+      "steps": [
+        {
+          "stepTitle": "第一步：识别 $A_{4\\times 3}$ 列满秩，直接触发左乘保秩",
+          "detail": "由 $r(A)=3=$ 列数（或用西尔维斯特 $3+r(B)-3\\le r(AB)\\le\\min\\{3,r(B)\\}$），立得 $r(AB)=r(B)$！"
+        },
+        {
+          "stepTitle": "第二步：结合单向归属得同解",
+          "detail": "显然 $Bx=0$ 的任一解必满足 $ABx=0$，叠加 $r(AB)=r(B)$（解空间维数相同），故 $ABx=0$ 与 $Bx=0$ 同解，选 (A)！（注：若改为 $r(B)=3$ 即 $B$ 可逆，则 $r(AB)=r(A)\\Rightarrow r(B^TA^T)=r(A^T)$，此时才选 (C)！）"
+        }
+      ],
+      "finalAnswer": "(A) $ABx=0$ 与 $Bx=0$ 同解",
+      "takeaway": "记住联动口诀：**$A$ 列满秩 $\\Rightarrow ABx=0$ 与 $Bx=0$ 同解；$B$ 行满秩 $\\Rightarrow B^TA^Tx=0$ 与 $A^Tx=0$ 同解！**",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.42-43",
+        "pdfPage": 53,
+        "itemRef": "强化例 4.1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la04_adv_part1",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la04-e-06",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 9 例精解（列满秩/行满秩与类消去）",
+      "title": "【强化例 4.2】$C_{n\\times m}$ 行满秩的右类消去律四结论辨析",
+      "problem": "设 $B$ 是 $n$ 阶矩阵，$C$ 是 $n\\times m$ 矩阵，且 $r(C)=n$，则下列结论：① 若 $BC=O$，则 $B=O$；② 若 $BC=C$，则 $B=E$；③ 若 $BC=O$，则 $1\\le r(B)<n$；④ 若 $BC=C$，则 $r(B)=n$。所有正确结论的序号为 $(\\quad)$。  (A) ①②④　(B) ②④　(C) ①③④　(D) ③④",
+      "steps": [
+        {
+          "stepTitle": "第一步：判定 $C_{n\\times m}$ 满足 $r(C)=n$（行满秩）",
+          "detail": "$C$ 有 $n$ 行且 $r(C)=n$，故 $C$ 行满秩，满足**右类消去律**：若 $XC=YC$，必有 $X=Y$！"
+        },
+        {
+          "stepTitle": "第二步：逐项秒杀 ①②③④",
+          "detail": "① $BC=OC\\implies B=O$（正确！）；② $BC=EC\\implies B=E$（正确！）；③ 由 ① 知 $B=O$ 故 $r(B)=0$，与 $1\\le r(B)$ 矛盾（错误！）；④ 由 ② 知 $B=E\\implies r(B)=n$（正确！）。故正确序号为 ①②④！"
+        }
+      ],
+      "finalAnswer": "(A) ①②④",
+      "takeaway": "看到非方阵 $C_{n\\times m}$ 满行秩在等式右边，直接像消去可逆阵一样右消去 $C$，切勿受限于「只有方阵才可消去」的思维定式！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.43",
+        "pdfPage": 54,
+        "itemRef": "强化例 4.2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la04_adv_part1",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la04-e-07",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 9 例精解（列满秩/行满秩与类消去）",
+      "title": "【强化例 4.3】已知 $A_{3\\times 2}B_{2\\times 3}$ 满秩乘积，双消去秒求 $BA=9E_2$",
+      "problem": "设 $A,B$ 分别为 $3\\times 2$ 和 $2\\times 3$ 实矩阵，若 $AB=\\begin{bmatrix}8&0&-4\\\\-\\frac{3}{2}&9&-6\\\\-2&0&1\\end{bmatrix}$，求 $BA$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：定 $r(AB)=2$，夹逼推出 $A$ 列满秩且 $B$ 行满秩",
+          "detail": "观察 $AB$ 第 1 行是第 3 行的 $-4$ 倍，而左上 $2\\times 2$ 子式 $\\begin{vmatrix}8&0\\\\-3/2&9\\end{vmatrix}=72\\ne 0$，故 $r(AB)=2$。又 $2=r(AB)\\le r(A),r(B)\\le 2\\implies r(A)=r(B)=2$，即 **$A$ 列满秩、$B$ 行满秩**！"
+        },
+        {
+          "stepTitle": "第二步：算 $(AB)^2=9AB$，左右连续双消去秒出 $BA$",
+          "detail": "直接计算得 $(AB)^2=\\begin{bmatrix}72&0&-36\\\\-27/2&81&-54\\\\-18&0&9\\end{bmatrix}=9AB$，即 $A(BA)B=A(9E_2)B$。因 $A$ 列满秩（左消 $A$）得 $(BA)B=(9E_2)B$；再因 $B$ 行满秩（右消 $B$）立得 $BA=9E_2=\\begin{bmatrix}9&0\\\\0&9\\end{bmatrix}$！"
+        }
+      ],
+      "finalAnswer": "$\\begin{bmatrix}9&0\\\\0&9\\end{bmatrix}$",
+      "takeaway": "考场神技：已知 $AB$（大阵）反求 $BA$（小阵），先算 $(AB)^2$ 找比例系数 $k$（或找 $AB$ 的非零特征值），再利用满秩分解 $A$ 列满秩、$B$ 行满秩左右双消去！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.43",
+        "pdfPage": 54,
+        "itemRef": "强化例 4.3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la04_adv_part1",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la04-e-08",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 9 例精解（分块广义初等变换与夹逼）",
+      "title": "【强化例 4.4】（2023 数一）$ABC=O$ 下三个分块矩阵秩 $r_1\\le r_3\\le r_2$ 精准排序",
+      "problem": "已知 $n$ 阶矩阵 $A,B,C$ 满足 $ABC=O$，$E$ 为 $n$ 阶单位矩阵，记矩阵 $\\begin{bmatrix}O&A\\\\BC&E\\end{bmatrix},\\;\\begin{bmatrix}AB&C\\\\O&E\\end{bmatrix},\\;\\begin{bmatrix}E&AB\\\\AB&O\\end{bmatrix}$ 的秩分别为 $r_1,r_2,r_3$，则 $(\\quad)$。  (A) $r_1\\le r_2\\le r_3$　(B) $r_1\\le r_3\\le r_2$　(C) $r_3\\le r_1\\le r_2$　(D) $r_2\\le r_1\\le r_3$",
+      "steps": [
+        {
+          "stepTitle": "第一步：用广义初等变换逐一化为分块对角阵求秩",
+          "detail": "① 对第 1 阵：$R_1-A\\cdot R_2\\implies \\begin{bmatrix}-ABC&O\\\\BC&E\\end{bmatrix}=\\begin{bmatrix}O&O\\\\BC&E\\end{bmatrix}$，再列消去 $BC$ 得 **$r_1=n$**；② 对第 2 阵：$R_1-C\\cdot R_2\\implies \\begin{bmatrix}AB&O\\\\O&E\\end{bmatrix}$，得 **$r_2=r(AB)+n$**；③ 对第 3 阵：先 $R_2-(AB)R_1$ 得 $\\begin{bmatrix}E&AB\\\\O&-ABAB\\end{bmatrix}$，再 $C_2-C_1(AB)$ 得 $\\begin{bmatrix}E&O\\\\O&-ABAB\\end{bmatrix}$，故 **$r_3=r((AB)^2)+n$**！"
+        },
+        {
+          "stepTitle": "第二步：由「越乘秩越小」一步定序",
+          "detail": "因 $0\\le r((AB)^2)\\le r(AB)$，两边同加 $n$ 即得 $n\\le r((AB)^2)+n\\le r(AB)+n$，即 $r_1\\le r_3\\le r_2$，选 (B)！"
+        }
+      ],
+      "finalAnswer": "(B) $r_1\\le r_3\\le r_2$",
+      "takeaway": "见分块阵里有 $E$，立刻以 $E$ 为支点做广义初等行/列消元（打掉同行同列所有块！），瞬间把 2×2 分块秩化简为 $n+r(\\text{舒尔补})$！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.43-44",
+        "pdfPage": 54,
+        "itemRef": "强化例 4.4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la04_adv_part1",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la04-e-09",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 9 例精解（分块广义初等变换与夹逼）",
+      "title": "【强化例 4.5】$A(C+BA)=O$ 用西尔维斯特 + 逆三角下界夹死 $r(C+BA)=n-r$",
+      "problem": "设 $A,B$ 分别为 $m\\times n$ 与 $n\\times m$ 矩阵，$C$ 为 $n$ 阶可逆矩阵，且 $r(A)=r<n$，$A(C+BA)=O$，则 $r(C+BA)=\\_\\_\\_\\_$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：用 $AB=O$ 推论定上界 $\\le n-r$",
+          "detail": "由 $A_{m\\times n}(C+BA)_{n\\times n}=O$，直接套西尔维斯特特例得 $r(A)+r(C+BA)\\le n\\implies r(C+BA)\\le n-r$。"
+        },
+        {
+          "stepTitle": "第二步：用逆三角不等式定下界 $\\ge n-r$",
+          "detail": "由 $r(C+BA)=r(C-(-BA))\\ge r(C)-r(BA)$；又 $C$ 可逆故 $r(C)=n$，且 $r(BA)\\le r(A)=r$，故 $r(C+BA)\\ge n-r$！两头夹死得 $r(C+BA)=n-r$！"
+        }
+      ],
+      "finalAnswer": "$n-r$",
+      "takeaway": "只要题中要求算一个抽象矩阵的**精确秩数值**（填空题），99% 是「西尔维斯特给上界 + 逆三角 $r(C+X)\\ge r(C)-r(X)$ 给下界」双向夹死！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.45",
+        "pdfPage": 56,
+        "itemRef": "强化例 4.5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la04_adv_part2",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la04-e-10",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 9 例精解（西尔维斯特与弗罗贝尼乌斯）",
+      "title": "【强化例 4.6】（2025 数一）$r(A)+r(B)+r(C)=r(ABC)+2n$ 连续两次西尔维斯特夹死等号",
+      "problem": "设 $n$ 阶矩阵 $A,B,C$ 满足 $r(A)+r(B)+r(C)=r(ABC)+2n$，给出四个结论：① $r(ABC)+n=r(AB)+r(C)$；② $r(AB)+n=r(A)+r(B)$；③ $r(A)=r(B)=r(C)=n$；④ $r(AB)=r(BC)=n$。所有正确结论的序号为 $(\\quad)$。  (A) ①②　(B) ①③　(C) ②④　(D) ③④",
+      "steps": [
+        {
+          "stepTitle": "法一（逻辑推演：连套两次西尔维斯特夹紧）",
+          "detail": "由题设与两次公式 8：$r(A)+r(B)+r(C)=r(ABC)+2n\\ge [r(AB)+r(C)-n]+2n=r(AB)+r(C)+n\\ge [r(A)+r(B)-n]+r(C)+n=r(A)+r(B)+r(C)$！首尾完全相等，故中间两个不等号**必须同时取等**！即 $r(ABC)+n=r(AB)+r(C)$（① 正确）且 $r(AB)+n=r(A)+r(B)$（② 正确）！"
+        },
+        {
+          "stepTitle": "法二（考场 5 秒特值排除 ③④）",
+          "detail": "取 $n=2$，$A=\\begin{bmatrix}1&0\\\\0&0\\end{bmatrix},\\;B=\\begin{bmatrix}0&0\\\\0&1\\end{bmatrix},\\;C=E_2$，则 $r(A)=1,r(B)=1,r(C)=2,ABC=O\\Rightarrow r(ABC)=0$，精准满足 $1+1+2=0+4$！但 $r(A)=1\\ne 2$ 且 $r(AB)=0\\ne 2$，秒排 ③④，稳选 (A)！"
+        }
+      ],
+      "finalAnswer": "(A) ①②",
+      "takeaway": "2025 数一新真题典范：凡是等式里出现 $+2n$ 与三阵乘积 $r(ABC)$，就是把两步西尔维斯特不等式强行逼到极限取等！选填题加配对角特值阵 5 秒双保险。",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.45-46 / 没咋了 P.31例7",
+        "pdfPage": 56,
+        "itemRef": "强化例 4.6"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la04_adv_part2",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la04-e-11",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 9 例精解（西尔维斯特与弗罗贝尼乌斯）",
+      "title": "【强化例 4.7】弗罗贝尼乌斯不等式一行秒证：$r(AB)=r(B)\\implies r(ABC)=r(BC)$",
+      "problem": "设矩阵 $A_{m\\times n},\\;B_{n\\times s}$ 满足 $r(AB)=r(B)$，证明：对任意矩阵 $C_{s\\times t}$，有 $r(ABC)=r(BC)$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：套弗罗贝尼乌斯定下界",
+          "detail": "由 $r(ABC)\\ge r(AB)+r(BC)-r(B)$，代入已知 $r(AB)=r(B)$，瞬间消去得 $r(ABC)\\ge r(BC)$！"
+        },
+        {
+          "stepTitle": "第二步：套乘积上界夹死等号（另附方程组同解法对照）",
+          "detail": "又由越乘秩越小知 $r(ABC)=r(A(BC))\\le r(BC)$，上下夹逼即得 $r(ABC)=r(BC)$！（注：亦可用 $ABx=0\\Leftrightarrow Bx=0$ 推出 $ABCy=0\\Leftrightarrow BCy=0$ 证得，但弗罗贝尼乌斯仅需 1 行！）"
+        }
+      ],
+      "finalAnswer": "证毕（$r(BC)\\le r(AB)+r(BC)-r(B)\\le r(ABC)\\le r(BC)$）",
+      "takeaway": "「已知二阵保秩 $r(AB)=r(B)$，要证右添任意阵 $C$ 仍保秩 $r(ABC)=r(BC)$」——直接默写弗罗贝尼乌斯不等式，1 行满分！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.46",
+        "pdfPage": 57,
+        "itemRef": "强化例 4.7"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la04_adv_part2",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la04-e-12",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 9 例精解（四秩相等与伴随秩）",
+      "title": "【强化例 4.8】四个分块阵秩等于 $2r(A)$ 真假辨析（精准识破错位块 $BA$！）",
+      "problem": "设 $A,B$ 为 $n$ 阶实矩阵，下列结论**不成立**的是 $(\\quad)$。  (A) $r\\begin{bmatrix}A&AB\\\\O&A^T\\end{bmatrix}=2r(A)$　(B) $r\\begin{bmatrix}A&O\\\\O&A^TA\\end{bmatrix}=2r(A)$　(C) $r\\begin{bmatrix}A&BA\\\\O&AA^T\\end{bmatrix}=2r(A)$　(D) $r\\begin{bmatrix}A&O\\\\BA&A^T\\end{bmatrix}=2r(A)$",
+      "steps": [
+        {
+          "stepTitle": "第一步：验证 (A)(B)(D) 均恒等于 $2r(A)$",
+          "detail": "① (B) 是分块对角阵，由实矩阵四秩相等得 $r(A)+r(A^TA)=2r(A)$；② (A) 中 $AB$ 与 $A$ 同行且在右乘位置，作列变换 $C_2-C_1 B$ 将 $AB$ 清零化为 $\\begin{bmatrix}A&O\\\\O&A^T\\end{bmatrix}$，秩为 $2r(A)$；③ (D) 中 $BA$ 与 $A$ 同列且在左乘位置，作行变换 $R_2-B R_1$ 将 $BA$ 清零化为 $\\begin{bmatrix}A&O\\\\O&A^T\\end{bmatrix}$，秩亦为 $2r(A)$！"
+        },
+        {
+          "stepTitle": "第二步：识破 (C) 错位块并用 2 阶反例实锤否决",
+          "detail": "在 (C) 中，$BA$ 与 $A$ 同行却左乘 $B$（列变换消不掉），与 $AA^T$ 同列却非 $X(AA^T)$ 形式（行变换也消不掉）！取 $A=\\begin{bmatrix}0&1\\\\0&1\\end{bmatrix},\\;B=\\begin{bmatrix}0&0\\\\1&1\\end{bmatrix}$，算得 $BA=\\begin{bmatrix}0&0\\\\0&2\\end{bmatrix},\\;AA^T=\\begin{bmatrix}1&1\\\\1&1\\end{bmatrix}$，拼成 4 阶阵 $\\begin{bmatrix}0&1&0&0\\\\0&1&0&2\\\\0&0&1&1\\\\0&0&1&1\\end{bmatrix}$，秩为 **$3\\ne 2r(A)=2$**！故选 (C)！"
+        }
+      ],
+      "finalAnswer": "(C)",
+      "takeaway": "分块阵秒杀规律：**同行右乘 $AB$ 可列消、同列左乘 $BA$ 可行消**；只要出现「同行左乘 $BA$」或「同列右乘 $AB$」，必是命题人故意埋的错位陷阱！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.47",
+        "pdfPage": 58,
+        "itemRef": "强化例 4.8"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la04_adv_part2",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la04-e-13",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 9 例精解（四秩相等与伴随秩）",
+      "title": "【强化例 4.9】（2024 数二）4 阶阵 $A(A-A^*)=O$ 且 $A\\ne A^*$ 定 $r(A)\\in\\{1,2\\}$",
+      "problem": "设 $A$ 为 4 阶矩阵，$A^*$ 为 $A$ 的伴随矩阵，若 $A(A-A^*)=O$ 且 $A\\ne A^*$，则 $r(A)$ 取值为 $(\\quad)$。  (A) $0$ 或 $1$　(B) $1$ 或 $3$　(C) $2$ 或 $3$　(D) $1$ 或 $2$",
+      "steps": [
+        {
+          "stepTitle": "第一步：先证 $|A|=0$，化简得 $A^2=O$",
+          "detail": "由 $A(A-A^*)=O$ 得 $r(A)+r(A-A^*)\\le 4$。因 $A\\ne A^*$ 故 $r(A-A^*)\\ge 1\\implies r(A)\\le 3\\implies |A|=0$！于是展开得 $O=A(A-A^*)=A^2-AA^*=A^2-|A|E=A^2$！"
+        },
+        {
+          "stepTitle": "第二步：由 $A^2=O$ 压至 $r(A)\\le 2$，再联动 $A^*=O$ 排除 $r(A)=0$",
+          "detail": "由 $A^2=O\\implies 2r(A)\\le 4\\implies r(A)\\le 2$。由于 $r(A)\\le 2<4-1=3$，由伴随秩公式立得 $A^*=O$！又题设 $A\\ne A^*=O$，故 $A\\ne O\\implies r(A)\\ge 1$！综上 $r(A)=1$ 或 $2$（且两值均可实现：如 $J_2(0)\\oplus 0_2$ 秩 1，$J_2(0)\\oplus J_2(0)$ 秩 2）。"
+        }
+      ],
+      "finalAnswer": "(D) $1$ 或 $2$",
+      "takeaway": "2024 真题神仙连招：**先由 $A\\ne A^*$ 砍掉满秩得 $|A|=0$ $\\to$ 瞬间消掉 $AA^*$ 得 $A^2=O$ $\\to$ 压低秩至 $\\le 2$ 触发 $A^*=O$ $\\to$ 反推 $A\\ne O$ 排除 $0$**，环环相扣无一废话！",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.47 / 没咋了 P.31例6",
+        "pdfPage": 58,
+        "itemRef": "强化例 4.9"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la04_adv_part2",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la04-e-14",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化独家好题与真题精选",
+      "title": "【没咋了 1.8 例 1】$r(A_{m\\times n})=r<m<n$ 的 4 个高频概念陷阱全灭（答案竟然是 0 个！）",
+      "problem": "设矩阵 $A$ 是 $m\\times n$ 矩阵，$r(A)=r<m<n$，则下列说法中正确的个数有 $(\\quad)$：① $A$ 的任一 $r-1$ 阶子式均不为 $0$；② $|A|=0$；③ $A$ 的任一 $r$ 阶子式均不为 $0$；④ $A$ 经初等**行**变换可以化为 $\\begin{bmatrix}E_r&O\\\\O&O\\end{bmatrix}$。  (A) $0$ 个　(B) $1$ 个　(C) $2$ 个　(D) $3$ 个",
+      "steps": [
+        {
+          "stepTitle": "第一步：逐条精准排雷 ①②③",
+          "detail": "① 错：存在 $r$ 阶非零子式绝不保证「任意」$r-1$ 阶子式非零（反例 $\\begin{bmatrix}1&0&0\\\\0&0&0\\end{bmatrix}$ 中 $r=1$ 或 3×4 阵中 $r=2$，有大量全零 1 阶子式）；② 错：$m<n$ 说明 $A$ 根本不是方阵，**不存在行列式 $|A|$**！③ 错：只存在「至少一个」$r$ 阶子式非零，不是「任一」！"
+        },
+        {
+          "stepTitle": "第二步：识破最隐蔽的 ④（行变换无法把所有非零列移至前 $r$ 列！）",
+          "detail": "④ 错：化为等价标准形 $\\begin{bmatrix}E_r&O\\\\O&O\\end{bmatrix}$ 一般需要**初等行变换 + 初等列变换**同时作用！反例 $A=\\begin{bmatrix}0&1&0\\\\0&0&0\\end{bmatrix}$（$r=1<2<3$），无论怎么作初等行变换，第 1 列永远全为 $0$，绝对化不成 $\\begin{bmatrix}1&0&0\\\\0&0&0\\end{bmatrix}$！故 4 句全错，选 (A) $0$ 个！"
+        }
+      ],
+      "finalAnswer": "(A) $0$ 个",
+      "takeaway": "这道题一网打尽秩定义的 4 个经典认知盲区：**非方阵无 $|A|$、「存在」非「任一」、等价标准形必须行列联手！**",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.29",
+        "pdfPage": 34,
+        "itemRef": "没咋了 1.8 例 1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la04_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la04-e-15",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化独家好题与真题精选",
+      "title": "【没咋了 1.8 例 2】行满秩阵 $A_{m\\times n}$ 满足 $BA=CA$ 证明 $B=C$（右逆与转置方程组双证）",
+      "problem": "设 $A$ 为 $m\\times n$ 矩阵，且 $r(A)=m<n$，$B,C$ 均为 $n\\times m$ 矩阵，满足 $BA=CA$，证明：$B=C$。",
+      "steps": [
+        {
+          "stepTitle": "证法一（右乘 $A^T$ 造可逆格拉姆阵 $AA^T$，2 行秒证！）",
+          "detail": "由 $r(A)=m$ 及实矩阵四秩相等知 $r(AA^T)=r(A)=m$，而 $AA^T$ 为 $m$ 阶方阵，故 **$AA^T$ 可逆**！将 $(B-C)A=O$ 两端右乘 $A^T$ 得 $(B-C)(AA^T)=O$，再右乘 $(AA^T)^{-1}$ 立得 $B-C=O\\Rightarrow B=C$！"
+        },
+        {
+          "stepTitle": "证法二（转置化为列满秩齐次方程组）",
+          "detail": "令 $D=B-C$，由 $DA=O$ 两端转置得 $A^TD^T=O$。因 $r(A^T)=m$（$A^T$ 列满秩），齐次方程组 $A^Tx=0$ 只有零解，而 $D^T$ 的每列都是其解，故 $D^T=O\\Rightarrow B=C$！（注：证法二对任意数域均成立，不依赖实矩阵！）"
+        }
+      ],
+      "finalAnswer": "证毕（两种经典证明均严谨推出 $B=C$）",
+      "takeaway": "记住两大通用技巧：**实矩阵行满秩找 $AA^T$ 可逆（列满秩找 $A^TA$ 可逆）；一般数域用转置 + 齐次方程组只有零解！**",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.29",
+        "pdfPage": 34,
+        "itemRef": "没咋了 1.8 例 2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la04_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la04-e-16",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化独家好题与真题精选",
+      "title": "【没咋了 1.8 例 3】（李艳芳 900 题）行满秩阵与「仅初等列变换化 $(E_m,O)$」神坑",
+      "problem": "设 $A$ 为 $m\\times n$ 矩阵，$r(A)=m$，则下列说法中正确的是 $(\\quad)$：① 若 $P$ 为 $m$ 阶矩阵，且 $PA=A$，则 $P=E$；② 若 $P$ 为 $n$ 阶矩阵，且 $AP=A$，则 $P=E$；③ $A$ 能通过一系列初等**行**变换化为形式 $(E_m,O)$；④ $A$ 能通过一系列初等**列**变换化为形式 $(E_m,O)$。  (A) ①③　(B) ①④　(C) ②③　(D) ②④",
+      "steps": [
+        {
+          "stepTitle": "第一步：用右类消去律判 ①②",
+          "detail": "因 $r(A)=m$（行满秩），故 ① $(P-E)A=O\\implies P-E=O\\implies P=E$（**正确**）；② 若 $m<n$，$A$ 不列满秩，反例 $A=[1,0],\\;P=\\begin{bmatrix}1&0\\\\0&2\\end{bmatrix}\\ne E$ 满足 $AP=A$（**错误**）。"
+        },
+        {
+          "stepTitle": "第二步：精准剖析 ③ 错 ④ 对的本质原因",
+          "detail": "③ 错：反例 $A=[0,1]$，仅作行变换永远得 $[0,k]\\ne[1,0]$！④ 对：因 $r(A)=m$，必存在 $m$ 个线性无关的列；先通过初等列交换将这 $m$ 列换到最左端得 $[A_1,A_2]$（其中 $A_1$ 为 $m$ 阶可逆阵），再右乘可逆列变换阵 $\\begin{bmatrix}A_1^{-1}&-A_1^{-1}A_2\\\\O&E_{n-m}\\end{bmatrix}$（全为初等列变换！），立得 $[A_1,A_2]\\begin{bmatrix}A_1^{-1}&-A_1^{-1}A_2\\\\O&E\\end{bmatrix}=[E_m,O]$！故选 (B) ①④！"
+        }
+      ],
+      "finalAnswer": "(B) ①④",
+      "takeaway": "绝对经典神坑题！死记对称结论：**行满秩 $\\leftrightarrow$ 仅用初等列变换可化 $[E_m,O]$；列满秩 $\\leftrightarrow$ 仅用初等行变换可化 $\\begin{bmatrix}E_n\\\\O\\end{bmatrix}$！**",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.30",
+        "pdfPage": 35,
+        "itemRef": "没咋了 1.8 例 3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la04_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la04-e-17",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化独家好题与真题精选",
+      "title": "【没咋了 1.8 例 4】$A_{n\\times m}B_{m\\times n}$ 满秩（$r(AB)=n$）秒推 $r(BA)=n$（双证！）",
+      "problem": "设 $A,B$ 分别为 $n\\times m$ 和 $m\\times n$ 矩阵，若 $r(AB)=n$，则 $r(BA)=\\_\\_\\_\\_$。",
+      "steps": [
+        {
+          "stepTitle": "证法一（平方降秩夹逼，1 行封神！）",
+          "detail": "$AB$ 是 $n$ 阶方阵且 $r(AB)=n$，故 $AB$ 可逆，从而 $(AB)^2$ 仍可逆，秩为 $n$！于是 $n=r((AB)^2)=r(A(BA)B)\\le r(BA)\\le\\min\\{r(B),r(A)\\}\\le n\\implies r(BA)=n$！"
+        },
+        {
+          "stepTitle": "证法二（西尔维斯特不等式直推）",
+          "detail": "由 $n=r(AB)\\le\\min\\{r(A),r(B)\\}\\le n\\implies r(A)=r(B)=n$。再对 $B_{m\\times n}A_{n\\times m}$ 套西尔维斯特（中间公共维数为 $n$！）：$r(BA)\\ge r(B)+r(A)-n=n+n-n=n$，结合 $r(BA)\\le n$ 即得 $r(BA)=n$！"
+        }
+      ],
+      "finalAnswer": "$n$",
+      "takeaway": "记住这条极高频小题结论：**当小方阵 $AB$ 满秩（$r(AB)=n$）时，大方阵 $BA$ 与它同秩 $r(BA)=n$**（注意反过来不成立：$r(BA)=n$ 时 $AB$ 的秩可以小于 $n$，例如 $m=3,n=2$ 取列空间与行空间正交的矩阵！）。",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.30",
+        "pdfPage": 35,
+        "itemRef": "没咋了 1.8 例 4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la04_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la04-e-18",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化独家好题与真题精选",
+      "title": "【没咋了 1.9 例 2】（2018 数一二三）$r(A,AB)=r(A)$ 与四大拼阵秩命题辨析",
+      "problem": "设 $A,B$ 为 $n$ 阶矩阵，记 $r(X)$ 为矩阵 $X$ 的秩，$(X\\;\\;Y)$ 表示分块矩阵，则 $(\\quad)$。  (A) $r(A\\;\\;AB)=r(A)$　(B) $r(A\\;\\;BA)=r(A)$　(C) $r(A\\;\\;B)=\\max\\{r(A),r(B)\\}$　(D) $r(A\\;\\;B)=r(A^T\\;\\;B^T)$",
+      "steps": [
+        {
+          "stepTitle": "第一步：用广义初等列变换秒证 (A) 恒成立",
+          "detail": "$(A\\;\\;AB)\\begin{bmatrix}E&-B\\\\O&E\\end{bmatrix}=(A\\;\\;O)$，右乘可逆阵不改变秩，故 $r(A\\;\\;AB)=r(A\\;\\;O)=r(A)$（亦可从向量视角看：$AB$ 的每列均可由 $A$ 的列线性表出，拼入不增秩）！"
+        },
+        {
+          "stepTitle": "第二步：逐项反例否决 (B)(C)(D)",
+          "detail": "取 $A=\\begin{bmatrix}1&0\\\\0&0\\end{bmatrix},\\;B=\\begin{bmatrix}0&0\\\\1&0\\end{bmatrix}$：① $BA=\\begin{bmatrix}0&0\\\\1&0\\end{bmatrix}$，故 $r(A\\;\\;BA)=2\\ne 1=r(A)$，排 (B)；② $r(A\\;\\;B)=2\\ne 1=\\max\\{1,1\\}$，排 (C)；③ $(A^T\\;\\;B^T)=\\begin{bmatrix}1&0&0&1\\\\0&0&0&0\\end{bmatrix}$ 秩为 $1\\ne 2=r(A\\;\\;B)$，排 (D)（**致命陷阱：$(A\\;\\;B)^T=\\begin{bmatrix}A^T\\\\B^T\\end{bmatrix}\\ne (A^T\\;\\;B^T)$！**）。"
+        }
+      ],
+      "finalAnswer": "(A) $r(A\\;\\;AB)=r(A)$",
+      "takeaway": "2018 统考名题！(D) 选项专治「把水平拼阵转置误写成水平拼转置」的经典错误：记住 $r(A,B)=r\\begin{bmatrix}A^T\\\\B^T\\end{bmatrix}$，与 $r(A^T,B^T)$ 毫无必然相等关系！",
+      "source": {
+        "book": "27 没咋了线代强化讲义 & 27 张宇基础30讲",
+        "printedPage": "没咋了 P.33 / 基础 P.131注",
+        "pdfPage": 38,
+        "itemRef": "没咋了 1.9 例 2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la04_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la04-s-01",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "四、题型总结（一）：求秩与证明秩等式/不等式破题总表",
+      "title": "矩阵的秩七大高频题型与一招破题路由表（表 L4-1）",
+      "overview": "无论遇到具体含参矩阵求秩，还是抽象矩阵乘积/分块/伴随秩证明，均可按特征信号 5 秒锁定唯一破题路线：",
+      "patterns": [
+        {
+          "typeName": "抽象矩阵求精确秩值的「双夹逼」范式",
+          "triggers": "题干未给矩阵元素，却要填出或证明 $r(X)=\\text{确切表达式}$",
+          "method": "同时找一个上界不等式（常用 $AB=O\\Rightarrow r(A)+r(B)\\le n$ 或 $r(AB)\\le r(A)$）和一个下界不等式（常用 $r(C+X)\\ge r(C)-r(X)$、西尔维斯特或弗罗贝尼乌斯），上下逼平！",
+          "pitfall": "若等式形如 $r(A)=r(B)$ 且矩阵不易分解，也可转向证明齐次方程组 $Ax=0$ 与 $Bx=0$ 同解！",
+          "relatedRefs": "强化例 4.5, 强化例 4.6, 强化例 4.7, 没咋了 1.8 例 4"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 L4-1　矩阵的秩七大题型识别与一招破题路由表",
+          "headers": [
+            "题型信号",
+            "核心动作 / 公式",
+            "关键提醒",
+            "代表题号"
+          ],
+          "rows": [
+            [
+              "具体含参矩阵定秩",
+              "初等行变换化行阶梯形（禁列变换混用进增广阵）",
+              "行阶梯同时保证充要，子式法须检验非零低阶子式",
+              "例 2.19、基础习题 2.5"
+            ],
+            [
+              "$A$ 列满秩 / $B$ 行满秩",
+              "左乘列满秩保秩/左消去；右乘行满秩保秩/右消去",
+              "列满秩行变换化 $[E;O]$，行满秩列变换化 $[E,O]$",
+              "例 2.20、强化例 4.1–4.3、没咋了 1.8 例 3"
+            ],
+            [
+              "含 $E$ 或 $AB/BA$ 分块阵",
+              "以 $E$ 为支点广义消元；同行右乘列消、同列左乘行消",
+              "错位块（同行左乘/同列右乘）一般不能消零！",
+              "强化例 4.4、强化例 4.8、没咋了 1.9 例 2"
+            ],
+            [
+              "$AB=O$ 或 $A(C+BA)=O$",
+              "上界 $r(A)+r(B)\\le n$ + 下界 $r(C+X)\\ge r(C)-r(X)$",
+              "$n$ 必须是中间公共维数（左列数 = 右行数）",
+              "强化例 4.5、强化例 4.9"
+            ],
+            [
+              "三阵乘积 $r(ABC)$",
+              "连用西尔维斯特或直接套弗罗贝尼乌斯不等式",
+              "$r(ABC)\\ge r(AB)+r(BC)-r(B)$，1 行出结果",
+              "强化例 4.6、强化例 4.7"
+            ],
+            [
+              "伴随矩阵 $r(A^*)$",
+              "三值双向阶梯 $\\{n,1,0\\}$ + $AA^*=|A|E$",
+              "由 $r(A^*)=1$ 求参务必排掉 $r(A)\\le n-2$ 的根！",
+              "基础习题 2.5、强化例 4.9"
+            ],
+            [
+              "多项式零化 $f(A)=O$",
+              "互异因子 $(A-k_1E)(A-k_2E)=O\\Rightarrow$ 两秩和 $=n$",
+              "重因子（如 $A^2=O$）只保证 $2r(A)\\le n$，不等！",
+              "没咋了 1.8 例 5、强化 P.48 注"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "线代所有章节都会回流到「秩」——把这 7 条路由练到条件反射，第 4–6 讲的选择填空就能做到 30 秒一题！",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.41-48 / 没咋了 P.28-33",
+        "pdfPage": 52,
+        "itemRef": "表 L4-1 第4讲破题路由表"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la04-s-02",
+      "kind": "summary",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、题型总结（二）：列满秩 vs 行满秩镜像全表",
+      "title": "列满秩 vs 行满秩 vs 可逆阵八维速查对比表（表 L4-2）",
+      "overview": "列满秩与行满秩几乎所有结论都呈严格「转置镜像」对称，记混左右就会整题崩盘，建议考前对照背熟：",
+      "patterns": [
+        {
+          "typeName": "特值构造秒判左右法",
+          "triggers": "考场一时拿不准左乘还是右乘、行变换还是列变换",
+          "method": "立刻拿最简 1×2 行满秩阵 $A=[0,1]$ 和 2×1 列满秩阵 $B=[0,1]^T$ 代入 3 秒试错，所有假命题当场现形！",
+          "pitfall": "试错反例不要取 $[1,0]$（恰好已是 $(E_1,O)$ 容易漏掉行变换陷阱），取 $[0,1]$ 才最具杀伤力！",
+          "relatedRefs": "强化例 4.1, 强化例 4.2, 没咋了 1.8 例 3"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 L4-2　列满秩、行满秩与可逆矩阵八维镜像对照表",
+          "headers": [
+            "对比维度",
+            "列满秩 $A_{m\\times n}\\;(r=n)$",
+            "行满秩 $A_{m\\times n}\\;(r=m)$",
+            "可逆方阵 $A_{n\\times n}\\;(r=n)$"
+          ],
+          "rows": [
+            [
+              "形状约束",
+              "瘦高阵：$m\\ge n$",
+              "矮胖阵：$m\\le n$",
+              "方阵：$m=n$"
+            ],
+            [
+              "保秩乘法",
+              "**左乘**保秩：$r(AB)=r(B)$",
+              "**右乘**保秩：$r(CA)=r(C)$",
+              "左右乘均保秩"
+            ],
+            [
+              "类消去律",
+              "**左**消去：$AB=AC\\Rightarrow B=C$",
+              "**右**消去：$BA=CA\\Rightarrow B=C$",
+              "左右均可消去"
+            ],
+            [
+              "单侧初等变换标准形",
+              "仅**初等行**变换可化 $\\begin{bmatrix}E_n\\\\O\\end{bmatrix}$",
+              "仅**初等列**变换可化 $[E_m,O]$",
+              "仅行或仅列均可化 $E_n$"
+            ],
+            [
+              "方程组 $Ax=0$",
+              "只有零解",
+              "$m<n$ 时必有非零解",
+              "只有零解"
+            ],
+            [
+              "方程组 $Ax=b$",
+              "未必有解；若有解必唯一",
+              "对任意 $b$ **必有解**",
+              "对任意 $b$ 必有唯一解"
+            ],
+            [
+              "格拉姆阵可逆性",
+              "$A^TA$（$n$ 阶）可逆（实阵）",
+              "$AA^T$（$m$ 阶）可逆（实阵）",
+              "$A,A^TA,AA^T$ 全可逆"
+            ],
+            [
+              "单侧逆存在性",
+              "存在左逆 $LA=E_n$",
+              "存在右逆 $AR=E_m$",
+              "唯一双侧逆 $A^{-1}$"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "只需死记一侧「**列满秩 = 左乘保秩 + 左消去 + 仅行变换化 $[E;O]$**」，另一侧全靠转置镜像瞬间还原！",
+      "source": {
+        "book": "27 张宇线代9讲 & 线代独家大总结 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.42-43 / 大总结 P.8-9 / 没咋了 P.30",
+        "pdfPage": 53,
+        "itemRef": "表 L4-2 列满秩与行满秩对照表"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la04-s-03",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "四、题型总结（三）：第 4 讲考场防错红线清单",
+      "title": "矩阵的秩 6 大高频失分红线与反例速查（表 L4-3）",
+      "overview": "矩阵的秩是考研选择题「反例排雷」的重灾区，以下 6 条红线建议配最小 2 阶反例牢记于心：",
+      "patterns": [
+        {
+          "typeName": "2 阶核心反例库（考场万能排雷器）",
+          "triggers": "选择题出现抽象矩阵秩的恒等式真假判断",
+          "method": "常备三对 2 阶神级反例：① 幂零阵 $\\begin{bmatrix}0&1\\\\0&0\\end{bmatrix}$（否 $r(A^2)=r(A)$ 与秩 1 可对角化）；② 互异秩 1 阵 $\\begin{bmatrix}1&0\\\\0&0\\end{bmatrix},\\begin{bmatrix}0&0\\\\1&0\\end{bmatrix}$（否 $r(A,B)=r(A^T,B^T)$、$r(A,BA)=r(A)$）；③ $[0,1]$（否行满秩仅用行变换化 $[E,O]$）。",
+          "pitfall": "切忌只拿单位阵 $E$ 或对角阵试探，对角阵满足交换律且对称，会漏掉几乎所有非交换、非对称陷阱！",
+          "relatedRefs": "强化例 4.8, 没咋了 1.8 例 1, 没咋了 1.8 例 3, 没咋了 1.9 例 2"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 L4-3　矩阵的秩 6 大高频失分红线与最小反例",
+          "headers": [
+            "红线",
+            "典型错误想法",
+            "正确结论与最小反例"
+          ],
+          "rows": [
+            [
+              "红线 1",
+              "$r(A^2)=r(A)$ 恒成立",
+              "错！仅实对称阵恒成立；反例 $A=\\begin{bmatrix}0&1\\\\0&0\\end{bmatrix}$ 有 $r(A)=1,r(A^2)=0$"
+            ],
+            [
+              "红线 2",
+              "$r(A,B)=r(A^T,B^T)$",
+              "错！$(A,B)^T=\\begin{bmatrix}A^T\\\\B^T\\end{bmatrix}$，故 $r(A,B)=r\\begin{bmatrix}A^T\\\\B^T\\end{bmatrix}$，一般 $\\ne r(A^T,B^T)$"
+            ],
+            [
+              "红线 3",
+              "$r\\begin{bmatrix}A&C\\\\O&B\\end{bmatrix}=r(A)+r(B)$",
+              "错！一般只保证 $\\ge r(A)+r(B)$；反例 $A=B=0,C=1$ 得 $1>0$"
+            ],
+            [
+              "红线 4",
+              "行满秩阵可仅经初等行变换化 $(E_m,O)$",
+              "错！必须用初等**列**变换；反例 $A=[0,1]$"
+            ],
+            [
+              "红线 5",
+              "$r(A)=r\\Rightarrow$ 任一 $r$ 阶子式非零",
+              "错！仅保证「至少存在一个」$r$ 阶子式非零"
+            ],
+            [
+              "红线 6",
+              "$r(A^*)=1\\Leftrightarrow |A|=0$",
+              "错！$r(A^*)=1\\Leftrightarrow r(A)=n-1$，必须排除 $r(A)\\le n-2$ 的退化解！"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "牢记 6 条红线 + 3 组最小 2 阶反例，矩阵的秩模块所有客观题与证明题都能稳如磐石！",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "第4讲全章总结",
+        "pdfPage": 52,
+        "itemRef": "表 L4-3 第4讲防错红线"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    }
+  ]
+}

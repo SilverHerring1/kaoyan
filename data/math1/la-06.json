@@ -1,0 +1,1305 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "la-06",
+  "title": "线代 · 第 6 讲　向量组",
+  "sourceMeta": "深度整合《27 张宇基础30讲·线代》第3讲（P.82-113）+《27 张宇线代9讲》第6讲（P.64-71 全 7 例）+《27 没咋了线代强化讲义》2.1–2.5节（P.36-51 含 2026 真题）+《线代独家大总结》P.12-15，100% 逐页核图与 SymPy 验算",
+  "basicRequirements": {
+    "master": "熟练掌握向量内积与正交、线性相关/无关/表出三大等价定义与七大判别定理、极大线性无关组与满秩分解 A=GH、向量组等价三秩相等判据、施密特正交化以及数一专属基变换、过渡矩阵与坐标变换。",
+    "understand": "理解矩阵乘法 AB=C 的「列左行右」向量本质、初等行变换的「行等价 vs 列同相关」双保真性质，以及矩阵等价、行等价、列等价与方程组同解的四维强弱关系。",
+    "familiar": "熟悉循环组合向量组奇偶秒杀法则、正交补维数直觉、幂零链线性无关证明与两基同坐标非零向量的 λ=1 特征值本质。"
+  },
+  "items": [
+    {
+      "id": "m1-la06-f-01",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "一、向量的内积、模、夹角与正交",
+      "title": "向量内积、模长、夹角、柯西不等式、单位化与正交矩阵定义",
+      "formulaLatex": "$$(\\alpha,\\beta)=\\alpha^T\\beta=\\sum_{i=1}^n a_ib_i;\\quad \\|\\alpha\\|=\\sqrt{(\\alpha,\\alpha)};\\quad |(\\alpha,\\beta)|\\le\\|\\alpha\\|\\|\\beta\\|;\\quad \\alpha\\perp\\beta\\iff \\alpha^T\\beta=0$$",
+      "conditions": "考研范围一律在实数域 $\\mathbb{R}^n$ 中讨论；零向量与任意向量正交。",
+      "pitfalls": "切勿混淆 $\\alpha^T\\beta$（1 个数，内积）与 $\\alpha\\beta^T$（$n\\times n$ 秩 $\\le 1$ 矩阵，外积）！记住 $\\operatorname{tr}(\\alpha\\beta^T)=\\alpha^T\\beta$！",
+      "source": {
+        "book": "27 张宇基础30讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.84-87 / 没咋了 P.37",
+        "pdfPage": 90,
+        "itemRef": "向量内积模与正交公式"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "对实 $n$ 维列向量 $\\alpha,\\beta$：① 内积满足对称性、双线性与正定性（$(\\alpha,\\alpha)\\ge 0$ 且 $=0\\Leftrightarrow\\alpha=0$）；② 非零向量单位化：$\\alpha^0=\\dfrac{\\alpha}{\\|\\alpha\\|}$；③ 夹角 $\\cos\\theta=\\dfrac{(\\alpha,\\beta)}{\\|\\alpha\\|\\|\\beta\\|}$；④ **标准（规范）正交向量组**：满足 $\\alpha_i^T\\alpha_j=\\delta_{ij}$；⑤ **正交矩阵**：$n$ 阶方阵 $Q$ 满足 $Q^TQ=E\\iff Q^T=Q^{-1}\\iff Q$ 的列（行）向量组为规范正交基（几何上保持长度与夹角不变，即刚体旋转/反射！）。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「内积就是 $\\alpha^T\\beta$（行乘列一个数），正交就是内积 0，规范正交阵 $Q^TQ=E$ 逆转置合一！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la06-f-02",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "一、线性相关、线性无关与线性表出",
+      "title": "线性相关 / 线性无关 / 线性表出的「定义 · 方程组 · 秩」三位一体等价公式",
+      "formulaLatex": "$$\\begin{aligned}&\\alpha_1,\\dots,\\alpha_s\\text{ 线性无关}\\iff Ax=0\\text{ 仅零解}\\iff r(\\alpha_1,\\dots,\\alpha_s)=s\\\\&\\beta\\text{ 可由 }\\alpha_1,\\dots,\\alpha_s\\text{ 表出}\\iff Ax=\\beta\\text{ 有解}\\iff r(A)=r([A,\\beta])\\end{aligned}$$",
+      "conditions": "所有向量必须同维（默认列向量，若题目给行向量须按列拼或转置统一）。",
+      "pitfalls": "单个向量 $\\alpha$ 线性相关 $\\iff \\alpha=0$（零向量！）；包含零向量的任何向量组必线性相关！",
+      "figureSvg": "<svg viewBox=\"0 0 640 232\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"向量组线性相关性五维等价与矩阵乘法列左行右图\">\n  <title>向量组线性相关性、秩、方程组五维等价转换与 AB=C 列左行右法则</title>\n  <defs>\n    <marker id=\"m1_la06_w1\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#2563eb\"/>\n    </marker>\n    <marker id=\"m1_la06_w2\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#7c3aed\"/>\n    </marker>\n  </defs>\n  <rect x=\"4\" y=\"4\" width=\"632\" height=\"224\" rx=\"10\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"320\" y=\"25\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">向量组核心引擎：相关性三大视角 + 矩阵乘法 AB = C「列左行右」铁律</text>\n\n  <!-- Left: Equivalence triangle -->\n  <g transform=\"translate(18, 40)\">\n    <rect width=\"302\" height=\"176\" rx=\"8\" fill=\"#ffffff\" stroke=\"#bfdbfe\" stroke-width=\"1.3\"/>\n    <text x=\"151\" y=\"20\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1d4ed8\">线性无关 vs 线性相关（三位一体）</text>\n\n    <rect x=\"14\" y=\"32\" width=\"130\" height=\"60\" rx=\"6\" fill=\"#ecfdf5\" stroke=\"#6ee7b7\"/>\n    <text x=\"79\" y=\"49\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#047857\">α₁,…,αₛ 线性无关</text>\n    <text x=\"79\" y=\"65\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#065f46\">⇔ Ax = 0 只有零解</text>\n    <text x=\"79\" y=\"81\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#047857\">⇔ r(A) = s（列满秩）</text>\n\n    <rect x=\"158\" y=\"32\" width=\"130\" height=\"60\" rx=\"6\" fill=\"#fef2f2\" stroke=\"#fca5a5\"/>\n    <text x=\"223\" y=\"49\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#b91c1c\">α₁,…,αₛ 线性相关</text>\n    <text x=\"223\" y=\"65\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#991b1b\">⇔ Ax = 0 有非零解</text>\n    <text x=\"223\" y=\"81\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#b91c1c\">⇔ r(A) &lt; s（列不满秩）</text>\n\n    <rect x=\"14\" y=\"102\" width=\"274\" height=\"64\" rx=\"6\" fill=\"#f8fafc\" stroke=\"#cbd5e1\"/>\n    <text x=\"151\" y=\"119\" text-anchor=\"middle\" font-size=\"10.2\" font-weight=\"700\" fill=\"#0f172a\">四大高频直觉铁律（选择题秒杀）</text>\n    <text x=\"24\" y=\"137\" font-size=\"9.5\" fill=\"#334155\">• 部分相关⇒整体相关；整体无关⇒部分无关</text>\n    <text x=\"24\" y=\"154\" font-size=\"9.5\" fill=\"#334155\">• 原相关⇒缩短必相关；原无关⇒延长必无关</text>\n  </g>\n\n  <!-- Right: Matrix multiplication AB = C -->\n  <g transform=\"translate(332, 40)\">\n    <rect width=\"290\" height=\"176\" rx=\"8\" fill=\"#ffffff\" stroke=\"#ddd6fe\" stroke-width=\"1.3\"/>\n    <text x=\"145\" y=\"20\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#6d28d9\">AB = C 向量组解读：「列看左 A，行看右 B」</text>\n\n    <!-- Column view -->\n    <rect x=\"12\" y=\"32\" width=\"266\" height=\"58\" rx=\"6\" fill=\"#eff6ff\" stroke=\"#93c5fd\"/>\n    <text x=\"22\" y=\"49\" font-size=\"10.2\" font-weight=\"700\" fill=\"#1d4ed8\">① 按列看：C 的列向量可由 A 的列线性表示</text>\n    <text x=\"22\" y=\"66\" font-size=\"9.5\" fill=\"#1e3a8a\">cⱼ = b₁ⱼα₁ + b₂ⱼα₂ + … + bₙⱼαₙ  （B 是列系数阵）</text>\n    <text x=\"22\" y=\"81\" font-size=\"9.2\" font-weight=\"700\" fill=\"#2563eb\">⇒ r(A, C) = r(A)；若 B 可逆则 A, C 列等价</text>\n\n    <!-- Row view -->\n    <rect x=\"12\" y=\"98\" width=\"266\" height=\"66\" rx=\"6\" fill=\"#f5f3ff\" stroke=\"#c4b5fd\"/>\n    <text x=\"22\" y=\"115\" font-size=\"10.2\" font-weight=\"700\" fill=\"#6d28d9\">② 按行看：C 的行向量可由 B 的行线性表示</text>\n    <text x=\"22\" y=\"132\" font-size=\"9.5\" fill=\"#4c1d95\">γᵢᵀ = aᵢ₁β₁ᵀ + aᵢ₂β₂ᵀ + … + aᵢₙβₙᵀ（A 是行系数阵）</text>\n    <text x=\"22\" y=\"148\" font-size=\"9.2\" font-weight=\"700\" fill=\"#7c3aed\">⇒ r([B; C]) = r(B)；若 A 可逆则 B, C 行等价</text>\n    <text x=\"22\" y=\"160\" font-size=\"8.6\" fill=\"#991b1b\">防坑：B 可逆不保证 A 与 C 行等价（李艳芳例3）！</text>\n  </g>\n</svg>",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.87-92 / 强化 P.65-66 / 没咋了 P.39",
+        "pdfPage": 93,
+        "itemRef": "线性相关性与表出等价公式"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "记列矩阵 $A=[\\alpha_1,\\dots,\\alpha_s]$：① **线性相关** $\\iff$ 存在不全为零的 $k_i$ 使 $\\sum k_i\\alpha_i=0 \\iff Ax=0$ 有非零解 $\\iff r(A)<s$；② **线性无关** $\\iff$ 仅全零系数成立 $\\iff Ax=0$ 仅零解 $\\iff r(A)=s$；③ **线性表出**：$r(A)=r([A,\\beta])=s$ 时**唯一**表出，$r(A)=r([A,\\beta])<s$ 时有**无穷多种**表出，$r(A)<r([A,\\beta])$ 时**不能**表出；④ 向量组 $B$ 可由向量组 $A$ 表出 $\\iff AX=B$ 有解 $\\iff r(A)=r(A,B)$！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「相关无关看齐次 $Ax=0$，能否表出看非齐次 $Ax=\\beta$；具体数值化阶梯，抽象证明写定义式！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la06-f-03",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、判别线性相关性的七大核心定理",
+      "title": "判别向量组线性相关性的七大核心定理（部分/整体、延长/缩短、以少表多与唯一表出）",
+      "formulaLatex": "$$\\text{部分相关}\\Rightarrow\\text{整体相关};\\quad \\text{原无关}\\Rightarrow\\text{延长无关};\\quad \\beta_1,\\dots,\\beta_t\\text{ 由 }\\alpha_1,\\dots,\\alpha_s\\text{ 表出且 }t>s\\Rightarrow \\beta\\text{ 组必相关}$$",
+      "conditions": "定理 ③「以少表多」与「无关被表」**均不可反推**（不能由 $t\\le s$ 推出可表出或无关！）；延长/缩短指在所有向量的**相同位置**添加或删去分量。",
+      "pitfalls": "定理 ① 是「**至少有一个**向量可由其余表出」，绝不是「**任一**向量都可由其余表出」！反例 $\\alpha_1=[0,0]^T,\\;\\alpha_2=[1,0]^T$ 相关，但 $\\alpha_2$ 不能由 $\\alpha_1$ 表出（基础例 3.3(C)）！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 线代独家大总结",
+        "printedPage": "基础 P.88-93 / 强化 P.68 / 大总结 P.13",
+        "pdfPage": 94,
+        "itemRef": "判别相关性七大定理"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "基础 30 讲 P.88–93 七大定理精炼：① **至少一个可表出**：$s\\ge 2$ 个向量相关 $\\iff$ 至少有一个向量可由其余向量表出；② **唯一表出定理**：$\\alpha_1,\\dots,\\alpha_s$ 无关而 $\\alpha_1,\\dots,\\alpha_s,\\beta$ 相关 $\\implies \\beta$ 可由 $\\alpha_1,\\dots,\\alpha_s$ **唯一**表出；③ **以少表多，多必相关**（逆否：**无关被表，个数不大** $t\\le s$）；④ **秩与方程组定理**：$s>n$（个数 $>$ 维数）必相关，$s=n$ 时看方阵行列式 $|A|=0$；⑤ **表出秩不大**：$B$ 可由 $A$ 表出 $\\implies r(B)\\le r(A)$；⑥ **部分相关 $\\Rightarrow$ 整体相关**（逆否：整体无关 $\\Rightarrow$ 部分无关）；⑦ **原无关 $\\Rightarrow$ 延长必无关**（逆否：原相关 $\\Rightarrow$ 缩短必相关）！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「部分相关整体相，整体无关部分无；原无延长必无关，原相缩短必相关；以少表多多必相，无关被表数不大！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la06-f-04",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "三、极大线性无关组、秩与满秩分解",
+      "title": "极大线性无关组定义、行阶梯主元列求法与满秩分解 $A=GH$",
+      "formulaLatex": "$$r(\\alpha_1,\\dots,\\alpha_s)=r(A)=A\\text{ 的行秩}=A\\text{ 的列秩};\\qquad A_{m\\times n}=G_{m\\times r}H_{r\\times n}\\;\\Longrightarrow\\;A^k=G(HG)^{k-1}H$$",
+      "conditions": "全为零向量的向量组没有极大线性无关组，规定其秩为 $0$；极大无关组一般不唯一，但所含向量个数（秩）唯一。",
+      "pitfalls": "① 求极大无关组绝不能拿化完阶梯形后的新列 $\\beta_i$ 当答案，必须**按列号回原矩阵 $A$ 中取原始向量 $\\alpha_i$**！ ② 严禁同时混用初等行变换与初等列变换求极大无关组（推荐**只作初等行变换**）！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.97-101 / 强化 P.67 / 没咋了 P.45-46",
+        "pdfPage": 103,
+        "itemRef": "极大无关组与满秩分解"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_adv_all",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "① **极大无关组双条件**：部分组 $\\alpha_{i_1},\\dots,\\alpha_{i_r}$ 线性无关，且原组中任一向量均可由它线性表示（等价于任添一个原组向量即相关）；② **标准求法**：将列向量拼成 $A$，**仅作初等行变换**化为行阶梯形（或行最简形 $R$），各非零行首非零元所在列对应的**原矩阵 $A$ 中的列**即构成极大无关组；③ **满秩分解神式 $A=GH$**（强化例 6.3 / 2026 真题）：取 $G$ 为极大无关组列，$H$ 为行最简形 $R$ 的前 $r$ 个非零行（即各列用极大无关组表出的系数阵！），天然有 **$A=GH$**，从而高次幂秒算 $A^k=G(HG)^{k-1}H$（把大矩阵降阶为 $r\\times r$ 小矩阵 $HG$！）！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「拼成列阵化最简，主元原列凑成 $G$，非零各行截成 $H$，自然就有 $A=GH$！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la06-f-05",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "三、等价向量组",
+      "title": "向量组等价三大充要条件（三秩相等）与「矩阵等价」本质区分",
+      "formulaLatex": "$$(\\mathrm{I})\\cong(\\mathrm{II})\\iff \\text{可互相线性表出}\\iff r(\\mathrm{I})=r(\\mathrm{II})\\text{ 且可单向表出}\\iff r(\\mathrm{I})=r(\\mathrm{II})=r(\\mathrm{I},\\mathrm{II})$$",
+      "conditions": "向量组等价必须同维（行数相同），不要求向量个数相同；反过来，仅知同维且 $r(A)=r(B)$ **推不出**向量组等价（如 $e_1=[1,0]^T$ 与 $e_2=[0,1]^T$ 秩均为 1 却不等价）！",
+      "pitfalls": "考场高频盲区（强化例 6.6）：若 (I) 可由 (II) 表出，但 (II) **不能**由 (I) 表出，则必有严格不等式 **$r(\\mathrm{I})<r(\\mathrm{II})$**（因为一旦 $r(\\mathrm{I})=r(\\mathrm{II})$ 再加单向表出就会立刻等价！）！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.98,103-104 / 强化 P.69 / 没咋了 P.47",
+        "pdfPage": 104,
+        "itemRef": "向量组等价三充要条件"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "两个**同维**向量组 (I): $\\alpha_1,\\dots,\\alpha_s$ 与 (II): $\\beta_1,\\dots,\\beta_t$ 等价（所张成子空间完全相同），满足反身性、对称性、传递性。三个高频充要判据：① 互相线性表出；② 等秩 + 单方向可表出；③ **三秩相等** $r(A)=r(B)=r(A,B)$！注意与矩阵等价彻底切割：矩阵等价要求**同型**且仅需 $r(A)=r(B)$；向量组等价只要求**同维**（向量个数 $s,t$ 可不同！），却要求**三秩相等**！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「矩阵等价看两秩（同型且 $r(A)=r(B)$）；向量等价看三秩（同维且 $r(A)=r(B)=r(A,B)$）！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la06-f-06",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "四、施密特正交化（数一与第 8 讲实对称阵共用核心！）",
+      "title": "施密特（Gram–Schmidt）正交化与规范正交基标准公式",
+      "formulaLatex": "$$\\beta_1=\\alpha_1,\\quad \\beta_2=\\alpha_2-\\frac{(\\alpha_2,\\beta_1)}{(\\beta_1,\\beta_1)}\\beta_1,\\quad \\beta_3=\\alpha_3-\\frac{(\\alpha_3,\\beta_1)}{(\\beta_1,\\beta_1)}\\beta_1-\\frac{(\\alpha_3,\\beta_2)}{(\\beta_2,\\beta_2)}\\beta_2;\\qquad \\gamma_i=\\frac{\\beta_i}{\\|\\beta_i\\|}$$",
+      "conditions": "**严格前提**：输入的 $\\alpha_1,\\dots,\\alpha_s$ 必须**线性无关**！若原组线性相关（如基础例 3.14），必须**先抽出极大线性无关组**再正交化！",
+      "pitfalls": "最常见失误：公式里分子分母写反或漏写前面的 $\\beta_j$（注意 $\\dfrac{(\\alpha_k,\\beta_j)}{(\\beta_j,\\beta_j)}$ 是一个数，后面必须乘以向量 $\\beta_j$，且分母是 $(\\beta_j,\\beta_j)=\\|\\beta_j\\|^2$ 不是 $\\|\\beta_j\\|$！）！",
+      "figureSvg": "<svg viewBox=\"0 0 640 220\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"施密特正交化几何投影原理图\">\n  <title>施密特正交化几何本质：从 α₂ 减去沿 β₁ 的正交投影得垂直分量 β₂</title>\n  <defs>\n    <marker id=\"m1_la06_sc1\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#2563eb\"/>\n    </marker>\n    <marker id=\"m1_la06_sc2\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#dc2626\"/>\n    </marker>\n    <marker id=\"m1_la06_sc3\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#059669\"/>\n    </marker>\n    <marker id=\"m1_la06_sc4\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#d97706\"/>\n    </marker>\n  </defs>\n  <rect x=\"4\" y=\"4\" width=\"632\" height=\"212\" rx=\"10\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"320\" y=\"25\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">施密特正交化几何本质：减去投影 = 留下纯垂直分量（再除以模长单位化）</text>\n\n  <!-- Left geometric projection -->\n  <g transform=\"translate(20, 40)\">\n    <rect width=\"300\" height=\"164\" rx=\"8\" fill=\"#ffffff\" stroke=\"#e2e8f0\"/>\n    <!-- Origin O=(44, 134) -->\n    <circle cx=\"44\" cy=\"134\" r=\"3\" fill=\"#0f172a\"/>\n    <text x=\"30\" y=\"147\" font-size=\"10.5\" font-weight=\"700\" fill=\"#0f172a\">O</text>\n\n    <!-- beta1 = alpha1 along horizontal -->\n    <line x1=\"44\" y1=\"134\" x2=\"262\" y2=\"134\" stroke=\"#2563eb\" stroke-width=\"2.4\" marker-end=\"url(#m1_la06_sc1)\"/>\n    <text x=\"230\" y=\"152\" font-size=\"10.5\" font-weight=\"700\" fill=\"#1d4ed8\">β₁ = α₁</text>\n\n    <!-- projection vector p on beta1 -->\n    <line x1=\"44\" y1=\"134\" x2=\"174\" y2=\"134\" stroke=\"#d97706\" stroke-width=\"3.2\" marker-end=\"url(#m1_la06_sc4)\"/>\n    <text x=\"112\" y=\"152\" text-anchor=\"middle\" font-size=\"9.8\" font-weight=\"700\" fill=\"#b45309\">投影 p = ((α₂,β₁)/(β₁,β₁)) β₁</text>\n\n    <!-- alpha2 diagonal -->\n    <line x1=\"44\" y1=\"134\" x2=\"176\" y2=\"36\" stroke=\"#dc2626\" stroke-width=\"2.4\" marker-end=\"url(#m1_la06_sc2)\"/>\n    <text x=\"102\" y=\"74\" font-size=\"11\" font-weight=\"700\" fill=\"#b91c1c\">α₂</text>\n\n    <!-- vertical dropped dashed line + orthogonal beta2 -->\n    <line x1=\"176\" y1=\"134\" x2=\"176\" y2=\"38\" stroke=\"#059669\" stroke-width=\"2.4\" stroke-dasharray=\"5 3\" marker-end=\"url(#m1_la06_sc3)\"/>\n    <rect x=\"166\" y=\"124\" width=\"10\" height=\"10\" fill=\"none\" stroke=\"#059669\" stroke-width=\"1.2\"/>\n    <text x=\"228\" y=\"84\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#047857\">β₂ = α₂ − p</text>\n    <text x=\"228\" y=\"99\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#059669\">(β₂ ⊥ β₁)</text>\n\n    <!-- beta2 translated at origin -->\n    <line x1=\"44\" y1=\"134\" x2=\"44\" y2=\"38\" stroke=\"#059669\" stroke-width=\"2.2\" marker-end=\"url(#m1_la06_sc3)\"/>\n    <text x=\"24\" y=\"64\" font-size=\"10.5\" font-weight=\"700\" fill=\"#047857\">β₂</text>\n    <!-- angle arc -->\n    <path d=\"M 80,134 A 36,36 0 0,0 72,113\" fill=\"none\" stroke=\"#64748b\" stroke-width=\"1.3\"/>\n    <text x=\"86\" y=\"124\" font-size=\"10\" fill=\"#475569\">θ</text>\n  </g>\n\n  <!-- Right step-by-step recipe -->\n  <g transform=\"translate(334, 40)\">\n    <rect width=\"286\" height=\"164\" rx=\"8\" fill=\"#ffffff\" stroke=\"#e2e8f0\"/>\n    <text x=\"143\" y=\"21\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#0f172a\">三步标准正交化流程（绝不漏先抽基！）</text>\n\n    <rect x=\"12\" y=\"30\" width=\"262\" height=\"36\" rx=\"6\" fill=\"#fef3c7\" stroke=\"#fcd34d\"/>\n    <text x=\"20\" y=\"45\" font-size=\"10\" font-weight=\"700\" fill=\"#92400e\">第 0 步（防坑）：先确认线性无关！</text>\n    <text x=\"20\" y=\"59\" font-size=\"9.2\" fill=\"#78350f\">若原组相关（如例3.14），须先取极大无关组再正交化</text>\n\n    <rect x=\"12\" y=\"73\" width=\"262\" height=\"44\" rx=\"6\" fill=\"#eff6ff\" stroke=\"#93c5fd\"/>\n    <text x=\"20\" y=\"88\" font-size=\"10\" font-weight=\"700\" fill=\"#1d4ed8\">第 1 步（正交化）：逐个减去前方所有投影</text>\n    <text x=\"20\" y=\"106\" font-size=\"9.5\" fill=\"#1e3a8a\">βₖ = αₖ − Σⱼ₌₁ᵏ⁻¹ [(αₖ,βⱼ)/(βⱼ,βⱼ)] βⱼ（可用倍数化整）</text>\n\n    <rect x=\"12\" y=\"124\" width=\"262\" height=\"32\" rx=\"6\" fill=\"#ecfdf5\" stroke=\"#6ee7b7\"/>\n    <text x=\"20\" y=\"139\" font-size=\"10\" font-weight=\"700\" fill=\"#047857\">第 2 步（单位化）：γₖ = βₖ / ‖βₖ‖</text>\n    <text x=\"20\" y=\"151\" font-size=\"9\" fill=\"#065f46\">检验：γᵢᵀγⱼ = δᵢⱼ（任意两不同向量内积为 0，自内积为 1）</text>\n  </g>\n</svg>",
+      "source": {
+        "book": "27 张宇基础30讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.107例3.14 / 没咋了 P.50",
+        "pdfPage": 113,
+        "itemRef": "施密特正交化公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_base_examples",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "将一组**线性无关**向量 $\\alpha_1,\\alpha_2,\\dots,\\alpha_s$ 转化为等价的规范正交基 $\\gamma_1,\\gamma_2,\\dots,\\gamma_s$：第 $k$ 步从 $\\alpha_k$ 中减去它在前方全部正交向量 $\\beta_1,\\dots,\\beta_{k-1}$ 方向上的正交投影，最后统一除以各自模长单位化！实战提速技巧：正交化过程中可随时将某个 $\\beta_k$ 乘以非零常数去分母化整（不改变正交方向与张成空间），最后一步再统一单位化！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「先抽基、后减投影、中途可去分母、收尾再单位化；算完立刻心算 $(\\gamma_i,\\gamma_j)=0$ 验正交！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la06-f-07",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "五、向量空间、基变换与坐标变换（仅数一）",
+      "title": "【数一专属】基变换公式 $H=\\Xi C$、过渡矩阵 $C=\\Xi^{-1}H$ 与坐标变换公式 $x=Cy$",
+      "formulaLatex": "$$[\\eta_1,\\dots,\\eta_n]=[\\xi_1,\\dots,\\xi_n]C\\;\\Longleftrightarrow\\;C=\\Xi^{-1}H;\\qquad \\alpha=\\Xi x=H y\\;\\Longrightarrow\\;x=Cy\\;\\Longleftrightarrow\\;y=C^{-1}x$$",
+      "conditions": "仅数学一大纲显式要求（数二、数三了解助理解相似变换 $P^{-1}AP$）。",
+      "pitfalls": "最高频致命反写错：把「由基 (I) 到基 (II) 的过渡矩阵 $C$」错算成 $H^{-1}\\Xi$ 或把坐标公式错写成 $y=Cx$！每次下笔前花 2 秒默写恒等桥 $\\alpha=\\Xi x=Hy=\\Xi Cy\\implies x=Cy$，永不搞反！",
+      "figureSvg": "<svg viewBox=\"0 0 640 218\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"数一基变换与坐标变换对偶关系图\">\n  <title>基变换（右乘过渡阵 C）与坐标变换（左乘逆阵 C⁻¹）对偶关系图</title>\n  <defs>\n    <marker id=\"m1_la06_bt1\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#2563eb\"/>\n    </marker>\n    <marker id=\"m1_la06_bt2\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#dc2626\"/>\n    </marker>\n  </defs>\n  <rect x=\"4\" y=\"4\" width=\"632\" height=\"210\" rx=\"10\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"320\" y=\"25\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">基变换与坐标变换对偶图（仅数一）：向量 α 本身不变，基右乘 C 则坐标左乘 C⁻¹</text>\n\n  <!-- Top invariant identity -->\n  <rect x=\"136\" y=\"38\" width=\"368\" height=\"30\" rx=\"15\" fill=\"#fef3c7\" stroke=\"#f59e0b\" stroke-width=\"1.3\"/>\n  <text x=\"320\" y=\"57\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#92400e\">恒等桥：α = [旧基]·x = [新基]·y = [旧基]·C·y</text>\n\n  <!-- Left box: Old basis -->\n  <g transform=\"translate(26, 86)\">\n    <rect width=\"190\" height=\"96\" rx=\"9\" fill=\"#ffffff\" stroke=\"#93c5fd\" stroke-width=\"1.5\"/>\n    <text x=\"95\" y=\"24\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1d4ed8\">旧基 (I)</text>\n    <text x=\"95\" y=\"48\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#0f172a\">Ξ = [ξ₁, ξ₂, …, ξₙ]</text>\n    <line x1=\"20\" y1=\"60\" x2=\"170\" y2=\"60\" stroke=\"#e2e8f0\"/>\n    <text x=\"95\" y=\"81\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#b91c1c\">旧坐标：x = [x₁,…,xₙ]ᵀ</text>\n  </g>\n\n  <!-- Right box: New basis -->\n  <g transform=\"translate(424, 86)\">\n    <rect width=\"190\" height=\"96\" rx=\"9\" fill=\"#ffffff\" stroke=\"#c4b5fd\" stroke-width=\"1.5\"/>\n    <text x=\"95\" y=\"24\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#6d28d9\">新基 (II)</text>\n    <text x=\"95\" y=\"48\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#0f172a\">H = [η₁, η₂, …, ηₙ]</text>\n    <line x1=\"20\" y1=\"60\" x2=\"170\" y2=\"60\" stroke=\"#e2e8f0\"/>\n    <text x=\"95\" y=\"81\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#b91c1c\">新坐标：y = [y₁,…,yₙ]ᵀ</text>\n  </g>\n\n  <!-- Top arrow: Basis change (left -> right) -->\n  <line x1=\"222\" y1=\"116\" x2=\"416\" y2=\"116\" stroke=\"#2563eb\" stroke-width=\"2.2\" marker-end=\"url(#m1_la06_bt1)\"/>\n  <rect x=\"250\" y=\"95\" width=\"140\" height=\"19\" rx=\"4\" fill=\"#eff6ff\"/>\n  <text x=\"320\" y=\"108\" text-anchor=\"middle\" font-size=\"10.2\" font-weight=\"700\" fill=\"#1d4ed8\">基变右乘：H = Ξ · C</text>\n  <text x=\"320\" y=\"130\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#3b82f6\">C = Ξ⁻¹H（[Ξ | H] → [E | C]）</text>\n\n  <!-- Bottom arrow: Coordinate change (right -> left) -->\n  <line x1=\"416\" y1=\"164\" x2=\"222\" y2=\"164\" stroke=\"#dc2626\" stroke-width=\"2.2\" marker-end=\"url(#m1_la06_bt2)\"/>\n  <rect x=\"242\" y=\"143\" width=\"156\" height=\"19\" rx=\"4\" fill=\"#fef2f2\"/>\n  <text x=\"320\" y=\"156\" text-anchor=\"middle\" font-size=\"10.2\" font-weight=\"700\" fill=\"#b91c1c\">坐标逆变：x = C·y ⇔ y = C⁻¹x</text>\n  <text x=\"320\" y=\"178\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#dc2626\">同坐标非零向量 ⇔ (C − E)x = 0</text>\n\n  <text x=\"320\" y=\"202\" text-anchor=\"middle\" font-size=\"9.8\" font-weight=\"700\" fill=\"#475569\">口诀：「由谁到谁，谁在左边」—— 由旧到新：旧基·C = 新基；求新坐标 y = C⁻¹x</text>\n</svg>",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.105-106 / 强化 P.70-71 / 没咋了 P.49-50",
+        "pdfPage": 111,
+        "itemRef": "数一基变换与坐标变换公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_adv_all",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "设 $\\Xi=[\\xi_1,\\dots,\\xi_n]$（旧基）与 $H=[\\eta_1,\\dots,\\eta_n]$（新基）是 $n$ 维向量空间 $V$ 的两组基：① **过渡矩阵 $C$**：由旧基到新基满足「**新基 = 旧基 $\\cdot\\, C$**」，故 $C=\\Xi^{-1}H$（实操将 $[\\Xi\\mid H]\\xrightarrow{\\text{行}}[E\\mid C]$，一步免求逆！），$C$ 的第 $j$ 列即新基向量 $\\eta_j$ 在旧基下的坐标，且 $C$ 必可逆；② **坐标变换**：同一向量 $\\alpha=\\Xi x=Hy=\\Xi Cy$，消去线性无关的旧基立得「**旧坐标 = $C\\cdot$ 新坐标**」（$x=Cy\\Leftrightarrow y=C^{-1}x$）！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「由谁到谁，谁放左乘 $C$！新基 = 旧基·$C$，坐标方向正相反：旧坐标 = $C$·新坐标！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la06-c-01",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "六、向量组与矩阵运算的核心结论",
+      "title": "矩阵乘法 $AB=O$ 与 $AB=C$ 的向量组「列左行右」六大秒杀法则",
+      "conditions": "记忆核心口诀：**乘积列看左因子 $A$，乘积行看右因子 $B$**！",
+      "pitfalls": "（没咋了 2.2 例 9 余丙森 5 套卷）已知 $AC=B$：若 **$B$ 的列无关**，可推 $r(C)\\ge r(B)=s\\Rightarrow C$ 列无关（正确！）；但反过来「$C$ 列无关」**推不出**「$B$ 列无关」（取 $A=O$ 即否）！",
+      "source": {
+        "book": "线代独家大总结 & 27 没咋了强化讲义",
+        "printedPage": "大总结 P.14-15 / 没咋了 P.27,41,44",
+        "pdfPage": 14,
+        "itemRef": "矩阵乘法列左行右六大法则"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_mzl_examples",
+        "verified": true
+      },
+      "summary": "① 若 $A_{m\\times n}B_{n\\times s}=O$：(a) $r(A)+r(B)\\le n$；(b) $B$ 的列全为 $Ax=0$ 的解（$A$ 的行全为 $B^Tx=0$ 的解）；(c) **若 $A\\ne O$，则 $B$ 的行向量组必线性相关；若 $B\\ne O$，则 $A$ 的列向量组必线性相关**！（没咋了 2.2 例 3 必考原题！）；② 若 $A_{m\\times n}B_{n\\times s}=C_{m\\times s}$：(d) **$C$ 的列可由 $A$ 的列线性表示**（$r(A,C)=r(A)$，若 $C$ 列无关则 $B$ 列必无关！）；(e) **$C$ 的行可由 $B$ 的行线性表示**（$r\\begin{bmatrix}B\\\\C\\end{bmatrix}=r(B)$，若 $C$ 行无关则 $A$ 行必无关！）；(f) 若 $A$ 可逆则 $B,C$ **行等价**；若 $B$ 可逆则 $A,C$ **列等价**！"
+    },
+    {
+      "id": "m1-la06-c-02",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "六、向量组与矩阵运算的核心结论",
+      "title": "循环线性组合向量组（$\\alpha_1\\pm\\alpha_2,\\dots,\\alpha_n\\pm\\alpha_1$）奇偶性秒杀定理",
+      "conditions": "需已知原向量组 $\\alpha_1,\\dots,\\alpha_n$ 线性无关（且若线性表出系为方阵 $B=AC$，因 $A$ 列满秩故 $r(B)=r(C)$，无须 $A$ 是方阵也成立——基础习题 3.4 注！）。",
+      "pitfalls": "千万注意 3 个向量（奇数！）和 4 个向量（偶数！）结果正好相反：例 4.5（3 个）全加无关，例 3.4（4 个）全加相关、末项改减才无关！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.95-96例3.4 / P.110习题3.4",
+        "pdfPage": 102,
+        "itemRef": "循环组合向量组奇偶定理"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_base_examples",
+        "verified": true
+      },
+      "summary": "设 $\\alpha_1,\\dots,\\alpha_n\\;(n\\ge 2)$ 线性无关：① **全减循环** $\\alpha_1-\\alpha_2,\\;\\alpha_2-\\alpha_3,\\;\\dots,\\;\\alpha_n-\\alpha_1$：全部相加恒得 $0$，**无论 $n$ 奇偶永远线性相关**（系数阵行列式 $\\det=0$）；② **全加循环** $\\alpha_1+\\alpha_2,\\;\\alpha_2+\\alpha_3,\\;\\dots,\\;\\alpha_n+\\alpha_1$：系数阵行列式 $\\det=1+(-1)^{n-1}$——**$n$ 为奇数时 $\\det=2\\ne 0$（线性无关！），$n$ 为偶数时 $\\det=0$（线性相关！）**；③ **末项改负号** $\\alpha_1+\\alpha_2,\\;\\dots,\\;\\alpha_{n-1}+\\alpha_n,\\;\\alpha_n-\\alpha_1$：$\\det=1-(-1)^{n-1}$——**$n$ 为偶数时 $\\det=2\\ne 0$（线性无关！），$n$ 为奇数时 $\\det=0$（线性相关！）**！"
+    },
+    {
+      "id": "m1-la06-c-03",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "六、向量组与矩阵运算的核心结论",
+      "title": "初等行变换的「行等价 vs 列同相关」双保真法则（附基础 P.92 误印澄清）",
+      "conditions": "若改作初等**列**变换，则镜像颠倒为「列向量组等价，行向量组同相关性」。",
+      "pitfalls": "绝不可由 $A\\xrightarrow{\\text{行}}B$ 推出「$A,B$ 列向量组等价」！反例：$A=\\begin{bmatrix}1&0\\\\0&0\\end{bmatrix}$ 交换两行得 $B=\\begin{bmatrix}0&0\\\\1&0\\end{bmatrix}$，两列空间完全不同！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.92(勘误),P.98-100",
+        "pdfPage": 104,
+        "itemRef": "初等行变换双保真与P.92勘误"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "summary": "若矩阵 $A$ 经初等**行**变换化为 $B$（即 $B=PA$，$P$ 可逆），则：① $A$ 与 $B$ 的**行向量组等价**（可互相线性表出）；② $A$ 与 $B$ 的**列向量组一般不等价**（张成的列空间可能改变），但对任意相同下标子集，$A$ 与 $B$ 对应的**部分列向量组具有完全相同的线性相关性与线性表出系数**（因 $Ax=0\\Leftrightarrow Bx=0$ 同解！）。**【教材勘误提醒（基础 30 讲 P.92）】**：原书 P.92 总结 (3) 讨论「方程个数大于未知数个数（$m<n$）」时误印为「这种形式的方程组是不存在的」，实为笔误——方程多于未知数的超定方程组完全存在（如 $A_{4\\times 3}x=0$），只是不像 $m>n$（必有非零解）或 $m=n$（算行列式）那样有一步秒杀口诀，需化行阶梯形判秩！"
+    },
+    {
+      "id": "m1-la06-c-04",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、向量组与矩阵运算的核心结论",
+      "title": "「矩阵等价」「行向量组等价」「列向量组等价」强弱链条（李艳芳 900 题核心）",
+      "conditions": "必须牢记矩阵等价定义 $PAQ=C$（允许同时行、列变换），而行等价仅允许左乘 $P$，列等价仅允许右乘 $Q$。",
+      "pitfalls": "（没咋了 2.4 例 3）若 $AB=C$ 且 $B$ 可逆，只保 **$A,C$ 列等价**，绝不保 $A,C$ 行等价！",
+      "source": {
+        "book": "27 没咋了线代强化讲义 & 27 张宇基础30讲",
+        "printedPage": "没咋了 P.48例3 / 基础 P.103",
+        "pdfPage": 53,
+        "itemRef": "三种等价强弱关系结论"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_mzl_examples",
+        "verified": true
+      },
+      "summary": "对同型 $m\\times n$ 矩阵 $A,C$：① **$A,C$ 行等价** $\\iff PA=C\\;(P\\text{ 可逆})\\iff Ax=0$ 与 $Cx=0$ 同解 $\\implies r(A)=r(C)\\iff$ **$A,C$ 矩阵等价**；② **$A,C$ 列等价** $\\iff AQ=C\\;(Q\\text{ 可逆})\\iff A^Tx=0$ 与 $C^Tx=0$ 同解 $\\implies$ **$A,C$ 矩阵等价**；③ 反之均**不成立**！「矩阵等价」最弱（只需同型且等秩），既推不出「行等价」，也推不出「列等价」；而「行等价」与「列等价」之间亦互不蕴含！"
+    },
+    {
+      "id": "m1-la06-c-05",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、向量组与矩阵运算的核心结论",
+      "title": "正交非零向量组必线性无关 + 两基下「同坐标非零向量」$\\Leftrightarrow$ 过渡阵 $C$ 的 $\\lambda=1$ 特征向量",
+      "conditions": "正交必无关必须要求**每个向量均非零**（零向量与任何向量正交却导致相关！）。",
+      "pitfalls": "求「在两组基下有相同坐标的非零**向量** $\\delta$」时，解出 $(C-E)x=0$ 得到的 $x$ 只是**坐标**——若旧基不是标准基 $E$，务必乘回 $\\delta=\\Xi x$ 才得到真正的向量！（当旧基为标准基 $e_1,\\dots,e_n$ 时坐标恰好等于向量本身！）",
+      "source": {
+        "book": "27 张宇基础30讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.113习题3.11-3.12 / 没咋了 P.38例3,P.51例5",
+        "pdfPage": 119,
+        "itemRef": "正交无关与同坐标特征值本质"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_mzl_examples",
+        "verified": true
+      },
+      "summary": "① **正交必无关**：两两正交的**非零**向量组 $\\alpha_1,\\dots,\\alpha_s$ 必然线性无关（证：设 $\\sum k_i\\alpha_i=0$，两边与 $\\alpha_j$ 作内积得 $k_j\\|\\alpha_j\\|^2=0\\Rightarrow k_j=0$！），且在正交基下分解任意投影向量 $\\gamma=\\sum k_i\\alpha_i$ 只需直接内积 $k_i=\\dfrac{(\\gamma,\\alpha_i)}{(\\alpha_i,\\alpha_i)}$（2023 数一秒杀技！）；② **两基同坐标本质（数一）**：设由旧基 $\\Xi$ 到新基 $H$ 的过渡矩阵为 $C$（$H=\\Xi C$），则向量 $\\delta$ 在两组基下坐标相同（$x=y$）$\\iff x=Cx \\iff (C-E)x=0$！即存在非零同坐标向量 $\\iff 1$ 是过渡矩阵 $C$ 的特征值（对应基础解系即全部坐标 $x$，再回代 $\\delta=\\Xi x$ 得向量！）！"
+    },
+    {
+      "id": "m1-la06-e-01",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础核心例题（基础 30 讲）",
+      "title": "【例 3.1】含双参 $(a,b)$ 判断 $\\beta$ 能否由 $\\alpha_1,\\alpha_2,\\alpha_3$ 线性表示并求表达式",
+      "problem": "已知 $\\alpha_1=[1,4,0,2]^T,\\;\\alpha_2=[2,7,1,3]^T,\\;\\alpha_3=[0,1,-1,a]^T,\\;\\beta=[3,10,b,4]^T$，问：(1) $a,b$ 取何值时 $\\beta$ 不能表示；(2) $a,b$ 取何值时可表示，并写出全部表达式。",
+      "steps": [
+        {
+          "stepTitle": "第一步：将 $\\beta=x_1\\alpha_1+x_2\\alpha_2+x_3\\alpha_3$ 化增广阵行阶梯形",
+          "detail": "$[\\alpha_1,\\alpha_2,\\alpha_3\\mid\\beta]=\\begin{bmatrix}1&2&0&3\\\\4&7&1&10\\\\0&1&-1&b\\\\2&3&a&4\\end{bmatrix}\\xrightarrow{\\text{行变换}}\\begin{bmatrix}1&2&0&3\\\\0&-1&1&-2\\\\0&0&a-1&0\\\\0&0&0&b-2\\end{bmatrix}$。"
+        },
+        {
+          "stepTitle": "第二步：按 $(b-2)$ 与 $(a-1)$ 精准分三档讨论",
+          "detail": "① **当 $b\\ne 2$ 时**：$r(A)<r([A,\\beta])$，方程无解，$\\beta$ **不能**线性表示；② **当 $b=2,\\;a\\ne 1$ 时**：$r(A)=r([A,\\beta])=3$，有**唯一解** $x=[-1,2,0]^T$，故唯一表示为 $\\beta=-\\alpha_1+2\\alpha_2$；③ **当 $b=2,\\;a=1$ 时**：$r(A)=r([A,\\beta])=2<3$，有**无穷多解** $x=k[-2,1,1]^T+[-1,2,0]^T$，故 $\\beta=-(2k+1)\\alpha_1+(k+2)\\alpha_2+k\\alpha_3\\;(k\\in\\mathbb{R})$！"
+        }
+      ],
+      "finalAnswer": "(1) $b\\ne 2$；(2) $b=2,a\\ne 1$ 时唯一 $\\beta=-\\alpha_1+2\\alpha_2$；$b=2,a=1$ 时 $\\beta=-(2k+1)\\alpha_1+(k+2)\\alpha_2+k\\alpha_3\\;(k\\in\\mathbb{R})$",
+      "takeaway": "具体含参线性表出题的黄金模板：拼增广阵 $[A\\mid\\beta]$ 只作初等行变换，行阶梯最后两行一眼切清「无解 / 唯一解 / 无穷多解」！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.93-94",
+        "pdfPage": 99,
+        "itemRef": "例 3.1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la06-e-02",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础核心例题（基础 30 讲）",
+      "title": "【例 3.2】经典考研母题：前 $s$ 个相关、后 $s$ 个无关，证 $\\alpha_1$ 可表而 $\\alpha_{s+1}$ 不可表",
+      "problem": "设向量组 $\\alpha_1,\\alpha_2,\\dots,\\alpha_s$ 线性相关，而 $\\alpha_2,\\alpha_3,\\dots,\\alpha_{s+1}$ 线性无关，证明：(1) $\\alpha_1$ 可由 $\\alpha_2,\\dots,\\alpha_s$ 线性表示；(2) $\\alpha_{s+1}$ 不能由 $\\alpha_1,\\dots,\\alpha_s$ 线性表示。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：整体无关 $\\Rightarrow$ 部分无关 + 唯一表出定理（2 行秒证！）",
+          "detail": "由 $\\alpha_2,\\dots,\\alpha_s,\\alpha_{s+1}$ 线性无关，其部分组 $\\alpha_2,\\dots,\\alpha_s$ 必线性无关！又添入 $\\alpha_1$ 后 $\\alpha_1,\\alpha_2,\\dots,\\alpha_s$ 线性相关，由定理 2 立得 **$\\alpha_1$ 可由 $\\alpha_2,\\dots,\\alpha_s$ 线性表示（且表示法唯一！）**。"
+        },
+        {
+          "stepTitle": "第 (2) 问：反证法代入 (1) 导出矛盾",
+          "detail": "反设 $\\alpha_{s+1}$ 可由 $\\alpha_1,\\alpha_2,\\dots,\\alpha_s$ 线性表示：$\\alpha_{s+1}=\\lambda_1\\alpha_1+\\lambda_2\\alpha_2+\\cdots+\\lambda_s\\alpha_s$。将 (1) 中 $\\alpha_1=\\sum_{i=2}^s l_i\\alpha_i$ 代入上式，立得 $\\alpha_{s+1}$ 可由 $\\alpha_2,\\dots,\\alpha_s$ 线性表示，从而 $\\alpha_2,\\dots,\\alpha_s,\\alpha_{s+1}$ 线性相关，与题设矛盾！故 $\\alpha_{s+1}$ 绝不能表出！"
+        }
+      ],
+      "finalAnswer": "(1) 能（且唯一）；(2) 不能（均证毕）",
+      "takeaway": "考研压轴证明母题（在没咋了 P.44 例 8 也再次作为核心母题出现！）：遇到「前后各抽一段一相关一无关」，必走「**交集子组无关 $\\to$ 头部可唯一表出 $\\to$ 反证尾部不可表出**」三步曲！",
+      "source": {
+        "book": "27 张宇基础30讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.94-95 / 没咋了 P.44例8",
+        "pdfPage": 100,
+        "itemRef": "例 3.2"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la06-e-03",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础核心例题（基础 30 讲）",
+      "title": "【例 3.3 & 例 3.4】线性相关性 4 大概念反例 + 4 维循环向量组秒判（奇偶反转！）",
+      "problem": "①（例 3.3）对 $s$ 个 $n$ 维向量，选正确命题：(A) $\\alpha_s$ 不能由前 $s-1$ 个表出 $\\Rightarrow$ 全组无关；(B) 存在不全为零 $k_1,\\dots,k_{s-1}$ 使 $\\sum_{i=1}^{s-1}k_i\\alpha_i+0\\alpha_s=0\\Rightarrow\\alpha_s$ 不能由前 $s-1$ 个表出；(C) 全组相关 $\\Rightarrow$ 任一向量可由其余表出；(D) 全组相关且 $\\alpha_s$ 不能由前 $s-1$ 个表出 $\\Rightarrow$ 前 $s-1$ 个必相关；②（例 3.4）$\\alpha_1,\\alpha_2,\\alpha_3,\\alpha_4$ 无关，选线性无关组：(A) 全减循环 (B) 全加循环 (C) $\\alpha_1+\\alpha_2,\\alpha_2+\\alpha_3,\\alpha_3-\\alpha_4,\\alpha_4-\\alpha_1$ (D) $\\alpha_1+\\alpha_2,\\alpha_2+\\alpha_3,\\alpha_3+\\alpha_4,\\alpha_4-\\alpha_1$。",
+      "steps": [
+        {
+          "stepTitle": "① 例 3.3：反例秒杀 (A)(B)(C)，逆否证 (D)",
+          "detail": "(A) 反例 $[1,0],[2,0],[0,2]$：第 3 个不可表但前两个已相关；(B) 陷阱最隐蔽！线性相关组合系数不唯一，反例 $\\alpha_1=[1,1],\\alpha_2=[2,2],\\alpha_3=[3,3]$ 满足 $2\\alpha_1-\\alpha_2+0\\alpha_3=0$，但 $\\alpha_3=\\alpha_1+\\alpha_2$ 依然可表出！(C) 反例 $[0,0],[1,0]$；(D) 正确（若前 $s-1$ 个无关而全组相关，由定理 2 知 $\\alpha_s$ 必可由前 $s-1$ 个表出，矛盾！）。"
+        },
+        {
+          "stepTitle": "② 例 3.4：4 为偶数！全减/全加循环均相关，末项改减才无关",
+          "detail": "(A) 四项和为 $0$；(B) 交替加减 $(\\alpha_1+\\alpha_2)-(\\alpha_2+\\alpha_3)+(\\alpha_3+\\alpha_4)-(\\alpha_4+\\alpha_1)=0$；(C) $(\\alpha_1+\\alpha_2)-(\\alpha_2+\\alpha_3)+(\\alpha_3-\\alpha_4)+(\\alpha_4-\\alpha_1)=0$；(D) 过渡阵行列式 $\\begin{vmatrix}1&0&0&-1\\\\1&1&0&0\\\\0&1&1&0\\\\0&0&1&1\\end{vmatrix}=1-(-1)=2\\ne 0$，选 (D)！"
+        }
+      ],
+      "finalAnswer": "① (D)；② (D)",
+      "takeaway": "牢记例 3.3 (B) 的反例神坑：看到某个相关式里 $\\alpha_s$ 系数为 $0$，**绝不能推** $\\alpha_s$ 不能由前面表出！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.95-96",
+        "pdfPage": 101,
+        "itemRef": "例 3.3-3.4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la06-e-04",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础核心例题（基础 30 讲）",
+      "title": "【例 3.5 & 例 3.6】范德蒙德向量组（延长无关！）+ 幂零链 $\\alpha,A\\alpha,\\dots,A^{k-1}\\alpha$ 无关证明",
+      "problem": "①（例 3.5）设 $a_1,\\dots,a_s$ 互不相同，讨论 $s$ 个 $n$ 维向量 $\\alpha_i=[1,a_i,a_i^2,\\dots,a_i^{n-1}]^T\\;(i=1,\\dots,s)$ 的线性相关性；②（例 3.6）设 $A$ 为 $n$ 阶阵，若存在正整数 $k$ 使 $A^k\\alpha=0$ 且 $A^{k-1}\\alpha\\ne 0$，证 $\\alpha,A\\alpha,\\dots,A^{k-1}\\alpha$ 线性无关。",
+      "steps": [
+        {
+          "stepTitle": "① 例 3.5：按 $s>n,\\;s=n,\\;s<n$ 三档全分类",
+          "detail": "• 当 $s>n$（个数 $>$ 维数）时必**线性相关**；• 当 $s=n$ 时拼成 $n$ 阶范德蒙德行列式 $\\prod_{i<j}(a_j-a_i)\\ne 0$，故**线性无关**；• 当 $s<n$ 时，截取前 $s$ 个分量构成的 $s$ 阶范德蒙德行列式非零（线性无关），再由「**原无关则延长必无关**」知原 $n$ 维向量组亦**线性无关**！（综上：$s\\le n$ 无关，$s>n$ 相关！）"
+        },
+        {
+          "stepTitle": "② 例 3.6：定义式递次左乘 $A^{k-1},A^{k-2},\\dots,A$ 逐个剥洋葱消零！",
+          "detail": "设 $\\lambda_1\\alpha+\\lambda_2 A\\alpha+\\cdots+\\lambda_k A^{k-1}\\alpha=0$。① 两端左乘 $A^{k-1}$，利用 $A^k\\alpha=A^{k+1}\\alpha=\\cdots=0$ 瞬间只剩 $\\lambda_1 A^{k-1}\\alpha=0$，因 $A^{k-1}\\alpha\\ne 0\\implies \\lambda_1=0$！② 代回原式左乘 $A^{k-2}$ 得 $\\lambda_2 A^{k-1}\\alpha=0\\implies \\lambda_2=0$；依次递推得 $\\lambda_1=\\cdots=\\lambda_k=0$，证毕！"
+        }
+      ],
+      "finalAnswer": "① $s\\le n$ 线性无关，$s>n$ 线性相关；② 证毕",
+      "takeaway": "例 3.6 是整个线代**最重要的抽象定义法证明模板**——在强化例 6.4 中直接升级用来证明 $r(A^{n+1})=r(A^n)$！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.96-97",
+        "pdfPage": 102,
+        "itemRef": "例 3.5-3.6"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la06-e-05",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础核心例题（基础 30 讲）",
+      "title": "【例 3.7 & 例 3.8】极大无关组标准求法 + 满秩分解 $A=BC$ 巧求小阵 $CB$（反求高次幂神技！）",
+      "problem": "①（例 3.7）求 $\\alpha_1=[1,-1,2,4]^T,\\alpha_2=[0,3,1,2]^T,\\alpha_3=[3,0,7,14]^T,\\alpha_4=[1,-2,2,0]^T,\\alpha_5=[2,1,5,10]^T$ 的秩与一个极大无关组；②（例 3.8）设 $A=\\begin{bmatrix}1&-2&-1&2\\\\2&-3&-2&3\\\\2&-2&-2&2\\\\1&-1&-1&1\\end{bmatrix}=BC$，其中 $B=\\begin{bmatrix}-1&-2\\\\-2&-3\\\\-2&-2\\\\-1&-1\\end{bmatrix}$，求 $CB$。",
+      "steps": [
+        {
+          "stepTitle": "① 例 3.7：仅作初等行变换化行最简形，盯主元列编号取原向量",
+          "detail": "$A\\xrightarrow{\\text{行}}\\begin{bmatrix}1&0&3&0&2\\\\0&1&1&0&1\\\\0&0&0&1&0\\\\0&0&0&0&0\\end{bmatrix}$，秩为 3，主元在第 1,2,4 列，故 $\\alpha_1,\\alpha_2,\\alpha_4$ 为一个极大无关组（对应选 (B)，且同时读出 $\\alpha_3=3\\alpha_1+\\alpha_2,\\;\\alpha_5=2\\alpha_1+\\alpha_2$！）。"
+        },
+        {
+          "stepTitle": "② 例 3.8：认出 $B=[\\alpha_3,\\alpha_2]$，直接读取 $A$ 各列在基 $B$ 下的坐标阵 $C$！",
+          "detail": "仔细扫一眼 $A$ 的列：$\\alpha_1=-\\alpha_3,\\;\\alpha_4=-\\alpha_2$，而给定 $B=[\\alpha_3,\\alpha_2]$ 恰是 $A$ 的极大无关组！故 $A=[\\alpha_1,\\alpha_2,\\alpha_3,\\alpha_4]=[\\alpha_3,\\alpha_2]\\begin{bmatrix}-1&0&1&0\\\\0&1&0&-1\\end{bmatrix}=BC$，立刻得 $C=\\begin{bmatrix}-1&0&1&0\\\\0&1&0&-1\\end{bmatrix}$！乘出 $CB=\\begin{bmatrix}-1&0&1&0\\\\0&1&0&-1\\end{bmatrix}\\begin{bmatrix}-1&-2\\\\-2&-3\\\\-2&-2\\\\-1&-1\\end{bmatrix}=\\begin{bmatrix}-1&0\\\\-1&-2\\end{bmatrix}$！"
+        }
+      ],
+      "finalAnswer": "① 秩为 3，极大无关组如 $\\alpha_1,\\alpha_2,\\alpha_4$（选 (B)）；② $CB=\\begin{bmatrix}-1&0\\\\-1&-2\\end{bmatrix}$（选 (D)）",
+      "takeaway": "例 3.8 揭开了满秩分解 $A=BC$ 的真实面纱：$C$ 的第 $j$ 列就是 $A$ 的第 $j$ 列用 $B$ 的列线性表出的坐标，而且算 $A^9=B(CB)^8C$ 时把 4 阶大阵直接降成 2 阶下三角阵 $CB$！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.99-101",
+        "pdfPage": 105,
+        "itemRef": "例 3.7-3.8"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la06-e-06",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础核心例题（基础 30 讲）",
+      "title": "【例 3.12】同题双问深度对比：「矩阵 $A,B$ 等价」vs「向量组 (I),(II) 等价」",
+      "problem": "设 (I) $\\alpha_1=[1,0,2]^T,\\alpha_2=[0,1,1]^T,\\alpha_3=[2,-1,a+4]^T$，(II) $\\beta_1=[1,2,4]^T,\\beta_2=[1,-1,a+2]^T,\\beta_3=[3,3,10]^T$，矩阵 $A=[\\alpha_1,\\alpha_2,\\alpha_3],\\;B=[\\beta_1,\\beta_2,\\beta_3]$。(1) 讨论 $A,B$ 是否矩阵等价；(2) 讨论向量组 (I),(II) 是否向量组等价。",
+      "steps": [
+        {
+          "stepTitle": "第一步：分别化阶梯形求 $r(A),\\;r(B)$ 与拼阵 $r(A,B)$",
+          "detail": "$|A|=a+1$，$|B|=-3a$（或作行变换 $[A\\mid B]\\to\\begin{bmatrix}1&0&2&1&1&3\\\\0&1&-1&2&-1&3\\\\0&0&a+1&0&a+1&1\\end{bmatrix}$ 与 $[B\\mid A]$）。得：① $a\\ne 0,-1$ 时 $r(A)=r(B)=r(A,B)=3$；② $a=-1$ 时 $r(A)=2\\ne 3=r(B)$；③ $a=0$ 时 $r(A)=3\\ne 2=r(B)$！"
+        },
+        {
+          "stepTitle": "第二步：逐问作答并点破两者核心区别",
+          "detail": "(1) **矩阵等价**（同型且 $r(A)=r(B)$）：当且仅当 $a\\ne 0$ 且 $a\\ne -1$ 时 $A\\cong B$；$a=0$ 或 $a=-1$ 时不等价；(2) **向量组等价**（三秩相等 $r(A)=r(B)=r(A,B)$）：同样仅当 $a\\ne 0,-1$ 时 (I) $\\cong$ (II)（均满秩 3 均可张成整个 $\\mathbb{R}^3$！）；$a=-1$ 或 $a=0$ 时秩就不等故不等价。（补充警醒：若两个 3 维向量组均为秩 2，矩阵必然等价，但向量组只有当它们张成**同一个平面**时才等价！）"
+        }
+      ],
+      "finalAnswer": "(1)(2) 均在 $a\\ne 0$ 且 $a\\ne -1$ 时等价；$a=0$ 或 $a=-1$ 时不等价",
+      "takeaway": "记住极简几何画面：3 维空间里任何两组 3 个向量若秩都是 3，它们必等价（都张成 $\\mathbb{R}^3$）；若秩都是 2，矩阵必等价但向量组未必等价（可能张成两张不同的过原点平面）！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.104-105",
+        "pdfPage": 110,
+        "itemRef": "例 3.12"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la06-e-07",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础核心例题（数一向量空间）",
+      "title": "【例 3.13】（数一经典）求由基 (II) 到基 (I) 的过渡矩阵与新基下坐标",
+      "problem": "设 $\\mathbb{R}^3$ 中两个基 (I) $\\alpha_1=[1,1,0]^T,\\alpha_2=[0,1,1]^T,\\alpha_3=[1,0,1]^T$，(II) $\\beta_1=[1,0,0]^T,\\beta_2=[1,1,0]^T,\\beta_3=[1,1,1]^T$。(1) 求由基 (II) 到基 (I) 的过渡矩阵 $C$；(2) 已知 $\\xi$ 在基 (II) 下坐标为 $[1,0,2]^T$，求 $\\xi$ 在基 (I) 下坐标。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：认准「由 (II) 到 (I)」$\\Rightarrow [\\alpha]=[\\beta]C\\Rightarrow C=[\\beta]^{-1}[\\alpha]$",
+          "detail": "$[\\beta]=\\begin{bmatrix}1&1&1\\\\0&1&1\\\\0&0&1\\end{bmatrix}$ 为上三角阵，极易口算逆阵 $[\\beta]^{-1}=\\begin{bmatrix}1&-1&0\\\\0&1&-1\\\\0&0&1\\end{bmatrix}$！故 $C=\\begin{bmatrix}1&-1&0\\\\0&1&-1\\\\0&0&1\\end{bmatrix}\\begin{bmatrix}1&0&1\\\\1&1&0\\\\0&1&1\\end{bmatrix}=\\begin{bmatrix}0&-1&1\\\\1&0&-1\\\\0&1&1\\end{bmatrix}$！"
+        },
+        {
+          "stepTitle": "第 (2) 问：由 $[\\alpha]x=[\\beta][1,0,2]^T$ 解 $x=[\\alpha]^{-1}[\\beta][1,0,2]^T$（或 $x=C^{-1}[1,0,2]^T$）",
+          "detail": "先算 $\\xi=[\\beta][1,0,2]^T=[3,2,2]^T$，再求 $[\\alpha]^{-1}=\\frac{1}{2}\\begin{bmatrix}1&1&-1\\\\-1&1&1\\\\1&-1&1\\end{bmatrix}$，得 $x=\\frac{1}{2}\\begin{bmatrix}1&1&-1\\\\-1&1&1\\\\1&-1&1\\end{bmatrix}\\begin{bmatrix}3\\\\2\\\\2\\end{bmatrix}=\\left[\\frac{3}{2},\\frac{1}{2},\\frac{3}{2}\\right]^T$！（检验：$\\frac{3}{2}\\alpha_1+\\frac{1}{2}\\alpha_2+\\frac{3}{2}\\alpha_3=[3,2,2]^T=\\xi$，精准吻合！）"
+        }
+      ],
+      "finalAnswer": "(1) $C=\\begin{bmatrix}0&-1&1\\\\1&0&-1\\\\0&1&1\\end{bmatrix}$；(2) $\\left[\\frac{3}{2},\\frac{1}{2},\\frac{3}{2}\\right]^T$",
+      "takeaway": "做完坐标变换务必做 3 秒黄金验算：把求出的新坐标 $x$ 乘回新基 $[\\alpha]x$，核对是否恰好等于旧坐标乘旧基 $[\\beta]y$！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.106",
+        "pdfPage": 112,
+        "itemRef": "例 3.13"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la06-e-08",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础核心例题（数一施密特正交化）",
+      "title": "【例 3.14】（高危必防！）3 个相关向量张成 2 维子空间，先抽基再施密特正交化",
+      "problem": "设向量空间 $V=\\operatorname{span}\\{\\alpha_1,\\alpha_2,\\alpha_3\\}$，其中 $\\alpha_1=[1,0,1]^T,\\;\\alpha_2=[1,2,3]^T,\\;\\alpha_3=[2,2,4]^T$，求 $V$ 的一个规范正交基。",
+      "steps": [
+        {
+          "stepTitle": "第 0 步（防坑核心！）：先检查相关性，发现 $\\alpha_3=\\alpha_1+\\alpha_2$ 故 $\\dim V=2$！",
+          "detail": "切勿直接对 3 个向量套施密特正交化（否则第 3 步必算出零向量 $\\beta_3=0$！）。一眼看出 $\\alpha_3=\\alpha_1+\\alpha_2$，而 $\\alpha_1,\\alpha_2$ 不成比例，故 $V$ 是 3 维空间中的 **2 维子空间**，取基 $\\alpha_1,\\alpha_2$！"
+        },
+        {
+          "stepTitle": "第 1–2 步：对 $\\alpha_1,\\alpha_2$ 施密特正交化并单位化",
+          "detail": "$\\beta_1=\\alpha_1=[1,0,1]^T$；$\\beta_2=\\alpha_2-\\dfrac{(\\alpha_2,\\beta_1)}{(\\beta_1,\\beta_1)}\\beta_1=[1,2,3]^T-\\dfrac{1+0+3}{1+0+1}[1,0,1]^T=[-1,2,1]^T$（检验 $\\beta_1^T\\beta_2=-1+0+1=0$！）。单位化：$\\gamma_1=\\dfrac{1}{\\sqrt{2}}[1,0,1]^T,\\;\\gamma_2=\\dfrac{1}{\\sqrt{6}}[-1,2,1]^T$！"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{1}{\\sqrt{2}}[1,0,1]^T,\\;\\dfrac{1}{\\sqrt{6}}[-1,2,1]^T$（共 2 个向量！）",
+      "takeaway": "看到求 $\\operatorname{span}\\{\\alpha_1,\\dots,\\alpha_s\\}$ 的规范正交基，**第一动作永远是先判秩抽极大无关组**，绝对不要闭眼直接代公式！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.107",
+        "pdfPage": 113,
+        "itemRef": "例 3.14"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la06-e-09",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础习题精粹（基础 30 讲）",
+      "title": "【基础习题 3.3 & 3.8 & 3.12】含参向量组表出、4 维含参唯一表出与两基同坐标向量",
+      "problem": "①（习题 3.3）$\\alpha_1=[\\lambda,1,1]^T,\\alpha_2=[1,\\lambda,1]^T,\\alpha_3=[1,1,\\lambda]^T,\\alpha_4=[1,\\lambda,\\lambda^2]^T$，若 $\\alpha_1,\\alpha_2,\\alpha_3$ 可由 $\\alpha_1,\\alpha_2,\\alpha_4$ 表出，求 $\\lambda$ 范围；②（习题 3.8）求 $a,b$ 使 $\\beta=[1,1,b+3,5]^T$ 不可表出或唯一表出；③（习题 3.12 数一）求过渡阵、$\\gamma=[9,6,5]^T$ 两基坐标及两基下相同坐标向量 $\\delta$。",
+      "steps": [
+        {
+          "stepTitle": "① 习题 3.3：转化为 $\\alpha_3$ 可由 $\\alpha_1,\\alpha_2,\\alpha_4$ 表出，切莫漏检 $\\lambda=1$！",
+          "detail": "算 $|\\alpha_1,\\alpha_2,\\alpha_4|=(\\lambda^2-1)^2$：① $\\lambda\\ne\\pm 1$ 时满秩必可表出；② $\\lambda=1$ 时四向量全为 $[1,1,1]^T$，**显然可表出！**（高频漏根坑！）；③ $\\lambda=-1$ 时增广阵行变换得矛盾行 $[0,0,0\\mid 1]$ 不可表出。综上 $\\lambda\\ne -1$（选 (C)）！"
+        },
+        {
+          "stepTitle": "② 习题 3.8：增广阵行变换得 $a=-1,b\\ne 0$ 不可表出；$a\\ne -1$ 唯一表出",
+          "detail": "行阶梯最后两行为 $[0,0,a+1,0\\mid b]$ 与 $[0,0,0,a+1\\mid 0]$：当 $a=-1,b\\ne 0$ 时无解不可表出；当 $a\\ne -1$ 时唯一解 $\\beta=-\\frac{2b}{a+1}\\alpha_1+\\frac{a+b+1}{a+1}\\alpha_2+\\frac{b}{a+1}\\alpha_3+0\\alpha_4$！"
+        },
+        {
+          "stepTitle": "③ 习题 3.12：求过渡阵 $C=[\\alpha]^{-1}[\\beta]$ 与同坐标方程 $(C-E)x=0$",
+          "detail": "$C=\\begin{bmatrix}0&1&1\\\\-1&-3&-2\\\\2&4&4\\end{bmatrix}$；$\\gamma$ 在基 $\\beta$ 下坐标 $[0,-4,5]^T$，在基 $\\alpha$ 下坐标 $x=Cy=[1,2,4]^T$；同坐标条件 $[\\alpha]x=[\\beta]x\\iff (C-E)x=0$，因 $|C-E|\\ne 0$ 只有零解，故仅零向量 $\\delta=0$ 有相同坐标！"
+        }
+      ],
+      "finalAnswer": "① $\\lambda\\ne -1$（选 (C)）；② 不可表 $a=-1,b\\ne 0$，唯一表 $a\\ne -1$；③ $C=\\begin{bmatrix}0&1&1\\\\-1&-3&-2\\\\2&4&4\\end{bmatrix}$，坐标 $[1,2,4]^T$ 与 $[0,-4,5]^T$，仅 $\\delta=0$",
+      "takeaway": "习题 3.3 与没咋了 2.4 例 1（2022 数二，把「单向表出」升级成「两向量组等价」，多排一个 $\\lambda=-2$！）构成完美的「基础 $\\to$ 真题」对照！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.108-113",
+        "pdfPage": 114,
+        "itemRef": "基础习题 3.3/3.8/3.12"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la06-e-10",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 7 例精解（具体与抽象向量关系）",
+      "title": "【强化例 6.1】（2023 数一二）求既可由 $\\alpha_1,\\alpha_2$ 表出又可由 $\\beta_1,\\beta_2$ 表出的公共向量 $\\gamma$",
+      "problem": "已知 $\\alpha_1=[1,2,3]^T,\\;\\alpha_2=[2,1,1]^T,\\;\\beta_1=[2,5,9]^T,\\;\\beta_2=[1,0,1]^T$，若 $\\gamma$ 既可由 $\\alpha_1,\\alpha_2$ 线性表示，也可由 $\\beta_1,\\beta_2$ 线性表示，则 $\\gamma=(\\quad)$。  (A) $k[3,3,4]^T$　(B) $k[3,5,10]^T$　(C) $k[-1,1,2]^T$　(D) $k[1,5,8]^T$",
+      "steps": [
+        {
+          "stepTitle": "第一步：设 $\\gamma=k_1\\alpha_1+k_2\\alpha_2=l_1\\beta_1+l_2\\beta_2$ 化 4 元齐次方程组",
+          "detail": "移项得 $k_1\\alpha_1+k_2\\alpha_2+(-l_1)\\beta_1+(-l_2)\\beta_2=0$。对矩阵 $[\\alpha_1,\\alpha_2,\\beta_1,\\beta_2]=\\begin{bmatrix}1&2&2&1\\\\2&1&5&0\\\\3&1&9&1\\end{bmatrix}$ 作初等行变换：$\\begin{bmatrix}1&2&2&1\\\\0&-3&1&-2\\\\0&-5&3&-2\\end{bmatrix}\\to\\begin{bmatrix}1&0&0&-3\\\\0&1&0&1\\\\0&0&1&1\\end{bmatrix}$！于是基础解系为 $[k_1,k_2,-l_1,-l_2]^T=k[3,-1,-1,1]^T$！"
+        },
+        {
+          "stepTitle": "第二步：将 $k_1=3k,\\;k_2=-k$ 回代得 $\\gamma=k[1,5,8]^T$（两头校验！）",
+          "detail": "$\\gamma=3k\\alpha_1-k\\alpha_2=k(3[1,2,3]^T-[2,1,1]^T)=k[1,5,8]^T$！顺手用 $\\beta$ 组校验：$l_1=k,l_2=-k\\implies k\\beta_1-k\\beta_2=k([2,5,9]^T-[1,0,1]^T)=k[1,5,8]^T$，完全吻合！选 (D)！"
+        }
+      ],
+      "finalAnswer": "(D) $k[1,5,8]^T\\;(k\\in\\mathbb{R})$",
+      "takeaway": "2023 真题实质就是「两个 2 维子空间的交集直线」（公共解法三）；考场选择题也可用叉积法 10 秒秒杀：两平面法向量 $n_1=\\alpha_1\\times\\alpha_2,\\;n_2=\\beta_1\\times\\beta_2$，交线方向就是 $n_1\\times n_2$！",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.65-66 / 没咋了 P.57例1",
+        "pdfPage": 76,
+        "itemRef": "强化例 6.1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_adv_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la06-e-11",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 7 例精解（具体与抽象向量关系）",
+      "title": "【强化例 6.2】（2024 数二）三向量线性相关且任意两个线性无关求 $a,b$",
+      "problem": "设 $\\alpha_1=[a,1,-1,1]^T,\\;\\alpha_2=[1,1,b,a]^T,\\;\\alpha_3=[1,a,-1,1]^T$，若 $\\alpha_1,\\alpha_2,\\alpha_3$ 线性相关且其中任意两个向量线性无关，则 $(\\quad)$。  (A) $a=1,b\\ne -1$　(B) $a=1,b=-1$　(C) $a\\ne -2,b=2$　(D) $a=-2,b=2$",
+      "steps": [
+        {
+          "stepTitle": "第一步：先肉眼排除成比例退化点 $a=1$（瞬间秒杀一半选项！）",
+          "detail": "观察 $\\alpha_1=[a,1,-1,1]^T$ 与 $\\alpha_3=[1,a,-1,1]^T$：若 $a=1$，则 $\\alpha_1=\\alpha_3$（两向量线性相关！），直接违背「任意两个线性无关」，**1 秒排除 (A)(B)**！"
+        },
+        {
+          "stepTitle": "第二步：令 $r(\\alpha_1,\\alpha_2,\\alpha_3)=2$ 行阶梯定 $a=-2,\\;b=2$",
+          "detail": "在 $a\\ne 1$ 下对 $[\\alpha_1,\\alpha_2,\\alpha_3]$ 作初等行变换化为 $\\begin{bmatrix}1&1&a\\\\0&1&1+a\\\\0&0&-b(a+1)-2\\\\0&0&a+2\\end{bmatrix}$。为使秩 $=2$，后两行必须全为零：$a+2=0\\implies a=-2$；代入 $-b(-2+1)-2=0\\implies b=2$！（注：这与强化例 5.9 是完全同一道母题的「向量版 vs 平面版」孪生题！没咋了 P.43 例 5 直接问 $ab=-4$！）"
+        }
+      ],
+      "finalAnswer": "(D) $a=-2,\\;b=2$（$ab=-4$）",
+      "takeaway": "遇到「3 向量相关且任两无关」，等价于 **$r=2$ 且任意两列不成比例**——第一眼先盯两列几乎一样的向量秒杀退化根 $a=1$！",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.66-67 / 没咋了 P.43例5",
+        "pdfPage": 77,
+        "itemRef": "强化例 6.2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_adv_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la06-e-12",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 7 例精解（极大无关组与满秩分解）",
+      "title": "【强化例 6.3】含参 $3\\times 5$ 阵秩为 2 求 $a$、极大无关组及满秩分解 $A=GH$",
+      "problem": "设矩阵 $A=\\begin{bmatrix}1&-1&3&0&-1\\\\-1&0&-2&-a&-1\\\\1&1&a&2&3\\end{bmatrix}$ 的秩为 $2$。(1) 求 $a$ 的值；(2) 求 $A$ 列向量组的一个极大线性无关组 $\\alpha,\\beta$，并求矩阵 $H$ 使 $A=GH$（其中 $G=[\\alpha,\\beta]$）。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：行阶梯形锁定 $a=1$",
+          "detail": "$A\\xrightarrow{\\text{行}}\\begin{bmatrix}1&-1&3&0&-1\\\\0&-1&1&-a&-2\\\\0&0&a-1&2(1-a)&0\\end{bmatrix}$，因 $r(A)=2$，第 3 行必全零 $\\implies a=1$！"
+        },
+        {
+          "stepTitle": "第 (2) 问：化行最简形，主元原列作 $G$，前两行直接作 $H$！",
+          "detail": "代入 $a=1$ 化行最简形：$A\\xrightarrow{\\text{行}}\\begin{bmatrix}1&0&2&1&1\\\\0&1&-1&1&2\\\\0&0&0&0&0\\end{bmatrix}$！取主元列 $\\alpha=\\alpha_1=[1,-1,1]^T,\\;\\beta=\\alpha_2=[-1,0,1]^T$ 构成极大无关组 $G=[\\alpha_1,\\alpha_2]$；由行最简形直接读出 $\\alpha_3=2\\alpha_1-\\alpha_2,\\;\\alpha_4=\\alpha_1+\\alpha_2,\\;\\alpha_5=\\alpha_1+2\\alpha_2$，故 **$H=\\begin{bmatrix}1&0&2&1&1\\\\0&1&-1&1&2\\end{bmatrix}$**（恰好就是行最简形的前 2 行！）。"
+        }
+      ],
+      "finalAnswer": "(1) $a=1$；(2) $G=[\\alpha_1,\\alpha_2]$，$H=\\begin{bmatrix}1&0&2&1&1\\\\0&1&-1&1&2\\end{bmatrix}$",
+      "takeaway": "记死无敌速算结论：**当取前 $r$ 个主元列拼成 $G$ 时，$A=GH$ 中的 $H$ 就是 $A$ 的行最简阶梯形去掉全零行后剩下的 $r$ 行！**",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.67",
+        "pdfPage": 78,
+        "itemRef": "强化例 6.3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_adv_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la06-e-13",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 7 例精解（抽象证明压轴）",
+      "title": "【强化例 6.4】压轴神证明：(1) 证 $\\alpha,A\\alpha,\\dots,A^{k-1}\\alpha$ 无关；(2) 证 $r(A^{n+1})=r(A^n)$！",
+      "problem": "设 $A$ 为 $n$ 阶方阵，证明：(1) 若 $A^{k-1}\\alpha\\ne 0,\\;A^k\\alpha=0$，则 $\\alpha,A\\alpha,\\dots,A^{k-1}\\alpha$ 线性无关；(2) $r(A^{n+1})=r(A^n)$。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：定义式逐次左乘 $A^{k-1},A^{k-2},\\dots,A$ 剥出全零系数",
+          "detail": "设 $l_0\\alpha+l_1A\\alpha+\\cdots+l_{k-1}A^{k-1}\\alpha=0$，左乘 $A^{k-1}$ 得 $l_0A^{k-1}\\alpha=0\\Rightarrow l_0=0$；依次左乘 $A^{k-2},\\dots,A$ 推得 $l_1=\\cdots=l_{k-1}=0$，证毕！"
+        },
+        {
+          "stepTitle": "第 (2) 问：证方程组 $A^{n+1}x=0$ 与 $A^nx=0$ 同解（反证法联动第 (1) 问！）",
+          "detail": "① 显然 $A^n\\eta=0\\Rightarrow A^{n+1}\\eta=0$；② 反过来，设 $\\gamma$ 是 $A^{n+1}x=0$ 的任一解（即 $A^{n+1}\\gamma=0$）。**反设** $A^n\\gamma\\ne 0$，则由 (1)（取 $k=n+1$）知 **$\\gamma,A\\gamma,A^2\\gamma,\\dots,A^n\\gamma$** 这 **$n+1$ 个 $n$ 维向量线性无关**！然而个数 $n+1>$ 维数 $n$ 必线性相关，矛盾！故必有 $A^n\\gamma=0$！因此 $A^{n+1}x=0$ 与 $A^nx=0$ 同解，立得 $r(A^{n+1})=r(A^n)$！"
+        }
+      ],
+      "finalAnswer": "(1)(2) 均严密证毕（且顺带推出 $A^nx=0$ 与 $A^{n+1}x=0$ 同解！）",
+      "takeaway": "全线代最优雅的压轴证明题之一！两问一脉相承，同时是没咋了 P.61 例 8（李林 880 题）① 的底层理论基石！",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.68-69 / 没咋了 P.40,61例8",
+        "pdfPage": 79,
+        "itemRef": "强化例 6.4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_adv_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la06-e-14",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 7 例精解（综合题）",
+      "title": "【强化例 6.5】（2025 数二）由向量线性关系 $\\alpha_1+\\alpha_2=\\alpha_3+\\alpha_4$ 5 秒写出 $Ax=\\alpha_1+4\\alpha_4$ 通解",
+      "problem": "设矩阵 $A=[\\alpha_1,\\alpha_2,\\alpha_3,\\alpha_4]$，若 $\\alpha_1,\\alpha_2,\\alpha_3$ 线性无关，且 $\\alpha_1+\\alpha_2=\\alpha_3+\\alpha_4$，则方程组 $Ax=\\alpha_1+4\\alpha_4$ 的通解为 $x=\\_\\_\\_\\_$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：由已知相关性锁定 $r(A)=3$ 及齐次唯一基础解系",
+          "detail": "由 $\\alpha_4=\\alpha_1+\\alpha_2-\\alpha_3$ 知 $\\alpha_4$ 可由无关组 $\\alpha_1,\\alpha_2,\\alpha_3$ 表出，故 $r(A)=3$，齐次基础解系含 $4-3=1$ 个向量！移项 $\\alpha_1+\\alpha_2-\\alpha_3-\\alpha_4=0$ 立得基础解系 $\\xi=[1,1,-1,-1]^T$！"
+        },
+        {
+          "stepTitle": "第二步：肉眼直读特解 $\\eta^*=[1,0,0,4]^T$，拼成通解",
+          "detail": "由 $A[1,0,0,4]^T=\\alpha_1+4\\alpha_4$ 立得特解 $\\eta^*=[1,0,0,4]^T$，故通解为 $x=k[1,1,-1,-1]^T+[1,0,0,4]^T\\;(k\\in\\mathbb{R})$！"
+        }
+      ],
+      "finalAnswer": "$x=k[1,1,-1,-1]^T+[1,0,0,4]^T\\;(k\\in\\mathbb{R})$",
+      "takeaway": "2025 数二 5 分送分填空题！只要吃透「移项凑零读齐次解、盯右端系数读特解」，5 秒拿满分且绝不翻车！",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.69 / 没咋了 P.56例5",
+        "pdfPage": 80,
+        "itemRef": "强化例 6.5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_adv_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la06-e-15",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 7 例精解（向量组等价）",
+      "title": "【强化例 6.6】$\\alpha$ 组可由 $\\beta$ 组表出，但 $\\beta$ 组不能由 $\\alpha$ 组表出，严格降秩锁定 $a=1$",
+      "problem": "求常数 $a$ 的值，使 $\\alpha_1=[1,1,a]^T,\\alpha_2=[1,a,1]^T,\\alpha_3=[a,1,1]^T$ 能由 $\\beta_1=[1,1,a]^T,\\beta_2=[-2,a,4]^T,\\beta_3=[-2,a,a]^T$ 线性表示，但 $\\beta_1,\\beta_2,\\beta_3$ 不能由 $\\alpha_1,\\alpha_2,\\alpha_3$ 线性表示。",
+      "steps": [
+        {
+          "stepTitle": "第一步：由单向可表但不可互表，必有严格不等式 $r(\\alpha)<r(\\beta)\\le 3\\implies |\\alpha_1,\\alpha_2,\\alpha_3|=0$",
+          "detail": "因 $\\alpha$ 组可由 $\\beta$ 组表出故 $r(\\alpha)\\le r(\\beta)$；若取等号则两向量组等价（必可互表！），矛盾！故必有 $r(\\alpha)<r(\\beta)\\le 3\\implies r(\\alpha)<3\\implies |\\alpha_1,\\alpha_2,\\alpha_3|=(a+2)(a-1)^2=0\\implies a=1$ 或 $a=-2$！"
+        },
+        {
+          "stepTitle": "第二步：逐一检验 $a=1$ 与 $a=-2$，排掉 $a=-2$（根本不可单向表出！）",
+          "detail": "• 当 $a=1$ 时，$\\alpha_1=\\alpha_2=\\alpha_3=\\beta_1=[1,1,1]^T$，显然 $\\alpha$ 组可由 $\\beta$ 组表出，而 $\\beta_2=[-2,1,4]^T$ 不能由 $[1,1,1]^T$ 表出，**满足题意！** • 当 $a=-2$ 时，$[\\beta_1,\\beta_2,\\beta_3\\mid \\alpha_1,\\alpha_2,\\alpha_3]\\xrightarrow{\\text{行}}\\begin{bmatrix}1&-2&-2&1&1&-2\\\\0&0&-6&0&3&-3\\\\0&0&0&0&-3&3\\end{bmatrix}$，可见 $r(\\beta)=2<3=r(\\beta,\\alpha_2)$，$\\alpha_2$ 根本不能由 $\\beta$ 组表出，**舍去 $a=-2$**！综上 $a=1$！"
+        }
+      ],
+      "finalAnswer": "$a=1$",
+      "takeaway": "单向表出但不等价题的二段法：**先用严格不等式 $r(\\alpha)<r(\\beta)\\le n$ 逼出 $|\\alpha|=0$ 找候选根，再逐根回代核验「正向可表 + 反向不可表」！**",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.70",
+        "pdfPage": 81,
+        "itemRef": "强化例 6.6"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_adv_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la06-e-16",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 7 例精解（数一向量空间）",
+      "title": "【强化例 6.7】（数一）已知过渡矩阵反求基参数 $a,b$ 与新基下坐标",
+      "problem": "设 $\\mathbb{R}^3$ 中基 (I) $\\beta_1=[1,0,0]^T,\\beta_2=[1,1,0]^T,\\beta_3=[1,1,1]^T$ 到基 (II) $\\alpha_1=[1,a,0]^T,\\alpha_2=[0,1,b]^T,\\alpha_3=[1,0,1]^T$ 的过渡矩阵为 $C=\\begin{bmatrix}0&-1&1\\\\1&0&-1\\\\0&1&1\\end{bmatrix}$。(1) 求 $a,b$；(2) 已知 $\\xi$ 在基 (I) 下坐标为 $[1,0,2]^T$，求在基 (II) 下坐标。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：由 $[\\alpha]=[\\beta]C$（比求逆更快！）直接比对元素秒得 $a=b=1$",
+          "detail": "按基变换公式直接乘 $[\\beta]C=\\begin{bmatrix}1&1&1\\\\0&1&1\\\\0&0&1\\end{bmatrix}\\begin{bmatrix}0&-1&1\\\\1&0&-1\\\\0&1&1\\end{bmatrix}=\\begin{bmatrix}1&0&1\\\\1&1&0\\\\0&1&1\\end{bmatrix}=[\\alpha_1,\\alpha_2,\\alpha_3]=\\begin{bmatrix}1&0&1\\\\a&1&0\\\\0&b&1\\end{bmatrix}$，一眼读出 $a=1,\\;b=1$！（比先算 $[\\beta]^{-1}[\\alpha]$ 更省一步求逆！）"
+        },
+        {
+          "stepTitle": "第 (2) 问：由坐标变换 $y=C^{-1}x$（或解 $Cy=x$）得 $y=\\left[\\frac{3}{2},\\frac{1}{2},\\frac{3}{2}\\right]^T$",
+          "detail": "由 $x=Cy$ 即 $\\begin{cases}-y_2+y_3=1\\\\y_1-y_3=0\\\\y_2+y_3=2\\end{cases}$，口算 3 秒直接解出 $y_3=\\frac{3}{2},\\;y_2=\\frac{1}{2},\\;y_1=\\frac{3}{2}$！（完全不用算 $3\\times 3$ 逆矩阵！）"
+        }
+      ],
+      "finalAnswer": "(1) $a=1,\\;b=1$；(2) $\\left[\\frac{3}{2},\\frac{1}{2},\\frac{3}{2}\\right]^T$",
+      "takeaway": "考场极速心法：已知过渡矩阵 $C$ 求新基或求新坐标时，直接写 $[\\text{新}]=[\\text{旧}]C$ 与 $Cy=x$ 解稀疏小方程组，往往比求 3 阶逆阵快 3 倍！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.71",
+        "pdfPage": 82,
+        "itemRef": "强化例 6.7"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_adv_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la06-e-17",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化独家真题精选",
+      "title": "【没咋了 2.1 例 3】（2023 数一）两两正交向量组内积投影 5 秒秒杀 $k_1^2+k_2^2+k_3^2=\\frac{11}{9}$",
+      "problem": "已知 $\\alpha_1=[1,0,1,1]^T,\\;\\alpha_2=[-1,-1,0,1]^T,\\;\\alpha_3=[0,1,-1,1]^T,\\;\\beta=[1,1,1,-1]^T$，$\\gamma=k_1\\alpha_1+k_2\\alpha_2+k_3\\alpha_3$。若 $\\gamma^T\\alpha_i=\\beta^T\\alpha_i\\;(i=1,2,3)$，则 $k_1^2+k_2^2+k_3^2=\\_\\_\\_\\_$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：敏锐发现 $\\alpha_1,\\alpha_2,\\alpha_3$ 两两正交且 $\\|\\alpha_i\\|^2=3$！（直接免解方程组！）",
+          "detail": "口算内积：$\\alpha_1^T\\alpha_2=-1+0+0+1=0$，$\\alpha_1^T\\alpha_3=0+0-1+1=0$，$\\alpha_2^T\\alpha_3=0-1+0+1=0$！且 $\\|\\alpha_1\\|^2=\\|\\alpha_2\\|^2=\\|\\alpha_3\\|^2=3$！"
+        },
+        {
+          "stepTitle": "第二步：直接内积出 $k_i=\\frac{\\beta^T\\alpha_i}{3}$",
+          "detail": "$\\gamma^T\\alpha_i=k_i\\|\\alpha_i\\|^2=3k_i=\\beta^T\\alpha_i$：$\\beta^T\\alpha_1=1+0+1-1=1\\Rightarrow k_1=\\frac{1}{3}$；$\\beta^T\\alpha_2=-1-1+0-1=-3\\Rightarrow k_2=-1$；$\\beta^T\\alpha_3=0+1-1-1=-1\\Rightarrow k_3=-\\frac{1}{3}$！故 $k_1^2+k_2^2+k_3^2=\\frac{1}{9}+1+\\frac{1}{9}=\\dfrac{11}{9}$！"
+        }
+      ],
+      "finalAnswer": "$\\dfrac{11}{9}$",
+      "takeaway": "2023 数一神题！看到题目给出一堆内积等式 $\\gamma^T\\alpha_i=\\beta^T\\alpha_i$（几何上就是 $\\beta$ 在子空间的正交投影 $\\gamma$！），第一秒先检验 $\\alpha_i$ 是否两两正交，瞬间化为 3 个单变量除法！",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.38",
+        "pdfPage": 43,
+        "itemRef": "没咋了 2.1 例 3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la06-e-18",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化独家真题精选",
+      "title": "【没咋了 2.2 例 4】4 维正交补空间维数秒定 $r(\\alpha_1,\\alpha_2,\\alpha_3,\\beta_1)=4$ 与 $r(\\beta_1,\\beta_2)=1$",
+      "problem": "设 4 维列向量 $\\alpha_1,\\alpha_2,\\alpha_3$ 线性无关，$\\beta_1,\\beta_2$ 为非零列向量，且 $\\beta_1,\\beta_2$ 均与 $\\alpha_1,\\alpha_2,\\alpha_3$ 正交，则 $r(\\alpha_1,\\alpha_2,\\alpha_3,\\beta_1),\\;r(\\beta_1,\\beta_2)$ 分别为 $(\\quad)$。  (A) $3,1$　(B) $3,2$　(C) $4,1$　(D) $4,2$",
+      "steps": [
+        {
+          "stepTitle": "第一步：将正交条件翻译为齐次方程组 $A^Tx=0$，定解空间维数 $=4-3=1$",
+          "detail": "记 $A=[\\alpha_1,\\alpha_2,\\alpha_3]$，因 $\\alpha_1,\\alpha_2,\\alpha_3$ 无关故 $r(A^T)=r(A)=3$。$\\beta_1,\\beta_2$ 均与三向量正交 $\\iff A^T\\beta_1=0,\\;A^T\\beta_2=0$，即 $\\beta_1,\\beta_2$ 都是 4 元齐次方程组 $A^Tx=0$ 的非零解！而 $A^Tx=0$ 解空间维数仅为 $4-3=1$，故 $\\beta_1,\\beta_2$ 必成比例，**$r(\\beta_1,\\beta_2)=1$**！"
+        },
+        {
+          "stepTitle": "第二步：证 $\\beta_1$ 不能由 $\\alpha_1,\\alpha_2,\\alpha_3$ 表出，得 $r(\\alpha_1,\\alpha_2,\\alpha_3,\\beta_1)=4$",
+          "detail": "反设 $\\beta_1=k_1\\alpha_1+k_2\\alpha_2+k_3\\alpha_3$，两端左乘 $\\beta_1^T$ 得 $\\|\\beta_1\\|^2=\\beta_1^T\\beta_1=0\\implies \\beta_1=0$，与 $\\beta_1$ 非零矛盾！故四向量线性无关，**$r(\\alpha_1,\\alpha_2,\\alpha_3,\\beta_1)=4$**，选 (C)！"
+        }
+      ],
+      "finalAnswer": "(C) $4,\\;1$",
+      "takeaway": "记住欧氏空间正交补直觉：在 $\\mathbb{R}^4$ 里，3 维子空间的正交补只有 $4-3=1$ 维（一条法线！），所以里面任意两个非零法向量必共线（秩 1），且任意非零法向量必独立于原 3 维子空间（总秩 4）！",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.41",
+        "pdfPage": 46,
+        "itemRef": "没咋了 2.2 例 4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la06-e-19",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化独家真题精选",
+      "title": "【没咋了 2.2 例 6 & 例 7】子式定行列相关性（缩短/延长应用！）+ 四命题真假精辨",
+      "problem": "①（例 6）设 $3\\times 4$ 矩阵 $A=[\\alpha_1,\\alpha_2,\\alpha_3,\\alpha_4]=\\begin{bmatrix}\\beta_1\\\\\\beta_2\\\\\\beta_3\\end{bmatrix}$ 满足 $\\begin{vmatrix}a_{12}&a_{14}\\\\a_{32}&a_{34}\\end{vmatrix}\\ne 0$ 且 $\\begin{vmatrix}a_{11}&a_{12}&a_{13}\\\\a_{21}&a_{22}&a_{23}\\\\a_{31}&a_{32}&a_{33}\\end{vmatrix}=0$，则正确结论是：① $r(A)=2$；② $\\alpha_2,\\alpha_4$ 无关；③ $\\beta_1,\\beta_2,\\beta_3$ 相关；④ $\\alpha_1,\\alpha_2,\\alpha_3$ 相关；②（例 7）判断四个命题真假：① $\\alpha_1,\\alpha_2,\\alpha_3$ 无关，$\\alpha_4$ 不可由前 3 表出 $\\Rightarrow$ 全无关；② $\\alpha_1,\\alpha_2$ 无关，$\\alpha_3,\\alpha_4$ 均不可由前 2 表出 $\\Rightarrow$ 全无关；③ 存在 $A$ 使 $A\\alpha_1,\\dots,A\\alpha_4$ 无关 $\\Rightarrow \\alpha_1,\\dots,\\alpha_4$ 无关；④ $A$ 可逆且 $\\beta_i$ 无关，$A\\beta_i=\\alpha_i\\Rightarrow \\alpha_i$ 无关。",
+      "steps": [
+        {
+          "stepTitle": "① 例 6：用「延长无关」定 ②、用「3 阶行列式为 0」定 ④，排 ①③",
+          "detail": "• 第 1,3 行与第 2,4 列的 2 阶子式非零 $\\implies \\alpha_2,\\alpha_4$ 缩短后无关 $\\implies$ 延长回 3 维的 $\\alpha_2,\\alpha_4$ 必**线性无关**（② 对！）；• 前 3 列 3 阶行列式为 0 $\\implies \\alpha_1,\\alpha_2,\\alpha_3$ 必**线性相关**（④ 对！）；• 但其余 3 阶子式（含第 4 列）完全可能非零，故 $r(A)$ 可能为 3，$\\beta_1,\\beta_2,\\beta_3$ 可能无关，排 ①③！选 (D) ②④！"
+        },
+        {
+          "stepTitle": "② 例 7：秒识 ② 漏掉「$\\alpha_3$ 与 $\\alpha_4$ 自身可能相关」天坑！",
+          "detail": "① 对（添 1 个不可表出向量秩必 $+1$）；② **错！**（反例 $\\alpha_1=e_1,\\alpha_2=e_2,\\alpha_3=e_3,\\alpha_4=2e_3$：$\\alpha_3,\\alpha_4$ 均不可由 $e_1,e_2$ 表出，但 $\\alpha_4=2\\alpha_3$ 导致整体相关！）；③ 对（$r(A[\\alpha])=4\\le r([\\alpha])\\le 4\\Rightarrow r([\\alpha])=4$！）；④ 对（左乘可逆阵 $A$ 保秩！）。故正确为 ①③④，选 (D)！"
+        }
+      ],
+      "finalAnswer": "① (D) ②④；② (D) ①③④",
+      "takeaway": "牢记例 7 ② 的经典反例：**单添 1 个不能表出的向量必保无关；但同时添 2 个都不能表出的向量，它们之间可能互相撞车成比例（甚至 $\\alpha_4=\\alpha_3+\\alpha_1$！）导致整体相关！**",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.43",
+        "pdfPage": 48,
+        "itemRef": "没咋了 2.2 例 6-7"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la06-e-20",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化独家真题精选（2026 最新统考真题 · 含实锤勘误）",
+      "title": "【没咋了 2.3 例 3】（2026 数一二三最新真题！）极大无关组、满秩分解 $A=GH$ 与 $A^{10}$ 全解",
+      "problem": "已知向量组 $\\alpha_1=[1,0,-1,-1]^T,\\;\\alpha_2=[1,-1,0,-2]^T,\\;\\alpha_3=[0,-1,1,-1]^T,\\;\\alpha_4=[0,1,-1,1]^T$，记 $A=[\\alpha_1,\\alpha_2,\\alpha_3,\\alpha_4],\\;G=[\\alpha_1,\\alpha_2]$。(1) 证明 $\\alpha_1,\\alpha_2$ 是极大线性无关组；(2) 求矩阵 $H$ 使 $A=GH$，并求 $A^{10}$。（**【实锤勘误】**：《27 没咋了线代强化讲义》P.46 题干排版将 $\\alpha_3=[0,-1,1,-1]^T$ 重复误印了两遍，实为 4 个向量 $\\alpha_1,\\alpha_2,\\alpha_3,\\alpha_4$。）",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：行最简阶梯形一步同时证极大无关组并读出 $H$",
+          "detail": "$A=\\begin{bmatrix}1&1&0&0\\\\0&-1&-1&1\\\\-1&0&1&-1\\\\-1&-2&-1&1\\end{bmatrix}\\xrightarrow{\\text{行变换}}\\begin{bmatrix}1&0&-1&1\\\\0&1&1&-1\\\\0&0&0&0\\\\0&0&0&0\\end{bmatrix}$。可见 $r(A)=2$，主元列为第 1,2 列（且 $\\alpha_1,\\alpha_2$ 明显不成比例），故 $\\alpha_1,\\alpha_2$ 是极大线性无关组！"
+        },
+        {
+          "stepTitle": "第 (2) 问：截前两行得 $H$，算 $HG=\\begin{bmatrix}1&-1\\\\0&1\\end{bmatrix}$ 秒杀 $A^{10}=G(HG)^9 H$！",
+          "detail": "由行最简形直接得 $H=\\begin{bmatrix}1&0&-1&1\\\\0&1&1&-1\\end{bmatrix}$（检验 $\\alpha_3=-\\alpha_1+\\alpha_2,\\;\\alpha_4=\\alpha_1-\\alpha_2$，精准满足 $A=GH$！）。再算小方阵 $HG=\\begin{bmatrix}1&0&-1&1\\\\0&1&1&-1\\end{bmatrix}\\begin{bmatrix}1&1\\\\0&-1\\\\-1&0\\\\-1&-2\\end{bmatrix}=\\begin{bmatrix}1&-1\\\\0&1\\end{bmatrix}$！它是 2 阶标准若尔当块，立刻有 $(HG)^9=\\begin{bmatrix}1&-9\\\\0&1\\end{bmatrix}$！回代 $A^{10}=G(HG)^9 H=\\begin{bmatrix}1&1\\\\0&-1\\\\-1&0\\\\-1&-2\\end{bmatrix}\\begin{bmatrix}1&-9\\\\0&1\\end{bmatrix}\\begin{bmatrix}1&0&-1&1\\\\0&1&1&-1\\end{bmatrix}=\\begin{bmatrix}1&-8&-9&9\\\\0&-1&-1&1\\\\-1&9&10&-10\\\\-1&7&8&-8\\end{bmatrix}$！"
+        }
+      ],
+      "finalAnswer": "$H=\\begin{bmatrix}1&0&-1&1\\\\0&1&1&-1\\end{bmatrix}$，$A^{10}=\\begin{bmatrix}1&-8&-9&9\\\\0&-1&-1&1\\\\-1&9&10&-10\\\\-1&7&8&-8\\end{bmatrix}$",
+      "takeaway": "2026 统考新鲜热辣大题！完美串联了「极大无关组 $\\to$ 满秩分解 $A=GH$ $\\to$ 2 阶上三角幂 $(HG)^9$ $\\to$ $A^{10}=G(HG)^9H$」整条黄金流水线！",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.46（含重印勘误）",
+        "pdfPage": 51,
+        "itemRef": "没咋了 2.3 例 3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la06-e-21",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化独家真题精选",
+      "title": "【没咋了 2.4 例 1 & 例 2】（2022 数二 & 2019 数二）含参向量组等价双真题精解",
+      "problem": "①（2022 数二）$\\alpha_1=[\\lambda,1,1]^T,\\alpha_2=[1,\\lambda,1]^T,\\alpha_3=[1,1,\\lambda]^T,\\alpha_4=[1,\\lambda,\\lambda^2]^T$，若 $\\alpha_1,\\alpha_2,\\alpha_3$ 与 $\\alpha_1,\\alpha_2,\\alpha_4$ 等价，求 $\\lambda$ 范围；②（2019 数二）(I) $\\alpha_1=[1,1,4]^T,\\alpha_2=[1,0,4]^T,\\alpha_3=[1,2,a^2+3]^T$，(II) $\\beta_1=[1,1,a+3]^T,\\beta_2=[0,2,1-a]^T,\\beta_3=[1,3,a^2+3]^T$ 等价，求 $a$ 并将 $\\beta_3$ 用 (I) 表出。",
+      "steps": [
+        {
+          "stepTitle": "① 2022 数二：同时比 $|\\alpha_1,\\alpha_2,\\alpha_3|=(\\lambda+2)(\\lambda-1)^2$ 与 $|\\alpha_1,\\alpha_2,\\alpha_4|=(\\lambda^2-1)^2$",
+          "detail": "• 当 $\\lambda\\notin\\{1,-1,-2\\}$ 时两组均满秩 3 必等价；• $\\lambda=1$ 时四向量全为 $[1,1,1]^T$，均秩 1 且**等价**！• $\\lambda=-1$ 时 $r(\\alpha_1,\\alpha_2,\\alpha_3)=3\\ne 2=r(\\alpha_1,\\alpha_2,\\alpha_4)$（不等价）；• $\\lambda=-2$ 时 $r(\\alpha_1,\\alpha_2,\\alpha_3)=2\\ne 3=r(\\alpha_1,\\alpha_2,\\alpha_4)$（不等价）！综上 $\\lambda\\ne -1$ 且 $\\lambda\\ne -2$（选 (C)！对比基础习题 3.3 单向表出只排 $\\lambda=-1$！）。"
+        },
+        {
+          "stepTitle": "② 2019 数二：算 $|A|=a^2-1,\\;|B|=2(a-2)(a+1)$ 并严查 $a=-1$ 时三秩是否相等！",
+          "detail": "• 当 $a\\notin\\{1,-1,2\\}$ 时 $r(A)=r(B)=3$ 必等价；• 当 $a=1$ 时 $r(A)=2\\ne 3=r(B)$（不等价）；• 当 $a=2$ 时 $r(A)=3\\ne 2=r(B)$（不等价）；• 当 $a=-1$ 时 $r(A)=r(B)=2$，拼阵行变换检验 $[A\\mid B]=\\begin{bmatrix}1&1&1&1&0&1\\\\1&0&2&1&2&3\\\\4&4&4&2&2&4\\end{bmatrix}\\xrightarrow{\\text{行}}\\begin{bmatrix}1&0&2&1&2&3\\\\0&1&-1&0&-2&-2\\\\0&0&0&-2&-6&-8\\end{bmatrix}$ 得 $r(A,B)=3\\ne 2$（**不等价！**绝不能只看 $r(A)=r(B)=2$ 就误判等价！）。故 $a\\ne 1,-1,2$；此时对比 $\\alpha_3=[1,2,a^2+3]^T$ 与 $\\beta_3=[1,3,a^2+3]^T$ 之差恰为 $[0,1,0]^T=\\alpha_1-\\alpha_2$，瞬间直出 $\\beta_3=\\alpha_1-\\alpha_2+\\alpha_3$！"
+        }
+      ],
+      "finalAnswer": "① (C) $\\{\\lambda\\in\\mathbb{R}\\mid\\lambda\\ne -1,\\lambda\\ne -2\\}$；② $a\\ne 1,-1,2$，且 $\\beta_3=\\alpha_1-\\alpha_2+\\alpha_3$",
+      "takeaway": "2019 数二第 2 问提醒了最高危的「$r(A)=r(B)=2$ 但 $r(A,B)=3$」真题陷阱——两个秩为 2 的向量组**必须再查三秩相等 $r(A,B)=2$**，绝对不能看两秩相等就说等价！",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.47-48",
+        "pdfPage": 52,
+        "itemRef": "没咋了 2.4 例 1-2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la06-e-22",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化独家真题精选",
+      "title": "【没咋了 2.4 例 3】（李艳芳 900 题）矩阵等价 vs 行等价 vs 右乘可逆阵 $B$ 终极辨析",
+      "problem": "设 $A,B,C$ 均为 $n$ 阶矩阵，则下列命题中正确的是 $(\\quad)$。  (A) 若 $A$ 与 $C$ 等价，则 $A$ 与 $C$ 的行向量组等价　(B) 若 $A$ 与 $C$ 的行向量组等价，则 $A$ 与 $C$ 等价　(C) 若 $AB=C$ 且 $A,C$ 行等价，则 $B$ 可逆　(D) 若 $AB=C$ 且 $B$ 可逆，则 $A,C$ 行等价",
+      "steps": [
+        {
+          "stepTitle": "第一步：用强弱链「行等价 $\\implies$ 秩相等 $\\iff$ 矩阵等价」秒锁定 (B)",
+          "detail": "同型矩阵 $A,C$ 行向量组等价 $\\implies$ 它们同秩 $r(A)=r(C) \\iff A$ 与 $C$ 矩阵等价！故 (B) 恒真！"
+        },
+        {
+          "stepTitle": "第二步：逐项极简反例击穿 (A)(C)(D)",
+          "detail": "• (A) 错：$A=\\begin{bmatrix}1&0\\\\0&0\\end{bmatrix},C=\\begin{bmatrix}0&1\\\\0&0\\end{bmatrix}$ 同秩 1 故矩阵等价，但行向量 $(1,0)$ 与 $(0,1)$ 不等价；• (C) 错：取 $A=C=O,\\;B=O$（不可逆）；• (D) 错：$B$ 在**右边**可逆只保 **$A,C$ 列等价**，不保行等价（取 $A=\\begin{bmatrix}1&0\\\\0&0\\end{bmatrix},B=\\begin{bmatrix}0&1\\\\1&0\\end{bmatrix}$ 得 $C=\\begin{bmatrix}0&1\\\\0&0\\end{bmatrix}$，行不等价！）。"
+        }
+      ],
+      "finalAnswer": "(B)",
+      "takeaway": "这道 900 题经典把「矩阵等价、行等价、列等价」全部考透了：记住 **左可逆保行等价、右可逆保列等价、左右任一等价都推矩阵等价，反之全错！**",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.48",
+        "pdfPage": 53,
+        "itemRef": "没咋了 2.4 例 3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la06-e-23",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化独家真题精选（数一向量空间）",
+      "title": "【没咋了 2.5 例 3–5】（2023 数一 & 李林 6 套 & 余丙森 5 套）过渡矩阵、行列式与两基同坐标非零向量",
+      "problem": "①（2023 数一）求 $\\mathbb{R}^2$ 从基 $\\alpha_1=[1,0]^T,\\alpha_2=[1,-1]^T$ 到基 $\\beta_1=[1,1]^T,\\beta_2=[1,2]^T$ 的过渡矩阵；②（李林 6 套）$\\beta_k=\\alpha_1+\\cdots+\\alpha_k$，求从基 $\\beta$ 到基 $\\alpha$ 的过渡矩阵 $P$ 的行列式 $|P|$；③（余丙森 5 套）求在标准基 $e_1,e_2,e_3,e_4$ 与基 $\\alpha_1=[2,1,-1,1]^T,\\alpha_2=[0,3,1,0]^T,\\alpha_3=[5,3,2,1]^T,\\alpha_4=[6,6,1,3]^T$ 下有相同坐标的非零向量。",
+      "steps": [
+        {
+          "stepTitle": "① 2023 数一：套 $C=[\\alpha_1,\\alpha_2]^{-1}[\\beta_1,\\beta_2]$ 3 秒秒杀",
+          "detail": "$[\\alpha_1,\\alpha_2]=\\begin{bmatrix}1&1\\\\0&-1\\end{bmatrix}$ 恰为自身逆阵（$A^2=E$！），故 $C=\\begin{bmatrix}1&1\\\\0&-1\\end{bmatrix}\\begin{bmatrix}1&1\\\\1&2\\end{bmatrix}=\\begin{bmatrix}2&3\\\\-1&-2\\end{bmatrix}$！"
+        },
+        {
+          "stepTitle": "② 李林 6 套：正反互逆，单位上三角阵行列式恒为 1！",
+          "detail": "由基 $\\alpha$ 到基 $\\beta$ 的过渡矩阵 $Q$ 是上三角全 1 阵（$|Q|=1$），故反方向由 $\\beta$ 到 $\\alpha$ 的过渡矩阵 $P=Q^{-1}$ 满足 $|P|=|Q|^{-1}=1$！"
+        },
+        {
+          "stepTitle": "③ 余丙森 5 套：同坐标 $\\iff (A-E)x=0$（过渡阵 $A$ 属于 $\\lambda=1$ 的特征向量！）",
+          "detail": "设向量 $x=Ex=Ax\\iff (A-E)x=0$！其中 $A-E=\\begin{bmatrix}1&0&5&6\\\\1&2&3&6\\\\-1&1&1&1\\\\1&0&1&2\\end{bmatrix}\\xrightarrow{\\text{行}}\\begin{bmatrix}1&0&0&1\\\\0&1&0&1\\\\0&0&1&1\\\\0&0&0&0\\end{bmatrix}$，解得全部非零向量为 **$k[-1,-1,-1,1]^T\\;(k\\ne 0)$**（检验 $A[-1,-1,-1,1]^T=[-2-5+6,-1-3-3+6,1-1-2+1,-1-1+3]^T=[-1,-1,-1,1]^T$，精准满分！）！"
+        }
+      ],
+      "finalAnswer": "① $\\begin{bmatrix}2&3\\\\-1&-2\\end{bmatrix}$；② $|P|=1$；③ $k[-1,-1,-1,1]^T\\;(k\\ne 0)$",
+      "takeaway": "记住数一必考点：求在两基下坐标相同的非零向量，等价于求过渡矩阵 $C$ 对应特征值 $\\lambda=1$ 的非零特征向量（最后再左乘旧基 $\\Xi x$，标准基时 $\\Xi=E$ 直接就是 $x$）！",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.51",
+        "pdfPage": 56,
+        "itemRef": "没咋了 2.5 例 3-5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la06_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la06-s-01",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "四、题型总结（一）：向量组五大高频题型破题总表",
+      "title": "具体与抽象向量组五大高频题型一招破题路由表（表 L6-1）",
+      "overview": "向量组题看似概念繁多，实质只有「数值化阶梯」「定义剥系数」「矩阵秩转译」「基变右乘 $C$」四套动作：",
+      "patterns": [
+        {
+          "typeName": "抽象向量组无关性证明「定义法三连招」",
+          "triggers": "题干未给坐标，要求证明抽象向量组 $\\beta_1,\\dots,\\beta_t$ 线性无关",
+          "method": "一律先写定义式 $\\sum k_i\\beta_i=0$，再按题型选一招：① **左乘矩阵/内积**（幂零链乘 $A^{k-1}$、正交组与 $\\alpha_j$ 作内积）；② **代入重组**（化为已知无关组 $\\alpha_i$ 组合，令系数矩阵行列式 $\\ne 0$）；③ **反证法**（导出与已知无关或维数限制矛盾）。",
+          "pitfall": "绝对不要试图对抽象向量写行列式（除非已明确是 $n$ 个 $n$ 维向量且已知方阵过渡关系）！",
+          "relatedRefs": "例 3.2, 例 3.6, 强化例 6.4, 没咋了 2.1 例 3"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 L6-1　向量组五大高频题型识别与首选破题路由表",
+          "headers": [
+            "题型分类",
+            "核心信号",
+            "首选破题招式",
+            "代表题号"
+          ],
+          "rows": [
+            [
+              "具体含参相关性 / 表出",
+              "给出含 $a,b,\\lambda$ 具体向量坐标",
+              "拼矩阵只作初等行变换化阶梯形；$s=n$ 先算方阵 $|A|=0$",
+              "例 3.1、强化例 6.2、基础习题 3.3/3.8"
+            ],
+            [
+              "极大无关组与满秩分解",
+              "求极大无关组、表出其余向量、$A=GH$ 与 $A^k$",
+              "化行最简形，主元原列凑 $G$，非零各行直接作 $H$，$A^k=G(HG)^{k-1}H$",
+              "例 3.7–3.8、强化例 6.3、没咋了 2.3 例 3"
+            ],
+            [
+              "抽象相关性与概念辨析",
+              "部分/延长/以少表多/正交/幂零链",
+              "定义式左乘/内积/重组；选择题用七大定理 + 极简 2/3 维反例",
+              "例 3.2–3.6、强化例 6.4、没咋了 2.2 例 4,6,7"
+            ],
+            [
+              "向量组等价与单向表出",
+              "(I) 与 (II) 等价、单向可表不可互表",
+              "等价验三秩相等 $r(A)=r(B)=r(A,B)$；单向不等价必 $r(\\text{I})<r(\\text{II})$",
+              "例 3.12、强化例 6.6、没咋了 2.4 例 1–3"
+            ],
+            [
+              "向量空间与正交化（数一）",
+              "过渡阵 $C$、坐标变换、同坐标、规范正交基",
+              "新基 = 旧基·$C$、旧坐标 = $C$·新坐标；同坐标解 $(C-E)x=0$；正交化前先抽基",
+              "例 3.13–3.14、强化例 6.7、没咋了 2.5 例 3–5"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "记住底层大一统：**向量组问题 = 线性方程组问题 = 矩阵秩问题**，三个视角自由切换，线代中段彻底打通！",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.64-71 / 没咋了 P.36-51",
+        "pdfPage": 75,
+        "itemRef": "表 L6-1 第6讲破题路由表"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la06-s-02",
+      "kind": "summary",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、题型总结（二）：四种「等价 / 同解」终极辨析表",
+      "title": "矩阵等价 · 行向量组等价 · 列向量组等价 · 方程组同解四维终极对照表（表 L6-2）",
+      "overview": "这是考研线代选择题失分率最高的四组孪生概念，一张表彻底厘清它们的尺寸前提、矩阵乘积形式与强弱蕴含：",
+      "patterns": [
+        {
+          "typeName": "四维等价一眼辨别口诀",
+          "triggers": "选择题混考 $PAQ=B$、$PA=B$、$AQ=B$、$Ax=0$ 同解与行/列向量组等价",
+          "method": "牢记 12 字口诀：**左行右列，行管 $Ax=0$，列管 $A^Tx=0$，两头都能推矩阵等价，反之全推不出！**",
+          "pitfall": "特别留心：两个矩阵**行数可以不同**而仍然「行向量组等价 / $Ax=0$ 同解」（此时用 $B=PA,A=QB$，而不能要求单个方阵 $P$ 可逆！）。",
+          "relatedRefs": "例 3.12, 没咋了 2.4 例 3, 强化例 5.6, 没咋了 2.9 例 6"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 L6-2　矩阵等价、行等价、列等价与方程组同解四维对照表",
+          "headers": [
+            "概念名称",
+            "尺寸前提",
+            "充要代数条件（同型时）",
+            "等价的方程组 / 秩刻画"
+          ],
+          "rows": [
+            [
+              "矩阵等价 $A\\cong B$",
+              "必须**同型**（$m\\times n$）",
+              "$PAQ=B$（$P,Q$ 可逆）",
+              "$r(A)=r(B)$（最弱！）"
+            ],
+            [
+              "行向量组等价",
+              "列数 $n$ 相同即可",
+              "$PA=B$（$P$ 可逆；一般 $\\exists P,Q:B=PA,A=QB$）",
+              "$r(A)=r(B)=r\\begin{bmatrix}A\\\\B\\end{bmatrix}\\iff Ax=0$ 与 $Bx=0$ 同解"
+            ],
+            [
+              "列向量组等价",
+              "行数 $m$ 相同即可",
+              "$AQ=B$（$Q$ 可逆；一般 $\\exists P,Q:B=AP,A=BQ$）",
+              "$r(A)=r(B)=r([A,B])\\iff A^Tx=0$ 与 $B^Tx=0$ 同解"
+            ],
+            [
+              "矩阵相似 $A\\sim B$（预告）",
+              "同阶方阵",
+              "$P^{-1}AP=B$（$P$ 可逆）",
+              "强于矩阵等价（保秩、迹、行列式、特征多项式）"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "把这张表和第 4 讲「列满秩/行满秩表」对照背熟，线代客观概念题几乎再无死角！",
+      "source": {
+        "book": "27 张宇基础30讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.103-104 / 没咋了 P.47-48,58",
+        "pdfPage": 109,
+        "itemRef": "表 L6-2 四维等价对照表"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la06-s-03",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "四、题型总结（三）：第 6 讲防错红线与四书勘误清单",
+      "title": "向量组 6 大高频扣分红线与四书实锤勘误汇总（表 L6-3）",
+      "overview": "汇总向量组与向量空间 6 大高危扣分红线，以及本讲核图实锤发现的 3 处教材/讲义印刷错误：",
+      "patterns": [
+        {
+          "typeName": "四书勘误同步避雷提示",
+          "triggers": "回翻基础 30 讲 P.92 或没咋了强化讲义 P.45–46 对照复习时",
+          "method": "① 基础 P.92 总结 (3) 误印「方程个数大于未知数个数不存在」，实为笔误（超定方程组存在，需行变换判秩）；② 没咋了 P.45 注 2 漏印双引号内容，补全为「向量组中任一向量均可由这 $r$ 个向量线性表示」；③ 没咋了 P.46 例 3（2026 真题）重复误印两遍 $\\alpha_3$，实为 4 个向量 $\\alpha_1,\\dots,\\alpha_4$！",
+          "pitfall": "复习纸质讲义看到漏印/重印切勿怀疑自己，以本工作台 SymPy 核验版为准！",
+          "relatedRefs": "没咋了 2.3 例 3, 例 3.14, 强化例 6.7, 例 3.3-3.4"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 L6-3　向量组 6 大失分红线与四书印刷勘误清单",
+          "headers": [
+            "红线 / 勘误",
+            "常见误区 / 原书瑕疵",
+            "正确铁律 / 严谨修正"
+          ],
+          "rows": [
+            [
+              "红线 1",
+              "相关 $\\Rightarrow$ 任一向量可由其余表出",
+              "错！仅保证「**至少有一个**」向量可由其余表出（例 3.3）"
+            ],
+            [
+              "红线 2",
+              "$\\alpha_3,\\alpha_4$ 均不可由 $\\alpha_1,\\alpha_2$ 表出 $\\Rightarrow$ 整体无关",
+              "错！$\\alpha_3,\\alpha_4$ 彼此可能相关，仅添 1 个才保无关（没咋了 2.2 例 7）"
+            ],
+            [
+              "红线 3",
+              "4 个循环相加 $\\alpha_1+\\alpha_2,\\dots,\\alpha_4+\\alpha_1$ 无关",
+              "错！偶数个全加循环 $\\det=0$ 相关，奇数个（3 个）才无关！"
+            ],
+            [
+              "红线 4",
+              "过渡矩阵写反方向 / 正交化前未先抽基",
+              "由旧到新：新基 = 旧基·$C$，旧坐标 = $C$·新坐标；正交化前必先判秩抽极大无关组！"
+            ],
+            [
+              "勘误 1",
+              "基础 30 讲 P.92 写「方程个数大于未知数个数不存在」",
+              "印刷笔误！超定方程组完全存在，仅无「必有非零解/算方阵行列式」捷径，需行阶梯判秩"
+            ],
+            [
+              "勘误 2 & 3",
+              "没咋了 P.45 注 2 空引号 & P.46 例 3(2026真题) 重印两遍 $\\alpha_3$",
+              "P.45 注 2 补全「任一向量可由该 $r$ 向量表出」；P.46 例 3 去重后为 4 向量 $\\alpha_1,\\dots,\\alpha_4$，$A^{10}$ 经 SymPy 验算无误"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "牢记 6 条红线 + 3 处勘误修正，向量组与数一向量空间模块做到颗粒归仓、滴水不漏！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "第6讲全章总结",
+        "pdfPage": 75,
+        "itemRef": "表 L6-3 第6讲防错与勘误清单"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    }
+  ]
+}

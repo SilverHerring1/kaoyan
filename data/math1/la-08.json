@@ -1,0 +1,1295 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "la-08",
+  "title": "线代 · 第 8 讲　相似理论",
+  "sourceMeta": "深度整合《27 张宇基础30讲·线代》第5讲后半（P.151-177）+《27 张宇线代9讲》第8讲（P.79-92 全 10 例）+《27 没咋了线代强化讲义》3.3–3.7节（P.69-88 含 2024 数一/数二真题与谱分解专题）+《线代独家大总结》P.20-22，100% 逐页核图与 SymPy 验算",
+  "basicRequirements": {
+    "master": "熟练掌握矩阵相似定义与六大相似不变量、可相似对角化的完备判据体系（2 充要 + 5 充分 + 1 必要 + 2 否决）、实对称矩阵正交相似对角化与谱分解定理、相似传递桥 Q=P_1P_2^{-1} 及高次幂 A^n/f(A) 与递推数列通项求解。",
+    "understand": "理解实对称阵与非对称阵相似对角化的本质差异、相似「三同一异」变换手段、AB 与 BA 五大关系、正交矩阵伴随判据及不可对角化矩阵的链式方程组若尔当构造法。",
+    "familiar": "熟悉 4 阶若尔当反例（6 不变量全同仍不相似）、可交换矩阵同时对角化充要条件及实对称矩阵二重根免正交化谱分解秒杀技。"
+  },
+  "items": [
+    {
+      "id": "m1-la08-f-01",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "一、矩阵相似定义与六大相似不变量",
+      "title": "矩阵相似定义（$P^{-1}AP=B$）与 6 大核心相似不变量",
+      "formulaLatex": "$$A\\sim B\\;\\Longleftrightarrow\\;\\exists\\text{ 可逆阵 }P\\text{ 使 }P^{-1}AP=B\\;\\Longrightarrow\\;\\begin{cases}|A|=|B|,\\quad r(A)=r(B),\\quad \\operatorname{tr}(A)=\\operatorname{tr}(B)\\\\ |\\lambda E-A|=|\\lambda E-B|\\;(\\lambda_A=\\lambda_B),\\quad r(\\lambda E-A)=r(\\lambda E-B)\\\\ A,B\\text{ 各阶主子式之和分别相等}\\end{cases}$$",
+      "conditions": "上述 6 条全是**必要条件**（不满足任一条立刻否决 $A\\nsim B$），但对一般非对称阵并非充分条件（即使 6 条全成立仍可能不相似，见基础 P.152 四阶若尔当反例！）；唯独当 **$A,B$ 均为实对称矩阵**时，$A\\sim B\\Longleftrightarrow$ 特征值相同！",
+      "pitfalls": "① 已知 $A\\sim B$ 求参数时，只算 $\\operatorname{tr}(A)=\\operatorname{tr}(B)$ 与 $|A|=|B|$ 得到候选参数后，若存在重特征值必须补验 $r(\\lambda_0 E-A)=r(\\lambda_0 E-B)$，防止伪解混入！ ② 注意「相似 $\\Rightarrow$ 等价」（因 $P^{-1}AP=B$ 是特殊 $QAP=B$），但「等价 $\\nRightarrow$ 相似」（秩同即可等价，但特征值不同绝不相似）！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.151-152 / 强化 P.86 / 没咋了 P.73",
+        "pdfPage": 157,
+        "itemRef": "矩阵相似定义与六大不变量"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_core_theory",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "相似是同一线性变换在不同基下的矩阵表示，满足自反性（$A\\sim A$）、对称性（$A\\sim B\\Rightarrow B\\sim A$）与传递性（$A\\sim C,C\\sim B\\Rightarrow A\\sim B$）。六大必要条件（相似不变量）是选择题排错与反求参数的绝对核心，尤其 **$\\operatorname{tr}(A)=\\operatorname{tr}(B)$、$|A|=|B|$ 与重特征值处 $r(\\lambda_0 E-A)=r(\\lambda_0 E-B)$** 几乎逢考必用！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「相似六不变：秩、迹、行列式、特征多项式、特征矩阵秩、各阶主子式之和——少一条直接秒杀不相似！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la08-f-02",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、矩阵可相似对角化与高次幂公式",
+      "title": "可相似对角化基本模型（$P^{-1}AP=\\Lambda$）、反求 $A$ 及 $A^k/f(A)$ 公式",
+      "formulaLatex": "$$P^{-1}AP=\\Lambda=\\operatorname{diag}(\\lambda_1,\\dots,\\lambda_n)\\;\\Longleftrightarrow\\;A=P\\Lambda P^{-1}\\;\\Longrightarrow\\;A^k=P\\Lambda^k P^{-1},\\quad f(A)=Pf(\\Lambda)P^{-1}$$",
+      "conditions": "列序必须严格对齐：$P$ 中特征向量顺序调整时，$\\Lambda$ 主对角线上对应特征值顺序必须同步调整！特别地，当特征值含 $0$ 时，$0^k=0$ 仅对 **$k\\ge 1$** 成立（$k=0$ 处 $A^0=E\\ne P\\operatorname{diag}(0,1,\\dots)P^{-1}$，强化例 8.8 致命边界！）",
+      "pitfalls": "① 求 $A^n=P\\Lambda^n P^{-1}$ 切勿把 $P$ 与 $P^{-1}$ 的左右位置写反！（口诀：$P^{-1}AP=\\Lambda$ 把 $P$ 移过去自然是 $A=P\\Lambda P^{-1}$！） ② 写 $P$ 时无需强行正交单位化（除非题干要求正交矩阵 $Q$），选最简整数特征向量可把 $P^{-1}$ 计算量减半！",
+      "figureSvg": "<svg viewBox=\"0 0 640 275\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"矩阵可相似对角化判别决策树\">\n  <title>矩阵可相似对角化（A ~ Λ）全套充要、充分、必要与否决条件决策树</title>\n  <defs>\n    <marker id=\"m1_la08_t_blue\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#2563eb\"/>\n    </marker>\n    <marker id=\"m1_la08_t_green\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#059669\"/>\n    </marker>\n    <marker id=\"m1_la08_t_red\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#dc2626\"/>\n    </marker>\n  </defs>\n  <rect x=\"4\" y=\"4\" width=\"632\" height=\"267\" rx=\"10\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"320\" y=\"24\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">矩阵可相似对角化（A ~ Λ）四路快速判别决策树</text>\n\n  <!-- Top node -->\n  <rect x=\"215\" y=\"34\" width=\"210\" height=\"32\" rx=\"16\" fill=\"#1d4ed8\"/>\n  <text x=\"320\" y=\"54\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#ffffff\">判定 n 阶方阵 A 能否 A ~ Λ</text>\n\n  <!-- Arrows down to 3 columns -->\n  <line x1=\"255\" y1=\"66\" x2=\"112\" y2=\"90\" stroke=\"#059669\" stroke-width=\"1.8\" marker-end=\"url(#m1_la08_t_green)\"/>\n  <line x1=\"320\" y1=\"66\" x2=\"320\" y2=\"90\" stroke=\"#2563eb\" stroke-width=\"1.8\" marker-end=\"url(#m1_la08_t_blue)\"/>\n  <line x1=\"385\" y1=\"66\" x2=\"528\" y2=\"90\" stroke=\"#dc2626\" stroke-width=\"1.8\" marker-end=\"url(#m1_la08_t_red)\"/>\n\n  <!-- Col 1: 5 Sufficient fast-pass -->\n  <g transform=\"translate(16, 92)\">\n    <rect x=\"0\" y=\"0\" width=\"194\" height=\"168\" rx=\"8\" fill=\"#ecfdf5\" stroke=\"#6ee7b7\" stroke-width=\"1.3\"/>\n    <text x=\"97\" y=\"19\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#047857\">绿色直通（5 大充分条件）</text>\n    <text x=\"12\" y=\"40\" font-size=\"9.5\" fill=\"#065f46\">① 实对称矩阵 (Aᵀ = A) 必正交对角化</text>\n    <text x=\"12\" y=\"61\" font-size=\"9.5\" fill=\"#065f46\">② 有 n 个互不相同的特征值</text>\n    <text x=\"12\" y=\"82\" font-size=\"9.5\" fill=\"#065f46\">③ r(A) = 1 且 tr(A) ≠ 0</text>\n    <text x=\"12\" y=\"103\" font-size=\"9.5\" fill=\"#065f46\">④ (A−k₁E)(A−k₂E)=O (k₁≠k₂)</text>\n    <text x=\"18\" y=\"117\" font-size=\"8.6\" fill=\"#047857\">特例：幂等 A²=A · 对合 A²=E</text>\n    <text x=\"12\" y=\"136\" font-size=\"9.5\" fill=\"#065f46\">⑤ Aᵏ = E (或复域上无重根零化式)</text>\n    <rect x=\"10\" y=\"144\" width=\"174\" height=\"18\" rx=\"4\" fill=\"#d1fae5\"/>\n    <text x=\"97\" y=\"156\" text-anchor=\"middle\" font-size=\"8.7\" font-weight=\"700\" fill=\"#065f46\">满足任一条 ⇒ 立刻结论 A ~ Λ ✓</text>\n  </g>\n\n  <!-- Col 2: 2 Iff ultimate judge -->\n  <g transform=\"translate(222, 92)\">\n    <rect x=\"0\" y=\"0\" width=\"196\" height=\"168\" rx=\"8\" fill=\"#eff6ff\" stroke=\"#93c5fd\" stroke-width=\"1.3\"/>\n    <text x=\"98\" y=\"19\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1d4ed8\">终极仲裁（2 大充要条件）</text>\n    <rect x=\"10\" y=\"29\" width=\"176\" height=\"44\" rx=\"6\" fill=\"#ffffff\" stroke=\"#bfdbfe\"/>\n    <text x=\"98\" y=\"46\" text-anchor=\"middle\" font-size=\"9.8\" font-weight=\"700\" fill=\"#1e40af\">充要 ①：恰有 n 个线性无关</text>\n    <text x=\"98\" y=\"62\" text-anchor=\"middle\" font-size=\"9.8\" font-weight=\"700\" fill=\"#1e40af\">的特征向量（拼成可逆阵 P）</text>\n\n    <rect x=\"10\" y=\"81\" width=\"176\" height=\"52\" rx=\"6\" fill=\"#ffffff\" stroke=\"#bfdbfe\"/>\n    <text x=\"98\" y=\"98\" text-anchor=\"middle\" font-size=\"9.8\" font-weight=\"700\" fill=\"#1e40af\">充要 ②：对每个 kᵢ 重特征值 λᵢ</text>\n    <text x=\"98\" y=\"114\" text-anchor=\"middle\" font-size=\"10.2\" font-weight=\"700\" fill=\"#2563eb\">n − r(λᵢE − A) = kᵢ</text>\n    <text x=\"98\" y=\"128\" text-anchor=\"middle\" font-size=\"8.6\" fill=\"#475569\">即每个重根的几何重数 = 代数重数</text>\n\n    <text x=\"98\" y=\"154\" text-anchor=\"middle\" font-size=\"8.9\" font-weight=\"700\" fill=\"#1e3a8a\">单根必有 1 个向量，只需查重根！</text>\n  </g>\n\n  <!-- Col 3: Red veto & necessary -->\n  <g transform=\"translate(430, 92)\">\n    <rect x=\"0\" y=\"0\" width=\"194\" height=\"168\" rx=\"8\" fill=\"#fef2f2\" stroke=\"#fca5a5\" stroke-width=\"1.3\"/>\n    <text x=\"97\" y=\"19\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#b91c1c\">红灯一票否决（必不可对角化）</text>\n    <text x=\"12\" y=\"40\" font-size=\"9.5\" fill=\"#991b1b\">✗ 必要违背：r(A) ≠ 非零特征值个数</text>\n    <text x=\"12\" y=\"61\" font-size=\"9.5\" fill=\"#991b1b\">✗ 非零幂零阵：A ≠ O 但 Aᵏ = O</text>\n    <text x=\"12\" y=\"82\" font-size=\"9.5\" fill=\"#991b1b\">✗ 全等特征值：λ 全为 k 但 A ≠ kE</text>\n    <text x=\"12\" y=\"103\" font-size=\"9.5\" fill=\"#991b1b\">✗ 某重根满足 r(λᵢE−A) &gt; n − kᵢ</text>\n    <rect x=\"10\" y=\"116\" width=\"174\" height=\"44\" rx=\"5\" fill=\"#fee2e2\" stroke=\"#f87171\"/>\n    <text x=\"97\" y=\"131\" text-anchor=\"middle\" font-size=\"8.9\" font-weight=\"700\" fill=\"#991b1b\">进阶警报（基础 P.152 反例）：</text>\n    <text x=\"97\" y=\"144\" text-anchor=\"middle\" font-size=\"8.4\" fill=\"#7f1d1d\">4 阶 J₂(1)⊕J₂(1) 与 J₃(1)⊕J₁(1) 六大</text>\n    <text x=\"97\" y=\"155\" text-anchor=\"middle\" font-size=\"8.4\" fill=\"#7f1d1d\">必要条件全同仍不相似（看 (E−A)² 秩！）</text>\n  </g>\n</svg>",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.155-157 / 强化 P.79-80 / 没咋了 P.69-70",
+        "pdfPage": 90,
+        "itemRef": "相似对角化与高次幂公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_core_theory",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "若存在可逆阵 $P=[\\xi_1,\\dots,\\xi_n]$ 使 $P^{-1}AP=\\Lambda$，展开 $AP=P\\Lambda$ 即 $[A\\xi_1,\\dots,A\\xi_n]=[\\lambda_1\\xi_1,\\dots,\\lambda_n\\xi_n]$，可见 **$P$ 的第 $j$ 列 $\\xi_j$ 必是 $A$ 对应 $\\lambda_j$ 的特征向量，且 $n$ 列线性无关**！一旦完成对角化：① 反求矩阵 $A=P\\Lambda P^{-1}$；② 高次幂 $A^k=P\\operatorname{diag}(\\lambda_1^k,\\dots,\\lambda_n^k)P^{-1}$；③ 任意多项式 $f(A)=P\\operatorname{diag}(f(\\lambda_1),\\dots,f(\\lambda_n))P^{-1}$！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「左 $P^{-1}$ 右 $P$ 变对角，反求 $A$ 就左 $P$ 右 $P^{-1}$；列序与特征值一一锁定，高次幂只幂对角线！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la08-f-03",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "三、实对称矩阵的正交相似对角化",
+      "title": "实对称矩阵正交相似对角化公式（$Q^TAQ=\\Lambda$）与四步规范流程",
+      "formulaLatex": "$$A^T=A\\;(\\text{实阵})\\;\\Longleftrightarrow\\;\\exists\\text{ 正交阵 }Q\\,(Q^TQ=E)\\text{ 使 }Q^{-1}AQ=Q^TAQ=\\Lambda=\\operatorname{diag}(\\lambda_1,\\dots,\\lambda_n)$$",
+      "conditions": "这是**双向充要定理**：一个实矩阵能被正交矩阵相似对角化 $\\Longleftrightarrow$ 它是实对称矩阵（因 $A=Q\\Lambda Q^T\\Rightarrow A^T=(Q\\Lambda Q^T)^T=Q\\Lambda Q^T=A$）！",
+      "pitfalls": "① 大忌：千万不要对属于**不同特征值**的向量混在一起做施密特正交化！因为 $\\beta_2=\\alpha_2-k\\alpha_1$ 是异值线性组合，会直接破坏特征向量身份（基础 P.166 重点警示）！ ② 遇到 3 阶二重根方程如 $x_1+2x_2-2x_3=0$，先任选一个简明特解 $\\xi_1=[-2,1,0]^T$，第二个解直接联立 $\\xi_1^Tx=0$ 解得 $[2,4,5]^T$，比背施密特公式快两倍且零分数错误！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.164-166 / 强化 P.82 / 没咋了 P.77-79",
+        "pdfPage": 170,
+        "itemRef": "实对称矩阵正交相似对角化"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_core_theory",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "任意 $n$ 阶实对称矩阵具有三大王牌性质：① 特征值全是实数；② 属于**不同**特征值的特征向量**天然相互正交**；③ 必可正交相似对角化 $Q^TAQ=\\Lambda$！四步求 $Q$：① 求全部特征值；② 求各特征值对应的基础解系；③ **仅对同一重特征值**的线性无关特征向量做施密特正交化（或直接凑正交解！），再将全部 $n$ 个特征向量单位化得 $\\gamma_1,\\dots,\\gamma_n$；④ 拼 $Q=[\\gamma_1,\\dots,\\gamma_n]$，此时 $Q^{-1}=Q^T$，彻底免去求逆阵！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「实对称无条件正交对角化：异值天生正交，同值才需施密特，最后全员单位化！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la08-f-04",
+      "kind": "formula",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、谱分解定理与二重根免正交化秒杀公式",
+      "title": "实对称矩阵谱分解定理（$A=\\sum\\lambda_i\\gamma_i\\gamma_i^T$）与二重特征值考场秒杀公式",
+      "formulaLatex": "$$A=\\sum_{i=1}^{n}\\lambda_i\\gamma_i\\gamma_i^T,\\quad \\sum_{i=1}^{n}\\gamma_i\\gamma_i^T=E,\\quad f(A)=\\sum_{i=1}^{n}f(\\lambda_i)\\gamma_i\\gamma_i^T;\\qquad (\\lambda_0\\text{ 为 }n-1\\text{ 重根})\\Rightarrow f(A)=f(\\lambda_0)E+[f(\\lambda_1)-f(\\lambda_0)]\\gamma_1\\gamma_1^T$$",
+      "conditions": "$\\gamma_1,\\dots,\\gamma_n$ 必须是实对称阵 $A$ 的**单位正交**特征向量（切记要先除以 $\\|\\xi_1\\|$ 单位化！）。",
+      "pitfalls": "最常见丢分点：把未单位化的特征向量 $\\xi_1$ 直接代成 $\\xi_1\\xi_1^T$，漏除了 $\\|\\xi_1\\|^2$！牢记写成分式 $\\frac{\\xi_1\\xi_1^T}{\\xi_1^T\\xi_1}$ 最保险！",
+      "figureSvg": "<svg viewBox=\"0 0 640 245\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"实对称矩阵正交对角化与谱分解定理流程图\">\n  <title>实对称矩阵正交相似对角化与谱分解定理（含高次幂一招秒杀公式）</title>\n  <defs>\n    <marker id=\"m1_la08_s_blue\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#2563eb\"/>\n    </marker>\n    <marker id=\"m1_la08_s_green\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#059669\"/>\n    </marker>\n  </defs>\n  <rect x=\"4\" y=\"4\" width=\"632\" height=\"237\" rx=\"10\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"320\" y=\"25\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">实对称矩阵核心闭环：正交相似对角化 QᵀAQ = Λ → 谱分解 A = Σ λᵢγᵢγᵢᵀ</text>\n\n  <!-- Step flow top row -->\n  <g transform=\"translate(18, 40)\">\n    <rect x=\"0\" y=\"0\" width=\"128\" height=\"62\" rx=\"7\" fill=\"#eff6ff\" stroke=\"#93c5fd\" stroke-width=\"1.2\"/>\n    <text x=\"64\" y=\"20\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#1d4ed8\">① 实对称 Aᵀ = A</text>\n    <text x=\"64\" y=\"37\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#3b82f6\">必有 n 个实特征值</text>\n    <text x=\"64\" y=\"52\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#3b82f6\">异值特征向量天然正交</text>\n\n    <line x1=\"128\" y1=\"31\" x2=\"152\" y2=\"31\" stroke=\"#2563eb\" stroke-width=\"1.8\" marker-end=\"url(#m1_la08_s_blue)\"/>\n\n    <rect x=\"156\" y=\"0\" width=\"144\" height=\"62\" rx=\"7\" fill=\"#f5f3ff\" stroke=\"#c4b5fd\" stroke-width=\"1.2\"/>\n    <text x=\"228\" y=\"20\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#6d28d9\">② 施密特正交单位化</text>\n    <text x=\"228\" y=\"37\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#7c3aed\">仅对【同重特征值】正交化</text>\n    <text x=\"228\" y=\"52\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#7c3aed\">严禁跨特征值正交化！</text>\n\n    <line x1=\"300\" y1=\"31\" x2=\"324\" y2=\"31\" stroke=\"#2563eb\" stroke-width=\"1.8\" marker-end=\"url(#m1_la08_s_blue)\"/>\n\n    <rect x=\"328\" y=\"0\" width=\"122\" height=\"62\" rx=\"7\" fill=\"#ecfdf5\" stroke=\"#6ee7b7\" stroke-width=\"1.2\"/>\n    <text x=\"389\" y=\"20\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#047857\">③ 拼正交阵 Q</text>\n    <text x=\"389\" y=\"37\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#059669\">Q = [γ₁, γ₂, …, γₙ]</text>\n    <text x=\"389\" y=\"52\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#065f46\">QᵀQ = E ⇒ Q⁻¹ = Qᵀ</text>\n\n    <line x1=\"450\" y1=\"31\" x2=\"474\" y2=\"31\" stroke=\"#059669\" stroke-width=\"1.8\" marker-end=\"url(#m1_la08_s_green)\"/>\n\n    <rect x=\"478\" y=\"0\" width=\"126\" height=\"62\" rx=\"7\" fill=\"#047857\"/>\n    <text x=\"541\" y=\"22\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#ffffff\">QᵀAQ = Λ</text>\n    <text x=\"541\" y=\"40\" text-anchor=\"middle\" font-size=\"10\" fill=\"#d1fae5\">A = QΛQᵀ</text>\n    <text x=\"541\" y=\"54\" text-anchor=\"middle\" font-size=\"8.8\" fill=\"#a7f3d0\">充要：可正交对角化 ⇔ Aᵀ=A</text>\n  </g>\n\n  <!-- Bottom panel: Spectral decomposition + rank-1 shortcut -->\n  <g transform=\"translate(18, 118)\">\n    <rect x=\"0\" y=\"0\" width=\"330\" height=\"110\" rx=\"8\" fill=\"#ffffff\" stroke=\"#a5b4fc\" stroke-width=\"1.3\"/>\n    <text x=\"165\" y=\"20\" text-anchor=\"middle\" font-size=\"11.2\" font-weight=\"700\" fill=\"#3730a3\">谱分解定理（把 A 拆成秩 1 投影阵线性组合）</text>\n    <rect x=\"14\" y=\"28\" width=\"302\" height=\"30\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#818cf8\"/>\n    <text x=\"165\" y=\"47\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#312e81\">A = λ₁γ₁γ₁ᵀ + λ₂γ₂γ₂ᵀ + … + λₙγₙγₙᵀ</text>\n    <text x=\"165\" y=\"75\" text-anchor=\"middle\" font-size=\"9.6\" fill=\"#4338ca\">完备正交分解：γ₁γ₁ᵀ + γ₂γ₂ᵀ + … + γₙγₙᵀ = Q Qᵀ = E</text>\n    <text x=\"165\" y=\"94\" text-anchor=\"middle\" font-size=\"9.6\" font-weight=\"700\" fill=\"#1d4ed8\">多项式/高次幂秒杀：f(A) = Σ f(λᵢ) γᵢγᵢᵀ</text>\n\n    <rect x=\"344\" y=\"0\" width=\"260\" height=\"110\" rx=\"8\" fill=\"#fffbeb\" stroke=\"#fcd34d\" stroke-width=\"1.3\"/>\n    <text x=\"474\" y=\"20\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#92400e\">考场核武器：少算二重特征向量！</text>\n    <text x=\"474\" y=\"40\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#78350f\">若 3 阶实对称阵只有两个不同值 λ₁ 与 λ₀ (二重)：</text>\n    <rect x=\"356\" y=\"48\" width=\"236\" height=\"28\" rx=\"5\" fill=\"#ffffff\" stroke=\"#fbbf24\"/>\n    <text x=\"474\" y=\"66\" text-anchor=\"middle\" font-size=\"10.4\" font-weight=\"700\" fill=\"#b45309\">f(A) = f(λ₀)E + [f(λ₁)−f(λ₀)] γ₁γ₁ᵀ</text>\n    <text x=\"474\" y=\"92\" text-anchor=\"middle\" font-size=\"9\" fill=\"#92400e\">只需单根的 1 个单位向量 γ₁！免施密特正交化</text>\n    <text x=\"474\" y=\"104\" text-anchor=\"middle\" font-size=\"8.6\" fill=\"#b45309\">（秒杀强化例 8.5、没咋了谱分解例 2、基础 6.12！）</text>\n  </g>\n</svg>",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.85 注(2) / 没咋了 P.84 谱分解专题",
+        "pdfPage": 96,
+        "itemRef": "实对称矩阵谱分解定理"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_spectral_suite",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "把 $A=Q\\Lambda Q^T=[\\gamma_1,\\dots,\\gamma_n]\\operatorname{diag}(\\lambda_1,\\dots,\\lambda_n)[\\gamma_1,\\dots,\\gamma_n]^T$ 按列乘行展开，即得**谱分解定理**：$A$ 是 $n$ 个两两正交的秩 1 投影阵 $\\gamma_i\\gamma_i^T$ 按特征值加权之和！当 3 阶实对称阵仅有两个不同特征值（单根 $\\lambda_1$ 与二重根 $\\lambda_0$，或多项式函数在两个不同特征值处取值相等 $f(\\lambda_2)=f(\\lambda_3)=c$！）时，利用完备关系 $\\gamma_2\\gamma_2^T+\\gamma_3\\gamma_3^T=E-\\gamma_1\\gamma_1^T$，**只用单根的 1 个单位特征向量 $\\gamma_1$ 就能一步算出 $A$、$A^n$ 或 $f(A)$**，彻底免求二重根特征向量与正交化！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「看到 3 阶实对称阵只有两个不同特征值（或 $f(\\lambda_2)=f(\\lambda_3)$），立刻用 $f(A)=cE+[f(\\lambda_1)-c]\\gamma_1\\gamma_1^T$，10 秒碾压 20 分钟暴力矩阵乘法！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la08-f-05",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "四、相似传递构造桥与「三同一异」变换手段",
+      "title": "相似传递桥公式（$Q=P_1P_2^{-1}$）、分块对角相似与「三同一异」",
+      "formulaLatex": "$$P_1^{-1}AP_1=\\Lambda=P_2^{-1}BP_2\\;\\Longrightarrow\\;(P_1P_2^{-1})^{-1}A(P_1P_2^{-1})=B;\\qquad P^{-1}AP=B\\;\\Longrightarrow\\;P^{-1}[af(A)+bA^{-1}+cA^*]P=af(B)+bB^{-1}+cB^*$$",
+      "conditions": "搭桥时 $P_1,P_2$ 对应的 $\\Lambda$ 主对角线特征值排列顺序**必须完全一致**，否则算出的 $Q$ 会错位！",
+      "pitfalls": "千万别把 $Q=P_1P_2^{-1}$ 记成 $P_2P_1^{-1}$！检验最快方法：直接把 $Q^{-1}AQ=P_2(P_1^{-1}AP_1)P_2^{-1}=P_2\\Lambda P_2^{-1}=B$ 心算一遍！",
+      "figureSvg": "<svg viewBox=\"0 0 640 245\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"矩阵相似传递桥、三同异与AB和BA关系图\">\n  <title>矩阵相似传递桥梁、三同一异手段与 AB vs BA 五大结论图谱</title>\n  <defs>\n    <marker id=\"m1_la08_b_blue\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#2563eb\"/>\n    </marker>\n    <marker id=\"m1_la08_b_green\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#059669\"/>\n    </marker>\n    <marker id=\"m1_la08_b_purple\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#7c3aed\"/>\n    </marker>\n  </defs>\n  <rect x=\"4\" y=\"4\" width=\"632\" height=\"237\" rx=\"10\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"320\" y=\"25\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">相似传递构造桥（求 Q 使 Q⁻¹AQ = B）·「三同一异」与 AB / BA 规律</text>\n\n  <!-- Left: Transitivity Bridge -->\n  <g transform=\"translate(18, 40)\">\n    <rect x=\"0\" y=\"0\" width=\"305\" height=\"188\" rx=\"8\" fill=\"#ffffff\" stroke=\"#bfdbfe\" stroke-width=\"1.3\"/>\n    <text x=\"152\" y=\"20\" text-anchor=\"middle\" font-size=\"11.2\" font-weight=\"700\" fill=\"#1d4ed8\">① 相似传递桥：借对角阵 Λ 搭桥求 Q</text>\n\n    <rect x=\"18\" y=\"44\" width=\"66\" height=\"36\" rx=\"7\" fill=\"#eff6ff\" stroke=\"#3b82f6\" stroke-width=\"1.4\"/>\n    <text x=\"51\" y=\"66\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#1e3a8a\">A</text>\n\n    <rect x=\"120\" y=\"44\" width=\"66\" height=\"36\" rx=\"7\" fill=\"#fef3c7\" stroke=\"#f59e0b\" stroke-width=\"1.4\"/>\n    <text x=\"153\" y=\"66\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#92400e\">Λ</text>\n\n    <rect x=\"222\" y=\"44\" width=\"66\" height=\"36\" rx=\"7\" fill=\"#ecfdf5\" stroke=\"#10b981\" stroke-width=\"1.4\"/>\n    <text x=\"255\" y=\"66\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#065f46\">B</text>\n\n    <line x1=\"84\" y1=\"62\" x2=\"118\" y2=\"62\" stroke=\"#2563eb\" stroke-width=\"1.8\" marker-end=\"url(#m1_la08_b_blue)\"/>\n    <text x=\"101\" y=\"54\" text-anchor=\"middle\" font-size=\"9\" font-weight=\"700\" fill=\"#2563eb\">P₁</text>\n    <line x1=\"222\" y1=\"62\" x2=\"188\" y2=\"62\" stroke=\"#059669\" stroke-width=\"1.8\" marker-end=\"url(#m1_la08_b_green)\"/>\n    <text x=\"205\" y=\"54\" text-anchor=\"middle\" font-size=\"9\" font-weight=\"700\" fill=\"#059669\">P₂</text>\n\n    <!-- Curved bridge A -> B -->\n    <path d=\"M 51 82 Q 153 122 255 82\" fill=\"none\" stroke=\"#7c3aed\" stroke-width=\"2\" marker-end=\"url(#m1_la08_b_purple)\"/>\n    <text x=\"153\" y=\"114\" text-anchor=\"middle\" font-size=\"10.2\" font-weight=\"700\" fill=\"#6d28d9\">Q = P₁P₂⁻¹  ⇒  Q⁻¹AQ = B</text>\n\n    <rect x=\"14\" y=\"126\" width=\"277\" height=\"52\" rx=\"6\" fill=\"#f5f3ff\" stroke=\"#ddd6fe\"/>\n    <text x=\"152\" y=\"142\" text-anchor=\"middle\" font-size=\"9.3\" font-weight=\"700\" fill=\"#5b21b6\">推导：P₁⁻¹AP₁ = Λ = P₂⁻¹BP₂ ⇒ (P₁P₂⁻¹)⁻¹ A (P₁P₂⁻¹) = B</text>\n    <text x=\"152\" y=\"158\" text-anchor=\"middle\" font-size=\"9\" fill=\"#6d28d9\">若 P₁, P₂ 均为正交阵（二次型正交传递），则 Q = Q₁Q₂ᵀ 仍正交！</text>\n    <text x=\"152\" y=\"172\" text-anchor=\"middle\" font-size=\"8.6\" fill=\"#7c3aed\">铁律：P₁ 与 P₂ 列序必须对应同一顺序的 Λ！</text>\n  </g>\n\n  <!-- Right: Three Same One Different + AB vs BA -->\n  <g transform=\"translate(335, 40)\">\n    <rect x=\"0\" y=\"0\" width=\"287\" height=\"90\" rx=\"8\" fill=\"#ffffff\" stroke=\"#fecaca\" stroke-width=\"1.3\"/>\n    <text x=\"143\" y=\"19\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#b91c1c\">②「三同一异」：已知 P⁻¹AP = B</text>\n    <text x=\"14\" y=\"38\" font-size=\"9.5\" fill=\"#047857\">✓ 同手段 P：f(A)~f(B), A⁻¹~B⁻¹, A*~B*（可线性组合相加！）</text>\n    <text x=\"14\" y=\"56\" font-size=\"9.5\" fill=\"#dc2626\">✗ 异手段：Aᵀ 与 Bᵀ 用的变换阵是 (P⁻¹)ᵀ ≠ P！</text>\n    <text x=\"14\" y=\"74\" font-size=\"9.3\" font-weight=\"700\" fill=\"#991b1b\">⇒ A+Aᵀ 与 B+Bᵀ 一般不相似（除非 P 为正交阵！）</text>\n\n    <rect x=\"0\" y=\"98\" width=\"287\" height=\"90\" rx=\"8\" fill=\"#ffffff\" stroke=\"#a7f3d0\" stroke-width=\"1.3\"/>\n    <text x=\"143\" y=\"117\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#047857\">③ AB 与 BA 的五大关系（高频选填）</text>\n    <text x=\"14\" y=\"135\" font-size=\"9.3\" fill=\"#065f46\">1. 任意方阵 A, B：|λE−AB| = |λE−BA|（特征值完全同）</text>\n    <text x=\"14\" y=\"151\" font-size=\"9.3\" fill=\"#065f46\">2. 若 A 或 B 可逆：AB = A(BA)A⁻¹ ⇒ AB ~ BA</text>\n    <text x=\"14\" y=\"167\" font-size=\"9.3\" fill=\"#065f46\">3. 非方阵 AₘₓₙBₙₓₘ：非零特征值同，多出 |m−n| 个 0</text>\n    <text x=\"14\" y=\"182\" font-size=\"9\" font-weight=\"700\" fill=\"#b45309\">4. 均不可逆时 AB 与 BA 未必相似（反例 r(AB)≠r(BA)）</text>\n  </g>\n</svg>",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.153,169 / 强化 P.86 / 没咋了 P.73",
+        "pdfPage": 97,
+        "itemRef": "相似传递桥与三同一异"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_core_theory",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "① **搭桥求变换阵**：当 $A,B$ 均可相似于同一对角阵 $\\Lambda$（$P_1^{-1}AP_1=\\Lambda, P_2^{-1}BP_2=\\Lambda$）时，令 **$Q=P_1P_2^{-1}$** 立得 $Q^{-1}AQ=B$（若 $P_1,P_2$ 均为正交阵，则 $Q=Q_1Q_2^T$ 仍为正交阵！）；② **分块相似**：若 $A\\sim C, B\\sim D$，则 $\\operatorname{diag}(A,B)\\sim\\operatorname{diag}(C,D)$；③ **三同一异**：在 $P^{-1}AP=B$ 下，$f(A)$、$A^{-1}$、$A^*$ 三者与对应 $B$ 家族**共享同一个相似变换阵 $P$**，因此任意线性组合都保持相似！唯独 $A^T\\sim B^T$ 使用的是 $(P^{-1})^T$，手段不同！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「$P_1$ 把 $A$ 变 $\\Lambda$，$P_2$ 把 $B$ 变 $\\Lambda$，从 $A$ 到 $B$ 记口诀：**先走 $P_1$ 再倒走 $P_2^{-1}$，即 $Q=P_1P_2^{-1}$**！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la08-f-06",
+      "kind": "formula",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "五、正交矩阵核心公式与伴随判正交神技",
+      "title": "正交矩阵 6 大充要刻画、实特征值 $\\pm 1$（勘误补注）与 $a_{ij}=\\pm A_{ij}$ 定理",
+      "formulaLatex": "$$A^TA=E\\Leftrightarrow A^{-1}=A^T\\Leftrightarrow\\text{各行(列)为单位正交基};\\qquad A\\ne O\\text{ 且 }a_{ij}=\\pm A_{ij}\\;\\Longrightarrow\\;AA^T=E,\\;|A|=\\pm 1$$",
+      "conditions": "证明 $a_{ij}=\\pm A_{ij}\\Rightarrow$ 正交时，题干必须给出 **$A\\ne O$**（若 $A=O$ 则 $a_{ij}=A_{ij}=0$ 但 $O$ 不是正交阵！）。",
+      "pitfalls": "注意若正交阵 3 阶且 $|A|=1$，则 $A$ 必有特征值 $1$（因特征多项式为实三次，复根成对模为 $1$ 乘积为 $1$，剩余实根必为 $+1$！）——极常用于考场证明 $|E-A|=0$！",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.90 / 没咋了 P.77(严谨补注)",
+        "pdfPage": 101,
+        "itemRef": "正交矩阵性质与伴随判正交"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_core_theory",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "① **正交矩阵闭环**：$A$ 正交 $\\Leftrightarrow A^T$ 正交 $\\Leftrightarrow A^{-1}$ 正交 $\\Leftrightarrow A^*$ 正交 $\\Leftrightarrow -A$ 正交；正交阵乘积 $AB$ 仍正交（但 $A+B$ 未必正交！），行列式 $|A|=\\pm 1$，且正交变换严格保内积与长度 $\\|Qx\\|=\\|x\\|$。② **伴随相等秒判正交（强化 P.90 ★★★）**：若非零阵满足 $a_{ij}=A_{ij}$（即 $A^T=A^*$），则 $AA^T=AA^*=|A|E\\Rightarrow |A|^2=|A|^n$，又 $|A|=\\sum_{j}a_{ij}^2>0\\implies |A|=1$ 且 $AA^T=E$（同理 $a_{ij}=-A_{ij}\\Rightarrow |A|=-1, AA^T=E$）！③ **【原书严谨勘误 · 没咋了 P.77 3.5.1(2)】**：原书漏写「实」字而径称「正交阵特征值 $\\lambda=1$ 或 $-1$」。严谨结论：正交阵的复特征值满足 **$|\\lambda|=1$**（如二维旋转阵 $\\begin{bmatrix}0&-1\\\\1&0\\end{bmatrix}$ 为正交阵但特征值为 $\\pm i$！），其**实特征值**必取自 $\\{-1,1\\}$！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「正交矩阵乘闭加不闭，行列式只取 $\\pm 1$，复特征值模长 $1$、实特征值 $\\pm 1$，见 $a_{ij}=\\pm A_{ij}$ 秒判正交！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la08-c-01",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "六、可相似对角化的完备判别体系",
+      "title": "可相似对角化「2 充要 + 5 充分 + 1 必要 + 2 否决」总判据（含没咋了 P.69 印刷勘误）",
+      "conditions": "考研默认在**实数域**讨论相似对角化：若 $A^k=E$（如 $k=3,4$）出现虚特征值，仅在复数域可对角化，在实数域不可对角化（当 $k=2$ 即 $A^2=E$ 时特征值仅 $\\pm 1$ 为实数，实数域必可对角化！）。",
+      "pitfalls": "「$A$ 有 3 个两两线性无关的特征向量」**推不出** $A$ 可对角化！因为两两无关的 3 个向量可能共面（整体线性相关，如属于同一二重根的三个共面向量），见没咋了 3.3.3 例 5！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.156-158 / 强化 P.80-81 / 没咋了 P.69(印刷勘误)",
+        "pdfPage": 91,
+        "itemRef": "可相似对角化完备判别体系"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_core_theory",
+        "verified": true
+      },
+      "summary": "判断 $n$ 阶矩阵 $A$ 能否相似对角化（$A\\sim\\Lambda$）：① **2 大充要条件**：(a) $A$ 恰有 $n$ 个线性无关特征向量；(b) 对每个 $k_i$ 重特征值 $\\lambda_i$，均有 $n-r(\\lambda_i E-A)=k_i$（几何重数 = 代数重数）。② **5 大充分条件**：(1) 实对称阵 $A^T=A$；(2) 有 $n$ 个互异特征值；(3) $r(A)=1$ 且 $\\operatorname{tr}(A)\\ne 0$；(4) 满足无重根二次零化式 $(A-k_1E)(A-k_2E)=O\\;(k_1\\ne k_2)$（含幂等 $A^2=A$、对合 $A^2=E$）；(5) $A^k=E$（复数域可对角化，考研仅在实根时实对角化）。③ **1 大必要条件**：$r(A)=$ 非零特征值个数（重根按重数算）。④ **2 大否决条件**：(1) 非零幂零阵（$A\\ne O$ 但 $A^k=O$）必不可对角化；(2) 全部特征值相等为 $k$ 但 $A\\ne kE$，必不可对角化！⑤ **【原书印刷勘误 · 没咋了 P.69 3.3.1】**：中间推导行误将对角阵「记 $\\Lambda=\\operatorname{diag}(\\lambda_1,\\dots,\\lambda_n)$」印成「记 $A=\\operatorname{diag}(\\lambda_1,\\dots,\\lambda_n)$」，切勿与原阵 $A$ 混淆！"
+    },
+    {
+      "id": "m1-la08-c-02",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "六、实对称阵与非对称阵相似的本质差异",
+      "title": "实对称阵 vs 一般方阵相似对角化四大本质分野",
+      "conditions": "结论 ② 要求 $A,B$ **双方**均为实对称阵！若仅一方对称（如 $A=\\operatorname{diag}(1,1)$ 而 $B=\\begin{bmatrix}1&1\\\\0&1\\end{bmatrix}$），特征值全同却绝不相似！",
+      "pitfalls": "反求实对称阵 $A$ 时，少给一个特征向量根本不要慌——利用「实对称异值正交」，直接用已知特征向量作法向量写齐次方程 $\\xi_i^Tx=0$ 即可补出其余特征向量！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲",
+        "printedPage": "基础 P.165,169 / 强化 P.82",
+        "pdfPage": 93,
+        "itemRef": "实对称与非对称阵相似差异"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "summary": "① **对称性与正交对角化充要**：实阵 $A$ 存在正交阵 $Q$ 使 $Q^TAQ=\\Lambda\\Longleftrightarrow A^T=A\\Longleftrightarrow A$ 有 $n$ 个两两正交的特征向量（强化例 8.4）！非对称阵即使可对角化，也绝不存在正交阵使其相似对角化；② **两实对称阵相似充要**：若 $A,B$ **均为实对称阵**，则 $A\\sim B\\Longleftrightarrow$ 二者特征值完全相同（无需再验 $r(\\lambda E-A)$！）；③ **异值特征向量关系**：一般阵仅保证**线性无关**，实对称阵升级为**两两正交**；④ **重根处理**：实对称阵对任意重根必自动满秩降阶 $n-r(\\lambda_0E-A)=k$，永不出现若尔当缺向量退化！"
+    },
+    {
+      "id": "m1-la08-c-03",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、不可对角化矩阵的相似判别与 4 阶若尔当反例",
+      "title": "6 大相似必要条件全成立却仍不相似的 4 阶经典反例（基础 P.152）与高次幂秩判别",
+      "conditions": "对于 **2 阶与 3 阶**矩阵，只要特征值相同且对每个重根 $r(\\lambda_0 E-A)=r(\\lambda_0 E-B)$，就**已经充分保证** $A\\sim B$（因 3 的整数分拆仅 $3,2+1,1+1+1$，块数唯一确定分拆！）；从 **4 阶起**，2 块既可是 $2+2$ 又可是 $3+1$，才必须追加检验 $r((\\lambda_0 E-A)^2)$！",
+      "pitfalls": "考场遇到不可对角化的 3 阶阵判相似（如 2018 数二 没咋了 3.4.4 例 5），只需比特征值 + $r(\\lambda_0 E-A)$ 就能 100% 锁定答案；遇到不可对角化的证明相似（如强化例 8.10、没咋了 3.7.2 例 4），则按 $AP=PB$ 分列解线性方程组显式构造可逆阵 $P$！",
+      "source": {
+        "book": "27 张宇基础30讲·线代 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.152 / 没咋了 P.75,87",
+        "pdfPage": 158,
+        "itemRef": "4阶若尔当反例与不可对角化相似"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_core_theory",
+        "verified": true
+      },
+      "summary": "基础 30 讲 P.152 给出压轴级 4 阶反例：$A=\\begin{bmatrix}1&0&0&0\\\\1&1&0&0\\\\0&0&1&0\\\\0&0&1&1\\end{bmatrix}\\;(\\text{两块 }J_2(1))$ 与 $B=\\begin{bmatrix}1&0&0&0\\\\0&1&0&0\\\\0&1&1&0\\\\0&0&1&1\\end{bmatrix}\\;(J_1(1)\\oplus J_3(1))$。它们满足全部 6 条相似必要条件：$|A|=|B|=1,\\;r(A)=r(B)=4,\\;\\operatorname{tr}(A)=\\operatorname{tr}(B)=4,\\;\\lambda_A=\\lambda_B=(1,1,1,1),\\;r(\\lambda E-A)=r(\\lambda E-B)$（特别 $\\lambda=1$ 时秩均为 $2$）且各阶主子式之和全同，**但 $A\\nsim B$**！一秒识破原因：计算 **$(E-A)^2=O$（秩为 0）而 $(E-B)^2\\ne O$（秩为 1）**！若 $A\\sim B$ 则必有 $r((E-A)^k)=r((E-B)^k)$ 对一切 $k\\ge 1$ 成立！"
+    },
+    {
+      "id": "m1-la08-c-04",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、「三同一异」与分块转置相似辨析",
+      "title": "$A\\sim B$ 下 $A+A^T\\nsim B+B^T$ 经典反例，但 $\\operatorname{diag}(A,A^T)\\sim\\operatorname{diag}(B,B^T)$ 恒真！",
+      "conditions": "若特别附加「$A,B$ **正交相似**（$Q^TAQ=B$）」，则 $(Q^{-1})^T=Q$ 手段重合，此时 $A+A^T\\sim B+B^T$ 才转为真！",
+      "pitfalls": "切勿把「$A+A^T\\nsim B+B^T$」错误泛化到分块对角阵 $\\operatorname{diag}(A,A^T)$——分块对角互不干扰，只需各自相似即可整体相似！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.155 例5.8 / 强化 P.88 例8.7 / 没咋了 P.75 例6",
+        "pdfPage": 99,
+        "itemRef": "三同一异与分块转置相似"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_adv_examples",
+        "verified": true
+      },
+      "summary": "已知 $P^{-1}AP=B$（$A,B$ 可逆）：① $f(A),A^{-1},A^*$ 同用变换阵 $P$，故 $A^2+A^{-1}\\sim B^2+B^{-1}$、$A^*-A^{-1}\\sim B^*-B^{-1}$ 等**一切同阵组合均真**；② $A^T\\sim B^T$ 单独成立，但变换阵变为 $(P^{-1})^T$，因此跨组相加 **$A+A^T\\sim B+B^T$ 一般为假**（最小反例 $A=\\operatorname{diag}(1,2),\\;B=\\begin{bmatrix}1&1\\\\0&2\\end{bmatrix}$，此时 $A+A^T=\\operatorname{diag}(2,4)$ 特征值 $2,4$，而 $B+B^T=\\begin{bmatrix}2&1\\\\1&4\\end{bmatrix}$ 特征值 $3\\pm\\sqrt{2}$！）；③ **惊喜真命题（没咋了 3.4.4 例 6）**：分块对角阵 $\\begin{bmatrix}A&O\\\\O&A^T\\end{bmatrix}\\sim\\begin{bmatrix}B&O\\\\O&B^T\\end{bmatrix}$ **恒成立**！因为分块对角允许上下两块各自采用不同的可逆阵 $\\operatorname{diag}(P,(P^{-1})^T)$！"
+    },
+    {
+      "id": "m1-la08-c-05",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、AB 与 BA 的五大经典结论",
+      "title": "$AB$ 与 $BA$ 特征值、相似性与非方阵零特征值五大铁律（大总结 P.22）",
+      "conditions": "记住结论 ⑤ 的绝妙配因式技巧：凡遇 $AB=aA+bB+cE$ 只要凑出 $(A-bE)(B-aE)=(ab+c)E$ 且右端非零，立得 $(A-bE)$ 与 $(B-aE)$ 可逆可交换 $\\implies AB=BA$！",
+      "pitfalls": "做没咋了 3.4.4 例 6「$A,B$ 可逆且 $A^{-1}\\sim B^{-1}$，判 $AB\\sim BA$」时别绕晕：只要 $A$ 可逆，根本不需要 $A\\sim B$，$AB=A(BA)A^{-1}$ **无条件必相似**！",
+      "source": {
+        "book": "线代独家大总结 & 27 没咋了强化讲义",
+        "printedPage": "大总结 P.22 / 没咋了 P.85 3.7.1",
+        "pdfPage": 22,
+        "itemRef": "AB与BA五大关系结论"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_core_theory",
+        "verified": true
+      },
+      "summary": "综合《线代独家大总结》P.22 与《没咋了》P.85 全部 5 条结论：① 对任意 $n$ 阶方阵 $A,B$，恒有 **$|\\lambda E-AB|=|\\lambda E-BA|$**（特征值完全相同，故 $\\operatorname{tr}(AB)=\\operatorname{tr}(BA)$ 且 $|AB|=|BA|$）；② 若 $A$ 或 $B$ 中**至少有一个可逆**，则 **$AB\\sim BA$**（因 $A^{-1}(AB)A=BA$）；③ 若 $A,B$ 均不可逆，则 $AB$ 与 $BA$ 未必相似（反例 $A=\\begin{bmatrix}0&1\\\\0&0\\end{bmatrix},\\;B=\\begin{bmatrix}1&0\\\\0&0\\end{bmatrix}$，得 $AB=O$ 而 $BA=A\\ne O$，秩都不同！）；④ 若 $A_{m\\times n},B_{n\\times m}$ 为非方阵（不妨 $m>n$），则 $|\\lambda E_m-AB|=\\lambda^{m-n}|\\lambda E_n-BA|$，即 **$AB$ 与 $BA$ 非零特征值完全相同，$AB$ 仅多出 $m-n$ 个 $0$ 特征值**！⑤ 对同阶阵 $A,B$，若 $AB=aA+bB\\;(ab\\ne 0)$，则必可交换 **$AB=BA$**（证明：$(A-bE)(B-aE)=abE\\ne 0\\Rightarrow$ 互为逆阵可交换！）。"
+    },
+    {
+      "id": "m1-la08-c-06",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、同时对角化与交换阵专题（2024 真题热点）",
+      "title": "可交换阵同时对角化条件（$AB=BA$ 下的充要与充分不必要关系）",
+      "conditions": "若已知 $AB=A-B$ 且 $A$ 有 3 个不同特征值（没咋了 3.7.1 例 2）：由 $(A+E)(B-E)=-E\\implies A+E$ 可逆（故 $\\lambda_i\\ne -1$！）且 $AB=BA$，立刻推得 $A,B$ 可同时对角化！",
+      "pitfalls": "千万别误以为「$AB=BA\\implies A,B$ 均可对角化」——取 $A=B=\\begin{bmatrix}1&1\\\\0&1\\end{bmatrix}$ 显然交换，但二者都不可对角化！",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.85-86 3.7.1",
+        "pdfPage": 90,
+        "itemRef": "可交换阵同时对角化定理"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_mzl_examples",
+        "verified": true
+      },
+      "summary": "设 $n$ 阶阵 $A,B$ 满足 **$AB=BA$**：① 若 $A$ 有 $n$ 个互不相同的特征值，则 $A$ 的 $n$ 个线性无关特征向量**自动全为 $B$ 的特征向量**，因此存在同一个可逆阵 $P$ 使 $P^{-1}AP=\\Lambda_1$ 与 $P^{-1}BP=\\Lambda_2$ **同时对角化**（特别地，此时 $B$ 必可对角化！）；② 反过来（2024 数二真题），即使 $AB=BA$ 且 $B$ 可对角化，$A$ 也未必有 $n$ 个相异特征值（如 $A=B=E$），故「$A$ 有 $n$ 个不同特征值」是「$B$ 可对角化」的**充分不必要条件**；③ 充要条件（进阶）：两矩阵可同时相似对角化 $\\Longleftrightarrow$ $A,B$ **各自均可对角化且 $AB=BA$**！（若有一方不可对角化，即使 $AB=BA$ 也绝无公共可逆阵 $P$ 将二者同时对角化，见没咋了 3.7.1 例 3！）"
+    },
+    {
+      "id": "m1-la08-e-01",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础核心例题（基础 30 讲）",
+      "title": "【例 5.6 + 例 5.7】相似六不变量极速排除法 & 由迹与行列式反求参数",
+      "problem": "(1) 设 $W=\\begin{bmatrix}1&1&1\\\\2&2&2\\\\3&3&3\\end{bmatrix}$，与 $W$ 相似的是 $(\\quad)$。(A) $\\begin{bmatrix}1&0&1\\\\0&2&0\\\\0&0&0\\end{bmatrix}$ (B) $\\begin{bmatrix}1&0&0\\\\0&0&2\\\\0&3&0\\end{bmatrix}$ (C) $\\begin{bmatrix}1&1&1\\\\2&2&2\\\\-3&-3&-3\\end{bmatrix}$ (D) $\\begin{bmatrix}1&2&1\\\\2&4&2\\\\1&2&1\\end{bmatrix}$。(2) 已知 $A=\\begin{bmatrix}2&0&0\\\\0&0&1\\\\0&1&a\\end{bmatrix}\\sim B=\\operatorname{diag}(2,b,-1)$，求 $(a,b)$。",
+      "steps": [
+        {
+          "stepTitle": "(1) 依次用秩、行列式、迹 3 秒排除 (A)(B)(C)",
+          "detail": "$r(W)=1,\\;|W|=0,\\;\\operatorname{tr}(W)=6$。(A) 秩为 $2\\ne 1$ 排除；(B) $|B|=-6\\ne 0$ 排除；(C) $\\operatorname{tr}(C)=0\\ne 6$ 排除；仅剩 (D)！验证 (D)：$r(D)=1,\\;\\operatorname{tr}(D)=6\\ne 0$，故 $W,D$ 均相似于 $\\operatorname{diag}(6,0,0)$，由传递性 $W\\sim D$！"
+        },
+        {
+          "stepTitle": "(2) 联立 $|A|=|B|$ 与 $\\operatorname{tr}(A)=\\operatorname{tr}(B)$",
+          "detail": "$|A|=-2=|B|=-2b\\implies b=1$；$\\operatorname{tr}(A)=2+a=\\operatorname{tr}(B)=2+1-1=2\\implies a=0$。验证 $a=0$ 时 $A$ 实对称且特征值恰为 $2,1,-1$，故必相似！"
+        }
+      ],
+      "finalAnswer": "(1) (D)；(2) $(a,b)=(0,1)$",
+      "takeaway": "两个秩 1 矩阵相似的极速充要条件：**$\\operatorname{tr}(A)=\\operatorname{tr}(B)$**（同非零时共相似于 $\\operatorname{diag}(\\operatorname{tr},0,\\dots,0)$；同为零时共相似于 $J_2(0)\\oplus O$！）",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.154-155",
+        "pdfPage": 160,
+        "itemRef": "例 5.6 与 例 5.7"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la08-e-02",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础核心例题（基础 30 讲）",
+      "title": "【例 5.9 + 例 5.10】四阵秒判能否相似对角化 & 由三不可逆条件定可对角化",
+      "problem": "(1) 下列不能相似于对角阵的是 $(\\quad)$。(A) $\\begin{bmatrix}0&0&1\\\\0&1&0\\\\1&0&0\\end{bmatrix}$ (B) $\\begin{bmatrix}1&1&1\\\\0&2&2\\\\0&0&3\\end{bmatrix}$ (C) $\\begin{bmatrix}1&-2&1\\\\2&-4&2\\\\1&-2&1\\end{bmatrix}$ (D) $\\begin{bmatrix}2&-1&2\\\\5&-3&3\\\\-1&0&-2\\end{bmatrix}$。(2) 3 阶阵 $A$ 满足 $|E+A|=0,\\;(3E-A)x=0$ 有非零解、$E-3A$ 不可逆，判 $A$ 是否可相似对角化。",
+      "steps": [
+        {
+          "stepTitle": "(1) 套用充分条件决策树 5 秒排除 (A)(B)(C)",
+          "detail": "(A) 实对称 ✓；(B) 上三角对角元 $1,2,3$ 互异 ✓；(C) 秩为 1 且迹 $-2\\ne 0$ ✓！对 (D) 算特征多项式得 $|\\lambda E-D|=(\\lambda+1)^3=0$，三重根 $\\lambda=-1$ 但 $D\\ne -E$，绝不可对角化，选 (D)！"
+        },
+        {
+          "stepTitle": "(2) 译出 3 个互异特征值直接达标",
+          "detail": "三个条件分别译出特征值 $-1,\\;3,\\;\\frac{1}{3}$，3 个互不相同特征值 $\\implies$ 必可相似于 $\\operatorname{diag}(-1,3,\\frac{1}{3})$！"
+        }
+      ],
+      "finalAnswer": "(1) (D)；(2) 可以，相似于 $\\operatorname{diag}(-1,3,\\frac{1}{3})$",
+      "takeaway": "判别能否对角化的标准三连问：① 实对称吗？② 特征值全互异吗（或秩 1 迹非零）？③ 若有重根，查 $r(\\lambda_0 E-A)=n-k$（全等根直接看 $A\\stackrel{?}{=}kE$）！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.157-158",
+        "pdfPage": 163,
+        "itemRef": "例 5.9 与 例 5.10"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la08-e-03",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础核心例题（基础 30 讲）",
+      "title": "【例 5.11 + 例 5.12】列顺序对齐选 $P$ & 2 阶伴随基底 $P=[\\alpha,A\\alpha]$ 判对角化",
+      "problem": "(1) $\\alpha_1,\\alpha_2$ 属 $\\lambda=1$（无关），$\\alpha_3$ 属 $\\lambda=-1$，选满足 $P^{-1}AP=\\operatorname{diag}(1,-1,1)$ 的 $P$。(2) 设 2 阶阵满足 $A^2-A=2E$，$P=[\\alpha,A\\alpha]$（$\\alpha\\ne 0$ 非特征向量），证 $|P|\\ne 0$，求 $P^{-1}AP$ 并判 $A$ 能否对角化。",
+      "steps": [
+        {
+          "stepTitle": "(1) 先排异值组合，再核对第 2 列必须对应 $\\lambda=-1$",
+          "detail": "$\\alpha_1+\\alpha_3$ 为异值组合必错；要使 $\\Lambda=\\operatorname{diag}(1,-1,1)$，第 1、3 列必须来自 $\\operatorname{span}\\{\\alpha_1,\\alpha_2\\}$ 且无关，第 2 列必须为 $k\\alpha_3$，故仅 $P=[\\alpha_1+\\alpha_2,-\\alpha_3,\\alpha_2]$ 正确！"
+        },
+        {
+          "stepTitle": "(2) 线性无关证 $|P|\\ne 0$，写出 $AP=P\\begin{bmatrix}0&2\\\\1&1\\end{bmatrix}$",
+          "detail": "若 $|P|=0$ 则 $\\alpha,A\\alpha$ 线性相关，又 $\\alpha\\ne 0\\Rightarrow A\\alpha=\\lambda_0\\alpha$ 与题设矛盾，故 $P$ 可逆！再由 $A^2\\alpha=2\\alpha+A\\alpha$ 得 $AP=[A\\alpha,A^2\\alpha]=[\\alpha,A\\alpha]\\begin{bmatrix}0&2\\\\1&1\\end{bmatrix}$，即 $P^{-1}AP=\\begin{bmatrix}0&2\\\\1&1\\end{bmatrix}$！其特征值为 $2,-1$ 互异，故 $A\\sim\\operatorname{diag}(2,-1)$！"
+        }
+      ],
+      "finalAnswer": "(1) $[\\alpha_1+\\alpha_2,-\\alpha_3,\\alpha_2]$；(2) $P^{-1}AP=\\begin{bmatrix}0&2\\\\1&1\\end{bmatrix}$，可相似于 $\\operatorname{diag}(2,-1)$",
+      "takeaway": "构造 Krylov 基底 $P=[\\alpha,A\\alpha]$ 把抽象 2 阶阵化为具体矩阵 $\\begin{bmatrix}0&c_0\\\\1&c_1\\end{bmatrix}$ 是考研高频大题模板（没咋了 3.4.4 例 8 为同源升级版）！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.159",
+        "pdfPage": 165,
+        "itemRef": "例 5.11 与 例 5.12"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la08-e-04",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础核心例题（基础 30 讲）",
+      "title": "【例 5.14 + 例 5.15 + 例 5.16】抽象基像矩阵对角化、反求 $A$ 与 $f(A)$ 一眼秒算",
+      "problem": "(1) 线性无关组 $\\alpha_1,\\alpha_2,\\alpha_3$ 满足 $A\\alpha_1=\\alpha_1+\\alpha_2+\\alpha_3,\\;A\\alpha_2=2\\alpha_2+\\alpha_3,\\;A\\alpha_3=2\\alpha_2+3\\alpha_3$，求 $B$ 使 $A[\\alpha_1,\\alpha_2,\\alpha_3]=[\\alpha_1,\\alpha_2,\\alpha_3]B$，并求 $P$ 使 $P^{-1}AP$ 为对角阵。(2) 已知 $A\\xi_i=i\\xi_i\\;(\\xi_1=[1,0,0]^T,\\xi_2=[1,1,0]^T,\\xi_3=[1,1,1]^T)$，反求 $A$。(3) $A\\sim\\operatorname{diag}(1,2,3)$，求 $B=A^3-6A^2+11A-8E$。",
+      "steps": [
+        {
+          "stepTitle": "(1) 右写列坐标得 $B$，对角化 $B$ 再复合 $P=CQ$",
+          "detail": "记 $C=[\\alpha_1,\\alpha_2,\\alpha_3]$（可逆），按列拼系数得 $B=\\begin{bmatrix}1&0&0\\\\1&2&2\\\\1&1&3\\end{bmatrix}$。求得 $B$ 特征值 $1,1,4$ 及可逆阵 $Q=\\begin{bmatrix}1&-2&0\\\\-1&0&1\\\\0&1&1\\end{bmatrix}$ 使 $Q^{-1}BQ=\\operatorname{diag}(1,1,4)$，则取 $P=CQ=[\\alpha_1-\\alpha_2,-2\\alpha_1+\\alpha_3,\\alpha_2+\\alpha_3]$ 即有 $P^{-1}AP=\\operatorname{diag}(1,1,4)$！"
+        },
+        {
+          "stepTitle": "(2) & (3) $A=P\\Lambda P^{-1}$ 及凯莱定理秒出 $B=-2E$",
+          "detail": "在 (2) 中 $P=\\begin{bmatrix}1&1&1\\\\0&1&1\\\\0&0&1\\end{bmatrix},\\;P^{-1}=\\begin{bmatrix}1&-1&0\\\\0&1&-1\\\\0&0&1\\end{bmatrix}$，故 $A=P\\operatorname{diag}(1,2,3)P^{-1}=\\begin{bmatrix}1&1&1\\\\0&2&1\\\\0&0&3\\end{bmatrix}$！在 (3) 中注意特征多项式 $f_A(\\lambda)=(\\lambda-1)(\\lambda-2)(\\lambda-3)=\\lambda^3-6\\lambda^2+11\\lambda-6$，故 $B=f_A(A)-2E=O-2E=-2E$（或代 $f(1)=f(2)=f(3)=-2$ 得 $P(-2E)P^{-1}=-2E$）！"
+        }
+      ],
+      "finalAnswer": "(1) $B=\\begin{bmatrix}1&0&0\\\\1&2&2\\\\1&1&3\\end{bmatrix},\\;P=[\\alpha_1-\\alpha_2,-2\\alpha_1+\\alpha_3,\\alpha_2+\\alpha_3]$；(2) $A=\\begin{bmatrix}1&1&1\\\\0&2&1\\\\0&0&3\\end{bmatrix}$；(3) $B=-2E$",
+      "takeaway": "记住 (3) 的惊喜结论：若多项式 $f(\\lambda)$ 在 $A$ 的全部特征值处取值均为同一常数 $c$ 且 $A$ 可对角化，则无需知道 $P$，$f(A)$ 直接等于 **$cE$**！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.160-163",
+        "pdfPage": 166,
+        "itemRef": "例 5.14 至 5.16"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la08-e-05",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础核心例题（基础 30 讲）",
+      "title": "【例 5.17】含参非对称阵可相似对角化定参数 $a=2$ 并求 $A^{100}$",
+      "problem": "已知 $A=\\begin{bmatrix}2&a&1\\\\0&3&0\\\\3&-6&0\\end{bmatrix}$ 能相似于对角矩阵，(1) 求 $a$；(2) 求 $A^{100}$。",
+      "steps": [
+        {
+          "stepTitle": "(1) 展开特征方程得重根 $\\lambda=3$，由 $r(3E-A)=1$ 定 $a$",
+          "detail": "按第 2 行展开 $|\\lambda E-A|=(\\lambda-3)(\\lambda^2-2\\lambda-3)=(\\lambda-3)^2(\\lambda+1)=0\\implies\\lambda_1=\\lambda_2=3,\\;\\lambda_3=-1$。因 $A$ 可对角化，必有 $r(3E-A)=3-2=1$。化简 $3E-A=\\begin{bmatrix}1&-a&-1\\\\0&0&0\\\\-3&6&3\\end{bmatrix}\\to\\begin{bmatrix}1&-a&-1\\\\0&6-3a&0\\\\0&0&0\\end{bmatrix}$，故 $6-3a=0\\implies a=2$！"
+        },
+        {
+          "stepTitle": "(2) 拼特征向量 $P$ 算 $A^{100}=P\\Lambda^{100}P^{-1}$",
+          "detail": "$\\lambda=3$ 得 $\\xi_1=[1,0,1]^T,\\;\\xi_2=[2,1,0]^T$；$\\lambda=-1$ 得 $\\xi_3=[1,0,-3]^T$。令 $P=\\begin{bmatrix}1&2&1\\\\0&1&0\\\\1&0&-3\\end{bmatrix}$，求逆 $P^{-1}=\\frac{1}{4}\\begin{bmatrix}3&-6&1\\\\0&4&0\\\\1&-2&-1\\end{bmatrix}$，立得 $A^{100}=\\frac{1}{4}\\begin{bmatrix}3^{101}+1&2\\cdot 3^{100}-2&3^{100}-1\\\\0&4\\cdot 3^{100}&0\\\\3^{101}-3&-2\\cdot 3^{101}+6&3^{100}+3\\end{bmatrix}$！"
+        }
+      ],
+      "finalAnswer": "(1) $a=2$；(2) $A^{100}=\\frac{1}{4}\\begin{bmatrix}3^{101}+1&2\\cdot 3^{100}-2&3^{100}-1\\\\0&4\\cdot 3^{100}&0\\\\3^{101}-3&-2\\cdot 3^{101}+6&3^{100}+3\\end{bmatrix}$",
+      "takeaway": "「已知含参矩阵可对角化求参数」全流程固定两步：① 算特征值锁定重根 $\\lambda_0$；② 令 $r(\\lambda_0 E-A)=n-k$ 消元解参！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.163-164",
+        "pdfPage": 169,
+        "itemRef": "例 5.17"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la08-e-06",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础核心例题（基础 30 讲 & 2010 数二真题）",
+      "title": "【例 5.18 + 例 5.19】（2010 数二）已知正交阵 $Q$ 第 1 列反求 $a,Q$ 并由传递性判相似",
+      "problem": "(1) 设 $A=\\begin{bmatrix}0&-1&4\\\\-1&3&a\\\\4&a&0\\end{bmatrix}$，正交阵 $Q$ 使 $Q^TAQ=\\Lambda$，若 $Q$ 第 1 列为 $\\frac{1}{\\sqrt{6}}[1,2,1]^T$，求 $a,Q$。(2) 判 $A$ 与 $B=\\begin{bmatrix}5&0&0\\\\-5&-1&3\\\\4&3&-1\\end{bmatrix}$ 是否相似。",
+      "steps": [
+        {
+          "stepTitle": "(1) 抓住「$Q$ 的第 1 列即 $A$ 的特征向量」秒解 $a=-1,\\lambda_1=2$",
+          "detail": "由 $A[1,2,1]^T=\\lambda_1[1,2,1]^T$ 得 $\\begin{cases}-2+4=\\lambda_1\\\\-1+6+a=2\\lambda_1\\\\4+2a=\\lambda_1\\end{cases}\\implies\\lambda_1=2,\\;a=-1$！求得其余特征值 $\\lambda_2=5,\\;\\lambda_3=-4$，对应特征向量 $\\xi_2=[1,-1,1]^T,\\;\\xi_3=[-1,0,1]^T$（因互异天然正交，只需单位化！），得 $Q=\\begin{bmatrix}\\frac{1}{\\sqrt6}&\\frac{1}{\\sqrt3}&-\\frac{1}{\\sqrt2}\\\\\\frac{2}{\\sqrt6}&-\\frac{1}{\\sqrt3}&0\\\\\\frac{1}{\\sqrt6}&\\frac{1}{\\sqrt3}&\\frac{1}{\\sqrt2}\\end{bmatrix}$。"
+        },
+        {
+          "stepTitle": "(2) 算 $B$ 的特征值恰为 $2,5,-4$，借 $\\Lambda$ 传递证相似",
+          "detail": "$|\\lambda E-B|=(\\lambda-5)(\\lambda^2+2\\lambda-8)=(\\lambda-5)(\\lambda+4)(\\lambda-2)=0$，3 个特征值互异且与 $A$ 完全相同，故 $A\\sim\\operatorname{diag}(2,5,-4)\\sim B\\implies A\\sim B$！"
+        }
+      ],
+      "finalAnswer": "(1) $a=-1$，$Q$ 如上，$Q^TAQ=\\operatorname{diag}(2,5,-4)$；(2) $A\\sim B$",
+      "takeaway": "看到「$Q$ 的第 $k$ 列为某向量」，立刻等价翻译为「该向量是 $A$ 的单位特征向量」，代入 $A\\xi=\\lambda\\xi$ 一步定参！",
+      "source": {
+        "book": "27 张宇基础30讲·线代 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.166-168 / 没咋了 P.79 例7",
+        "pdfPage": 172,
+        "itemRef": "例 5.18 与 例 5.19"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la08-e-07",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础精选习题（基础 30 讲）",
+      "title": "【基础习题 5.14 + 5.15】实对称阵少给 1 向量谱分解秒反求 $A$ & 含若尔当块分块阵求 $A^n$",
+      "problem": "(1) 3 阶实对称阵 $A$ 特征值为 $1,1,-1$，$\\xi_1=[1,1,1]^T,\\;\\xi_2=[2,2,1]^T$ 属 $\\lambda=1$，求 $A$。(2) 设 $A=\\begin{bmatrix}1&-2&0&0\\\\-1&0&0&0\\\\0&0&2&1\\\\0&0&0&2\\end{bmatrix}$，求 $A^n\\;(n\\ge 2)$。",
+      "steps": [
+        {
+          "stepTitle": "(1) 正交定单根 $\\xi_3=[-1,1,0]^T$，谱分解 1 行出 $A$！",
+          "detail": "由 $\\xi_3\\perp\\xi_1,\\xi_2$ 解 $\\begin{cases}x_1+x_2+x_3=0\\\\2x_1+2x_2+x_3=0\\end{cases}\\implies\\xi_3=[-1,1,0]^T$，单位化 $\\gamma_3=\\frac{1}{\\sqrt2}[-1,1,0]^T$。套二重根谱分解秒杀公式：$A=1\\cdot E+(-1-1)\\gamma_3\\gamma_3^T=E-\\begin{bmatrix}1&-1&0\\\\-1&1&0\\\\0&0&0\\end{bmatrix}=\\begin{bmatrix}0&1&0\\\\1&0&0\\\\0&0&1\\end{bmatrix}$！（无需算 $P^{-1}$！）"
+        },
+        {
+          "stepTitle": "(2) 分块对角各自求幂：左上对角化，右下二项展开若尔当块！",
+          "detail": "记 $A=\\operatorname{diag}(B,C)$。对 $B=\\begin{bmatrix}1&-2\\\\-1&0\\end{bmatrix}$ 特征值 $-1,2$，对角化得 $B^n=\\frac{1}{3}\\begin{bmatrix}(-1)^n+2^{n+1}&2(-1)^n-2^{n+1}\\\\(-1)^n-2^n&2(-1)^n+2^n\\end{bmatrix}$；对不可对角化的若尔当块 $C=2E+\\begin{bmatrix}0&1\\\\0&0\\end{bmatrix}$，二项展开（幂零二次归零！）得 $C^n=\\begin{bmatrix}2^n&n\\cdot 2^{n-1}\\\\0&2^n\\end{bmatrix}$！拼回分块对角即得 $A^n$！"
+        }
+      ],
+      "finalAnswer": "(1) $A=\\begin{bmatrix}0&1&0\\\\1&0&0\\\\0&0&1\\end{bmatrix}$；(2) $A^n=\\operatorname{diag}(B^n,\\;\\begin{bmatrix}2^n&n\\cdot 2^{n-1}\\\\0&2^n\\end{bmatrix})$",
+      "takeaway": "分块对角阵求高次幂**千万别整体硬对角化**——尤其像本题右下块 $C$ 根本不可对角化，分块各自选用最优工具（对角化 + 二项式展开）才是满分姿势！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.170-171,176-177",
+        "pdfPage": 176,
+        "itemRef": "基础习题 5.14 与 5.15"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la08-e-08",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 10 例精解（基本局面与可对角化判别）",
+      "title": "【强化例 8.1】$P^{-1}AP=\\operatorname{diag}(1,1,2)$，重根列线性组合 $Q=[\\alpha_1+\\alpha_2,\\alpha_2,\\alpha_3]$ 求 $Q^{-1}AQ$",
+      "problem": "设 $A$ 为 3 阶矩阵，$P=[\\alpha_1,\\alpha_2,\\alpha_3]$ 可逆且 $P^{-1}AP=\\operatorname{diag}(1,1,2)$。若 $Q=[\\alpha_1+\\alpha_2,\\alpha_2,\\alpha_3]$，则 $Q^{-1}AQ=(\\quad)$。  (A) $\\operatorname{diag}(1,2,1)$　(B) $\\operatorname{diag}(1,1,2)$　(C) $\\operatorname{diag}(2,1,2)$　(D) $\\begin{bmatrix}2&0&0\\\\0&2&0\\\\0&1&1\\end{bmatrix}$",
+      "steps": [
+        {
+          "stepTitle": "同特征值线性组合仍为同值特征向量（基本局面直读！）",
+          "detail": "由 $P^{-1}AP=\\operatorname{diag}(1,1,2)$ 知 $\\alpha_1,\\alpha_2$ 属二重根 $\\lambda=1$，$\\alpha_3$ 属 $\\lambda=2$。故 $\\alpha_1+\\alpha_2$ 仍是 $\\lambda=1$ 的特征向量且与 $\\alpha_2$ 线性无关！从而 $Q=[\\alpha_1+\\alpha_2,\\alpha_2,\\alpha_3]$ 的三列依次对应特征值 $1,1,2$，即 $Q^{-1}AQ=\\operatorname{diag}(1,1,2)$，选 (B)！（进阶变式见没咋了 3.3.3 例 3：$Q=P C\\Rightarrow Q^{-1}AQ=C^{-1}\\Lambda C$，即便跨特征值组合也可 10 秒硬算！）"
+        }
+      ],
+      "finalAnswer": "(B) $\\operatorname{diag}(1,1,2)$",
+      "takeaway": "遇到 $Q$ 是 $P$ 各列的线性组合：若仅在同特征值子空间内组合，对角阵不变；若出现跨特征值组合，写成 $Q=PC$ 套 $Q^{-1}AQ=C^{-1}\\Lambda C$ 万能通杀！",
+      "source": {
+        "book": "27 张宇线代9讲 & 基础30讲",
+        "printedPage": "强化 P.80 / 基础 P.160 例5.13",
+        "pdfPage": 91,
+        "itemRef": "强化例 8.1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_adv_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la08-e-09",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 10 例精解（基本局面与可对角化判别）",
+      "title": "【强化例 8.2】上三角矩阵重特征值几何重数秒判（$A$ 不可对角化 vs $B$ 可对角化）",
+      "problem": "下列矩阵中不能相似于对角矩阵的是 $(\\quad)$。  (A) $A=\\begin{bmatrix}1&1&0\\\\0&1&0\\\\0&0&2\\end{bmatrix}$　(B) $B=\\begin{bmatrix}1&0&0\\\\0&1&1\\\\0&0&2\\end{bmatrix}$　(C) $C=\\begin{bmatrix}1&1&0\\\\0&2&1\\\\0&0&3\\end{bmatrix}$　(D) $D=\\begin{bmatrix}1&0&0\\\\0&1&1\\\\0&1&2\\end{bmatrix}$",
+      "steps": [
+        {
+          "stepTitle": "排除对称阵 (D) 与互异对角元 (C)，聚焦对比 (A) 与 (B) 的 $r(E-X)$",
+          "detail": "(D) 为实对称阵必可对角化；(C) 特征值 $1,2,3$ 互异必可对角化。对 (A)(B)，特征值均为 $1,1,2$：① $E-A=\\begin{bmatrix}0&-1&0\\\\0&0&0\\\\0&0&-1\\end{bmatrix}$，秩为 $2\\implies n-r=1<2$，故 $A$ 不可对角化！② $E-B=\\begin{bmatrix}0&0&0\\\\0&0&-1\\\\0&0&-1\\end{bmatrix}$，秩为 $1\\implies n-r=2$，故 $B$ 可对角化！选 (A)！"
+        }
+      ],
+      "finalAnswer": "(A)",
+      "takeaway": "上三角阵秒看技巧：若非零非对角元 $a_{ij}$ 夹在**两个相等的主对角元**之间（如 $A$ 中 $a_{12}=1$ 夹在 $1,1$ 之间），往往形成若尔当块导致不可对角化；夹在不同主对角元之间（如 $B$ 中 $a_{23}=1$ 夹在 $1,2$ 之间）则不影响对角化！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.81",
+        "pdfPage": 92,
+        "itemRef": "强化例 8.2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_adv_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la08-e-10",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 10 例精解（基本局面与可对角化判别）",
+      "title": "【强化例 8.3】「仅有 2 个不同特征值 + 可对角化」双分支参数分类讨论（$b=1,a=1$ 或 $b=3,a=-1$）",
+      "problem": "设矩阵 $A=\\begin{bmatrix}2&1&0\\\\1&2&0\\\\1&a&b\\end{bmatrix}$ 仅有两个不同的特征值，若 $A$ 相似于对角矩阵，求 $a,b$ 的值及对应可逆阵 $P$ 使 $P^{-1}AP=\\Lambda$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：分块下三角秒求 3 个特征值 $b,1,3$，分两种重根情形！",
+          "detail": "$|\\lambda E-A|=(\\lambda-b)[(\\lambda-2)^2-1]=(\\lambda-b)(\\lambda-1)(\\lambda-3)=0$。因「仅有 2 个不同特征值」，必有 $b=1$ 或 $b=3$！"
+        },
+        {
+          "stepTitle": "第二步：分别用 $r(\\lambda_0 E-A)=1$ 锁定 $a$ 并求 $P$",
+          "detail": "① 当 $b=1$ 时，$\\lambda=1,1,3$；$E-A=\\begin{bmatrix}-1&-1&0\\\\-1&-1&0\\\\-1&-a&0\\end{bmatrix}$，要使 $r(E-A)=1\\Longleftrightarrow a=1$！解得 $P=\\begin{bmatrix}-1&0&1\\\\1&0&1\\\\0&1&1\\end{bmatrix}$ 使 $P^{-1}AP=\\operatorname{diag}(1,1,3)$；② 当 $b=3$ 时，$\\lambda=3,3,1$；$3E-A=\\begin{bmatrix}1&-1&0\\\\-1&1&0\\\\-1&-a&0\\end{bmatrix}$，要使 $r(3E-A)=1\\Longleftrightarrow a=-1$！解得 $P=\\begin{bmatrix}1&0&-1\\\\1&0&1\\\\0&1&1\\end{bmatrix}$ 使 $P^{-1}AP=\\operatorname{diag}(3,3,1)$！"
+        }
+      ],
+      "finalAnswer": "两组解：① $b=1,\\;a=1$；② $b=3,\\;a=-1$（对应 $P$ 如上）",
+      "takeaway": "看到「仅有 2 个不同特征值」千万别漏掉第二个分支！把含参特征值依次与另外两个常数特征值相等，逐一用 $r(\\lambda_0 E-A)=1$ 锁参！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.81-82",
+        "pdfPage": 92,
+        "itemRef": "强化例 8.3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_adv_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la08-e-11",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 10 例精解（实对称阵与正交对角化）",
+      "title": "【强化例 8.4】「3 阶实矩阵 $A$ 是实对称阵 $\\Longleftrightarrow A$ 有 3 个两两正交的特征向量」充要证明",
+      "problem": "设 $A$ 是 3 阶实矩阵，则「$A$ 是实对称矩阵」是「$A$ 有 3 个相互正交的特征向量」的 $(\\quad)$。  (A) 充分非必要　(B) 必要非充分　(C) 充要条件　(D) 既非充分又非必要",
+      "steps": [
+        {
+          "stepTitle": "双向完整证明（单位化拼正交阵 $Q$ 是精髓！）",
+          "detail": "① 充分性：实对称阵异值特征向量天然正交、同值施密特正交化，必有 3 个两两正交特征向量；② 必要性：设 3 个非零两两正交特征向量为 $\\beta_1,\\beta_2,\\beta_3$，它们必线性无关，单位化得 $\\gamma_1,\\gamma_2,\\gamma_3$ 仍是 $A$ 的特征向量，拼成正交阵 $Q=[\\gamma_1,\\gamma_2,\\gamma_3]$ 满足 $Q^{-1}AQ=\\Lambda\\Rightarrow A=Q\\Lambda Q^{-1}=Q\\Lambda Q^T$，取转置立得 $A^T=(Q\\Lambda Q^T)^T=Q\\Lambda Q^T=A$！故为充要条件，选 (C)！（同源真题见没咋了 3.5.3 例 3！）"
+        }
+      ],
+      "finalAnswer": "(C) 充要条件",
+      "takeaway": "记住这道黄金等价桥：3 阶实阵给定 3 个两两正交的向量作为特征向量 $\\implies$ **立刻反推 $A$ 必为实对称矩阵**！",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.82-83 / 没咋了 P.78 例3",
+        "pdfPage": 93,
+        "itemRef": "强化例 8.4"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la08-e-12",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 10 例精解（实对称阵与谱分解秒杀）",
+      "title": "【强化例 8.5】行和为 3 + 二重特征值 1 的实对称阵求 $A^n$（普通法 / 正交法 / 谱分解 10 秒秒杀！）",
+      "problem": "设 $A$ 是 3 阶实对称矩阵，已知 $A$ 的每行元素之和均为 $3$，且有二重特征值 $\\lambda_1=\\lambda_2=1$，求 $A$ 的全部特征值、特征向量及 $A^n$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：行和为 3 得 $\\lambda_3=3,\\;\\xi_3=[1,1,1]^T$，正交法补全二重根特征向量",
+          "detail": "$A[1,1,1]^T=3[1,1,1]^T\\Rightarrow\\lambda_3=3,\\;\\xi_3=[1,1,1]^T$。由实对称异值正交，$\\lambda_1=\\lambda_2=1$ 的特征向量满足 $x_1+x_2+x_3=0$，得无关解 $\\xi_1=[-1,1,0]^T,\\;\\xi_2=[-1,0,1]^T$（全部特征向量为 $k_1\\xi_1+k_2\\xi_2$ 不全为 $0$）。"
+        },
+        {
+          "stepTitle": "第二步：三法求 $A^n$——法三「谱分解降维打击」10 秒出答案！",
+          "detail": "法一（$P\\Lambda^nP^{-1}$ 需算 3 阶逆阵）、法二（正交化 $Q\\Lambda^nQ^T$ 需算大量根号）。**法三（谱分解核武器）**：$A^n$ 特征值为 $1,1,3^n$，故 $A^n-E$ 特征值为 $0,0,3^n-1$，唯一非零根 $3^n-1$ 的单位特征向量 $\\eta=\\frac{1}{\\sqrt3}[1,1,1]^T$！由谱分解一行秒出：$A^n=E+(3^n-1)\\eta\\eta^T=E+\\frac{3^n-1}{3}\\begin{bmatrix}1&1&1\\\\1&1&1\\\\1&1&1\\end{bmatrix}=\\frac{1}{3}\\begin{bmatrix}2+3^n&3^n-1&3^n-1\\\\3^n-1&2+3^n&3^n-1\\\\3^n-1&3^n-1&2+3^n\\end{bmatrix}$！"
+        }
+      ],
+      "finalAnswer": "特征值 $1,1,3$；$A^n=\\frac{1}{3}\\begin{bmatrix}2+3^n&3^n-1&3^n-1\\\\3^n-1&2+3^n&3^n-1\\\\3^n-1&3^n-1&2+3^n\\end{bmatrix}$",
+      "takeaway": "本题是谱分解定理教科书级的神操作：只要 3 阶实对称阵是「一单根 + 一重根」，永远用 $f(A)=f(\\lambda_0)E+[f(\\lambda_1)-f(\\lambda_0)]\\eta\\eta^T$ 一步出矩阵，零求逆、零根号乘法！",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.83-85 / 没咋了 P.84 例3",
+        "pdfPage": 94,
+        "itemRef": "强化例 8.5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_spectral_suite",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la08-e-13",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 10 例精解（矩阵相似与搭桥求 Q）",
+      "title": "【强化例 8.6 ★★★】$A^*\\sim B$ 反求 $a=4$、相似桥 $Q=P_1P_2^{-1}$ 及神级捷径秒算 $A^{99}=A^*$",
+      "problem": "若矩阵 $A$ 的伴随矩阵 $A^*=\\begin{bmatrix}3&2&-2\\\\0&-1&0\\\\a&2&-3\\end{bmatrix}$ 相似于 $B=\\begin{bmatrix}-1&0&0\\\\-2&1&0\\\\0&0&-1\\end{bmatrix}$，其中 $|A|>0$。(1) 求 $a$ 的值及可逆阵 $Q$ 使 $Q^{-1}A^*Q=B$；(2) 求 $A^{99}$。",
+      "steps": [
+        {
+          "stepTitle": "(1) 比特征多项式锁定 $a=4$，借共同对角阵 $\\Lambda=\\operatorname{diag}(-1,-1,1)$ 搭桥算 $Q$",
+          "detail": "$|\\lambda E-B|=(\\lambda+1)^2(\\lambda-1)$，而 $|\\lambda E-A^*|=(\\lambda+1)(\\lambda^2-9+2a)$；令 $\\lambda^2-9+2a=\\lambda^2-1\\implies a=4$！分别求得 $A^*$ 特征向量 $P_1=\\begin{bmatrix}1&1&1\\\\-2&0&0\\\\0&2&1\\end{bmatrix}$、$B$ 特征向量 $P_2=\\begin{bmatrix}1&0&0\\\\1&0&1\\\\0&1&0\\end{bmatrix}$ 均化为 $\\Lambda=\\operatorname{diag}(-1,-1,1)$。由传递桥得 $Q=P_1P_2^{-1}=\\begin{bmatrix}1&1&1\\\\-2&0&0\\\\0&2&1\\end{bmatrix}\\begin{bmatrix}1&0&0\\\\0&0&1\\\\-1&1&0\\end{bmatrix}=\\begin{bmatrix}0&1&1\\\\-2&0&0\\\\-1&1&2\\end{bmatrix}$！"
+        },
+        {
+          "stepTitle": "(2) 绝妙捷径：发现 $(A^*)^2=E$ 且 $|A|=1\\implies A=A^*=A^{99}$！",
+          "detail": "由 $|A^*|=|A|^2=1$ 且 $|A|>0\\implies |A|=1$，故 $A^*=A^{-1}$！又 $A^*\\sim\\operatorname{diag}(-1,-1,1)\\implies (A^*)^2=E\\implies (A^{-1})^2=E\\implies A^2=E$ 且 $A=A^{-1}=A^*$！因此 **$A^{99}=(A^2)^{49}A=A=A^*=\\begin{bmatrix}3&2&-2\\\\0&-1&0\\\\4&2&-3\\end{bmatrix}$**——根本不用算 $P\\Lambda^{99}P^{-1}$！"
+        }
+      ],
+      "finalAnswer": "(1) $a=4,\\;Q=\\begin{bmatrix}0&1&1\\\\-2&0&0\\\\-1&1&2\\end{bmatrix}$；(2) $A^{99}=A^*=\\begin{bmatrix}3&2&-2\\\\0&-1&0\\\\4&2&-3\\end{bmatrix}$",
+      "takeaway": "看到对角化特征值全为 $\\pm 1$，立刻意识 $M^2=E$！再结合 $|A|=1\\Rightarrow A^{-1}=A^*$，10 秒省掉全部 3 阶逆阵乘法！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.86-88",
+        "pdfPage": 97,
+        "itemRef": "强化例 8.6"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_adv_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la08-e-14",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 10 例精解（矩阵相似与三同一异）",
+      "title": "【强化例 8.7】$A\\sim B$ 下「三同一异」一眼排掉 $A+A^T\\sim B+B^T$",
+      "problem": "设 $A,B$ 可逆且 $A\\sim B$，下列结论错误的是 $(\\quad)$。  (A) $A^T\\sim B^T$　(B) $A^2+A^{-1}\\sim B^2+B^{-1}$　(C) $A+A^T\\sim B+B^T$　(D) $A^*-A^{-1}\\sim B^*-B^{-1}$",
+      "steps": [
+        {
+          "stepTitle": "「三同一异」速判 + 2 阶反例铁证",
+          "detail": "(A) 单独取转置成立（变换阵为 $(P^{-1})^T$）；(B)(D) 均属于 $\\{f(A),A^{-1},A^*\\}$ 同阵 $P$ 家族，必成立；唯独 (C) 混搭 $A$ 与 $A^T$，取相似对 $A=\\begin{bmatrix}1&0\\\\0&2\\end{bmatrix},\\;B=\\begin{bmatrix}1&1\\\\0&2\\end{bmatrix}$，得 $A+A^T=\\operatorname{diag}(2,4)$ 特征值 $2,4$，而 $B+B^T=\\begin{bmatrix}2&1\\\\1&4\\end{bmatrix}$ 特征值 $3\\pm\\sqrt2$，显然不相似！选 (C)！"
+        }
+      ],
+      "finalAnswer": "(C) $A+A^T$ 与 $B+B^T$ 相似",
+      "takeaway": "记住张宇「三同一异」金句：**多项式、逆阵、伴随同手段 $P$ 可随意相加减，转置手段变成 $(P^{-1})^T$ 严禁混加！**",
+      "source": {
+        "book": "27 张宇线代9讲 & 基础30讲",
+        "printedPage": "强化 P.88 / 基础 P.155 例5.8",
+        "pdfPage": 99,
+        "itemRef": "强化例 8.7"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_adv_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la08-e-15",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 10 例精解（2024 数一真题压轴大题！）",
+      "title": "【强化例 8.8 / 2024 数一真题】三数列线性递推 $\\alpha_n=A\\alpha_{n-1}$ 求 $A^n$ 与通项（警惕 $0^n$ 边界 $n\\ge 1$！）",
+      "problem": "已知数列 $\\{x_n\\},\\{y_n\\},\\{z_n\\}$ 满足 $x_0=-1,\\;y_0=0,\\;z_0=2$，且 $\\begin{cases}x_n=-2x_{n-1}+2z_{n-1}\\\\y_n=-2y_{n-1}-2z_{n-1}\\\\z_n=-6x_{n-1}-3y_{n-1}+3z_{n-1}\\end{cases}$，记 $\\alpha_n=[x_n,y_n,z_n]^T$，写出满足 $\\alpha_n=A\\alpha_{n-1}$ 的矩阵 $A$，并求 $A^n$ 及 $x_n,y_n,z_n\\;(n=1,2,\\dots)$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：写出系数阵 $A$ 并相似对角化求 $A^n$",
+          "detail": "$A=\\begin{bmatrix}-2&0&2\\\\0&-2&-2\\\\-6&-3&3\\end{bmatrix}$，算出 $|\\lambda E-A|=\\lambda(\\lambda-1)(\\lambda+2)=0\\implies\\lambda_1=0,\\;\\lambda_2=1,\\;\\lambda_3=-2$。求对应特征向量拼成 $P=\\begin{bmatrix}1&2&-1\\\\-1&-2&2\\\\1&3&0\\end{bmatrix}$，求逆 $P^{-1}=\\begin{bmatrix}6&3&-2\\\\-2&-1&1\\\\1&1&0\\end{bmatrix}$。于是对 **$n\\ge 1$** 有 $A^n=P\\operatorname{diag}(0,1,(-2)^n)P^{-1}=\\begin{bmatrix}-4-(-2)^n&-2-(-2)^n&2\\\\4-(-2)^{n+1}&2-(-2)^{n+1}&-2\\\\-6&-3&3\\end{bmatrix}$！"
+        },
+        {
+          "stepTitle": "第二步：代入 $\\alpha_n=A^n\\alpha_0$ 得通项，并用 $n=1$ 回代检验！",
+          "detail": "右乘 $\\alpha_0=[-1,0,2]^T$ 得 $x_n=8+(-2)^n,\\;y_n=-8+(-2)^{n+1},\\;z_n=12\\;(n=1,2,\\dots)$！检验 $n=1$：原递推式得 $x_1=2+4=6,\\;y_1=-4,\\;z_1=6+6=12$；通项公式代 $n=1$ 得 $8-2=6,\\;-8+4=-4,\\;12$，100% 吻合！（**致命提醒**：代 $n=0$ 时通项给出 $(9,-10,12)\\ne(-1,0,2)$，因为特征值 $\\lambda_1=0$ 使 $0^n=0$ 仅在 $n\\ge 1$ 有效，切勿写错范围！）"
+        }
+      ],
+      "finalAnswer": "$A^n=\\begin{bmatrix}-4-(-2)^n&-2-(-2)^n&2\\\\4-(-2)^{n+1}&2-(-2)^{n+1}&-2\\\\-6&-3&3\\end{bmatrix}$；$x_n=8+(-2)^n,\\;y_n=-8+(-2)^{n+1},\\;z_n=12\\;(n=1,2,\\dots)$",
+      "takeaway": "2024 数一 12 分大题！凡遇相似对角化求 $A^n$ 算数列通项，算完务必把 **$n=1$** 代回原递推式 10 秒验算——任何符号或求逆笔误当场现形！",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.88-89 / 没咋了 P.72 例6",
+        "pdfPage": 99,
+        "itemRef": "强化例 8.8 (2024 数一真题)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_adv_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la08-e-16",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 10 例精解（正交矩阵与若尔当综合压轴）",
+      "title": "【强化例 8.9】3 阶正交矩阵 $a_{11}=1$ 秒杀 $Ax=[1,0,0]^T$ 唯一解",
+      "problem": "设 $A$ 为 3 阶正交矩阵，其第 1 行第 1 列元素 $a_{11}=1$，又 $\\beta=[1,0,0]^T$，求方程组 $Ax=\\beta$ 的解。",
+      "steps": [
+        {
+          "stepTitle": "单位行/列长度锁死第 1 行与第 1 列其余元素全为 0！",
+          "detail": "因 $A$ 正交，第 1 行与第 1 列向量的平方和均为 $1$：$1^2+a_{12}^2+a_{13}^2=1$ 且 $1^2+a_{21}^2+a_{31}^2=1\\implies a_{12}=a_{13}=a_{21}=a_{31}=0$！即 $A=\\begin{bmatrix}1&0&0\\\\0&a_{22}&a_{23}\\\\0&a_{32}&a_{33}\\end{bmatrix}$。又正交阵可逆且 $A^{-1}=A^T$，故唯一解 $x=A^T\\beta=[1,0,0]^T$！"
+        }
+      ],
+      "finalAnswer": "$x=[1,0,0]^T$",
+      "takeaway": "正交阵任一元素取 $\\pm 1$，立刻锁死它**所在整行与整列的其余元素全为 0**——几乎是考研正交阵填空题的专属秒杀密码！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.90-91",
+        "pdfPage": 101,
+        "itemRef": "强化例 8.9"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_adv_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la08-e-17",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化 9 讲全 10 例精解（综合压轴：不可对角化若尔当相似 + 原书严谨补注！）",
+      "title": "【强化例 8.10 + 严谨补注】$A$ 仅有 1 个线性无关特征向量求 $a=7$ 及化 3 阶若尔当块 $J_3(2)$",
+      "problem": "设 $A=\\begin{bmatrix}-4&2&10\\\\-4&3&a\\\\-3&1&7\\end{bmatrix}$，且 $A$ 的所有特征向量中只有一个线性无关的特征向量，$B=\\begin{bmatrix}2&1&0\\\\0&2&1\\\\0&0&2\\end{bmatrix}$。(1) 求 $a$；(2) 是否存在可逆阵 $P$ 使 $P^{-1}AP=B$？若存在求全部 $P$。",
+      "steps": [
+        {
+          "stepTitle": "(1) 算特征多项式锁定三重根 $2$，并补全原书漏证的两道严谨验证！",
+          "detail": "算出 $|\\lambda E-A|=(\\lambda-2)(\\lambda^2-4\\lambda+11-a)$。因 $A$ 仅有 1 个线性无关特征向量，必仅含唯一一个三重特征值 $\\lambda_1=\\lambda_2=\\lambda_3=2$！**【原书严谨补注 · 强化 P.91】**：原书仅令判别式 $\\Delta=16-4(11-a)=0\\Rightarrow a=7$，漏了两个必要环节：① 需说明二次式若有两个不同实根或另一二重实根 $\\mu\\ne 2$，则 $A$ 至少有 2 个不同特征值从而至少有 2 个线性无关特征向量（而若 $\\Delta<0$ 有共轭复根，在复数域上共有 3 个互异特征值从而有 3 个无关特征向量；即便限定实域，原题按线性代数通用复特征值框架要求唯一三重根 $\\lambda=2$，此时二次式为 $(\\lambda-2)^2\\implies 11-a=4\\Rightarrow a=7$）；② 求出 $a=7$ 后，**必须回代验算 $r(2E-A)=2$**（排除 $r=1$ 有 2 个特征向量或 $r=0$ 有 3 个！）——实算 $2E-A=\\begin{bmatrix}6&-2&-10\\\\4&-1&-7\\\\3&-1&-5\\end{bmatrix}\\to\\begin{bmatrix}1&0&-2\\\\0&1&-1\\\\0&0&0\\end{bmatrix}$，恰有 $r(2E-A)=2$，几何重数确为 $3-2=1$，逻辑彻底闭环！"
+        },
+        {
+          "stepTitle": "(2) 由 $AP=PB$ 逐列解链式方程组 $(A-2E)x_1=0,\\;(A-2E)x_2=x_1,\\;(A-2E)x_3=x_2$",
+          "detail": "设 $P=[x_1,x_2,x_3]$，则 $AP=PB\\Longleftrightarrow [Ax_1,Ax_2,Ax_3]=[2x_1,\\;x_1+2x_2,\\;x_2+2x_3]$。逐级求解：① $(A-2E)x_1=0\\Rightarrow x_1=k_1[2,1,1]^T\\;(k_1\\ne 0)$；② $(A-2E)x_2=x_1\\Rightarrow x_2=k_2[2,1,1]^T+[0,k_1,0]^T$；③ $(A-2E)x_3=x_2\\Rightarrow x_3=k_3[2,1,1]^T+[-k_1,k_2-3k_1,0]^T$。故 $P=\\begin{bmatrix}2k_1&2k_2&2k_3-k_1\\\\k_1&k_1+k_2&k_3+k_2-3k_1\\\\k_1&k_2&k_3\\end{bmatrix}$，验算 $|P|=-k_1^3\\ne 0\\Longleftrightarrow k_1\\ne 0$（$k_2,k_3$ 任意常数）！"
+        }
+      ],
+      "finalAnswer": "(1) $a=7$；(2) 存在，全部可逆阵 $P=\\begin{bmatrix}2k_1&2k_2&2k_3-k_1\\\\k_1&k_1+k_2&k_3+k_2-3k_1\\\\k_1&k_2&k_3\\end{bmatrix}$（$k_1\\ne 0$，$k_2,k_3$ 为任意常数）",
+      "takeaway": "这是考研「不可对角化阵相似」的巅峰母题：把 $P^{-1}AP=J_3(\\lambda_0)$ 翻译成 $AP=PJ_3(\\lambda_0)$，按列拆成 3 个接力方程组 $(A-\\lambda_0 E)x_1=0\\to x_2\\to x_3$，一步步向上求解稳拿满分！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.91-92(含严谨补注)",
+        "pdfPage": 102,
+        "itemRef": "强化例 8.10"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_adv_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la08-e-18",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化讲义精选（对角化判据、真题、谱分解与同时对角化）",
+      "title": "【没咋了 3.3.3 例 5】7 大条件中「$A\\sim\\Lambda$ 充分不必要条件」精确逐条排雷（共 3 个！）",
+      "problem": "设 3 阶阵 $A$，下列条件是 $A\\sim\\Lambda$ 的**充分但不必要**条件的有 \\_\\_\\_\\_ 个：① $A$ 有 3 个不相等的特征值；② $A$ 有 3 个线性无关的特征向量；③ $A$ 有 3 个两两线性无关的特征向量；④ $A$ 属于不同特征值的特征向量相互正交；⑤ $A^2+2A-3E=O$；⑥ $A^3-A^2$ 可相似对角化；⑦ $r(A+5E)<r(A-E)<r(A)$。",
+      "steps": [
+        {
+          "stepTitle": "逐条严审 ①–⑦（最烧脑的是 ③④⑥⑦！）",
+          "detail": "① **充分不必要 ✓**（$E$ 可对角化但无 3 个相异特征值）；② **充要 ✗**；③ **既不充分也不必要 ✗**（反例 $A=\\operatorname{diag}(1,1,1)$ 虽可对角化，但可举不可对角化阵 $A=\\begin{bmatrix}1&1&0\\\\0&1&0\\\\0&0&2\\end{bmatrix}$ 吗？不对，它只有 2 维特征空间但其中 2 维平面里的 3 个向量两两无关，如对 3 阶阵有 $\\lambda=1$ 二维平面取 $[1,0,0]^T,[0,1,0]^T,[1,1,0]^T$——Wait，2 维平面需几何重数 2，若 $\\lambda=1$ 几何重数 2 + 单根 $\\lambda=2$ 几何重数 1 则已可对角化！真正反例是 3 阶阵有 $\\lambda=1$（重数 3，几何重数 2）如 $J_2(1)\\oplus J_1(1)$，其 2 维特征空间中任意 3 个两两不共线的向量即两两线性无关，但整体线性相关且 $A$ **不可对角化**！）；④ **既不充分也不必要 ✗**（单特征值不可对角化阵如 $J_3(1)$ 真空成立 ④，且非对称可对角化阵不满足 ④）；⑤ **充分不必要 ✓**（$(A+3E)(A-E)=O$ 无重根零化式必可对角化！）；⑥ **既不充分也不必要 ✗**（反例 $A=\\begin{bmatrix}0&1&0\\\\0&0&0\\\\0&0&1\\end{bmatrix}$ 有 $A^3-A^2=O$ 可对角化，但 $A$ 不可对角化！）；⑦ **充分不必要 ✓**：$0\\le r(A+5E)<r(A-E)<r(A)\\le 3$ 为严格递增非负整数，只可能 $r(A+5E)\\le 1$ 且 $r(A-E)\\le 2$；若 $r(A+5E)=0\\Rightarrow A=-5E$ 矛盾（因 $r(A)=3,r(A-E)=3$ 不满足严格小于！），故唯一可能是 $r(A+5E)=1,r(A-E)=2,r(A)=3\\implies \\lambda=-5$ 有 $3-1=2$ 个无关特征向量、$\\lambda=1$ 有 $3-2=1$ 个无关特征向量，合计 $2+1=3$ 个无关特征向量 $\\implies A\\sim\\Lambda$！共 ①⑤⑦ 3 个！"
+        }
+      ],
+      "finalAnswer": "$3$ 个（①、⑤、⑦）",
+      "takeaway": "记住两大神级反例与神级推理：③ 的反例是 $J_2(1)\\oplus J_1(1)$（2 维平面藏着无数个两两无关向量！）；⑦ 用「严格递增整数秩逼出两特征空间维数和 $=3$」是近年的顶级压轴考法！",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.71 例5",
+        "pdfPage": 76,
+        "itemRef": "没咋了 3.3.3 例 5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la08-e-19",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化讲义精选（历年经典真题）",
+      "title": "【没咋了 3.4.4 例 5 + 例 7】（2018 数二 & 2014 数二）3 阶不可对角化阵判相似 & $n$ 阶秩 1 阵相似证明",
+      "problem": "(1)（2018 数二）下列与 $M=\\begin{bmatrix}1&1&0\\\\0&1&1\\\\0&0&1\\end{bmatrix}$ 相似的是 $(\\quad)$。(A) $\\begin{bmatrix}1&1&-1\\\\0&1&1\\\\0&0&1\\end{bmatrix}$ (B) $\\begin{bmatrix}1&0&-1\\\\0&1&1\\\\0&0&1\\end{bmatrix}$ (C) $\\begin{bmatrix}1&1&-1\\\\0&1&0\\\\0&0&1\\end{bmatrix}$ (D) $\\begin{bmatrix}1&0&-1\\\\0&1&0\\\\0&0&1\\end{bmatrix}$。(2)（2014 数二）证明全 1 阵 $A=(1)_{n\\times n}$ 与末列为 $(1,2,\\dots,n)^T$、其余列全 0 的阵 $B$ 相似。",
+      "steps": [
+        {
+          "stepTitle": "(1) 3 阶三重根 $\\lambda=1$ 阵只需比 $r(E-X)$ 一眼锁死 (A)！",
+          "detail": "$r(E-M)=r\\begin{bmatrix}0&-1&0\\\\0&0&-1\\\\0&0&0\\end{bmatrix}=2$。检查四选项的 $r(E-X)$：(A) $\\begin{bmatrix}0&-1&1\\\\0&0&-1\\\\0&0&0\\end{bmatrix}$ 秩为 **$2$** ✓；(B)(C)(D) 减去 $E$ 后秩均为 **$1$** ✗！故 3 秒选 (A)！"
+        },
+        {
+          "stepTitle": "(2) 借助共同对角阵 $\\Lambda=\\operatorname{diag}(n,0,\\dots,0)$ 传递秒证",
+          "detail": "两矩阵均满足 $r(A)=r(B)=1$ 且 $\\operatorname{tr}(A)=\\operatorname{tr}(B)=n\\ne 0$！由秩 1 矩阵谱定理，二者特征值均为 $n$（单根）与 $0$（$n-1$ 重），且 $n-r(0E-A)=n-r(0E-B)=n-1$，故均相似于 $\\operatorname{diag}(n,0,\\dots,0)$，由相似传递性立得 $A\\sim B$！"
+        }
+      ],
+      "finalAnswer": "(1) (A)；(2) 二者均相似于 $\\operatorname{diag}(n,0,\\dots,0)$，由传递性证毕",
+      "takeaway": "3 阶非对角化上三角阵判相似：**别算 $P$！直接减掉 $\\lambda_0 E$ 比秩**（对 3 阶阵，特征值同 + $r(\\lambda_0 E-A)$ 同即为充要条件）！",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.75 例5,例7",
+        "pdfPage": 80,
+        "itemRef": "没咋了 3.4.4 例 5 与 例 7"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la08-e-20",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化讲义精选（实对称伴随 + 秩 2 对称阵）",
+      "title": "【没咋了 3.5.3 例 6 + 例 8】（李艳芳 3 套卷）由 $A^*$ 仅 2 个不同特征值定 $\\lambda^2+\\mu^2=3$ & $A=\\alpha\\beta^T+\\beta\\alpha^T$",
+      "problem": "(1) 3 阶实对称阵 $A$ 仅有两个不同特征值 $\\lambda,\\mu$，且 $A^*=\\begin{bmatrix}1&1&1\\\\a&1&1\\\\b&c&d\\end{bmatrix}$，求 $\\lambda^2+\\mu^2$。(2) 设 $\\alpha,\\beta$ 是 3 维单位正交列向量，$A=\\alpha\\beta^T+\\beta\\alpha^T$，证 $A$ 可对角化；并当 $\\alpha=(\\frac{\\sqrt2}{2},0,\\frac{\\sqrt2}{2})^T,\\;\\beta=(0,1,0)^T$ 时求正交阵 $Q$ 使 $Q^T(A+A^*)Q=\\Lambda$。",
+      "steps": [
+        {
+          "stepTitle": "(1) 对称性定 $a=b=c=1$，再由 $A^*$ 至多 2 个不同特征值锁定 $d=1$！",
+          "detail": "$A$ 实对称 $\\Rightarrow A^*$ 实对称 $\\Rightarrow a=b=c=1$。算 $|\\lambda E-A^*|=\\lambda[\\lambda^2-(d+2)\\lambda+2(d-1)]=0$，二次项判别式 $\\Delta=(d-2)^2+8>0$ 恒有两不等实根！因 $A$ 仅 2 个不同特征值，$A^*$ 至多 2 个不同特征值，故二次方程必以 $0$ 为根 $\\implies 2(d-1)=0\\implies d=1$！此时 $A^*$ 特征值为 $0,0,3\\Rightarrow r(A^*)=1\\Rightarrow r(A)=2$，故 $A$ 必有 $0$ 与二重非零特征值 $\\mu$（另一不同特征值 $\\lambda=0$），从而 $A^*$ 唯一非零特征值 $\\mu^2=3\\implies \\lambda^2+\\mu^2=0+3=3$！"
+        },
+        {
+          "stepTitle": "(2) 秩 2 对称阵 $A=\\alpha\\beta^T+\\beta\\alpha^T$ 的特征值必为 $1,-1,0$！",
+          "detail": "① $A^T=(\\alpha\\beta^T+\\beta\\alpha^T)^T=A$ 实对称，必可对角化！② 直接作用：$A(\\alpha+\\beta)=\\beta+\\alpha=1\\cdot(\\alpha+\\beta)$，$A(\\alpha-\\beta)=\\beta-\\alpha=(-1)(\\alpha-\\beta)$；取与 $\\alpha,\\beta$ 均正交的单位向量 $\\gamma=(-\\frac{\\sqrt2}{2},0,\\frac{\\sqrt2}{2})^T$，则 $A\\gamma=0$！故 $A$ 特征值为 $1,-1,0$，伴随 $A^*$ 特征值为 $0,0,-1$，二者共享同一套单位正交特征向量 $\\gamma_1=\\frac{\\alpha+\\beta}{\\sqrt2},\\;\\gamma_2=\\frac{\\alpha-\\beta}{\\sqrt2},\\;\\gamma_3=\\gamma$，故 $A+A^*$ 特征值为 $1,-1,-1$，$Q=[\\gamma_1,\\gamma_2,\\gamma_3]$ 立得 $Q^T(A+A^*)Q=\\operatorname{diag}(1,-1,-1)$！"
+        }
+      ],
+      "finalAnswer": "(1) $\\lambda^2+\\mu^2=3$；(2) $Q=\\begin{bmatrix}\\frac{1}{2}&\\frac{1}{2}&-\\frac{\\sqrt2}{2}\\\\\\frac{\\sqrt2}{2}&-\\frac{\\sqrt2}{2}&0\\\\\\frac{1}{2}&\\frac{1}{2}&\\frac{\\sqrt2}{2}\\end{bmatrix},\\;\\Lambda=\\operatorname{diag}(1,-1,-1)$",
+      "takeaway": "绝美模型记死：单位正交列向量组构成的实对称阵 $\\alpha\\beta^T+\\beta\\alpha^T$，特征值永远是 **$1,-1,0,\\dots,0$**，对应特征向量就是 **$\\alpha\\pm\\beta$** 与正交补空间！",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.78,80 例6,例8",
+        "pdfPage": 83,
+        "itemRef": "没咋了 3.5.3 例 6 与 例 8"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la08-e-21",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化讲义精选（谱分解高阶压轴！）",
+      "title": "【没咋了谱分解例 2（加点难度！）】只给 1 个特征向量竟能唯一反求 $B=A^3-4A+E$！",
+      "problem": "设 3 阶实对称阵 $A$ 的特征值为 $1,2,-2$，且 $A[1,-1,1]^T=[1,-1,1]^T$，若 $B=A^3-4A+E$，求矩阵 $B$。",
+      "steps": [
+        {
+          "stepTitle": "神来之笔：算 $f(\\lambda)=\\lambda^3-4\\lambda+1$ 在三个特征值处的值，惊现二重根！",
+          "detail": "虽然 $A$ 有 3 个不同特征值且只给了 $\\lambda_1=1$ 的特征向量（单靠条件无法唯一确定 $A$！），但算 $B=f(A)$ 的特征值：$f(1)=1-4+1=-2$，**$f(2)=8-8+1=1$，$f(-2)=-8+8+1=1$**！神奇地，后两个未知特征向量在 $B$ 下合并成了同一个二重特征值 $1$！"
+        },
+        {
+          "stepTitle": "套谱分解公式 5 秒秒杀 $B$！",
+          "detail": "单位化 $\\gamma_1=\\frac{1}{\\sqrt3}[1,-1,1]^T$。由谱分解：$B=(-2)\\gamma_1\\gamma_1^T+1\\cdot(\\gamma_2\\gamma_2^T+\\gamma_3\\gamma_3^T)=E-3\\gamma_1\\gamma_1^T=E-\\begin{bmatrix}1&-1&1\\\\-1&1&-1\\\\1&-1&1\\end{bmatrix}=\\begin{bmatrix}0&1&-1\\\\1&0&1\\\\-1&1&0\\end{bmatrix}$！"
+        }
+      ],
+      "finalAnswer": "$B=\\begin{bmatrix}0&1&-1\\\\1&0&1\\\\-1&1&0\\end{bmatrix}$",
+      "takeaway": "全书最惊艳的「信息看似不够、多项式合并重根」谱分解神题：算 $f(A)$ 只要 $f(\\lambda_2)=f(\\lambda_3)$，就能利用 $\\gamma_2\\gamma_2^T+\\gamma_3\\gamma_3^T=E-\\gamma_1\\gamma_1^T$ 彻底消去全部未知特征向量！",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.84 谱分解例2",
+        "pdfPage": 89,
+        "itemRef": "没咋了谱分解例 2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_spectral_suite",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la08-e-22",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化讲义精选（2024 数二真题 & 同时对角化压轴）",
+      "title": "【没咋了 3.7.1 例 1 + 例 3】（2024 数二 & 张宇 4 套卷）$AB=BA$ 同时对角化判定与公共特征向量",
+      "problem": "(1)（2024 数二）设 $A,B$ 为 2 阶阵且 $AB=BA$，则「$A$ 有 2 个不相等的特征值」是「$B$ 可对角化」的 $(\\quad)$。(A) 充要 (B) 充分不必要 (C) 必要不充分 (D) 既不充分也不必要。(2)（张宇 4 套卷）设 $A=\\begin{bmatrix}3&0&0\\\\-1&3&1\\\\a&0&1\\end{bmatrix},\\;B=\\begin{bmatrix}1&2&b\\\\0&1&1\\\\2&2&0\\end{bmatrix}$ 且 $AB=BA$，求 $a,b$、全部公共特征向量，并判是否存在可逆 $P$ 使 $A,B$ 同时对角化。",
+      "steps": [
+        {
+          "stepTitle": "(1) 2024 数二真题秒解：充分不必要 (B)",
+          "detail": "充分性：若 $A$ 有 2 个相异特征值，则 $A$ 的 2 个无关特征向量必全为 $B$ 的特征向量 $\\Rightarrow B$ 可对角化；必要性不成立：反例 $A=B=E$ 满足 $AB=BA$ 且 $B$ 可对角化，但 $A$ 只有二重特征值 $1$！选 (B)！"
+        },
+        {
+          "stepTitle": "(2) 解 $AB=BA$ 得 $(a,b)=(2,1)$，发现 $B$ 有 3 个互异特征值 $-1,0,3\\Rightarrow$ 必可同时对角化！",
+          "detail": "由 $AB=BA$ 逐元对比立得唯一解 **$a=2,\\;b=1$**。先算 $B=\\begin{bmatrix}1&2&1\\\\0&1&1\\\\2&2&0\\end{bmatrix}$ 的特征多项式：$|\\lambda E-B|=(\\lambda+1)\\lambda(\\lambda-3)=0$，恰有 3 个互异特征值 **$-1,0,3$**！由可交换公共特征向量定理，$B$ 的 3 个线性无关特征向量 $\\xi_1=[0,-1,2]^T$（$\\lambda_B=-1,\\;\\lambda_A=1$）、$\\xi_2=[1,-1,1]^T$（$\\lambda_B=0,\\;\\lambda_A=3$）、$\\xi_3=[2,1,2]^T$（$\\lambda_B=3,\\;\\lambda_A=3$）自动全为 $A$ 的特征向量！全部公共特征向量即 $k_1\\xi_1,\\;k_2\\xi_2,\\;k_3\\xi_3$（各 $k_i\\ne 0$）。令可逆阵 $P=[\\xi_1,\\xi_2,\\xi_3]=\\begin{bmatrix}0&1&2\\\\-1&-1&1\\\\2&1&2\\end{bmatrix}$，同时满足 $P^{-1}AP=\\operatorname{diag}(1,3,3)$ 与 $P^{-1}BP=\\operatorname{diag}(-1,0,3)$！"
+        }
+      ],
+      "finalAnswer": "(1) (B) 充分不必要条件；(2) $a=2,\\;b=1$；全部公共特征向量为 $k_1[0,-1,2]^T,\\;k_2[1,-1,1]^T,\\;k_3[2,1,2]^T\\;(k_i\\ne 0)$；存在 $P=\\begin{bmatrix}0&1&2\\\\-1&-1&1\\\\2&1&2\\end{bmatrix}$ 使 $A,B$ 同时对角化！",
+      "takeaway": "遇到 $AB=BA$ 求公共特征向量并同时对角化：**优先找无重根的那一个矩阵（本题是 $B$）算特征向量**——它的特征向量组自动就是两阵的全部公共特征向量并直接拼成公共 $P$！",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.85-86 例1,例3",
+        "pdfPage": 90,
+        "itemRef": "没咋了 3.7.1 例 1 与 例 3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la08-e-23",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、没咋了强化讲义精选（不可对角化阵的相似传递证明）",
+      "title": "【没咋了 3.7.2 例 4】（李林 6 套卷）三阵 $A,B,C$ 均不可对角化，直接定义构造 $P$ 证 $A\\sim B\\sim C$",
+      "problem": "设 $A=\\begin{bmatrix}2&1\\\\-1&0\\end{bmatrix},\\;B=\\begin{bmatrix}1&1\\\\0&1\\end{bmatrix},\\;C=\\begin{bmatrix}1&0\\\\1&1\\end{bmatrix}$，证明：(1) $A,B,C$ 均不可相似对角化；(2) $A\\sim B\\sim C$。",
+      "steps": [
+        {
+          "stepTitle": "(1) 三阵特征值全为二重根 $1$ 且均不等于 $E$，一票否决对角化！",
+          "detail": "算出三阵特征多项式均为 $(\\lambda-1)^2=0$（二重特征值 $1$），但 $A\\ne E,\\;B\\ne E,\\;C\\ne E$，由否决条件立知三阵均不可相似对角化！"
+        },
+        {
+          "stepTitle": "(2) 放弃对角阵中介，直接按 $AP=PB$ 构造可逆阵 $P$！",
+          "detail": "① 证 $B\\sim C$：取置换阵 $P_1=\\begin{bmatrix}0&1\\\\1&0\\end{bmatrix}$，直接验算 $P_1^{-1}BP_1=C$！② 证 $A\\sim B$：解 $AP_2=P_2B\\Longleftrightarrow [A\\xi_1,A\\xi_2]=[\\xi_1,\\xi_1+\\xi_2]$，先解 $(A-E)\\xi_1=0\\Rightarrow\\xi_1=[1,-1]^T$，再解 $(A-E)\\xi_2=\\xi_1\\Rightarrow\\xi_2=[1,0]^T$，取 $P_2=\\begin{bmatrix}1&1\\\\-1&0\\end{bmatrix}$（$|P_2|=1\\ne 0$），验算 $P_2^{-1}AP_2=B$！由相似传递性即得 $A\\sim B\\sim C$！"
+        }
+      ],
+      "finalAnswer": "(1) 全为二重根 $1$ 且均 $\\ne E$ 故皆不可对角化；(2) $P_2=\\begin{bmatrix}1&1\\\\-1&0\\end{bmatrix}$ 使 $P_2^{-1}AP_2=B$，$P_1=\\begin{bmatrix}0&1\\\\1&0\\end{bmatrix}$ 使 $P_1^{-1}BP_1=C$",
+      "takeaway": "两阵都不可对角化时不能再拿 $\\Lambda$ 当中介，改拿**标准若尔当块 $B=\\begin{bmatrix}1&1\\\\0&1\\end{bmatrix}$** 当中介，两步解链式方程组 $100\\%$ 构造出 $P$！",
+      "source": {
+        "book": "27 没咋了线代强化讲义",
+        "printedPage": "没咋了 P.87 例4",
+        "pdfPage": 92,
+        "itemRef": "没咋了 3.7.2 例 4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la08_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la08-s-01",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "七、题型总结（一）：第 8 讲相似与对角化破题路由表",
+      "title": "相似理论 8 大核心题型破题路由总表（表 L8-1）",
+      "overview": "第 8 讲是考研线代大题最高频出题区（2024 数一/数二均出重头题），按信号词精准路由：",
+      "patterns": [
+        {
+          "typeName": "反求实对称阵 / 高次幂最优决策顺序",
+          "triggers": "求实对称阵 $A$、$A^n$ 或 $f(A)$",
+          "method": "先扫特征值个数：① 若仅有 2 个不同值（或 $f(\\lambda_2)=f(\\lambda_3)$），直接用**谱分解秒杀式** $f(A)=cE+[f(\\lambda_1)-c]\\gamma_1\\gamma_1^T$（免正交化免求逆）；② 若 3 个互异值，直接 $Q\\Lambda^nQ^T$（无需施密特）；③ 若非对称可对角化，老实求最简整数 $P$ 算 $P\\Lambda^nP^{-1}$ 并用 $n=1$ 回代检验！",
+          "pitfall": "特征值含 $0$ 时（如 2024 数一），$A^n=P\\Lambda^nP^{-1}$ 仅对 $n\\ge 1$ 成立，$n=0$ 是单位阵 $E$！",
+          "relatedRefs": "强化例 8.5, 强化例 8.8 (2024 数一真题), 没咋了谱分解例 2"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 L8-1　第 8 讲相似理论 8 大核心题型破题路由",
+          "headers": [
+            "题干特征 / 信号词",
+            "第一反应核心手段",
+            "避坑 / 加速要点",
+            "代表例题"
+          ],
+          "rows": [
+            [
+              "判 $A$ 能否相似对角化",
+              "先扫 5 充分（对称/互异/秩1非零迹/无重根零化）；重根查 $r(\\lambda_0 E-A)=n-k$",
+              "全等根 $\\lambda=k$ 直接看 $A\\stackrel{?}{=}kE$",
+              "例 5.9、强化例 8.2、没咋了 3.3.3 例 5"
+            ],
+            [
+              "含参阵可对角化求参",
+              "算特征值找重根 $\\lambda_0$，令 $r(\\lambda_0 E-A)=n-k$",
+              "「仅 2 个不同特征值」务必分情况讨论所有重根配对！",
+              "例 5.17、强化例 8.3"
+            ],
+            [
+              "判 $A$ 与 $B$ 是否相似",
+              "先用 6 不变量排除；双实对称看特征值；可对角化走 $\\Lambda$ 传递；3 阶不可对角化比 $r(\\lambda_0 E-X)$",
+              "4 阶不可对角化需加验 $r((\\lambda_0 E-X)^2)$！",
+              "例 5.6、强化例 8.6、没咋了 3.4.4 例 5/7"
+            ],
+            [
+              "求可逆 $Q$ 使 $Q^{-1}AQ=B$",
+              "分别对角化 $P_1^{-1}AP_1=\\Lambda=P_2^{-1}BP_2$，搭桥 $Q=P_1P_2^{-1}$",
+              "$P_1,P_2$ 列序必须对齐同一个 $\\Lambda$！",
+              "强化例 8.6"
+            ],
+            [
+              "求实对称正交阵 $Q$",
+              "异值天然正交仅单位化；同重根先正交化再单位化",
+              "严禁对不同特征值的向量混用施密特！",
+              "例 5.18、强化例 8.4/8.5"
+            ],
+            [
+              "求 $A^n$ / $f(A)$ / 递推通项",
+              "实对称两值用谱分解 $cE+(f_1-c)\\gamma_1\\gamma_1^T$；一般阵用 $P\\Lambda^nP^{-1}$；分块阵各自求幂",
+              "含若尔当块用二项展开；通项用 $n=1$ 验算！",
+              "强化例 8.5/8.8、基础习题 5.15、没咋了谱分解例 2"
+            ],
+            [
+              "不可对角化阵相似证明",
+              "列写 $AP=PB$ 拆为链式方程组 $(A-\\lambda_0E)x_1=0\\to x_2\\to x_3$",
+              "最后必验 $|P|\\ne 0$ 锁定自由常数约束！",
+              "强化例 8.10、没咋了 3.7.2 例 4"
+            ],
+            [
+              "$AB=BA$ 与同时对角化",
+              "$A$ 无重根 $\\Rightarrow A$ 特征向量全为 $B$ 特征向量 $\\Rightarrow$ 必同时对角化",
+              "二者皆可对角化 + 可交换才是同时对角化充要条件",
+              "没咋了 3.7.1 例 1/3"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "把这张 8 行路由表刻进肌肉记忆，第 8 讲无论是 5 分选填还是 12 分压轴大题都能起手即稳！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "第8讲全章总结",
+        "pdfPage": 90,
+        "itemRef": "表 L8-1 第8讲破题路由表"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la08-s-02",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "七、题型总结（二）：三种相似标准形全景对比表",
+      "title": "一般相似对角化 vs 实对称正交对角化 vs 若尔当相似三维对照（表 L8-2）",
+      "overview": "清晰区分三类相似变换的前提、变换矩阵性质与适用场景，彻底根除「什么时候需要施密特正交化」的迷茫：",
+      "patterns": [
+        {
+          "typeName": "什么时候必须做施密特正交化？",
+          "triggers": "题干要求「求可逆矩阵 $P$」还是「求正交矩阵 $Q$」",
+          "method": "① 仅要求可逆阵 $P$ 使 $P^{-1}AP=\\Lambda$：即便 $A$ 实对称，也**不需要**正交化和单位化（直接拼最简整数无关特征向量最快）；② 明确要求**正交矩阵 $Q$**（或化二次型为标准形用正交变换）：仅对重特征值组内做正交化，然后全员单位化！",
+          "pitfall": "注意：非对称矩阵绝不存在正交阵 $Q$ 使 $Q^TAQ=\\Lambda$，千万别对非对称阵瞎做施密特！",
+          "relatedRefs": "强化例 8.4, 强化例 8.5, 强化例 8.10"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 L8-2　一般相似对角化、实对称正交对角化与若尔当相似三维对比",
+          "headers": [
+            "对比维度",
+            "一般相似对角化 $P^{-1}AP=\\Lambda$",
+            "实对称正交对角化 $Q^TAQ=\\Lambda$",
+            "不可对角化若尔当相似 $P^{-1}AP=J$"
+          ],
+          "rows": [
+            [
+              "充要前提",
+              "每重根 $n-r(\\lambda_iE-A)=k_i$",
+              "$A$ 为实对称矩阵 ($A^T=A$)",
+              "存在某重根 $n-r(\\lambda_iE-A)<k_i$"
+            ],
+            [
+              "变换矩阵要求",
+              "只需可逆 ($|P|\\ne 0$)，选最简整数列",
+              "必须正交 ($Q^TQ=E$)，需同根正交+全员单位化",
+              "由 $AP=PJ$ 链式解出广义特征向量拼 $P$"
+            ],
+            [
+              "逆矩阵求法",
+              "初等变换/伴随算 $P^{-1}$",
+              "**免求逆！**直接 $Q^{-1}=Q^T$",
+              "视题意按需计算 $P^{-1}$"
+            ],
+            [
+              "异值向量关系",
+              "线性无关（一般不正交）",
+              "**两两正交**（天然垂直）",
+              "特征向量不足 $n$ 个"
+            ],
+            [
+              "高次幂 $A^n$ 算式",
+              "$P\\Lambda^n P^{-1}$",
+              "$Q\\Lambda^nQ^T=\\sum\\lambda_i^n\\gamma_i\\gamma_i^T$",
+              "二项展开 $J^n=(\\lambda_0E+N)^n$"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "看清题干要的是「可逆阵 $P$」还是「正交阵 $Q$」，能帮你节省至少 50% 的考场草稿时间！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲",
+        "printedPage": "基础 P.165 / 强化 P.82,91",
+        "pdfPage": 93,
+        "itemRef": "表 L8-2 三种相似标准形对比"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la08-s-03",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "七、题型总结（三）：第 8 讲考场防错红线清单",
+      "title": "相似理论 7 大高频失分红线与最小反例（表 L8-3）",
+      "overview": "本讲是考研线代「表面很像真命题、实则全是反例」的重灾区，逐条熟背以下 7 条红线：",
+      "patterns": [
+        {
+          "typeName": "考场相似命题 3 枚黄金反例",
+          "triggers": "抽象矩阵相似真假判断题拿不准",
+          "method": "常备 3 组最小反例：① $A=\\operatorname{diag}(1,2),\\;B=\\begin{bmatrix}1&1\\\\0&2\\end{bmatrix}$（$A\\sim B$ 但 $A+A^T\\nsim B+B^T$）；② $J_2(1)\\oplus J_2(1)$ vs $J_3(1)\\oplus J_1(1)$（6 不变量全同却不相似）；③ 二维旋转阵 $\\begin{bmatrix}0&-1\\\\1&0\\end{bmatrix}$（正交阵但特征值为虚数 $\\pm i$！）。",
+          "pitfall": "判断正交阵性质时别忘了复特征值 $\\pm i$；判断 $AB\\sim BA$ 时别忘了双不可逆反例 $A=\\begin{bmatrix}0&1\\\\0&0\\end{bmatrix},B=\\begin{bmatrix}1&0\\\\0&0\\end{bmatrix}$！",
+          "relatedRefs": "强化例 8.7, 4阶若尔当反例与不可对角化相似, AB与BA五大关系结论"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 L8-3　相似理论 7 大高频失分红线",
+          "headers": [
+            "红线",
+            "典型错误想法",
+            "正确结论与最小反例"
+          ],
+          "rows": [
+            [
+              "红线 1",
+              "特征值相同 $\\Rightarrow A\\sim B$",
+              "错！仅当 **$A,B$ 均为实对称阵**时充要；反例 $E_2$ 与 $\\begin{bmatrix}1&1\\\\0&1\\end{bmatrix}$"
+            ],
+            [
+              "红线 2",
+              "$A\\sim B\\Rightarrow A+A^T\\sim B+B^T$",
+              "错！$A^T$ 变换阵变为 $(P^{-1})^T$；但分块阵 $\\operatorname{diag}(A,A^T)\\sim\\operatorname{diag}(B,B^T)$ 恒真！"
+            ],
+            [
+              "红线 3",
+              "6 大相似不变量全同 $\\Rightarrow A\\sim B$",
+              "错！仅 2、3 阶充分；4 阶反例 $J_2(1)\\oplus J_2(1)$ vs $J_3(1)\\oplus J_1(1)$（查 $(E-A)^2$ 秩！）"
+            ],
+            [
+              "红线 4",
+              "任意同阶方阵恒有 $AB\\sim BA$",
+              "错！特征值恒同，但至少一方可逆才必相似；双奇异反例 $AB=O\\ne BA$"
+            ],
+            [
+              "红线 5",
+              "正交阵特征值必为 $1$ 或 $-1$",
+              "错！漏了「实」字！复特征值满足 $|\\lambda|=1$（反例旋转阵 $\\begin{bmatrix}0&-1\\\\1&0\\end{bmatrix}$ 特征值 $\\pm i$）"
+            ],
+            [
+              "红线 6",
+              "对 $A$ 的全部特征向量混在一起施密特正交化",
+              "错！严禁跨特征值正交化，仅能对**同一重特征值**的特征向量正交化！"
+            ],
+            [
+              "红线 7",
+              "$A$ 有 3 个两两线性无关的特征向量 $\\Rightarrow A\\sim\\Lambda$",
+              "错！两两无关可整体共面线性相关（反例 $J_2(1)\\oplus J_1(1)$ 的 2 维特征空间！）"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "吃透 7 条红线 + 4 阶若尔当反例，相似理论所有选择题都能做到秒排伪命题！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "第8讲防错红线汇总",
+        "pdfPage": 90,
+        "itemRef": "表 L8-3 第8讲防错红线"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    }
+  ]
+}

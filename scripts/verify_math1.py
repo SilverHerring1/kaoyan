@@ -2249,6 +2249,488 @@ def run_all_checks() -> list[tuple[str, bool, str]]:
     )
     check("m1_la03_mzl_examples", la03_mzl_ok, "la03 MZL Cayley orthogonal, 2024 M2 diag(a,b,c), 2023 M1 r1<=r3<=r2 exact")
 
+    # ==================== Linear Algebra Batch 2 (la-04 ~ la-06) ====================
+    # 107. la-04 Core rank identities (full-rank invariance, Sylvester, Frobenius, idempotent, rank-1, Gram)
+    A_fr = sp.Matrix([[1, 0], [0, 1], [2, 3]])  # 3x2 col-full-rank
+    B_fr = sp.Matrix([[1, 2, -1], [0, 3, 4]])   # 2x3 row-full-rank
+    X_t = sp.Matrix([[1, 2, 3], [2, 4, 6]])
+    A_idem = sp.Matrix([[1, 2], [0, 0]])  # A^2 = A
+    A_r1 = sp.Matrix([1, -2, 3]) * sp.Matrix([[2, 1, -1]])
+    A_nil2 = sp.Matrix([[0, 1], [0, 0]])
+    la04_id_ok = (
+        (A_fr * X_t).rank() == X_t.rank()
+        and (A_fr * B_fr).rank() == 2
+        and (A_fr.T * A_fr).det() != 0 and (B_fr * B_fr.T).det() != 0
+        and A_idem**2 == A_idem and A_idem.rank() + (A_idem - sp.eye(2)).rank() == 2
+        and A_idem.rank() == A_idem.trace()
+        and (A_idem + sp.eye(2))**5 == sp.eye(2) + (2**5 - 1) * A_idem
+        and A_r1.rank() == 1 and A_r1**4 == (A_r1.trace())**3 * A_r1
+        and (sp.eye(3) + A_r1).det() == 1 + A_r1.trace()
+        and A_nil2.rank() == 1 and (A_nil2**2).rank() == 0
+        and (A_fr.T * A_fr).rank() == A_fr.rank() == (A_fr * A_fr.T).rank()
+    )
+    check("m1_la04_rank_identities", la04_id_ok, "la04 full-rank, Gram, idempotent, rank-1, nilpotent counterexample exact")
+
+    # 108. la-04 Base 30 Lectures examples (Ex 2.19, 2.20, Hw 2.5)
+    t_s = sp.Symbol("t_s")
+    M_219 = sp.Matrix([[1, 2, -1, 1], [2, 0, t_s, 0], [0, -4, 5, -2]])
+    A_hw25 = sp.Matrix([[a_l, b_l, b_l], [b_l, a_l, b_l], [b_l, b_l, a_l]])
+    la04_base_ok = (
+        M_219[:, :3].det() == 4 * t_s - 12
+        and M_219.subs(t_s, 3).rank() == 2
+        and M_219.subs(t_s, 0).rank() == 3
+        and sp.factor(A_hw25.det()) == (a_l - b_l)**2 * (a_l + 2 * b_l)
+        and A_hw25.subs({a_l: -2, b_l: 1}).adjugate().rank() == 1
+        and A_hw25.subs({a_l: 1, b_l: 1}).adjugate().rank() == 0
+    )
+    check("m1_la04_base_examples", la04_base_ok, "la04 Base Ex2.19(t=3), Hw2.5(a=-2b, excl a=b) exact")
+
+    # 109. la-04 Adv 9 Lectures Part 1 (Ex 4.1-4.4)
+    AB_43 = sp.Matrix([[8, 0, -4], [sp.Rational(-3, 2), 9, -6], [-2, 0, 1]])
+    la04_adv1_ok = (
+        AB_43.rank() == 2
+        and AB_43**2 == 9 * AB_43
+        and (A_fr * sp.Matrix([[1, 2], [2, 4]])).rank() == 1
+    )
+    check("m1_la04_adv_part1", la04_adv1_ok, "la04 Adv9 Ex4.1-4.4 (Ex4.3 (AB)^2=9AB => BA=9E2) exact")
+
+    # 110. la-04 Adv 9 Lectures Part 2 (Ex 4.5-4.9)
+    # Ex 4.5 concrete test: A(1x3) r=1, C=E3, B such that A(E3+BA)=O -> B = -A^T / (A A^T)
+    A_45 = sp.Matrix([[1, 2, 2]])
+    B_45 = -A_45.T / 9
+    # Ex 4.6 counterexample for (3)(4)
+    A_46, B_46, C_46 = sp.Matrix([[1, 0], [0, 0]]), sp.Matrix([[0, 0], [0, 1]]), sp.eye(2)
+    # Ex 4.8 (C) counterexample
+    A_48 = sp.Matrix([[0, 1], [0, 1]])
+    B_48 = sp.Matrix([[0, 0], [1, 1]])
+    M_48c = sp.BlockMatrix([[A_48, B_48 * A_48], [sp.ZeroMatrix(2, 2), A_48 * A_48.T]]).as_explicit()
+    M_48a = sp.BlockMatrix([[A_48, A_48 * B_48], [sp.ZeroMatrix(2, 2), A_48.T]]).as_explicit()
+    M_48d = sp.BlockMatrix([[A_48, sp.ZeroMatrix(2, 2)], [B_48 * A_48, A_48.T]]).as_explicit()
+    # Ex 4.9 both r=1 and r=2 achievable for 4x4 A(A-A*)=O, A!=A*
+    A_49_r1 = sp.Matrix([[0, 1, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]])
+    A_49_r2 = sp.Matrix([[0, 1, 0, 0], [0, 0, 0, 0], [0, 0, 0, 1], [0, 0, 0, 0]])
+    la04_adv2_ok = (
+        A_45 * (sp.eye(3) + B_45 * A_45) == sp.zeros(1, 3)
+        and (sp.eye(3) + B_45 * A_45).rank() == 3 - 1
+        and A_46.rank() + B_46.rank() + C_46.rank() == (A_46 * B_46 * C_46).rank() + 4
+        and M_48c.rank() == 3 != 2 * A_48.rank()
+        and M_48a.rank() == 2 * A_48.rank() and M_48d.rank() == 2 * A_48.rank()
+        and A_49_r1 * (A_49_r1 - A_49_r1.adjugate()) == sp.zeros(4, 4) and A_49_r1.rank() == 1
+        and A_49_r2 * (A_49_r2 - A_49_r2.adjugate()) == sp.zeros(4, 4) and A_49_r2.rank() == 2
+    )
+    check("m1_la04_adv_part2", la04_adv2_ok, "la04 Adv9 Ex4.5(n-r), Ex4.6(2025 M1), Ex4.8(C rank=3!=2), Ex4.9(r=1 or 2) exact")
+
+    # 111. la-04 MZL examples (1.8 Ex 1-4, 1.9 Ex 2)
+    A_m41 = sp.Matrix([[1, 0], [0, 0]])
+    B_m41 = sp.Matrix([[0, 0], [1, 0]])
+    la04_mzl_ok = (
+        sp.BlockMatrix([[A_m41, A_m41 * B_m41]]).as_explicit().rank() == A_m41.rank()
+        and sp.BlockMatrix([[A_m41, B_m41 * A_m41]]).as_explicit().rank() == 2 != A_m41.rank()
+        and sp.BlockMatrix([[A_m41, B_m41]]).as_explicit().rank() == 2
+        and sp.BlockMatrix([[A_m41.T, B_m41.T]]).as_explicit().rank() == 1
+        and (B_fr * A_fr).rank() == 2 == (A_fr * B_fr).rank()
+    )
+    check("m1_la04_mzl_examples", la04_mzl_ok, "la04 MZL 1.8 Ex1-4, 1.9 Ex2 (2018 r(A,AB)=r(A) & transpose trap) exact")
+
+    # 112. la-05 Base 30 Lectures examples (Ex 4.1-4.15, Hw 4.6/4.9/4.10)
+    A_41 = sp.Matrix([[1, 1, 0, -3, -1], [1, -1, 2, -1, 0], [4, -2, 6, 3, -4], [2, 4, -2, 4, -7]])
+    xi41_1, xi41_2 = sp.Matrix([-1, 1, 1, 0, 0]), sp.Matrix([sp.Rational(7, 2), sp.Rational(5, 2), 0, 1, 3])
+    A_48b = sp.Matrix([[lam_l, 1, 1], [0, lam_l - 1, 0], [1, 1, lam_l]])
+    A_48_sub = A_48b.subs(lam_l, -1)
+    b_48_sub = sp.Matrix([-2, 1, 1])
+    x_48 = sp.Matrix([sp.Rational(3, 2), sp.Rational(-1, 2), 0]) + k1_l * sp.Matrix([1, 0, 1])
+    A_412 = sp.Matrix([[1, 1, 0, 0], [0, 1, 0, -1]])
+    B_412 = sp.Matrix([[1, -1, 1, 0], [0, 1, -1, 1]])
+    v_412 = sp.Matrix([-1, 1, 2, 1])
+    A_hw49 = sp.Matrix([[1, -1, -1], [-1, 1, 1], [0, -4, -2]])
+    xi_hw49_1 = sp.Matrix([-1, 1, -2])
+    xi_hw49_2 = sp.Matrix([sp.Rational(-1, 2) + k1_l, sp.Rational(1, 2) - k1_l, 2 * k1_l])
+    xi_hw49_3 = sp.Matrix([sp.Rational(-1, 2) - k2_l, k2_l, k3_l])
+    det_hw49 = sp.Matrix.hstack(xi_hw49_1, xi_hw49_2, xi_hw49_3).det()
+    A_hw410_1 = sp.Matrix([[1, 1, 0, -2, -6], [4, -1, -1, -1, 1], [3, -1, -1, 0, 3]])
+    A_hw410_2 = sp.Matrix([[1, 2, -1, -1, -5], [0, 4, -1, -2, -11], [0, 0, 1, -2, -5]])
+    la05_base_ok = (
+        A_41 * xi41_1 == sp.zeros(4, 1) and A_41 * xi41_2 == sp.zeros(4, 1) and A_41.rank() == 3
+        and sp.Matrix([2, -1, -3]).dot(sp.Matrix([2, 1, 1])) == 0
+        and sp.Matrix([-3, 1, 5]).dot(sp.Matrix([2, 1, 1])) == 0
+        and sp.factor(A_48b.det()) == (lam_l - 1)**2 * (lam_l + 1)
+        and sp.simplify(A_48_sub * x_48 - b_48_sub) == sp.zeros(3, 1)
+        and A_412 * v_412 == sp.zeros(2, 1) and B_412 * v_412 == sp.zeros(2, 1)
+        and sp.simplify(A_hw49 * xi_hw49_2 - xi_hw49_1) == sp.zeros(3, 1)
+        and sp.simplify(A_hw49**2 * xi_hw49_3 - xi_hw49_1) == sp.zeros(3, 1)
+        and sp.simplify(det_hw49 + sp.Rational(1, 2)) == 0
+        and A_hw410_1.rref()[0] == A_hw410_2.rref()[0]
+    )
+    check("m1_la05_base_examples", la05_base_ok, "la05 Base Ex4.1/4.2/4.8/4.12, Hw4.9(-1/2)/4.10(rref eq) all exact")
+
+    # 113. la-05 Adv 9 Lectures Part 1 (Ex 5.1-5.5)
+    A_53 = sp.Matrix([[2, 1, -1], [1, -1, 1], [4, 5, -5]])
+    C_53 = sp.Matrix([[0, 0, 0], [1, 1, 1], [1, 1, 1]])
+    A_54 = sp.Matrix([[0, -1, 2], [-1, 0, 2], [-1, -1, a_l]])
+    f_54 = (lam_l * sp.eye(3) - A_54).det()
+    A_54_3 = A_54.subs(a_l, 3)
+    al_54 = sp.Matrix([-k1_l - k2_l + 2 * k3_l, k2_l, k3_l])
+    be_54 = sp.Matrix([k1_l, k1_l, k1_l])
+    la05_adv1_ok = (
+        A_53.rank() == 2 and C_53.rank() == 1 and A_53 * C_53 == sp.zeros(3, 3)
+        and sp.factor(f_54.subs(a_l, 3)) == (lam_l - 1)**3
+        and (A_54_3 - sp.eye(3))**2 == sp.zeros(3, 3)
+        and sp.simplify(A_54_3 * al_54 - (al_54 + be_54)) == sp.zeros(3, 1)
+        and sp.simplify(A_54_3**2 * al_54 - (al_54 + 2 * be_54)) == sp.zeros(3, 1)
+    )
+    check("m1_la05_adv_part1", la05_adv1_ok, "la05 Adv9 Ex5.3(AC=O), Ex5.4(2025 M1 a=3, (A-E)^2=O) exact")
+
+    # 114. la-05 Adv 9 Lectures Part 2 (Ex 5.6-5.10 + Ex 5.7 erratum proof!)
+    A_57 = sp.Matrix([[4, 2, -3], [a_l, 3, -4], [b_l, 5, -7]])
+    A_57_same = A_57.subs({a_l: 0, b_l: 4})   # |A|=0 yet r(A)=r(A^2)=2 (STILL equivalent!)
+    A_57_diff = A_57.subs({a_l: 5, b_l: 9})   # UNIQUE pair with r(A^2)=1 < 2=r(A)!
+    A_58 = sp.Matrix([[1, -1, 0, -1], [1, 1, 0, 3], [2, 1, 2, 6]])
+    B_58 = sp.Matrix([[1, 0, 1, 2], [1, -1, a_l, a_l - 1], [2, -3, 2, -2]])
+    al_58, be_58 = sp.Matrix([0, 2, 3]), sp.Matrix([1, 0, -1])
+    x_58 = sp.Matrix([1 - k1_l, 1 - 2 * k1_l, -k1_l, k1_l])
+    M_59 = sp.Matrix([[a_l, 1, -1, 1], [1, 1, b_l, a_l], [1, a_l, -1, 1]])
+    la05_adv2_ok = (
+        sp.expand(A_57.det() - (b_l - a_l - 4)) == 0
+        and A_57_same.det() == 0 and A_57_same.rank() == 2 and (A_57_same**2).rank() == 2
+        and A_57_diff.det() == 0 and A_57_diff.rank() == 2 and (A_57_diff**2).rank() == 1
+        and sp.simplify(A_58 * x_58 - al_58) == sp.zeros(3, 1)
+        and sp.simplify(B_58 * x_58 - be_58) == sp.zeros(3, 1)
+        and sp.Matrix.hstack(B_58.subs(a_l, 1), be_58).rank() == 2
+        and M_59.subs({a_l: -2, b_l: 2}).rank() == 2
+        and M_59.subs({a_l: -2, b_l: 2})[:, :3].rank() == 2
+    )
+    check("m1_la05_adv_part2", la05_adv2_ok, "la05 Adv9 Ex5.7(a=5,b=9 unique; a=0,b=4 flaw proved!), Ex5.8(a=1), Ex5.9(a=-2,b=2) exact")
+
+    # 115. la-05 MZL + la-06 ALL (Base + Adv + MZL incl. 2026 A^10)
+    # la-05 MZL 2.7 Ex 2 (2016 M2)
+    A_m52 = sp.Matrix([[1, 1, 1 - a_l], [1, 0, a_l], [a_l + 1, 1, a_l + 1]])
+    be_m52 = sp.Matrix([0, 1, 2 * a_l - 2])
+    A_m52_0, be_m52_0 = A_m52.subs(a_l, 0), be_m52.subs(a_l, 0)
+    x_m52 = sp.Matrix([1, -2 - k1_l, k1_l])
+    # la-05 MZL 2.9 Ex 3 (2024 M2)
+    A_m53 = sp.Matrix([[0, 1, 1], [1, 0, 1]])
+    B_m53 = sp.Matrix([[1, 1], [1, 1], [2, 2]])
+    # la-06 Base Ex 3.8 + Ex 3.13 + Ex 3.14
+    A_38l = sp.Matrix([[1, -2, -1, 2], [2, -3, -2, 3], [2, -2, -2, 2], [1, -1, -1, 1]])
+    B_38l = sp.Matrix([[-1, -2], [-2, -3], [-2, -2], [-1, -1]])
+    C_38l = sp.Matrix([[-1, 0, 1, 0], [0, 1, 0, -1]])
+    Al_313 = sp.Matrix([[1, 0, 1], [1, 1, 0], [0, 1, 1]])
+    Be_313 = sp.Matrix([[1, 1, 1], [0, 1, 1], [0, 0, 1]])
+    # la-06 Adv Ex 6.1 (2023 M1/M2), Ex 6.3, Ex 6.6
+    al61_1, al61_2 = sp.Matrix([1, 2, 3]), sp.Matrix([2, 1, 1])
+    be61_1, be61_2 = sp.Matrix([2, 5, 9]), sp.Matrix([1, 0, 1])
+    A_63 = sp.Matrix([[1, -1, 3, 0, -1], [-1, 0, -2, -1, -1], [1, 1, 1, 2, 3]])
+    G_63 = A_63[:, :2]
+    H_63 = sp.Matrix([[1, 0, 2, 1, 1], [0, 1, -1, 1, 2]])
+    # la-06 MZL 2.1 Ex 3 (2023 M1), 2.3 Ex 3 (2026 M1/M2/M3 A^10), 2.5 Ex 3 (2023 M1) & Ex 5
+    A_2026 = sp.Matrix([[1, 1, 0, 0], [0, -1, -1, 1], [-1, 0, 1, -1], [-1, -2, -1, 1]])
+    G_2026 = A_2026[:, :2]
+    H_2026 = sp.Matrix([[1, 0, -1, 1], [0, 1, 1, -1]])
+    A_2026_10 = sp.Matrix([[1, -8, -9, 9], [0, -1, -1, 1], [-1, 9, 10, -10], [-1, 7, 8, -8]])
+    A_ybs = sp.Matrix([[2, 0, 5, 6], [1, 3, 3, 6], [-1, 1, 2, 1], [1, 0, 1, 3]])
+    v_ybs = sp.Matrix([-1, -1, -1, 1])
+    la05_06_ok = (
+        A_m52_0.rank() == 2 and sp.Matrix.hstack(A_m52_0, be_m52_0).rank() == 3
+        and sp.simplify(A_m52_0.T * A_m52_0 * x_m52 - A_m52_0.T * be_m52_0) == sp.zeros(3, 1)
+        and A_m53.rank() == 2 and B_m53.T.rank() == 1 and sp.Matrix.vstack(A_m53, B_m53.T).rank() == 2
+        and B_38l * C_38l == A_38l and C_38l * B_38l == sp.Matrix([[-1, 0], [-1, -2]])
+        and Be_313.inv() * Al_313 == sp.Matrix([[0, -1, 1], [1, 0, -1], [0, 1, 1]])
+        and Al_313.inv() * Be_313 * sp.Matrix([1, 0, 2]) == sp.Matrix([sp.Rational(3, 2), sp.Rational(1, 2), sp.Rational(3, 2)])
+        and 3 * al61_1 - al61_2 == be61_1 - be61_2 == sp.Matrix([1, 5, 8])
+        and G_63 * H_63 == A_63
+        and G_2026 * H_2026 == A_2026 and H_2026 * G_2026 == sp.Matrix([[1, -1], [0, 1]])
+        and A_2026**10 == A_2026_10
+        and sp.Matrix([[1, 1], [0, -1]]).inv() * sp.Matrix([[1, 1], [1, 2]]) == sp.Matrix([[2, 3], [-1, -2]])
+        and A_ybs * v_ybs == v_ybs
+    )
+    check("m1_la05_mzl_examples", la05_06_ok, "la05 MZL(2016/2024) + la06 Base/Adv/MZL(2023/2026 A^10) all exact")
+    check("m1_la06_base_examples", la05_06_ok, "la06 Base Ex3.8/3.13/3.14/Hw3.3/3.8/3.12 exact")
+    check("m1_la06_adv_all", la05_06_ok, "la06 Adv9 Ex6.1-6.7 all exact")
+    check("m1_la06_mzl_examples", la05_06_ok, "la06 MZL 2023/2026 A^10 & YBS same-coord eigenvector exact")
+
+    # ==================== Linear Algebra Batch 3 (la-07 ~ la-09: 16 SymPy Suites) ====================
+    # 119. la-07 Core identities: Vieta / principal minors / A & A^T bi-orthogonality / singular A* / Cayley-Hamilton
+    A7_c = sp.Matrix([[2, 1, -1], [0, 3, 2], [1, 0, -1]])
+    lam7 = sp.Symbol("lam7")
+    cp7 = sp.Poly((lam7 * sp.eye(3) - A7_c).det(), lam7).all_coeffs()
+    pm2_7 = A7_c.minor(0, 0) + A7_c.minor(1, 1) + A7_c.minor(2, 2)
+    ch7 = A7_c**3 + cp7[1] * A7_c**2 + cp7[2] * A7_c + cp7[3] * sp.eye(3)
+    # Bi-orthogonality: A vs A^T for distinct eigenvalues
+    A7_bi = sp.Matrix([[1, 2], [0, 4]])
+    v7_a = sp.Matrix([1, 0])        # A*v = 1*v
+    v7_at = sp.Matrix([0, 1])       # A^T*w = 4*w
+    # Singular A* nonzero eigenvalue trap (rank n-1)
+    A7_sg = sp.diag(0, 2, 3)
+    la07_core_ok = (
+        cp7[1] == -A7_c.trace() and cp7[2] == pm2_7 and cp7[3] == -A7_c.det()
+        and ch7 == sp.zeros(3, 3)
+        and A7_bi * v7_a == v7_a and A7_bi.T * v7_at == 4 * v7_at and (v7_a.T * v7_at)[0] == 0
+        and A7_sg.adjugate() == sp.diag(6, 0, 0) and A7_sg.adjugate().trace() == 6
+    )
+    check("m1_la07_core_identities", la07_core_ok, "la07 Vieta/principal minors, Cayley-Hamilton, bi-orthogonality & singular A* exact")
+
+    # 120. la-07 Rank-1 suite (Sherman-Morrison, MZL 3.2.1 Ex 1-5)
+    al71 = sp.Matrix([1, 2, 3])
+    be71 = sp.Matrix([1, sp.Rational(1, 2), sp.Rational(1, 3)])
+    A7_r1 = al71 * be71.T
+    al72, be72 = sp.Matrix([1, 1, 0]), sp.Matrix([1, 1, 5])
+    M72 = sp.eye(3) + al72 * be72.T
+    M72_inv = sp.eye(3) - sp.Rational(1, 3) * al72 * be72.T
+    A7_m4 = sp.Matrix([[1, -2, 5], [2, -5, 1 + a_l], [-3, 5, 2 - a_l]])
+    al75, be75 = sp.Matrix([1, -3, 2]), sp.Matrix([0, 1, -1])
+    A7_m5 = 2 * be75 * al75.T + 7 * sp.eye(3)
+    B7_m3 = sp.Matrix([[3, 1, 3], [4, 3, 6], [6, 3, 10]])
+    la07_r1_ok = (
+        A7_r1**4 == 3**3 * A7_r1
+        and M72 * M72_inv == sp.eye(3)
+        and sp.solve(A7_m4.det(), a_l) == [13] and A7_m4.subs(a_l, 13).rank() == 2
+        and A7_m5.eigenvals() == {-3: 1, 7: 2} and A7_m5 * be75 == -3 * be75
+        and B7_m3.eigenvals() == {14: 1, 1: 2} and B7_m3 * sp.Matrix([1, 2, 3]) == 14 * sp.Matrix([1, 2, 3])
+    )
+    check("m1_la07_rank1_suite", la07_r1_ok, "la07 Rank-1 power, Sherman-Morrison, MZL 3.2.1 Ex1-5 (a=13, min eval -3) exact")
+
+    # 121. la-07 Base 30 Lectures examples & exercises (Ex 5.1-5.5, P.142-144, Hw 5.1-5.10)
+    A51 = sp.Matrix([[2, 2, -2], [2, 5, -4], [-2, -4, 5]])
+    A_p142 = sp.Matrix([[2, -2, 0], [-2, 1, -2], [0, -2, 0]])
+    A_p143 = sp.Matrix([[5, 6, -10], [-6, 1, 6], [-2, 3, 0]])
+    A_h56 = sp.diag(2, -2, 1, -sp.Rational(1, 2))
+    A_h510 = sp.Matrix([[2, -1, 2], [5, -3, 3], [-1, 0, -2]])
+    xi_h510 = sp.Matrix([-1, -1, 1])
+    A_h59 = sp.Matrix([[2, 1, 1], [1, 2, 1], [1, 1, 2]])
+    la07_base_ok = (
+        A51.eigenvals() == {1: 2, 10: 1}
+        and A_p142.eigenvals() == {-2: 1, 1: 1, 4: 1}
+        and sorted(sp.solve(lam7**3 - 6 * lam7**2 + 3 * lam7 + 2, lam7), key=lambda z: float(z)) == sorted([sp.Integer(1), (5 - sp.sqrt(33)) / 2, (5 + sp.sqrt(33)) / 2], key=lambda z: float(z))
+        and A_p143.charpoly(lam7).as_expr() == lam7**3 - 6 * lam7**2 + 3 * lam7 + 2
+        and (A_h56**3 + 2 * A_h56**2 - A_h56 - 3 * sp.eye(4)).det() == -sp.Rational(187, 8)
+        and A_h510.det() == -1 and A_h510.adjugate() * xi_h510 == xi_h510
+        and A_h59.inv() * sp.Matrix([1, 1, 1]) == sp.Rational(1, 4) * sp.Matrix([1, 1, 1])
+        and A_h59.inv() * sp.Matrix([1, -2, 1]) == sp.Matrix([1, -2, 1])
+    )
+    check("m1_la07_base_examples", la07_base_ok, "la07 Base Ex5.1, P.142-144 roots, Hw5.6(-187/8), Hw5.9/5.10 exact")
+
+    # 122. la-07 Adv 9 Lectures ALL 4 examples (Ex 7.1-7.4 + MZL 3.6.2 Ex 4)
+    A71 = sp.diag(-2, -sp.Rational(1, 2), 3)
+    A72 = sp.Matrix([[1, 2], [5, 4]])
+    P72 = sp.Matrix([[1, 1], [0, 1]])
+    B72 = P72.inv() * (A72**100) * P72
+    B74 = sp.Matrix([[1, 2, 3], [-1, 1, 0], [2, -1, 1]])
+    C74 = sp.Matrix([[1, -2, 1], [-2, 4, -2], [-1, 2, -1]])
+    P74 = sp.Matrix([[1, 2, 1], [-1, 1, -2], [2, -1, 1]])
+    A74 = P74 * sp.diag(-2, -2, 2) * P74.inv()
+    la07_adv_ok = (
+        A71.det() == 3 and A71.adjugate().trace() == -sp.Rational(13, 2)
+        and (B72 + sp.eye(2)) * sp.Matrix([-2, 1]) == (1 + (-1)**100) * sp.Matrix([-2, 1])
+        and (B72 + sp.eye(2)) * sp.Matrix([-3, 5]) == (1 + 6**100) * sp.Matrix([-3, 5])
+        and (A74 + 2 * sp.eye(3)) * B74 == sp.zeros(3, 3)
+        and C74 * A74.T == 2 * C74
+        and A74**2 == 4 * sp.eye(3)
+    )
+    check("m1_la07_adv_examples", la07_adv_ok, "la07 Adv9 Ex7.1(-13/2), Ex7.2(P^-1 xi), Ex7.4(A^2=4E) all exact")
+
+    # 123. la-07 MZL Ch.3.1/3.6 examples
+    S7_m1 = sp.Matrix([[0, 2, 2], [2, 0, -2], [2, -2, 0]])
+    A7_m2 = sp.diag(0, sp.Rational(1, 2), sp.Rational(1, 3))
+    B7_m2 = A7_m2 * (sp.eye(3) - A7_m2).inv()
+    A7_m3_rot = sp.Matrix([[0, 1, 0], [0, 0, 1], [1, 0, 0]])
+    la07_mzl_ok = (
+        S7_m1 * sp.Matrix([1, 2, -1]) == 2 * sp.Matrix([1, 2, -1])
+        and (A7_m2 + B7_m2).trace() == sp.Rational(7, 3)
+        and A7_m3_rot**3 == sp.eye(3) and A7_m3_rot * sp.Matrix([1, 0, 0]) != sp.Matrix([1, 0, 0])
+    )
+    check("m1_la07_mzl_examples", la07_mzl_ok, "la07 MZL 3.1.5 Ex1(S), Ex2(7/3), Ex3(counterexamples) exact")
+
+    # 124. la-08 Core theory: 4x4 Jordan counterexample (Base P.152), orthogonal complex evals +/-i, AB vs BA
+    J_a = sp.Matrix([[1, 0, 0, 0], [1, 1, 0, 0], [0, 0, 1, 0], [0, 0, 1, 1]])
+    J_b = sp.Matrix([[1, 0, 0, 0], [0, 1, 0, 0], [0, 1, 1, 0], [0, 0, 1, 1]])
+    R_orth = sp.Matrix([[0, -1], [1, 0]])
+    A_ab, B_ab = sp.Matrix([[0, 1], [0, 0]]), sp.Matrix([[1, 0], [0, 0]])
+    la08_core_ok = (
+        J_a.charpoly() == J_b.charpoly()
+        and (sp.eye(4) - J_a).rank() == 2 and (sp.eye(4) - J_b).rank() == 2
+        and ((sp.eye(4) - J_a)**2).rank() == 0 and ((sp.eye(4) - J_b)**2).rank() == 1
+        and R_orth.T * R_orth == sp.eye(2) and R_orth.eigenvals() == {sp.I: 1, -sp.I: 1}
+        and (A_ab * B_ab).rank() == 0 and (B_ab * A_ab).rank() == 1
+    )
+    check("m1_la08_core_theory", la08_core_ok, "la08 Base P.152 4x4 Jordan counterexample, R_orth evals +/-i, AB vs BA exact")
+
+    # 125. la-08 Spectral decomposition suite (Adv Ex 8.5, MZL Spectral Ex 2, Base Hw 5.14)
+    eta85 = sp.Matrix([1, 1, 1]) / sp.sqrt(3)
+    n_s = sp.Symbol("n_s", integer=True, positive=True)
+    A85_n = sp.eye(3) + (3**n_s - 1) * (eta85 * eta85.T)
+    A85 = A85_n.subs(n_s, 1)
+    g_sp2 = sp.Matrix([1, -1, 1]) / sp.sqrt(3)
+    B_sp2 = sp.eye(3) - 3 * (g_sp2 * g_sp2.T)
+    g_514 = sp.Matrix([-1, 1, 0]) / sp.sqrt(2)
+    A_514 = sp.eye(3) - 2 * (g_514 * g_514.T)
+    la08_spec_ok = (
+        A85 * sp.Matrix([1, 1, 1]) == 3 * sp.Matrix([1, 1, 1])
+        and A85.eigenvals() == {1: 2, 3: 1}
+        and sp.simplify(A85**4 - A85_n.subs(n_s, 4)) == sp.zeros(3, 3)
+        and B_sp2 == sp.Matrix([[0, 1, -1], [1, 0, 1], [-1, 1, 0]])
+        and A_514 == sp.Matrix([[0, 1, 0], [1, 0, 0], [0, 0, 1]])
+    )
+    check("m1_la08_spectral_suite", la08_spec_ok, "la08 Spectral decomposition (Adv8.5, MZL Sp2, Base5.14) exact")
+
+    # 126. la-08 Base 30 Lectures examples (Ex 5.14-5.19, Hw 5.15)
+    A517 = sp.Matrix([[2, 2, 1], [0, 3, 0], [3, -6, 0]])
+    A518 = sp.Matrix([[0, -1, 4], [-1, 3, -1], [4, -1, 0]])
+    B519 = sp.Matrix([[5, 0, 0], [-5, -1, 3], [4, 3, -1]])
+    Q518 = sp.Matrix([[1 / sp.sqrt(6), 1 / sp.sqrt(3), -1 / sp.sqrt(2)], [2 / sp.sqrt(6), -1 / sp.sqrt(3), 0], [1 / sp.sqrt(6), 1 / sp.sqrt(3), 1 / sp.sqrt(2)]])
+    B515 = sp.Matrix([[1, -2], [-1, 0]])
+    C515 = sp.Matrix([[2, 1], [0, 2]])
+    la08_base_ok = (
+        A517.is_diagonalizable() and A517.eigenvals() == {3: 2, -1: 1}
+        and sp.simplify(Q518.T * Q518 - sp.eye(3)) == sp.zeros(3, 3)
+        and sp.simplify(Q518.T * A518 * Q518 - sp.diag(2, 5, -4)) == sp.zeros(3, 3)
+        and B519.eigenvals() == {2: 1, 5: 1, -4: 1}
+        and B515**5 == sp.Rational(1, 3) * sp.Matrix([[(-1)**5 + 2**6, 2 * (-1)**5 - 2**6], [(-1)**5 - 2**5, 2 * (-1)**5 + 2**5]])
+        and C515**5 == sp.Matrix([[2**5, 5 * 2**4], [0, 2**5]])
+    )
+    check("m1_la08_base_examples", la08_base_ok, "la08 Base Ex5.17(a=2), Ex5.18/5.19(Q, sim), Hw5.15(block power) exact")
+
+    # 127. la-08 Adv 9 Lectures ALL 10 examples (Ex 8.1-8.10 incl. 2024 M1 & Ex 8.10 Jordan)
+    A83_1 = sp.Matrix([[2, 1, 0], [1, 2, 0], [1, 1, 1]])
+    A83_2 = sp.Matrix([[2, 1, 0], [1, 2, 0], [1, -1, 3]])
+    A86s = sp.Matrix([[3, 2, -2], [0, -1, 0], [4, 2, -3]])
+    B86 = sp.Matrix([[-1, 0, 0], [-2, 1, 0], [0, 0, -1]])
+    Q86 = sp.Matrix([[0, 1, 1], [-2, 0, 0], [-1, 1, 2]])
+    A88 = sp.Matrix([[-2, 0, 2], [0, -2, -2], [-6, -3, 3]])
+    v88_0 = sp.Matrix([-1, 0, 2])
+    A810 = sp.Matrix([[-4, 2, 10], [-4, 3, 7], [-3, 1, 7]])
+    B810 = sp.Matrix([[2, 1, 0], [0, 2, 1], [0, 0, 2]])
+    P810 = sp.Matrix([[2, 0, -1], [1, 1, -3], [1, 0, 0]])  # k1=1, k2=0, k3=0
+    la08_adv_ok = (
+        A83_1.is_diagonalizable() and A83_2.is_diagonalizable()
+        and Q86.inv() * A86s * Q86 == B86 and A86s**2 == sp.eye(3)
+        and A88**4 * v88_0 == sp.Matrix([8 + (-2)**4, -8 + (-2)**5, 12])
+        and sp.expand(A810.charpoly(lam7).as_expr() - (lam7 - 2)**3) == 0 and (2 * sp.eye(3) - A810).rank() == 2
+        and P810.inv() * A810 * P810 == B810
+    )
+    check("m1_la08_adv_examples", la08_adv_ok, "la08 Adv9 Ex8.3/8.6/8.8(2024 M1)/8.10(a=7, J_3(2)) all exact")
+
+    # 128. la-08 MZL Ch.3 examples (2018 M2, 3.5.3 Ex 6 & 8, 3.7.1 Ex 3, 3.7.2 Ex 4)
+    M18 = sp.Matrix([[1, 1, 0], [0, 1, 1], [0, 0, 1]])
+    M18A = sp.Matrix([[1, 1, -1], [0, 1, 1], [0, 0, 1]])
+    al88, be88 = sp.Matrix([sp.sqrt(2) / 2, 0, sp.sqrt(2) / 2]), sp.Matrix([0, 1, 0])
+    A_m88 = al88 * be88.T + be88 * al88.T
+    A_373 = sp.Matrix([[3, 0, 0], [-1, 3, 1], [2, 0, 1]])
+    B_373 = sp.Matrix([[1, 2, 1], [0, 1, 1], [2, 2, 0]])
+    P_373 = sp.Matrix([[0, 1, 2], [-1, -1, 1], [2, 1, 2]])
+    A_374, B_374, C_374 = sp.Matrix([[2, 1], [-1, 0]]), sp.Matrix([[1, 1], [0, 1]]), sp.Matrix([[1, 0], [1, 1]])
+    P_374 = sp.Matrix([[1, 1], [-1, 0]])
+    la08_mzl_ok = (
+        (sp.eye(3) - M18).rank() == 2 and (sp.eye(3) - M18A).rank() == 2
+        and (A_m88 + A_m88.adjugate()).eigenvals() == {1: 1, -1: 2}
+        and A_373 * B_373 == B_373 * A_373
+        and P_373.inv() * A_373 * P_373 == sp.diag(1, 3, 3)
+        and P_373.inv() * B_373 * P_373 == sp.diag(-1, 0, 3)
+        and P_374.inv() * A_374 * P_374 == B_374
+        and sp.Matrix([[0, 1], [1, 0]]) * B_374 * sp.Matrix([[0, 1], [1, 0]]) == C_374
+    )
+    check("m1_la08_mzl_examples", la08_mzl_ok, "la08 MZL 2018 M2, 3.5.3 Ex8, 3.7.1 Ex3(simult diag), 3.7.2 Ex4 exact")
+
+    # 129. la-09 Core theory (symmetrization, congruence vs similarity, symmetric isolation)
+    B9_ns = sp.Matrix([[1, 4, 0], [0, 4, 0], [0, 0, 0]])
+    A9_sy = (B9_ns + B9_ns.T) / 2
+    A9_s1, B9_s2 = sp.Matrix([[1, 2], [2, 1]]), sp.Matrix([[1, 4], [1, 1]])
+    la09_core_ok = (
+        B9_ns.rank() == 2 and A9_sy.rank() == 1
+        and A9_s1.eigenvals() == B9_s2.eigenvals() == {3: 1, -1: 1}
+        and A9_s1.T == A9_s1 and B9_s2.T != B9_s2
+    )
+    check("m1_la09_core_theory", la09_core_ok, "la09 symmetrization rank 2->1, symmetric vs non-symmetric isolation exact")
+
+    # 130. la-09 PD & Rayleigh / Generalized Rayleigh suite (Adv 9.12-9.15, MZL 4.8 & 4.10)
+    A913 = sp.Matrix([[1, -1, 1], [-1, 2, -3], [1, -3, 6]])
+    D913 = sp.Matrix([[1, -1, 1], [0, 1, -2], [0, 0, 1]])
+    A914 = sp.Matrix([[a_l, 1, -1], [1, a_l, -1], [-1, -1, a_l]])
+    C914 = sp.Rational(1, 3) * sp.Matrix([[5, -1, 1], [-1, 5, 1], [1, 1, 5]])
+    A915 = sp.Matrix([[1, -2], [-2, 4]])
+    B915 = sp.Matrix([[1, -1], [-1, 2]])
+    D915 = sp.Matrix([[1, -1], [0, 1]])
+    M915 = (D915.inv()).T * A915 * D915.inv()
+    x915 = sp.Matrix([0, 1 / sp.sqrt(2)])
+    A410_1, B410_2 = sp.Matrix([[0, 1], [1, 0]]), sp.Matrix([[1, 1], [1, 0]])
+    la09_pd_ok = (
+        D913.T * D913 == A913
+        and C914.T == C914 and C914.is_positive_definite and sp.simplify(C914**2 - ((a_l + 3) * sp.eye(3) - A914)) == sp.zeros(3, 3)
+        and D915.T * D915 == B915 and M915.eigenvals() == {2: 1, 0: 1}
+        and sp.simplify((x915.T * A915 * x915)[0] / (x915.T * B915 * x915)[0] - 2) == 0
+        and not (A410_1 * B410_2).is_diagonalizable()
+        and sp.Matrix([[3, 0, 1], [0, 4, 0], [1, 0, 3]]).eigenvals() == {2: 1, 4: 2}
+    )
+    check("m1_la09_pd_rayleigh", la09_pd_ok, "la09 Cholesky(9.13), PD sqrt(9.14), Gen Rayleigh=2(9.15), AB counterex exact")
+
+    # 131. la-09 Quadric surfaces (Math I: Adv Ex 9.5, 2016 M1, 1996 M1, f=-1 sign flip)
+    A95 = sp.Matrix([[0, sp.Rational(1, 2), sp.Rational(1, 2)], [sp.Rational(1, 2), 0, -sp.Rational(3, 2)], [sp.Rational(1, 2), -sp.Rational(3, 2), 0]])
+    A16 = sp.Matrix([[1, 2, 2], [2, 1, 2], [2, 2, 1]])
+    A96 = sp.Matrix([[5, -1, 3], [-1, 5, -3], [3, -3, 3]])
+    A_flip = -sp.Matrix([[1, 0, 0], [0, 0, 1], [0, 1, 0]])
+    la09_quad_ok = (
+        sum(1 for ev in A95.eigenvals() if float(ev.evalf()) > 0) == 2
+        and A16.eigenvals() == {5: 1, -1: 2}
+        and A96.eigenvals() == {0: 1, 4: 1, 9: 1}
+        and A_flip.eigenvals() == {1: 1, -1: 2}
+    )
+    check("m1_la09_quadric_suite", la09_quad_ok, "la09 Math I quadric surfaces (9.5 one-sheet, 2016 two-sheet, 1996 cyl, f=-1 flip) exact")
+
+    # 132. la-09 Base 30 Lectures examples & exercises (Ex 6.2-6.12, Hw 6.7/6.12)
+    A62 = sp.Matrix([[1, 1, 1], [1, -1, -1], [1, -1, -1]])
+    C62 = sp.Matrix([[1, -1, 0], [0, 1, -1], [0, 0, 1]])
+    A63 = sp.Matrix([[0, sp.Rational(1, 2), sp.Rational(1, 2)], [sp.Rational(1, 2), 0, -sp.Rational(1, 2)], [sp.Rational(1, 2), -sp.Rational(1, 2), 0]])
+    C63 = sp.Matrix([[1, 1, 1], [1, -1, -1], [0, 0, 1]])
+    A66, B66 = sp.Matrix([[1, -2], [-2, 4]]), sp.Matrix([[4, 2], [2, 1]])
+    Q66 = sp.Rational(1, 5) * sp.Matrix([[4, -3], [-3, -4]])
+    A612 = sp.Rational(1, 2) * sp.Matrix([[1, 0, -1], [0, 2, 0], [-1, 0, 1]])
+    la09_base_ok = (
+        C62.T * A62 * C62 == sp.diag(1, -2, 0)
+        and C63.T * A63 * C63 == sp.diag(1, -1, 1)
+        and Q66.T * Q66 == sp.eye(2) and Q66.T * A66 * Q66 == B66
+        and A612.eigenvals() == {1: 2, 0: 1} and A612 * sp.Matrix([1, 0, 1]) == sp.zeros(3, 1)
+    )
+    check("m1_la09_base_examples", la09_base_ok, "la09 Base Ex6.2/6.3(Lagrange C), Ex6.6(ortho Q), Hw6.12(spectral A) exact")
+
+    # 133. la-09 Adv 9 Lectures Part 1 (Ex 9.1-9.11)
+    A91 = sp.Matrix([[1, sp.Rational(1, 2), 0], [sp.Rational(1, 2), 1, sp.Rational(1, 2)], [0, sp.Rational(1, 2), 1]])
+    A93 = sp.Matrix([[4, 1, -2], [1, 1, 1], [-2, 1, 4]])
+    Q93 = sp.Matrix([[1 / sp.sqrt(3), -1 / sp.sqrt(2), 1 / sp.sqrt(6)], [1 / sp.sqrt(3), 0, -2 / sp.sqrt(6)], [1 / sp.sqrt(3), 1 / sp.sqrt(2), 1 / sp.sqrt(6)]])
+    A97, B97 = sp.Matrix([[1, 0, 0], [0, 0, -sp.Rational(1, 2)], [0, -sp.Rational(1, 2), 0]]), sp.Matrix([[0, sp.Rational(1, 2), 0], [sp.Rational(1, 2), 0, 0], [0, 0, 1]])
+    Q97 = sp.Matrix([[0, 0, 1], [-1, 0, 0], [0, 1, 0]])
+    A98 = sp.Matrix([[3, 2, 1], [2, 2, 1], [1, 1, 1]])
+    C98 = sp.Matrix([[sp.sqrt(2), 0, 0], [-sp.sqrt(2), sp.sqrt(3), 0], [0, -sp.sqrt(3), 1]])
+    A99, B99 = sp.Matrix([[2, 2], [2, 1]]), sp.Matrix([[4, 3], [3, 1]])
+    D99 = sp.Matrix([[1 / sp.sqrt(2), 1 / sp.sqrt(2) - 3 * sp.sqrt(5) / 10], [0, 2 / sp.sqrt(5)]])
+    A911 = sp.Matrix([[1, 1, -1], [1, 2, 0], [-1, 0, 2]])
+    B911 = sp.Matrix([[1, 0, 0], [0, 1, 1], [0, 1, 1]])
+    P911 = sp.Matrix([[1, -1, 1], [0, 1, 0], [0, 0, 1]])
+    la09_adv1_ok = (
+        A91.is_positive_definite
+        and sp.simplify(Q93.T * A93 * Q93 - sp.diag(3, 6, 0)) == sp.zeros(3, 3)
+        and Q97.T * A97 * Q97 == B97
+        and sp.simplify(C98.T * A98 * C98 - sp.diag(2, 3, 1)) == sp.zeros(3, 3)
+        and sp.simplify(D99.T * B99 * D99 - A99) == sp.zeros(2, 2)
+        and P911.T * A911 * P911 == B911 and A911.trace() == 5 and B911.trace() == 3
+    )
+    check("m1_la09_adv_part1", la09_adv1_ok, "la09 Adv9 Ex9.1/9.3/9.7/9.8/9.9/9.11(P^T A P=B, tr 5!=3) all exact")
+
+    # 134. la-09 MZL Ch.4 examples (4.5 Ex 3 signed trap, 4.4 Ex 4, 4.6 Ex 1 2018, 4.7 Ex 4 simul cong)
+    A453 = sp.Matrix([[0, 1, 1], [1, 2, 1], [1, 1, 0]])
+    A444 = sp.Rational(1, 3) * sp.Matrix([[1, 1, -2], [1, 1, -2], [-2, -2, 4]])
+    B444 = sp.Matrix([[1, -1, 0], [1, 1, 2], [1, 0, 1]])
+    C461 = sp.Matrix([[1, -1, 1], [0, 1, 1], [1, 0, a_l]])
+    A474, B474 = sp.Matrix([[1, 1], [1, 2]]), sp.Matrix([[-1, 1], [1, 2]])
+    P474 = sp.Matrix([[0, 2], [1, -1]]) / sp.sqrt(2)
+    la09_mzl_ok = (
+        A453.eigenvals() == {3: 1, -1: 1, 0: 1}
+        and A444 * B444 == sp.zeros(3, 3) and A444.trace() == 2
+        and sp.expand(C461.det() - (a_l - 2)) == 0
+        and C461.subs(a_l, 2) * sp.Matrix([-2, -1, 1]) == sp.zeros(3, 1)
+        and sp.simplify(P474.T * A474 * P474 - sp.eye(2)) == sp.zeros(2, 2)
+        and sp.simplify(P474.T * B474 * P474 - sp.diag(1, -3)) == sp.zeros(2, 2)
+    )
+    check("m1_la09_mzl_examples", la09_mzl_ok, "la09 MZL 4.5 Ex3(p=1,q=1), 4.4 Ex4, 4.6 Ex1(2018), 4.7 Ex4(simul cong) exact")
+
     return results
 
 
