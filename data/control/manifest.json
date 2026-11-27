@@ -150,7 +150,7 @@
       "syllabusReq": "完整覆盖 2020、2021（首年禁用计算器）、2022 共 3 套浙大 845 真题全部大题，逐题 SymPy 验算并标注原答案册勘误与方法拓展。",
       "kinds": ["formula", "conclusion", "example", "summary"],
       "file": "exam-02.json",
-      "ready": false
+      "ready": true
     },
     {
       "id": "exam-03",

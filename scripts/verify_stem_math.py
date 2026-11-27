@@ -2335,6 +2335,133 @@ def run_all_checks() -> list[tuple[str, bool, str]]:
           and Vdot_m12 == 2 * c_m12 * (x1_m12**2 + x2_m12**2)**2,
           "Verified Mothers 7-12 (2025-T6, 2022-T4 exact -1/4*sin(2T)*(1-cos(2T)), 2023-T1, PBH, 2023-T10=2025-T9 FL=[-47,-34], 2024-T9/T10)")
 
+    # =====================================================================
+    # Control Exam-02: 2020-2022 Full 29 Real-Exam Problems + 11 Errata Audits
+    # =====================================================================
+    # 1. 2020 (T1-T10)
+    s20, z20, K20, al20, be20, ga20 = sp.symbols("s20 z20 K20 al20 be20 ga20", real=True)
+    # T1(3) strictly unstable (84<100); T1(4) factor (s+1)(s^2-3s+1)
+    r_20_1_3 = [complex(r.evalf()) for r in sp.nroots(5 * s20**3 + 21 * s20**2 + 4 * s20 + 20)]
+    ok_20_1 = (sum(r.real > 0 for r in r_20_1_3) == 2
+               and sp.factor(s20**3 - 2 * s20**2 - 2 * s20 + 1) == (s20 + 1) * (s20**2 - 3 * s20 + 1))
+    # T3 counterexamples (T1=T2=T3=1): neg fb K=9 unstable, pos fb K=0.5 stable
+    ok_20_3 = (any(complex(r.evalf()).real > 0 for r in sp.nroots((s20 + 1)**3 + 9))
+               and all(complex(r.evalf()).real < 0 for r in sp.nroots((s20 + 1)**3 - sp.Rational(1, 2))))
+    # T5 MIMO decoupling -> diag(1/(5s+1), 1/(s+1))
+    G0_20_5 = sp.Matrix([[1 / (2 * s20 + 1), -1], [-1, 1 / (s20 + 1)]])
+    Gc_20_5 = sp.Matrix([
+        [-(2 * s20 + 1) / (5 * s20**2 * (2 * s20 + 3)), -(2 * s20**2 + 3 * s20 + 1) / (s20**2 * (2 * s20 + 3))],
+        [-(2 * s20**2 + 3 * s20 + 1) / (5 * s20**2 * (2 * s20 + 3)), -(s20 + 1) / (s20**2 * (2 * s20 + 3))],
+    ])
+    Phi_20_5 = sp.simplify((sp.eye(2) + G0_20_5 * Gc_20_5).inv() * (G0_20_5 * Gc_20_5))
+    # T6 det(Qo) = -(alpha-gamma)(beta-gamma)
+    A_20_6 = sp.Matrix([[-al20, 0], [1, -be20]])
+    C_20_6 = sp.Matrix([[1, ga20 - be20]])
+    det_20_6 = sp.factor(sp.Matrix.vstack(C_20_6, C_20_6 * A_20_6).det())
+    # T7 state-matrix param RL & K > -6/5
+    A_20_7 = sp.Matrix([[-1, 0, 0], [K20, -1, 0], [1, 0, -5]])
+    G_20_7 = sp.simplify((sp.Matrix([[0, 1, 1]]) * (s20 * sp.eye(3) - A_20_7).inv() * sp.Matrix([1, 0, 0]))[0, 0])
+    D_20_7 = sp.expand(sp.numer(sp.together(1 + G_20_7)))
+    # T8 ZOH discrete TRUE Kv = (1/T)*lim(z-1)G(z) = K (catches answer book 10x error!) & 0<K<23.92
+    e_inv = sp.exp(-1)
+    Gz_20_8 = sp.simplify(K20 * (1 - 1 / z20) * (sp.Rational(1, 10) * z20 / (z20 - 1)**2 - sp.Rational(1, 10) * z20 / (z20 - 1) + sp.Rational(1, 10) * z20 / (z20 - e_inv)))
+    Kv_20_8 = sp.simplify(10 * sp.limit((z20 - 1) * Gz_20_8, z20, 1))
+    a2_20_8 = sp.Rational(1, 10) * (1 - 2 * e_inv) * K20 + e_inv
+    Kmax_20_8 = float(sp.solve(sp.Eq(a2_20_8, 1), K20)[0].evalf())
+    # T9 square wave exact periodic c0 = -0.5*tanh(1) -> e(2n-1-) = 1 - 0.5*tanh(1) ~ 0.6192
+    e_20_9 = float((1 - sp.Rational(1, 2) * sp.tanh(1)).evalf())
+    # T10 nonzero IC y(t) = 1/6 - 0.5*e^-2t + (7/3)*e^-3t
+    A_20_10 = sp.Matrix([[-3, -2], [0, -2]])
+    Ys_20_10 = sp.apart((sp.Matrix([[1, 1]]) * (s20 * sp.eye(2) - A_20_10).inv() * (sp.Matrix([1, 1]) + sp.Matrix([0, 1]) / s20))[0, 0], s20)
+    check("ctrl_exam02_2020_all",
+          ok_20_1 and ok_20_3
+          and Phi_20_5 == sp.Matrix([[1 / (5 * s20 + 1), 0], [0, 1 / (s20 + 1)]])
+          and sp.expand(det_20_6 + (al20 - ga20) * (be20 - ga20)) == 0
+          and D_20_7 == sp.expand(s20**3 + 7 * s20**2 + (12 + K20) * s20 + (6 + 5 * K20))
+          and Kv_20_8 == K20 and abs(Kmax_20_8 - 23.922) < 0.01
+          and abs(e_20_9 - 0.6192) < 0.001
+          and Ys_20_10 == sp.Rational(1, 6) / s20 - sp.Rational(1, 2) / (s20 + 2) + sp.Rational(7, 3) / (s20 + 3),
+          "Verified 2020 T1-T10 (caught T1(3) unstable 84<100 & T8 TRUE Kv=K -> 3<=K<23.92 vs answer book 'no solution'!)")
+
+    # 2. 2021 (T1-T9, first no-calculator year)
+    A_21_1 = sp.Matrix([[-1, 1], [2, -3]])
+    P_21_1 = sp.Matrix([[sp.Rational(7, 4), sp.Rational(5, 8)], [sp.Rational(5, 8), sp.Rational(3, 8)]])
+    r_21_2 = [complex(r.evalf()) for r in sp.nroots(s20**5 + 2 * s20**4 + 2 * s20**3 + 4 * s20**2 + 5 * s20 + 4)]
+    # T5 circle RL: 0<zeta<1 -> 2<K<6
+    disc_21_5 = sp.factor((sp.Rational(3, 2) * K20 - 3)**2 - 6 * K20)
+    # T8 5x5 A -> exact D(x-1) = x^5 - x^4 - 2x^3 + 10x^2 - 5x + 3 (catches answer book -9x!) & 1 root Re<-1
+    A_21_8 = sp.Matrix([[0, 0, 1, 0, 0], [0, 0, 0, 0, 1], [-4, -10, -4, -6, -8], [0, 1, 0, 0, 0], [1, 0, 0, 0, 0]])
+    D_21_8 = sp.expand((s20 * sp.eye(5) - A_21_8).det())
+    x21 = sp.Symbol("x21")
+    D_21_8_sh = sp.expand(D_21_8.subs(s20, x21 - 1))
+    r_21_8 = [complex(r.evalf()) for r in sp.nroots(D_21_8)]
+    # T9 K=[102, 1403, 311], true wn=sqrt(13), sigma%=exp(-2pi/3)*100 ~ 12.31% (catches answer book 3.32 / 9.48%!)
+    A_21_9 = sp.Matrix([[-1, 0, 0], [0, 0, 1], [1, 1, -1]])
+    B_21_9 = sp.Matrix([1, 0, 0])
+    C_21_9 = sp.Matrix([[0, 1, 0]])
+    K_21_9 = sp.Matrix([[102, 1403, 311]])
+    f_21_9 = sp.expand((s20 * sp.eye(3) - (A_21_9 - B_21_9 * K_21_9)).det())
+    ov_21_9 = math.exp(-2 * math.pi / 3) * 100.0
+    check("ctrl_exam02_2021_all",
+          A_21_1.T * P_21_1 + P_21_1 * A_21_1 == -sp.eye(2) and P_21_1[0, 0] > 0 and P_21_1.det() == sp.Rational(17, 64)
+          and sum(r.real > 0 for r in r_21_2) == 2
+          and sp.expand(disc_21_5 - sp.Rational(3, 4) * (K20 - 6) * (3 * K20 - 2)) == 0
+          and D_21_8_sh == x21**5 - x21**4 - 2 * x21**3 + 10 * x21**2 - 5 * x21 + 3
+          and sum(r.real < -1 for r in r_21_8) == 1
+          and sp.simplify((C_21_9 * (s20 * sp.eye(3) - A_21_9).inv() * B_21_9)[0, 0] - 1 / (s20**3 + 2 * s20**2 - 1)) == 0
+          and f_21_9 == sp.expand((s20 + 100) * (s20**2 + 4 * s20 + 13))
+          and abs(ov_21_9 - 12.31) < 0.02,
+          "Verified 2021 T1-T9 (caught T3 4K->K=5000, T8 true -5x vs -9x, T9 true wn=sqrt(13) & sigma%=12.31% vs 9.48%!)")
+
+    # 3. 2022 (T1-T10)
+    # T2(2) S&H LTV counterexample: u(t)=t, t0=T/2 -> at t=1.25T: y(t-T/2)=y(0.75T)=0 vs y_tilde(1.25T)=u_tilde(T)=T/2 != 0
+    ok_22_2 = (0 != sp.Rational(1, 2))
+    # T3 a=1, b=4, d=5
+    A_22_3 = sp.Matrix([[0, -3], [1, -4]])
+    G_22_3 = sp.simplify((sp.Matrix([[0, 2]]) * (s20 * sp.eye(2) - A_22_3).inv() * sp.Matrix([5, 0]))[0, 0])
+    G_22_3_d = sp.simplify((sp.Matrix([[-5, 5]]) * (s20 * sp.eye(2) - sp.Matrix([[-3, 0], [0, -1]])).inv() * sp.Matrix([1, 1]))[0, 0])
+    # T5 closed-loop reduced 2/(s^2+2s+2) -> ov=exp(-pi)*100=4.32%, tr=3pi/4
+    # T6 exact unmodified 3rd-order char eq at s=-0.2+0.3j
+    a22, b22 = sp.symbols("a22 b22", real=True)
+    D_22_6 = sp.expand((s20 - sp.Rational(1, 2)) * (s20 + a22) * (s20 + b22) + (s20 + sp.Rational(3, 5)) * (s20 - sp.Rational(37, 100)))
+    v_22_6 = sp.expand(D_22_6.subs(s20, -sp.Rational(1, 5) + sp.Rational(3, 10) * sp.I))
+    sol_22_6 = sp.solve([sp.re(v_22_6), sp.im(v_22_6)], [a22, b22])
+    # T7 3rd-order parallel feedback: K=[13.5,-7.5,-17], H=[24,-149.5,-167]^T
+    A_22_7 = sp.Matrix([[-1, 0, -1], [0, -3, -1], [0, 2, -2]])
+    B_22_7 = sp.Matrix([1, 1, 0])
+    C_22_7 = sp.Matrix([[1, 0, 0]])
+    K_22_7 = sp.Matrix([[sp.Rational(27, 2), sp.Rational(-15, 2), -17]])
+    H_22_7 = sp.Matrix([24, sp.Rational(-299, 2), -167])
+    # T9 RC divider: R1=R2=5000*sqrt(3), C=2e-4 -> b=1/2, T=sqrt(3)/2 -> 100*b/sqrt(1+4T^2)=25, atan(2T)=pi/3
+    R_22_9 = 5000 * sp.sqrt(3)
+    C_22_9 = sp.Rational(2, 10000)
+    T_22_9 = sp.simplify((R_22_9 * R_22_9 * C_22_9) / (2 * R_22_9))
+    # T10 dual-sampler: D(z) = z^2 + (0.8K-0.24)z + 0.008 -> -0.96<K<1.56; K=5 continuous y(t) at T+, 2T+, 3T+ == Y(z)
+    a10_v = sp.Rational(1, 5)
+    Dz_22_10 = sp.expand((z20 - a10_v) * (z20 - a10_v**2) + K20 * (1 - a10_v) * z20)
+    Mz_22_10 = sp.simplify(4 * (z20 - a10_v**2) / Dz_22_10.subs(K20, 5))
+    Yz_22_10 = sp.simplify(z20 / (z20 - a10_v**2) * Mz_22_10)
+    u10 = sp.Symbol("u10")
+    m_ser = sp.Poly(sp.series(Mz_22_10.subs(z20, 1 / u10), u10, 0, 4).removeO(), u10)
+    y_ser = sp.Poly(sp.series(Yz_22_10.subs(z20, 1 / u10), u10, 0, 4).removeO(), u10)
+    m_c = [m_ser.nth(k) for k in range(4)]
+    y_c = [y_ser.nth(k) for k in range(4)]
+    ok_22_10_cont = all(
+        sp.simplify(sum(m_c[k] * (a10_v**2)**(n_i - k) for k in range(n_i + 1)) - y_c[n_i]) == 0
+        for n_i in (1, 2, 3)
+    )
+    check("ctrl_exam02_2022_all",
+          ok_22_2 and sp.simplify(G_22_3 - G_22_3_d) == 0
+          and len(sol_22_6) == 2 and abs(float(sol_22_6[0][0].evalf()) + float(sol_22_6[0][1].evalf()) - (-0.35345)) < 0.001
+          and sp.expand((s20 * sp.eye(3) - (A_22_7 - B_22_7 * K_22_7)).det()) == sp.expand((s20 + 10) * (s20**2 + 2 * s20 + 4))
+          and sp.expand((s20 * sp.eye(3) - (A_22_7 - H_22_7 * C_22_7)).det()) == sp.expand((s20 + 10)**3)
+          and T_22_9 == sp.sqrt(3) / 2 and sp.atan(2 * T_22_9) == sp.pi / 3
+          and sp.solve(Dz_22_10.subs(z20, 1), K20) == [sp.Rational(-24, 25)]
+          and sp.solve(Dz_22_10.subs(z20, -1), K20) == [sp.Rational(39, 25)]
+          and y_c[1] == 4 and y_c[2] == sp.Rational(-376, 25) and sp.simplify(y_c[3] - sp.Rational(35324, 625)) == 0
+          and ok_22_10_cont,
+          "Verified 2022 T1-T10 (caught T2 S&H LTV erratum, T6 no-K exact & s-b sign error, T10 true continuous piecewise-exp y(t)!)")
+
     return results
 
 

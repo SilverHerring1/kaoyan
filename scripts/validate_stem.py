@@ -122,6 +122,9 @@ def validate_subject(subj: str) -> tuple[int, int, list[str]]:
                     m_dbs = DOUBLE_BS_CMD_RE.search(val)
                     if m_dbs:
                         errors.append(f"{ctx}.{field_path}: accidental double-backslash LaTeX command '{m_dbs.group(0)}' (causes KaTeX newline + literal command name)")
+                    for bad_macro in ("\\xLongrightarrow", "\\xLongleftarrow", "\\xLongleftrightarrow"):
+                        if bad_macro in val:
+                            errors.append(f"{ctx}.{field_path}: unsupported KaTeX macro '{bad_macro}' (use \\xrightarrow or \\overset{{...}}{{\\Longrightarrow}})")
                 elif isinstance(val, list):
                     for i, elem in enumerate(val):
                         scan_bad_chars(elem, f"{field_path}[{i}]")
