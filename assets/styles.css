@@ -101,9 +101,9 @@ body {
 
 .container {
   width: 100%;
-  max-width: 1200px;
+  max-width: min(1480px, 95vw);
   margin-inline: auto;
-  padding-inline: 1rem;
+  padding-inline: clamp(0.85rem, 2vw, 1.5rem);
 }
 
 .visually-hidden:where(:not(:focus-within, :active)) {
@@ -2378,9 +2378,9 @@ kbd {
 
 /* Responsive Semantic Data Table (Textbook Tables & Summary Matrices) */
 .stem-table-wrapper {
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: visible;
   max-inline-size: 100%;
-  max-block-size: min(460px, 75vh);
   container-type: inline-size;
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
@@ -2422,7 +2422,9 @@ kbd {
   padding: 0.55rem 0.75rem;
   border-bottom: 1.5px solid #c7d2fe;
   border-right: 1px solid #e2e8f0;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: keep-all;
 }
 
 .stem-data-table tbody th {
@@ -2437,7 +2439,7 @@ kbd {
   border-bottom: 1px solid var(--border-subtle);
   border-right: 1.5px solid #e2e8f0;
   vertical-align: top;
-  min-inline-size: 7.5rem;
+  min-inline-size: 6.5rem;
 }
 
 .stem-data-table tbody td {
@@ -2652,6 +2654,69 @@ kbd {
   -webkit-overflow-scrolling: touch;
 }
 
+/* Standard thin accessible scrollbar (WCAG 1.4.11 >= 3:1 contrast) when fallback scroll is unavoidable */
+.math-scroll,
+.stem-card .katex-display,
+.stem-table-wrapper,
+.stem-step-detail,
+.stem-conclusion-text,
+.stem-problem-text,
+.stem-final-answer,
+.stem-summary-overview {
+  --scrollbar-thumb: #7b8496;
+  --scrollbar-track: #edf0f7;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+@supports not (scrollbar-color: auto) {
+  .math-scroll,
+  .stem-card .katex-display,
+  .stem-table-wrapper,
+  .stem-step-detail,
+  .stem-conclusion-text,
+  .stem-problem-text,
+  .stem-final-answer,
+  .stem-summary-overview {
+    scrollbar-width: auto;
+  }
+
+  .math-scroll::-webkit-scrollbar,
+  .stem-card .katex-display::-webkit-scrollbar,
+  .stem-table-wrapper::-webkit-scrollbar,
+  .stem-step-detail::-webkit-scrollbar,
+  .stem-conclusion-text::-webkit-scrollbar,
+  .stem-problem-text::-webkit-scrollbar,
+  .stem-final-answer::-webkit-scrollbar,
+  .stem-summary-overview::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+  }
+
+  .math-scroll::-webkit-scrollbar-thumb,
+  .stem-card .katex-display::-webkit-scrollbar-thumb,
+  .stem-table-wrapper::-webkit-scrollbar-thumb,
+  .stem-step-detail::-webkit-scrollbar-thumb,
+  .stem-conclusion-text::-webkit-scrollbar-thumb,
+  .stem-problem-text::-webkit-scrollbar-thumb,
+  .stem-final-answer::-webkit-scrollbar-thumb,
+  .stem-summary-overview::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 999px;
+  }
+
+  .math-scroll::-webkit-scrollbar-track,
+  .stem-card .katex-display::-webkit-scrollbar-track,
+  .stem-table-wrapper::-webkit-scrollbar-track,
+  .stem-step-detail::-webkit-scrollbar-track,
+  .stem-conclusion-text::-webkit-scrollbar-track,
+  .stem-problem-text::-webkit-scrollbar-track,
+  .stem-final-answer::-webkit-scrollbar-track,
+  .stem-summary-overview::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+  }
+}
+
 .stem-conclusion-text {
   font-size: 0.92rem;
   line-height: 1.72;
@@ -2756,7 +2821,7 @@ kbd {
 
 .stem-svg-stage svg {
   max-width: 100%;
-  width: min(500px, 100%);
+  width: min(620px, 100%);
   height: auto;
   display: block;
 }

@@ -1,0 +1,1303 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "prob-07",
+  "title": "概率 · 第 7 讲：大数定律与中心极限定理",
+  "sourceMeta": "五书深度融合：27 张宇基础30讲(第5讲 P.125-135) + 27 张宇概率9讲(第7讲 P.57-62) + 27 方浩概率强化(第5章 P.125-132) + 27 猪狗百宝书(第5章 P.5-1~5-13) + 27 版概率论全总结(P.14) · 含 2001/2003/2020/2022 真题与 3 处勘误补注",
+  "basicRequirements": [
+    "了解切比雪夫不等式及其积分证明，牢记中心必须与 EX 对齐。",
+    "理解依概率收敛的定义与连续映射运算法则，掌握均方收敛充分判据及柯西无期望反例。",
+    "了解切比雪夫、伯努利和辛钦大数定律的条件与统一结论，区分切比雪夫充分条件与马尔可夫一般条件。",
+    "了解列维-林德伯格与棣莫弗-拉普拉斯中心极限定理，熟练掌握「求概率/求阈值/求样本量」三类标准题型与二项分布三档近似。"
+  ],
+  "items": [
+    {
+      "id": "m1-pr07-f-01",
+      "kind": "formula",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、切比雪夫不等式",
+      "title": "切比雪夫不等式（两种等价形态与积分放缩证法）",
+      "formulaLatex": "$$\\begin{aligned} &\\text{若随机变量 }X\\text{ 存在有限期望 }EX=\\mu\\text{ 与方差 }DX=\\sigma^2\\text{，则对 }\\forall\\varepsilon>0\\text{：}\\\\ &P\\{|X-EX|\\ge\\varepsilon\\}\\le\\frac{DX}{\\varepsilon^2}　\\Longleftrightarrow　 P\\{|X-EX|<\\varepsilon\\}\\ge 1-\\frac{DX}{\\varepsilon^2}\\\\ &\\text{记 }\\varepsilon=k\\sigma (k>0)\\text{，即得：} P\\{|X-\\mu|\\ge k\\sigma\\}\\le\\frac{1}{k^2},　 P\\{|X-\\mu|<k\\sigma\\}\\ge 1-\\frac{1}{k^2}\\\\ &\\text{放缩核心：} P\\{|X-\\mu|\\ge\\varepsilon\\}=\\int_{|x-\\mu|\\ge\\varepsilon}f(x)\\,\\mathrm{d}x\\le\\int_{|x-\\mu|\\ge\\varepsilon}\\frac{(x-\\mu)^2}{\\varepsilon^2}f(x)\\,\\mathrm{d}x\\le\\frac{DX}{\\varepsilon^2}\\end{aligned}$$",
+      "conditions": "唯一前提是 $EX$ 与 $DX$ 存在有限且 $\\varepsilon>0$；绝对不要求独立性或特定分布形态，但**绝对值内的中心必须严格等于 $EX$**！",
+      "pitfalls": "① **中心错位雷区**：遇到 $P\\{|X-a|\\ge\\varepsilon\\}$ 且 $a\\ne EX$，严禁直接套 $\\frac{DX}{\\varepsilon^2}$！须先通过三角不等式或区间包含改写为以 $EX$ 为中心的事件。 ② 由于连续型单点概率为 $0$，严格不等号 $>$ 与 $\\ge$ 互换不影响结果，但离散型边界点须留意；切比雪夫上界若算出 $>1$ 虽永真却无信息量。",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 680 340\" role=\"img\" aria-label=\"切比雪夫不等式、大数定律与中心极限定理三维对照\">\n  <title>切比雪夫不等式、大数定律与中心极限定理三维对照</title>\n  <defs>\n    <marker id=\"m1_pr07_map_arr\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n      <path d=\"M0 1 L9 5 L0 9 Z\" fill=\"#7c3aed\"/>\n    </marker>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"680\" height=\"340\" rx=\"12\" fill=\"#f8fafc\"/>\n  <text x=\"340\" y=\"26\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"700\" fill=\"#0f172a\">三大极限定理家族三维对照：适用样本量 · 精度 · 命题题眼</text>\n\n  <!-- Col 1: Chebyshev -->\n  <rect x=\"18\" y=\"44\" width=\"204\" height=\"222\" rx=\"10\" fill=\"#ffffff\" stroke=\"#8b5cf6\" stroke-width=\"1.4\"/>\n  <rect x=\"18\" y=\"44\" width=\"204\" height=\"34\" rx=\"10\" fill=\"#f5f3ff\"/>\n  <text x=\"120\" y=\"66\" text-anchor=\"middle\" font-size=\"12.5\" font-weight=\"700\" fill=\"#6d28d9\">① 切比雪夫不等式</text>\n  <text x=\"30\" y=\"98\" font-size=\"11\" font-weight=\"700\" fill=\"#0f172a\">样本规模：任意有限 n（甚至单个 X）</text>\n  <text x=\"30\" y=\"120\" font-size=\"10.5\" fill=\"#334155\">前提：EX、DX 存在即可（无分布要求）</text>\n  <text x=\"30\" y=\"142\" font-size=\"10.5\" fill=\"#6d28d9\" font-weight=\"600\">结论：P{|X - EX| ≥ ε} ≤ DX / ε²</text>\n  <text x=\"30\" y=\"164\" font-size=\"10.5\" fill=\"#334155\">精度：粗糙保守（给出“至少/至多”界）</text>\n  <rect x=\"28\" y=\"182\" width=\"184\" height=\"72\" rx=\"7\" fill=\"#faf5ff\" stroke=\"#ddd6fe\"/>\n  <text x=\"38\" y=\"200\" font-size=\"10.5\" font-weight=\"700\" fill=\"#5b21b6\">高频考法题眼：</text>\n  <text x=\"38\" y=\"218\" font-size=\"10\" fill=\"#475569\">• 未知分布求概率上下界</text>\n  <text x=\"38\" y=\"234\" font-size=\"10\" fill=\"#475569\">• 必先核对中心是否为 EX！</text>\n  <text x=\"38\" y=\"248\" font-size=\"10\" fill=\"#475569\">• 证明切比雪夫/马尔可夫 LLN</text>\n\n  <!-- Col 2: LLN -->\n  <rect x=\"238\" y=\"44\" width=\"204\" height=\"222\" rx=\"10\" fill=\"#ffffff\" stroke=\"#0f766e\" stroke-width=\"1.4\"/>\n  <rect x=\"238\" y=\"44\" width=\"204\" height=\"34\" rx=\"10\" fill=\"#ecfdf5\"/>\n  <text x=\"340\" y=\"66\" text-anchor=\"middle\" font-size=\"12.5\" font-weight=\"700\" fill=\"#065f46\">② 大数定律（LLN）</text>\n  <text x=\"250\" y=\"98\" font-size=\"11\" font-weight=\"700\" fill=\"#0f172a\">样本规模：大样本极限 n → ∞</text>\n  <text x=\"250\" y=\"120\" font-size=\"10.5\" fill=\"#334155\">前提：辛钦(i.i.d.+μ) / 切氏(不相关+界)</text>\n  <text x=\"250\" y=\"142\" font-size=\"10.5\" fill=\"#0f766e\" font-weight=\"600\">结论：(1/n)∑Xᵢ —P→ 常数 μ</text>\n  <text x=\"250\" y=\"164\" font-size=\"10.5\" fill=\"#334155\">精度：定性刻画“稳定到常数”，不给分布</text>\n  <rect x=\"248\" y=\"182\" width=\"184\" height=\"72\" rx=\"7\" fill=\"#f0fdfa\" stroke=\"#99f6e4\"/>\n  <text x=\"258\" y=\"200\" font-size=\"10.5\" font-weight=\"700\" fill=\"#065f46\">高频考法题眼：</text>\n  <text x=\"258\" y=\"218\" font-size=\"10\" fill=\"#475569\">• “依概率收敛于 ____”</text>\n  <text x=\"258\" y=\"234\" font-size=\"10\" fill=\"#475569\">• (1/n)∑g(Xᵢ) → E[g(X₁)]</text>\n  <text x=\"258\" y=\"248\" font-size=\"10\" fill=\"#475569\">• 证明参数估计量的一致性！</text>\n\n  <!-- Col 3: CLT -->\n  <rect x=\"458\" y=\"44\" width=\"204\" height=\"222\" rx=\"10\" fill=\"#ffffff\" stroke=\"#2563eb\" stroke-width=\"1.4\"/>\n  <rect x=\"458\" y=\"44\" width=\"204\" height=\"34\" rx=\"10\" fill=\"#eff6ff\"/>\n  <text x=\"560\" y=\"66\" text-anchor=\"middle\" font-size=\"12.5\" font-weight=\"700\" fill=\"#1d4ed8\">③ 中心极限定理（CLT）</text>\n  <text x=\"470\" y=\"98\" font-size=\"11\" font-weight=\"700\" fill=\"#0f172a\">样本规模：大样本近似 n → ∞</text>\n  <text x=\"470\" y=\"120\" font-size=\"10.5\" fill=\"#334155\">前提：i.i.d. + EX = μ, 0 &lt; DX = σ² &lt; ∞</text>\n  <text x=\"470\" y=\"142\" font-size=\"10.5\" fill=\"#2563eb\" font-weight=\"600\">结论：(∑Xᵢ - nμ)/(√n σ) → N(0, 1)</text>\n  <text x=\"470\" y=\"164\" font-size=\"10.5\" fill=\"#334155\">精度：定量刻画涨落分布，精准查 Φ(x)</text>\n  <rect x=\"468\" y=\"182\" width=\"184\" height=\"72\" rx=\"7\" fill=\"#eff6ff\" stroke=\"#bfdbfe\"/>\n  <text x=\"478\" y=\"200\" font-size=\"10.5\" font-weight=\"700\" fill=\"#1e40af\">高频考法题眼：</text>\n  <text x=\"478\" y=\"218\" font-size=\"10\" fill=\"#475569\">• 题干给 Φ(x) 或求“近似概率”</text>\n  <text x=\"478\" y=\"234\" font-size=\"10\" fill=\"#475569\">• 求至少抽样人数 n / 最多装箱数</text>\n  <text x=\"478\" y=\"248\" font-size=\"10\" fill=\"#475569\">• 构造大样本近似置信区间</text>\n\n  <!-- Bottom theoretical chain -->\n  <rect x=\"18\" y=\"280\" width=\"644\" height=\"46\" rx=\"9\" fill=\"#0f172a\"/>\n  <text x=\"115\" y=\"308\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#c4b5fd\">切比雪夫不等式</text>\n  <line x1=\"178\" y1=\"303\" x2=\"224\" y2=\"303\" stroke=\"#7c3aed\" stroke-width=\"2\" marker-end=\"url(#m1_pr07_map_arr)\"/>\n  <text x=\"315\" y=\"308\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#6ee7b7\">证明大数定律（收敛值）</text>\n  <line x1=\"406\" y1=\"303\" x2=\"452\" y2=\"303\" stroke=\"#7c3aed\" stroke-width=\"2\" marker-end=\"url(#m1_pr07_map_arr)\"/>\n  <text x=\"556\" y=\"308\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#93c5fd\">CLT 刻画 √n 级误差分布</text>\n</svg>",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 猪狗百宝书",
+        "printedPage": "基础 P.125 / 9讲 P.57 / 猪狗 P.5-1~5-2",
+        "pdfPage": 131,
+        "itemRef": "切比雪夫不等式及其积分证明"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr07_chebyshev_and_exams",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "在**完全不知道总体分布类型**、仅知期望 $EX$ 与方差 $DX$ 时，给出随机变量偏离期望概率的普适保守上界（与落入区间概率的保守下界）；它更是证明切比雪夫、伯努利与马尔可夫大数定律的底层数学引擎。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「大于等于 $\\varepsilon$，小于等于方差除 $\\varepsilon^2$（口诀：$\\ge \\varepsilon \\le$）；先看中心对不对 $EX$，不对必须先平移对齐！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr07-f-02",
+      "kind": "formula",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、依概率收敛",
+      "title": "随机变量序列的依概率收敛定义与四则/连续映射运算法则",
+      "formulaLatex": "$$\\begin{aligned} &\\text{定义：对 }\\forall\\varepsilon>0,　 \\lim_{n\\to\\infty}P\\{|X_n-X|<\\varepsilon\\}=1 \\Longleftrightarrow \\lim_{n\\to\\infty}P\\{|X_n-X|\\ge\\varepsilon\\}=0\\\\ &　　\\text{记作 }X_n\\xrightarrow{P}X\\text{（常取 }X=a\\text{ 为常数，亦记 }\\operatorname{plim}_{n\\to\\infty}X_n=a\\text{）}\\\\ &\\text{运算性质（若 }X_n\\xrightarrow{P}a, Y_n\\xrightarrow{P}b\\text{，且 }g(x,y)\\text{ 在 }(a,b)\\text{ 连续）：}\\\\ &　\\text{① }X_n\\pm Y_n\\xrightarrow{P}a\\pm b　　\\text{② }X_n Y_n\\xrightarrow{P}ab　　\\text{③ }\\frac{X_n}{Y_n}\\xrightarrow{P}\\frac{a}{b}  (b\ne 0)\\\\ &　\\text{④ 连续映射定理：}g(X_n)\\xrightarrow{P}g(a),　 g(X_n,Y_n)\\xrightarrow{P}g(a,b)\\\\ &\\text{常用充分判据（均方收敛}\\Rightarrow\\text{依概率收敛）：}\\lim_{n\\to\\infty}E(X_n)=a\\text{ 且 }\\lim_{n\\to\\infty}D(X_n)=0\\implies X_n\\xrightarrow{P}a\\end{aligned}$$",
+      "conditions": "连续映射定理要求 $g$ 在极限常数点 $(a,b)$ 处连续；充分判据 $E[(X_n-a)^2]=D(X_n)+(EX_n-a)^2\\to 0$ 由马尔可夫/切比雪夫不等式一步导出，但**反之不成立**（$X_n\\xrightarrow{P}a$ 甚至不要求 $EX_n$ 存在！）。",
+      "pitfalls": "**误把充分当必要**：$X_n\\xrightarrow{P}a$ 不能反推出 $EX_n\\to a$ 或 $DX_n\\to 0$（如伸缩柯西分布 $X_n\\xrightarrow{P}0$ 但连期望都不存在；又如 $P\\{X_n=n^2\\}=1/n,\\;P\\{X_n=0\\}=1-1/n$ 有 $X_n\\xrightarrow{P}0$ 但 $EX_n=n\\to\\infty$！）。",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 680 350\" role=\"img\" aria-label=\"依概率收敛与三大大数定律阶梯图\">\n  <title>依概率收敛与三大大数定律阶梯图</title>\n  <defs>\n    <marker id=\"m1_pr07_lln_arrow\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n      <path d=\"M0 1 L9 5 L0 9 Z\" fill=\"#475569\"/>\n    </marker>\n    <marker id=\"m1_pr07_lln_blue\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n      <path d=\"M0 1 L9 5 L0 9 Z\" fill=\"#2563eb\"/>\n    </marker>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"680\" height=\"350\" rx=\"12\" fill=\"#f8fafc\"/>\n  <text x=\"340\" y=\"26\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"700\" fill=\"#0f172a\">依概率收敛几何直觉与四大（含马尔可夫）大数定律条件阶梯</text>\n\n  <!-- Left panel: Convergence in probability -->\n  <rect x=\"18\" y=\"42\" width=\"310\" height=\"292\" rx=\"10\" fill=\"#ffffff\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"173\" y=\"64\" text-anchor=\"middle\" font-size=\"12.5\" font-weight=\"700\" fill=\"#1e40af\">① 依概率收敛：质量向 a ± ε 通道坍缩</text>\n\n  <!-- epsilon band -->\n  <rect x=\"135\" y=\"84\" width=\"76\" height=\"170\" fill=\"#dbeafe\" opacity=\"0.55\"/>\n  <line x1=\"135\" y1=\"84\" x2=\"135\" y2=\"254\" stroke=\"#2563eb\" stroke-width=\"1\" stroke-dasharray=\"4 3\"/>\n  <line x1=\"211\" y1=\"84\" x2=\"211\" y2=\"254\" stroke=\"#2563eb\" stroke-width=\"1\" stroke-dasharray=\"4 3\"/>\n  <line x1=\"173\" y1=\"78\" x2=\"173\" y2=\"258\" stroke=\"#1e3a8a\" stroke-width=\"1.3\" stroke-dasharray=\"2 2\"/>\n\n  <!-- axes -->\n  <line x1=\"36\" y1=\"254\" x2=\"314\" y2=\"254\" stroke=\"#475569\" stroke-width=\"1.4\" marker-end=\"url(#m1_pr07_lln_arrow)\"/>\n  <text x=\"310\" y=\"270\" text-anchor=\"end\" font-size=\"10.5\" fill=\"#475569\">取值 x</text>\n  <text x=\"135\" y=\"269\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#2563eb\">a - ε</text>\n  <text x=\"173\" y=\"269\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1e3a8a\">a</text>\n  <text x=\"211\" y=\"269\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#2563eb\">a + ε</text>\n\n  <!-- n=10 wide curve -->\n  <path d=\"M 44 252 C 84 250, 118 206, 173 206 C 228 206, 262 250, 302 252\" fill=\"none\" stroke=\"#94a3b8\" stroke-width=\"2\" stroke-dasharray=\"5 3\"/>\n  <text x=\"270\" y=\"226\" font-size=\"10.5\" fill=\"#64748b\">n = 10</text>\n\n  <!-- n=50 medium curve -->\n  <path d=\"M 78 253 C 115 251, 140 156, 173 156 C 206 156, 231 251, 268 253\" fill=\"none\" stroke=\"#0f766e\" stroke-width=\"2.2\"/>\n  <text x=\"235\" y=\"176\" font-size=\"10.5\" font-weight=\"600\" fill=\"#0f766e\">n = 50</text>\n\n  <!-- n=500 sharp curve -->\n  <path d=\"M 122 253 C 148 252, 160 94, 173 94 C 186 94, 198 252, 224 253\" fill=\"none\" stroke=\"#2563eb\" stroke-width=\"2.5\"/>\n  <text x=\"200\" y=\"110\" font-size=\"10.5\" font-weight=\"700\" fill=\"#2563eb\">n = 500</text>\n\n  <!-- bottom note -->\n  <rect x=\"30\" y=\"280\" width=\"286\" height=\"44\" rx=\"7\" fill=\"#eff6ff\" stroke=\"#bfdbfe\"/>\n  <text x=\"173\" y=\"297\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1e3a8a\">lim P{|Xₙ - a| &lt; ε} = 1 ⟺ lim P{|Xₙ - a| ≥ ε} = 0</text>\n  <text x=\"173\" y=\"315\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#334155\">不要求样本点逐点收敛，允许“小概率飞出带外”</text>\n\n  <!-- Right panel: Hierarchy of LLNs -->\n  <rect x=\"342\" y=\"42\" width=\"320\" height=\"292\" rx=\"10\" fill=\"#ffffff\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"502\" y=\"64\" text-anchor=\"middle\" font-size=\"12.5\" font-weight=\"700\" fill=\"#0f766e\">② 大数定律条件由强到弱（结论殊途同归）</text>\n\n  <!-- Box 1: Bernoulli -->\n  <rect x=\"358\" y=\"76\" width=\"288\" height=\"44\" rx=\"7\" fill=\"#ecfdf5\" stroke=\"#10b981\" stroke-width=\"1.2\"/>\n  <text x=\"370\" y=\"94\" font-size=\"11.5\" font-weight=\"700\" fill=\"#065f46\">伯努利大数定律（0-1 独立同分布）</text>\n  <text x=\"370\" y=\"111\" font-size=\"10.5\" fill=\"#047857\">频率 μₙ / n 依概率收敛于概率 p（特例之首）</text>\n\n  <!-- Box 2: Khinchin -->\n  <rect x=\"358\" y=\"130\" width=\"288\" height=\"46\" rx=\"7\" fill=\"#eff6ff\" stroke=\"#3b82f6\" stroke-width=\"1.2\"/>\n  <text x=\"370\" y=\"148\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1d4ed8\">辛钦大数定律（考研最高频！）</text>\n  <text x=\"370\" y=\"166\" font-size=\"10.5\" fill=\"#1e40af\">条件：独立同分布 + 期望存在（不要求方差存在！）</text>\n\n  <!-- Box 3: Chebyshev -->\n  <rect x=\"358\" y=\"186\" width=\"288\" height=\"46\" rx=\"7\" fill=\"#f5f3ff\" stroke=\"#8b5cf6\" stroke-width=\"1.2\"/>\n  <text x=\"370\" y=\"204\" font-size=\"11.5\" font-weight=\"700\" fill=\"#6d28d9\">切比雪夫大数定律（允许不同分布）</text>\n  <text x=\"370\" y=\"222\" font-size=\"10.5\" fill=\"#5b21b6\">条件：两两不相关 + 方差有公共上界 DXᵢ ≤ C</text>\n\n  <!-- Box 4: Markov -->\n  <rect x=\"358\" y=\"242\" width=\"288\" height=\"40\" rx=\"7\" fill=\"#fffbeb\" stroke=\"#f59e0b\" stroke-width=\"1.2\"/>\n  <text x=\"370\" y=\"259\" font-size=\"11\" font-weight=\"700\" fill=\"#b45309\">马尔可夫桥：D(∑Xᵢ) / n² → 0（防充分当必要误判）</text>\n  <text x=\"370\" y=\"274\" font-size=\"10\" fill=\"#92400e\">例：DXᵢ = ln i 无公共上界，但 (1/n²)∑DXᵢ → 0 仍服从！</text>\n\n  <!-- Unified footer -->\n  <rect x=\"358\" y=\"290\" width=\"288\" height=\"34\" rx=\"7\" fill=\"#0f172a\"/>\n  <text x=\"502\" y=\"311\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#f8fafc\">统一结论：(1/n) ∑ Xᵢ —P→ (1/n) ∑ EXᵢ</text>\n</svg>",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "基础 P.126 / 9讲 P.57-58 / 方浩 P.125 / 猪狗 P.5-2",
+        "pdfPage": 132,
+        "itemRef": "依概率收敛定义与运算性质"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr07_prob_conv_cauchy",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "依概率收敛把高等数学的数列极限推广到概率空间：当 $n$ 充分大时，$X_n$ 落入 $a\\pm\\varepsilon$ 窄通道内的概率无限趋近 $1$，允许极小概率事件跑到通道外。考研中仅在两大板块登场：**大数定律**与**估计量的一致性（相合性）**。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「依概率收敛算术规则和普通数列极限几乎一模一样；要证收敛于常数，三条路：直接定义算极限、套大数定律、或证期望趋于真值且方差趋于 0！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr07-f-03",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "三、三大大数定律与马尔可夫/泊松拓展",
+      "title": "切比雪夫、伯努利、辛钦大数定律与马尔可夫/泊松大数定律总表",
+      "formulaLatex": "$$\\begin{aligned} &\\text{统一形式（称 }\\{X_n\\}\\text{ 服从大数定律）：}\\forall\\varepsilon>0, \\lim_{n\\to\\infty}P\\!\\left\\{\\left|\\frac{1}{n}\\sum_{i=1}^{n}X_i-\\frac{1}{n}\\sum_{i=1}^{n}EX_i\\right|<\\varepsilon\\right\\}=1, \\text{即 }\\frac{1}{n}\\sum_{i=1}^{n}X_i-\\frac{1}{n}\\sum_{i=1}^{n}EX_i\\xrightarrow{P}0\\\\ &\\text{① 伯努利大数定律：}\\mu_n\\sim B(n,p)\\implies \\frac{\\mu_n}{n}\\xrightarrow{P}p　(\\text{频率依概率稳定于概率})\\\\ &\\text{② 切比雪夫大数定律：}\\{X_n\\}\\text{ 两两不相关，且 }\\exists C>0\\text{ 使 }DX_i\\le C (\\forall i)\\implies \\frac{1}{n}\\sum_{i=1}^{n}X_i-\\frac{1}{n}\\sum_{i=1}^{n}EX_i\\xrightarrow{P}0\\\\ &\\text{③ 辛钦大数定律：}\\{X_n\\}\\text{ 独立同分布，且 }EX_i=\\mu\\text{ 存在}\\implies \\frac{1}{n}\\sum_{i=1}^{n}X_i\\xrightarrow{P}\\mu　(\\text{不要求方差存在！})\\\\ &\\text{④ 马尔可夫大数定律：}\\lim_{n\\to\\infty}\\frac{1}{n^2}D\\!\\left(\\sum_{i=1}^{n}X_i\\right)=0\\implies \\frac{1}{n}\\sum_{i=1}^{n}X_i-\\frac{1}{n}\\sum_{i=1}^{n}EX_i\\xrightarrow{P}0\\\\ &\\text{⑤ 泊松大数定律：}n\\text{ 次独立试验第 }i\\text{ 次成功概率 }p_i\\implies \\frac{S_n}{n}-\\frac{1}{n}\\sum_{i=1}^{n}p_i\\xrightarrow{P}0\\end{aligned}$$",
+      "conditions": "牢记包含关系：伯努利 $\\subset$ 切比雪夫 $\\subset$ 马尔可夫，且伯努利 $\\subset$ 辛钦；切比雪夫不要求同分布也不要求独立（仅需两两不相关 + 一致有界方差），辛钦不要求方差存在！",
+      "pitfalls": "**「方差存在」与「方差有公共上界」天差地别**：$DX_i=i$ 对每个 $i$ 方差都有限，但无公共上界 $C$；同时切比雪夫只需**两两不相关**，某些教辅强加「相互独立」是不必要的过强条件。",
+      "tables": [
+        {
+          "caption": "表 P7-1 · 五大（含拓展）大数定律前提条件与结论速查表",
+          "headers": [
+            "定律名称",
+            "分布与相依性条件",
+            "矩条件",
+            "依概率收敛结论",
+            "证明工具 / 考研地位"
+          ],
+          "rows": [
+            [
+              "伯努利大数定律",
+              "独立同分布于 $B(1,p)$",
+              "自动有界（$p(1-p)\\le\\frac14$）",
+              "$\\frac{\\mu_n}{n}\\xrightarrow{P}p$",
+              "切比雪夫不等式 · 频率稳定性基石"
+            ],
+            [
+              "辛钦大数定律",
+              "相互独立且同分布（i.i.d.）",
+              "$EX_i=\\mu$ 存在（**无须方差**）",
+              "$\\frac{1}{n}\\sum_{i=1}^n X_i\\xrightarrow{P}\\mu$",
+              "特征函数（超纲免证）· **考研最高频**"
+            ],
+            [
+              "切比雪夫大数定律",
+              "两两不相关（可不同分布）",
+              "$\\exists C>0,\\;DX_i\\le C$（公共上界）",
+              "$\\frac{1}{n}\\sum X_i-\\frac{1}{n}\\sum EX_i\\xrightarrow{P}0$",
+              "切比雪夫不等式 · 判别选择题高频"
+            ],
+            [
+              "马尔可夫大数定律",
+              "允许相关且不同分布",
+              "$\\frac{1}{n^2}D(\\sum_{i=1}^n X_i)\\to 0$",
+              "$\\frac{1}{n}\\sum X_i-\\frac{1}{n}\\sum EX_i\\xrightarrow{P}0$",
+              "切比雪夫不等式 · 排雷充分当必要"
+            ],
+            [
+              "泊松大数定律",
+              "独立（各次成功概率 $p_i$ 不同）",
+              "自动满足 $p_i(1-p_i)\\le\\frac14$",
+              "$\\frac{S_n}{n}-\\frac{1}{n}\\sum_{i=1}^n p_i\\xrightarrow{P}0$",
+              "切比雪夫特例 · 茆书经典证明题"
+            ]
+          ]
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化 & 27 猪狗百宝书 & 27 版全总结",
+        "printedPage": "基础 P.127-128 / 9讲 P.58 / 方浩 P.126-128 / 猪狗 P.5-3~5-4 / 全总结 P.14",
+        "pdfPage": 133,
+        "itemRef": "三大大数定律与马尔可夫泊松大数定律"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr07_lln_series_and_markov",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "三大大数定律本质是「不同强度前提下的同一结论」：**样本算术平均依概率收敛于期望的算术平均**。考研中辛钦使用频率最高（i.i.d. 只要期望存在即可秒用，甚至可用于 $\\frac1n\\sum g(X_i)\\xrightarrow{P}E[g(X_1)]$），切比雪夫专治「不同分布或仅不相关」的序列。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「辛钦考最高：独立同分布+期望存（无须方差）；切比雪夫允许异分布：两两不相关+方差有公共上界；马尔可夫兜底：和方差除 $n^2$ 趋零！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr07-f-04",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "四、中心极限定理（CLT）",
+      "title": "列维-林德伯格与棣莫弗-拉普拉斯中心极限定理及二项分布三档近似",
+      "formulaLatex": "$$\\begin{aligned} &\\text{① 列维-林德伯格定理（i.i.d. CLT）：设 }\\{X_n\\}\\text{ 独立同分布，}EX_i=\\mu, DX_i=\\sigma^2\\in(0,+\\infty)\\text{，则 }\\forall x\\in\\mathbb{R}\\text{：}\\\\ &　　\\lim_{n\\to\\infty}P\\!\\left\\{\\frac{\\sum_{i=1}^{n}X_i-n\\mu}{\\sqrt{n}\\,\\sigma}\\le x\\right\\}=\\Phi(x)=\\frac{1}{\\sqrt{2\\pi}}\\int_{-\\infty}^{x}e^{-\\frac{t^2}{2}}\\,\\mathrm{d}t\\\\ &　　\\text{实用近似：}\\sum_{i=1}^{n}X_i\\dot\\sim N(n\\mu,\\,n\\sigma^2),　　 \\bar X=\\frac{1}{n}\\sum_{i=1}^{n}X_i\\dot\\sim N\\!\\left(\\mu,\\,\\frac{\\sigma^2}{n}\\right)\\\\ &\\text{② 棣莫弗-拉普拉斯定理（二项 CLT）：设 }S_n\\sim B(n,p) (0<p<1)\\text{，则 }\\forall x\\in\\mathbb{R}\\text{：}\\\\ &　　\\lim_{n\\to\\infty}P\\!\\left\\{\\frac{S_n-np}{\\sqrt{np(1-p)}}\\le x\\right\\}=\\Phi(x),　　 S_n\\dot\\sim N(np,\\,np(1-p))\\\\ &　　\\text{区间近似：}P\\{a\\le S_n\\le b\\}\\approx\\Phi\\!\\left(\\frac{b-np}{\\sqrt{np(1-p)}}\\right)-\\Phi\\!\\left(\\frac{a-np}{\\sqrt{np(1-p)}}\\right)\\end{aligned}$$",
+      "conditions": "列维-林德伯格必备三要素：**独立、同分布、期望存在且方差 $0<\\sigma^2<\\infty$**（缺方差如柯西分布完全不适用！）；棣莫弗-拉普拉斯即取 $X_i\\sim B(1,p)$ 的特例，当 $p$ 极小或极大（强偏态）且 $np\\le 10$ 时宜改用泊松近似。",
+      "pitfalls": "**考研不强制做 $\\pm 0.5$ 连续性修正**：考研数学真题与主流教材（张宇/方浩/猪狗）一律直接使用 $\\Phi\\left(\\frac{b-np}{\\sqrt{npq}}\\right)-\\Phi\\left(\\frac{a-np}{\\sqrt{npq}}\\right)$，若强行加减 $0.5$ 反而会与题干所给 $\\Phi(\\cdot)$ 查表数据对不上！",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 680 350\" role=\"img\" aria-label=\"中心极限定理钟形汇聚与二项分布三档近似路由\">\n  <title>中心极限定理钟形汇聚与二项分布三档近似路由</title>\n  <defs>\n    <marker id=\"m1_pr07_clt_arr\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n      <path d=\"M0 1 L9 5 L0 9 Z\" fill=\"#2563eb\"/>\n    </marker>\n    <marker id=\"m1_pr07_clt_teal\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n      <path d=\"M0 1 L9 5 L0 9 Z\" fill=\"#0f766e\"/>\n    </marker>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"680\" height=\"350\" rx=\"12\" fill=\"#f8fafc\"/>\n  <text x=\"340\" y=\"26\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"700\" fill=\"#0f172a\">中心极限定理（CLT）钟形汇聚与二项分布 B(n, p) 三档近似路由</text>\n\n  <!-- Left panel: CLT visual -->\n  <rect x=\"18\" y=\"42\" width=\"322\" height=\"292\" rx=\"10\" fill=\"#ffffff\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"179\" y=\"64\" text-anchor=\"middle\" font-size=\"12.5\" font-weight=\"700\" fill=\"#1e40af\">① 列维-林德伯格：任意 i.i.d. 求和 → 正态钟形</text>\n\n  <!-- Mini plot 1: n=1 skewed -->\n  <rect x=\"32\" y=\"76\" width=\"90\" height=\"74\" rx=\"6\" fill=\"#fef2f2\" stroke=\"#fecaca\"/>\n  <text x=\"77\" y=\"92\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#b91c1c\">n = 1（偏态/均匀）</text>\n  <path d=\"M 42 138 L 42 102 Q 62 128, 110 138 Z\" fill=\"#f87171\" opacity=\"0.5\" stroke=\"#dc2626\" stroke-width=\"1.5\"/>\n\n  <line x1=\"126\" y1=\"113\" x2=\"144\" y2=\"113\" stroke=\"#2563eb\" stroke-width=\"1.8\" marker-end=\"url(#m1_pr07_clt_arr)\"/>\n\n  <!-- Mini plot 2: n=5 smoothing -->\n  <rect x=\"148\" y=\"76\" width=\"84\" height=\"74\" rx=\"6\" fill=\"#fffbeb\" stroke=\"#fde68a\"/>\n  <text x=\"190\" y=\"92\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#b45309\">n = 5（渐趋对称）</text>\n  <path d=\"M 156 138 C 166 135, 173 103, 185 103 C 198 103, 210 135, 224 138 Z\" fill=\"#fbbf24\" opacity=\"0.45\" stroke=\"#d97706\" stroke-width=\"1.5\"/>\n\n  <line x1=\"236\" y1=\"113\" x2=\"254\" y2=\"113\" stroke=\"#2563eb\" stroke-width=\"1.8\" marker-end=\"url(#m1_pr07_clt_arr)\"/>\n\n  <!-- Mini plot 3: n>=30 bell -->\n  <rect x=\"258\" y=\"76\" width=\"70\" height=\"74\" rx=\"6\" fill=\"#eff6ff\" stroke=\"#93c5fd\"/>\n  <text x=\"293\" y=\"92\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#1d4ed8\">n → ∞</text>\n  <path d=\"M 264 138 C 274 137, 282 100, 293 100 C 304 100, 312 137, 322 138 Z\" fill=\"#60a5fa\" opacity=\"0.5\" stroke=\"#2563eb\" stroke-width=\"1.8\"/>\n\n  <!-- Standardized formula box -->\n  <rect x=\"32\" y=\"164\" width=\"294\" height=\"70\" rx=\"8\" fill=\"#eff6ff\" stroke=\"#3b82f6\" stroke-width=\"1.3\"/>\n  <text x=\"179\" y=\"185\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#1e3a8a\">标准化黄金公式（必备：i.i.d. + μ, σ² 存在）</text>\n  <text x=\"179\" y=\"207\" text-anchor=\"middle\" font-size=\"12.5\" font-weight=\"700\" fill=\"#2563eb\">Yₙ = (∑Xᵢ - nμ) / (√n · σ)  ≈  N(0, 1)</text>\n  <text x=\"179\" y=\"225\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#475569\">即 ∑Xᵢ ≈ N(nμ, nσ²)，X̄ ≈ N(μ, σ²/n)</text>\n\n  <!-- 3 problem types -->\n  <rect x=\"32\" y=\"246\" width=\"294\" height=\"76\" rx=\"8\" fill=\"#f8fafc\" stroke=\"#cbd5e1\"/>\n  <text x=\"179\" y=\"265\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#0f172a\">考场“知二求一”三大标准题型：P(Yₙ ≤ y) ≈ Φ(y) = β</text>\n  <text x=\"44\" y=\"284\" font-size=\"10.5\" fill=\"#334155\">• 求概率 β：已知 n 与阈值 → 标准化直接查 Φ(y)</text>\n  <text x=\"44\" y=\"300\" font-size=\"10.5\" fill=\"#334155\">• 求阈值 y：已知 n 与保证率 β → 反查分位数 z_α</text>\n  <text x=\"44\" y=\"316\" font-size=\"10.5\" fill=\"#334155\">• 求样本量 n：已知误差与精度 → 解关于 √n 二次不等式</text>\n\n  <!-- Right panel: 3-tier Binomial router -->\n  <rect x=\"352\" y=\"42\" width=\"310\" height=\"292\" rx=\"10\" fill=\"#ffffff\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"507\" y=\"64\" text-anchor=\"middle\" font-size=\"12.5\" font-weight=\"700\" fill=\"#0f766e\">② 二项分布 B(n, p) 计算三档速查路由</text>\n\n  <!-- Root node -->\n  <rect x=\"424\" y=\"76\" width=\"166\" height=\"32\" rx=\"16\" fill=\"#0f172a\"/>\n  <text x=\"507\" y=\"96\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#ffffff\">遇到 Sₙ ~ B(n, p)</text>\n  <line x1=\"507\" y1=\"108\" x2=\"507\" y2=\"124\" stroke=\"#0f766e\" stroke-width=\"1.5\" marker-end=\"url(#m1_pr07_clt_teal)\"/>\n\n  <!-- Tier 1 -->\n  <rect x=\"368\" y=\"128\" width=\"278\" height=\"52\" rx=\"8\" fill=\"#ecfdf5\" stroke=\"#10b981\" stroke-width=\"1.2\"/>\n  <text x=\"380\" y=\"147\" font-size=\"11.5\" font-weight=\"700\" fill=\"#065f46\">第一档：n 较小（如 n ≤ 10）</text>\n  <text x=\"380\" y=\"166\" font-size=\"10.5\" fill=\"#047857\">直接用二项精确公式：C(n, k) pᵏ (1 - p)ⁿ⁻ᵏ</text>\n\n  <!-- Tier 2 -->\n  <rect x=\"368\" y=\"190\" width=\"278\" height=\"58\" rx=\"8\" fill=\"#fffbeb\" stroke=\"#f59e0b\" stroke-width=\"1.2\"/>\n  <text x=\"380\" y=\"209\" font-size=\"11.5\" font-weight=\"700\" fill=\"#b45309\">第二档：n 大、p 很小、λ = np 适中（≤ 10）</text>\n  <text x=\"380\" y=\"227\" font-size=\"10.5\" fill=\"#92400e\">泊松定理近似：B(n, p) ≈ P(λ)，偏态时优于正态！</text>\n  <text x=\"380\" y=\"241\" font-size=\"10\" fill=\"#b45309\">（若 p 很大且 q = 1 - p 很小，改对失败次数用泊松）</text>\n\n  <!-- Tier 3 -->\n  <rect x=\"368\" y=\"258\" width=\"278\" height=\"64\" rx=\"8\" fill=\"#eff6ff\" stroke=\"#2563eb\" stroke-width=\"1.4\"/>\n  <text x=\"380\" y=\"277\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1d4ed8\">第三档：n 大且 np, n(1 - p) 均不太小（≥ 5）</text>\n  <text x=\"380\" y=\"295\" font-size=\"10.5\" fill=\"#1e40af\">棣莫弗-拉普拉斯 CLT：Sₙ ≈ N(np, npq)</text>\n  <text x=\"380\" y=\"311\" font-size=\"10\" fill=\"#2563eb\">考研题给 Φ(·) 查表值即明确锁定用 CLT 近似！</text>\n</svg>",
+      "tables": [
+        {
+          "caption": "表 P7-2 · 二项分布 B(n, p) 概率计算三档选型速查表",
+          "headers": [
+            "适用档位",
+            "参数特征",
+            "选用公式",
+            "典型题眼与精度说明"
+          ],
+          "rows": [
+            [
+              "第一档：精确计算",
+              "$n$ 较小（如 $n\\le 10$）",
+              "$P\\{X=k\\}=C_n^k p^k(1-p)^{n-k}$",
+              "无近似误差，直接手算或求对立事件"
+            ],
+            [
+              "第二档：泊松近似",
+              "$n$ 大、$p$ 很小、$\\lambda=np\\le 10$",
+              "$P\\{X=k\\}\\approx\\frac{\\lambda^k}{k!}e^{-\\lambda}$",
+              "给出 $e^{-\\lambda}$ 数值；偏态明显时精度远高于正态"
+            ],
+            [
+              "第三档：正态 CLT 近似",
+              "$n$ 大且 $np\\ge 5,\\;n(1-p)\\ge 5$",
+              "$S_n\\dot\\sim N(np,\\,np(1-p))$",
+              "题干给出 $\\Phi(x)$ 查表值或问区间近似概率/样本量 $n$"
+            ]
+          ]
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化 & 27 猪狗百宝书 & 27 版全总结",
+        "printedPage": "基础 P.129-130 / 9讲 P.58-59 / 方浩 P.130-131 / 猪狗 P.5-5~5-6 / 全总结 P.14",
+        "pdfPage": 135,
+        "itemRef": "列维-林德伯格与棣莫弗-拉普拉斯中心极限定理"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr07_clt_core_exams",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "中心极限定理解释了自然界与工程中「正态分布无处不在」的根本原因：**无论单个随机变量服从何种分布**（离散、均匀、指数、偏态皆可），只要独立同分布且期望方差有限，其大量累加之和经标准化后必依分布收敛于标准正态 $N(0,1)$！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「加起来减期望除以标准差，就逼近 $N(0,1)$！总和方差是 $n\\sigma^2$（分母 $\\sqrt n\\sigma$），均值方差是 $\\sigma^2/n$（分母 $\\sigma/\\sqrt n$），切莫把 $\\sqrt n$ 乘除写反！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr07-f-05",
+      "kind": "formula",
+      "stage": "intensive",
+      "examWeight": "extended",
+      "section": "五、经验分布函数与格里文科定理（仅数三考纲拓展）",
+      "title": "经验分布函数 F_n(x) 的期望方差、协方差与格里文科定理（仅数三拓展）",
+      "formulaLatex": "$$\\begin{aligned} &\\text{设有序样本 }x_{(1)}\\le x_{(2)}\\le\\dots\\le x_{(n)}\\text{，示性变量 }I_i(x)=\\mathbb{I}_{\\{X_i\\le x\\}}\\sim B(1,F(x))\\text{：}\\\\ &F_n(x)=\\frac{1}{n}\\sum_{i=1}^{n}I_i(x)=\\begin{cases}0,&x<x_{(1)}\\\\ \\frac{k}{n},&x_{(k)}\\le x<x_{(k+1)} (k=1,\\dots,n-1)\\\\ 1,&x\\ge x_{(n)}\\end{cases}\\\\ &E[F_n(x)]=F(x),　　 D[F_n(x)]=\\frac{F(x)[1-F(x)]}{n}\\le\\frac{1}{4n}\\\\ &\\operatorname{Cov}(F_n(u),F_n(v))=\\frac{1}{n}\\Big(F(\\min\\{u,v\\})-F(u)F(v)\\Big)\\\\ &\\text{伯努利大数定律：}F_n(x)\\xrightarrow{P}F(x)　\\text{；格里文科定理：}P\\!\\left\\{\\lim_{n\\to\\infty}\\sup_{-\\infty<x<+\\infty}|F_n(x)-F(x)|=0\\right\\}=1\\end{aligned}$$",
+      "conditions": "样本须为简单随机样本（i.i.d.）；若样本中有重复观测值（如两个 $347$），阶梯在该点直接跳跃 $2/n$。",
+      "pitfalls": "**原书笔误顺带勘误**：`猪狗百宝书 P.6-3` 格里文科定理框内将「$F_n(x)$ 是其经验分布函数」误印为「使其经验分布函数」；数一同学复习时识别其与伯努利大数定律的内在联系即可，无须过度刷偏题。",
+      "source": {
+        "book": "27 猪狗百宝书 & 27 方浩强化（仅数三拓展）",
+        "printedPage": "猪狗 P.6-3, 6-12 / 方浩 P.128",
+        "pdfPage": 136,
+        "itemRef": "经验分布函数与格里文科定理（仅数三拓展）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr07_empirical_cdf",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "【数一提醒：本条属**仅数三考纲**，数一作原理拓展了解！】经验分布函数本质是用阶梯频率逼近真实分布函数 $F(x)$，借助伯努利大数定律可得逐点依概率收敛，格里文科定理进一步给出一致几乎处处收敛，是整个非参数统计的基石。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「把 $nF_n(x)$ 看成二项分布 $B(n, F(x))$，期望 $F(x)$、方差 $F(1-F)/n$ 一秒写完！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr07-c-01",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "一、大数定律条件辨析与勘误排雷",
+      "title": "切比雪夫仅是充分条件：「方差无界 ≠ 不服从大数定律」（跨书严谨补注！）",
+      "conditions": "**五书勘误与严谨补注**：`方浩强化 P.127 例题 3` 排除 (B) $E(1/i)$ 与 (C) $P(i)$ 时，解析仅写「$DX_i$ 无界，不满足切比雪夫大数定律」，属于**把充分条件的否定当成结论否定**！严谨判定须分两层：① 题干若问「**满足切比雪夫大数定律条件**」则看 $DX_i\\le C$；② 题干若问「**服从大数定律**」则须检验马尔可夫条件 $\\frac{1}{n^2}\\sum DX_i\\to 0$ 或极限分布是否退化为常数。",
+      "application": "应对「以下哪个序列不服从大数定律」的选择题时，对每个选项先算 $DX_i$ 再估 $\\frac{1}{n^2}\\sum_{i=1}^n DX_i$ 的量级（关键阈值：$DX_i=O(i^\\alpha)$ 中 $\\alpha<1$ 必服从，$\\alpha\\ge 1$ 破坏马尔可夫条件）。",
+      "pitfalls": "典型边界反例：$X_i\\sim N(0, i)$ 相互独立，则 $\\bar X_n\\sim N\\left(0,\\frac{n+1}{2n}\\right)\\xrightarrow{d}N\\left(0,\\frac12\\right)$，极限是非退化正态分布，故严格不服从大数定律；而 $X_i\\sim N(0,\\ln i)$ 则 $\\bar X_n\\sim N\\left(0,\\frac{\\ln(n!)}{n^2}\\right)\\xrightarrow{P}0$，严格服从大数定律！",
+      "source": {
+        "book": "27 方浩强化 & 27 张宇基础30讲 & 27 猪狗百宝书",
+        "printedPage": "方浩 P.127 例3（严谨补注） / 基础 P.127 例5.1 / 猪狗 P.5-4, 5-10",
+        "pdfPage": 133,
+        "itemRef": "切比雪夫充分条件与马尔可夫边界严谨补注"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr07_lln_series_and_markov",
+        "verified": true
+      },
+      "summary": "判断独立（或两两不相关）序列 $\\{X_n\\}$ 是否服从大数定律时：**切比雪夫条件「$DX_i\\le C$ 一致有界」只是充分而非必要条件！**更宽的马尔可夫充分条件为 $\\lim_{n\\to\\infty}\\frac{1}{n^2}\\sum_{i=1}^n DX_i=0$。例如独立序列满足 $DX_i=\\ln i$ 或 $DX_i=i^{0.5}$ 时方差无界，却有 $\\frac{1}{n^2}\\sum_{i=1}^n DX_i\\to 0$，**依然服从大数定律**！真正导致 $X_i\\sim P(i)$（$DX_i=i$）或 $X_i\\sim E(1/i)$（$DX_i=i^2$）不服从大数定律的实质是 $\\frac{1}{n^2}\\sum DX_i$ 分别趋于 $\\frac{1}{2}>0$ 与 $+\\infty$（且由正态/特征函数可证其均值方差不趋于 $0$）。"
+    },
+    {
+      "id": "m1-pr07-c-02",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、辛钦大数定律函数推广",
+      "title": "辛钦函数推广：独立同分布序列的任意函数平均依概率收敛于函数期望",
+      "conditions": "务必核实 $E[g(X_1)]$ 绝对收敛存在（如标准柯西分布 $X_i$ 期望不存在，辛钦大数定律不适用，实际上其样本均值仍服从标准柯西分布，永不收敛于常数！）。",
+      "application": "2022 真题、2003 真题与几乎所有「当 $n\\to\\infty$ 时，$\\frac1n\\sum g(X_i)$ 依概率收敛于 ____」的填空/选择题，一步转化为算单变量期望 $E[g(X_1)]$！",
+      "pitfalls": "遇到 $\\frac{1}{n}\\sum_{i=1}^n (X_i-\\bar X)^2$ 或 $S^2=\\frac{1}{n-1}\\sum (X_i-\\bar X)^2$ 时，各项因共用 $\\bar X$ 而不独立！必须先展开成 $\\frac{1}{n}\\sum X_i^2 - \\bar X^2$，再分别对两项用辛钦与连续映射定理得 $E(X^2)-(EX)^2=DX$。",
+      "source": {
+        "book": "27 张宇概率9讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.58, 60 / 方浩 P.128-129 / 猪狗 P.5-8~5-9",
+        "pdfPage": 69,
+        "itemRef": "辛钦大数定律函数平均与样本矩推广"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr07_lln_series_and_markov",
+        "verified": true
+      },
+      "summary": "若 $\\{X_n\\}$ 独立同分布，且对某可测函数 $g(x)$ 存在有限期望 $E[g(X_1)]=\\mu_g$，则 $\\{g(X_n)\\}$ 亦独立同分布且期望有限，由辛钦大数定律立得：$$\\frac{1}{n}\\sum_{i=1}^{n}g(X_i)\\xrightarrow{P}E[g(X_1)]$$特别地，样本 $k$ 阶原点矩 $A_k=\\frac{1}{n}\\sum_{i=1}^n X_i^k\\xrightarrow{P}E(X_1^k)$（只要 $k$ 阶矩存在，**无须 $2k$ 阶矩存在**！）；再配合连续映射定理，任意连续比值如 $\\frac{\\sum X_i^2}{\\sum X_i}=\\frac{\\frac1n\\sum X_i^2}{\\frac1n\\sum X_i}\\xrightarrow{P}\\frac{E(X_1^2)}{E(X_1)}$（$EX_1\\ne 0$）。"
+    },
+    {
+      "id": "m1-pr07-c-03",
+      "kind": "conclusion",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "三、中心极限定理三大题型模版",
+      "title": "中心极限定理「知二求一」四步流水线（求概率 β / 求阈值 y / 求样本量 n）",
+      "conditions": "当题目涉及未知比例 $p$ 的民调抽样最小样本量 $n$ 时（如「有 $95\\%$ 把握使 $|\\hat p-p|<0.01$」），利用最坏方差上界 $p(1-p)\\le\\frac{1}{4}$ 保守缩放，直接得 $n\\ge\\left(\\frac{z_{\\alpha/2}}{2\\varepsilon}\\right)^2$！",
+      "application": "通杀汽车装载、机床供电、加法取整误差、保险索赔与收视率抽样五大经典大题。",
+      "pitfalls": "**向上取整 vs 向下取整方向别反**：求「至少调查多少人 / 至少配多少千瓦」须**向上取整 $\\lceil\\cdot\\rceil$**；求「每辆车最多装多少箱 / 最多几个数相加」须**向下取整 $\\lfloor\\cdot\\rfloor$**！",
+      "source": {
+        "book": "27 猪狗百宝书 & 27 张宇基础30讲",
+        "printedPage": "猪狗 P.5-6~5-7 / 基础 P.131-133",
+        "pdfPage": 126,
+        "itemRef": "中心极限定理知二求一四步解题模版"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "summary": "记独立同分布之和 $S_n=\\sum_{i=1}^n X_i$（$EX_i=\\mu,\\;DX_i=\\sigma^2>0$），标准化变量 $Y_n=\\frac{S_n-n\\mu}{\\sqrt n\\sigma}\\dot\\sim N(0,1)$。所有应用题均归结为方程 $P\\{S_n\\le y\\}\\approx\\Phi\\!\\left(\\frac{y-n\\mu}{\\sqrt n\\sigma}\\right)=\\beta$ 中的三参「知二求一」：\n1. **求概率 $\\beta$**：已知 $n,y\\implies$ 算 $z=\\frac{y-n\\mu}{\\sqrt n\\sigma}$，直接查 $\\Phi(z)$（双侧对称区间用 $2\\Phi(z)-1$）；\n2. **求阈值 $y$**：已知 $n,\\beta\\implies$ 反查分位数 $z=\\Phi^{-1}(\\beta)$，解出 $y=n\\mu+z\\sqrt n\\sigma$；\n3. **求最小样本量 / 最大装载数 $n$**：已知误差界或总限重 $y$ 与保证率 $\\beta\\implies$ 列不等式 $\\frac{y-n\\mu}{\\sqrt n\\sigma}\\ge z_\\alpha$，化为关于 $t=\\sqrt n$ 的一元二次不等式求解并按题意向上（求至少抽样数）或向下（求最多装载数）取整！"
+    },
+    {
+      "id": "m1-pr07-c-04",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "四、三大极限定理家族选型对照",
+      "title": "切比雪夫不等式 · 大数定律 · 中心极限定理三维识别矩阵",
+      "conditions": "特别注意：用切比雪夫不等式估计大样本量 $n$ 往往比中心极限定理保守 $3\\sim 5$ 倍（例如误差 $0.01$、置信度 $95\\%$ 时切比雪夫需 $50000$ 人，CLT 仅需 $9604$ 人），除非题干明确要求「由切比雪夫不等式」，否则求近似概率/样本量一律优先用 CLT！",
+      "application": "快速区分 2022 两道同年真题（切比雪夫四阶矩 vs 辛钦三角密度）与 2020 真题（二项 CLT）。",
+      "tables": [
+        {
+          "caption": "表 P7-3 · 切比雪夫不等式 vs 大数定律 vs 中心极限定理命题识别矩阵",
+          "headers": [
+            "对比维度",
+            "切比雪夫不等式",
+            "大数定律（LLN）",
+            "中心极限定理（CLT）"
+          ],
+          "rows": [
+            [
+              "适用样本量",
+              "任意有限 $n$（可 $n=1$）",
+              "$n\\to\\infty$（渐近）",
+              "$n$ 充分大（近似）"
+            ],
+            [
+              "核心输出",
+              "保守概率上界或下界",
+              "样本均值趋近的**极限常数**",
+              "标准化和的**近似正态分布 $\\Phi(x)$**"
+            ],
+            [
+              "必备矩条件",
+              "$EX,DX$ 存在",
+              "辛钦仅需 $EX$；切氏需 $DX_i\\le C$",
+              "$EX$ 存在且 $0<DX<\\infty$"
+            ],
+            [
+              "高频题干关键词",
+              "「由切比雪夫不等式」「至少/至多」",
+              "「当 $n\\to\\infty$ 依概率收敛于」「相合性」",
+              "「近似概率」「参考数据 $\\Phi(\\cdot)$」「至少抽样 $n$」"
+            ]
+          ]
+        }
+      ],
+      "pitfalls": "大数定律管「收敛到哪个数（一阶精度）」，中心极限定理管「以 $\\frac{1}{\\sqrt n}$ 尺度围绕该数如何正态涨落（二阶精度）」——前者不能算近似概率，后者才是近似查表引擎。",
+      "source": {
+        "book": "27 张宇概率9讲 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.57-62 / 猪狗 P.5-13",
+        "pdfPage": 68,
+        "itemRef": "切比雪夫大数定律与中心极限定理三维对照"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "summary": "考场看到大样本或不等式题，按「是否问精确不等界 / 是否问收敛常数 / 是否给 $\\Phi(x)$ 求近似概率」三秒精准锁定工具，绝不混用。"
+    },
+    {
+      "id": "m1-pr07-c-05",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "五、跨章衔接：数理统计的理论基石",
+      "title": "大数定律与中心极限定理在数理统计（第 8、9 讲）中的三大直接落地",
+      "conditions": "第 2、3 条仅需总体二阶矩存在；在 2021 年考研数学改革后，本章与数理统计联合命题频次显著提升（2020/2022 连续出现）。",
+      "application": "复习第 9 讲估计量一致性证明及概率 9 讲例 9.10 大样本近似置信区间时，直接调用本结论秒证！",
+      "pitfalls": "证明 $S^2\\xrightarrow{P}\\sigma^2$ 时，用辛钦大数定律只需 $DX<\\infty$（二阶矩存在），比用切比雪夫不等式（需 $D(S^2)$ 存在即四阶矩存在）条件更弱、过程更短！",
+      "source": {
+        "book": "27 张宇概率9讲 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.60, 74, 78 / 猪狗 P.5-13, 7-4",
+        "pdfPage": 71,
+        "itemRef": "大数定律与CLT在数理统计中的跨章衔接"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "summary": "本章绝非孤立冷门章，它直接支撑后两讲数理统计的三大支柱：\n1. **矩估计相合性**：由辛钦大数定律，$A_k\\xrightarrow{P}\\nu_k$，再由连续映射定理，只要矩估计是样本矩的连续函数，就自动是未知参数的**一致（相合）估计量**；\n2. **样本方差相合性**：$S^2=\\frac{n}{n-1}\\left(\\frac1n\\sum X_i^2-\\bar X^2\\right)\\xrightarrow{P}1\\cdot(E(X^2)-(EX)^2)=\\sigma^2$（仅需总体方差存在，无须正态！）；\n3. **大样本近似置信区间与检验**：即使总体非正态，只要 $n$ 充分大，由 CLT 与 $S\\xrightarrow{P}\\sigma$ 即得 $\\frac{\\sqrt n(\\bar X-\\mu)}{S}\\dot\\sim N(0,1)$，从而可对任意未知分布构造均值近似置信区间 $\\bar X\\pm z_{\\alpha/2}\\frac{S}{\\sqrt n}$！"
+    },
+    {
+      "id": "m1-pr07-e-01",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "一、切比雪夫不等式真题实战",
+      "title": "【2022 真题 · 含方浩强化勘误】样本二阶矩的切比雪夫概率上界",
+      "problem": "设随机变量 $X_1,X_2,\\dots,X_n$ 独立同分布，且 $X_1$ 的四阶矩存在。记 $\\mu_k=E(X_1^k)\\;(k=1,2,3,4)$，则由切比雪夫不等式，对任意 $\\varepsilon>0$，有 $P\\!\\left\\{\\left|\\frac{1}{n}\\sum_{i=1}^n X_i^2-\\mu_2\\right|\\ge\\varepsilon\\right\\}\\le (\\quad)$。\nA. $\\frac{\\mu_4-\\mu_2^2}{n\\varepsilon^2}$　　 B. $\\frac{\\mu_4-\\mu_2^2}{\\sqrt n\\varepsilon^2}$　　 C. $\\frac{\\mu_2-\\mu_1^2}{n\\varepsilon^2}$　　 D. $\\frac{\\mu_2-\\mu_1^2}{\\sqrt n\\varepsilon^2}$",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "令 $Y=\\frac{1}{n}\\sum_{i=1}^n X_i^2$，先核对中心 $\\mu_2$ 是否恰好等于 $EY$，再由独立同分布算出 $DY=\\frac{1}{n}D(X_1^2)$，一步代入切比雪夫不等式。"
+        },
+        {
+          "stepTitle": "核对随机变量期望中心",
+          "detail": "记 $Y=\\frac{1}{n}\\sum_{i=1}^n X_i^2$，由同分布得 $EY=\\frac{1}{n}\\sum_{i=1}^n E(X_i^2)=E(X_1^2)=\\mu_2$，与绝对值内中心严格匹配！"
+        },
+        {
+          "stepTitle": "计算方差并代入切比雪夫不等式",
+          "detail": "因 $X_1,\\dots,X_n$ 独立同分布，故 $X_1^2,\\dots,X_n^2$ 亦独立同分布，从而 $$DY=\\frac{1}{n^2}\\sum_{i=1}^{n}D(X_i^2)=\\frac{1}{n}D(X_1^2)=\\frac{E(X_1^4)-[E(X_1^2)]^2}{n}=\\frac{\\mu_4-\\mu_2^2}{n}$$ 由切比雪夫不等式即得 $$P\\{|Y-\\mu_2|\\ge\\varepsilon\\}\\le\\frac{DY}{\\varepsilon^2}=\\frac{\\mu_4-\\mu_2^2}{n\\varepsilon^2}$$ 故选 **A**。"
+        }
+      ],
+      "finalAnswer": "选 **A**：$\\dfrac{\\mu_4-\\mu_2^2}{n\\varepsilon^2}$。",
+      "source": {
+        "book": "2022 考研真题 · 概率9讲 / 方浩强化 / 猪狗百宝书",
+        "printedPage": "9讲 P.55 例6.9 / 方浩 P.126 例2（勘误） / 猪狗 P.5-8 例8.1",
+        "pdfPage": 66,
+        "itemRef": "2022真题：样本二阶矩切比雪夫上界（含方浩P.126勘误）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr07_chebyshev_and_exams",
+        "verified": true
+      },
+      "takeaway": "① **五书原书印刷勘误**：`方浩强化 P.126 例题 2` 题干前文写了「对 $\\forall\\varepsilon>0$」，后半句却把 `≥ ε` 误印为常数 `≥ 1`（导致 $\\varepsilon$ 悬空且与选项分母 $n\\varepsilon^2$ 矛盾），对照 `概率 9 讲 P.55 例 6.9` 及 `猪狗 P.5-8 例 8.1 (2022)` 确认原真题为 `≥ ε`！ ② 防错分母：$D(\\bar Y)=\\frac{DY_1}{n}$ 的分母是 $n$ 而非 $\\sqrt n$（切勿与标准差混淆）。"
+    },
+    {
+      "id": "m1-pr07-e-02",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、切比雪夫不等式真题实战",
+      "title": "【2001 真题 + 卡方联合】相关变量差与正态平方和的切比雪夫界",
+      "problem": "(1)（2001 真题）设随机变量 $X,Y$ 的数学期望都是 $2$，方差分别为 $1$ 和 $4$，相关系数为 $0.5$，则由切比雪夫不等式得 $P\\{|X-Y|\\ge 6\\}\\le\\underline{\\qquad}$；\n(2) 设 $X_1,\\dots,X_n\\;(n>2)$ 是来自 $N(0,1)$ 的简单随机样本，由切比雪夫不等式得 $P\\!\\left\\{0<\\sum_{i=1}^n X_i^2<2n\\right\\}\\ge\\underline{\\qquad}$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "两题均为先识别新变量的期望与方差，再对准「中心 = 期望」套切比雪夫不等式；第 (2) 问把 $0<U<2n$ 改写为 $|U-n|<n$！"
+        },
+        {
+          "stepTitle": "求解 (1)：含相关系数算方差",
+          "detail": "令 $Z=X-Y$，则 $EZ=EX-EY=2-2=0$，恰好匹配 $|X-Y|=|Z-0|$！又 $$\\operatorname{Cov}(X,Y)=\\rho\\sqrt{DX}\\sqrt{DY}=0.5\\times 1\\times 2=1$$ 故 $DZ=DX+DY-2\\operatorname{Cov}(X,Y)=1+4-2=3$，由切比雪夫不等式：$$P\\{|X-Y|\\ge 6\\}\\le\\frac{3}{6^2}=\\frac{1}{12}$$"
+        },
+        {
+          "stepTitle": "求解 (2)：识别卡方分布并对称改写区间",
+          "detail": "记 $U=\\sum_{i=1}^n X_i^2\\sim\\chi^2(n)$，则 $EU=n,\\;DU=2n$。观察事件 $\\{0<U<2n\\}=\\{|U-n|<n\\}$，中心恰好是 $EU=n$，半径 $\\varepsilon=n$，故 $$P\\{0<U<2n\\}=P\\{|U-n|<n\\}\\ge 1-\\frac{2n}{n^2}=1-\\frac{2}{n}$$"
+        }
+      ],
+      "finalAnswer": "(1) $\\dfrac{1}{12}$；　　 (2) $1-\\dfrac{2}{n}$。",
+      "source": {
+        "book": "2001 考研真题 & 27 猪狗百宝书",
+        "printedPage": "猪狗 P.5-9 例8.5 / P.5-10 例8.10",
+        "pdfPage": 129,
+        "itemRef": "2001真题与卡方样本和切比雪夫估计"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr07_chebyshev_and_exams",
+        "verified": true
+      },
+      "takeaway": "第 (1) 问切勿漏减 $2\\operatorname{Cov}(X,Y)$；第 (2) 问若没想起 $\\sum X_i^2\\sim\\chi^2(n)$，也可用 $E(X_i^2)=1,\\;D(X_i^2)=E(X_i^4)-1=3-1=2$ 算出 $DU=2n$。"
+    },
+    {
+      "id": "m1-pr07-e-03",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、依概率收敛直接验证",
+      "title": "【概率 9 讲 例 7.1】伸缩柯西序列：无期望却严格依概率收敛于 0",
+      "problem": "设随机变量序列 $\\{X_n\\}$ 的概率密度为 $f_n(x)=\\dfrac{n}{\\pi(1+n^2x^2)}\\;(-\\infty<x<+\\infty,\\;n=1,2,\\dots)$，证明：$X_n\\xrightarrow{P}0$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "$X_n$ 为伸缩柯西分布，期望和方差均不存在，无法用切比雪夫不等式！必须回归**依概率收敛的原始定义**直接积分计算 $P\\{|X_n-0|<\\varepsilon\\}$ 的极限。"
+        },
+        {
+          "stepTitle": "按依概率收敛定义直接积分",
+          "detail": "对任意给定的 $\\varepsilon>0$，由偶函数对称性计算：$$P\\{|X_n-0|<\\varepsilon\\}=\\int_{-\\varepsilon}^{\\varepsilon}\\frac{n}{\\pi(1+n^2x^2)}\\,\\mathrm{d}x=\\frac{2}{\\pi}\\int_{0}^{\\varepsilon}\\frac{1}{1+(nx)^2}\\,\\mathrm{d}(nx)=\\frac{2}{\\pi}\\arctan(n\\varepsilon)$$"
+        },
+        {
+          "stepTitle": "取极限证毕",
+          "detail": "当 $n\\to\\infty$ 时，由于 $\\varepsilon>0$ 固定，有 $n\\varepsilon\\to+\\infty$，故 $$\\lim_{n\\to\\infty}P\\{|X_n-0|<\\varepsilon\\}=\\lim_{n\\to\\infty}\\frac{2}{\\pi}\\arctan(n\\varepsilon)=\\frac{2}{\\pi}\\cdot\\frac{\\pi}{2}=1$$ 由定义即证 $X_n\\xrightarrow{P}0$。"
+        }
+      ],
+      "finalAnswer": "$\\lim_{n\\to\\infty}P\\{|X_n|<\\varepsilon\\}=\\lim_{n\\to\\infty}\\frac{2}{\\pi}\\arctan(n\\varepsilon)=1\\implies X_n\\xrightarrow{P}0$。",
+      "source": {
+        "book": "27 张宇概率9讲 & 27 方浩强化",
+        "printedPage": "9讲 P.60 例7.1 / 方浩 P.125 例1",
+        "pdfPage": 71,
+        "itemRef": "概率9讲例7.1：伸缩柯西序列依概率收敛于0"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr07_prob_conv_cauchy",
+        "verified": true
+      },
+      "takeaway": "**深刻警示**：本题是「依概率收敛不要求期望/方差存在」的黄金范例——企图先算 $EX_n$ 和 $DX_n$ 套充分判据会直接卡死（积分发散）！"
+    },
+    {
+      "id": "m1-pr07-e-04",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "三、切比雪夫与马尔可夫大数定律判别",
+      "title": "【基础例 5.1 + 方浩例 3 深度对比】缩放指数与变参序列是否服从大数定律",
+      "problem": "(1)（基础例 5.1 / 猪狗例 8.8）设独立序列 $\\{X_n\\}$ 满足 $X_n\\sim E(n)\\;(n\\ge 1)$，则下列序列中**不服从**切比雪夫大数定律的是（ ）。\nA. $X_1,\\frac12 X_2,\\dots,\\frac1n X_n,\\dots$　 B. $X_1,X_2,\\dots,X_n,\\dots$　 C. $X_1,2X_2,\\dots,nX_n,\\dots$　 D. $X_1,2^2X_2,\\dots,n^2X_n,\\dots$\n(2)（方浩强化例 3）设独立序列 $\\{X_i\\}$ 满足下列分布，哪个满足切比雪夫大数定律？并严谨分析其余选项是否仍服从一般（马尔可夫）大数定律：\nA. $U(-i,i)$　 B. $E(1/i)$　 C. $P(i)$　 D. $B(1,1/i)$",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "切比雪夫大数定律核心查两件事：① 两两不相关（独立自动满足）；② 方差存在**与 $n$ 无关的公共上界 $C$**。同时用 $\\frac{1}{n^2}\\sum_{i=1}^n DX_i$ 验明是否真的破坏大数定律！"
+        },
+        {
+          "stepTitle": "求解 (1)：逐项计算缩放后方差",
+          "detail": "由 $X_n\\sim E(n)$ 知 $DX_n=\\frac{1}{n^2}$。各选项第 $n$ 项方差为：\n- A：$D(\\frac1n X_n)=\\frac{1}{n^4}\\le 1$；\n- B：$D(X_n)=\\frac{1}{n^2}\\le 1$；\n- C：$D(nX_n)=n^2\\cdot\\frac{1}{n^2}=1\\le 1$；\n- D：$D(n^2X_n)=n^4\\cdot\\frac{1}{n^2}=n^2$（无公共上界，且 $\\frac{1}{n^2}\\sum_{k=1}^n k^2\\sim\\frac{n}{3}\\to\\infty$！）。\n故 **D** 既不满足切比雪夫条件也不服从大数定律。"
+        },
+        {
+          "stepTitle": "求解 (2)：对比切比雪夫条件与马尔可夫条件",
+          "detail": "各选项方差：\n- A：$U(-i,i)$ 有 $DX_i=\\frac{i^2}{3}$，$\\frac{1}{n^2}\\sum DX_i\\sim\\frac{n}{9}\\to\\infty$；\n- B：$E(1/i)$ 有 $DX_i=i^2$，$\\frac{1}{n^2}\\sum DX_i\\sim\\frac{n}{3}\\to\\infty$；\n- C：$P(i)$ 有 $DX_i=i$，$\\frac{1}{n^2}\\sum DX_i=\\frac{n+1}{2n}\\to\\frac12\\ne 0$（均值不收敛于常数）；\n- D：$B(1,1/i)$ 有 $DX_i=\\frac{1}{i}(1-\\frac{1}{i})\\le\\frac14$，有公共上界 $C=\\frac14$！\n故选 **D**。"
+        }
+      ],
+      "finalAnswer": "(1) 选 **D**；　　 (2) 选 **D**（且补注：排除 A/B/C 的根本原因是 $\\frac{1}{n^2}\\sum DX_i\\not\\to 0$，绝非仅仅「方差无界」）。",
+      "source": {
+        "book": "27 张宇基础30讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "基础 P.127 例5.1 / 方浩 P.127 例3（严谨补注） / 猪狗 P.5-10 例8.8",
+        "pdfPage": 133,
+        "itemRef": "切比雪夫与马尔可夫大数定律双题辨析"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr07_lln_series_and_markov",
+        "verified": true
+      },
+      "takeaway": "**严谨排雷**：若把题 (2) 某选项改成 $P(\\ln i)$，虽然 $DX_i=\\ln i$ 同样无界（不满足切比雪夫），却满足马尔可夫条件 $\\frac{1}{n^2}\\sum \\ln i\\to 0$，依然服从大数定律！答题须区分「满足切比雪夫条件」与「服从大数定律」。"
+    },
+    {
+      "id": "m1-pr07-e-05",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "四、辛钦大数定律真题实战",
+      "title": "【2022 真题】三角分布样本平方均值的依概率收敛极限",
+      "problem": "设随机变量序列 $X_1,X_2,\\dots,X_n,\\dots$ 独立同分布，且 $X_1$ 的概率密度为 $f(x)=\\begin{cases}1-|x|,&|x|<1\\\\0,&\\text{其他}\\end{cases}$，则当 $n\\to\\infty$ 时，$\\dfrac{1}{n}\\sum_{i=1}^n X_i^2$ 依概率收敛于（ ）。\nA. $\\frac18$　　 B. $\\frac16$　　 C. $\\frac13$　　 D. $\\frac12$",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "独立同分布序列的函数平均 $\\frac1n\\sum g(X_i)$ 见到「依概率收敛于」直接锁定**辛钦大数定律**，一步转化为求单变量期望 $E(X_1^2)$！"
+        },
+        {
+          "stepTitle": "应用辛钦大数定律转化目标",
+          "detail": "因 $X_1,X_2,\\dots$ 独立同分布，故 $X_1^2,X_2^2,\\dots$ 也独立同分布。只须检验 $E(X_1^2)$ 有限，即可由辛钦大数定律得 $\\frac{1}{n}\\sum_{i=1}^n X_i^2\\xrightarrow{P}E(X_1^2)$。"
+        },
+        {
+          "stepTitle": "偶函数对称积分算二阶矩",
+          "detail": "$$E(X_1^2)=\\int_{-1}^{1}x^2(1-|x|)\\,\\mathrm{d}x=2\\int_{0}^{1}(x^2-x^3)\\,\\mathrm{d}x=2\\left(\\frac{1}{3}-\\frac{1}{4}\\right)=\\frac{1}{6}$$ 故选 **B**。"
+        }
+      ],
+      "finalAnswer": "选 **B**：$\\dfrac{1}{6}$。",
+      "source": {
+        "book": "2022 考研真题 · 概率9讲 / 方浩强化 / 猪狗百宝书",
+        "printedPage": "9讲 P.60 例7.2 / 方浩 P.129 例6 / 猪狗 P.5-8 例8.2",
+        "pdfPage": 71,
+        "itemRef": "2022真题：三角分布样本平方均值辛钦收敛"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr07_lln_series_and_markov",
+        "verified": true
+      },
+      "takeaway": "三角分布 $f(x)=1-|x|$（即两独立 $U(-1/2,1/2)$ 之和）的期望 $EX_1=0$，方差等于二阶矩 $DX_1=E(X_1^2)=\\frac{1}{12}+\\frac{1}{12}=\\frac{1}{6}$，可顺手双向验算！"
+    },
+    {
+      "id": "m1-pr07-e-06",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "四、辛钦大数定律真题实战",
+      "title": "【2003 真题 + 连续映射组合】指数二阶矩、掷骰均值与比值极限",
+      "problem": "(1)（2003 真题）设总体 $X\\sim E(2)$，$X_1,\\dots,X_n$ 为简单随机样本，则 $n\\to\\infty$ 时 $Y_n=\\frac{1}{n}\\sum_{i=1}^n X_i^2\\xrightarrow{P}\\underline{\\qquad}$；\n(2) 掷均匀骰子 $n$ 次，点数均值 $M_n\\xrightarrow{P}\\underline{\\qquad}$；\n(3)（方浩强化例 7）设 $X_i$ 独立同分布于 $P(\\lambda)\\;(\\lambda>0)$，则当 $n\\to\\infty$ 时，$\\dfrac{\\sum_{i=1}^n X_i^2}{\\sum_{i=1}^n X_i}\\xrightarrow{P}\\underline{\\qquad}$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "第 (1)(2) 问直接用辛钦大数定律；第 (3) 问分子分母同除以 $n$，拆成两个样本矩之比，再用连续映射定理！"
+        },
+        {
+          "stepTitle": "求解 (1) 与 (2)",
+          "detail": "(1) $X\\sim E(2)$ 有 $EX=\\frac12,\\;DX=\\frac14\\implies E(X^2)=DX+(EX)^2=\\frac14+\\frac14=\\frac12$，由辛钦定律 $Y_n\\xrightarrow{P}\\frac12$。\n(2) 单次点数期望 $EX_1=\\frac{1+2+3+4+5+6}{6}=3.5$，故 $M_n\\xrightarrow{P}3.5$。"
+        },
+        {
+          "stepTitle": "求解 (3)：分子分母同除 n 套连续映射",
+          "detail": "由 $X_i\\sim P(\\lambda)$ 得 $EX_1=\\lambda>0$，$E(X_1^2)=DX_1+(EX_1)^2=\\lambda+\\lambda^2$。由辛钦定律：$$\\frac{1}{n}\\sum_{i=1}^n X_i^2\\xrightarrow{P}\\lambda+\\lambda^2,\\qquad \\frac{1}{n}\\sum_{i=1}^n X_i\\xrightarrow{P}\\lambda\\ne 0$$ 由依概率收敛除法法则得 $\\dfrac{\\sum X_i^2}{\\sum X_i}\\xrightarrow{P}\\dfrac{\\lambda+\\lambda^2}{\\lambda}=\\lambda+1$。"
+        }
+      ],
+      "finalAnswer": "(1) $\\dfrac{1}{2}$；　　 (2) $3.5$（或 $\\frac72$）；　　 (3) $\\lambda+1$。",
+      "source": {
+        "book": "2003 考研真题 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "猪狗 P.5-9 例8.4,8.7 / 方浩 P.129 例7",
+        "pdfPage": 129,
+        "itemRef": "2003真题与辛钦连续映射组合收敛"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr07_lln_series_and_markov",
+        "verified": true
+      },
+      "takeaway": "参数化口径提醒：国内主流教材 $E(\\lambda)$ 以速率 $\\lambda$ 为参（均值 $1/\\lambda$），故 $E(2)$ 均值是 $\\frac12$ 而非 $2$；若题干明确写「均值为 $2$ 的指数分布」，二阶矩则是 $2\\times 2^2=8$！"
+    },
+    {
+      "id": "m1-pr07-e-07",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "extended",
+      "section": "四、大数定律理论证明",
+      "title": "【茆书经典证明】马尔可夫大数定律与泊松大数定律一步证法",
+      "problem": "(1) 证明马尔可夫大数定律：对随机变量序列 $\\{X_n\\}$，若 $\\lim_{n\\to\\infty}\\frac{1}{n^2}D\\!\\left(\\sum_{i=1}^n X_i\\right)=0$，则 $\\{X_n\\}$ 服从大数定律；\n(2) 证明泊松大数定律：设 $S_n$ 为 $n$ 次独立试验中事件 $A$ 发生的次数，第 $i$ 次试验中 $P(A)=p_i$，证明 $\\frac{S_n}{n}-\\frac{1}{n}\\sum_{i=1}^n p_i\\xrightarrow{P}0$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "两道定理证明均直接对均值变量 $Y_n=\\frac{1}{n}\\sum_{i=1}^n X_i$ 施加切比雪夫不等式，一气呵成！"
+        },
+        {
+          "stepTitle": "证明马尔可夫大数定律",
+          "detail": "记 $Y_n=\\frac{1}{n}\\sum_{i=1}^n X_i$，则 $EY_n=\\frac{1}{n}\\sum_{i=1}^n EX_i$，$DY_n=\\frac{1}{n^2}D\\!\\left(\\sum_{i=1}^n X_i\\right)$。对 $\\forall\\varepsilon>0$，由切比雪夫不等式：$$0\\le P\\!\\left\\{\\left|\\frac{1}{n}\\sum_{i=1}^n X_i-\\frac{1}{n}\\sum_{i=1}^n EX_i\\right|\\ge\\varepsilon\\right\\}\\le\\frac{DY_n}{\\varepsilon^2}=\\frac{1}{n^2\\varepsilon^2}D\\!\\left(\\sum_{i=1}^n X_i\\right)\\xrightarrow{n\\to\\infty}0$$ 由夹逼准则即证 $\\{X_n\\}$ 服从大数定律。"
+        },
+        {
+          "stepTitle": "导出泊松大数定律",
+          "detail": "令 $X_i=\\mathbb{I}_{\\{\\text{第 }i\\text{ 次 }A\\text{ 发生}\\}}\\sim B(1,p_i)$，则 $S_n=\\sum_{i=1}^n X_i$，$EX_i=p_i$，$DX_i=p_i(1-p_i)\\le\\frac14$。由各次独立得 $$\\frac{1}{n^2}D(S_n)=\\frac{1}{n^2}\\sum_{i=1}^n p_i(1-p_i)\\le\\frac{n\\cdot\\frac14}{n^2}=\\frac{1}{4n}\\to 0$$ 由马尔可夫（或切比雪夫）大数定律立得证！"
+        }
+      ],
+      "finalAnswer": "均由切比雪夫不等式 $P\\{|Y_n-EY_n|\\ge\\varepsilon\\}\\le\\frac{DY_n}{\\varepsilon^2}\\to 0$ 严格得证。",
+      "source": {
+        "book": "27 猪狗百宝书（茆书汇编）& 27 方浩强化",
+        "printedPage": "猪狗 P.5-11 例8.13-8.14 / 方浩 P.128 例5",
+        "pdfPage": 131,
+        "itemRef": "马尔可夫与泊松大数定律证明"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "takeaway": "注意马尔可夫大数定律**完全不要求独立也不要求不相关**（只要总和方差增长阶低于 $n^2$ 即可，如有限步相依的 $m$-dependent 序列依然成立！）。"
+    },
+    {
+      "id": "m1-pr07-e-08",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "五、中心极限定理真题实战",
+      "title": "【2020 真题】百次对称 0-1 试验和的棣莫弗-拉普拉斯近似",
+      "problem": "设 $X_1,X_2,\\dots,X_{100}$ 为来自总体 $X$ 的简单随机样本，其中 $P\\{X=0\\}=P\\{X=1\\}=\\frac12$，$\\Phi(x)$ 表示标准正态分布函数，则利用中心极限定理可得 $P\\!\\left\\{\\sum_{i=1}^{100} X_i\\le 55\\right\\}$ 的近似值为（ ）。\nA. $1-\\Phi(1)$　　 B. $\\Phi(1)$　　 C. $1-\\Phi(0.2)$　　 D. $\\Phi(0.2)$",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "直接认出 $S_{100}=\\sum_{i=1}^{100} X_i\\sim B(100,\\frac12)$，算出 $np=50,\\;\\sqrt{npq}=5$，标准化即秒杀！"
+        },
+        {
+          "stepTitle": "计算和的期望与标准差",
+          "detail": "单变量 $X_i\\sim B(1,\\frac12)$，故 $EX_i=\\frac12,\\;DX_i=\\frac14$。因此 $S_{100}=\\sum_{i=1}^{100} X_i\\sim B(100,\\frac12)$，期望 $ES_{100}=100\\times\\frac12=50$，标准差 $\\sqrt{DS_{100}}=\\sqrt{100\\times\\frac14}=5$。"
+        },
+        {
+          "stepTitle": "套用棣莫弗-拉普拉斯 CLT",
+          "detail": "$$P\\{S_{100}\\le 55\\}=P\\!\\left\\{\\frac{S_{100}-50}{5}\\le\\frac{55-50}{5}\\right\\}=P\\!\\left\\{\\frac{S_{100}-50}{5}\\le 1\\right\\}\\approx\\Phi(1)$$ 故选 **B**。"
+        }
+      ],
+      "finalAnswer": "选 **B**：$\\Phi(1)$。",
+      "source": {
+        "book": "2020 考研真题 · 概率9讲 / 方浩强化 / 猪狗百宝书",
+        "printedPage": "9讲 P.61 例7.3 / 方浩 P.131 例8 / 猪狗 P.5-8 例8.3",
+        "pdfPage": 72,
+        "itemRef": "2020真题：百次0-1试验和CLT近似"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr07_clt_core_exams",
+        "verified": true
+      },
+      "takeaway": "防错选项 D：若把标准差错算成方差 $25$，就会误算 $\\frac{55-50}{25}=0.2$ 掉进出题人专门设好的陷阱 D！"
+    },
+    {
+      "id": "m1-pr07-e-09",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "五、中心极限定理真题实战",
+      "title": "【2001 真题】汽车最大安全装箱数（列二次不等式向下取整）",
+      "problem": "生产线成箱包装产品，每箱重量 $X_i$ 独立同分布，平均重 $50\\,\\text{kg}$，标准差为 $5\\,\\text{kg}$。现用最大载重量为 $5$ 吨（$5000\\,\\text{kg}$）的汽车承运，试用中心极限定理求每辆车最多可装多少箱，才能保障不超载的概率大于 $0.977$？（已知 $\\Phi(2)=0.977$）",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "设装 $n$ 箱，要求 $P\\left\\{\\sum_{i=1}^n X_i\\le 5000\\right\\}>0.977=\\Phi(2)$，转化为关于 $\\sqrt n$ 的一元二次不等式并**向下取整**！"
+        },
+        {
+          "stepTitle": "标准化建立不等式",
+          "detail": "设每车装 $n$ 箱，总重 $S_n=\\sum_{i=1}^n X_i$，则 $ES_n=50n,\\;DS_n=25n$。由列维-林德伯格定理：$$P\\{S_n\\le 5000\\}=P\\!\\left\\{\\frac{S_n-50n}{5\\sqrt n}\\le\\frac{5000-50n}{5\\sqrt n}\\right\\}\\approx\\Phi\\!\\left(\\frac{1000-10n}{\\sqrt n}\\right)>0.977=\\Phi(2)$$"
+        },
+        {
+          "stepTitle": "解二次不等式并向下取整",
+          "detail": "由 $\\Phi(x)$ 严格单增得 $\\frac{1000-10n}{\\sqrt n}>2$，令 $t=\\sqrt n>0$：$$5t^2+t-500<0\\implies 0<t<\\frac{-1+\\sqrt{1+10000}}{10}=\\frac{\\sqrt{10001}-1}{10}\\approx 9.9005$$ 平方得 $n<98.02$，因箱数取整数且须不超载，向下取整得最大装箱数 **$n=98$**。"
+        }
+      ],
+      "finalAnswer": "每辆车最多装 **$98$ 箱**。",
+      "source": {
+        "book": "2001 考研真题 · 基础30讲 / 猪狗百宝书",
+        "printedPage": "基础 P.133 例5.6 / 猪狗 P.5-9 例8.6",
+        "pdfPage": 139,
+        "itemRef": "2001真题：汽车最大装箱数CLT计算"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr07_clt_core_exams",
+        "verified": true
+      },
+      "takeaway": "**绝不可估成 $100$ 箱**：若装 $100$ 箱，平均重量已达 $5000\\,\\text{kg}$，不超载概率仅 $0.5$！留出 $2$ 倍标准差安全冗余恰占去 $2$ 箱空间。"
+    },
+    {
+      "id": "m1-pr07-e-10",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "五、中心极限定理经典应用",
+      "title": "【基础例 5.4 / 茆书】计算机加法取整误差（双问：求概率 & 求最多加数个数）",
+      "problem": "计算机作加法时将各加数舍入到最接近整数，设各取整误差 $X_i$ 相互独立且均服从 $U(-0.5,0.5)$。已知 $\\Phi(1.645)=0.95$：\n(1) 将 $1500$ 个数相加，求误差总和绝对值超过 $15$ 的概率（可用 $\\Phi$ 表示）；\n(2) 最多几个数相加，可使误差总和绝对值小于 $10$ 的概率不小于 $90\\%$？",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "单误差 $X_i\\sim U(-0.5,0.5)$ 有 $\\mu=0,\\;\\sigma^2=\\frac{1}{12}$；双侧绝对值事件直接化成 $2\\Phi(z)-1$ 求解！"
+        },
+        {
+          "stepTitle": "求单变量期望方差并解第 (1) 问",
+          "detail": "由 $U(-0.5,0.5)$ 得 $\\mu=0,\\;\\sigma^2=\\frac{(0.5-(-0.5))^2}{12}=\\frac{1}{12}$。对 $n=1500$，$ES_{1500}=0$，$DS_{1500}=\\frac{1500}{12}=125$，$\\sqrt{DS_{1500}}=5\\sqrt 5$。故 $$P\\{|S_{1500}|>15\\}=1-P\\!\\left\\{\\left|\\frac{S_{1500}}{5\\sqrt 5}\\right|\\le\\frac{15}{5\\sqrt 5}\\right\\}\\approx 2\\Big[1-\\Phi\\!\\left(\\frac{3}{\\sqrt 5}\\right)\\Big]\\approx 2[1-\\Phi(1.34)]\\approx 0.18$$"
+        },
+        {
+          "stepTitle": "求解第 (2) 问最多加数个数",
+          "detail": "要求 $P\\{|S_n|<10\\}\\approx 2\\Phi\\!\\left(\\frac{10}{\\sqrt{n/12}}\\right)-1\\ge 0.90\\iff \\Phi\\!\\left(\\frac{20\\sqrt 3}{\\sqrt n}\\right)\\ge 0.95=\\Phi(1.645)$。故 $$\\frac{20\\sqrt 3}{\\sqrt n}\\ge 1.645\\implies n\\le\\frac{1200}{1.645^2}\\approx 443.45$$ 向下取整得最多 **$443$ 个数**相加。"
+        }
+      ],
+      "finalAnswer": "(1) $2\\left[1-\\Phi\\left(\\frac{3\\sqrt 5}{5}\\right)\\right]\\approx 0.180$；　　 (2) 最多 **$443$ 个数**。",
+      "source": {
+        "book": "27 张宇基础30讲 & 27 猪狗百宝书（茆书汇编）",
+        "printedPage": "基础 P.131 例5.4 / 猪狗 P.5-12 例8.16",
+        "pdfPage": 137,
+        "itemRef": "计算机加法取整误差CLT双问"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr07_clt_core_exams",
+        "verified": true
+      },
+      "takeaway": "**双侧置信度别忘换算单侧**：双侧概率 $2\\Phi(z)-1\\ge 0.90$ 对应 $\\Phi(z)\\ge\\frac{1+0.90}{2}=0.95$，切勿直接查 $\\Phi(z)=0.90$！"
+    },
+    {
+      "id": "m1-pr07-e-11",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、强化技巧：配对重构与逆求常数",
+      "title": "【方浩例 10 + 猪狗例 8.12】配对差值构造新 i.i.d. 序列逆求标准化系数",
+      "problem": "(1)（猪狗例 8.12）设 $X_1,X_2,\\dots,X_{2n},\\dots$ 是来自 $B(1,\\frac12)$ 的简单随机样本，若 $\\lim_{n\\to\\infty}P\\!\\left\\{a\\sum_{i=1}^n (X_{2i}-X_{2i-1})\\le\\sqrt n\\,x\\right\\}=\\Phi(x)\\;(\\forall x\\in\\mathbb{R})$，求常数 $a$；\n(2)（方浩强化例 10）若改设 $X_i\\sim N(0,1)$ 独立同分布，求 $c>0$ 使 $\\lim_{n\\to\\infty}P\\!\\left\\{\\frac{c}{\\sqrt n}\\sum_{i=1}^n (X_{2i}-X_{2i-1})\\le x\\right\\}=\\Phi(x)$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "把相邻两项打包成 $Y_i=X_{2i}-X_{2i-1}\\;(i=1,\\dots,n)$，下标互不重叠故 $\\{Y_i\\}$ 仍是独立同分布！求出 $EY_i=0$ 与 $DY_i$ 后对照标准化系数 $\\frac{1}{\\sqrt{n\\,DY_1}}$ 即可秒出！"
+        },
+        {
+          "stepTitle": "求解 (1)：打包配对变量 Y_i",
+          "detail": "令 $Y_i=X_{2i}-X_{2i-1}\\;(i=1,\\dots,n)$，显然 $Y_1,\\dots,Y_n$ 相互独立同分布，且 $EY_i=0$，$DY_i=DX_{2i}+DX_{2i-1}=\\frac14+\\frac14=\\frac12$。由列维-林德伯格 CLT：$$\\frac{\\sum_{i=1}^n Y_i}{\\sqrt{n\\cdot\\frac12}}=\\frac{\\sqrt 2}{\\sqrt n}\\sum_{i=1}^n Y_i\\xrightarrow{d}N(0,1)$$ 注意若 $a<0$，由 $Y_i$ 对称分布 $-Y_i\\overset{d}{=}Y_i$ 亦使极限为 $\\Phi(x)$！对比题目 $\\frac{a}{\\sqrt n}\\sum Y_i$（两侧同除 $\\sqrt n$）：故 $a=\\pm\\sqrt 2$（若限定 $a>0$ 则 $a=\\sqrt 2$）。"
+        },
+        {
+          "stepTitle": "求解 (2)：正态配对系数",
+          "detail": "当 $X_i\\sim N(0,1)$ 时，$Y_i=X_{2i}-X_{2i-1}\\sim N(0,2)$，方差 $DY_i=2$，标准差 $\\sqrt 2$。故标准化变量为 $\\frac{1}{\\sqrt{2n}}\\sum_{i=1}^n Y_i\\sim N(0,1)$，从而 $c=\\frac{1}{\\sqrt 2}=\\frac{\\sqrt 2}{2}$！"
+        }
+      ],
+      "finalAnswer": "(1) $a=\\pm\\sqrt 2$（利用 $Y_i$ 关于 $0$ 对称，正负号均可！）；　　 (2) $c=\\dfrac{\\sqrt 2}{2}$。",
+      "source": {
+        "book": "27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "方浩 P.132 例10 / 猪狗 P.5-10 例8.12",
+        "pdfPage": 137,
+        "itemRef": "配对差值构造新i.i.d.序列逆求标准化系数"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr07_clt_tricks",
+        "verified": true
+      },
+      "takeaway": "**符号对称彩蛋**：第 (1) 问未限定 $a>0$！由于 $Y_i=X_{2i}-X_{2i-1}$ 分布关于原点严格对称，$-Y_i$ 与 $Y_i$ 同分布，故 $a=-\\sqrt 2$ 同样满足 $\\lim P\\{\\cdot\\le\\sqrt n x\\}=\\Phi(x)$，做解答题务必两解兼顾！"
+    },
+    {
+      "id": "m1-pr07-e-12",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、强化技巧：配对重构与逆求常数",
+      "title": "【方浩例 9】非正态 i.i.d. 序列求和与平方和的 CLT 极限计算",
+      "problem": "(1) 设 $X_1,X_2,\\dots,X_n,\\dots$ 独立同分布于 $U(0,1)$，求极限 $\\lim_{n\\to\\infty}P\\!\\left\\{\\sum_{i=1}^n X_i\\le\\frac{n}{2}+\\frac{\\sqrt n}{2}\\right\\}$；\n(2) 设 $X_1,X_2,\\dots,X_n,\\dots$ 独立同分布于 $E(1)$，求 $\\lim_{n\\to\\infty}P\\!\\left\\{\\sum_{i=1}^n X_i\\le n+\\sqrt n\\right\\}$ 与 $\\lim_{n\\to\\infty}P\\!\\left\\{\\sum_{i=1}^n X_i^2\\le 2n+2\\sqrt{5n}\\right\\}$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "只要识别出所求和是独立同分布变量之和（包含 $X_i^2$！），算出单变量的期望与方差，严格执行「减 $n\\mu$ 除以 $\\sqrt n\\sigma$」即出 $\\Phi$ 值。"
+        },
+        {
+          "stepTitle": "求解 (1)：U(0,1) 标准化",
+          "detail": "$EX_i=\\frac12,\\;DX_i=\\frac{1}{12},\\;\\sigma=\\frac{1}{2\\sqrt 3}$。事件等价于 $$\\frac{\\sum_{i=1}^n X_i - \\frac n2}{\\sqrt n\\cdot\\frac{1}{2\\sqrt 3}}\\le\\frac{\\frac{\\sqrt n}{2}}{\\frac{\\sqrt n}{2\\sqrt 3}}=\\sqrt 3$$ 由列维-林德伯格 CLT 得极限为 $\\Phi(\\sqrt 3)$！"
+        },
+        {
+          "stepTitle": "求解 (2)：指数及其平方和的 CLT",
+          "detail": "对 $X_i\\sim E(1)$：$EX_i=1,DX_i=1\\implies \\lim P\\{\\sum X_i\\le n+\\sqrt n\\}=\\Phi(1)$。\n对 $Y_i=X_i^2$：由 $\\Gamma$ 矩公式 $E(X^k)=k!$ 得 $EY_i=E(X_i^2)=2$，$E(Y_i^2)=E(X_i^4)=4!=24$，故 $DY_i=24-4=20$，$\\sigma_Y=2\\sqrt 5$！因此 $$\\lim_{n\\to\\infty}P\\!\\left\\{\\frac{\\sum X_i^2-2n}{2\\sqrt{5n}}\\le\\frac{2\\sqrt{5n}}{2\\sqrt{5n}}\\right\\}=\\Phi(1)$$"
+        }
+      ],
+      "finalAnswer": "(1) $\\Phi(\\sqrt 3)$；　　 (2) 均为 $\\Phi(1)$。",
+      "source": {
+        "book": "27 方浩强化 & 27 张宇基础30讲",
+        "printedPage": "方浩 P.131-132 例9 / 基础 P.134 习题5.1",
+        "pdfPage": 136,
+        "itemRef": "U(0,1)与指数分布平方和CLT极限"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr07_clt_tricks",
+        "verified": true
+      },
+      "takeaway": "求 $D(X_i^2)$ 须用 $E(X_i^4)-[E(X_i^2)]^2$，指数分布 $E(\\lambda)$ 的 $k$ 阶原点矩口诀 $E(X^k)=\\frac{k!}{\\lambda^k}$ 能省掉三次分部积分！"
+    },
+    {
+      "id": "m1-pr07-e-13",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "五、中心极限定理经典应用",
+      "title": "【1988 真题改编 / 猪狗示例 1】系统部件可靠性与保险索赔户数近似概率",
+      "problem": "(1) 某系统由 $100$ 个相互独立部件组成，每个部件正常工作概率为 $0.9$，至少 $85$ 个工作系统才正常，求系统正常工作的近似概率；\n(2)（1988 真题改编）被盗索赔户占 $20\\%$，抽查 $100$ 户索赔户，求其中被盗索赔户不少于 $14$ 户且不多于 $26$ 户的概率近似值（用 $\\Phi$ 表示）。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "两题均为标准二项分布 $B(n,p)$ 且 $np,nq\\ge 5$，直接用棣莫弗-拉普拉斯定理标准化。"
+        },
+        {
+          "stepTitle": "求解 (1)：100 部件可靠性",
+          "detail": "设正常部件数 $X\\sim B(100,0.9)$，则 $EX=90,\\;DX=100\\times 0.9\\times 0.1=9,\\;\\sigma=3$。$$P\\{X\\ge 85\\}=1-P\\{X<85\\}\\approx 1-\\Phi\\!\\left(\\frac{85-90}{3}\\right)=1-\\Phi\\!\\left(-\\frac53\\right)=\\Phi\\!\\left(\\frac53\\right)\\approx 0.9522$$"
+        },
+        {
+          "stepTitle": "求解 (2)：对称区间直接用 2Φ(z)-1",
+          "detail": "设被盗索赔户数 $X\\sim B(100,0.2)$，则 $EX=20,\\;DX=16,\\;\\sigma=4$。$$P\\{14\\le X\\le 26\\}\\approx\\Phi\\!\\left(\\frac{26-20}{4}\\right)-\\Phi\\!\\left(\\frac{14-20}{4}\\right)=\\Phi(1.5)-\\Phi(-1.5)=2\\Phi(1.5)-1\\approx 0.8664$$"
+        }
+      ],
+      "finalAnswer": "(1) $\\Phi\\!\\left(\\dfrac53\\right)\\approx 0.952$；　　 (2) $2\\Phi(1.5)-1\\approx 0.866$。",
+      "source": {
+        "book": "27 猪狗百宝书 & 27 张宇基础30讲",
+        "printedPage": "猪狗 P.5-6 示例1, P.5-11 例8.15 / 基础 P.132 例5.5",
+        "pdfPage": 126,
+        "itemRef": "系统可靠性与1988真题保险索赔CLT"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr07_clt_core_exams",
+        "verified": true
+      },
+      "takeaway": "注意 $\\Phi(-z)=1-\\Phi(z)$，故 $1-\\Phi(-5/3)=\\Phi(5/3)$，计算极快且不易出错。"
+    },
+    {
+      "id": "m1-pr07-e-14",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "五、中心极限定理经典应用",
+      "title": "【猪狗例 8.11 + 基础习题 5.3】多盒投球与万次抛币区间概率",
+      "problem": "(1) $5$ 个盒子，$100$ 个球，每球等可能放入任一盒中，按 CLT 求指定某盒中超过 $24$ 个球而不超过 $28$ 个球的近似概率：\nA. $\\Phi(2)-\\Phi(1)$　 B. $2\\Phi(1)-\\Phi(2)$　 C. $\\Phi(1)+\\Phi(2)-1$　 D. $2[\\Phi(1)-\\Phi(-2)]$\n(2) 匀质硬币连抛 $10000$ 次，求正面次数落入 $[4950,5050]$ 的近似概率（$\\Phi(1)=0.8413$）。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "把「是否落入指定盒子」看作单次成功概率 $p=\\frac15$ 的伯努利试验，立刻归结为 $B(100,0.2)$！"
+        },
+        {
+          "stepTitle": "求解 (1)：指定盒球数 B(100, 1/5)",
+          "detail": "每球入指定盒概率 $p=\\frac15$，故该盒球数 $X\\sim B(100,0.2)$，有 $EX=20,\\;\\sigma=\\sqrt{100\\times 0.2\\times 0.8}=4$。因此 $$P\\{24<X\\le 28\\}\\approx\\Phi\\!\\left(\\frac{28-20}{4}\\right)-\\Phi\\!\\left(\\frac{24-20}{4}\\right)=\\Phi(2)-\\Phi(1)$$ 故选 **A**。"
+        },
+        {
+          "stepTitle": "求解 (2)：万次抛币 1σ 区间",
+          "detail": "$X\\sim B(10000,0.5)$，$EX=5000,\\;\\sigma=\\sqrt{2500}=50$。$$P\\{4950\\le X\\le 5050\\}\\approx\\Phi(1)-\\Phi(-1)=2\\Phi(1)-1=2\\times 0.8413-1=0.6826$$"
+        }
+      ],
+      "finalAnswer": "(1) 选 **A**：$\\Phi(2)-\\Phi(1)$；　　 (2) $0.6826$。",
+      "source": {
+        "book": "27 猪狗百宝书 & 27 张宇基础30讲",
+        "printedPage": "猪狗 P.5-10 例8.11 / 基础 P.135 习题5.3",
+        "pdfPage": 130,
+        "itemRef": "多盒投球与万次抛币CLT区间概率"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr07_clt_core_exams",
+        "verified": true
+      },
+      "takeaway": "多盒投球只关注「**指定某一个盒子**」时，其余 $4$ 个盒子的分配细节完全无关，直接按 $B(100,1/5)$ 建模即可，千万别去写多项分布！"
+    },
+    {
+      "id": "m1-pr07-e-15",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "五、中心极限定理经典应用",
+      "title": "【猪狗示例 2 & 例 8.17】车间机床与旅馆空调电力配置（求阈值 y）",
+      "problem": "(1) 某车间 $200$ 台同型号机床独立工作，每台开工率 $70\\%$，工作时耗电 $15\\,\\text{kW}$，问至少配多少 $\\text{kW}$ 电能才能有 $95\\%$ 把握保证正常生产？（$\\Phi(1.645)=0.95$）\n(2) 某旅馆 $500$ 间客房每间一台 $2\\,\\text{kW}$ 空调，开房率 $80\\%$，需多少 $\\text{kW}$ 电力才能有 $99\\%$ 可能性保证足够供电？（$\\Phi(2.33)=0.99$）",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "先对开机台数 $X\\sim B(n,p)$ 求满足 $P\\{X\\le k\\}\\ge\\beta$ 的临界台数 $k$，再乘以单台功率即可！"
+        },
+        {
+          "stepTitle": "求解 (1)：200 台机床供电",
+          "detail": "开机数 $X\\sim B(200,0.7)$，$EX=140,\\;DX=200\\times 0.7\\times 0.3=42,\\;\\sigma=\\sqrt{42}\\approx 6.481$。设总供电 $W=15k$，要求 $P\\{X\\le k\\}\\approx\\Phi\\!\\left(\\frac{k-140}{\\sqrt{42}}\\right)\\ge 0.95=\\Phi(1.645)$，解得 $k\\ge 140+1.645\\sqrt{42}\\approx 150.66$，所需功率 $W=15\\times 150.66\\approx 2260\\,\\text{kW}$（若按整台取 $k=151$ 则 $2265\\,\\text{kW}$）。"
+        },
+        {
+          "stepTitle": "求解 (2)：500 间空调供电",
+          "detail": "开启台数 $X\\sim B(500,0.8)$，$EX=400,\\;DX=500\\times 0.8\\times 0.2=80,\\;\\sigma=4\\sqrt 5\\approx 8.9443$。由 $\\frac{k-400}{4\\sqrt 5}\\ge 2.33$ 得 $k\\ge 400+2.33\\times 4\\sqrt 5\\approx 420.84$，故总电力至少需 $2k\\approx 841.68\\,\\text{kW}$（按整台取 $421$ 台即 $842\\,\\text{kW}$）。"
+        }
+      ],
+      "finalAnswer": "(1) 约 $2260\\,\\text{kW}$（整台计 $2265\\,\\text{kW}$）；　　 (2) 约 $841.7\\,\\text{kW}$（整台计 $842\\,\\text{kW}$）。",
+      "source": {
+        "book": "27 猪狗百宝书",
+        "printedPage": "猪狗 P.5-7 示例2 / P.5-12 例8.17",
+        "pdfPage": 127,
+        "itemRef": "机床与旅馆空调电力配置CLT求阈值"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr07_clt_core_exams",
+        "verified": true
+      },
+      "takeaway": "注意把每台功率 $P_0$ 留在最后乘（或写入 $Y_i=P_0 X_i$ 使方差乘 $P_0^2$、标准差乘 $P_0$），切勿漏乘 $P_0$！"
+    },
+    {
+      "id": "m1-pr07-e-16",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "五、中心极限定理经典应用",
+      "title": "【猪狗示例 3 & 例 8.18】未知比例抽样最小样本量：CLT vs 切比雪夫威力对比",
+      "problem": "为估计某市成年男子吸烟比例 $p$，随机调查 $n$ 人测得吸烟人数 $m$，问至少调查多少人，才能以大于 $95\\%$ 的概率保证频率 $m/n$ 与 $p$ 之差的绝对值小于 $0.01$？（$\\Phi(1.96)=0.975$）试同时比较改用切比雪夫不等式需抽多少人。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "未知 $p$ 导致方差 $p(1-p)$ 未知！利用最坏上界 $p(1-p)\\le\\frac{1}{4}$（当 $p=\\frac12$ 取等）做保守放缩，即可彻底消去未知参数 $p$。"
+        },
+        {
+          "stepTitle": "方法一：中心极限定理（最优精算）",
+          "detail": "由 $m\\sim B(n,p)$，标准化并利用 $\\sqrt{p(1-p)}\\le\\frac12$：$$P\\!\\left\\{\\left|\\frac{m}{n}-p\\right|<0.01\\right\\}=P\\!\\left\\{\\frac{|m-np|}{\\sqrt{np(1-p)}}<\\frac{0.01\\sqrt n}{\\sqrt{p(1-p)}}\\right\\}\\ge P\\!\\left\\{\\frac{|m-np|}{\\sqrt{np(1-p)}}<0.02\\sqrt n\\right\\}\\approx 2\\Phi(0.02\\sqrt n)-1$$ 令 $2\\Phi(0.02\\sqrt n)-1>0.95\\iff \\Phi(0.02\\sqrt n)>0.975=\\Phi(1.96)$，故 $$0.02\\sqrt n>1.96\\implies\\sqrt n>98\\implies n>9604\\quad(\\text{取 }n\\ge 9605,\\;\\text{若含等号取 }9604)$$"
+        },
+        {
+          "stepTitle": "方法二：切比雪夫不等式（保守对照）",
+          "detail": "由切比雪夫不等式：$$P\\!\\left\\{\\left|\\frac{m}{n}-p\\right|<0.01\\right\\}\\ge 1-\\frac{p(1-p)}{n\\cdot 0.01^2}\\ge 1-\\frac{1}{4\\times 10^{-4}n}\\ge 0.95\\implies n\\ge 50000$$ 切比雪夫需抽 $50000$ 人，是 CLT 样本量的 **5.2 倍**！"
+        }
+      ],
+      "finalAnswer": "CLT 仅需至少 **$9604$**（严格大于取 $9605$）人；切比雪夫需至少 $50000$ 人。",
+      "source": {
+        "book": "27 猪狗百宝书 & 27 张宇基础30讲",
+        "printedPage": "猪狗 P.5-7 示例3 / P.5-12 例8.18 / 基础 P.135 习题5.4",
+        "pdfPage": 132,
+        "itemRef": "未知比例抽样最小样本量：CLT与切比雪夫对比"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr07_clt_tricks",
+        "verified": true
+      },
+      "takeaway": "**绝不要漏掉 $p(1-p)\\le\\frac14$**：这是所有「未知概率 $p$ 定抽样样本量」题的统一绝招；顺记 $90\\%$ 把握且误差 $0.05$（猪狗示例 3）得 $n\\ge (1.645/0.1)^2\\approx 271$ 人。"
+    },
+    {
+      "id": "m1-pr07-e-17",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "extended",
+      "section": "五、中心极限定理与泊松近似辨析",
+      "title": "【基础例 5.3】大 n 小 p 偏态情形：泊松近似为何优于正态 CLT？",
+      "problem": "某批产品次品率 $p=0.002$，随机抽取 $n=1000$ 件，求其中次品数不超过 $3$ 件的近似概率；若改换场景 $n=400,\\;p=0.4$ 求正品数在 $[150,175]$ 内的概率，分别应选哪种近似？",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "按二项三档速查表判断：$np=2$ 且 $p=0.002$ 极小、分布严重右偏，用泊松 $P(2)$ 极精准；$n=400,p=0.4$ 满足 $np=160,nq=240\\gg 5$，用正态 CLT！"
+        },
+        {
+          "stepTitle": "场景一：n=1000, p=0.002 用泊松近似",
+          "detail": "$\\lambda=np=2$，则 $X\\sim B(1000,0.002)\\approx P(2)$，故 $$P\\{X\\le 3\\}\\approx\\sum_{k=0}^{3}\\frac{2^k}{k!}e^{-2}=\\left(1+2+2+\\frac43\\right)e^{-2}=\\frac{19}{3}e^{-2}\\approx 0.8571$$ （精确二项值为 $0.8573$，误差仅 $0.0002$；若硬用无修正正态 CLT 得 $\\Phi(0.708)\\approx 0.761$，误差高达 $10\\%$！）"
+        },
+        {
+          "stepTitle": "场景二：n=400, p=0.4 用正态 CLT",
+          "detail": "$EX=160,\\;DX=96,\\;\\sigma=4\\sqrt 6\\approx 9.798$，故 $P\\{150\\le X\\le 175\\}\\approx\\Phi(1.531)-\\Phi(-1.021)\\approx 0.783$。"
+        }
+      ],
+      "finalAnswer": "场景一用泊松近似 $\\dfrac{19}{3}e^{-2}\\approx 0.8571$；场景二用正态 CLT 约 $0.783$。",
+      "source": {
+        "book": "27 张宇基础30讲 & 27 猪狗百宝书",
+        "printedPage": "基础 P.130 例5.3 / 猪狗 P.5-6 注",
+        "pdfPage": 136,
+        "itemRef": "二项分布泊松近似与正态CLT精度择优"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr07_clt_tricks",
+        "verified": true
+      },
+      "takeaway": "记住红线：$n$ 大不等于无脑套正态！当 $p$ 极小导致 $np<5$ 时，二项分布呈显著右偏尖峰，泊松近似完胜正态近似。"
+    },
+    {
+      "id": "m1-pr07-e-18",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、中心极限定理条件陷阱",
+      "title": "【猪狗例 8.9】列维-林德伯格前提陷阱：「同一离散分布」为何错？",
+      "problem": "设独立随机变量序列 $\\{X_n\\}$，$S_n=X_1+\\dots+X_n$，根据列维-林德伯格定理，$n$ 充分大时 $S_n$ 近似服从正态分布，只要 $X_1,\\dots,X_n$（ ）。\nA. 有相同的数学期望　　 B. 有相同的方差　　 C. 服从同一指数分布　　 D. 服从同一离散分布",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "逐一核对列维-林德伯格三条件：独立 + 同分布 + 期望方差均有限！警惕选项 D 暗藏「无限方差离散分布」！"
+        },
+        {
+          "stepTitle": "逐项排除 A、B、D",
+          "detail": "- **A、B 错**：仅有相同期望或仅有相同方差均不保证同分布（也不保证另一矩存在）；\n- **D 错（极易上当！）**：同一离散分布**不保证期望和方差存在**！例如离散分布 $P\\{X=k\\}=\\frac{6}{\\pi^2 k^2}\\;(k=1,2,\\dots)$ 满足 $\\sum p_k=1$，但 $EX=\\frac{6}{\\pi^2}\\sum\\frac1k=+\\infty$，期望方差均发散，完全不满足列维-林德伯格定理！"
+        },
+        {
+          "stepTitle": "确认唯一正解 C",
+          "detail": "同一指数分布 $E(\\lambda)\\;(\\lambda>0)$ 自动满足同分布，且 $EX_i=\\frac1\\lambda$、$DX_i=\\frac{1}{\\lambda^2}\\in(0,+\\infty)$ 全部存在有限，故选 **C**。"
+        }
+      ],
+      "finalAnswer": "选 **C**：服从同一指数分布。",
+      "source": {
+        "book": "27 猪狗百宝书",
+        "printedPage": "猪狗 P.5-10 例8.9",
+        "pdfPage": 130,
+        "itemRef": "列维-林德伯格条件辨析与无方差离散反例"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "takeaway": "**绝杀反例入库**：离散分布完全可以没有期望或没有方差（只需尾部概率衰减慢于 $1/k^3$，如 $p_k\\propto 1/k^2$ 无期望、$p_k\\propto 1/k^3$ 有期望但无方差）！"
+    },
+    {
+      "id": "m1-pr07-e-19",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "extended",
+      "section": "七、经验分布函数拓展（仅数三）",
+      "title": "【猪狗例 6.20 · 仅数三拓展】经验分布函数构造与协方差公式证明",
+      "problem": "【仅数三拓展】设总体分布函数 $F(x)$，经验分布函数 $F_n(x)$：\n(1) 样本值为 $344,350,347,368,347$，写出 $F_5(x)$；\n(2) 证明 $E[F_n(x)]=F(x)$，$D[F_n(x)]=\\frac{F(x)[1-F(x)]}{n}\\le\\frac{1}{4n}$；\n(3) 证明 $\\operatorname{Cov}(F_n(u),F_n(v))=\\frac{1}{n}\\big(F(\\min\\{u,v\\})-F(u)F(v)\\big)$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "先排序（注意重复值 $347$ 合并跳跃 $2/5$！），再引入示性变量 $I_i(x)=\\mathbb{I}_{\\{X_i\\le x\\}}$，利用 $I_i(u)I_i(v)=I_i(\\min\\{u,v\\})$ 一行证出协方差！"
+        },
+        {
+          "stepTitle": "求解 (1)：排序并合并重复跳点",
+          "detail": "排序样本：$344<347=347<350<368$。因 $347$ 出现两次，跳跃幅度为 $\\frac25$：$$F_5(x)=\\begin{cases}0,&x<344\\\\ \\frac15,&344\\le x<347\\\\ \\frac35,&347\\le x<350\\\\ \\frac45,&350\\le x<368\\\\ 1,&x\\ge 368\\end{cases}$$"
+        },
+        {
+          "stepTitle": "证明 (2)(3)：示性变量二项与协方差展开",
+          "detail": "记 $I_i(x)=\\mathbb{I}_{\\{X_i\\le x\\}}\\sim B(1,F(x))$，各 $i$ 独立，故 $F_n(x)=\\frac1n\\sum_{i=1}^n I_i(x)$，立得 $E[F_n(x)]=F(x)$，$D[F_n(x)]=\\frac{F(x)(1-F(x))}{n}\\le\\frac{1}{4n}$。\n对任意 $u,v$，因 $i\\ne j$ 时 $I_i(u)\\perp I_j(v)$，且 $I_i(u)I_i(v)=\\mathbb{I}_{\\{X_i\\le u,\\,X_i\\le v\\}}=I_i(\\min\\{u,v\\})$，故 $$\\operatorname{Cov}(F_n(u),F_n(v))=\\frac{1}{n^2}\\sum_{i=1}^n\\operatorname{Cov}(I_i(u),I_i(v))=\\frac{1}{n}\\Big(E[I_1(\\min\\{u,v\\})]-F(u)F(v)\\Big)=\\frac{1}{n}\\Big(F(\\min\\{u,v\\})-F(u)F(v)\\Big)$$"
+        }
+      ],
+      "finalAnswer": "$F_5(x)$ 在 $344,347,350,368$ 分别跳至 $\\frac15,\\frac35,\\frac45,1$；期望、方差与协方差全部得证。",
+      "source": {
+        "book": "27 猪狗百宝书（仅数三拓展）",
+        "printedPage": "猪狗 P.6-12 例6.20",
+        "pdfPage": 146,
+        "itemRef": "经验分布函数构造与协方差证明（仅数三）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr07_empirical_cdf",
+        "verified": true
+      },
+      "takeaway": "写 $F_5(x)$ 时最容易在重复观测值 $347$ 处硬拆两段空区间——记住所有分段区间必须左闭右开且非空！"
+    },
+    {
+      "id": "m1-pr07-e-20",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "extended",
+      "section": "七、大数定律与微积分跨界应用",
+      "title": "【基础习题 5.2 / 5.5】蒙特卡洛积分原理与和式概率极限",
+      "problem": "设 $U_1,U_2,\\dots,U_n,\\dots$ 独立同分布于 $U(0,1)$，$f(x)$ 在 $[0,1]$ 上连续：\n(1) 证明 $\\dfrac{1}{n}\\sum_{i=1}^n f(U_i)\\xrightarrow{P}\\int_0^1 f(x)\\,\\mathrm{d}x$；\n(2) 特别地，当 $f(x)=\\sqrt{1-x^2}$ 时，求 $\\frac{4}{n}\\sum_{i=1}^n\\sqrt{1-U_i^2}$ 的依概率收敛极限，并用切比雪夫不等式估计 $n=10000$ 时其偏离极限不超过 $0.05$ 的概率下界。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "$f(U_i)$ 独立同分布且期望恰为定积分 $\\int_0^1 f(x)\\,\\mathrm{d}x$，由辛钦定律一步打通概率与定积分（蒙特卡洛法原理）！"
+        },
+        {
+          "stepTitle": "证明 (1)：辛钦定律连接定积分",
+          "detail": "因 $f$ 在 $[0,1]$ 连续必有界，故 $E[f(U_1)]=\\int_0^1 f(x)\\cdot 1\\,\\mathrm{d}x$ 有限存在。又 $f(U_1),\\dots,f(U_n)$ 独立同分布，由辛钦大数定律直接得 $\\frac{1}{n}\\sum_{i=1}^n f(U_i)\\xrightarrow{P}\\int_0^1 f(x)\\,\\mathrm{d}x$。"
+        },
+        {
+          "stepTitle": "求解 (2)：估计圆周率 π 的切比雪夫界",
+          "detail": "取 $f(x)=\\sqrt{1-x^2}$，则 $E[4\\sqrt{1-U_1^2}]=4\\int_0^1\\sqrt{1-x^2}\\,\\mathrm{d}x=4\\cdot\\frac\\pi 4=\\pi$，故 $\\hat\\pi_n=\\frac{4}{n}\\sum\\sqrt{1-U_i^2}\\xrightarrow{P}\\pi$。又 $E[16(1-U_1^2)]=16\\left(1-\\frac13\\right)=\\frac{32}{3}$，故单变量方差 $D(4\\sqrt{1-U_1^2})=\\frac{32}{3}-\\pi^2\\approx 0.7971$，$D(\\hat\\pi_{10000})\\approx 7.971\\times 10^{-5}$。由切比雪夫不等式：$$P\\{|\\hat\\pi_{10000}-\\pi|<0.05\\}\\ge 1-\\frac{\\frac{32}{3}-\\pi^2}{10000\\times 0.0025}\\approx 0.9681$$"
+        }
+      ],
+      "finalAnswer": "(1) 辛钦大数定律证毕；　　 (2) 依概率收敛于 $\\pi$，概率下界为 $1-\\dfrac{\\frac{32}{3}-\\pi^2}{25}\\approx 0.968$。",
+      "source": {
+        "book": "27 张宇基础30讲",
+        "printedPage": "基础 P.134-135 习题5.2, 5.5 拓展",
+        "pdfPage": 140,
+        "itemRef": "蒙特卡洛积分与辛钦大数定律跨界应用"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr07_lln_series_and_markov",
+        "verified": true
+      },
+      "takeaway": "这类跨界题常出现在高数与概率结合的新题型中，把随机变量期望还原成定积分（或反过来把积分极限改写成概率期望）是核心破题点。"
+    },
+    {
+      "id": "m1-pr07-e-21",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "七、跨章衔接数理统计",
+      "title": "【数理统计衔接必会】样本方差 S² 对总体方差 σ² 的依概率收敛证明",
+      "problem": "设 $X_1,X_2,\\dots,X_n$ 是来自总体 $X$ 的简单随机样本，已知 $EX=\\mu$、$DX=\\sigma^2\\in(0,+\\infty)$（**不假定总体服从正态分布**），证明：样本方差 $S^2=\\dfrac{1}{n-1}\\sum_{i=1}^n (X_i-\\bar X)^2\\xrightarrow{P}\\sigma^2$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "切勿直接对 $(X_i-\\bar X)^2$ 套大数定律（彼此不独立）！先代数拆成 $\\frac{n}{n-1}\\left(\\frac1n\\sum X_i^2-\\bar X^2\\right)$，再对两项分别用辛钦大数定律与连续映射定理！"
+        },
+        {
+          "stepTitle": "代数恒等拆分消去相关性",
+          "detail": "利用平方展开恒等式 $\\sum_{i=1}^n (X_i-\\bar X)^2=\\sum_{i=1}^n X_i^2 - n\\bar X^2$，将样本方差改写为：$$S^2=\\frac{n}{n-1}\\left(\\frac{1}{n}\\sum_{i=1}^{n}X_i^2-\\bar X^2\\right)$$"
+        },
+        {
+          "stepTitle": "辛钦定律 + 连续映射一步收尾",
+          "detail": "因 $DX=\\sigma^2<\\infty$，故 $EX=\\mu$ 与 $E(X^2)=\\sigma^2+\\mu^2$ 均有限存在。由辛钦大数定律：$$\\bar X=\\frac{1}{n}\\sum_{i=1}^n X_i\\xrightarrow{P}\\mu,\\qquad \\frac{1}{n}\\sum_{i=1}^n X_i^2\\xrightarrow{P}\\sigma^2+\\mu^2$$ 再结合常数极限 $\\frac{n}{n-1}\\to 1$ 与依概率收敛的四则运算性质：$$S^2\\xrightarrow{P}1\\cdot\\big[(\\sigma^2+\\mu^2)-\\mu^2\\big]=\\sigma^2$$"
+        }
+      ],
+      "finalAnswer": "拆分为 $S^2=\\frac{n}{n-1}\\left(\\frac1n\\sum X_i^2-\\bar X^2\\right)\\xrightarrow{P}\\sigma^2$，证毕。",
+      "source": {
+        "book": "27 张宇概率9讲 & 27 方浩强化",
+        "printedPage": "9讲 P.60, 74 / 方浩 P.167 例12 衔接",
+        "pdfPage": 71,
+        "itemRef": "样本方差依概率收敛于总体方差证明"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "takeaway": "本题同时证明了 $S_n^2=\\frac1n\\sum(X_i-\\bar X)^2$（虽有偏！）同样依概率收敛于 $\\sigma^2$——即「有偏估计量完全可以是相合估计量」，直接打通第 9 讲！"
+    },
+    {
+      "id": "m1-pr07-s-01",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "一、大数定律四步秒判套路",
+      "title": "大数定律解题 4 步决策链（切比雪夫 vs 辛钦 vs 马尔可夫）",
+      "takeaway": "牢记辛钦不需方差、切比雪夫不需独立同分布、马尔可夫兜底方差缓慢增长（详见表 P7-1 与表 P7-3），四步覆盖所有大数定律选择、填空与证明题。",
+      "source": {
+        "book": "27 张宇概率9讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.58-60 / 方浩 P.126-129 / 猪狗 P.5-13",
+        "pdfPage": 69,
+        "itemRef": "大数定律四步解题决策总结"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "patterns": [
+        {
+          "typeName": "看标志词锁定大数定律",
+          "triggers": "一、大数定律四步秒判套路",
+          "method": "题干出现「$n\\to\\infty$」「依概率收敛于」「相合性/一致性」或样本平均 $\\frac1n\\sum g(X_i)$，立即锁定大数定律！",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "优先检查独立同分布（辛钦）",
+          "triggers": "一、大数定律四步秒判套路",
+          "method": "若序列 i.i.d.，只需核实 $E[g(X_1)]$ 绝对收敛存在，无需算方差，直接写出极限 $E[g(X_1)]$（复杂比值先上下同除 $n$ 再套连续映射）。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "不同分布或仅不相关走切比雪夫/马尔可夫",
+          "triggers": "一、大数定律四步秒判套路",
+          "method": "逐项算 $DX_i$；若存在公共上界 $C$ 则满足切比雪夫；若 $DX_i$ 无界，绝不盲判「不服从」，改验马尔可夫指标 $\\frac{1}{n^2}\\sum DX_i$ 是否趋于 $0$！",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "既无期望又无方差回原始定义",
+          "triggers": "一、大数定律四步秒判套路",
+          "method": "遇到柯西族等发散分布，放弃不等式，老老实实积分计算 $\\lim_{n\\to\\infty}P\\{|X_n-a|<\\varepsilon\\}=1$。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        }
+      ],
+      "overview": "大数定律解题 4 步决策链（切比雪夫 vs 辛钦 vs 马尔可夫）"
+    },
+    {
+      "id": "m1-pr07-s-02",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、中心极限定理四步流水线",
+      "title": "中心极限定理「设—求—标—查」标准模板与二项三档选型",
+      "takeaway": "看到题干附带「参考数据 $\\Phi(\\cdot)=\\dots$」就是考官明牌送分题（二项三档选型速查见表 P7-2），按四步标准化、核对开根号与取整方向即可稳拿满分。",
+      "source": {
+        "book": "27 猪狗百宝书 & 27 张宇基础30讲 & 27 方浩强化",
+        "printedPage": "猪狗 P.5-6, 5-13 / 基础 P.129-133 / 方浩 P.130-132",
+        "pdfPage": 126,
+        "itemRef": "中心极限定理四步流水线总结"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "patterns": [
+        {
+          "typeName": "Step 1 设独立同分布列",
+          "triggers": "二、中心极限定理四步流水线",
+          "method": "合理拆出单变量 $X_i$（计数题设 $0$-$1$ 变量，配对题打包 $Y_i=X_{2i}-X_{2i-1}$，和式题识别 $g(X_i)$）。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "Step 2 算清单变量期望与方差",
+          "triggers": "二、中心极限定理四步流水线",
+          "method": "先求 $\\mu=EX_1$、$\\sigma^2=DX_1>0$，再算总和 $S_n$ 的期望 $n\\mu$ 与标准差 $\\sqrt n\\sigma$（千万别把方差当标准差！）。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "Step 3 标准化转 $\\Phi(z)$",
+          "triggers": "二、中心极限定理四步流水线",
+          "method": "一律写成 $Y_n=\\frac{S_n-n\\mu}{\\sqrt n\\sigma}\\dot\\sim N(0,1)$；双侧对称概率化为 $2\\Phi(z)-1$；考研按惯例不做 $\\pm 0.5$ 连续性修正。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "Step 4 按三问反解并正确取整",
+          "triggers": "二、中心极限定理四步流水线",
+          "method": "求概率直接查表；求阈值反查分位数；求最小抽样数用 $p(1-p)\\le\\frac14$ 并向上取整，求最多装箱数解二次不等式并向下取整；$n$ 大 $p$ 极小（$np\\le 10$）时优先改用泊松近似。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        }
+      ],
+      "overview": "中心极限定理「设—求—标—查」标准模板与二项三档选型"
+    },
+    {
+      "id": "m1-pr07-s-03",
+      "kind": "summary",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、命题趋势与本讲五书勘误总览",
+      "title": "2020–2026 命题风向复盘与第 7 讲五书勘误汇总",
+      "takeaway": "本章难度远低于多维变换与数理统计计算，花半天吃透 3 个核心公式 + 10 道母题，即可稳保考场零失分！",
+      "source": {
+        "book": "五书交叉审校（基础30讲/概率9讲/方浩强化/猪狗百宝书/27全总结）",
+        "printedPage": "方浩 P.126-127 / 猪狗 P.5-8~5-13, 6-3",
+        "pdfPage": 131,
+        "itemRef": "概率第7讲考频趋势与五书勘误汇总"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "patterns": [
+        {
+          "typeName": "改革后冷门转温",
+          "triggers": "三、命题趋势与本讲五书勘误总览",
+          "method": "2004–2019 年本章长期沉寂，但 2021 改革后 2020、2022 连续命题（2020 二项 CLT、2022 切比雪夫四阶矩 + 辛钦三角密度），成为最容易拿满分的送分阵地。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "本讲勘误 #1（方浩强化 P.126 例题 2）",
+          "triggers": "三、命题趋势与本讲五书勘误总览",
+          "method": "题干写明「对 $\\forall\\varepsilon>0$」，不等式却误印为 `≥ 1`（悬空 $\\varepsilon$），应修正为 `≥ ε`（与 2022 真题及选项分母 $n\\varepsilon^2$ 对齐）。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "本讲严谨补注 #2（方浩强化 P.127 例题 3 & 基础例 5.1）",
+          "triggers": "三、命题趋势与本讲五书勘误总览",
+          "method": "仅凭「方差无界」不能否决序列服从大数定律（如 $DX_i=\\ln i$ 仍满足马尔可夫大数定律），排除 $E(1/i)$ 与 $P(i)$ 的本质理由是 $\\frac{1}{n^2}\\sum DX_i\\not\\to 0$。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "本讲勘误 #3（猪狗百宝书 P.5-8~5-12 & P.6-3）",
+          "triggers": "三、命题趋势与本讲五书勘误总览",
+          "method": "第 5 章全部例题编号误排为 `例 8.1~8.18`（不影响题目内容）；P.6-3 格里文科定理框内「是其经验分布函数」误印为「使其经验分布函数」。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        }
+      ],
+      "overview": "2020–2026 命题风向复盘与第 7 讲五书勘误汇总"
+    }
+  ]
+}

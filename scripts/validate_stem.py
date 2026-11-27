@@ -26,6 +26,27 @@ VALID_STAGES = {"foundation", "intensive", "both"}
 DOUBLE_BS_CMD_RE = re.compile(
     r"(?<!\\)\\\\(boldsymbol|mathrm|mathcal|mathbf|cdot|frac|sqrt|infty|alpha|beta|gamma|omega|zeta|sigma|theta|Delta|Sigma|sum|int|lim|det|left|right|text|dot|ddot|bar|tilde|hat|vec|quad|qquad|le|ge|ne|approx|to|Rightarrow|Leftrightarrow|implies|partial|nabla|times|pm|mp|cos|sin|tan|ln|log|exp|max|min|arg|arctan|arcsin|arccos)\b"
 )
+DOUBLE_BS_SPACE_RE = re.compile(r"(?<!\\)\\\\([;,:!])")
+
+
+def _strip_nested_latex_envs(body: str) -> str:
+    out: list[str] = []
+    i, depth, n = 0, 0, len(body)
+    while i < n:
+        m1 = re.match(r"\\begin\{([^}]+)\}", body[i:])
+        m2 = re.match(r"\\end\{([^}]+)\}", body[i:])
+        if m1:
+            depth += 1
+            out.append(" [ENV] ")
+            i += m1.end()
+        elif m2:
+            depth = max(0, depth - 1)
+            i += m2.end()
+        else:
+            if depth == 0:
+                out.append(body[i])
+            i += 1
+    return "".join(out)
 
 
 def check_latex_delimiters(text: str, ctx: str, errors: list[str]) -> None:
@@ -46,6 +67,17 @@ def check_latex_delimiters(text: str, ctx: str, errors: list[str]) -> None:
             errors.append(f"{ctx}: unescaped '&' inside \\text{{...}} in display math block #{idx + 1} (breaks KaTeX aligned)")
         if re.search(r"\\text\{[^{}]*·[^{}]*\}", block):
             errors.append(f"{ctx}: Unicode middle dot '·' inside \\text{{...}} in display math block #{idx + 1} (renders red \\cdotp in KaTeX)")
+        m_sp = DOUBLE_BS_SPACE_RE.search(block)
+        if m_sp:
+            errors.append(f"{ctx}: accidental double-backslash spacing '{m_sp.group(0)}' in display math block #{idx + 1} (breaks aligned lines!)")
+        for am in re.finditer(r"\\begin\{aligned\*?\}(.*?)\\end\{aligned\*?\}", block, flags=re.S):
+            top = re.sub(r"\\substack\{[^}]*\}", "[SUB]", _strip_nested_latex_envs(am.group(1)))
+            rows = [r.strip() for r in re.split(r"\\\\(?:\[[^\]]*\])?", top) if r.strip()]
+            if rows:
+                leads = [r.startswith("&") for r in rows]
+                has_amp = ["&" in re.sub(r"\\&", "", r) for r in rows]
+                if any(leads) and any(not h for h in has_amp):
+                    errors.append(f"{ctx}: orphan aligned row missing '&' in display math block #{idx + 1} (splits columns left/right)")
     # Remove $$...$$ and check single $
     rem = re.sub(r"\$\$.*?\$\$", "", cleaned, flags=re.S)
     if rem.count("$") % 2 != 0:

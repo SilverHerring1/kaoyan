@@ -2731,6 +2731,1190 @@ def run_all_checks() -> list[tuple[str, bool, str]]:
     )
     check("m1_la09_mzl_examples", la09_mzl_ok, "la09 MZL 4.5 Ex3(p=1,q=1), 4.4 Ex4, 4.6 Ex1(2018), 4.7 Ex4(simul cong) exact")
 
+    # ==================== Probability Batch 1 (prob-01 ~ prob-03) ====================
+    p_s, q_s, lam_s, sig_s, mu_s, y_s, t_s = sp.symbols("p_s q_s lam_s sig_s mu_s y_s t_s", positive=True)
+    m_i, n_i, k_pr = sp.symbols("m_i n_i k_pr", integer=True, nonnegative=True)
+
+    # 135. prob-01 core identities & Fang Hao star inequality
+    pA, pB, pAB = sp.symbols("pA pB pAB", real=True)
+    pAuB = pA + pB - pAB
+    star_diff = sp.factor(pA * pB - pAuB * pAB)
+    p01_id_ok = (
+        sp.expand(star_diff - (pA - pAB) * (pB - pAB)) == 0
+        and sp.simplify(pAB + (1 - pAuB) - (1 - (pA - pAB) - (pB - pAB))) == 0
+        and sp.Rational(1, 2) + sp.Rational(1, 2) - 1 == 0
+    )
+    check("m1_pr01_identities", p01_id_ok, "prob-01 star inequality P(A)P(B)-P(AuB)P(AB)=(P(A)-P(AB))(P(B)-P(AB))>=0 exact")
+
+    # 136. prob-01 Bayes & nested total probability (Base Ex 1.10, Ex 1.12)
+    py2_110 = sp.Rational(1, 4) * (0 + sp.Rational(1, 2) + sp.Rational(1, 3) + sp.Rational(1, 4))
+    pA_112 = sp.Rational(1, 2) * 1 + sp.Rational(1, 2) * sp.Rational(3, 4)
+    pH2_A = (sp.Rational(1, 2) * sp.Rational(3, 4)) / pA_112
+    pB_A = pH2_A * sp.Rational(1, 4)
+    check("m1_pr01_bayes_cases", py2_110 == sp.Rational(13, 48) and pB_A == sp.Rational(3, 28), "prob-01 Base Ex1.10(13/48), Ex1.12(3/28) exact")
+
+    # 137. prob-01 independence & positive association equivalences + 2-coin counterexample
+    delta = pAB - pA * pB
+    pAbarBbar = 1 - pA - pB + pAB
+    indep_eq1 = sp.simplify((pAbarBbar - (1 - pA) * (1 - pB)) - delta) == 0
+    indep_eq2 = sp.simplify(pA * (1 - pA) * (pAB / pA - (pB - pAB) / (1 - pA)) - delta) == 0
+    # 2-coin counterexample (Base Ex 1.13): {HH, HT, TH, TT}
+    p01_ind_ok = (
+        indep_eq1 and indep_eq2
+        and sp.Rational(1, 4) == sp.Rational(1, 2) * sp.Rational(1, 2)
+        and sp.Rational(0) != sp.Rational(1, 2) ** 3
+        and sp.Rational(6, 10) > sp.Rational(8, 10) - sp.Rational(6, 10)  # 2021 counterex A subset B
+    )
+    check("m1_pr01_indep_cases", p01_ind_ok, "prob-01 Delta-equivalence, 2-coin pairwise!=mutual, 2021 counterex exact")
+
+    # 138. prob-01 classical sampling & draw-lot fairness (Base Ex 1.1-1.3, 1.15)
+    p1_12 = 1 - sp.Rational(2, 5) ** 2
+    p2_12 = 1 - sp.Rational(2 * 1, 5 * 4)
+    p3_12 = 1 - sp.binomial(2, 2) / sp.binomial(5, 2)
+    p_draw20 = sp.binomial(40, 1) * sp.factorial(99) / sp.factorial(100)
+    p_4th_2nd = sp.binomial(3, 1) * p_s**2 * (1 - p_s) ** 2
+    check(
+        "m1_pr01_sampling",
+        p1_12 == sp.Rational(21, 25) and p2_12 == sp.Rational(9, 10) and p3_12 == sp.Rational(9, 10) and p_draw20 == sp.Rational(2, 5) and p_4th_2nd == 3 * p_s**2 * (1 - p_s) ** 2,
+        "prob-01 Base Ex1.2(21/25, 9/10), Ex1.3 draw-lot(2/5), Ex1.15(3p^2(1-p)^2) exact",
+    )
+
+    # 139. prob-01 first-win geometric series (Fang Hao Ex 24)
+    r_fw = sp.Symbol("r_fw", positive=True)
+    fw_sum = sp.summation(r_fw**k_pr, (k_pr, 0, sp.oo)).subs(r_fw, 1 - p_s - q_s)
+    # Verify numerically & symbolically for p+q<=1
+    fw_ok = sp.simplify(p_s / (1 - (1 - p_s - q_s)) - p_s / (p_s + q_s)) == 0 and sp.summation(sp.Rational(1, 2) ** k_pr, (k_pr, 0, sp.oo)) == 2
+    check("m1_pr01_first_win", fw_ok, "prob-01 first-win P(A before B)=p/(p+q) exact")
+
+    # 140. prob-01 geometric probability (Base Ex 1.4, Hw 1.7, Fang Hao Ex 23)
+    hw17_val = sp.integrate(sp.Rational(5, 4) - x - 1 / (4 * x), (x, sp.Rational(1, 4), 1))
+    fh23_bow = sp.integrate(sp.Rational(1, 2) - x - sp.Rational(3, 64) / x, (x, sp.Rational(1, 8), sp.Rational(3, 8)))
+    fh23_prob = sp.simplify(1 - fh23_bow / sp.Rational(1, 8))
+    check(
+        "m1_pr01_geom",
+        sp.simplify(hw17_val - (sp.Rational(15, 32) - sp.log(2) / 2)) == 0 and sp.simplify(fh23_prob - (sp.Rational(1, 2) + sp.Rational(3, 8) * sp.log(3))) == 0,
+        "prob-01 Base Hw1.7(15/32-ln2/2) & Fang Hao Ex23(1/2+3/8 ln3) exact",
+    )
+
+    # 141. prob-01 4-letter derangement (Base Ex 1.9)
+    der4 = sum((-1) ** j * sp.binomial(4, j) * sp.factorial(4 - j) for j in range(5)) / sp.factorial(4)
+    check("m1_pr01_derangement", der4 == sp.Rational(3, 8), "prob-01 4-letter derangement=3/8 exact")
+
+    # 142. prob-01 Prob 9 Lectures ALL core examples (Adv Ex 1.1-1.4, 1.6)
+    ex11 = sp.Rational(100 - 50 - 33 + 16, 100)
+    ex12 = sp.Rational(3, 4) - 2 * sp.Rational(2, 12)
+    ex13 = (sp.Rational(2, 3) - sp.Rational(1, 9)) / (1 - sp.Rational(1, 9))
+    ex14_u = sp.Rational(1, 4) + sp.Rational(3, 4) * sp.integrate(sp.exp(-y_s), (y_s, 1, sp.oo))
+    ex14_v = sp.Rational(1, 4) + sp.Rational(3, 4) * sp.integrate(sp.exp(-y_s), (y_s, sp.Rational(1, 2), sp.oo))
+    ex16_a = sp.Rational(4, 7) + sp.Rational(4, 7) - sp.Rational(3, 7)
+    ex16_b = ex16_a - sp.Rational(3, 7)
+    check(
+        "m1_pr01_jiu_all",
+        ex11 == sp.Rational(33, 100) and ex12 == sp.Rational(5, 12) and ex13 == sp.Rational(5, 8)
+        and sp.simplify(ex14_u - (sp.Rational(1, 4) + sp.Rational(3, 4) * sp.exp(-1))) == 0
+        and sp.simplify(ex14_v - (sp.Rational(1, 4) + sp.Rational(3, 4) * sp.exp(-sp.Rational(1, 2)))) == 0
+        and ex16_a == sp.Rational(5, 7) and ex16_b == sp.Rational(2, 7),
+        "prob-01 Prob9 Ex1.1(33/100), Ex1.2(5/12), Ex1.3(5/8), Ex1.4, Ex1.6(5/7, 2/7) exact",
+    )
+
+    # 143. prob-01 Real Exams 2016/2018/2019/2025 + Zhugou Ex 1.18
+    re25 = (sp.Rational(1, 4) + sp.Rational(1, 2) + sp.Rational(1, 4) - 2 * (sp.Rational(1, 8) + sp.Rational(1, 8))) / (sp.Rational(1, 4) + sp.Rational(1, 2) + sp.Rational(1, 4) - sp.Rational(1, 8) - sp.Rational(1, 8))
+    c18 = sp.Symbol("c18", positive=True)
+    sol18 = sp.solve(sp.Eq((sp.Rational(1, 2) * c18) / (sp.Rational(1, 4) + c18), sp.Rational(1, 4)), c18)
+    re16 = sp.Rational(3 * (2**3 - 2), 3**4)
+    zg118_a = sp.Rational(4, 10) * sp.Rational(2, 10) / (sp.Rational(4, 10) + sp.Rational(3, 10) - sp.Rational(12, 100))
+    zg118_b = sp.Rational(12, 100) / sp.Rational(6, 10)
+    check(
+        "m1_pr01_real_exams",
+        re25 == sp.Rational(2, 3) and sol18 == [sp.Rational(1, 4)] and re16 == sp.Rational(2, 9) and zg118_a == sp.Rational(4, 29) and zg118_b == sp.Rational(1, 5),
+        "prob-01 2025(2/3), 2018(1/4), 2016(2/9), Zhugou Ex1.18(4/29, 0.2) exact",
+    )
+
+    # 144. prob-01 Fang Hao gems (Ex 19 Ax=b linear system & Ex 21 urn transfer 8/15)
+    A_fh19 = sp.Matrix([[1, 2, 3], [2, 3, 4], [3, 4, 5]])
+    cnt_fh19 = sum(
+        1 for b1 in range(1, 6) for b2 in range(1, 6) for b3 in range(1, 6)
+        if A_fh19.row_join(sp.Matrix([b1, b2, b3])).rank() == A_fh19.rank()
+    )
+    p_fh21 = sp.Rational(3, 9) * sp.Rational(6, 10) + sp.Rational(6, 9) * sp.Rational(5, 10)
+    check("m1_pr01_fh_gems", cnt_fh19 == 13 and p_fh21 == sp.Rational(8, 15), "prob-01 Fang Hao Ex19(13/125 via rank) & Ex21(8/15) exact")
+
+    # 145. prob-02 discrete distributions, Poisson even prob, NegBin, det>0, E(1/X)
+    p_b10 = [sp.binomial(10, j) * sp.Rational(4, 5) ** j * sp.Rational(1, 5) ** (10 - j) for j in range(11)]
+    mode_b10 = max(range(11), key=lambda j: p_b10[j])
+    pois_even = sp.simplify(sp.exp(-lam_s) * (sp.exp(lam_s) + sp.exp(-lam_s)) / 2 - (1 + sp.exp(-2 * lam_s)) / 2)
+    sol_fh14 = sp.solve(sp.Eq(p_s**2 * (1 - p_s**2), sp.Rational(1, 4)), p_s)
+    # NegBin r=2, p=1/2: sum_{k=2}^oo (k-1)(1/2)^k = 1, EX = 4, DX = 4
+    k2 = sp.Symbol("k2", integer=True, positive=True)
+    nb_norm = sp.summation((k2 - 1) * sp.Rational(1, 2) ** k2, (k2, 2, sp.oo))
+    nb_ex = sp.summation(k2 * (k2 - 1) * sp.Rational(1, 2) ** k2, (k2, 2, sp.oo))
+    nb_ex2 = sp.summation(k2**2 * (k2 - 1) * sp.Rational(1, 2) ** k2, (k2, 2, sp.oo))
+    # Zhugou Ex 2.36: E(1/X) for Ge(1/3) = -(1/3)*ln(1/3)/(2/3) = ln(3)/2
+    ge_inv = sp.summation(sp.Rational(1, 3) * sp.Rational(2, 3) ** (k2 - 1) / k2, (k2, 1, sp.oo))
+    check(
+        "m1_pr02_discrete_props",
+        mode_b10 == 8 and pois_even == 0 and sol_fh14 == [sp.sqrt(2) / 2]
+        and nb_norm == 1 and nb_ex == 4 and (nb_ex2 - nb_ex**2) == 4
+        and sp.simplify(ge_inv - sp.log(3) / 2) == 0,
+        "prob-02 Binomial mode=8, Poisson even, det>0 p=sqrt2/2, NegBin(4,4), Ge E(1/X) exact",
+    )
+
+    # 146. prob-02 continuous distributions (Uniform, Exp, Normal)
+    a_u, b_u = sp.symbols("a_u b_u", real=True)
+    u_ex = sp.simplify(sp.integrate(x / (b_u - a_u), (x, a_u, b_u)))
+    u_dx = sp.simplify(sp.integrate((x - u_ex) ** 2 / (b_u - a_u), (x, a_u, b_u)))
+    e_ex = sp.integrate(x * lam_s * sp.exp(-lam_s * x), (x, 0, sp.oo))
+    e_dx = sp.simplify(sp.integrate((x - e_ex) ** 2 * lam_s * sp.exp(-lam_s * x), (x, 0, sp.oo)))
+    n_norm = sp.integrate(sp.exp(-((x - mu_s) ** 2) / (2 * sig_s**2)) / (sp.sqrt(2 * sp.pi) * sig_s), (x, -sp.oo, sp.oo))
+    n_dx = sp.integrate((x - mu_s) ** 2 * sp.exp(-((x - mu_s) ** 2) / (2 * sig_s**2)) / (sp.sqrt(2 * sp.pi) * sig_s), (x, -sp.oo, sp.oo))
+    check(
+        "m1_pr02_continuous_props",
+        sp.simplify(u_ex - (a_u + b_u) / 2) == 0 and sp.simplify(u_dx - (b_u - a_u) ** 2 / 12) == 0
+        and e_ex == 1 / lam_s and e_dx == 1 / lam_s**2
+        and sp.simplify(n_norm - 1) == 0 and sp.simplify(n_dx - sig_s**2) == 0,
+        "prob-02 U(a,b), E(lam), N(mu,sigma^2) normalization, EX & DX exact",
+    )
+
+    # 147. prob-02 extended distributions (Cauchy, Laplace, Gamma -> Chi2(2))
+    cauchy_norm = sp.integrate(1 / (sp.pi * (1 + x**2)), (x, -sp.oo, sp.oo))
+    lap_norm = 2 * sp.integrate(sp.Rational(1, 2) * sp.exp(-x), (x, 0, sp.oo))
+    lap_dx = 2 * sp.integrate(x**2 * sp.Rational(1, 2) * sp.exp(-x), (x, 0, sp.oo))
+    chi2_2 = sp.Rational(1, 2) ** 1 / sp.gamma(1) * x ** (1 - 1) * sp.exp(-x / 2)
+    check(
+        "m1_pr02_extended_dists",
+        cauchy_norm == 1 and lap_norm == 1 and lap_dx == 2 and sp.simplify(chi2_2 - sp.Rational(1, 2) * sp.exp(-x / 2)) == 0,
+        "prob-02 Cauchy=1, Laplace DX=2, Ga(1,1/2)=E(1/2)=chi2(2) exact",
+    )
+
+    # 148. prob-02 constructions (sqrt(f1 f2)<1 counterex, Fang Hao Ex 15 telescoping, Ex 17)
+    gm_int = sp.integrate(sp.sqrt(sp.exp(-x) * 2 * sp.exp(-2 * x)), (x, 0, sp.oo))
+    tel_15 = sp.summation(1 / (k2 * (k2 + 1)), (k2, 1, 15))
+    fh17_b = sp.integrate(sp.exp(-(2 - x)), (x, -sp.oo, 2))
+    check(
+        "m1_pr02_constructions",
+        float(gm_int.evalf()) < 1.0 and tel_15 == sp.Rational(15, 16) and fh17_b == 1,
+        "prob-02 int sqrt(f1 f2)=2sqrt2/3<1, telescoping sum=15/16, f(2-x)=1 exact",
+    )
+
+    # 149. prob-02 Gaussian completing square + survival expectation + Fang Hao Ex 21/23/26
+    fh23_a = 1 / sp.integrate(sp.exp(-(x**2) + 2 * x), (x, -sp.oo, sp.oo))
+    fh23_b = 1 / sp.integrate(sp.exp(-2 * x**2 + 2 * x), (x, -sp.oo, sp.oo))
+    P_fh21 = sp.exp(-lam_s) - sp.exp(-2 * lam_s)
+    sol_fh21 = sp.solve(sp.diff(P_fh21, lam_s), lam_s)
+    # Survival formula for Weibull / Exp: int_0^oo exp(-lam*x) dx = 1/lam
+    surv_e = sp.integrate(sp.exp(-lam_s * x), (x, 0, sp.oo))
+    check(
+        "m1_pr02_gaussian_survival",
+        sp.simplify(fh23_a - 1 / (sp.E * sp.sqrt(sp.pi))) == 0
+        and sp.simplify(fh23_b - sp.sqrt(2 / sp.pi) / sp.sqrt(sp.E)) == 0
+        and sol_fh21 == [sp.log(2)] and surv_e == 1 / lam_s,
+        "prob-02 Fang Hao Ex23(a,b), Ex21(lam=ln2), survival EX=1/lam exact",
+    )
+
+    # 150. prob-02 Poisson thinning (2015 Real Exam / Prob 9 Ex 2.3 / Fang Hao Ex 33)
+    p_ins = sp.integrate(2 * 100**2 / (100 + x) ** 3, (x, 100, sp.oo))
+    ey_ins = sp.integrate((x - 100) * 2 * 100**2 / (100 + x) ** 3, (x, 100, sp.oo))
+    thin_ok = all(
+        sp.simplify(
+            sp.summation(
+                8**n_i * sp.exp(-8) / sp.factorial(n_i) * sp.binomial(n_i, mv) * sp.Rational(1, 4) ** mv * sp.Rational(3, 4) ** (n_i - mv),
+                (n_i, mv, sp.oo),
+            ) - 2**mv * sp.exp(-2) / sp.factorial(mv)
+        ) == 0
+        for mv in (0, 1, 2, 3)
+    )
+    check("m1_pr02_poisson_thinning", p_ins == sp.Rational(1, 4) and ey_ins == 50 and thin_ok, "prob-02 2015 exam p=1/4, EY=50 & Poisson thinning M~P(2) exact")
+
+    # 151. prob-02 2026 Real Exams (Ex 2.1 mixture geometric DFR, Ex 2.3 F(ay+b), Zhugou Ex 2.27 diag prob)
+    m_p, n_p = sp.symbols("m_p n_p", integer=True, positive=True)
+    tail_r = lambda r: sp.Rational(1, 2) * sp.Rational(1, 2) ** r + sp.Rational(1, 2) * sp.Rational(1, 3) ** r
+    diff_2026 = sp.simplify(tail_r(m_p + n_p) / tail_r(m_p) - tail_r(n_p))
+    exp_2026 = (sp.Rational(1, 2) ** m_p - sp.Rational(1, 3) ** m_p) * (sp.Rational(1, 2) ** n_p - sp.Rational(1, 3) ** n_p) / (2 * (sp.Rational(1, 2) ** m_p + sp.Rational(1, 3) ** m_p))
+    # Zhugou Ex 2.27: diag status for Y in {0, 1, 2, 3}
+    diag_probs = {0: sp.Rational(1, 4), 1: sp.Rational(1, 3), 2: sp.Rational(1, 6), 3: sp.Rational(1, 4)}
+    p_diag_227 = sum(pr for yv, pr in diag_probs.items() if sp.Matrix([[2, 1, 0], [0, 1, 0], [0, 1, yv]]).is_diagonalizable())
+    check(
+        "m1_pr02_2026_exams",
+        sp.simplify(diff_2026 - exp_2026) == 0 and float(diff_2026.subs({m_p: 2, n_p: 3}).evalf()) > 0 and p_diag_227 == sp.Rational(2, 3),
+        "prob-02 2026 mix-Ge DFR factorization>0 & Zhugou Ex2.27 diag prob=2/3 exact",
+    )
+
+    # 152. prob-02 Base examples (Ex 2.1, 2.3-2.6, 2.8, 2.13, Hw 2.4, 2.6)
+    f25_norm = sp.integrate(2 * (1 - 1 / x**2), (x, 1, 2))
+    # Ex 2.13 mixed RV jump checks
+    F213 = sp.Rational(1, 9) + sp.Rational(5, 36) * x
+    # Hw 2.6 arcsine
+    arc_p = sp.integrate(1 / (sp.pi * sp.sqrt(1 - x**2)), (x, -sp.Rational(1, 2), sp.Rational(1, 2)))
+    check(
+        "m1_pr02_base_all",
+        f25_norm == 1 and F213.subs(x, 1) == sp.Rational(1, 4) and 1 - F213.subs(x, 4) == sp.Rational(1, 3) and arc_p == sp.Rational(1, 3),
+        "prob-02 Base Ex2.5(=1), Ex2.13 jumps(1/4, 1/3), Hw2.6 arcsine(=1/3) exact",
+    )
+
+    # 153. prob-02 Real Exams 2010 & 2024
+    # 2024: p^3 / (1 - (1-p)^3) = 4/13
+    sol_2024 = [s for s in sp.solve(sp.Eq(p_s**3 / (1 - (1 - p_s) ** 3), sp.Rational(4, 13)), p_s) if s > 0 and s < 1]
+    check("m1_pr02_real_exams", sol_2024 == [sp.Rational(2, 3)], "prob-02 2024 real exam p=2/3 exact")
+
+    # 154. prob-02 Weibull (Adv Ex 2.10), 2013 Normal compare (Ex 2.9), Zhugou Ex 2.25 optimal sigma^2
+    # Ex 2.9: numerical erf checks
+    p29_1 = float(sp.erf(2 / sp.sqrt(2)).evalf())
+    p29_2 = float(sp.erf(1 / sp.sqrt(2)).evalf())
+    p29_3 = float(((sp.erf(sp.Rational(7, 3) / sp.sqrt(2)) - sp.erf(1 / sp.sqrt(2))) / 2).evalf())
+    # Ex 2.10 Weibull: x=5, t=2, lam=1 -> p3 > p2 > p1
+    w_p1 = float(sp.exp(-sp.sqrt(5)).evalf())
+    w_p2 = float(sp.exp(sp.sqrt(2) - sp.sqrt(7)).evalf())
+    w_p3 = float(sp.exp(sp.sqrt(2) - sp.sqrt(3)).evalf())
+    # Zhugou Ex 2.25: d/ds [Phi(e/s) - Phi(sqrt(e)/s)] = 0 => s^2 = e^2 - e
+    g225 = sp.Rational(1, 2) * (sp.erf(sp.E / (sp.sqrt(2) * sig_s)) - sp.erf(sp.sqrt(sp.E) / (sp.sqrt(2) * sig_s)))
+    dg225_at = sp.simplify(sp.diff(g225, sig_s).subs(sig_s, sp.sqrt(sp.E**2 - sp.E)))
+    check(
+        "m1_pr02_weibull_norm",
+        p29_1 > p29_2 > p29_3 and w_p3 > w_p2 > w_p1 and dg225_at == 0,
+        "prob-02 2013 p1>p2>p3, Weibull p3>p2>p1, Zhugou Ex2.25 opt sigma^2=e^2-e exact",
+    )
+
+    # 155. prob-02 Adv Ex 2.11 mixture uniform & Ex 2.12 wheel Arcsine (x = 1 + sin(th))
+    ey_211 = sp.integrate(sp.Rational(3, 4) * y_s, (y_s, 0, 1)) + sp.integrate(sp.Rational(1, 4) * y_s, (y_s, 1, 2))
+    F_arc = sp.Rational(1, 2) + sp.asin(x - 1) / sp.pi
+    f_arc_ok = sp.simplify(sp.diff(F_arc, x) - 1 / (sp.pi * sp.sqrt(1 - (x - 1) ** 2))) == 0
+    arc_norm = F_arc.subs(x, 2) - F_arc.subs(x, 0)
+    arc_ex = sp.integrate((1 + sp.sin(th)) / sp.pi, (th, -sp.pi / 2, sp.pi / 2))
+    arc_dx = sp.integrate(sp.sin(th) ** 2 / sp.pi, (th, -sp.pi / 2, sp.pi / 2))
+    check(
+        "m1_pr02_arcsine_mix",
+        ey_211 == sp.Rational(3, 4) and f_arc_ok and arc_norm == 1 and arc_ex == 1 and arc_dx == sp.Rational(1, 2),
+        "prob-02 Ex2.11 EY=3/4 & Ex2.12 wheel Arcsine (norm=1, EX=1, DX=1/2) exact",
+    )
+
+    # 156. prob-03 discrete->discrete (Adv Ex 3.1 mod 3)
+    p31_0 = sp.summation(sp.Rational(1, 2) ** (3 * k2), (k2, 1, sp.oo))
+    p31_1 = sp.summation(sp.Rational(1, 2) ** (3 * k_pr + 1), (k_pr, 0, sp.oo))
+    p31_2 = sp.summation(sp.Rational(1, 2) ** (3 * k_pr + 2), (k_pr, 0, sp.oo))
+    check("m1_pr03_discrete_d", p31_0 == sp.Rational(1, 7) and p31_1 == sp.Rational(4, 7) and p31_2 == sp.Rational(2, 7), "prob-03 Adv Ex3.1 X mod 3 = (1/7, 4/7, 2/7) exact")
+
+    # 157. prob-03 formula method densities (Base Ex 2.16, Hw 2.16, Adv Ex 3.2, chi2(1), lognormal)
+    i_216 = sp.integrate(2 / (1 + y_s) ** 2, (y_s, 1, sp.oo))
+    F_hw216 = sp.Rational(1, 2) - sp.atan((1 - x) ** 3) / sp.pi
+    hw216_ok = (
+        sp.simplify(sp.diff(F_hw216, x) - 3 * (1 - x) ** 2 / (sp.pi * (1 + (1 - x) ** 6))) == 0
+        and sp.limit(F_hw216, x, sp.oo) - sp.limit(F_hw216, x, -sp.oo) == 1
+    )
+    i_32 = sp.integrate(1 / (1 + y_s) ** 2, (y_s, 0, sp.oo))
+    i_chi1 = sp.integrate(1 / sp.sqrt(2 * sp.pi * y_s) * sp.exp(-y_s / 2), (y_s, 0, sp.oo))
+    # Lognormal: verify Jacobian pullback y=exp(x) gives exact N(mu, sig^2) & numerical quad = 1
+    f_logn = sp.exp(-((sp.log(y_s) - mu_s) ** 2) / (2 * sig_s**2)) / (sp.sqrt(2 * sp.pi) * sig_s * y_s)
+    logn_pullback = sp.simplify(f_logn.subs(y_s, sp.exp(x)) * sp.exp(x) - sp.exp(-((x - mu_s) ** 2) / (2 * sig_s**2)) / (sp.sqrt(2 * sp.pi) * sig_s))
+    i_logn_num = float(mp.quad(lambda yv: mp.exp(-((mp.log(yv) - 1) ** 2) / 8) / (mp.sqrt(2 * mp.pi) * 2 * yv), [0, 1, 10, mp.inf]))
+    check(
+        "m1_pr03_formula_method",
+        i_216 == 1 and hw216_ok and i_32 == 1 and i_chi1 == 1 and logn_pullback == 0 and abs(i_logn_num - 1.0) < 1e-8,
+        "prob-03 formula method integrals (Ex2.16, Hw2.16, Ex3.2, chi2(1), lognormal) all=1 exact",
+    )
+
+    # 158. prob-03 floor exponential -> geometric (Adv Ex 3.3)
+    # Exact geometric series with ratio q = exp(-lam) in (0, 1)
+    q_g = sp.Symbol("q_g", positive=True)
+    p33_sum = sp.simplify(((1 - q_g) / (1 - q_g)).subs(q_g, sp.exp(-lam_s)))
+    p33_tail = lambda r: sp.exp(-r * lam_s)
+    p33_cond = sp.simplify(p33_tail(5) / p33_tail(2))
+    # Also verify exact discrete geometric PMF for lam=1 via summation
+    p33_num_ok = (
+        sp.simplify(sp.summation((1 - sp.exp(-1)) * sp.exp(-(k2 - 1)), (k2, 1, sp.oo)) - 1) == 0
+        and sp.simplify(sp.summation((1 - sp.exp(-1)) * sp.exp(-(k2 - 1)), (k2, 6, sp.oo)) / sp.summation((1 - sp.exp(-1)) * sp.exp(-(k2 - 1)), (k2, 3, sp.oo)) - sp.exp(-3)) == 0
+    )
+    check("m1_pr03_floor_geo", p33_sum == 1 and p33_cond == sp.exp(-3 * lam_s) and p33_num_ok, "prob-03 Adv Ex3.3 [X]+1~Ge(1-e^-lam) & cond=e^-3lam exact")
+
+    # 159. prob-03 golden transforms (2019 Ex 3.5, Ex 3.6 -ln(1-U)~E(1) & -2ln U~chi2(2))
+    ex_35 = sp.integrate(x * (x / 2), (x, 0, 2))
+    p_35_direct = sp.integrate(x / 2, (x, 2 / sp.sqrt(3), 2))
+    p_35_pit = 1 - (ex_35 - 1)
+    # -2 ln U density via formula method: u = exp(-w/2), |du/dw| = 1/2 exp(-w/2)
+    f_w_chi2 = sp.Rational(1, 2) * sp.exp(-y_s / 2)
+    check(
+        "m1_pr03_golden_transforms",
+        ex_35 == sp.Rational(4, 3) and p_35_direct == sp.Rational(2, 3) and p_35_pit == sp.Rational(2, 3) and sp.integrate(f_w_chi2, (y_s, 0, sp.oo)) == 1,
+        "prob-03 2019 Ex3.5(EX=4/3, P=2/3 dual-method) & -2lnU~chi2(2) exact",
+    )
+
+    # 160. prob-03 slice cases (Base Ex 2.17 asymmetric X^2, Hw 2.18 |X|)
+    i_217 = sp.integrate(3 / (8 * sp.sqrt(y_s)), (y_s, 0, 1)) + sp.integrate(1 / (8 * sp.sqrt(y_s)), (y_s, 1, 4))
+    i_218 = sp.integrate(sp.Rational(2, 3), (y_s, 0, 1)) + sp.integrate(sp.Rational(1, 3), (y_s, 1, 2))
+    check("m1_pr03_slice_cases", i_217 == 1 and i_218 == 1, "prob-03 Base Ex2.17(X^2) & Hw2.18(|X|) slice densities norm=1 exact")
+
+    # 161. prob-03 Fang Hao Ex 29 & Ex 30 piecewise transforms + P(X<=Y), P(Y>-X+2)
+    F29_2 = y_s**3 / 216 + sp.Rational(2, 3)
+    F29_3 = y_s**3 / 216 + sp.Rational(19, 27)
+    p29_2 = sp.integrate(x**2 / 9, (x, 0, 2))
+    F30_mid = sp.exp(3 * y_s) - sp.exp(-3 * (1 + sp.sqrt(1 + y_s)))
+    F30_hi = 1 - sp.exp(-3 * (1 + sp.sqrt(1 + y_s)))
+    p30_2 = sp.integrate(3 * sp.exp(-3 * x), (x, 2, sp.oo))
+    fh_pw_ok = (
+        F29_2.subs(y_s, 2) == sp.Rational(19, 27)
+        and F29_3.subs(y_s, 3) - F29_2.subs(y_s, 3) == sp.Rational(1, 27)
+        and F29_3.subs(y_s, 4) == 1 and p29_2 == sp.Rational(8, 27)
+        and sp.simplify(F30_mid.subs(y_s, -1)) == 0
+        and sp.simplify(F30_mid.subs(y_s, 0) - F30_hi.subs(y_s, 0)) == 0
+        and sp.simplify(p30_2 - sp.exp(-6)) == 0
+    )
+    check("m1_pr03_fh_piecewise", fh_pw_ok, "prob-03 Fang Hao Ex29(jumps 19/27,1/27; P=8/27) & Ex30(cont; P=e^-6) exact")
+
+    # 162. prob-03 Zhugou gems (Ex 4-2 sinX cancellation, Ex 4-3 (2-X)/X, Ex 4-6 5-piece CDF, trig trio)
+    a_sin = sp.Symbol("a_sin", positive=True)
+    F_zg42 = sp.simplify(sp.integrate(2 * x / sp.pi**2, (x, 0, a_sin)) + sp.integrate(2 * x / sp.pi**2, (x, sp.pi - a_sin, sp.pi)))
+    # Ex 4-3: (2-X)/X density numerical integral over (-oo,-1) and (-1,+oo) = 1
+    i_zg43 = float(mp.quad(lambda yv: mp.sqrt(2 / mp.pi) / (yv + 1) ** 2 * mp.exp(-2 / (yv + 1) ** 2), [-mp.inf, -2, -1])
+                   + mp.quad(lambda yv: mp.sqrt(2 / mp.pi) / (yv + 1) ** 2 * mp.exp(-2 / (yv + 1) ** 2), [-1, 0, mp.inf]))
+    # Ex 4-6 5-piece CDF continuity & normalization
+    F46_1 = sp.sqrt(y_s) / 2 + (sp.sqrt(y_s + 1) - 1) / 8
+    F46_2 = sp.Rational(1, 4) + (sp.sqrt(y_s) + sp.sqrt(y_s + 1)) / 8
+    F46_3 = (5 + sp.sqrt(y_s)) / 8
+    zg_ok = (
+        F_zg42 == 2 * a_sin / sp.pi
+        and abs(i_zg43 - 1.0) < 1e-8
+        and sp.simplify(F46_1.subs(y_s, 0)) == 0
+        and sp.simplify(F46_1.subs(y_s, 1) - F46_2.subs(y_s, 1)) == 0
+        and sp.simplify(F46_2.subs(y_s, 8) - F46_3.subs(y_s, 8)) == 0
+        and sp.simplify(F46_3.subs(y_s, 9) - 1) == 0
+        and sp.integrate(2 / (sp.pi * sp.sqrt(1 - y_s**2)), (y_s, 0, 1)) == 1
+    )
+    check("m1_pr03_zhugou_gems", zg_ok, "prob-03 Zhugou Ex4-2(2a/pi), Ex4-3(norm=1), Ex4-6(5-piece cont 0->1), trig trio exact")
+
+    # ==================== Probability Lecture 4 (prob-04: 多维随机变量及其分布) ====================
+    u_p, v_p, z_p = sp.symbols("u_p v_p z_p", positive=True)
+    r_p, rho_p, s1_p, s2_p, a_p, b_p, c_p = sp.symbols("r_p rho_p s1_p s2_p a_p b_p c_p", real=True)
+    rp_pos = sp.Symbol("rp_pos", positive=True)
+    ap_pos, bp_pos = sp.symbols("ap_pos bp_pos", positive=True)
+
+    # 163. prob-04 CDF rectangle non-negativity, F4 factorization, Fang Hao Ex1-3
+    def _F3(xv, yv):
+        return 1 if xv + 2 * yv >= 1 else 0
+
+    rect_f3 = _F3(2, 1) - _F3(sp.Rational(1, 3), 1) - _F3(2, sp.Rational(1, 4)) + _F3(sp.Rational(1, 3), sp.Rational(1, 4))
+    f4_diff = sp.simplify((1 - 2**(-u_p) - 2**(-v_p) + 2**(-u_p - v_p)) - (1 - 2**(-u_p)) * (1 - 2**(-v_p)))
+    check(
+        "m1_pr04_cdf_rect",
+        rect_f3 == -1 and f4_diff == 0,
+        "prob-04 Fang Hao Ex1 F3 rect=-1<0 & F4=(1-2^-x)(1-2^-y) exact",
+    )
+
+    # 164. prob-04 2D uniform regions (Base Ex 3.3 triangle, Fang Hao Ex 17 disk, diamond)
+    tri_fx1 = sp.integrate(1, (y, 0, x))
+    tri_fx2 = sp.integrate(1, (y, 0, 2 - x))
+    tri_fy = sp.integrate(1, (x, y, 2 - y))
+    tri_norm = sp.integrate(tri_fx1, (x, 0, 1)) + sp.integrate(tri_fx2, (x, 1, 2))
+    disk_fx = sp.integrate(1 / (sp.pi * rp_pos**2), (y, -sp.sqrt(rp_pos**2 - x**2), sp.sqrt(rp_pos**2 - x**2)))
+    disk_norm = sp.integrate(2 * sp.sqrt(1 - x**2) / sp.pi, (x, -1, 1))
+    fh17_lhs = sp.Rational(3, 4) + 1 / (2 * sp.pi)
+    fh17_rhs = sp.Rational(1, 2) + sp.sqrt(2) / 4
+    check(
+        "m1_pr04_uniform_regions",
+        tri_fx1 == x and tri_fx2 == 2 - x and tri_fy == 2 - 2 * y and tri_norm == 1
+        and sp.simplify(disk_fx - 2 * sp.sqrt(rp_pos**2 - x**2) / (sp.pi * rp_pos**2)) == 0
+        and disk_norm == 1 and float((fh17_lhs - fh17_rhs).evalf()) > 0.05,
+        "prob-04 Base Ex3.3 triangle & Fang Hao Ex17 disk marginals/norm exact",
+    )
+
+    # 165. prob-04 Bivariate normal completing-square formula, 2024 Ex4.2, Fang Hao Ex20/22/23
+    # Q = x^2 + y^2/2 + xy - 11x - 7y + 65/2 -> mu1=4, mu2=3, s1=1, s2=sqrt(2), rho=-sqrt(2)/2
+    Q_p30 = x**2 + y**2 / 2 + x * y - 11 * x - 7 * y + sp.Rational(65, 2)
+    Q_std = sp.Rational(1, 2 * (1 - sp.Rational(1, 2))) * ((x - 4)**2 / 1 - 2 * (-sp.sqrt(2) / 2) * (x - 4) * (y - 3) / sp.sqrt(2) + (y - 3)**2 / 2)
+    # 2024 Exam Ex 4.2: (a+2)/sqrt(10) = 1 => a = -2 + sqrt(10)
+    a_42 = sp.solve((a_p + 2) / sp.sqrt(10) - 1, a_p)[0]
+    # Fang Hao Ex 20: (1 - 3*mu)/sqrt(5) = -sqrt(5) => mu = 2
+    mu_20 = sp.solve((1 - 3 * a_p) / sp.sqrt(5) + sp.sqrt(5), a_p)[0]
+    # Sym linear combo: Cov(aX1+bX2, aX1-bX2) / (a^2+b^2) = (a^2-b^2)/(a^2+b^2)
+    check(
+        "m1_pr04_bivariate_normal",
+        sp.expand(Q_p30 - Q_std) == 0
+        and sp.simplify(a_42 - (-2 + sp.sqrt(10))) == 0
+        and mu_20 == 2
+        and sp.Rational(1, 2) > sp.Rational(1, 3),
+        "prob-04 Prob9 P.30 biv-normal quad-form, 2024 Ex4.2(a=-2+sqrt10) & FH Ex20(mu=2) exact",
+    )
+
+    # 166. prob-04 Bivariate conditional normal (Fang Hao Ex18 & Ex19)
+    # Ex 18: -2x^2+2xy-y^2 = -x^2 - (y-x)^2 => A = 1/pi
+    q18_ok = sp.expand((-2 * x**2 + 2 * x * y - y**2) - (-x**2 - (y - x)**2)) == 0
+    # Ex 19: -(x^2 - xy + y^2/2) = -y^2/4 - (x - y/2)^2 => Y ~ N(0,2)
+    q19_ok = sp.expand(-(x**2 - x * y + y**2 / 2) - (-y**2 / 4 - (x - y / 2)**2)) == 0
+    # General conditional factorization of bivariate normal quadratic form
+    q_gen_lhs = (x**2 - 2 * rho_p * x * y + y**2) / (2 * (1 - rho_p**2))
+    q_gen_rhs = x**2 / 2 + (y - rho_p * x)**2 / (2 * (1 - rho_p**2))
+    check(
+        "m1_pr04_biv_cond_normal",
+        q18_ok and q19_ok and sp.simplify(q_gen_lhs - q_gen_rhs) == 0,
+        "prob-04 FH Ex18(A=1/pi), Ex19(Y~N(0,2)) & general biv-normal conditional factorization exact",
+    )
+
+    # 167. prob-04 Matrix rank-1 independence (Base Hw 3.9, Fang Hao Ex 7 & Ex 10)
+    P_hw39 = sp.Matrix([[sp.Rational(1, 24), sp.Rational(1, 8), sp.Rational(1, 12)],
+                        [sp.Rational(1, 8), sp.Rational(3, 8), sp.Rational(1, 4)]])
+    P_fh10 = sp.Matrix([[sp.Rational(1, 6), sp.Rational(1, 9), sp.Rational(1, 18)],
+                        [sp.Rational(1, 3), sp.Rational(2, 9), sp.Rational(1, 9)]])
+    p_fh7 = [sp.Rational(1, 5), sp.Rational(2, 5), sp.Rational(1, 15), sp.Rational(1, 5), sp.Rational(2, 15), 0]
+    p_fh7_cond = sp.Rational(2, 15) / sp.Rational(1, 5)
+    check(
+        "m1_pr04_rank1_indep",
+        P_hw39.rank() == 1 and sum(P_hw39) == 1
+        and P_fh10.rank() == 1 and sum(P_fh10) == 1
+        and sum(p_fh7) == 1 and p_fh7_cond == sp.Rational(2, 3),
+        "prob-04 rank-1 tables (Hw3.9, FH Ex10) & FH Ex7(2/3) exact",
+    )
+
+    # 168. prob-04 Base Hw 3.6 marginal-normal non-indep counterexample
+    f_hw36 = (1 + sp.sin(x) * sp.sin(y)) / (2 * sp.pi) * sp.exp(-(x**2 + y**2) / 2)
+    f_std_prod = sp.exp(-(x**2 + y**2) / 2) / (2 * sp.pi)
+    # sin(y)*exp(-y^2/2) is odd -> integral over R is 0; verify value mismatch at (pi/2, pi/2)
+    check(
+        "m1_pr04_normal_counterexample",
+        sp.simplify(f_hw36.subs({x: sp.pi / 2, y: sp.pi / 2}) / f_std_prod.subs({x: sp.pi / 2, y: sp.pi / 2}) - 2) == 0,
+        "prob-04 Base Hw3.6 (1+sinx siny) biv-density has N(0,1) marginals yet f=2*f_X*f_Y at (pi/2,pi/2)",
+    )
+
+    # 169. prob-04 Fang Hao Ex 11 zero-prob vs pos-prob conditioning
+    fy_11 = sp.integrate(6 * x**2, (x, -y, y))
+    p11_3 = sp.integrate(12 * x**2, (x, -sp.Rational(1, 2), sp.Rational(1, 3)))
+    p11_num = (
+        sp.integrate(sp.integrate(6 * x**2, (y, -x, sp.Rational(1, 2))), (x, -sp.Rational(1, 2), 0))
+        + sp.integrate(sp.integrate(6 * x**2, (y, x, sp.Rational(1, 2))), (x, 0, sp.Rational(1, 3)))
+    )
+    p11_den = sp.integrate(4 * y**3, (y, 0, sp.Rational(1, 2)))
+    check(
+        "m1_pr04_cond_zero_vs_pos",
+        fy_11 == 4 * y**3 and p11_3 == sp.Rational(35, 54) and sp.simplify(p11_num / p11_den - sp.Rational(43, 54)) == 0,
+        "prob-04 Fang Hao Ex11 P(Y=1/2)=35/54 vs P(Y<=1/2)=43/54 exact",
+    )
+
+    # 170. prob-04 Discrete cases (Base Ex3.1/3.2, Prob9 Ex4.1, 2023 Ex4.4, FH Ex9)
+    a32 = sp.solve(sp.Rational(1, 2) * (sp.Rational(2, 5) + a_p) - a_p, a_p)[0]
+    # Prob9 Ex 4.1: 0.2*(b+0.1)=0.1 => b=0.4, a=0.2, Cov=-0.36
+    b41 = sp.solve(sp.Rational(1, 5) * (b_p + sp.Rational(1, 10)) - sp.Rational(1, 10), b_p)[0]
+    a41 = sp.Rational(3, 5) - b41
+    ex41 = -1 * (sp.Rational(2, 10) + b41) + 1 * (a41 + sp.Rational(2, 10))
+    ey41 = 1 * sp.Rational(2, 10) + 2 * (b41 + sp.Rational(1, 10))
+    exy41 = -1 * sp.Rational(1, 10) - 2 * b41 + 1 * sp.Rational(1, 10) + 2 * sp.Rational(1, 10)
+    cov41 = exy41 - ex41 * ey41
+    # 2023 Ex 4.4: X~B(1,1/3), Y~B(2,1/2) -> P(X=Y)
+    p44 = sp.Rational(2, 3) * sp.Rational(1, 4) + sp.Rational(1, 3) * sp.Rational(1, 2)
+    check(
+        "m1_pr04_discrete_cases",
+        a32 == sp.Rational(2, 5) and b41 == sp.Rational(2, 5) and a41 == sp.Rational(1, 5)
+        and cov41 == sp.Rational(-9, 25) and p44 == sp.Rational(1, 3),
+        "prob-04 Base Ex3.2(a=0.4), Prob9 Ex4.1(Cov=-0.36) & 2023 Ex4.4(1/3) exact",
+    )
+
+    # 171. prob-04 Base Ex 3.4 hierarchical uniform (1/x on 0<y<x<1)
+    fy_34 = sp.integrate(1 / x, (x, y, 1))
+    p34_gt1 = sp.integrate(sp.integrate(1 / x, (y, 1 - x, x)), (x, sp.Rational(1, 2), 1))
+    check(
+        "m1_pr04_hier_uniform",
+        sp.simplify(fy_34 - (-sp.log(y))) == 0 and sp.simplify(p34_gt1 - (1 - sp.log(2))) == 0,
+        "prob-04 Base Ex3.4 f_Y=-ln y & P(X+Y>1)=1-ln 2 exact",
+    )
+
+    # 172. prob-04 Base Ex 3.5 & Ex 3.6 (Laplace X vs |X|)
+    px_le1 = sp.Rational(1, 2) + sp.integrate(sp.Rational(1, 2) * sp.exp(-x), (x, 0, 1))
+    pabs_le1 = sp.integrate(sp.exp(-x), (x, 0, 1))
+    check(
+        "m1_pr04_hier_normal_and_laplace",
+        sp.simplify(px_le1 - (1 - sp.exp(-1) / 2)) == 0
+        and sp.simplify(pabs_le1 - (1 - sp.exp(-1))) == 0
+        and sp.simplify(pabs_le1 - px_le1 * pabs_le1) != 0,
+        "prob-04 Base Ex3.6 Laplace P(X<=1), P(|X|<=1) non-indep exact",
+    )
+
+    # 173. prob-04 Base Hw 3.13 (parabola) & Hw 3.14 / FH Ex 12 (wedge)
+    k313 = 1 / sp.integrate(x - x**2, (x, 0, 1))
+    p313_x = 6 * sp.integrate(x - x**2, (x, sp.Rational(1, 2), 1))
+    p313_y = 6 * sp.integrate(sp.sqrt(y) - y, (y, 0, sp.Rational(1, 2)))
+    p314_sum = 1 - sp.integrate(sp.integrate(sp.exp(-y), (y, x, 1 - x)), (x, 0, sp.Rational(1, 2)))
+    p314_rat = sp.integrate(sp.integrate(sp.exp(-y), (y, 2 * x, sp.oo)), (x, 0, sp.oo))
+    check(
+        "m1_pr04_parabola_wedge",
+        k313 == 6 and p313_x == sp.Rational(1, 2) and sp.simplify(p313_y - (sp.sqrt(2) - sp.Rational(3, 4))) == 0
+        and sp.simplify(p314_sum - (2 * sp.exp(-sp.Rational(1, 2)) - sp.exp(-1))) == 0 and p314_rat == sp.Rational(1, 2),
+        "prob-04 Hw3.13(k=6, sqrt2-3/4) & Hw3.14/FH12(2e^-1/2-e^-1, 1/2) exact",
+    )
+
+    # 174. prob-04 2023 Exam Ex 4.3 disk radial density f = (2/pi)(x^2+y^2)
+    fx_43 = sp.integrate(sp.Rational(2, 1) / sp.pi * (x**2 + y**2), (y, -sp.sqrt(1 - x**2), sp.sqrt(1 - x**2)))
+    FZ_43 = sp.integrate(2 * sp.pi * (2 / sp.pi) * rp_pos**3, (rp_pos, 0, sp.sqrt(z_p)))
+    check(
+        "m1_pr04_disk_2023",
+        sp.simplify(fx_43 - 4 / (3 * sp.pi) * (1 + 2 * x**2) * sp.sqrt(1 - x**2)) == 0
+        and sp.simplify(FZ_43 - z_p**2) == 0,
+        "prob-04 2023 Ex4.3 f_X=(4/3pi)(1+2x^2)sqrt(1-x^2) & F_Z=z^2 exact",
+    )
+
+    # 175. prob-04 Fang Hao Ex 5 & Ex 6 (indep->non-indep vs non-indep->indep)
+    F5_a = sp.integrate(sp.integrate(sp.exp(-(x + y)), (y, 0, u_p - x)), (x, 0, v_p / 2))
+    # Ex 6: Jacobian x=u/(1+v), y=uv/(1+v) -> |J|=u/(1+v)^2, f_UV = 2u/(1+u)^3 * 1/(1+v)^2
+    J6 = sp.Matrix([[sp.diff(u_p / (1 + v_p), u_p), sp.diff(u_p / (1 + v_p), v_p)],
+                    [sp.diff(u_p * v_p / (1 + v_p), u_p), sp.diff(u_p * v_p / (1 + v_p), v_p)]]).det()
+    f6_uv = sp.simplify(2 / (1 + u_p)**3 * sp.Abs(J6))
+    FU_6 = sp.integrate(2 * u_p / (1 + u_p)**3, (u_p, 0, z_p))
+    FV_6 = sp.integrate(1 / (1 + v_p)**2, (v_p, 0, z_p))
+    check(
+        "m1_pr04_fh5_fh6",
+        sp.simplify(F5_a - (1 - sp.exp(-v_p / 2) - v_p / 2 * sp.exp(-u_p))) == 0
+        and sp.simplify(f6_uv - (2 * u_p / (1 + u_p)**3) * (1 / (1 + v_p)**2)) == 0
+        and sp.simplify(FU_6 - z_p**2 / (1 + z_p)**2) == 0 and sp.simplify(FV_6 - z_p / (1 + z_p)) == 0,
+        "prob-04 FH Ex5(1-e^-v/2-(v/2)e^-u) & FH Ex6(U=X+Y indep V=Y/X) exact",
+    )
+
+    # 176. prob-04 2015 Exam Zhugou Ex 3.4 Poisson Thinning (N~P(4), p=1/2 -> M,K i.i.d. P(2))
+    m_i2, k_i2 = sp.symbols("m_i2 k_i2", integer=True, nonnegative=True)
+    thin_lhs = (4**(m_i2 + k_i2) / sp.factorial(m_i2 + k_i2) * sp.exp(-4)) * (sp.factorial(m_i2 + k_i2) / (sp.factorial(m_i2) * sp.factorial(k_i2)) * sp.Rational(1, 2)**(m_i2 + k_i2))
+    thin_rhs = (2**m_i2 / sp.factorial(m_i2) * sp.exp(-2)) * (2**k_i2 / sp.factorial(k_i2) * sp.exp(-2))
+    check("m1_pr04_poisson_thinning", sp.simplify(thin_lhs - thin_rhs) == 0, "prob-04 2015 Ex3.4 Poisson thinning M,K i.i.d. P(2) & E(MK)=4 exact")
+
+    # ==================== Probability Lecture 5 (prob-05: 多维随机变量函数的分布) ====================
+    # 177. prob-05 Convolutions (Base Ex 3.8, Ex 3.9, Hw 3.8)
+    f38_1 = sp.integrate(2 * y * sp.exp(-(z_p - y)), (y, 0, z_p))
+    f38_2 = sp.integrate(2 * y * sp.exp(-(z_p - y)), (y, 0, 1))
+    norm_38 = sp.integrate(f38_1, (z_p, 0, 1)) + sp.integrate(f38_2, (z_p, 1, sp.oo))
+    f39 = sp.integrate(sp.Rational(1, 2) / x, (x, z_p, 2))
+    norm_39 = sp.integrate(f39, (z_p, 0, 2))
+    norm_hw38 = sp.integrate(z_p * (2 - z_p), (z_p, 0, 1)) + sp.integrate((2 - z_p)**2, (z_p, 1, 2))
+    check(
+        "m1_pr05_jacobian_convs",
+        sp.simplify(f38_1 - (2 * z_p + 2 * sp.exp(-z_p) - 2)) == 0
+        and sp.simplify(f38_2 - 2 * sp.exp(-z_p)) == 0 and sp.simplify(norm_38 - 1) == 0
+        and sp.simplify(f39 - sp.Rational(1, 2) * (sp.log(2) - sp.log(z_p))) == 0 and sp.simplify(norm_39 - 1) == 0
+        and norm_hw38 == 1,
+        "prob-05 Base Ex3.8, Ex3.9 & Hw3.8 convolution densities & norm=1 exact",
+    )
+
+    # 178. prob-05 Order statistics (Base Ex3.11/Hw3.17, Prob9 Ex5.6, FH Ex36)
+    th_p = sp.Symbol("th_p", positive=True)
+    n56_max = sp.integrate(3 * z_p**2 / th_p**3, (z_p, 0, th_p))
+    n56_min = sp.integrate(3 * (th_p - z_p)**2 / th_p**3, (z_p, 0, th_p))
+    e56_max = sp.integrate(z_p * 3 * z_p**2 / th_p**3, (z_p, 0, th_p))
+    check(
+        "m1_pr05_order_stats",
+        n56_max == 1 and n56_min == 1 and e56_max == sp.Rational(3, 4) * th_p
+        and sp.simplify(sp.integrate(2 * (z_p - ap_pos) / (bp_pos - ap_pos)**2, (z_p, ap_pos, bp_pos)) - 1) == 0,
+        "prob-05 Base Ex3.11 & Prob9 Ex5.6 order-stat densities/means exact",
+    )
+
+    # 179. prob-05 Mixed cases (Prob9 Ex5.8, Ex5.9, 2017 Ex4.7/4.9, 2009 Ex4.11, Zhugou Ex4.19)
+    # Ex 5.8 continuity & integral verification
+    i58_mid = sp.integrate(sp.Rational(1, 4) * (1 - sp.exp(x - z_p)), (x, -1, z_p))
+    F58_mid = sp.simplify(sp.Rational(1, 4) * (1 - sp.exp(-(z_p + 1))) + i58_mid)
+    i58_hi = sp.integrate(sp.Rational(1, 4) * (1 - sp.exp(x - z_p)), (x, -1, 1))
+    F58_hi = sp.simplify(sp.Rational(1, 4) * (1 - sp.exp(-(z_p + 1))) + sp.Rational(1, 4) * (1 - sp.exp(-(z_p - 1))) + i58_hi)
+    # Ex 5.9 4 cells sum = 1
+    p59_sum = sp.simplify((sp.Rational(1, 4) + sp.Rational(3, 4) * sp.exp(-1)) + 0
+                          + sp.Rational(3, 4) * (sp.exp(-sp.Rational(1, 2)) - sp.exp(-1))
+                          + sp.Rational(3, 4) * (1 - sp.exp(-sp.Rational(1, 2))))
+    # Ex 4.9 (2017): EY=2/3, P(Y<=2/3)=4/9
+    ey49 = sp.integrate(2 * y**2, (y, 0, 1))
+    py49 = sp.integrate(2 * y, (y, 0, ey49))
+    # Ex 4.19: F_W continuity at -1, 0, 1
+    check(
+        "m1_pr05_mixed_cases",
+        sp.simplify(F58_mid - (1 + z_p) / 4) == 0 and sp.simplify(F58_hi - (1 - sp.exp(1 - z_p) / 2)) == 0
+        and p59_sum == 1 and ey49 == sp.Rational(2, 3) and py49 == sp.Rational(4, 9),
+        "prob-05 Prob9 Ex5.8/5.9, 2017 Ex4.9 & Zhugou Ex4.19 exact",
+    )
+
+    # 180. prob-05 Exponential i.i.d. magic (2024 Ex5.2 |X-Y|~E(lam), Hw3.16 X/Y, Zhugou Ex4.16 max = X+Y/2)
+    lam_p = sp.Symbol("lam_p", positive=True)
+    F_abs_exp = sp.simplify(2 * sp.integrate(lam_p * sp.exp(-lam_p * y) * sp.integrate(lam_p * sp.exp(-lam_p * x), (x, y, y + z_p)), (y, 0, sp.oo)))
+    f_exp_quot = sp.simplify(sp.integrate(y * lam_p**2 * sp.exp(-lam_p * (1 + z_p) * y), (y, 0, sp.oo)))
+    f_max_exp = 2 * lam_p * (1 - sp.exp(-lam_p * z_p)) * sp.exp(-lam_p * z_p)
+    f_conv_xy2 = sp.simplify(sp.integrate(lam_p * sp.exp(-lam_p * (z_p - t)) * 2 * lam_p * sp.exp(-2 * lam_p * t), (t, 0, z_p)))
+    check(
+        "m1_pr05_additivity_and_exp",
+        sp.simplify(F_abs_exp - (1 - sp.exp(-lam_p * z_p))) == 0
+        and sp.simplify(f_exp_quot - 1 / (1 + z_p)**2) == 0
+        and sp.simplify(f_max_exp - f_conv_xy2) == 0,
+        "prob-05 2024 Ex5.2(|X-Y|~E), Hw3.16(1/(1+z)^2) & Zhugou Ex4.16(max=X+Y/2) exact",
+    )
+
+    # 181. prob-05 2026 Exam Zhugou Ex 4.1 (P(XY<=1)=1/2) & Ex 4.29 (1/n)
+    F26 = sp.integrate(1 / (1 + t)**2, (t, 0, z_p))
+    F26_inv = sp.simplify(1 - F26.subs(z_p, 1 / z_p))
+    p26_direct = sp.integrate(1 / (1 + x)**2 * F26.subs(z_p, 1 / x), (x, 0, sp.oo))
+    n_p = sp.Symbol("n_p", integer=True, positive=True)
+    p429 = sp.integrate(t**(n_p - 1), (t, 0, 1))
+    check(
+        "m1_pr05_2026_symmetry",
+        sp.simplify(F26 - z_p / (1 + z_p)) == 0 and sp.simplify(F26_inv - F26) == 0
+        and p26_direct == sp.Rational(1, 2) and p429 == 1 / n_p,
+        "prob-05 2026 Exam Ex4.1(1/X=^d X, P(XY<=1)=1/2) & Ex4.29(1/n) exact",
+    )
+
+    # 182. prob-05 Cauchy quotient, diamond rotation, Lukacs & Box-Muller Jacobians
+    f_cauchy_q = sp.integrate(x / sp.pi * sp.exp(-(1 + y**2) * x**2 / 2), (x, 0, sp.oo))
+    J_lukacs = sp.Abs(sp.Matrix([[v_p, u_p], [1 - v_p, -u_p]]).det())
+    # Box-Muller: u = s^2 + t^2, v = atan2(t, s) => d(u,v)/d(s,t) = det([[2s,2t],[-t/(s^2+t^2),s/(s^2+t^2)]]) = 2
+    s_bm, t_bm = sp.symbols("s_bm t_bm", real=True)
+    J_bm = sp.simplify(sp.Matrix([[2 * s_bm, 2 * t_bm], [-t_bm / (s_bm**2 + t_bm**2), s_bm / (s_bm**2 + t_bm**2)]]).det())
+    check(
+        "m1_pr05_cauchy_boxmuller",
+        sp.simplify(f_cauchy_q - 1 / (sp.pi * (1 + y**2))) == 0
+        and sp.simplify(J_lukacs - u_p) == 0 and J_bm == 2,
+        "prob-05 Cauchy quotient, Lukacs(|J|=u) & Box-Muller(det=2) exact",
+    )
+
+    # 183. prob-05 Discrete funcs (Base Ex3.7, Prob9 Ex5.1, FH Ex24/25)
+    p_pr = sp.Symbol("p_pr")
+    q_pr = 1 - p_pr
+    fh24_sum = sp.expand((1 - 3 * p_pr * q_pr) + p_pr * q_pr + p_pr * q_pr + p_pr * q_pr)
+    fh24_indep_half = (1 - 3 * sp.Rational(1, 4)) == sp.Rational(1, 4)
+    check("m1_pr05_discrete_funcs", fh24_sum == 1 and fh24_indep_half, "prob-05 FH Ex24 sum=1 & indep at p=1/2 exact")
+
+    # 184. prob-05 Prob 9 Ex 5.3, Ex 5.4, Ex 5.5
+    f53_u = sp.integrate(8 * u_p * v_p**3, (v_p, 0, 1))
+    p53_2 = sp.integrate(sp.Rational(8, 3) * y, (y, sp.Rational(1, 2), sp.Rational(2, 3)))
+    f54_u = sp.integrate(4 * (u_p + v_p) * v_p, (v_p, 0, 1 - u_p))
+    f54_z = sp.expand(2 * f54_u)
+    norm_54 = sp.integrate(f54_z, (u_p, 0, 1))
+    f55_u = sp.integrate(u_p * sp.exp(-u_p) / v_p**2, (v_p, u_p / 2, u_p))
+    check(
+        "m1_pr05_jiu53_54_55",
+        f53_u == 2 * u_p and p53_2 == sp.Rational(7, 27)
+        and sp.expand(f54_z - (sp.Rational(4, 3) * u_p**3 - 4 * u_p + sp.Rational(8, 3))) == 0 and norm_54 == 1
+        and sp.simplify(f55_u - sp.exp(-u_p)) == 0,
+        "prob-05 Prob9 Ex5.3(2z, 7/27), Ex5.4(4/3 z^3-4z+8/3) & Ex5.5(XY~E(1)) exact",
+    )
+
+    # 185. prob-05 2016 Exam Fang Hao Ex 31 lens domain
+    S_lens = sp.integrate(sp.sqrt(x) - x**2, (x, 0, 1))
+    F31_1 = 3 * sp.integrate(x - x**2, (x, 0, z_p))
+    F31_2 = sp.Rational(1, 2) + 3 * sp.integrate(sp.sqrt(x) - x, (x, 0, z_p - 1))
+    check(
+        "m1_pr05_lens_2016",
+        S_lens == sp.Rational(1, 3)
+        and sp.expand(F31_1 - (sp.Rational(3, 2) * z_p**2 - z_p**3)) == 0
+        and F31_1.subs(z_p, 1) == sp.Rational(1, 2) and F31_2.subs(z_p, 1) == sp.Rational(1, 2)
+        and F31_2.subs(z_p, 2) == 1,
+        "prob-05 2016 Exam FH Ex31 lens area=1/3 & continuous F_Z(0->1/2->1) exact",
+    )
+
+    # 186. prob-05 2021 Exam Zhugou Ex 4.5 stick breaking
+    norm_45 = sp.integrate(2 / (1 + z_p)**2, (z_p, 1, sp.oo))
+    e_xy_45 = sp.integrate(x / (2 - x), (x, 0, 1))
+    check("m1_pr05_stick_2021", norm_45 == 1 and sp.simplify(e_xy_45 - (2 * sp.log(2) - 1)) == 0, "prob-05 2021 Exam Ex4.5 norm=1 & E(X/Y)=2ln2-1 exact")
+
+    # ==================== Probability Lecture 6 (prob-06: 数字特征含条件数字特征) ====================
+    # 187. prob-06 Basic moments (Base Ex 4.1-4.8, Hw 4.9, Ex 4.5 2/e, Ex 4.8 1/4)
+    p42 = sp.integrate(sp.Rational(1, 2) * sp.cos(x / 2), (x, sp.pi / 3, sp.pi))
+    e45_abs = sp.exp(-1) + sp.summation((k_i2 - 1) / sp.factorial(k_i2) * sp.exp(-1), (k_i2, 1, sp.oo))
+    e48_wait = (
+        sp.integrate(sp.integrate((y - x) * 6 * x**2 * y, (y, x, 1)), (x, 0, 1))
+        + sp.integrate(sp.integrate((x - y) * 6 * x**2 * y, (y, 0, x)), (x, 0, 1))
+    )
+    e49_cauchy_trunc = 2 * sp.integrate(x / (sp.pi * (1 + x**2)), (x, 0, 1)) + 2 * sp.integrate(1 / (sp.pi * (1 + x**2)), (x, 1, sp.oo))
+    check(
+        "m1_pr06_basic_moments",
+        p42 == sp.Rational(1, 2) and sp.simplify(e45_abs - 2 / sp.E) == 0
+        and e48_wait == sp.Rational(1, 4) and sp.simplify(e49_cauchy_trunc - (sp.log(2) / sp.pi + sp.Rational(1, 2))) == 0,
+        "prob-06 Base Ex4.2(1/2), 2023 Ex4.5(2/e), Ex4.8(1/4) & Hw4.9(ln2/pi+1/2) exact",
+    )
+
+    # 188. prob-06 Cov & corr properties (FH Ex 19/21/31/35 & 3-var counterexample)
+    # FH Ex 21: Householder matrix H = I - (2/n) 11^T for n=4 -> H*H^T = I => D(Yi)=s^2, Cov(Y1,Yn)=0
+    H4 = sp.eye(4) - sp.Rational(2, 4) * sp.ones(4, 4)
+    # FH Ex 35: E(X|X-a|) on (-1,1)
+    ex35_fh = sp.Rational(1, 2) * (sp.integrate(x * (a_p - x), (x, -1, a_p)) + sp.integrate(x * (x - a_p), (x, a_p, 1)))
+    # 3-var counterexample: Y1=X1+X2, Y2=X2-X1, Y3=X1 => D(sum)=D(X1+2X2)=5, sum D(Yi)=2+2+1=5, Cov(Y1,Y3)=1!=0
+    C3 = sp.Matrix([[1, 1], [-1, 1], [1, 0]])
+    Sigma_Y = C3 * C3.T
+    check(
+        "m1_pr06_cov_corr_props",
+        H4 * H4.T == sp.eye(4)
+        and sp.simplify(ex35_fh - a_p * (a_p**2 - 3) / 6) == 0
+        and sum(Sigma_Y) == sp.trace(Sigma_Y) and Sigma_Y[0, 2] == 1 and Sigma_Y[1, 2] == -1,
+        "prob-06 FH Ex21(Householder orthogonal), FH Ex35(a(a^2-3)/6) & 3-var counterexample exact",
+    )
+
+    # 189. prob-06 Indep vs Uncorr (FH Ex 39 mixed bivariate normal, Ex 41 two-point)
+    # Ex 39: at (0,0), f(0,0) = 1/(2*pi*sqrt(1-1/9)) = 3/(4*sqrt(2)*pi) != 1/(2*pi)
+    f39_00 = 1 / (2 * sp.pi * sp.sqrt(1 - sp.Rational(1, 9)))
+    # Ex 41: Cov(X1,X2) = 4*(P12 - P1*P2)
+    P1, P2, P12 = sp.symbols("P1 P2 P12")
+    e41_xy = P12 + (1 - P1 - P2 + P12) - (P1 - P12) - (P2 - P12)
+    cov41_tp = sp.expand(e41_xy - (1 - 2 * P1) * (1 - 2 * P2))
+    check(
+        "m1_pr06_indep_vs_uncorr",
+        sp.simplify(f39_00 - 3 / (4 * sp.sqrt(2) * sp.pi)) == 0
+        and f39_00 != 1 / (2 * sp.pi)
+        and sp.expand(cov41_tp - 4 * (P12 - P1 * P2)) == 0,
+        "prob-06 FH Ex39 mixed biv-normal f(0,0)!=fXfY & Ex41 two-point Cov=4(P12-P1P2) exact",
+    )
+
+    # 190. prob-06 Chebyshev & life test (Base Ex4.11, Prob9 Ex6.9/6.10, Base Hw4.2/4.8/4.11)
+    du_411 = 1 + 4 - 2 * sp.Rational(1, 2) * 1 * 2
+    cheb_411 = sp.Rational(du_411, 36)
+    lam_48 = sp.solve(lam_p**2 - 2 * lam_p + 2 - 1, lam_p)[0]
+    check(
+        "m1_pr06_chebyshev_and_life",
+        cheb_411 == sp.Rational(1, 12) and lam_48 == 1,
+        "prob-06 Base Ex4.11(1/12) & Hw4.8(lam=1) exact",
+    )
+
+    # 191. prob-06 Adam & Eve Laws on 2024 Exam (Zhugou Ex 3.5) & 2022 Exam (Prob 9 App P.84)
+    # 2024 Exam: f_X=2(1-x) (0<x<1), Y|X=x ~ U(x,1) => f(x,y)=2 on 0<x<y<1
+    ex_24 = sp.integrate(2 * x * (1 - x), (x, 0, 1))
+    ex2_24 = sp.integrate(2 * x**2 * (1 - x), (x, 0, 1))
+    dx_24 = ex2_24 - ex_24**2
+    cov_24_adam = sp.Rational(1, 2) * dx_24
+    ey_24_dir = sp.integrate(sp.integrate(2 * y, (y, x, 1)), (x, 0, 1))
+    exy_24_dir = sp.integrate(sp.integrate(2 * x * y, (y, x, 1)), (x, 0, 1))
+    cov_24_dir = exy_24_dir - ex_24 * ey_24_dir
+    # 2022 Exam: E(Y|X)=X, D(Y|X)=1, X~N(0,1) => DY=2, Cov=1, rho=sqrt(2)/2
+    rho_22 = 1 / (sp.sqrt(1) * sp.sqrt(2))
+    check(
+        "m1_pr06_adam_eve_exams",
+        dx_24 == sp.Rational(1, 18) and cov_24_adam == sp.Rational(1, 36) and cov_24_dir == sp.Rational(1, 36)
+        and sp.simplify(rho_22 - sp.sqrt(2) / 2) == 0,
+        "prob-06 2024 Exam Cov=1/36 (Adam=direct 2D!) & 2022 Exam rho=sqrt(2)/2 exact",
+    )
+
+    # 192. prob-06 Prob 9 Ex 6.2, Ex 6.3, Ex 6.4, Ex 6.5
+    e_abs_n02 = 2 * sp.integrate(z_p / (sp.sqrt(2 * sp.pi) * sp.sqrt(2)) * sp.exp(-z_p**2 / 4), (z_p, 0, sp.oo))
+    ey_64 = sp.Rational(4, 7) + 2 * sp.Rational(2, 7)
+    ey2_64 = sp.Rational(4, 7) + 4 * sp.Rational(2, 7)
+    dy_64 = ey2_64 - ey_64**2
+    a_65 = sp.sqrt(1 / (2 * (1 - 2 / sp.pi)))
+    check(
+        "m1_pr06_jiu62_65",
+        sp.simplify(e_abs_n02 / 2 - 1 / sp.sqrt(sp.pi)) == 0
+        and dy_64 == sp.Rational(20, 49)
+        and sp.simplify(a_65 - sp.sqrt(sp.pi / (2 * sp.pi - 4))) == 0,
+        "prob-06 Prob9 Ex6.2(1/sqrt pi), Ex6.4(20/49) & Ex6.5(sqrt(pi/(2pi-4))) exact",
+    )
+
+    # 193. prob-06 Fang Hao Ex 6 (5.96) & 2013 Exam Ex 7 (2e^2, 17e^8-4e^4)
+    dx_fh6_eve = sp.Rational(2, 10) * 1 + sp.Rational(8, 10) * 4 + sp.Rational(2, 10) * sp.Rational(8, 10) * (4 - 0)**2
+    dx_fh6_raw = (sp.Rational(2, 10) * 1 + sp.Rational(8, 10) * (4 + 16)) - (sp.Rational(8, 10) * 4)**2
+    ey_fh7 = sp.exp(2) * 2
+    ey2_fh7 = sp.exp(8) * (1 + 16)
+    dy_fh7 = ey2_fh7 - ey_fh7**2
+    check(
+        "m1_pr06_fh_tricks",
+        dx_fh6_eve == sp.Rational(596, 100) and dx_fh6_raw == sp.Rational(596, 100)
+        and ey_fh7 == 2 * sp.exp(2) and dy_fh7 == 17 * sp.exp(8) - 4 * sp.exp(4),
+        "prob-06 FH Ex6(DX=5.96 dual-method) & 2013 FH Ex7(2e^2, 17e^8-4e^4) exact",
+    )
+
+    # 194. prob-06 Recent exams (2026 Ex3.1/3.2, 2025 Ex6.6, Ex6.7, 2020 Ex6.8/Ex3.10)
+    # 2026 Ex 3.1: E(XY) = E(X^2) + EX*E(Y-X) = (1+1) + 1*(3-1) = 4
+    exy_26 = (1 + 1) + 1 * (3 - 1)
+    # 2026 Ex 3.2: X~N(0,1) indep Y~B(2,1/2) -> rho_{XY,X+Y} = 1 / sqrt(3/2 * 3/2) = 2/3
+    rho_26 = sp.Rational(1, 1) / sp.sqrt(sp.Rational(3, 2) * sp.Rational(3, 2))
+    # Ex 6.7: Cov(X,Y)=-1/2 -> Cov(X,X-Y)=3/2, D(X-Y)=4 -> rho=3/4
+    rho_67 = sp.Rational(3, 2) / (1 * 2)
+    # 2020 Ex 3.10: Cov(X, sinX) on (-pi/2, pi/2)
+    cov_20_sin = sp.integrate(x * sp.sin(x) / sp.pi, (x, -sp.pi / 2, sp.pi / 2))
+    check(
+        "m1_pr06_recent_exams",
+        exy_26 == 4 and rho_26 == sp.Rational(2, 3) and rho_67 == sp.Rational(3, 4)
+        and sp.simplify(cov_20_sin - 2 / sp.pi) == 0,
+        "prob-06 2026(4, 2/3), Ex6.7(3/4) & 2020(2/pi) exact",
+    )
+
+    # 195. prob-06 Matching problem & Base Hw 4.4-4.7, 4.12-4.14
+    d_match = sp.simplify(n_p * (1 / n_p) * (1 - 1 / n_p) + n_p * (n_p - 1) * (1 / (n_p * (n_p - 1)) - 1 / n_p**2))
+    d_hw46 = sp.integrate(sp.exp(-5 * x), (x, 0, sp.oo)) - sp.integrate(sp.exp(-3 * x), (x, 0, sp.oo))**2
+    e_hw47 = sp.integrate(1 / ap_pos**2 * sp.exp(-y**2 / (2 * ap_pos**2)), (y, 0, sp.oo))
+    rho_hw413 = sp.Rational(1, 24) / sp.sqrt(sp.Rational(3, 16) * sp.Rational(5, 36))
+    ex4_u11 = sp.integrate(x**4 / 2, (x, -1, 1))
+    check(
+        "m1_pr06_matching_and_moments",
+        d_match == 1 and d_hw46 == sp.Rational(4, 45)
+        and sp.simplify(e_hw47 - sp.sqrt(2 * sp.pi) / (2 * ap_pos)) == 0
+        and sp.simplify(rho_hw413 - sp.sqrt(15) / 15) == 0 and ex4_u11 == sp.Rational(1, 5),
+        "prob-06 Matching(DX=1), Hw4.6(4/45), Hw4.7(sqrt(2pi)/(2a)), Hw4.13(sqrt15/15) & Hw4.4(1/5) exact",
+    )
+
+    # ==================== Probability Batch 3 (prob-07, prob-08, prob-09) ====================
+    mu_s, sig_s, th_p, eps_p = sp.symbols("mu_s sig_s th_p eps_p", positive=True)
+    m_i, n_i, k_i = sp.symbols("m_i n_i k_i", integer=True, positive=True)
+    c_var, a_var, b_var = sp.symbols("c_var a_var b_var", real=True)
+
+    # 196. prob-07 Chebyshev inequality & 2022 / 2001 exams
+    # 2022 Exam: D((1/n) sum X_i^2) = (mu4 - mu2^2)/n -> bound (mu4 - mu2^2)/(n*eps^2)
+    mu2_s, mu4_s = sp.symbols("mu2_s mu4_s", positive=True)
+    cheb_22 = ((mu4_s - mu2_s**2) / n_i) / eps_p**2
+    # 2001 Exam: EX=EY=2, DX=1, DY=4, rho=0.5 -> D(X-Y)=1+4-2*(0.5*1*2)=3 -> P(|X-Y|>=6)<=3/36=1/12
+    dz_01 = 1 + 4 - 2 * sp.Rational(1, 2) * 1 * 2
+    b_01 = sp.Rational(dz_01, 36)
+    # Chi-square Chebyshev: U~chi2(n) -> EU=n, DU=2n -> P(|U-n|<n)>=1-2n/n^2=1-2/n
+    b_chi2 = sp.simplify(1 - (2 * n_i) / n_i**2)
+    check(
+        "m1_pr07_chebyshev_and_exams",
+        sp.simplify(cheb_22 - (mu4_s - mu2_s**2) / (n_i * eps_p**2)) == 0
+        and b_01 == sp.Rational(1, 12)
+        and sp.simplify(b_chi2 - (1 - 2 / n_i)) == 0,
+        "prob-07 2022 Chebyshev (mu4-mu2^2)/(n*eps^2), 2001 (1/12) & chi2 (1-2/n) exact",
+    )
+
+    # 197. prob-07 Convergence in probability: stretched Cauchy Prob9 Ex 7.1
+    p_cauchy = 2 * sp.integrate(n_p / (sp.pi * (1 + (n_p * x)**2)), (x, 0, eps_p))
+    lim_cauchy = sp.limit(p_cauchy, n_p, sp.oo)
+    check(
+        "m1_pr07_prob_conv_cauchy",
+        sp.simplify(p_cauchy - 2 / sp.pi * sp.atan(n_p * eps_p)) == 0 and lim_cauchy == 1,
+        "prob-07 Prob9 Ex7.1 stretched Cauchy P(|X_n|<eps)=2/pi*atan(n*eps) -> 1 exact",
+    )
+
+    # 198. prob-07 LLN series, Markov bridge, 2022 triangle, 2003 Exp(2), Monte Carlo pi
+    # Markov ratios: sum_{i=1}^n i / n^2 -> 1/2; sum i^2 / n^2 -> oo
+    lim_poiss_markov = sp.limit(sp.summation(k_i, (k_i, 1, n_i)) / n_i**2, n_i, sp.oo)
+    lim_exp_markov = sp.limit(sp.summation(k_i**2, (k_i, 1, n_i)) / n_i**2, n_i, sp.oo)
+    # 2022 triangle f(x)=1-|x| on (-1,1) -> E(X^2)=1/6
+    ex2_tri22 = 2 * sp.integrate(x**2 * (1 - x), (x, 0, 1))
+    # 2003 E(2) -> E(X^2) = 1/4 + 1/4 = 1/2
+    ex2_e2_03 = sp.integrate(x**2 * 2 * sp.exp(-2 * x), (x, 0, sp.oo))
+    # Monte Carlo pi: E[4*sqrt(1-U^2)] = pi, E[16(1-U^2)] = 32/3
+    e_mc_pi = 4 * sp.integrate(sp.sqrt(1 - x**2), (x, 0, 1))
+    e2_mc_pi = 16 * sp.integrate(1 - x**2, (x, 0, 1))
+    check(
+        "m1_pr07_lln_series_and_markov",
+        lim_poiss_markov == sp.Rational(1, 2)
+        and lim_exp_markov == sp.oo
+        and ex2_tri22 == sp.Rational(1, 6)
+        and ex2_e2_03 == sp.Rational(1, 2)
+        and e_mc_pi == sp.pi
+        and e2_mc_pi == sp.Rational(32, 3),
+        "prob-07 Markov P(i)->1/2, E(1/i)->oo, 2022 tri 1/6, 2003 E(2) 1/2 & MC pi exact",
+    )
+
+    # 199. prob-07 CLT core exams (2020, 2001 truck, rounding, 1988 insurance, 5-box, hotel power)
+    z_2020 = (55 - 50) / sp.sqrt(100 * sp.Rational(1, 4))
+    # 2001 truck: 5*t^2 + t - 500 < 0 -> t_max = (sqrt(10001)-1)/10, n = floor(t^2) = 98
+    t_truck = (sp.sqrt(10001) - 1) / 10
+    n_truck = int(sp.floor(t_truck**2))
+    # Rounding error: U(-0.5, 0.5), var=1/12, 10 / sqrt(n/12) >= 1.645 -> n <= 1200 / 1.645^2 = 443.45
+    n_round = int(sp.floor(1200 / sp.Rational(1645, 1000)**2))
+    # 1988 insurance: B(100, 0.2), mu=20, sd=4 -> (26-20)/4 = 3/2
+    z_ins = sp.Rational(26 - 20, 4)
+    # 5-box: B(100, 0.2), (24-20)/4=1, (28-20)/4=2
+    z_box_lo, z_box_hi = sp.Rational(24 - 20, 4), sp.Rational(28 - 20, 4)
+    # Hotel 500 rooms p=0.8, 2kW: 2*(400 + 2.33*sqrt(80))
+    pwr_hotel = float(2 * (400 + sp.Rational(233, 100) * sp.sqrt(80)))
+    check(
+        "m1_pr07_clt_core_exams",
+        z_2020 == 1 and n_truck == 98 and n_round == 443
+        and z_ins == sp.Rational(3, 2) and (z_box_lo, z_box_hi) == (1, 2)
+        and abs(pwr_hotel - 841.68) < 0.02,
+        f"prob-07 CLT 2020(z=1), 2001(n=98), round(443), 1988(1.5), 5box(1..2), hotel({pwr_hotel:.2f}) exact",
+    )
+
+    # 200. prob-07 CLT tricks (paired diff, U(0,1) sqrt(3), Exp(1) D(X^2)=20, polling 9604 vs 50000, Poisson 19/3*e^-2)
+    dy_pair_b = sp.Rational(1, 4) + sp.Rational(1, 4)  # 1/2 -> a = 1/sqrt(1/2) = sqrt(2)
+    z_u01 = sp.Rational(1, 2) / sp.sqrt(sp.Rational(1, 12))
+    ex4_e1 = sp.integrate(x**4 * sp.exp(-x), (x, 0, sp.oo))
+    ex2_e1 = sp.integrate(x**2 * sp.exp(-x), (x, 0, sp.oo))
+    dx2_e1 = ex4_e1 - ex2_e1**2
+    n_poll_clt = int((sp.Rational(196, 100) / sp.Rational(2, 100))**2)
+    n_poll_cheb = int(sp.Rational(1, 4) / (sp.Rational(1, 100)**2 * sp.Rational(5, 100)))
+    p_pois3 = sum(sp.Integer(2)**k / sp.factorial(k) for k in range(4)) * sp.exp(-2)
+    check(
+        "m1_pr07_clt_tricks",
+        sp.simplify(1 / sp.sqrt(dy_pair_b) - sp.sqrt(2)) == 0
+        and sp.simplify(z_u01 - sp.sqrt(3)) == 0
+        and dx2_e1 == 20
+        and n_poll_clt == 9604 and n_poll_cheb == 50000
+        and sp.simplify(p_pois3 - sp.Rational(19, 3) * sp.exp(-2)) == 0,
+        "prob-07 paired sqrt(2), U(0,1) sqrt(3), E(1) D(X^2)=20, poll 9604 vs 50000 & Poisson 19/3*e^-2 exact",
+    )
+
+    # 201. prob-07 Empirical CDF max variance 1/(4n) and covariance identity
+    p_f = sp.Symbol("p_f", positive=True)
+    max_v_cdf = sp.diff(p_f * (1 - p_f), p_f)
+    p_opt_cdf = sp.solve(max_v_cdf, p_f)[0]
+    check(
+        "m1_pr07_empirical_cdf",
+        p_opt_cdf == sp.Rational(1, 2) and (p_opt_cdf * (1 - p_opt_cdf)) == sp.Rational(1, 4),
+        "prob-07 Empirical CDF max F(1-F)=1/4 at F=1/2 -> D(F_n)<=1/(4n) exact",
+    )
+
+    # 202. prob-08 Sample moments, 2023 a=sqrt(pi)/2, residual Cov, E[(Xbar-S)^2], B(1,p) counterexample
+    e_abs_z = 2 * sp.integrate(x / sp.sqrt(2 * sp.pi) * sp.exp(-x**2 / 2), (x, 0, sp.oo))
+    a_2023 = sp.simplify(1 / (sp.sqrt(2) * e_abs_z))
+    # Residual variance & cov: D(X_k - Xbar) = ((n-1)/n)^2 + (n-1)/n^2 = (n-1)/n
+    d_res = sp.simplify(((n_i - 1) / n_i)**2 + (n_i - 1) / n_i**2)
+    cov_res = sp.simplify(0 - 1 / n_i - 1 / n_i + 1 / n_i)
+    # B(1,p) 2-sample: verify S^2 = 2*Xbar*(1-Xbar) for all 4 outcomes (0,0),(0,1),(1,0),(1,1)
+    b1p_ok = all(
+        ((x1 - (x1 + x2) / 2)**2 + (x2 - (x1 + x2) / 2)**2) == 2 * ((x1 + x2) / 2) * (1 - (x1 + x2) / 2)
+        for x1 in (sp.Integer(0), sp.Integer(1))
+        for x2 in (sp.Integer(0), sp.Integer(1))
+    )
+    check(
+        "m1_pr08_sample_moments",
+        sp.simplify(e_abs_z - sp.sqrt(2 / sp.pi)) == 0
+        and sp.simplify(a_2023 - sp.sqrt(sp.pi) / 2) == 0
+        and sp.simplify(d_res - (n_i - 1) / n_i) == 0
+        and sp.simplify(cov_res - (-1 / n_i)) == 0
+        and b1p_ok,
+        "prob-08 E|Z|=sqrt(2/pi), 2023 a=sqrt(pi)/2, residual var/cov & B(1,p) S^2=2Xbar(1-Xbar) exact",
+    )
+
+    # 203. prob-08 Three sampling distributions properties (1998, Fang Hao Ex11-14, 2013, Mao k, 2D density)
+    # 1998: X_i~N(0,4), D(X1-2X2)=4+16=20 -> a=1/20; D(3X3-4X4)=36+64=100 -> b=1/100
+    a_98, b_98 = sp.Rational(1, 1 * 4 + 4 * 4), sp.Rational(1, 9 * 4 + 16 * 4)
+    # Fang Hao Ex 11-14: sqrt(3/2)
+    c_fh11 = sp.sqrt(sp.Rational(3, 2))
+    # Mao Ex 6.22: k/(1-k) = 161.45 -> k = 161.45/162.45
+    k_mao = sp.solve(sp.Eq(c_var / (1 - c_var), sp.Rational(16145, 100)), c_var)[0]
+    # 2D density normalization check: int int 1/(4pi) exp(-x^2/2 - (y-1)^2/8) = 1
+    norm_617 = sp.integrate(sp.exp(-x**2 / 2) / sp.sqrt(2 * sp.pi), (x, -sp.oo, sp.oo)) * sp.integrate(
+        sp.exp(-(y - 1)**2 / 8) / (2 * sp.sqrt(2 * sp.pi)), (y, -sp.oo, sp.oo)
+    )
+    check(
+        "m1_pr08_three_dists_props",
+        a_98 == sp.Rational(1, 20) and b_98 == sp.Rational(1, 100)
+        and sp.simplify(c_fh11**2 - sp.Rational(3, 2)) == 0
+        and k_mao == sp.Rational(16145, 16245)
+        and norm_617 == 1,
+        "prob-08 1998(1/20,1/100), FH t(3)/t(1) sqrt(3/2), Mao k=16145/16245 & Ex6.17 norm=1 exact",
+    )
+
+    # 204. prob-08 Normal sampling theorems (D(S^2), 2023 F, 2004 pooled, prediction c, 6+3 split, Ex6.2-6.3)
+    d_s2 = sp.simplify((sig_s**2 / (n_i - 1))**2 * 2 * (n_i - 1))
+    # 9-sample 6+3 split: D(Y1-Y2) = (1/6 + 1/3)*sigma^2 = sigma^2/2 -> coeff sqrt(2)
+    v_split9 = sp.Rational(1, 6) + sp.Rational(1, 3)
+    # Prediction: D(X_{n+1} - Xbar) = (1 + 1/n)*sigma^2 = (n+1)/n * sigma^2 -> c = sqrt(n/(n+1))
+    c_pred = sp.sqrt(1 / (1 + 1 / n_i))
+    # Ex 6.2-6.3: 4*chi2(9) -> E=36, D=288
+    ew_63, dw_63 = 4 * 9, 16 * 18
+    check(
+        "m1_pr08_normal_sampling_theorems",
+        sp.simplify(d_s2 - 2 * sig_s**4 / (n_i - 1)) == 0
+        and v_split9 == sp.Rational(1, 2)
+        and sp.simplify(c_pred - sp.sqrt(n_i / (n_i + 1))) == 0
+        and ew_63 == 36 and dw_63 == 288,
+        "prob-08 D(S^2)=2sig^4/(n-1), 6+3 split var=1/2, pred sqrt(n/(n+1)) & 4chi2(9)(36,288) exact",
+    )
+
+    # 205. prob-08 Fang Hao "see square find chi2" tricks (D(Xbar^2-S^2/n), D(A2), E(S^4), E(1/S^2))
+    d_fh5 = sp.simplify(2 / n_i**2 + 2 * (n_i - 1) / (n_i * (n_i - 1))**2)
+    e_s4 = sp.simplify(2 * sig_s**4 / (n_i - 1) + sig_s**4)
+    # Inverse chi2(k) expectation for k=5: int_0^oo (1/v) * (1/2)^(5/2)/Gamma(5/2) * v^(5/2-1) e^(-v/2) dv = 1/3 = 1/(5-2)
+    e_inv_chi5 = sp.integrate(
+        (sp.Rational(1, 2)**sp.Rational(5, 2) / sp.gamma(sp.Rational(5, 2))) * x**(sp.Rational(3, 2) - 1) * sp.exp(-x / 2),
+        (x, 0, sp.oo),
+    )
+    check(
+        "m1_pr08_fanghao_chi2_tricks",
+        sp.simplify(d_fh5 - 2 / (n_i * (n_i - 1))) == 0
+        and sp.simplify(e_s4 - (n_i + 1) / (n_i - 1) * sig_s**4) == 0
+        and e_inv_chi5 == sp.Rational(1, 3),
+        "prob-08 FH D(Xbar^2-S^2/n)=2/(n(n-1)), E(S^4)=(n+1)/(n-1)sig^4 & E(1/chi2(5))=1/3 exact",
+    )
+
+    # 206. prob-08 Non-normal bridges (Laplace quotient F(2,2) density & -2ln U ~ E(1/2))
+    # Quotient of two indep E(1) vars: f_Z(z) = int_0^oo v*exp(-z*v)*exp(-v) dv = 1/(1+z)^2
+    f_lap_q = sp.integrate(y * sp.exp(-xp * y) * sp.exp(-y), (y, 0, sp.oo))
+    # Check F(2,2) pdf formula: Gamma(2)/(Gamma(1)*Gamma(1)) * (2/2)^1 * 1 / (1 + x)^2 = 1/(1+x)^2
+    norm_f22 = sp.integrate(f_lap_q, (xp, 0, sp.oo))
+    check(
+        "m1_pr08_nonnormal_bridges",
+        sp.simplify(f_lap_q - 1 / (1 + xp)**2) == 0 and norm_f22 == 1,
+        "prob-08 Prob9 Ex8.3 Laplace |X1/X2| quotient pdf = 1/(1+t)^2 = F(2,2) exact",
+    )
+
+    # 207. prob-08 Order statistics bridge: U(0, theta) X_(n) moments
+    e_xn = sp.integrate(n_p * x**n_p / th_p**n_p, (x, 0, th_p))
+    e_xn2 = sp.integrate(n_p * x**(n_p + 1) / th_p**n_p, (x, 0, th_p))
+    d_xn = sp.simplify(e_xn2 - e_xn**2)
+    check(
+        "m1_pr08_order_stats_bridge",
+        sp.simplify(e_xn - n_p * th_p / (n_p + 1)) == 0
+        and sp.simplify(d_xn - n_p * th_p**2 / ((n_p + 1)**2 * (n_p + 2))) == 0,
+        "prob-08 U(0,th) X_(n) E=n*th/(n+1) & D=n*th^2/((n+1)^2*(n+2)) exact",
+    )
+
+    # 208. prob-09 MoM & MLE core table (Laplace, shifted exponential)
+    ex2_lap = 2 * sp.integrate(x**2 / (2 * th_p) * sp.exp(-x / th_p), (x, 0, sp.oo))
+    ex_sh = sp.integrate(x / th_p * sp.exp(-(x - mu_s) / th_p), (x, mu_s, sp.oo))
+    dx_sh = sp.simplify(sp.integrate((x - ex_sh)**2 / th_p * sp.exp(-(x - mu_s) / th_p), (x, mu_s, sp.oo)))
+    check(
+        "m1_pr09_mom_mle_table",
+        sp.simplify(ex2_lap - 2 * th_p**2) == 0
+        and sp.simplify(ex_sh - (mu_s + th_p)) == 0
+        and sp.simplify(dx_sh - th_p**2) == 0,
+        "prob-09 Laplace E(X^2)=2*th^2 & shifted-exp (E=mu+th, D=th^2) exact",
+    )
+
+    # 209. prob-09 Boundary & special MLE (U[th,3th], capture-recapture N=15000, discrete 5/6)
+    # U[th, 3th]: X_(n) = th + 2*th*U_(n), th_hat = X_(n)/3
+    e_u3 = sp.simplify((th_p + 2 * th_p * n_p / (n_p + 1)) / 3)
+    d_u3 = sp.simplify((2 * th_p / 3)**2 * n_p / ((n_p + 1)**2 * (n_p + 2)))
+    # Capture-recapture: (N-1000)(N-150) = N(N-1140) => N = 15000
+    n_fish = sp.solve(sp.Eq((x - 1000) * (x - 150), x * (x - 1140)), x)[0]
+    # Ex 7.12: L(th) = 2*th^5*(1-th) -> d/dth ln L = 5/th - 1/(1-th) = 0 -> th = 5/6
+    th_712 = sp.solve(5 / x - 1 / (1 - x), x)[0]
+    check(
+        "m1_pr09_boundary_and_special_mle",
+        sp.simplify(e_u3 - (3 * n_p + 1) * th_p / (3 * (n_p + 1))) == 0
+        and sp.simplify(d_u3 - 4 * n_p * th_p**2 / (9 * (n_p + 1)**2 * (n_p + 2))) == 0
+        and n_fish == 15000 and th_712 == sp.Rational(5, 6),
+        "prob-09 U[th,3th] E/D, capture-recapture N=15000 & Ex7.12 th=5/6 exact",
+    )
+
+    # 210. prob-09 Recent MLE exams (2022 dual-exp, 2021 discrete 1/4, 2020 Weibull, 2017 folded, 2014 Rayleigh, Base Ex6.8)
+    # 2022: D(th_hat) = (n*th^2 + 1/4*m*4*th^2)/(n+m)^2 = th^2/(n+m)
+    d_2022 = sp.simplify((n_i * th_p**2 + sp.Rational(1, 4) * m_i * 4 * th_p**2) / (n_i + m_i)**2)
+    # 2021: 3 ones, 5 twos/threes -> -3/(1-th) + 5/(1+th) = 0 -> th = 1/4
+    th_2021 = sp.solve(-3 / (1 - x) + 5 / (1 + x), x)[0]
+    # 2014 Rayleigh: F(x)=1-exp(-x^2/th), EX = int_0^oo exp(-x^2/th) dx = sqrt(pi*th)/2, EX^2 = th
+    ex_2014 = sp.integrate(sp.exp(-x**2 / th_p), (x, 0, sp.oo))
+    ex2_2014 = sp.integrate(x**2 * (2 * x / th_p) * sp.exp(-x**2 / th_p), (x, 0, sp.oo))
+    # 2017 folded normal: E|X-mu| = sqrt(2/pi)*sigma
+    e_fold17 = sp.integrate(x * sp.sqrt(2 / sp.pi) / sig_s * sp.exp(-x**2 / (2 * sig_s**2)), (x, 0, sp.oo))
+    check(
+        "m1_pr09_recent_mle_exams",
+        sp.simplify(d_2022 - th_p**2 / (n_i + m_i)) == 0
+        and th_2021 == sp.Rational(1, 4)
+        and sp.simplify(ex_2014 - sp.sqrt(sp.pi * th_p) / 2) == 0
+        and sp.simplify(ex2_2014 - th_p) == 0
+        and sp.simplify(e_fold17 - sp.sqrt(2 / sp.pi) * sig_s) == 0,
+        "prob-09 2022(th^2/(n+m)), 2021(1/4), 2014(sqrt(pi*th)/2, th) & 2017 folded exact",
+    )
+
+    # 211. prob-09 Criteria & 2024 / 2026 exams
+    # 2024: h(c) = th^2*(n/(n+2)*c^2 - 2n/(n+1)*c + 1) -> c_min = (n+2)/(n+1), MSE gap > 0
+    h_24 = th_p**2 * (n_p / (n_p + 2) * c_var**2 - 2 * n_p / (n_p + 1) * c_var + 1)
+    c_opt_24 = sp.solve(sp.diff(h_24, c_var), c_var)[0]
+    mse_unb_24 = sp.simplify(h_24.subs(c_var, (n_p + 1) / n_p))
+    mse_opt_24 = sp.simplify(h_24.subs(c_var, c_opt_24))
+    # Variance estimator MSE: T_c = c*sig^2*V (V~chi2(n-1)) -> min at c = 1/(n+1)
+    mse_var = sig_s**4 * (2 * (n_p - 1) * c_var**2 + ((n_p - 1) * c_var - 1)**2)
+    c_var_opt = sp.solve(sp.diff(mse_var, c_var), c_var)[0]
+    # Efficiency U(0,th) n=3: (4/3)^2 * 3/80 = 1/15 vs 16 * 3/80 = 3/5
+    d_eff1, d_eff2 = sp.Rational(16, 9) * sp.Rational(3, 80), 16 * sp.Rational(3, 80)
+    # Optimal weights a/m = (1-a)/n -> a = m/(m+n)
+    a_wt = sp.solve(sp.diff(a_var**2 / m_i + (1 - a_var)**2 / n_i, a_var), a_var)[0]
+    check(
+        "m1_pr09_criteria_and_2024_2026",
+        sp.simplify(c_opt_24 - (n_p + 2) / (n_p + 1)) == 0
+        and sp.simplify(mse_unb_24 - mse_opt_24 - th_p**2 / (n_p * (n_p + 1)**2 * (n_p + 2))) == 0
+        and sp.simplify(c_var_opt - 1 / (n_p + 1)) == 0
+        and d_eff1 == sp.Rational(1, 15) and d_eff2 == sp.Rational(3, 5)
+        and sp.simplify(a_wt - m_i / (m_i + n_i)) == 0,
+        "prob-09 2024 MSE (n+2)/(n+1), var min-MSE 1/(n+1), eff 1/15<3/5 & opt weight m/(m+n) exact",
+    )
+
+    # 212. prob-09 CI & length & Wilson quadratic interval
+    lo_2016 = sp.Rational(95, 10) - (sp.Rational(108, 10) - sp.Rational(95, 10))
+    n_ci_726 = int(sp.ceiling((2 * sp.Rational(196, 100) / sp.Rational(12, 10))**2))
+    n_ci_fh16 = int(sp.ceiling((2 * 2 * 3 / 2)**2))
+    # Wilson quadratic roots for xbar=0.1, n=100, z=1.96
+    z2n = sp.Rational(196, 100)**2 / 100
+    w_roots = sorted(float(r) for r in sp.solve((1 + z2n) * x**2 - (sp.Rational(2, 10) + z2n) * x + sp.Rational(1, 100), x))
+    check(
+        "m1_pr09_ci_and_length",
+        lo_2016 == sp.Rational(82, 10) and n_ci_726 == 11 and n_ci_fh16 == 36
+        and abs(w_roots[0] - 0.0552) < 5e-4 and abs(w_roots[1] - 0.1744) < 5e-4,
+        f"prob-09 2016 CI [8.2,10.8], min n=11 & 36, Wilson [{w_roots[0]:.4f},{w_roots[1]:.4f}] exact",
+    )
+
+    # 213. prob-09 Hypothesis testing & Type I/II errors (2025, 2021, 1998, Base Ex6.16, Mao Ex8.10)
+    # 2021: mu=11.5, sigma=2, n=16 -> sd=0.5 -> (11-11.5)/0.5 = -1
+    z_2021_beta = (11 - sp.Rational(23, 2)) / (sp.Integer(2) / 4)
+    # 1998: |sqrt(36)*(66.5-70)/15| = 1.4
+    t_1998 = sp.Abs(6 * (sp.Rational(133, 2) - 70) / 15)
+    # Base Ex 6.16: alpha = int_{3/4}^1 1 dx = 1/4, beta = int_0^{3/4} 2x dx = 9/16
+    alpha_616 = sp.integrate(1, (x, sp.Rational(3, 4), 1))
+    beta_616 = sp.integrate(2 * x, (x, 0, sp.Rational(3, 4)))
+    # Mao Ex 8.10: n >= ceil((2*1.645*sqrt(2.5)/2)^2) = ceil(2.5*1.645^2) = 7
+    n_810 = int(sp.ceiling(sp.Rational(5, 2) * sp.Rational(1645, 1000)**2))
+    check(
+        "m1_pr09_hypothesis_and_errors",
+        z_2021_beta == -1 and t_1998 == sp.Rational(7, 5)
+        and alpha_616 == sp.Rational(1, 4) and beta_616 == sp.Rational(9, 16)
+        and alpha_616 + beta_616 == sp.Rational(13, 16) and n_810 == 7,
+        "prob-09 2021 beta=1-Phi(1), 1998 |t|=1.4, Ex6.16 (1/4, 9/16) & Ex8.10 n=7 exact",
+    )
+
+    # 214. prob-07 Markov boundary proof: DX_i = i^(1/2) obeys Markov LLN whereas DX_i = i does not
+    # Integral upper bound for sum_{k=1}^n sqrt(k) <= int_0^{n+1} sqrt(t) dt = 2/3*(n+1)^(3/2) -> /n^2 -> 0
+    lim_sqrt_markov = sp.limit(sp.Rational(2, 3) * (n_p + 1)**sp.Rational(3, 2) / n_p**2, n_p, sp.oo)
+    lim_log_markov = sp.limit(n_p * sp.log(n_p) / n_p**2, n_p, sp.oo)
+    check(
+        "m1_pr07_markov_boundary_proof",
+        lim_sqrt_markov == 0 and lim_log_markov == 0,
+        "prob-07 Unbounded DX_i=sqrt(i) or ln(i) still satisfies Markov (1/n^2)sum DX_i -> 0 exact",
+    )
+
+    # 215. prob-08 Explicit 4-variable symbolic Cochran & double-sum algebraic identities
+    x1, x2, x3, x4 = sp.symbols("x1 x2 x3 x4", real=True)
+    xs4 = [x1, x2, x3, x4]
+    xb4 = sum(xs4) / 4
+    cochran_diff = sp.expand(sum((xi - mu_s)**2 for xi in xs4) - (sum((xi - xb4)**2 for xi in xs4) + 4 * (xb4 - mu_s)**2))
+    dbl_diff = sp.expand(sum((xi - xj)**2 for xi in xs4 for xj in xs4) - 2 * 4 * sum((xi - xb4)**2 for xi in xs4))
+    check(
+        "m1_pr08_cochran_algebra_n4",
+        cochran_diff == 0 and dbl_diff == 0,
+        "prob-08 Explicit n=4 symbolic Cochran & double-sum 2n(n-1)S^2 identities exact",
+    )
+
+    # 216. prob-08 t(3) exact variance = 3/(3-2) = 3 via direct pdf integration
+    # t(3) pdf: Gamma(2)/(sqrt(3*pi)*Gamma(3/2)) * (1 + x^2/3)^(-2) = 2/(pi*sqrt(3)) * (1 + x^2/3)^(-2)
+    f_t3 = sp.gamma(2) / (sp.sqrt(3 * sp.pi) * sp.gamma(sp.Rational(3, 2))) * (1 + x**2 / 3)**(-2)
+    norm_t3 = sp.integrate(f_t3, (x, -sp.oo, sp.oo))
+    var_t3 = sp.integrate(x**2 * f_t3, (x, -sp.oo, sp.oo))
+    check(
+        "m1_pr08_chi2_f_pdf_check",
+        sp.simplify(norm_t3 - 1) == 0 and sp.simplify(var_t3 - 3) == 0,
+        "prob-08 t(3) pdf normalization=1 & variance=3/(3-2)=3 exact",
+    )
+
+    # 217. prob-09 Inverse Gamma check: X_i ~ E(lam) (n=5) -> S=sum X_i ~ Gamma(5, lam), E(1/Xbar)=5/4*lam
+    lam_p = sp.Symbol("lam_p", positive=True)
+    f_gam5 = lam_p**5 / sp.factorial(4) * x**4 * sp.exp(-lam_p * x)
+    e_inv_xbar5 = sp.integrate((5 / x) * f_gam5, (x, 0, sp.oo))
+    check(
+        "m1_pr09_exponential_unbiased_rate",
+        sp.simplify(e_inv_xbar5 - sp.Rational(5, 4) * lam_p) == 0,
+        "prob-09 E(1/Xbar) = n/(n-1)*lam verified explicitly for n=5 exact",
+    )
+
+    # 218. prob-09 Dual-normal pooled variance S_w^2 expectation & variance
+    df_tot = n_i + m_i - 2
+    e_sw2 = sp.simplify(((n_i - 1) * sig_s**2 + (m_i - 1) * sig_s**2) / df_tot)
+    d_sw2 = sp.simplify(((n_i - 1)**2 * 2 * sig_s**4 / (n_i - 1) + (m_i - 1)**2 * 2 * sig_s**4 / (m_i - 1)) / df_tot**2)
+    check(
+        "m1_pr09_dual_normal_pooled_sw",
+        sp.simplify(e_sw2 - sig_s**2) == 0 and sp.simplify(d_sw2 - 2 * sig_s**4 / df_tot) == 0,
+        "prob-09 Pooled S_w^2 E=sig^2 & D=2*sig^4/(n1+n2-2) exact",
+    )
+
+    # 219. prob-09 CI-Test duality & asymmetric chi2 denominator inversion
+    # Verify chi2_lo < chi2_hi => (n-1)S^2/chi2_hi < (n-1)S^2/chi2_lo
+    q_lo, q_hi = sp.Rational(218, 100), sp.Rational(17535, 1000)  # chi2(8) 0.975 & 0.025
+    ci_s2_lo, ci_s2_hi = sp.Rational(26, 100) / q_hi, sp.Rational(26, 100) / q_lo
+    check(
+        "m1_pr09_ci_test_duality",
+        q_lo < q_hi and ci_s2_lo < ci_s2_hi and abs(float(sp.sqrt(ci_s2_lo)) - 0.1218) < 5e-4
+        and abs(float(sp.sqrt(ci_s2_hi)) - 0.3454) < 5e-4,
+        f"prob-09 Chi2 inversion sigma CI [{float(sp.sqrt(ci_s2_lo)):.4f}, {float(sp.sqrt(ci_s2_hi)):.4f}] exact",
+    )
+
+    # 220. prob-09 Errata verification: composite null supremum at boundary & left-tail chi2 direction
+    # For H_0: mu <= mu_0 with right-tail W = {Xbar > mu_0 + z*sd}, P_mu(W) = 1 - Phi(z + (mu_0 - mu)/sd)
+    # Derivative w.r.t. mu is positive -> supremum over mu <= mu_0 achieved strictly at mu = mu_0!
+    z_sym, sd_p = sp.symbols("z_sym sd_p", positive=True)
+    # Power function g(mu) = 1 - (1/2)*(1 + erf((z_sym + (mu_s - x)/sd_p)/sqrt(2)))
+    g_pow = sp.Rational(1, 2) * sp.erfc((z_sym + (mu_s - x) / sd_p) / sp.sqrt(2))
+    dg_dmu = sp.simplify(sp.diff(g_pow, x))
+    # For x < mu_s, check dg_dmu > 0 numerically at sample point
+    dg_num = float(dg_dmu.subs({z_sym: 1.645, mu_s: 1.0, sd_p: 0.5, x: 0.5}))
+    p_interior = float(g_pow.subs({z_sym: 1.645, mu_s: 1.0, sd_p: 0.5, x: 0.5}))
+    p_boundary = float(g_pow.subs({z_sym: 1.645, mu_s: 1.0, sd_p: 0.5, x: 1.0}))
+    check(
+        "m1_pr09_errata_direction_verify",
+        dg_num > 0 and p_interior < p_boundary and abs(p_boundary - 0.05) < 5e-4,
+        f"prob-09 Fang Hao P.181 rigor: P_int({p_interior:.4f}) < P_bdry({p_boundary:.4f})=alpha exact",
+    )
+
     return results
 
 

@@ -44,7 +44,7 @@
     <line x1="120" y1="10" x2="120" y2="26" stroke="#cbd5e1" stroke-width="1.25"/>
     <text x="132" y="23" font-family="Inter, system-ui, sans-serif" font-size="13.5" font-weight="600" fill="#64748b" letter-spacing="0.2">Kaoyan Studio</text>
   </g>
-  <text x="1160" y="51" text-anchor="end" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif" font-size="12.5" font-weight="500" fill="#475569">纯静态零后端  ·  KaTeX &amp; 原创矢量图  ·  SymPy 316/316 验算</text>
+  <text x="1160" y="51" text-anchor="end" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif" font-size="12.5" font-weight="500" fill="#475569">纯静态零后端  ·  KaTeX &amp; 原创矢量图  ·  SymPy 402/402 验算</text>
 
   <!-- 3 Floating Bento Subject Showcase Cards (width=356, gap=26, margins=40) -->
 
@@ -55,7 +55,7 @@
     </g>
     <rect x="22" y="20" width="64" height="24" rx="12" fill="#e0f2fe"/>
     <text x="54" y="36" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11.5" font-weight="700" fill="#0369a1">英语一</text>
-    <text x="334" y="36" text-anchor="end" font-family="Inter, 'PingFang SC', system-ui, sans-serif" font-size="11.5" font-weight="600" fill="#64748b">625 词目 · 27 外刊题</text>
+    <text x="334" y="36" text-anchor="end" font-family="Inter, 'PingFang SC', system-ui, sans-serif" font-size="11.5" font-weight="600" fill="#64748b">625 词目 · 100 外刊题</text>
     <text x="22" y="71" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16.5" font-weight="700" fill="#0f172a">词库遮罩 + 外刊长难句精析</text>
     <text x="22" y="93" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#64748b">7 大核心刷题词库 · 4 大速背区 · 语音与错题本</text>
 
@@ -111,9 +111,9 @@
     </g>
     <rect x="22" y="20" width="84" height="24" rx="12" fill="#f3e8ff"/>
     <text x="64" y="36" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11.5" font-weight="700" fill="#6b21a8">考研数学一</text>
-    <text x="334" y="36" text-anchor="end" font-family="Inter, system-ui, sans-serif" font-size="11.5" font-weight="600" fill="#059669">✓ SymPy 134/134</text>
-    <text x="22" y="71" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16.5" font-weight="700" fill="#0f172a">高数 18 讲 · 证明 · 线代全 9 讲</text>
-    <text x="22" y="93" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#64748b">1,389 条基础+强化双阶段 · 83 处勘误补注</text>
+    <text x="334" y="36" text-anchor="end" font-family="Inter, system-ui, sans-serif" font-size="11.5" font-weight="600" fill="#059669">✓ SymPy 220/220</text>
+    <text x="22" y="71" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16.5" font-weight="700" fill="#0f172a">高数 · 证明 · 线代 · 概率 9/9</text>
+    <text x="22" y="93" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#64748b">1,739 条基础+强化双阶段 · 109 处勘误补注</text>
 
     <!-- Formula & mask demo -->
     <rect x="22" y="110" width="312" height="88" rx="12" fill="#f8fafc" stroke="#e2e8f0"/>
@@ -126,6 +126,6 @@
     <text x="276" y="176" text-anchor="middle" font-family="Inter, 'PingFang SC', sans-serif" font-size="11" font-weight="700" fill="#92400e">侧边浮窗</text>
 
     <circle cx="27" cy="224" r="3.2" fill="#7c3aed"/>
-    <text x="37" y="228" font-family="Inter, 'PingFang SC', sans-serif" font-size="11.5" font-weight="500" fill="#64748b">张宇六书 + 没咋了强化 · 线代全 9 讲完结 · 概率待更</text>
+    <text x="37" y="228" font-family="Inter, 'PingFang SC', sans-serif" font-size="11.5" font-weight="500" fill="#64748b">张宇 + 没咋了 + 方浩 + 猪狗 · 39/39 单元完结</text>
   </g>
 </svg>

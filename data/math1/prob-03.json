@@ -1,0 +1,1251 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "prob-03",
+  "title": "概率 · 第 3 讲　一维随机变量函数的分布",
+  "sourceMeta": "深度融合《27 张宇基础30讲·概率》第2讲后半（P.47-51,60-61）+《27 张宇概率9讲》第3讲（P.23-28 全 6 例）+《27 方浩概率强化》第2章题型四（P.45-50 全 4 例）+《27 猪狗概率统计百宝书》第4章一维部分（P.4-1~4-5 全 6 示例）+《27 版概率论全总结》P.7，100% 逐页核图与 SymPy 验算",
+  "basicRequirements": {
+    "master": "熟练掌握一维随机变量函数四大类型：离散→离散合并同类项（含无穷取模级数）、严格单调可导公式法（含值域边界与绝对值导数）、非单调与分段平顶混合型画图切片定义法，以及概率积分变换 Y=F_X(X)~U(0,1) 与 Z=-ln[1-F_X(X)]~E(1) 两大黄金结论。",
+    "understand": "理解公式法的严苛适用禁区（平顶段产跳点绝不能硬套公式法）、非对称支撑区间上 Y=X² 与 Y=|X| 的双支→单支折叠规律、连续型取整离散化（指数分布转几何分布）及函数相关事件 P{X≤Y} 的回代 X 一元降维法。",
+    "familiar": "熟悉标准正态平方变 χ²(1)、对数正态密度、逻辑斯蒂指数变换、均匀角三角变换三连（柯西/反正弦/半反正弦）、含奇点分式变换、逆变换采样构造法及截尾限幅混合分布。"
+  },
+  "items": [
+    {
+      "id": "m1-pr03-f-01",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "一、一维随机变量函数四类总纲与离散→离散法则",
+      "title": "一维随机变量函数 $Y=g(X)$ 四大类型总路由与离散→离散合并同类项公式",
+      "formulaLatex": "$$\\begin{aligned} &X\\sim\\begin{pmatrix}x_1&x_2&\\cdots\\\\p_1&p_2&\\cdots\\end{pmatrix},\\quad Y=g(X)\\;\\Longrightarrow\\;P\\{Y=y_k\\}=\\sum_{g(x_i)=y_k}p_i\\\\ &\\text{四类总览：① 离散}\\to\\text{离散（合并求和）\\quad ② 连续}\\to\\text{连续/混合（定义法或公式法）}\\\\ &\\phantom{\\text{四类总览：}}\\text{③ 连续}\\to\\text{离散（区间积分）\\quad ④ 黄金变换（}F_X(X)\\sim U(0,1),\\;-\\ln[1-F_X(X)]\\sim E(1)\\text{）}\\end{aligned}$$",
+      "conditions": "离散型取无穷可列值时（如强化例 3.1 $X\\bmod 3$），合并同类项会导出等比无穷级数求和，务必确认首项与公比无误。",
+      "pitfalls": "离散→离散算完分布律后，若题干接着问分布函数 $F_Y(y)$（如基础习题 2.12），切记按 $y_k$ 从小到大排列写成左闭右开阶梯函数！",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 256\" width=\"100%\" style=\"max-width:640px;height:auto;display:block;margin:8px auto;\" font-family=\"system-ui,-apple-system,'Segoe UI',sans-serif\"><title>一维随机变量函数 Y=g(X) 四类题型求解路由决策图</title><defs><marker id=\"m1_pr03_arr_s\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M0 1 L9 5 L0 9 Z\" fill=\"#475569\"/></marker></defs><rect x=\"2\" y=\"2\" width=\"636\" height=\"252\" rx=\"12\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/><rect x=\"170\" y=\"14\" width=\"300\" height=\"36\" rx=\"18\" fill=\"#0f172a\"/><text x=\"320\" y=\"36\" text-anchor=\"middle\" font-size=\"12.5\" font-weight=\"700\" fill=\"#ffffff\">已知 X 的分布，求 Y = g(X) 的分布（四类路由）</text><path d=\"M320 50 L320 64 L88 64 L88 78\" fill=\"none\" stroke=\"#475569\" stroke-width=\"1.4\" marker-end=\"url(#m1_pr03_arr_s)\"/><path d=\"M320 64 L242 64 L242 78\" fill=\"none\" stroke=\"#475569\" stroke-width=\"1.4\" marker-end=\"url(#m1_pr03_arr_s)\"/><path d=\"M320 64 L398 64 L398 78\" fill=\"none\" stroke=\"#475569\" stroke-width=\"1.4\" marker-end=\"url(#m1_pr03_arr_s)\"/><path d=\"M320 64 L552 64 L552 78\" fill=\"none\" stroke=\"#475569\" stroke-width=\"1.4\" marker-end=\"url(#m1_pr03_arr_s)\"/><rect x=\"14\" y=\"84\" width=\"146\" height=\"156\" rx=\"8\" fill=\"#eff6ff\" stroke=\"#93c5fd\" stroke-width=\"1.4\"/><text x=\"87\" y=\"104\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1d4ed8\">① 离散 → 离散</text><text x=\"87\" y=\"124\" text-anchor=\"middle\" font-size=\"10\" fill=\"#1e3a8a\">算出所有 yᵢ = g(xᵢ)</text><text x=\"87\" y=\"142\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#1d4ed8\">合并相同 yᵢ</text><text x=\"87\" y=\"158\" text-anchor=\"middle\" font-size=\"10\" fill=\"#1e3a8a\">对应概率直接相加</text><rect x=\"22\" y=\"174\" width=\"130\" height=\"56\" rx=\"6\" fill=\"#ffffff\" stroke=\"#bfdbfe\"/><text x=\"87\" y=\"192\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#1e40af\">高频例型</text><text x=\"87\" y=\"207\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">Y = X² · X²+X+1</text><text x=\"87\" y=\"221\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">Y = X mod 3（9讲例3.1）</text><rect x=\"169\" y=\"84\" width=\"146\" height=\"156\" rx=\"8\" fill=\"#ecfdf5\" stroke=\"#6ee7b7\" stroke-width=\"1.4\"/><text x=\"242\" y=\"104\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#047857\">② 连续 · 严格单调</text><text x=\"242\" y=\"124\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#065f46\">公式法一步秒杀</text><text x=\"242\" y=\"142\" text-anchor=\"middle\" font-size=\"10\" fill=\"#065f46\">f_Y(y) = f_X[h(y)]·|h′(y)|</text><text x=\"242\" y=\"158\" text-anchor=\"middle\" font-size=\"9.8\" fill=\"#dc2626\">先定值域 (α, β) 写 0！</text><rect x=\"177\" y=\"174\" width=\"130\" height=\"56\" rx=\"6\" fill=\"#ffffff\" stroke=\"#a7f3d0\"/><text x=\"242\" y=\"192\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#047857\">高频例型</text><text x=\"242\" y=\"207\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">aX+b · eˣ（对数正态）</text><text x=\"242\" y=\"221\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">1-∛X · (2-X)/X</text><rect x=\"325\" y=\"84\" width=\"146\" height=\"156\" rx=\"8\" fill=\"#fffbeb\" stroke=\"#fcd34d\" stroke-width=\"1.4\"/><text x=\"398\" y=\"104\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#b45309\">③ 非单调 / 混合型</text><text x=\"398\" y=\"124\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#92400e\">定义法（万能兜底）</text><text x=\"398\" y=\"142\" text-anchor=\"middle\" font-size=\"10\" fill=\"#78350f\">画 y=g(x) 图找 y 断点</text><text x=\"398\" y=\"158\" text-anchor=\"middle\" font-size=\"10\" fill=\"#78350f\">F_Y(y)=P{g(X)≤y}</text><rect x=\"333\" y=\"174\" width=\"130\" height=\"56\" rx=\"6\" fill=\"#ffffff\" stroke=\"#fde68a\"/><text x=\"398\" y=\"192\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#b45309\">必用定义法信号</text><text x=\"398\" y=\"207\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">X², |X|, sinX（多支折叠）</text><text x=\"398\" y=\"221\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#dc2626\">含常值平顶段→出跳点！</text><rect x=\"480\" y=\"84\" width=\"146\" height=\"156\" rx=\"8\" fill=\"#f5f3ff\" stroke=\"#c4b5fd\" stroke-width=\"1.4\"/><text x=\"553\" y=\"104\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#6d28d9\">④ 连续→离散 / 黄金</text><text x=\"553\" y=\"124\" text-anchor=\"middle\" font-size=\"10\" fill=\"#5b21b6\">取整 Y=[X]+1 按段积分</text><text x=\"553\" y=\"142\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#6d28d9\">F_X(X) ~ U(0, 1)</text><text x=\"553\" y=\"158\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#6d28d9\">-ln[1-F_X(X)] ~ E(1)</text><rect x=\"488\" y=\"174\" width=\"130\" height=\"56\" rx=\"6\" fill=\"#ffffff\" stroke=\"#ddd6fe\"/><text x=\"553\" y=\"192\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#6d28d9\">高频例型</text><text x=\"553\" y=\"207\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">E(λ)→Ge(1-e⁻λ)</text><text x=\"553\" y=\"221\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">2019真题 F(X)&gt;EX-1</text></svg>",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化",
+        "printedPage": "基础 P.47-48 / 9讲 P.23-24 / 方浩 P.45-46",
+        "pdfPage": 34,
+        "itemRef": "一维随机变量函数四大类型总纲"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "已知一维随机变量 $X$ 的分布，求函数 $Y=g(X)$ 的分布是考研必考大题与客观题基础模块。《概率 9 讲》第 3 讲将其彻底梳理为四大类型：其中**离散→离散**最直观，先算出每个取值对应的 $g(x_i)$，再把所有相等的 $y_k$ 合并成一列、对应概率直接相加，最后检查合并后概率总和是否仍等于 $1$。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「离散变离散，算值合并把概率加；连续变连续，单调公式、非单调画图定义法！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr03-f-02",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、万能兜底武器：分布函数法（定义法）与画图切片三步曲",
+      "title": "分布函数法（定义法）三步标准流程与非单调/分段平顶画图切片法则",
+      "formulaLatex": "$$\\begin{aligned} &F_Y(y)=P\\{Y\\le y\\}=P\\{g(X)\\le y\\}=\\int_{\\{x:\\,g(x)\\le y\\}}f_X(x)\\,\\mathrm{d}x\\\\ &\\text{若 }F_Y(y)\\text{ 连续且分段可导：}\\quad f_Y(y)=F_Y'(y)\\quad(\\text{若 }F_Y\\text{ 有跳点则为混合型，无全局密度!})\\end{aligned}$$",
+      "conditions": "只有确认所得 $F_Y(y)$ **处处连续**且除有限点外导数存在连续时，才能对 $F_Y(y)$ 求导写出全局概率密度 $f_Y(y)$；一旦 $y=g(x)$ 含平顶常值段（如方浩例 29），$Y$ 是混合型，只能给出 $F_Y(y)$ 而不存在全局密度！",
+      "pitfalls": "① 最高频失误：只看某一段曲线而**忘了加上已经在横线 $Y=y$ 彻底下方的另一段常值/分支区间**（如方浩例 29 当 $y\\in[2,3)$ 时，绝不能漏掉 $Y=1$ 那段贡献的 $\\frac{19}{27}$！） ② 写分段区间端点时，若 $F_Y$ 有跳跃点，务必保证每个分段均为**左闭右开** $[y_k,y_{k+1})$ 以严守右连续！",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 264\" width=\"100%\" style=\"max-width:640px;height:auto;display:block;margin:8px auto;\" font-family=\"system-ui,-apple-system,'Segoe UI',sans-serif\"><title>非单调抛物线与分段平顶混合型函数水平线切片法求分布函数图解</title><defs><marker id=\"m1_pr03_ax\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"5.5\" markerHeight=\"5.5\" orient=\"auto\"><path d=\"M0 1 L9 5 L0 9 Z\" fill=\"#475569\"/></marker></defs><rect x=\"2\" y=\"2\" width=\"636\" height=\"260\" rx=\"12\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/><text x=\"320\" y=\"23\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">定义法绝招：画 y = g(x) 图像，水平直线 y 向下切片反解 X 区间</text><rect x=\"14\" y=\"34\" width=\"300\" height=\"218\" rx=\"8\" fill=\"#ffffff\" stroke=\"#bfdbfe\"/><text x=\"164\" y=\"52\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1d4ed8\">① 非对称折叠：Y = X²，X ∈ (-1, 2)（基础例2.17）</text><line x1=\"40\" y1=\"194\" x2=\"296\" y2=\"194\" stroke=\"#475569\" stroke-width=\"1.2\" marker-end=\"url(#m1_pr03_ax)\"/><line x1=\"126\" y1=\"204\" x2=\"126\" y2=\"66\" stroke=\"#475569\" stroke-width=\"1.2\" marker-end=\"url(#m1_pr03_ax)\"/><text x=\"294\" y=\"206\" font-size=\"10\" fill=\"#475569\">x</text><text x=\"118\" y=\"72\" font-size=\"10\" fill=\"#475569\">y</text><path d=\"M66 166 Q96 194, 126 194 Q156 194, 186 166 Q216 138, 246 82\" fill=\"none\" stroke=\"#2563eb\" stroke-width=\"2.4\"/><circle cx=\"66\" cy=\"166\" r=\"3\" fill=\"#ffffff\" stroke=\"#2563eb\" stroke-width=\"1.6\"/><circle cx=\"246\" cy=\"82\" r=\"3\" fill=\"#ffffff\" stroke=\"#2563eb\" stroke-width=\"1.6\"/><line x1=\"48\" y1=\"131\" x2=\"282\" y2=\"131\" stroke=\"#dc2626\" stroke-width=\"1.4\" stroke-dasharray=\"4 3\"/><line x1=\"216\" y1=\"131\" x2=\"216\" y2=\"194\" stroke=\"#dc2626\" stroke-width=\"1\" stroke-dasharray=\"2 2\"/><text x=\"282\" y=\"126\" text-anchor=\"end\" font-size=\"9.5\" font-weight=\"700\" fill=\"#dc2626\">1≤y&lt;4：[-1, √y]</text><line x1=\"48\" y1=\"178\" x2=\"282\" y2=\"178\" stroke=\"#059669\" stroke-width=\"1.4\" stroke-dasharray=\"4 3\"/><text x=\"282\" y=\"174\" text-anchor=\"end\" font-size=\"9.5\" font-weight=\"700\" fill=\"#047857\">0≤y&lt;1：[-√y, √y]</text><line x1=\"66\" y1=\"166\" x2=\"66\" y2=\"196\" stroke=\"#94a3b8\" stroke-dasharray=\"2 2\"/><text x=\"66\" y=\"206\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">-1</text><text x=\"126\" y=\"206\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">0</text><text x=\"186\" y=\"206\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">1</text><text x=\"246\" y=\"206\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">2</text><text x=\"118\" y=\"169\" text-anchor=\"end\" font-size=\"9.5\" fill=\"#1e40af\">1</text><text x=\"118\" y=\"86\" text-anchor=\"end\" font-size=\"9.5\" fill=\"#1e40af\">4</text><text x=\"164\" y=\"226\" text-anchor=\"middle\" font-size=\"9.8\" font-weight=\"600\" fill=\"#1e3a8a\">y=1 为关键断点：双支切变单支</text><text x=\"164\" y=\"241\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">f_Y = 3/(8√y) (0,1) · 1/(8√y) (1,4)</text><rect x=\"326\" y=\"34\" width=\"300\" height=\"218\" rx=\"8\" fill=\"#ffffff\" stroke=\"#fde68a\"/><text x=\"476\" y=\"52\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#b45309\">② 分段平顶出跳点（方浩强化 例题29）</text><line x1=\"354\" y1=\"194\" x2=\"608\" y2=\"194\" stroke=\"#475569\" stroke-width=\"1.2\" marker-end=\"url(#m1_pr03_ax)\"/><line x1=\"372\" y1=\"204\" x2=\"372\" y2=\"66\" stroke=\"#475569\" stroke-width=\"1.2\" marker-end=\"url(#m1_pr03_ax)\"/><text x=\"606\" y=\"206\" font-size=\"10\" fill=\"#475569\">x</text><text x=\"364\" y=\"72\" font-size=\"10\" fill=\"#475569\">y</text><line x1=\"372\" y1=\"110\" x2=\"442\" y2=\"110\" stroke=\"#dc2626\" stroke-width=\"2.8\"/><circle cx=\"442\" cy=\"110\" r=\"3.2\" fill=\"#dc2626\"/><text x=\"407\" y=\"103\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#dc2626\">Y=3 (+1/27)</text><line x1=\"442\" y1=\"138\" x2=\"512\" y2=\"82\" stroke=\"#2563eb\" stroke-width=\"2.4\"/><circle cx=\"442\" cy=\"138\" r=\"3\" fill=\"#ffffff\" stroke=\"#2563eb\" stroke-width=\"1.6\"/><circle cx=\"512\" cy=\"82\" r=\"3\" fill=\"#ffffff\" stroke=\"#2563eb\" stroke-width=\"1.6\"/><text x=\"498\" y=\"114\" font-size=\"9.5\" font-weight=\"700\" fill=\"#1d4ed8\">Y=2X</text><line x1=\"512\" y1=\"166\" x2=\"582\" y2=\"166\" stroke=\"#dc2626\" stroke-width=\"2.8\"/><circle cx=\"512\" cy=\"166\" r=\"3.2\" fill=\"#dc2626\"/><circle cx=\"582\" cy=\"166\" r=\"3\" fill=\"#ffffff\" stroke=\"#dc2626\" stroke-width=\"1.6\"/><text x=\"548\" y=\"159\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#dc2626\">Y=1 (+19/27)</text><line x1=\"368\" y1=\"124\" x2=\"594\" y2=\"124\" stroke=\"#059669\" stroke-width=\"1.3\" stroke-dasharray=\"4 3\"/><text x=\"594\" y=\"120\" text-anchor=\"end\" font-size=\"9.2\" font-weight=\"600\" fill=\"#047857\">y∈[2,3)</text><text x=\"372\" y=\"206\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">0</text><text x=\"442\" y=\"206\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">1</text><text x=\"512\" y=\"206\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">2</text><text x=\"582\" y=\"206\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">3</text><text x=\"364\" y=\"169\" text-anchor=\"end\" font-size=\"9.2\" fill=\"#475569\">1</text><text x=\"364\" y=\"141\" text-anchor=\"end\" font-size=\"9.2\" fill=\"#475569\">2</text><text x=\"364\" y=\"113\" text-anchor=\"end\" font-size=\"9.2\" fill=\"#475569\">3</text><text x=\"364\" y=\"85\" text-anchor=\"end\" font-size=\"9.2\" fill=\"#475569\">4</text><text x=\"476\" y=\"226\" text-anchor=\"middle\" font-size=\"9.8\" font-weight=\"600\" fill=\"#92400e\">平顶段将整块概率压成跳点（混合型）</text><text x=\"476\" y=\"241\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">y 断点 1,2,3,4 · 必逐段累加下方全部区间</text></svg>",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "基础 P.48 / 9讲 P.24 / 方浩 P.45-49 / 猪狗 P.4-2",
+        "pdfPage": 35,
+        "itemRef": "分布函数法与画图切片三步曲"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "分布函数法（定义法）对**一切一维函数 $Y=g(X)$ 无条件适用**（无论是否单调、是否连续、是否含常值平顶段或产出混合型随机变量！）。《方浩强化》与《概率 9 讲》极力推崇的**数形结合画图切片三步法**：① **只在 $f_X(x)>0$ 的有效支撑区间上**画出 $y=g(x)$ 图像，标出所有极值点、分段点与常值高度作为 **$y$ 的关键分段点**；② 用水平直线 $Y=y$ 自下而上扫过图像，读出落在直线**下方（含线上）**的全部 $x$ 区间集合；③ 逐段积分（或直接用已知 $F_X$ 相减）写出 $F_Y(y)$，最后检查单调性、右连续性与 $0\\to 1$ 边界！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「先画有效区间的 $y=g(x)$ 图，找齐 $y$ 断点，水平横线往下切，下方全部 $x$ 区间加起来！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr03-f-03",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "三、严格单调可导速算武器：公式法及其分段推广",
+      "title": "严格单调可导公式法 $f_Y(y)=f_X[h(y)]|h'(y)|$ 与分段单调求和推广式",
+      "formulaLatex": "$$\\begin{aligned} &\\text{严格单调可导 }y=g(x)\\text{（反函数 }x=h(y)\\text{，值域 }(\\alpha,\\beta)\\text{）：}\\\\ &\\qquad f_Y(y)=\\begin{cases}f_X[h(y)]\\,|h'(y)|,&\\alpha<y<\\beta\\\\0,&\\text{其他}\\end{cases},\\qquad \\alpha=\\min\\left\\{\\lim_{x\\to a^+}g,\\;\\lim_{x\\to b^-}g\\right\\},\\;\\beta=\\max\\left\\{\\lim_{x\\to a^+}g,\\;\\lim_{x\\to b^-}g\\right\\}\\\\ &\\text{分段单调推广（}I_1,\\dots,I_m\\text{ 各自严格单调，反函数 }h_k(y)\\text{）：}\\quad f_Y(y)=\\sum_{k:\\,y\\in g(I_k)}f_X[h_k(y)]\\,|h_k'(y)|\\end{aligned}$$",
+      "conditions": "严格要求：① $X$ 是连续型随机变量；② $g(x)$ 在支撑区间（或各子区间）上严格单调且反函数连续可导；③ **先定值域 $(\\alpha,\\beta)$，值域之外一律补写 $0$**！",
+      "pitfalls": "公式法两大经典扣分点：① 忘加绝对值导致单调递减变换算出**负密度**；② 忘写值域边界（如 $Y=e^X$ 只在 $y>0$ 非零，$Z=\\frac{2-X}{X}$ 在 $X\\in(0,1)$ 时值域为 $z>1$，写错区间即扣半分！）。",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "基础 P.48 / 9讲 P.24-25 / 方浩 P.46 / 猪狗 P.4-3",
+        "pdfPage": 35,
+        "itemRef": "严格单调公式法与分段单调推广"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr03_formula_method",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "当 $y=g(x)$ 在 $X$ 的支撑区间 $(a,b)$ 上严格单调且反函数 $x=h(y)$ 连续可导时，公式法免去求 $F_Y(y)$ 再求导两步，一步直出密度：$f_X$ 中把 $x$ 替换成 $h(y)$，再乘雅可比伸缩绝对值 $|h'(y)|$（递减时 $h'(y)<0$ 靠绝对值自动变正！）。若 $g(x)$ 分成有限个严格单调区间（甚至含零测度孤立奇点，如猪狗示例 3 的 $Y=(2-X)/X$ 在 $x=0$ 处间断），各单调支直接分别套公式并求和即可！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「先定 $y$ 值域，再解反函数 $x=h(y)$；代入 $f_X(h)$ 别忘乘 $|h'(y)|$，值域之外写个零！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr03-f-04",
+      "kind": "formula",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、连续→离散（取整/阶梯函数）与连续→混合剥离公式",
+      "title": "连续型向离散型转换（$P\\{Y=a\\}=\\int_{g(x)=a}f_X(x)\\mathrm{d}x$）与指数取整转几何分布公式",
+      "formulaLatex": "$$\\begin{aligned} &X\\sim f_X(x),\\;Y=g(X)\\text{ 离散}\\implies P\\{Y=a\\}=\\int_{\\{x:\\,g(x)=a\\}}f_X(x)\\,\\mathrm{d}x=F_X(x_{\\text{右}})-F_X(x_{\\text{左}})\\\\ &\\text{经典定理：若 }X\\sim E(\\lambda),\\;Y=[X]+1\\text{（}[X]\\text{ 为向下取整），则 }\\\\ &\\qquad P\\{Y=k\\}=P\\{k-1\\le X<k\\}=e^{-\\lambda(k-1)}-e^{-\\lambda k}=(1-e^{-\\lambda})(e^{-\\lambda})^{k-1}\\;(k=1,2,\\dots)\\implies Y\\sim Ge(1-e^{-\\lambda})\\end{aligned}$$",
+      "conditions": "注意 $[X]$ 表示不超过 $X$ 的最大整数，故 $\\{[X]=m\\}\\iff \\{m\\le X<m+1\\}$；对连续型 $X$，端点开闭不影响积分值。",
+      "pitfalls": "别把 $Y=[X]+1$ 与 $Z=[X]$ 的几何分布参数搞混：$Y=[X]+1$ 取值 $1,2,\\dots$ 严格服从标准 $Ge(1-e^{-\\lambda})$；而 $Z=[X]$ 取值从 $0$ 开始，比标准几何分布少 1！",
+      "source": {
+        "book": "27 张宇《概率9讲》",
+        "printedPage": "9讲 P.25-26 例3.3",
+        "pdfPage": 36,
+        "itemRef": "连续型转离散型与指数取整转几何"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr03_floor_geo",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "当 $g(x)$ 把连续区间「压扁」为可列个离散点（最常见为向下取整 $[X]$、向上取整 $\\lceil X\\rceil$、符号函数 $\\operatorname{sgn}(X)$ 或阶梯示性函数）时，$Y$ 变成离散型随机变量！求法两步：① 锁定 $Y$ 的全部可能取值 $a$；② 找出水平集 $\\{x:g(x)=a\\}$ 对应的 $x$ 区间并对 $f_X(x)$ 积分（或直接用 $F_X$ 相减）。最著名的结晶就是把连续无记忆的 $E(\\lambda)$ 取整加 1 精准变成离散无记忆的 $Ge(1-e^{-\\lambda})$！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「连续变离散，反查原像区间直接减 $F_X$；指数取整加 1 变几何，参数 $p=1-e^{-\\lambda}$ 牢牢记！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr03-f-05",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "五、两大黄金分布变换（概率积分变换与指数化变换）",
+      "title": "两大黄金变换：$Y=F_X(X)\\sim U(0,1)$、$Z=-\\ln[1-F_X(X)]\\sim E(1)$ 与 $-2\\ln U\\sim\\chi^2(2)$",
+      "formulaLatex": "$$\\begin{aligned} &\\text{设连续型 }X\\sim F_X(x)\\text{（在正概率密度区间严格单增连续），则：}\\\\ &\\text{黄金变换 ①：}Y=F_X(X)\\sim U(0,1),\\qquad 1-F_X(X)\\sim U(0,1)\\\\ &\\text{黄金变换 ②：}Z=-\\ln[1-F_X(X)]\\sim E(1),\\qquad -\\ln F_X(X)\\sim E(1)\\\\ &\\text{数理统计推论：}W=-2\\ln U\\sim\\chi^2(2);\\qquad X_1,\\dots,X_n\\text{ i.i.d. 连续}\\implies -2\\sum_{i=1}^{n}\\ln F_X(X_i)\\sim\\chi^2(2n)\\end{aligned}$$",
+      "conditions": "要求 $X$ 为**连续型随机变量**（严格来说仅需 $F_X(x)$ 连续即可，基础/强化教材通常在正概率密度区间严格单增下用反函数 $F_X^{-1}$ 一步证明）；**离散型随机变量不成立**！",
+      "pitfalls": "① 离散型反例：若 $X\\sim B(1,\\frac12)$，则 $F_X(X)$ 只取 $\\frac12$ 和 $1$ 两个离散值，绝不是 $U(0,1)$！ ② 2019 真题（强化例 3.5）若不认出 $F(X)\\sim U(0,1)$ 就要费力先求 $F(x)$ 再解不等式积分，认出后直接 $P\\{U>EX-1\\}=1-(EX-1)=2-EX$ 3 秒出答案！",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 232\" width=\"100%\" style=\"max-width:640px;height:auto;display:block;margin:8px auto;\" font-family=\"system-ui,-apple-system,'Segoe UI',sans-serif\"><title>概率积分变换黄金链条：任意连续分布 X → U(0,1) → E(1) → χ²(2)</title><defs><marker id=\"m1_pr03_arr_p\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M0 1 L9 5 L0 9 Z\" fill=\"#2563eb\"/></marker><marker id=\"m1_pr03_arr_rev\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M0 1 L9 5 L0 9 Z\" fill=\"#7c3aed\"/></marker></defs><rect x=\"2\" y=\"2\" width=\"636\" height=\"228\" rx=\"12\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/><text x=\"320\" y=\"24\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">两大黄金分布变换链（考研真题高频秒杀引擎）</text><rect x=\"16\" y=\"48\" width=\"118\" height=\"84\" rx=\"9\" fill=\"#ffffff\" stroke=\"#475569\" stroke-width=\"1.5\"/><text x=\"75\" y=\"72\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#0f172a\">任意连续型 X</text><text x=\"75\" y=\"92\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#334155\">分布函数 F_X(x)</text><text x=\"75\" y=\"110\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#64748b\">正密度区严格单增</text><text x=\"75\" y=\"123\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#dc2626\">离散型不适用!</text><line x1=\"134\" y1=\"90\" x2=\"184\" y2=\"90\" stroke=\"#2563eb\" stroke-width=\"2\" marker-end=\"url(#m1_pr03_arr_p)\"/><text x=\"159\" y=\"78\" text-anchor=\"middle\" font-size=\"9.8\" font-weight=\"700\" fill=\"#1d4ed8\">Y=F_X(X)</text><text x=\"159\" y=\"106\" text-anchor=\"middle\" font-size=\"9\" fill=\"#64748b\">或 1-F_X(X)</text><rect x=\"190\" y=\"48\" width=\"118\" height=\"84\" rx=\"9\" fill=\"#eff6ff\" stroke=\"#2563eb\" stroke-width=\"1.6\"/><text x=\"249\" y=\"72\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#1d4ed8\">U(0, 1)</text><text x=\"249\" y=\"92\" text-anchor=\"middle\" font-size=\"10.2\" fill=\"#1e40af\">EY = 1/2</text><text x=\"249\" y=\"108\" text-anchor=\"middle\" font-size=\"10.2\" fill=\"#1e40af\">DY = 1/12</text><text x=\"249\" y=\"123\" text-anchor=\"middle\" font-size=\"9.3\" fill=\"#2563eb\">2019真题秒杀核</text><line x1=\"308\" y1=\"90\" x2=\"364\" y2=\"90\" stroke=\"#2563eb\" stroke-width=\"2\" marker-end=\"url(#m1_pr03_arr_p)\"/><text x=\"336\" y=\"78\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#047857\">Z=-ln(1-Y)</text><text x=\"336\" y=\"106\" text-anchor=\"middle\" font-size=\"9\" fill=\"#64748b\">或 -ln Y</text><rect x=\"370\" y=\"48\" width=\"112\" height=\"84\" rx=\"9\" fill=\"#ecfdf5\" stroke=\"#059669\" stroke-width=\"1.6\"/><text x=\"426\" y=\"72\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#047857\">E(1)</text><text x=\"426\" y=\"92\" text-anchor=\"middle\" font-size=\"10.2\" fill=\"#065f46\">EZ = 1</text><text x=\"426\" y=\"108\" text-anchor=\"middle\" font-size=\"10.2\" fill=\"#065f46\">DZ = 1</text><text x=\"426\" y=\"123\" text-anchor=\"middle\" font-size=\"9.3\" fill=\"#059669\">9讲 例3.6</text><line x1=\"482\" y1=\"90\" x2=\"520\" y2=\"90\" stroke=\"#2563eb\" stroke-width=\"2\" marker-end=\"url(#m1_pr03_arr_p)\"/><text x=\"501\" y=\"78\" text-anchor=\"middle\" font-size=\"9.8\" font-weight=\"700\" fill=\"#6d28d9\">W = 2Z</text><rect x=\"526\" y=\"48\" width=\"98\" height=\"84\" rx=\"9\" fill=\"#f5f3ff\" stroke=\"#7c3aed\" stroke-width=\"1.6\"/><text x=\"575\" y=\"72\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#6d28d9\">χ²(2)</text><text x=\"575\" y=\"92\" text-anchor=\"middle\" font-size=\"10\" fill=\"#5b21b6\">-2ln U ~ χ²(2)</text><text x=\"575\" y=\"108\" text-anchor=\"middle\" font-size=\"9.8\" fill=\"#5b21b6\">EW=2, DW=4</text><text x=\"575\" y=\"123\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#6d28d9\">n项和 ~ χ²(2n)</text><path d=\"M249 132 C249 168, 75 168, 75 138\" fill=\"none\" stroke=\"#7c3aed\" stroke-width=\"1.7\" stroke-dasharray=\"5 3\" marker-end=\"url(#m1_pr03_arr_rev)\"/><text x=\"162\" y=\"176\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#6d28d9\">逆变换采样：X = F_X⁻¹(U) 具有分布 F_X</text><rect x=\"16\" y=\"188\" width=\"608\" height=\"30\" rx=\"7\" fill=\"#fffbeb\" stroke=\"#fcd34d\"/><text x=\"320\" y=\"207\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#92400e\">推论速记：若 X₁,…,Xₙ i.i.d. 连续，则 -2 Σ ln F_X(Xᵢ) ~ χ²(2n)（把第3讲直连第6讲抽样分布！）</text></svg>",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化",
+        "printedPage": "基础 P.49 例2.15 / 9讲 P.26-28 例3.4-3.6 / 方浩 P.50 例32",
+        "pdfPage": 37,
+        "itemRef": "两大黄金分布变换公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr03_golden_transforms",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "这两条「脱去原分布外衣」的黄金定理是考研选择题和解答题的核武器：① 无论 $X$ 原来是正态、指数、三角还是多复杂的连续分布，只要把 $X$ 代入它自己的分布函数 $F_X$，输出 $Y=F_X(X)$ 瞬间洗白成 **$U(0,1)$**（概率积分变换！）；② 再套一层 $-\\ln(1-Y)$ 或 $-\\ln Y$，立刻转化为无记忆的 **$E(1)$**，再乘 $2$ 就是 **$\\chi^2(2)$**！逆向使用 $X=F_X^{-1}(U)$ 则是计算机用均匀随机数生成任意复杂分布（蒙特卡洛逆变换采样）的理论核心！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「自己套自己变均匀 $U(0,1)$，取负对数变指数 $E(1)$，再乘 2 秒变卡方 $\\chi^2(2)$！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr03-f-06",
+      "kind": "formula",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、高频经典一维函数变身密度速记库",
+      "title": "线性变换、$Y=X^2$、$Y=|X|$、对数正态 $Y=e^X$ 与标准正态平方 $\\chi^2(1)$ 密度公式库",
+      "formulaLatex": "$$\\begin{aligned} &Y=aX+b\\;(a\\ne 0):\\quad f_Y(y)=\\frac{1}{|a|}f_X\\!\\left(\\frac{y-b}{a}\\right)\\\\ &Y=|X|:\\quad f_Y(y)=\\begin{cases}f_X(y)+f_X(-y),&y>0\\\\0,&y\\le 0\\end{cases}\\\\ &Y=X^2:\\quad f_Y(y)=\\begin{cases}\\frac{1}{2\\sqrt{y}}\\left[f_X(\\sqrt{y})+f_X(-\\sqrt{y})\\right],&y>0\\\\0,&y\\le 0\\end{cases}\\quad\\Big(\\text{特例：}X\\sim N(0,1)\\Rightarrow f_{X^2}(y)=\\frac{1}{\\sqrt{2\\pi y}}e^{-y/2}\\sim\\chi^2(1)\\Big)\\\\ &Y=e^X\\;(X\\sim N(\\mu,\\sigma^2)\\text{ 对数正态}):\\quad f_Y(y)=\\begin{cases}\\frac{1}{\\sqrt{2\\pi}\\sigma y}\\exp\\!\\left(-\\frac{(\\ln y-\\mu)^2}{2\\sigma^2}\\right),&y>0\\\\0,&y\\le 0\\end{cases}\\end{aligned}$$",
+      "conditions": "上述密度模板均要求 $X$ 为连续型随机变量；套用 $Y=|X|$ 与 $Y=X^2$ 折叠模板时，必须严格代入 $f_X$ 的分段定义域，不可忽略 $f_X(-\\sqrt{y})$ 在支撑外为 $0$ 引起的分段变化！",
+      "pitfalls": "非对称支撑陷阱（基础例 2.17 & 习题 2.18）：当 $X\\in(-1,2)$ 时，$y\\in(0,1)$ 处 $f_X(\\sqrt{y})$ 与 $f_X(-\\sqrt{y})$ 均非零，而 $y\\in(1,4)$ 处 $-\\sqrt{y}<-1$ 导致 $f_X(-\\sqrt{y})=0$，所以 $f_Y(y)$ 必然在 $y=1$ 处发生分段跳变！",
+      "source": {
+        "book": "27 张宇基础30讲 & 27 猪狗百宝书 & 全总结",
+        "printedPage": "基础 P.50-51,60-61 / 猪狗 P.4-2~4-4 / 全总结 P.7",
+        "pdfPage": 56,
+        "itemRef": "高频一维函数变身密度速记库"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr03_formula_method",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "把考研出现频率最高的 5 个一维函数变换直接升格为二级模板：① **线性伸缩平移**记住除 $|a|$（保正态性、保均匀性）；② **绝对值折叠 $Y=|X|$** 把负半轴密度翻折到正半轴与正半轴相加；③ **平方折叠 $Y=X^2$** 先算 $\\pm\\sqrt{y}$ 两支之和再乘雅可比 $\\frac{1}{2\\sqrt{y}}$（若 $f_X$ 为偶函数则简化为 $\\frac{1}{\\sqrt{y}}f_X(\\sqrt{y})$）；④ **对数正态 $Y=e^X$** 只需对 $N(\\mu,\\sigma^2)$ 套公式法乘 $\\frac{1}{y}$ 即可。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「线性除 $|a|$，绝对值左右叠，平方叠完乘 $\\frac{1}{2\\sqrt{y}}$，对数正态分母多乘 $y$！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr03-c-01",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "一、公式法适用禁区与定义法优先准则",
+      "title": "四类绝不可盲套单调公式法的信号（非单调、平顶常值段、跳跃间断、混合输出）",
+      "conditions": "若 $g(x)$ 仅在有限个孤立点间断而在其余每个子区间上严格单调可导（如 $Y=(2-X)/X$ 在 $x=0$ 处无穷间断），仍可按分段单调推广套公式法，但务必用定义法核对值域与归一性。",
+      "pitfalls": "考场最惨丢分：对分段平顶函数（方浩例 29）只对斜坡段 $Y=2X$ 盲套公式法，完全丢失 $y=1$ 和 $y=3$ 两处占了总概率 $\\frac{20}{27}$ 的离散跳点！",
+      "source": {
+        "book": "27 方浩强化 & 27 张宇《概率9讲》",
+        "printedPage": "方浩 P.45-46 / 9讲 P.24-25",
+        "pdfPage": 50,
+        "itemRef": "公式法禁区与定义法优先准则"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "summary": "《方浩强化》P.46 明确忠告：公式法要求 $y=g(x)$ 处处可导且严格单调，条件极其苛刻，只在少数光滑单调情形适用！凡遇下列任一信号，**立即切换定义法（画图切片）**：① $g(x)$ 非单调（如 $X^2,|X|,\\sin X,(X-1)^2-1$）；② $g(x)$ 含水平常值段（如 $Y=3\\,(X\\le 1)$，把整块概率压成一个离散跳点，必然产生混合型随机变量，根本没有全局密度！）；③ $g(x)$ 存在跳跃间断点；④ 题干直接要求求**分布函数 $F_Y(y)$** 而非密度。"
+    },
+    {
+      "id": "m1-pr03-c-02",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、$Y=X^2$ 与 $Y=|X|$ 非对称支撑折叠分段规律",
+      "title": "非对称区间上 $Y=X^2$ 与 $Y=|X|$ 折叠断点判定法则（对称偶倍 vs 不对称拆两段）",
+      "conditions": "若支撑完全在同侧（$0\\le a<b$ 或 $a<b\\le 0$），$Y=X^2$ 与 $Y=|X|$ 在整个支撑上严格单调，退化为单支公式法！",
+      "pitfalls": "记忆检查法：算完分段密度 $f_Y(y)$ 后，花 10 秒口算各段定积分之和是否恰好等于 $1$（如基础例 2.17：$\\int_0^1\\frac{3}{8\\sqrt y}\\mathrm{d}y+\\int_1^4\\frac{1}{8\\sqrt y}\\mathrm{d}y=\\frac34+\\frac14=1$），可瞬间排掉 100% 漏支错误！",
+      "source": {
+        "book": "27 张宇《考研数学基础30讲·概率》",
+        "printedPage": "基础 P.50-51 例2.17, P.60-61 习题2.18",
+        "pdfPage": 56,
+        "itemRef": "非对称区间平方与绝对值折叠规律"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr03_slice_cases",
+        "verified": true
+      },
+      "summary": "设连续型 $X$ 的支撑区间为 $(a,b)$ 且 $a<0<b$，令 $m=\\min(|a|,b),\\;M=\\max(|a|,b)$：① 对 $Y=|X|$，在 $y\\in(0,m)$ 上**双支叠加** $f_X(y)+f_X(-y)$，在 $y\\in(m,M)$ 上**仅剩较长那侧单支**；② 对 $Y=X^2$，在 $y\\in(0,m^2)$ 上**双支叠加** $\\frac{1}{2\\sqrt{y}}[f_X(\\sqrt{y})+f_X(-\\sqrt{y})]$，在 $y\\in(m^2,M^2)$ 上**仅剩较长那侧单支**！当且仅当支撑对称（$|a|=b$）时合为一段。"
+    },
+    {
+      "id": "m1-pr03-c-03",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、概率积分变换 $F_X(X)\\sim U(0,1)$ 的严格成立边界",
+      "title": "只需 $F_X(x)$ 连续（或在正密度区严格单增），即可保证 $F_X(X)\\sim U(0,1)$ 且与原分布无关",
+      "conditions": "唯一硬底线：$F_X(x)$ 必须**处处连续**（即无离散跳点，不能是离散型或混合型！）；一旦 $X$ 在某点 $x_0$ 有正概率 $p_0>0$，则 $F_X(X)$ 在值 $F_X(x_0)$ 处也会聚起概率质量 $p_0$，不再均匀！",
+      "pitfalls": "遇到含未知复杂分布 $X$（如正态 $N(3,4)$、三角密度、对数密度）问 $P\\{F_X(X)>c\\}$ 或 $E[F_X(X)^k]$ 时，切忌去积原密度求 $F_X$，直接把 $F_X(X)$ 换成 $U\\sim U(0,1)$ 秒出 $1-c$ 与 $\\frac{1}{k+1}$！",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化",
+        "printedPage": "基础 P.49 注 / 9讲 P.26-27 例3.4-3.5 / 方浩 P.50 例32",
+        "pdfPage": 37,
+        "itemRef": "概率积分变换成立边界与速算应用"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr03_golden_transforms",
+        "verified": true
+      },
+      "summary": "基础例 2.15 与概率 9 讲例 3.4 均特别加注：教材证明中假设「$F_X(x)$ 在 $\\mathbb{R}$ 上严格单增」只是为了方便直接写反函数 $F_X^{-1}(y)$ 的**充分条件**；事实上，只要 $X$ 是连续型随机变量（例如支撑只在有限区间 $(0,2)$ 上，外部 $F_X$ 恒为 $0$ 或 $1$，仅在正密度区间 $(0,2)$ 严格单增，甚至有零密度空带只要用广义反函数），依然严格成立 $F_X(X)\\sim U(0,1)$！"
+    },
+    {
+      "id": "m1-pr03-c-04",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、指数分布取整离散化：连续无记忆 → 离散无记忆",
+      "title": "$X\\sim E(\\lambda)\\implies [X]+1\\sim Ge(1-e^{-\\lambda})$（无记忆性跨越连续/离散的完美桥梁）",
+      "conditions": "此结论对**任意**指数参数 $\\lambda>0$ 成立；若换成其他连续分布取整（如 $U(0,3)$），则 $[X]+1$ 服从离散均匀分布而非几何分布。",
+      "pitfalls": "强化例 3.3 求 $P\\{Y>5\\mid Y>2\\}$ 既可用几何无记忆得 $P\\{Y>3\\}=q^3=e^{-3\\lambda}$，也可直接把 $Y>k$ 还原成 $X\\ge k$ 用指数无记忆得 $P\\{X\\ge 5\\mid X\\ge 2\\}=P\\{X\\ge 3\\}=e^{-3\\lambda}$，两条路 100% 互验！",
+      "source": {
+        "book": "27 张宇《概率9讲》",
+        "printedPage": "9讲 P.25-26 例3.3",
+        "pdfPage": 36,
+        "itemRef": "指数取整转几何分布桥梁结论"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr03_floor_geo",
+        "verified": true
+      },
+      "summary": "若连续型寿命 $X\\sim E(\\lambda)$，只按整数周期向上计费（记 $Y=[X]+1\\in\\{1,2,3,\\dots\\}$），则 $Y\\sim Ge(p)$，其中单周期结束率 $p=1-e^{-\\lambda}$、单周期存活率 $q=1-p=e^{-\\lambda}$！因此立刻继承几何分布全部性质：① $P\\{Y>m+n\\mid Y>m\\}=P\\{Y>n\\}=e^{-n\\lambda}$；② $EY=\\frac{1}{1-e^{-\\lambda}}$，$DY=\\frac{e^{-\\lambda}}{(1-e^{-\\lambda})^2}$！"
+    },
+    {
+      "id": "m1-pr03-c-05",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "五、分段混合函数关联事件概率的「回代 $X$ 降维法」",
+      "title": "已知分段 $Y=g(X)$ 求 $P\\{X\\le Y\\}$ 或 $P\\{Y>-X+2\\}$：切忌求二维联合，直接按 $X$ 分段回代一元！",
+      "conditions": "只要事件由同一个底层变量 $X$ 及其函数 $Y=g(X)$ 共同决定，回代消去 $Y$ 永远是唯一严谨且最快路径。",
+      "pitfalls": "切忌盲目画 $(X,Y)$ 二维平面区域去对 $f_X(x)f_Y(y)$ 做二重积分——$X$ 与 $Y=g(X)$ **绝不独立**，且概率质量全集中在曲线 $y=g(x)$ 上，二维联合密度根本不存在！",
+      "source": {
+        "book": "27 方浩《概率统计就这点事·强化篇》",
+        "printedPage": "方浩 P.46-49 例题29(2), 例题30(2)",
+        "pdfPage": 51,
+        "itemRef": "函数相关事件回代X一元降维法"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr03_fh_piecewise",
+        "verified": true
+      },
+      "summary": "在《方浩强化》例题 29(2) 与例题 30(2) 中，先要求出分段混合 $Y=g(X)$ 的分布函数 $F_Y(y)$，第二问突然追问 $P\\{X\\le Y\\}$ 或 $P\\{Y>-X+2\\}$！此时 $X$ 与 $Y=g(X)$ 完全函数相关，**绝不存在二维联合密度**！正确破题神招：将 $Y=g(X)$ 直接回代进不等式，按 $g(x)$ 的分段条件写成完备互斥并集：$P\\{h(X,g(X))>0\\}=\\sum_k P\\{X\\in I_k,\\;h(X,g_k(X))>0\\}$，瞬间退化为最简单的一元 $X$ 区间积分！"
+    },
+    {
+      "id": "m1-pr03-e-01",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、离散→离散与基础单调/折叠变换",
+      "title": "基础例 2.14 & 习题 2.12：离散型 $Y=X^2$ 与 $Y=X^2+X+1$ 合并同类项求分布律与分布函数",
+      "problem": "(1) 设 $X$ 分布律为 $P\\{X=-1\\}=\\frac14,\\;P\\{X=0\\}=\\frac12,\\;P\\{X=1\\}=\\frac14$，求 $Y=X^2$ 分布律；(2) 设 $P\\{X=-1\\}=P\\{X=0\\}=P\\{X=1\\}=\\frac13$，求 $Y=X^2+X+1$ 的分布函数 $F_Y(y)$。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：算值并合并 $X=\\pm 1\\to Y=1$",
+          "detail": "$Y$ 可能取 $0,1$。$P\\{Y=0\\}=P\\{X=0\\}=\\frac12$；$P\\{Y=1\\}=P\\{X=-1\\}+P\\{X=1\\}=\\frac14+\\frac14=\\frac12$，故 $Y\\sim B(1,\\frac12)$。"
+        },
+        {
+          "stepTitle": "第 (2) 问：先合并分布律，再按左闭右开写阶梯分布函数",
+          "detail": "当 $X=-1$ 或 $0$ 时均有 $Y=1$（合概率 $\\frac23$），当 $X=1$ 时 $Y=3$（概率 $\\frac13$）。故 $F_Y(y)=0\\,(y<1),\\;\\frac23\\,(1\\le y<3),\\;1\\,(y\\ge 3)$。"
+        }
+      ],
+      "finalAnswer": "(1) $P\\{Y=0\\}=P\\{Y=1\\}=\\frac12$；(2) $F_Y(y)=\\begin{cases}0,&y<1\\\\2/3,&1\\le y<3\\\\1,&y\\ge 3\\end{cases}$",
+      "takeaway": "离散变离散先列表写出每个 $x_i$ 对应的 $g(x_i)$，把重复值一合并就绝对不会漏算！",
+      "source": {
+        "book": "27 张宇《考研数学基础30讲·概率》",
+        "printedPage": "基础 P.48-49, P.54, P.58",
+        "pdfPage": 54,
+        "itemRef": "例 2.14 与习题 2.12 离散函数合并"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr03_discrete_d",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr03-e-02",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、离散→离散与基础单调/折叠变换",
+      "title": "基础例 2.15 / 强化例 3.4：概率积分变换 $Y=F_X(X)\\sim U(0,1)$ 完整证明",
+      "problem": "设随机变量 $X$ 的分布函数 $F_X(x)$ 严格单调增加且连续（存在反函数 $F_X^{-1}(y)$），令 $Y=F_X(X)$，证明 $Y\\sim U(0,1)$。",
+      "steps": [
+        {
+          "stepTitle": "定值域边界 $y<0$ 与 $y\\ge 1$",
+          "detail": "因 $0\\le F_X(x)\\le 1$，故 $Y=F_X(X)$ 仅在 $[0,1]$ 上取值：当 $y<0$ 时 $F_Y(y)=0$；当 $y\\ge 1$ 时 $F_Y(y)=1$。"
+        },
+        {
+          "stepTitle": "对 $0\\le y<1$ 用严格单增反函数反解不等式",
+          "detail": "$F_Y(y)=P\\{F_X(X)\\le y\\}=P\\{X\\le F_X^{-1}(y)\\}=F_X[F_X^{-1}(y)]=y$。"
+        },
+        {
+          "stepTitle": "对照均匀分布函数确认结论",
+          "detail": "综上 $F_Y(y)=\\begin{cases}0,&y<0\\\\y,&0\\le y<1\\\\1,&y\\ge 1\\end{cases}$，严格为 $U(0,1)$ 的分布函数，证毕！"
+        }
+      ],
+      "finalAnswer": "$Y=F_X(X)\\sim U(0,1)$（已严格证毕；注：仅需在正密度区间严格单增即可）",
+      "takeaway": "证明仅有短短 5 行，却是每年考研客观题和统计大题的常客（如方浩例 32、2019 真题强化例 3.5），必须倒背如流！",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化",
+        "printedPage": "基础 P.49 例2.15 / 9讲 P.26 例3.4 / 方浩 P.50 例32",
+        "pdfPage": 55,
+        "itemRef": "例 2.15 概率积分变换证明"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr03_golden_transforms",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr03-e-03",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、离散→离散与基础单调/折叠变换",
+      "title": "基础例 2.16：区间 $(0,2)$ 随机折断——较短段 $X$ 与长短段之比 $Z=\\frac{Y}{X}$ 的密度",
+      "problem": "在区间 $(0,2)$ 上随机取一点，将其分为两段，较短段长度记为 $X$，较长段长度记为 $Y$，令 $Z=\\frac{Y}{X}$。(1) 求 $X$ 的概率密度；(2) 求 $Z$ 的概率密度。",
+      "steps": [
+        {
+          "stepTitle": "引入截点 $V\\sim U(0,2)$，用定义法求 $X=\\min(V,2-V)$",
+          "detail": "显然 $0<X<1$。对 $0\\le x<1$，$F_X(x)=1-P\\{\\min(V,2-V)>x\\}=1-P\\{x<V<2-x\\}=1-\\frac{(2-x)-x}{2}=x$，故 **$X\\sim U(0,1)$**！"
+        },
+        {
+          "stepTitle": "消去 $Y=2-X$ 化为一元严格单减变换套公式法",
+          "detail": "关键降维：$Z=\\frac{Y}{X}=\\frac{2-X}{X}=\\frac{2}{X}-1$！当 $X\\in(0,1)$ 时 $Z$ 严格单减，值域 $z\\in(1,+\\infty)$；反函数 $x=h(z)=\\frac{2}{1+z}$，导数 $|h'(z)|=\\frac{2}{(1+z)^2}$。代入公式法得 $f_Z(z)=1\\cdot\\frac{2}{(1+z)^2}=\\frac{2}{(1+z)^2}\\;(z>1)$（其余为 0）。"
+        }
+      ],
+      "finalAnswer": "(1) $X\\sim U(0,1)$；(2) $f_Z(z)=\\begin{cases}\\frac{2}{(1+z)^2},&z>1\\\\0,&z\\le 1\\end{cases}$",
+      "takeaway": "牢记张宇老师金句「能用一元表示就绝不要用二元」：把 $Y=2-X$ 代入后，一道看似二维商分布的题瞬间变成最简单的一元单调公式法！",
+      "source": {
+        "book": "27 张宇《考研数学基础30讲·概率》",
+        "printedPage": "基础 P.49-50 例2.16",
+        "pdfPage": 55,
+        "itemRef": "例 2.16 截断较短段与长短比分布"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr03_formula_method",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr03-e-04",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、离散→离散与基础单调/折叠变换",
+      "title": "基础例 2.17：非对称分段密度 $f_X(x)$ 下非单调变换 $Y=X^2$ 切片法",
+      "problem": "设 $X$ 概率密度为 $f_X(x)=\\begin{cases}1/2,&-1<x<0\\\\1/4,&0\\le x<2\\\\0,&\\text{其他}\\end{cases}$，令 $Y=X^2$，求 $Y$ 的分布函数与概率密度。",
+      "steps": [
+        {
+          "stepTitle": "画 $(-1,2)$ 上抛物线 $y=x^2$，定出关键断点 $y=0,1,4$",
+          "detail": "左支 $(-1,0)$ 映到 $(0,1)$，右支 $[0,2)$ 映到 $[0,4)$，故 $y=1$ 为双支切单支的关键分界点！"
+        },
+        {
+          "stepTitle": "四段切片求 $F_Y(y)$ 并检验连续性",
+          "detail": "① $y<0$：$F_Y=0$；② $0\\le y<1$：$F_Y(y)=P\\{-\\sqrt{y}\\le X<0\\}+P\\{0\\le X\\le\\sqrt{y}\\}=\\frac12\\sqrt{y}+\\frac14\\sqrt{y}=\\frac34\\sqrt{y}$；③ $1\\le y<4$：$F_Y(y)=P\\{-1<X<0\\}+P\\{0\\le X\\le\\sqrt{y}\\}=\\frac12+\\frac14\\sqrt{y}$；④ $y\\ge 4$：$F_Y=1$。各分界点完全连续！"
+        },
+        {
+          "stepTitle": "分段求导并积分核验归一",
+          "detail": "$f_Y(y)=\\frac{3}{8\\sqrt{y}}\\;(0<y<1)$，$\\frac{1}{8\\sqrt{y}}\\;(1<y<4)$，其余为 $0$。验归一：$\\frac34\\cdot 1+\\frac14(2-1)=1$，精准无误！"
+        }
+      ],
+      "finalAnswer": "$f_Y(y)=\\begin{cases}\\frac{3}{8\\sqrt{y}},&0<y<1\\\\\\frac{1}{8\\sqrt{y}},&1<y<4\\\\0,&\\text{其他}\\end{cases}$",
+      "takeaway": "基础例 2.17 是非对称 $Y=X^2$ 切片法的教科书范本，记住「画图找拐点 + 交界验连续 + 积分验归一」三连检验！",
+      "source": {
+        "book": "27 张宇《考研数学基础30讲·概率》",
+        "printedPage": "基础 P.50-51 例2.17",
+        "pdfPage": 56,
+        "itemRef": "例 2.17 非对称密度平方变换"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr03_slice_cases",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr03-e-05",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、离散→离散与基础单调/折叠变换",
+      "title": "基础习题 2.16 & 2.18：柯西分布下 $Y=1-\\sqrt[3]{X}$ 公式法 & 非对称均匀下 $Y=|X|$",
+      "problem": "(1) 已知 $f_X(x)=\\frac{k}{1+x^2}\\;(x\\in\\mathbb{R})$，求 $k$ 及 $Y=1-\\sqrt[3]{X}$ 的密度；(2) 设 $X\\sim U(-1,2)$，求 $Y=|X|$ 的概率密度。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：定 $k=\\frac1\\pi$ 后对严格单减三次方根套公式法",
+          "detail": "由 $\\int_{-\\infty}^{+\\infty}\\frac{k}{1+x^2}\\mathrm{d}x=k\\pi=1\\Rightarrow k=\\frac1\\pi$。变换 $y=1-\\sqrt[3]{x}$ 在 $\\mathbb{R}$ 上严格单减，值域 $\\mathbb{R}$，反函数 $x=h(y)=(1-y)^3$，导数 $|h'(y)|=|-3(1-y)^2|=3(1-y)^2$。代入公式法秒得 $f_Y(y)=\\frac{3(1-y)^2}{\\pi[1+(1-y)^6]}\\;(y\\in\\mathbb{R})$！"
+        },
+        {
+          "stepTitle": "第 (2) 问：套用 $Y=|X|$ 折叠公式并分 $(0,1)$ 与 $(1,2)$ 两段",
+          "detail": "$f_Y(y)=f_X(y)+f_X(-y)\\;(y>0)$：$0<y<1$ 时 $y,-y$ 均在 $(-1,2)$ 内，得 $\\frac13+\\frac13=\\frac23$；$1\\le y<2$ 时 $-y\\in(-2,-1]$ 落出支撑区，只剩 $\\frac13+0=\\frac13$；其余为 $0$。"
+        }
+      ],
+      "finalAnswer": "(1) $k=\\frac{1}{\\pi},\\;f_Y(y)=\\frac{3(1-y)^2}{\\pi[1+(1-y)^6]}\\;(y\\in\\mathbb{R})$；(2) $f_Y(y)=\\frac23\\,(0\\le y<1),\\;\\frac13\\,(1\\le y<2),\\;0\\,(\\text{其他})$",
+      "takeaway": "注意 $y=1-\\sqrt[3]{x}$ 在 $x=0$ 处导数虽为 $\\infty$，但其反函数 $h(y)=(1-y)^3$ 处处光滑可导，所以直接套 $f_X[h(y)]|h'(y)|$ 或先写分布函数求导完全无缝成立！",
+      "source": {
+        "book": "27 张宇《考研数学基础30讲·概率》",
+        "printedPage": "基础 P.55, P.60-61 习题2.16, 2.18",
+        "pdfPage": 61,
+        "itemRef": "习题 2.16 与 2.18 柯西单调与绝对值折叠"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr03_formula_method",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr03-e-06",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、离散→离散与基础单调/折叠变换",
+      "title": "猪狗示例 1 & 示例 4：标准正态平方 $X^2\\sim\\chi^2(1)$ 与对数正态 $Y=e^X$ 密度推导",
+      "problem": "(1) 设 $X\\sim N(0,1)$，求 $Y=X^2$ 的概率密度（卡方分布自由度 1 源头）；(2) 设 $X\\sim N(\\mu,\\sigma^2)$，求对数正态随机变量 $Y=e^X$ 的概率密度。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：对称折叠公式秒推 $\\chi^2(1)$",
+          "detail": "因 $N(0,1)$ 密度 $\\varphi(x)$ 为偶函数，对 $y>0$ 由平方折叠公式：$f_Y(y)=\\frac{1}{2\\sqrt{y}}[\\varphi(\\sqrt{y})+\\varphi(-\\sqrt{y})]=\\frac{1}{\\sqrt{y}}\\cdot\\frac{1}{\\sqrt{2\\pi}}e^{-y/2}=\\frac{1}{\\sqrt{2\\pi}}y^{-1/2}e^{-y/2}\\;(y>0)$，对照伽马分布正是 $Ga(\\frac12,\\frac12)=\\chi^2(1)$！"
+        },
+        {
+          "stepTitle": "第 (2) 问：严格单增指数变换套公式法",
+          "detail": "$y=e^x$ 值域 $y>0$，反函数 $x=\\ln y$，导数 $h'(y)=\\frac1y>0$，代入正态密度立得 $f_Y(y)=\\frac{1}{\\sqrt{2\\pi}\\sigma y}\\exp\\!\\left(-\\frac{(\\ln y-\\mu)^2}{2\\sigma^2}\\right)\\;(y>0)$。"
+        }
+      ],
+      "finalAnswer": "(1) $f_{X^2}(y)=\\frac{1}{\\sqrt{2\\pi y}}e^{-y/2}\\;(y>0)$；(2) $f_{e^X}(y)=\\frac{1}{\\sqrt{2\\pi}\\sigma y}e^{-\\frac{(\\ln y-\\mu)^2}{2\\sigma^2}}\\;(y>0)$",
+      "takeaway": "标准正态的平方即 1 自由度卡方分布 $\\chi^2(1)$，记住该推导可直接打通第 8 讲三大抽样分布！",
+      "source": {
+        "book": "27 猪狗《概率统计百宝书》",
+        "printedPage": "猪狗 P.4-2 示例1, P.4-4 示例4",
+        "pdfPage": 94,
+        "itemRef": "标准正态平方与对数正态密度"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr03_formula_method",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr03-e-07",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、离散→离散与基础单调/折叠变换",
+      "title": "猪狗示例 5：离散参数驱动的连续混合分布（$X\\in\\{1,2\\},\\,Y\\mid X=i\\sim U(0,i)$）",
+      "problem": "设离散型随机变量 $X$ 满足 $P\\{X=1\\}=P\\{X=2\\}=\\frac12$，在给定 $X=i\\;(i=1,2)$ 的条件下 $Y\\sim U(0,i)$，求 $Y$ 的分布函数 $F_Y(y)$ 与数学期望 $EY$。",
+      "steps": [
+        {
+          "stepTitle": "由全概率公式混合两个均匀分布函数",
+          "detail": "$F_Y(y)=\\frac12 F_{U(0,1)}(y)+\\frac12 F_{U(0,2)}(y)=\\begin{cases}0,&y<0\\\\\\frac34 y,&0\\le y<1\\\\\\frac12+\\frac14 y,&1\\le y<2\\\\1,&y\\ge 2\\end{cases}$。"
+        },
+        {
+          "stepTitle": "双法算期望 $EY$（求导积分 vs 全期望公式秒杀！）",
+          "detail": "法一：由 $f_Y(y)=\\frac34\\,(0,1),\\,\\frac14\\,(1,2)$ 积分得 $EY=\\int_0^1\\frac34 y\\,\\mathrm{d}y+\\int_1^2\\frac14 y\\,\\mathrm{d}y=\\frac38+\\frac38=\\frac34$；法二（全期望公式 2 秒出）：$EY=\\frac12 E(Y\\mid X=1)+\\frac12 E(Y\\mid X=2)=\\frac12\\cdot\\frac12+\\frac12\\cdot 1=\\frac34$！"
+        }
+      ],
+      "finalAnswer": "$F_Y(y)$ 分四段见上，$EY=\\frac{3}{4}$",
+      "takeaway": "全概率求混合分布 + 全期望求混合期望，是连接第 2、3、6 讲的黄金组合拳！",
+      "source": {
+        "book": "27 猪狗《概率统计百宝书》 & 27 张宇《概率9讲》",
+        "printedPage": "猪狗 P.4-4 示例5 / 9讲 P.20 例2.11",
+        "pdfPage": 96,
+        "itemRef": "离散驱动连续混合分布与期望"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_arcsine_mix",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr03-e-08",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、强化 9 讲全 6 例与方浩强化压轴精解",
+      "title": "强化例 3.1：无穷离散→有限离散（$P\\{X=k\\}=\\frac{1}{2^k}$ 取模 $Y=X\\bmod 3$）",
+      "problem": "设随机变量 $X$ 的概率分布为 $P\\{X=k\\}=\\frac{1}{2^k}\\;(k=1,2,3,\\dots)$，若 $Y$ 表示 $X$ 被 3 除的余数，求 $Y$ 的概率分布。",
+      "steps": [
+        {
+          "stepTitle": "列出 $Y\\in\\{0,1,2\\}$ 对应的三条公比为 $\\frac18$ 的等比级数",
+          "detail": "$P\\{Y=0\\}=\\sum_{m=1}^{\\infty}\\frac{1}{2^{3m}}=\\frac{1/8}{1-1/8}=\\frac17$；$P\\{Y=1\\}=\\sum_{m=0}^{\\infty}\\frac{1}{2^{3m+1}}=\\frac{1/2}{1-1/8}=\\frac47$；$P\\{Y=2\\}=\\sum_{m=0}^{\\infty}\\frac{1}{2^{3m+2}}=\\frac{1/4}{1-1/8}=\\frac27$。"
+        },
+        {
+          "stepTitle": "核验概率归一",
+          "detail": "$\\frac17+\\frac47+\\frac27=1$，完全闭合！（注意 $X$ 从 $k=1$ 开始，故 $Y=0$ 对应 $k=3,6,9,\\dots$ 首项是 $\\frac18$ 不是 $1$！）"
+        }
+      ],
+      "finalAnswer": "$Y\\sim\\begin{pmatrix}0&1&2\\\\1/7&4/7&2/7\\end{pmatrix}$",
+      "takeaway": "无穷离散同余分类必出等比级数求和，看清 $k$ 从 $0$ 还是 $1$ 起步，就能一秒锁死首项！",
+      "source": {
+        "book": "27 张宇《概率9讲》",
+        "printedPage": "9讲 P.24 例3.1",
+        "pdfPage": 35,
+        "itemRef": "强化例 3.1 无穷离散取模分布"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr03_discrete_d",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr03-e-09",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、强化 9 讲全 6 例与方浩强化压轴精解",
+      "title": "强化例 3.2 / 方浩例 31 / 基础习题 2.17：逻辑斯蒂分布 $f(x)=\\frac{e^x}{(1+e^x)^2}$ 下 $Y=e^X$",
+      "problem": "设随机变量 $X$ 的概率密度为 $f(x)=\\frac{e^x}{(1+e^x)^2}\\;(-\\infty<x<+\\infty)$，令 $Y=e^X$。(1) 求 $X$ 的分布函数；(2) 求 $Y$ 的概率密度。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：凑微分 $\\mathrm{d}(1+e^t)$ 积分求 $F_X(x)$",
+          "detail": "$F_X(x)=\\int_{-\\infty}^{x}\\frac{\\mathrm{d}(1+e^t)}{(1+e^t)^2}=\\left[-\\frac{1}{1+e^t}\\right]_{-\\infty}^{x}=1-\\frac{1}{1+e^x}=\\frac{e^x}{1+e^x}\\;(x\\in\\mathbb{R})$（大名鼎鼎的 Sigmoid 函数！）。"
+        },
+        {
+          "stepTitle": "第 (2) 问：严格单增指数变换套公式法",
+          "detail": "$y=e^x$ 在 $\\mathbb{R}$ 上严格单增可导，值域 $y>0$，反函数 $x=\\ln y$，$h'(y)=\\frac1y$。代入得 $f_Y(y)=\\frac{y}{(1+y)^2}\\cdot\\frac1y=\\frac{1}{(1+y)^2}\\;(y>0)$（其余为 0）。"
+        }
+      ],
+      "finalAnswer": "(1) $F_X(x)=\\frac{e^x}{1+e^x}\\;(x\\in\\mathbb{R})$；(2) $f_Y(y)=\\begin{cases}\\frac{1}{(1+y)^2},&y>0\\\\0,&y\\le 0\\end{cases}$",
+      "takeaway": "三书同时收录的绝对经典真题！注意 $Y$ 虽为良态连续分布，但 $EY=\\int_0^\\infty\\frac{y}{(1+y)^2}\\mathrm{d}y=+\\infty$ 发散（期望不存在）！",
+      "source": {
+        "book": "27 张宇《概率9讲》 & 27 方浩强化 & 基础30讲",
+        "printedPage": "9讲 P.25 例3.2 / 方浩 P.49-50 例31 / 基础 P.60 习题2.17",
+        "pdfPage": 36,
+        "itemRef": "强化例 3.2 逻辑斯蒂分布指数变换"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr03_formula_method",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr03-e-10",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、强化 9 讲全 6 例与方浩强化压轴精解",
+      "title": "强化例 3.3：连续→离散经典真题 $X\\sim E(\\lambda),\\,Y=[X]+1$ 求 $P\\{Y>5\\mid Y>2\\}$",
+      "problem": "设随机变量 $X\\sim E(\\lambda)$，令 $Y=[X]+1$（$[X]$ 为不超过 $X$ 的最大整数），求 $P\\{Y>5\\mid Y>2\\}$。",
+      "steps": [
+        {
+          "stepTitle": "法一：求出 $Y$ 分布律认出几何分布用无记忆性",
+          "detail": "对 $k=1,2,\\dots$，$P\\{Y=k\\}=P\\{k-1\\le X<k\\}=e^{-\\lambda(k-1)}-e^{-\\lambda k}=(1-e^{-\\lambda})(e^{-\\lambda})^{k-1}$，即 $Y\\sim Ge(1-e^{-\\lambda})$。由几何分布无记忆性得 $P\\{Y>5\\mid Y>2\\}=P\\{Y>3\\}=(e^{-\\lambda})^3=e^{-3\\lambda}$！"
+        },
+        {
+          "stepTitle": "法二：直译回 $X$ 用指数分布无记忆性 2 秒验证",
+          "detail": "因 $Y=[X]+1>k\\iff [X]\\ge k\\iff X\\ge k$，故 $P\\{Y>5\\mid Y>2\\}=P\\{X\\ge 5\\mid X\\ge 2\\}=P\\{X\\ge 3\\}=e^{-3\\lambda}$！"
+        }
+      ],
+      "finalAnswer": "$e^{-3\\lambda}$",
+      "takeaway": "记住整点等价翻译：$[X]+1>k\\iff X\\ge k$！既练了连续→离散转化，又用指数无记忆做了 2 秒无损验算！",
+      "source": {
+        "book": "27 张宇《概率9讲》",
+        "printedPage": "9讲 P.25-26 例3.3",
+        "pdfPage": 36,
+        "itemRef": "强化例 3.3 指数取整条件概率"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr03_floor_geo",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr03-e-11",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、强化 9 讲全 6 例与方浩强化压轴精解",
+      "title": "强化例 3.5 (2019 真题) & 方浩例 32：概率积分变换 $F(X)\\sim U(0,1)$ 秒杀真题双连",
+      "problem": "(1)（2019 真题 / 强化例 3.5）设 $f(x)=\\frac{x}{2}\\;(0<x<2)$（其余 0），$F(x)$ 为分布函数，求 $P\\{F(X)>EX-1\\}$；(2)（方浩例 32）设 $X\\sim N(1,1),\\;Y=2X+1$，求 $Y$ 的密度及 $F_Y(Y)$ 的分布函数。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：双法（直接算 vs $F(X)\\sim U(0,1)$ 秒杀）",
+          "detail": "先算 $EX=\\int_0^2\\frac{x^2}{2}\\mathrm{d}x=\\frac43$，故 $EX-1=\\frac13$。**秒杀法**：因 $X$ 连续，直接令 $U=F(X)\\sim U(0,1)$，立得 $P\\{U>\\frac13\\}=1-\\frac13=\\frac23$！（常规验算：$F(x)=\\frac{x^2}{4}$，解 $\\frac{x^2}{4}>\\frac13\\Rightarrow x>\\frac{2}{\\sqrt{3}}$，积分 $\\int_{2/\\sqrt{3}}^{2}\\frac{x}{2}\\mathrm{d}x=1-\\frac13=\\frac23$，完全吻合！）"
+        },
+        {
+          "stepTitle": "第 (2) 问：正态线性封闭 + 概率积分变换直出均匀分布",
+          "detail": "$EY=2(1)+1=3,\\;DY=4(1)=4\\Rightarrow Y\\sim N(3,4)$，密度 $f_Y(y)=\\frac{1}{2\\sqrt{2\\pi}}e^{-\\frac{(y-3)^2}{8}}$；因 $Y$ 连续且 $F_Y$ 严格单增，故 $F_Y(Y)\\sim U(0,1)$，其分布函数为 $G(u)=0\\,(u<0),\\;u\\,(0\\le u<1),\\;1\\,(u\\ge 1)$。"
+        }
+      ],
+      "finalAnswer": "(1) $\\frac{2}{3}$；(2) $Y\\sim N(3,4)$，$F_Y(Y)\\sim U(0,1)$",
+      "takeaway": "2019 真题专门奖励记住 $F(X)\\sim U(0,1)$ 的考生——连 $F(x)$ 的解析式都不用求，算出 $EX=\\frac43$ 后直接 $2-\\frac43=\\frac23$！",
+      "source": {
+        "book": "27 张宇《概率9讲》 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.27 例3.5 / 方浩 P.50 例32 / 猪狗 P.2-14 例2.8",
+        "pdfPage": 38,
+        "itemRef": "2019真题 概率积分变换秒杀双连"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr03_golden_transforms",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr03-e-12",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、强化 9 讲全 6 例与方浩强化压轴精解",
+      "title": "强化例 3.6：第二黄金变换 $Y=-\\ln[1-F_X(X)]\\sim E(1)$ 与 $-2\\ln U\\sim\\chi^2(2)$ 证明",
+      "problem": "设连续型随机变量 $X$ 的分布函数 $F_X(x)$ 在正密度区间上严格单增，令 $Y=-\\ln[1-F_X(X)]$，证明 $Y\\sim E(1)$，并推证对 $U\\sim U(0,1)$ 有 $W=-2\\ln U\\sim\\chi^2(2)$。",
+      "steps": [
+        {
+          "stepTitle": "证 $Y=-\\ln[1-F_X(X)]\\sim E(1)$",
+          "detail": "显然 $Y\\ge 0$（对 $y<0$ 有 $F_Y(y)=0$）。对 $y\\ge 0$，$F_Y(y)=P\\{-\\ln[1-F_X(X)]\\le y\\}=P\\{1-F_X(X)\\ge e^{-y}\\}=P\\{F_X(X)\\le 1-e^{-y}\\}$。由第一黄金变换 $F_X(X)\\sim U(0,1)$ 且 $1-e^{-y}\\in[0,1)$，立得 $F_Y(y)=1-e^{-y}\\;(y\\ge 0)$，即 $Y\\sim E(1)$！"
+        },
+        {
+          "stepTitle": "推证 $W=-2\\ln U\\sim\\chi^2(2)$",
+          "detail": "因 $U\\sim U(0,1)\\iff 1-U\\sim U(0,1)$，故 $Z=-\\ln U\\sim E(1)$；再作线性伸缩 $W=2Z$，得 $F_W(w)=P\\{Z\\le \\frac{w}{2}\\}=1-e^{-w/2}\\;(w\\ge 0)$，即 $W\\sim E(\\frac12)=\\chi^2(2)$！"
+        }
+      ],
+      "finalAnswer": "$Y=-\\ln[1-F_X(X)]\\sim E(1)$，且 $-2\\ln U\\sim\\chi^2(2)$（已证毕）",
+      "takeaway": "记住这条从「任意连续分布 → 均匀 → 指数 → 卡方」的升维通道，第 8 讲遇 $-2\\sum_{i=1}^n\\ln X_i\\;(X_i\\sim U(0,1))$ 一眼秒认 $\\chi^2(2n)$！",
+      "source": {
+        "book": "27 张宇《概率9讲》",
+        "printedPage": "9讲 P.27-28 例3.6",
+        "pdfPage": 38,
+        "itemRef": "强化例 3.6 指数化黄金变换与卡方推论"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr03_golden_transforms",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr03-e-13",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、强化 9 讲全 6 例与方浩强化压轴精解",
+      "title": "方浩例 29（压轴混合型母题）：分段平顶 $Y$ 的分布函数（双跳点）与 $P\\{X\\le Y\\}$",
+      "problem": "设 $X$ 概率密度为 $f(x)=\\frac{1}{9}x^2\\;(0<x<3)$（其余 0），定义 $Y=\\begin{cases}3,&X\\le 1\\\\2X,&1<X<2\\\\1,&X\\ge 2\\end{cases}$。(1) 求 $Y$ 的分布函数 $F_Y(y)$；(2) 求 $P\\{X\\le Y\\}$。",
+      "steps": [
+        {
+          "stepTitle": "画 $(0,3)$ 上分段图像，锁定 4 个 $y$ 关键断点 $1,2,3,4$",
+          "detail": "三段分别贡献：$(0,1]$ 上平顶 $Y=3$（总概率 $\\int_0^1\\frac{x^2}{9}\\mathrm{d}x=\\frac{1}{27}$）；$(1,2)$ 上斜线 $Y=2X\\in(2,4)$（总概率 $\\frac{7}{27}$）；$[2,3)$ 上平顶 $Y=1$（总概率 $\\int_2^3\\frac{x^2}{9}\\mathrm{d}x=\\frac{19}{27}$）。"
+        },
+        {
+          "stepTitle": "按 $y$ 分 5 段水平切片累加，严守左闭右开",
+          "detail": "① $y<1$：$0$；② $1\\le y<2$：仅包含平顶 $Y=1$，得 $\\frac{19}{27}$；③ $2\\le y<3$：包含 $Y=1$ 及斜线 $1<X\\le\\frac{y}{2}$，得 $\\frac{19}{27}+\\int_1^{y/2}\\frac{x^2}{9}\\mathrm{d}x=\\frac{y^3}{216}+\\frac23$；④ $3\\le y<4$：再跳加平顶 $Y=3$ 的 $\\frac{1}{27}$，得 $\\frac{y^3}{216}+\\frac{19}{27}$；⑤ $y\\ge 4$：检 $y=4^-$ 恰为 $\\frac{64}{216}+\\frac{19}{27}=1$，故为 $1$！"
+        },
+        {
+          "stepTitle": "第 (2) 问：回代 $Y=g(X)$ 化一元分段算 $P\\{X\\le Y\\}$",
+          "detail": "计算 $Y-X$ 分段：$X\\le 1$ 时 $3-X\\ge 2\\ge 0$（全满足）；$1<X<2$ 时 $2X-X=X>0$（全满足）；$X\\ge 2$ 时 $1-X\\le -1<0$（全不满足）。故 $P\\{X\\le Y\\}=P\\{0<X<2\\}=\\int_0^2\\frac{x^2}{9}\\mathrm{d}x=\\frac{8}{27}$！"
+        }
+      ],
+      "finalAnswer": "(1) $F_Y(y)=\\begin{cases}0,&y<1\\\\\\frac{19}{27},&1\\le y<2\\\\\\frac{y^3}{216}+\\frac{2}{3},&2\\le y<3\\\\\\frac{y^3}{216}+\\frac{19}{27},&3\\le y<4\\\\1,&y\\ge 4\\end{cases}$；(2) $P\\{X\\le Y\\}=\\frac{8}{27}$",
+      "takeaway": "方浩例 29 堪称一维分段混合型随机变量的巅峰母题！两处平顶在 $y=1$（跳高 $\\frac{19}{27}$）与 $y=3$（跳高 $\\frac{1}{27}$）制造出两个跳点，务必画出示意图逐段验算！",
+      "source": {
+        "book": "27 方浩《概率统计就这点事·强化篇》",
+        "printedPage": "方浩 P.46-48 例题29",
+        "pdfPage": 51,
+        "itemRef": "方浩例题 29 分段平顶混合型分布函数"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr03_fh_piecewise",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr03-e-14",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、强化 9 讲全 6 例与方浩强化压轴精解",
+      "title": "方浩例 30：指数分布 $E(3)$ 下分段非单调 $Y=(X-1)^2-1 / -X$ 与 $P\\{Y>-X+2\\}$",
+      "problem": "设 $X\\sim E(3)$（$f_X(x)=3e^{-3x},x\\ge 0$），定义 $Y=\\begin{cases}(X-1)^2-1,&X\\ge 1\\\\-X,&X<1\\end{cases}$。(1) 求 $F_Y(y)$；(2) 求 $P\\{Y>-X+2\\}$。",
+      "steps": [
+        {
+          "stepTitle": "画 $x>0$ 上的折抛物线图像，定断点 $y=-1,0$",
+          "detail": "$0<x<1$ 时 $y=-x$ 从 $0$ 降至 $-1$；$x\\ge 1$ 时 $y=(x-1)^2-1$ 从 $-1$ 严格递增至 $+\\infty$（在 $x=1$ 处两支连续对接于 $(1,-1)$！）。故 $Y$ 为连续型，最小值为 $-1$，关键断点为 $y=-1,0$。"
+        },
+        {
+          "stepTitle": "分三段水平切片求 $F_Y(y)$",
+          "detail": "① $y<-1$：$0$；② $-1\\le y<0$：横线交左支于 $x=-y$、交右支于 $x=1+\\sqrt{1+y}$，故 $F_Y(y)=P\\{-y\\le X\\le 1+\\sqrt{1+y}\\}=F_X(1+\\sqrt{1+y})-F_X(-y)=e^{3y}-e^{-3(1+\\sqrt{1+y})}$；③ $y\\ge 0$：左支全在下方，只需 $X\\le 1+\\sqrt{1+y}$，得 $1-e^{-3(1+\\sqrt{1+y})}$！检验 $y=-1,0$ 处处连续！"
+        },
+        {
+          "stepTitle": "第 (2) 问：回代消去 $Y$ 求 $P\\{X+Y>2\\}$",
+          "detail": "当 $X<1$ 时 $X+Y=0$ 不可能 $>2$；当 $X\\ge 1$ 时 $X+Y=(X-1)^2-1+X=X^2-X>2\\iff (X-2)(X+1)>0\\iff X>2$！故 $P\\{Y>-X+2\\}=P\\{X>2\\}=e^{-6}$！"
+        }
+      ],
+      "finalAnswer": "(1) $F_Y(y)=\\begin{cases}0,&y<-1\\\\e^{3y}-e^{-3(1+\\sqrt{1+y})},&-1\\le y<0\\\\1-e^{-3(1+\\sqrt{1+y})},&y\\ge 0\\end{cases}$；(2) $e^{-6}$",
+      "takeaway": "连续对接的「V 型/U 型」分段函数在 $-1\\le y<0$ 是双交点区间 $[-y,\\;1+\\sqrt{1+y}]$，跨过 $y=0$ 后左边界碰壁 $x=0$ 退化为单边界 $[0,\\;1+\\sqrt{1+y}]$，画图一眼看透！",
+      "source": {
+        "book": "27 方浩《概率统计就这点事·强化篇》",
+        "printedPage": "方浩 P.48-49 例题30",
+        "pdfPage": 53,
+        "itemRef": "方浩例题 30 指数分段非单调变换"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr03_fh_piecewise",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr03-e-15",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "八、猪狗百宝书高难一维变身与 2026 回环应用",
+      "title": "猪狗示例 2：线性斜坡密度 $f_X(x)=\\frac{2x}{\\pi^2}\\,(0<x<\\pi)$ 下 $Y=\\sin X$ 神奇消元得半反正弦",
+      "problem": "已知随机变量 $X$ 的概率密度为 $f_X(x)=\\begin{cases}\\frac{2x}{\\pi^2},&0<x<\\pi\\\\0,&\\text{其他}\\end{cases}$，求 $Y=\\sin X$ 的分布函数与概率密度。",
+      "steps": [
+        {
+          "stepTitle": "在 $(0,\\pi)$ 上画 $y=\\sin x$ 拱形，值域为 $(0,1)$",
+          "detail": "对任意 $y\\in(0,1)$，水平线 $Y=y$ 与拱形交于对称两点 $a=\\arcsin y\\in(0,\\frac{\\pi}{2})$ 与 $\\pi-a\\in(\\frac{\\pi}{2},\\pi)$，曲线在横线下方的 $x$ 区间是两翼 $(0,a]\\cup[\\pi-a,\\pi)$！"
+        },
+        {
+          "stepTitle": "两翼积分合并，二次项 $a^2$ 奇迹抵消！",
+          "detail": "$F_Y(y)=\\int_0^a\\frac{2x}{\\pi^2}\\mathrm{d}x+\\int_{\\pi-a}^{\\pi}\\frac{2x}{\\pi^2}\\mathrm{d}x=\\frac{a^2}{\\pi^2}+\\frac{\\pi^2-(\\pi-a)^2}{\\pi^2}=\\frac{a^2+2\\pi a-a^2}{\\pi^2}=\\frac{2a}{\\pi}=\\frac{2}{\\pi}\\arcsin y$！"
+        },
+        {
+          "stepTitle": "求导得半反正弦密度（竟与 $X\\sim U(0,\\pi)$ 完全同分布！）",
+          "detail": "$f_Y(y)=\\frac{2}{\\pi\\sqrt{1-y^2}}\\;(0<y<1)$，其余为 $0$！深层原因：$f_X(x)+f_X(\\pi-x)=\\frac{2x}{\\pi^2}+\\frac{2(\\pi-x)}{\\pi^2}=\\frac{2}{\\pi}$ 为常数！"
+        }
+      ],
+      "finalAnswer": "$F_Y(y)=\\frac{2}{\\pi}\\arcsin y\\;(0\\le y<1)$，$f_Y(y)=\\begin{cases}\\frac{2}{\\pi\\sqrt{1-y^2}},&0<y<1\\\\0,&\\text{其他}\\end{cases}$",
+      "takeaway": "一道极易被斜坡密度吓退却暗藏对称消元的神题！只要发现 $f_X(x)+f_X(\\pi-x)=\\text{const}$，就能立刻洞察其为何与均匀分布映射结果完全一样！",
+      "source": {
+        "book": "27 猪狗《概率统计百宝书》",
+        "printedPage": "猪狗 P.4-2 示例2",
+        "pdfPage": 94,
+        "itemRef": "猪狗示例 2 正弦非单调神奇消元"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr03_zhugou_gems",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr03-e-16",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "八、猪狗百宝书高难一维变身与 2026 回环应用",
+      "title": "猪狗示例 3：标准正态下含奇点变换 $Y=\\frac{2-X}{X}$ 分段单调公式法",
+      "problem": "设随机变量 $X\\sim N(0,1)$，求 $Y=\\frac{2-X}{X}$ 的概率密度。",
+      "steps": [
+        {
+          "stepTitle": "拆分间断点 $x=0$ 为两支严格单减区间",
+          "detail": "$y=\\frac{2}{x}-1$ 在 $x=0$ 处无穷间断（但 $P\\{X=0\\}=0$ 零测度不影响分布！）。在 $(-\\infty,0)$ 上严格单减映至 $(-\\infty,-1)$；在 $(0,+\\infty)$ 上严格单减映至 $(-1,+\\infty)$——两支值域互不重叠，合起来覆盖 $\\mathbb{R}\\setminus\\{-1\\}$！"
+        },
+        {
+          "stepTitle": "统一反函数 $x=\\frac{2}{y+1}$ 套公式法并验归一",
+          "detail": "反函数 $h(y)=\\frac{2}{y+1}\\;(y\\ne -1)$，$|h'(y)|=\\frac{2}{(y+1)^2}$。代入 $N(0,1)$ 密度得 $f_Y(y)=\\frac{1}{\\sqrt{2\\pi}}e^{-\\frac{2}{(y+1)^2}}\\cdot\\frac{2}{(y+1)^2}=\\sqrt{\\frac{2}{\\pi}}\\frac{1}{(y+1)^2}e^{-\\frac{2}{(y+1)^2}}\\;(y\\ne -1)$（在 $y=-1$ 处可补充定义 $f_Y(-1)=0$，恰为双侧连续密度！）。"
+        }
+      ],
+      "finalAnswer": "$f_Y(y)=\\sqrt{\\frac{2}{\\pi}}\\,\\frac{1}{(y+1)^2}\\,e^{-\\frac{2}{(y+1)^2}}\\;(y\\ne -1)$，$f_Y(-1)=0$",
+      "takeaway": "不要看到 $x=0$ 处分母为零就慌张——连续型随机变量单点概率为 $0$，拆开 $(-\\infty,0)$ 与 $(0,+\\infty)$ 两段严格单调分别套公式，发现两段值域无重叠且公式竟然完全统一！",
+      "source": {
+        "book": "27 猪狗《概率统计百宝书》",
+        "printedPage": "猪狗 P.4-3 示例3",
+        "pdfPage": 95,
+        "itemRef": "猪狗示例 3 含奇点分式线性变换"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr03_zhugou_gems",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr03-e-17",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "八、猪狗百宝书高难一维变身与 2026 回环应用",
+      "title": "猪狗示例 6（高难四区段折叠）：分段抛物线 $Y=X^2\\,(X<1),\\;X^2-1\\,(X\\ge 1)$ 精细切片",
+      "problem": "设 $X$ 密度为 $f(x)=\\frac14\\,(|x|\\le 1),\\;\\frac18\\,(1<|x|\\le 3)$（其余 0），若 $Y=\\begin{cases}X^2,&X<1\\\\X^2-1,&X\\ge 1\\end{cases}$，求 $Y$ 的分布函数 $F_Y(y)$。",
+      "steps": [
+        {
+          "stepTitle": "在 $(-3,3)$ 画出三段图像，精准锁死 4 个 $y$ 关键断点 $0,1,8,9$",
+          "detail": "三段值域：$(-3,-1)$ 上 $y=x^2\\in(1,9)$；$[-1,1)$ 上 $y=x^2\\in[0,1]$；$[1,3)$ 上 $y=x^2-1\\in[0,8)$。可见 $Y$ 无平顶段，故 $F_Y(y)$ 处处连续，关键断点为 $0,1,8,9$！"
+        },
+        {
+          "stepTitle": "逐段切片（$0\\le y<1$ 与 $1\\le y<8$）",
+          "detail": "① $y<0$：$0$；② $0\\le y<1$：$X\\in[-\\sqrt{y},\\sqrt{y}]$（贡献 $2\\sqrt{y}\\cdot\\frac14=\\frac{\\sqrt{y}}{2}$）并上 $X\\in[1,\\sqrt{y+1}]$（贡献 $\\frac{\\sqrt{y+1}-1}{8}$），合计 $\\frac{\\sqrt{y}}{2}+\\frac{\\sqrt{y+1}-1}{8}$；③ $1\\le y<8$：左部 $X\\in[-\\sqrt{y},1)$ 跨过 $-1$（贡献 $\\frac12+\\frac{\\sqrt{y}-1}{8}$）并上右部 $[1,\\sqrt{y+1}]$（贡献 $\\frac{\\sqrt{y+1}-1}{8}$），合计 $\\frac14+\\frac{\\sqrt{y}+\\sqrt{y+1}}{8}$！"
+        },
+        {
+          "stepTitle": "收尾两段（$8\\le y<9$ 与 $y\\ge 9$）并四点检验连续",
+          "detail": "④ $8\\le y<9$：右部 $[1,3)$ 全部落入下方（贡献 $\\frac14$）并上左部 $[-\\sqrt{y},1)$（贡献 $\\frac12+\\frac{\\sqrt{y}-1}{8}$），合计 $\\frac{5+\\sqrt{y}}{8}$；⑤ $y\\ge 9$：$1$。四点验连续：$0\\to\\frac{3+\\sqrt{2}}{8}\\to\\frac{5+2\\sqrt{2}}{8}\\to 1$，严丝合缝！"
+        }
+      ],
+      "finalAnswer": "$F_Y(y)=\\begin{cases}0,&y<0\\\\\\frac{\\sqrt{y}}{2}+\\frac{\\sqrt{y+1}-1}{8},&0\\le y<1\\\\\\frac14+\\frac{\\sqrt{y}+\\sqrt{y+1}}{8},&1\\le y<8\\\\\\frac{5+\\sqrt{y}}{8},&8\\le y<9\\\\1,&y\\ge 9\\end{cases}$",
+      "takeaway": "本题把「分段密度 $f(x)$」与「分段非单调函数 $g(x)$」双重叠加，练透这道 5 段切片题，考研任何一维函数分布大题都再无死角！",
+      "source": {
+        "book": "27 猪狗《概率统计百宝书》",
+        "printedPage": "猪狗 P.4-5 示例6",
+        "pdfPage": 97,
+        "itemRef": "猪狗示例 6 双重分段非单调精细切片"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr03_zhugou_gems",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr03-e-18",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "八、猪狗百宝书高难一维变身与 2026 回环应用",
+      "title": "高频变形：截尾/限幅理赔函数 $Y=\\min(X,c)$ 与 $Y=\\max(X-d,0)$ 的混合分布剖析",
+      "problem": "设连续型损失额 $X\\sim E(\\lambda)$，保险合同设上限 $c>0$（赔付 $Y_1=\\min(X,c)$）或设免赔额 $d>0$（赔付 $Y_2=\\max(X-d,0)$），分别求 $Y_1$ 与 $Y_2$ 的分布函数并标出跳点。",
+      "steps": [
+        {
+          "stepTitle": "上限截尾 $Y_1=\\min(X,c)$：右端点 $y=c$ 聚起跳点",
+          "detail": "$y<0$ 为 $0$；$0\\le y<c$ 时 $\\{Y_1\\le y\\}=\\{X\\le y\\}$ 得 $1-e^{-\\lambda y}$；$y\\ge c$ 时恒为 $1$！在 $y=c$ 处出现跳点，跳高 $P\\{Y_1=c\\}=P\\{X\\ge c\\}=e^{-\\lambda c}$！"
+        },
+        {
+          "stepTitle": "免赔截尾 $Y_2=\\max(X-d,0)$：左端点 $y=0$ 聚起跳点",
+          "detail": "$y<0$ 为 $0$；$y\\ge 0$ 时 $\\{Y_2\\le y\\}=\\{X\\le y+d\\}$ 得 $1-e^{-\\lambda(y+d)}$！在 $y=0$ 处出现跳点，跳高 $P\\{Y_2=0\\}=P\\{X\\le d\\}=1-e^{-\\lambda d}$！"
+        }
+      ],
+      "finalAnswer": "$Y_1$ 在 $c$ 处跳高 $e^{-\\lambda c}$；$Y_2$ 在 $0$ 处跳高 $1-e^{-\\lambda d}$（二者均为经典混合型随机变量）",
+      "takeaway": "保险精算/工程限幅题最爱考 $\\min(X,c)$ 与 $\\max(X-d,0)$：被截平的那一侧概率质量全部压成一个单点跳跃，绝不能漏写分段！",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化",
+        "printedPage": "基础 P.51 / 9讲 P.13 / 方浩 P.46-47",
+        "pdfPage": 57,
+        "itemRef": "截尾限幅函数混合型分布剖析"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr03_slice_cases",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr03-e-19",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "八、猪狗百宝书高难一维变身与 2026 回环应用",
+      "title": "一维函数分布反问题：由目标分布 $Y\\sim E(\\lambda)$ 或 $U(a,b)$ 逆构造变换函数 $g(X)$",
+      "problem": "已知 $U\\sim U(0,1)$，构造单调函数 $g(U)$ 使其分别服从：(1) 指数分布 $E(\\lambda)$；(2) 柯西分布 $t(1)$；(3) 威布尔分布 $F(x)=1-e^{-(x/\\theta)^m}\\;(x\\ge 0)$。",
+      "steps": [
+        {
+          "stepTitle": "应用逆变换采样核心原理 $X=F^{-1}(U)$",
+          "detail": "对任意严格单增连续分布函数 $F(x)$，令 $X=F^{-1}(U)$，则 $P\\{X\\le x\\}=P\\{U\\le F(x)\\}=F(x)$，一步命中目标分布！"
+        },
+        {
+          "stepTitle": "逐一反解 $F(x)=u$",
+          "detail": "(1) $1-e^{-\\lambda x}=u\\Rightarrow x=-\\frac{1}{\\lambda}\\ln(1-u)$（或因 $1-U\\stackrel{d}{=}U$ 简化为 $-\\frac{1}{\\lambda}\\ln U$）；(2) $\\frac12+\\frac{1}{\\pi}\\arctan x=u\\Rightarrow x=\\tan[\\pi(u-\\frac12)]$；(3) $1-e^{-(x/\\theta)^m}=u\\Rightarrow x=\\theta[-\\ln(1-u)]^{1/m}$！"
+        }
+      ],
+      "finalAnswer": "(1) $-\\frac{1}{\\lambda}\\ln U$；(2) $\\tan[\\pi(U-\\frac12)]$；(3) $\\theta(-\\ln U)^{1/m}$",
+      "takeaway": "《概率 9 讲》P.27 蓝框专门强调此逆变换思想——正反打通「任意分布 $\\leftrightarrow U(0,1)$」后，第 3 讲就真正融会贯通了！",
+      "source": {
+        "book": "27 张宇《概率9讲》",
+        "printedPage": "9讲 P.27 注(4)",
+        "pdfPage": 38,
+        "itemRef": "逆变换采样构造任意目标分布"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr03_golden_transforms",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr03-e-20",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "八、猪狗百宝书高难一维变身与 2026 回环应用",
+      "title": "一维三角函数高频题：$X\\sim U(-\\frac{\\pi}{2},\\frac{\\pi}{2})$ 下 $Y=\\tan X$ 变柯西 & $Y=\\sin X$ 变反正弦",
+      "problem": "设随机变量 $X\\sim U(-\\frac{\\pi}{2},\\frac{\\pi}{2})$，分别求：(1) $Y_1=\\tan X$ 的概率密度；(2) $Y_2=\\sin X$ 的概率密度；(3) $Y_3=\\cos X$ 的概率密度。",
+      "steps": [
+        {
+          "stepTitle": "(1)(2) 在 $(-\\frac{\\pi}{2},\\frac{\\pi}{2})$ 上严格单增，公式法秒杀",
+          "detail": "(1) $y=\\tan x$ 值域 $\\mathbb{R}$，反函数 $\\arctan y$，导数 $\\frac{1}{1+y^2}$，得 $f_{Y_1}(y)=\\frac{1}{\\pi(1+y^2)}$（标准柯西分布！）；(2) $y=\\sin x$ 值域 $(-1,1)$，反函数 $\\arcsin y$，导数 $\\frac{1}{\\sqrt{1-y^2}}$，得 $f_{Y_2}(y)=\\frac{1}{\\pi\\sqrt{1-y^2}}\\;(|y|<1)$（反正弦分布！）。"
+        },
+        {
+          "stepTitle": "(3) $Y_3=\\cos X$ 偶对称非单调，双支叠加",
+          "detail": "值域 $(0,1)$，对 $y\\in(0,1)$ 有两支 $\\pm\\arccos y$，由对称性 $F_{Y_3}(y)=1-P\\{|X|<\\arccos y\\}=1-\\frac{2}{\\pi}\\arccos y$，求导得 $f_{Y_3}(y)=\\frac{2}{\\pi\\sqrt{1-y^2}}\\;(0<y<1)$！"
+        }
+      ],
+      "finalAnswer": "(1) $\\frac{1}{\\pi(1+y^2)}\\,(y\\in\\mathbb{R})$；(2) $\\frac{1}{\\pi\\sqrt{1-y^2}}\\,(|y|<1)$；(3) $\\frac{2}{\\pi\\sqrt{1-y^2}}\\,(0<y<1)$",
+      "takeaway": "记住这三组经典三角变身：均匀角取 $\\tan$ 得柯西、取 $\\sin$ 得反正弦（正是车轮气门芯模型！）、取 $\\cos$ 得半反正弦！",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 猪狗百宝书",
+        "printedPage": "基础 P.56 / 9讲 P.22 / 猪狗 P.4-2",
+        "pdfPage": 33,
+        "itemRef": "均匀角三角变换三连"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr03_zhugou_gems",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr03-e-21",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "八、猪狗百宝书高难一维变身与 2026 回环应用",
+      "title": "一维变换视角复盘 2026 真题（猪狗例 2.3）：线性变换 $Y=cX+d$ 与分布函数 $F_X(ay+b)$ 对偶关系",
+      "problem": "若连续型 $X\\sim F_X(x)$，设 $Y=cX+d\\;(c\\ne 0)$，写出 $F_Y(y)$ 与 $f_Y(y)$ 在 $c>0$ 和 $c<0$ 两种符号下的精确公式，并解释为何 2026 真题中 $F_Y(y)=F_X(ay+b)$ 必有 $a>0$ 且对应 $Y=\\frac{X-b}{a}$。",
+      "steps": [
+        {
+          "stepTitle": "推导 $c>0$ 与 $c<0$ 下 $F_Y(y)$ 的符号翻转",
+          "detail": "当 $c>0$ 时 $F_Y(y)=P\\{X\\le\\frac{y-d}{c}\\}=F_X(\\frac{y-d}{c})$；当 $c<0$ 时不等号反向，$F_Y(y)=P\\{X\\ge\\frac{y-d}{c}\\}=1-F_X(\\frac{y-d}{c})$（连续型）！但求导后负负得正，密度统一为 $f_Y(y)=\\frac{1}{|c|}f_X(\\frac{y-d}{c})$！"
+        },
+        {
+          "stepTitle": "反看 2026 真题 $F_Y(y)=F_X(ay+b)$",
+          "detail": "因右侧直接是 $+F_X(ay+b)$ 而非 $1-F_X(\\cdot)$，故当 $y\\to+\\infty$ 欲使 $F_X(ay+b)\\to 1$ 必须 $a>0$！对照 $c>0$ 公式 $\\frac{1}{c}=a,\\;-\\frac{d}{c}=b\\implies c=\\frac{1}{a},\\;d=-\\frac{b}{a}$，故 $Y\\stackrel{d}{=}\\frac{X-b}{a}$，一眼杜绝符号与倒数颠倒！"
+        }
+      ],
+      "finalAnswer": "$c>0:\\,F_X(\\frac{y-d}{c})$；$c<0:\\,1-F_X(\\frac{y-d}{c})$；2026 真题 $F_X(ay+b)$ 必有 $a>0$ 且 $Y\\stackrel{d}{=}\\frac{X-b}{a}$",
+      "takeaway": "把第 2 讲的 2026 真题和第 3 讲线性变换合拢复盘，彻底斩断「$Y=aX+b$」与「$F_Y(y)=F_X(ay+b)$」的互逆混淆！",
+      "source": {
+        "book": "27 猪狗百宝书 & 27 张宇基础30讲",
+        "printedPage": "猪狗 P.2-12 例2.3(2026) / 基础 P.48",
+        "pdfPage": 43,
+        "itemRef": "线性变换符号翻转与2026真题回环"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_2026_exams",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr03-s-01",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "九、第 3 讲一维函数分布总路由与变身速查表",
+      "title": "一维随机变量函数四大类型解法与公式法边界速查表（表 P3-1）",
+      "overview": "遇到任何 $Y=g(X)$ 分布题，先花 3 秒对照表 P3-1 选定最优路线：能直接套黄金变换或单调公式法的绝不绕远路，遇非单调/分段/平顶立刻画图切片兜底。",
+      "patterns": [
+        {
+          "typeName": "选法决策铁律",
+          "triggers": "审题时快速判断用定义法还是公式法",
+          "method": "① $X$ 离散 $\\to$ 合并同类项；② $g$ 为 $F_X(X)$ 或 $-\\ln[1-F_X(X)]$ $\\to$ 直出 $U(0,1)$ / $E(1)$；③ $g$ 严格单调可导且求密度 $\\to$ 公式法；④ 其余全部画图切片定义法！",
+          "pitfall": "千万不要对带平顶常值段的分段函数盲套公式法，否则直接丢掉全部离散跳点！",
+          "relatedRefs": "强化例 3.1–3.6, 方浩例 29–32"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 P3-1　一维随机变量函数 $Y=g(X)$ 四大类型求解路由速查表",
+          "headers": [
+            "变换类型",
+            "首选方法",
+            "核心公式 / 操作步",
+            "高频致命陷阱"
+          ],
+          "rows": [
+            [
+              "离散 $\\to$ 离散",
+              "枚举合并法",
+              "列出 $y_i=g(x_i)$，相同 $y_k$ 概率相加",
+              "无穷离散取模（如 $\\bmod 3$）错定等比首项"
+            ],
+            [
+              "连续 $\\to$ 严格单调连续",
+              "公式法",
+              "$f_Y(y)=f_X[h(y)]|h'(y)|\\;(\\alpha<y<\\beta)$",
+              "漏绝对值算负密度；漏写值域 $(\\alpha,\\beta)$ 外为 0"
+            ],
+            [
+              "连续 $\\to$ 非单调 / 混合",
+              "画图切片定义法",
+              "画 $y=g(x)$ 找 $y$ 断点，$F_Y(y)=P\\{g(X)\\le y\\}$",
+              "漏加下方常值段；平顶跳点漏写左闭右开"
+            ],
+            [
+              "连续 $\\to$ 离散（取整）",
+              "原像区间积分法",
+              "$P\\{Y=k\\}=P\\{x\\in g^{-1}(k)\\}=F_X(b)-F_X(a)$",
+              "混淆 $[X]$（从 0 起）与 $[X]+1$（从 1 起）"
+            ],
+            [
+              "黄金分布变换",
+              "直接结论秒杀",
+              "$F_X(X)\\sim U(0,1)$；$-\\ln[1-F_X(X)]\\sim E(1)$",
+              "误用于离散型或混合型分布函数"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "记住「单调求密度用公式，非单调/分段/求分布函数全用画图定义法」，选法零纠结！",
+      "source": {
+        "book": "27 张宇《概率9讲》 & 27 方浩强化",
+        "printedPage": "9讲 P.23-28 / 方浩 P.45-50",
+        "pdfPage": 34,
+        "itemRef": "表 P3-1 一维函数四大类型求解路由"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr03-s-02",
+      "kind": "summary",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "九、第 3 讲一维函数分布总路由与变身速查表",
+      "title": "8 大高频经典一维函数变身结论速背表（表 P3-2）",
+      "overview": "汇总考研数学一小题秒杀、大题验算必背的 8 组经典一维变身结果，打通第 2、3、8 讲核心分布族。",
+      "patterns": [
+        {
+          "typeName": "分布家族变身直通车",
+          "triggers": "题目要求判断某常见分布作简单函数变换后的新分布类型",
+          "method": "先查表 P3-2 锚定答案方向，大题再用定义法或公式法写出 3 行标准过程。",
+          "pitfall": "注意 $X\\sim U(-\\frac{\\pi}{2},\\frac{\\pi}{2})$ 与 $X\\sim U(0,\\pi)$ 在 $\\sin X$ 变换下的值域差异（前者 $(-1,1)$，后者 $(0,1)$ 密度乘 2）！",
+          "relatedRefs": "基础例 2.15–2.17, 强化例 3.2–3.6, 猪狗示例 1–4"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 P3-2　8 大高频一维随机变量函数变身结论速背表",
+          "headers": [
+            "原分布 $X$",
+            "函数变换 $Y=g(X)$",
+            "目标分布 / 密度",
+            "关键备注"
+          ],
+          "rows": [
+            [
+              "$N(\\mu,\\sigma^2)$",
+              "$Y=aX+b\\;(a\\ne 0)$",
+              "$N(a\\mu+b,\\;a^2\\sigma^2)$",
+              "正态线性封闭，$\\frac{X-\\mu}{\\sigma}\\sim N(0,1)$"
+            ],
+            [
+              "$N(0,1)$",
+              "$Y=X^2$",
+              "$\\chi^2(1)$，$f_Y=\\frac{1}{\\sqrt{2\\pi y}}e^{-y/2}\\;(y>0)$",
+              "1 自由度卡方分布本源"
+            ],
+            [
+              "$N(\\mu,\\sigma^2)$",
+              "$Y=e^X$",
+              "对数正态，$f_Y=\\frac{1}{\\sqrt{2\\pi}\\sigma y}e^{-\\frac{(\\ln y-\\mu)^2}{2\\sigma^2}}$",
+              "定义域 $y>0$，乘雅可比 $\\frac1y$"
+            ],
+            [
+              "任意连续 $X\\sim F_X$",
+              "$Y=F_X(X)$ 或 $1-F_X(X)$",
+              "$U(0,1)$",
+              "2019 真题秒杀核；离散型不成立"
+            ],
+            [
+              "任意连续 $X\\sim F_X$",
+              "$Y=-\\ln[1-F_X(X)]$",
+              "$E(1)$",
+              "再乘 2 得 $-2\\ln U\\sim\\chi^2(2)$"
+            ],
+            [
+              "$E(\\lambda)$",
+              "$Y=[X]+1$",
+              "$Ge(1-e^{-\\lambda})$",
+              "连续无记忆 $\\to$ 离散无记忆"
+            ],
+            [
+              "$U(-\\frac{\\pi}{2},\\frac{\\pi}{2})$",
+              "$Y=\\tan X$ / $\\sin X$",
+              "柯西 $\\frac{1}{\\pi(1+y^2)}$ / 反正弦 $\\frac{1}{\\pi\\sqrt{1-y^2}}$",
+              "$\\cos X$ 值域 $(0,1)$ 密度 $\\frac{2}{\\pi\\sqrt{1-y^2}}$"
+            ],
+            [
+              "逻辑斯蒂 $\\frac{e^x}{(1+e^x)^2}$",
+              "$Y=e^X$",
+              "$f_Y(y)=\\frac{1}{(1+y)^2}\\;(y>0)$",
+              "期望不存在（发散）"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "熟背表 P3-2 后，一维变换客观题基本可以 10 秒口算并精准预判解答题终点！",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "第3讲变身结论总表",
+        "pdfPage": 37,
+        "itemRef": "表 P3-2 8大高频一维函数变身结论"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr03-s-03",
+      "kind": "summary",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "九、第 3 讲一维函数分布总路由与变身速查表",
+      "title": "分段/混合型分布函数画图切片五步避坑清单（表 P3-3）",
+      "overview": "针对考研解答题中得分率最低的「分段非单调/平顶混合型 $Y=g(X)$」（如方浩例 29、30 与猪狗示例 6），沉淀出一套 100% 不丢步、不漏段的五步质检清单。",
+      "patterns": [
+        {
+          "typeName": "五步切片质检闭环",
+          "triggers": "解答题要求写出分段函数 $Y=g(X)$ 的分布函数 $F_Y(y)$ 及关联概率 $P\\{h(X,Y)>0\\}$",
+          "method": "① 仅在 $f_X>0$ 支撑上作图；② 收集所有水平线触及的拐点/端点/平顶高度排序作 $y$ 断点；③ 每段写左闭右开并累加全部下方 $x$ 区间；④ 检查各断点左极限与右值（连续点必相等，平顶跳高必等于该段 $X$ 概率）；⑤ 关联概率直接回代 $Y=g(X)$ 化一元！",
+          "pitfall": "算完分段 $F_Y(y)$ 不验端点值——哪怕花 10 秒代一遍断点，也能捉出 99% 的积分上下限笔误！",
+          "relatedRefs": "方浩例 29, 方浩例 30, 猪狗示例 6"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 P3-3　分段/混合型一维函数分布 6 大高频失分坑与自检法",
+          "headers": [
+            "失分坑",
+            "常见错误表现",
+            "10 秒自检铁律"
+          ],
+          "rows": [
+            [
+              "坑 1：忘截有效支撑",
+              "把 $f_X(x)=0$ 区域也画入 $y=g(x)$ 导致多出虚假断点",
+              "作图第一笔先用虚线框定 $f_X(x)>0$ 范围"
+            ],
+            [
+              "坑 2：漏加下方已过分支",
+              "横线升到更高段时，忘了加上下方平顶段概率",
+              "用笔遮住直线 $Y=y$ 以上部分，把**下方所有黑线**全投影到 $x$ 轴"
+            ],
+            [
+              "坑 3：强行对混合型求导",
+              "对含跳点的 $F_Y(y)$ 分段求导并声称是全局密度 $f_Y(y)$",
+              "先查 $F_Y$ 在各断点是否连续；有跳高 $\\Delta>0$ 就写「混合型，无密度」"
+            ],
+            [
+              "坑 4：分段不等号丢右连续",
+              "把带跳点的分段写成 $1<y\\le 2$（左开右闭错！）",
+              "除首段 $y<y_{\\min}$ 外一律写左闭右开 $y_k\\le y<y_{k+1}$"
+            ],
+            [
+              "坑 5：末端边界不归一",
+              "最后一段代上界后不等于 1（如算成 $\\frac{26}{27}$）",
+              "必验 $F_Y(y_{\\max}^-)+\\text{末点跳高}=1$"
+            ],
+            [
+              "坑 6：求 $P(X\\le Y)$ 误套二维独立",
+              "把 $X$ 与 $Y=g(X)$ 当独立做二重积分",
+              "立刻把 $Y=g(X)$ 分段回代，化为纯 $X$ 一元区间积分"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "走完表 P3-3 的 6 条 10 秒自检，无论考卷把分段函数出得多绕，都能拿到满分步骤分！",
+      "source": {
+        "book": "27 方浩强化 & 27 猪狗百宝书 & 27 张宇《概率9讲》",
+        "printedPage": "第3讲切片避坑清单",
+        "pdfPage": 51,
+        "itemRef": "表 P3-3 分段混合型画图切片避坑清单"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    }
+  ]
+}

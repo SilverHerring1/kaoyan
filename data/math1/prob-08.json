@@ -1,0 +1,1472 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "prob-08",
+  "title": "概率 · 第 8 讲：统计量及其分布",
+  "sourceMeta": "五书深度融合：27 张宇基础30讲(第6讲前半 P.136-146) + 27 张宇概率9讲(第8讲 P.63-69) + 27 方浩概率强化(第6章 P.133-154) + 27 猪狗百宝书(第6章 P.6-1~6-16) + 27 版概率论全总结(P.15-16) · 含 1998–2023 真题与 5 处勘误补注",
+  "basicRequirements": [
+    "理解总体、简单随机样本、统计量（不含未知参数）、样本均值、样本方差与样本矩的概念，牢记任意总体下 E(X̄)=μ, D(X̄)=σ²/n, E(S²)=σ²。",
+    "掌握 χ²(n)、t(n)、F(n₁,n₂) 三大抽样分布的构造定义、核心性质及上侧 α 分位数的对称与三转公式。",
+    "熟练掌握单正态与双正态总体抽样分布定理（含科克伦分解、X̄⊥S²、D(S²)=2σ⁴/(n-1)、合并样本方差 S_w²），灵活运用「见到平方找卡方」速算二次统计量数字特征。"
+  ],
+  "items": [
+    {
+      "id": "m1-pr08-f-01",
+      "kind": "formula",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、总体、样本与常用统计量",
+      "title": "简单随机样本、统计量定义（禁含未知参数）与五大常用统计量",
+      "formulaLatex": "$$\\begin{aligned} &\\text{简单随机样本 }X_1,\\dots,X_n\\text{（独立同分布于总体 }X\\text{）：} F(x_1,\\dots,x_n)=\\prod_{i=1}^n F(x_i),　 f(x_1,\\dots,x_n)=\\prod_{i=1}^n f(x_i)\\\\ &\\text{统计量：}T=g(X_1,\\dots,X_n)\\text{ 为样本的不含任何未知参数的连续函数（可含已知参数！）}\\\\ &\\text{① 样本均值：}\\bar X=\\frac{1}{n}\\sum_{i=1}^{n}X_i　　\\text{② 样本方差（无偏）：}S^2=\\frac{1}{n-1}\\sum_{i=1}^{n}(X_i-\\bar X)^2,　 S=\\sqrt{S^2}\\\\ &\\text{③ 样本二阶中心矩（有偏方差）：}B_2=S_n^2=\\frac{1}{n}\\sum_{i=1}^{n}(X_i-\\bar X)^2=\\frac{n-1}{n}S^2\\\\ &\\text{④ 样本 }k\\text{ 阶原点矩与中心矩：}A_k=\\frac{1}{n}\\sum_{i=1}^{n}X_i^k,　　 B_k=\\frac{1}{n}\\sum_{i=1}^{n}(X_i-\\bar X)^k\\\\ &\\text{核心代数拆分恒等式：}\\sum_{i=1}^{n}(X_i-\\mu)^2=\\sum_{i=1}^{n}(X_i-\\bar X)^2+n(\\bar X-\\mu)^2;　　 \\sum_{i=1}^{n}(X_i-\\bar X)^2=\\sum_{i=1}^{n}X_i^2-n\\bar X^2\\end{aligned}$$",
+      "conditions": "统计量的硬性门槛是**绝对不能出现任何未知参数**（如总体 $N(\\mu,\\sigma^2)$ 中 $\\mu$ 已知、$\\sigma$ 未知时，$\\bar X-\\mu$ 是统计量，而 $\\frac{\\bar X-\\mu}{\\sigma}$ 不是统计量！）。",
+      "pitfalls": "① **别混淆样本 $X_i$ 与样本值 $x_i$**：抽样前 $X_1,\\dots,X_n$ 是独立同分布的随机变量（故统计量 $T$ 也是随机变量，有分布和数字特征）；抽样后 $x_1,\\dots,x_n$ 是具体实数。 ② 另外记住双和恒等式：$\\sum_{i=1}^n\\sum_{j=1}^n (X_i-X_j)^2=2n\\sum_{i=1}^n (X_i-\\bar X)^2=2n(n-1)S^2$（考过多次！）。",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "基础 P.136-137 / 9讲 P.63 / 方浩 P.133-134 / 猪狗 P.6-1~6-4",
+        "pdfPage": 142,
+        "itemRef": "总体样本与五大常用统计量及核心恒等式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_sample_moments",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "统计量是把高维样本数据压缩成低维可观测信息的函数，它是参数估计、区间估计与假设检验的唯一入口。考研中不作特殊说明时，「样本方差」一律指分母为 **$n-1$** 的无偏样本方差 $S^2$。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「样本方差除 $n-1$，二阶中心矩除 $n$；见离差平方和立刻拆：减真值平方和 = 减均值平方和 + $n$ 倍均值偏离平方！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr08-f-02",
+      "kind": "formula",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、任意总体统计量数字特征",
+      "title": "样本均值与样本方差的三大普适数字特征（不要求总体正态！）",
+      "formulaLatex": "$$\\begin{aligned} &\\text{设总体 }X\\text{ 满足 }EX=\\mu, DX=\\sigma^2>0\\text{（任意分布！），}X_1,\\dots,X_n\\text{ 为简单随机样本：}\\\\ &\\text{① }E(\\bar X)=\\mu　　\\text{② }D(\\bar X)=\\frac{\\sigma^2}{n}　　\\text{③ }E(S^2)=\\sigma^2\\\\ &\\text{直接推论：}\\\\ &　 E\\!\\left(\\sum_{i=1}^{n}(X_i-\\bar X)^2\\right)=(n-1)\\sigma^2,　　 E(B_2)=E(S_n^2)=\\frac{n-1}{n}\\sigma^2\\\\ &　 E(\\bar X^2)=\\mu^2+\\frac{\\sigma^2}{n},　　 \\operatorname{Cov}(X_i,\\bar X)=\\frac{\\sigma^2}{n},　　 \\operatorname{Cov}(X_i-\\bar X,\\,\\bar X)=0\\\\ &　 \\operatorname{Cov}(X_i-\\bar X,\\,X_j-\\bar X)=-\\frac{\\sigma^2}{n} (i\ne j),　　 D(X_i-\\bar X)=\\frac{n-1}{n}\\sigma^2\\end{aligned}$$",
+      "conditions": "只需 $EX=\\mu,\\;DX=\\sigma^2<\\infty$。注意：**$D(S^2)=\\frac{2\\sigma^4}{n-1}$ 仅对正态总体成立**，一般总体不适用！",
+      "pitfalls": "**极高频概念陷阱**：对非正态总体（如二项/泊松/均匀），$\\operatorname{Cov}(X_i-\\bar X,\\bar X)=0$ 依然恒成立，但 $\\bar X$ 与 $S^2$ **不再相互独立**！独立性是正态总体的专属特权。",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "基础 P.138 / 9讲 P.64,67 / 方浩 P.135-136 / 猪狗 P.6-4",
+        "pdfPage": 144,
+        "itemRef": "任意总体样本均值与样本方差数字特征"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_sample_moments",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "这三条黄金公式只需总体存在有限期望与方差即可成立，**完全不依赖正态假定**！这也是为什么样本方差必须除以 $n-1$ 才能保证无偏：$E[\\sum(X_i-\\bar X)^2]=\\sum E(X_i^2)-nE(\\bar X^2)=n(\\sigma^2+\\mu^2)-n(\\mu^2+\\frac{\\sigma^2}{n})=(n-1)\\sigma^2$。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「均值期望不变、方差除 $n$、无偏样本方差期望就是 $\\sigma^2$；样本残差与样本均值恒不相关，不同残差协方差为 $-\\sigma^2/n$！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr08-f-03",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "三、三大抽样分布（χ² · t · F）",
+      "title": "卡方 χ²(n)、t(n) 与 F(n₁, n₂) 分布的构造定义、数字特征与性质总表",
+      "formulaLatex": "$$\\begin{aligned} &\\text{① 卡方分布：}X_1,\\dots,X_n\\overset{\\text{i.i.d.}}{\\sim}N(0,1)\\implies \\chi^2=\\sum_{i=1}^{n}X_i^2\\sim\\chi^2(n)\\\\ &　　 E(\\chi^2)=n,　 D(\\chi^2)=2n;　　 \\chi^2_1\\perp\\chi^2_2\\implies \\chi^2_1+\\chi^2_2\\sim\\chi^2(n_1+n_2);　　 \\chi^2(2)=E(1/2)\\\\ &\\text{② }t\\text{ 分布：}X\\sim N(0,1), Y\\sim\\chi^2(n)\\text{ 独立}\\implies T=\\frac{X}{\\sqrt{Y/n}}\\sim t(n)\\\\ &　　\\text{密度偶函数关于 }0\\text{ 对称；}ET=0 (n\\ge 2), DT=\\frac{n}{n-2} (n\\ge 3);　 t(1)\\text{ 为标准柯西分布（无期望！）}\\\\ &\\text{③ }F\\text{ 分布：}X\\sim\\chi^2(n_1), Y\\sim\\chi^2(n_2)\\text{ 独立}\\implies F=\\frac{X/n_1}{Y/n_2}\\sim F(n_1,n_2)\\\\ &　　 \\frac{1}{F}\\sim F(n_2,n_1);　　 T\\sim t(n)\\implies T^2\\sim F(1,n)\\end{aligned}$$",
+      "conditions": "构造 $t$ 与 $F$ 分布时，**分子与分母必须严格相互独立**，且每个卡方变量必须除以自身自由度！",
+      "pitfalls": "① **$t(1)$ 无期望、$t(2)$ 无方差**：不要见 $t$ 分布就盲写 $ET=0$，需 $n\\ge 2$ 期望才存在（$t(1)$ 是柯西分布！），$n\\ge 3$ 方差才有限。 ② **$t$ 分布分子不能加绝对值**：$|X|/\\sqrt{Y/n}$ 恒非负，绝不服从对称的 $t(n)$ 分布（但其平方仍服从 $F(1,n)$！）；相反，分母 $\\sqrt{U^2}=|U|$ 带绝对值则完全合法！",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 680 360\" role=\"img\" aria-label=\"三大抽样分布密度形态与上侧α分位数解剖\">\n  <title>三大抽样分布密度形态与上侧α分位数解剖</title>\n  <defs>\n    <marker id=\"m1_pr08_d_arr\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n      <path d=\"M0 1 L9 5 L0 9 Z\" fill=\"#475569\"/>\n    </marker>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"680\" height=\"360\" rx=\"12\" fill=\"#f8fafc\"/>\n  <text x=\"340\" y=\"26\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"700\" fill=\"#0f172a\">三大抽样分布（χ² · t · F）密度曲线形态与考研上侧 α 分位数解剖</text>\n\n  <!-- Panel 1: Chi-square -->\n  <rect x=\"16\" y=\"42\" width=\"208\" height=\"248\" rx=\"10\" fill=\"#ffffff\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"120\" y=\"64\" text-anchor=\"middle\" font-size=\"12.5\" font-weight=\"700\" fill=\"#2563eb\">① χ²(n) 分布（右偏非负）</text>\n  <line x1=\"34\" y1=\"186\" x2=\"210\" y2=\"186\" stroke=\"#475569\" stroke-width=\"1.3\" marker-end=\"url(#m1_pr08_d_arr)\"/>\n  <line x1=\"40\" y1=\"190\" x2=\"40\" y2=\"82\" stroke=\"#475569\" stroke-width=\"1.3\" marker-end=\"url(#m1_pr08_d_arr)\"/>\n  <!-- n=2 exponential -->\n  <path d=\"M 40 94 Q 72 150, 194 184\" fill=\"none\" stroke=\"#94a3b8\" stroke-width=\"1.5\" stroke-dasharray=\"4 3\"/>\n  <text x=\"64\" y=\"102\" font-size=\"9.5\" fill=\"#64748b\">n=2: E(1/2)</text>\n  <!-- n=6 curve -->\n  <path d=\"M 40 186 C 54 184, 68 106, 92 106 C 118 106, 145 170, 200 185\" fill=\"none\" stroke=\"#2563eb\" stroke-width=\"2.3\"/>\n  <!-- shaded right tail -->\n  <path d=\"M 148 158 C 165 173, 182 182, 200 185 L 200 186 L 148 186 Z\" fill=\"#3b82f6\" opacity=\"0.35\"/>\n  <line x1=\"148\" y1=\"154\" x2=\"148\" y2=\"190\" stroke=\"#1d4ed8\" stroke-width=\"1.4\" stroke-dasharray=\"3 2\"/>\n  <text x=\"168\" y=\"176\" font-size=\"10\" font-weight=\"700\" fill=\"#1d4ed8\">α</text>\n  <text x=\"148\" y=\"204\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#1d4ed8\">χ²_α(n)</text>\n  <text x=\"120\" y=\"228\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#334155\">E = n，D = 2n，独立可加</text>\n  <text x=\"120\" y=\"246\" text-anchor=\"middle\" font-size=\"10\" fill=\"#b91c1c\">不对称！χ²_(1-α) ≠ -χ²_α</text>\n  <text x=\"120\" y=\"264\" text-anchor=\"middle\" font-size=\"10\" fill=\"#475569\">两侧须分别查 1-α/2 与 α/2</text>\n\n  <!-- Panel 2: t distribution -->\n  <rect x=\"236\" y=\"42\" width=\"208\" height=\"248\" rx=\"10\" fill=\"#ffffff\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"340\" y=\"64\" text-anchor=\"middle\" font-size=\"12.5\" font-weight=\"700\" fill=\"#0f766e\">② t(n) 分布（对称厚尾）</text>\n  <line x1=\"252\" y1=\"186\" x2=\"430\" y2=\"186\" stroke=\"#475569\" stroke-width=\"1.3\" marker-end=\"url(#m1_pr08_d_arr)\"/>\n  <line x1=\"340\" y1=\"190\" x2=\"340\" y2=\"82\" stroke=\"#475569\" stroke-width=\"1.2\" stroke-dasharray=\"2 2\"/>\n  <!-- N(0,1) dashed higher peak -->\n  <path d=\"M 258 185 C 296 184, 314 94, 340 94 C 366 94, 384 184, 422 185\" fill=\"none\" stroke=\"#94a3b8\" stroke-width=\"1.5\" stroke-dasharray=\"4 3\"/>\n  <text x=\"378\" y=\"102\" font-size=\"9.5\" fill=\"#64748b\">N(0,1) 更高</text>\n  <!-- t(n) solid lower peak, heavier tail -->\n  <path d=\"M 254 181 C 292 178, 312 110, 340 110 C 368 110, 388 178, 426 181\" fill=\"none\" stroke=\"#0f766e\" stroke-width=\"2.3\"/>\n  <!-- symmetric tails -->\n  <path d=\"M 388 164 C 402 176, 414 180, 426 181 L 426 186 L 388 186 Z\" fill=\"#14b8a6\" opacity=\"0.38\"/>\n  <path d=\"M 254 181 C 266 180, 278 176, 292 164 L 292 186 L 254 186 Z\" fill=\"#14b8a6\" opacity=\"0.38\"/>\n  <line x1=\"388\" y1=\"160\" x2=\"388\" y2=\"190\" stroke=\"#0f766e\" stroke-width=\"1.3\" stroke-dasharray=\"3 2\"/>\n  <line x1=\"292\" y1=\"160\" x2=\"292\" y2=\"190\" stroke=\"#0f766e\" stroke-width=\"1.3\" stroke-dasharray=\"3 2\"/>\n  <text x=\"292\" y=\"204\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#0f766e\">-t_α(n)</text>\n  <text x=\"340\" y=\"204\" text-anchor=\"middle\" font-size=\"10\" fill=\"#475569\">0</text>\n  <text x=\"388\" y=\"204\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#0f766e\">t_α(n)</text>\n  <text x=\"340\" y=\"228\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#334155\">偶函数：t_(1-α)(n) = -t_α(n)</text>\n  <text x=\"340\" y=\"246\" text-anchor=\"middle\" font-size=\"10\" fill=\"#0f766e\">t(1) = 柯西（无期望）；t² ~ F(1, n)</text>\n  <text x=\"340\" y=\"264\" text-anchor=\"middle\" font-size=\"10\" fill=\"#475569\">n → ∞ 时极限趋近标准正态</text>\n\n  <!-- Panel 3: F distribution -->\n  <rect x=\"456\" y=\"42\" width=\"208\" height=\"248\" rx=\"10\" fill=\"#ffffff\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"560\" y=\"64\" text-anchor=\"middle\" font-size=\"12.5\" font-weight=\"700\" fill=\"#7c3aed\">③ F(n₁, n₂) 分布（倒数对称）</text>\n  <line x1=\"472\" y1=\"186\" x2=\"650\" y2=\"186\" stroke=\"#475569\" stroke-width=\"1.3\" marker-end=\"url(#m1_pr08_d_arr)\"/>\n  <line x1=\"478\" y1=\"190\" x2=\"478\" y2=\"82\" stroke=\"#475569\" stroke-width=\"1.3\" marker-end=\"url(#m1_pr08_d_arr)\"/>\n  <!-- F curve -->\n  <path d=\"M 478 186 C 488 180, 496 96, 514 96 C 538 96, 566 172, 642 185\" fill=\"none\" stroke=\"#7c3aed\" stroke-width=\"2.3\"/>\n  <!-- left & right tails -->\n  <path d=\"M 478 186 C 484 182, 488 164, 493 142 L 493 186 Z\" fill=\"#a78bfa\" opacity=\"0.4\"/>\n  <path d=\"M 588 165 C 606 176, 624 182, 642 185 L 642 186 L 588 186 Z\" fill=\"#a78bfa\" opacity=\"0.4\"/>\n  <line x1=\"493\" y1=\"138\" x2=\"493\" y2=\"190\" stroke=\"#6d28d9\" stroke-width=\"1.2\" stroke-dasharray=\"3 2\"/>\n  <line x1=\"588\" y1=\"160\" x2=\"588\" y2=\"190\" stroke=\"#6d28d9\" stroke-width=\"1.2\" stroke-dasharray=\"3 2\"/>\n  <text x=\"502\" y=\"204\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#6d28d9\">F_(1-α/2)</text>\n  <text x=\"594\" y=\"204\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#6d28d9\">F_(α/2)</text>\n  <text x=\"560\" y=\"228\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#334155\">1 / F ~ F(n₂, n₁)（自由度互换！）</text>\n  <text x=\"560\" y=\"246\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#6d28d9\">F_(1-α)(n₁, n₂) = 1 / F_α(n₂, n₁)</text>\n  <text x=\"560\" y=\"264\" text-anchor=\"middle\" font-size=\"10\" fill=\"#475569\">特例：F_0.5(n, n) = 1（中位数为 1）</text>\n\n  <!-- Bottom universal quantile rule -->\n  <rect x=\"16\" y=\"302\" width=\"648\" height=\"44\" rx=\"8\" fill=\"#0f172a\"/>\n  <text x=\"340\" y=\"321\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#fde68a\">考研铁律：上侧 α 分位数一律满足 P{X &gt; x_α} = α（右侧面积为 α），α 越小，x_α 越大！</text>\n  <text x=\"340\" y=\"338\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#cbd5e1\">高频基准值：z_0.05 = 1.645 (Φ=0.95) · z_0.025 = 1.96 (Φ=0.975) · z_0.005 = 2.576</text>\n</svg>",
+      "tables": [
+        {
+          "caption": "表 P8-1 · 三大抽样分布（χ² · t · F）构造、性质与特例速查表",
+          "headers": [
+            "分布",
+            "标准构造（分子分母独立）",
+            "取值与对称性",
+            "核心数字特征与性质",
+            "高频特例与联通桥"
+          ],
+          "rows": [
+            [
+              "$\\chi^2(n)$",
+              "$\\sum_{i=1}^n Z_i^2,\\;Z_i\\overset{\\text{i.i.d.}}{\\sim}N(0,1)$",
+              "$(0,+\\infty)$ 右偏",
+              "$E=n,\\;D=2n$；独立可加",
+              "$\\chi^2(2)=E(\\frac12)=\\Gamma(1,\\frac12)$"
+            ],
+            [
+              "$t(n)$",
+              "$\\frac{Z}{\\sqrt{\\chi^2(n)/n}}$",
+              "$(-\\infty,+\\infty)$ 偶对称",
+              "$E=0\\;(n\\ge 2),\\;D=\\frac{n}{n-2}\\;(n\\ge 3)$",
+              "$t(1)=$ 柯西；$t^2\\sim F(1,n)$；$n\\to\\infty\\to N(0,1)$"
+            ],
+            [
+              "$F(n_1,n_2)$",
+              "$\\frac{\\chi^2(n_1)/n_1}{\\chi^2(n_2)/n_2}$",
+              "$(0,+\\infty)$ 右偏",
+              "$\\frac1F\\sim F(n_2,n_1)$；$EF=\\frac{n_2}{n_2-2}\\;(n_2>2)$",
+              "$F_{0.5}(n,n)=1$；$F(1,n)=t(n)^2$"
+            ]
+          ]
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化 & 27 猪狗百宝书 & 27 版全总结",
+        "printedPage": "基础 P.139-142 / 9讲 P.64-66 / 方浩 P.139-146 / 猪狗 P.6-5~6-6 / 全总结 P.15-16",
+        "pdfPage": 145,
+        "itemRef": "三大抽样分布构造性质与速查总表"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_three_dists_props",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "三大抽样分布全部以独立标准正态 $N(0,1)$ 为唯一砖块搭建：平方和得 $\\chi^2$，标正除以根号均方卡方得 $t$，两独立均方卡方之比得 $F$。它们共同构成正态统计推断的精确查表工具箱。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「卡方均值 $n$ 方差 $2n$ 独立可加，$\\chi^2(2)$ 就是 $E(1/2)$；$t$ 对称厚尾平方变 $F(1,n)$；$F$ 取倒数自由度互换！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr08-f-04",
+      "kind": "formula",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "四、上侧 α 分位数",
+      "title": "上侧 α 分位数定义、三大转换公式与高频基准数值表",
+      "formulaLatex": "$$\\begin{aligned} &\\text{上侧 }\\alpha\\text{ 分位数 }x_\\alpha\\text{ 定义（考研默认上侧！）：} P\\{X>x_\\alpha\\}=\\alpha \\Longleftrightarrow F(x_\\alpha)=1-\\alpha　(0<\\alpha<1)\\\\ &\\text{① 标准正态对称性：} z_{1-\\alpha}=-z_\\alpha,　　 \\Phi(z_\\alpha)=1-\\alpha,　　 P\\{|Z|\\le z_{\\alpha/2}\\}=1-\\alpha\\\\ &\\text{② }t\\text{ 分布对称性：} t_{1-\\alpha}(n)=-t_\\alpha(n),　　 P\\{|T|\\le t_{\\alpha/2}(n)\\}=1-\\alpha\\\\ &\\text{③ }F\\text{ 分布「三转公式」：} F_{1-\\alpha}(n_1,n_2)=\\frac{1}{F_\\alpha(n_2,n_1)}　\\Big(\\text{取倒数}+\\text{尾概率互补}+\\text{自由度互换}\\Big)\\\\ &\\text{④ }t\\text{ 与 }F\\text{ 分位数桥：} F_\\alpha(1,n)=\\big[t_{\\alpha/2}(n)\\big]^2,　　 F_{0.5}(n,n)=1\\end{aligned}$$",
+      "conditions": "上述关系对连续分布严格成立；$\\chi^2(n)$ 不具备负号对称或倒数对称，两侧分位数 $\\chi^2_{1-\\alpha/2}(n)$ 与 $\\chi^2_{\\alpha/2}(n)$ 须分别查表！",
+      "pitfalls": "**$F_\\alpha(1,n)=[t_{\\alpha/2}(n)]^2$ 极易丢掉 $/2$**：因为 $P\\{T^2>c^2\\}=P\\{|T|>c\\}=2P\\{T>c\\}$，所以 $F$ 的单侧尾面积 $\\alpha$ 对应 $t$ 的**双侧总尾面积** $\\alpha$（即单侧 $\\alpha/2$）！",
+      "tables": [
+        {
+          "caption": "表 P8-2 · 考研高频标准正态分位数与对称转换速查表",
+          "headers": [
+            "置信度 1-α（双侧）",
+            "单侧尾概率 α/2",
+            "对应 Φ(z)",
+            "上侧分位数 z",
+            "常考场景"
+          ],
+          "rows": [
+            [
+              "$90\\%$",
+              "$0.05$",
+              "$0.950$",
+              "$z_{0.05}=1.645$",
+              "双侧 90% 置信区间 / 单侧 $\\alpha=0.05$ 检验"
+            ],
+            [
+              "$95\\%$",
+              "$0.025$",
+              "$0.975$",
+              "$z_{0.025}=1.96$",
+              "双侧 95% 置信区间 / 双侧 $\\alpha=0.05$ 检验（最高频）"
+            ],
+            [
+              "$99\\%$",
+              "$0.005$",
+              "$0.995$",
+              "$z_{0.005}=2.576$（或 $2.58$）",
+              "双侧 99% 置信区间 / 双侧 $\\alpha=0.01$ 检验"
+            ],
+            [
+              "单侧 $99\\%$",
+              "$0.01$",
+              "$0.990$",
+              "$z_{0.01}=2.326$（常给 $2.33$）",
+              "单侧 $\\alpha=0.01$ 检验 / 99% 供电保证率"
+            ]
+          ]
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 猪狗百宝书 & 27 版全总结",
+        "printedPage": "基础 P.142-143 / 9讲 P.65-66 / 猪狗 P.6-2,6-5 / 全总结 P.16",
+        "pdfPage": 148,
+        "itemRef": "上侧α分位数定义与三转公式及常用值表"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_three_dists_props",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "上侧 $\\alpha$ 分位数即密度曲线右侧尾面积恰好为 $\\alpha$ 的横坐标临界点，它是所有置信区间端点与假设检验拒绝域临界值的直接零件。特别记住**$\\alpha$ 越小，右尾面积越窄，临界点 $x_\\alpha$ 越靠右越大**！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「上侧 $\\alpha$ 看右尾，$\\alpha$ 越小值越大；正态与 $t$ 换号对称，$F$ 用三转：倒数、互补、自由度对调！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr08-f-05",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "五、单正态总体抽样分布定理",
+      "title": "单正态总体抽样分布五大定理与科克伦（Cochran）自由度分解",
+      "formulaLatex": "$$\\begin{aligned} &\\text{设 }X_1,\\dots,X_n\\overset{\\text{i.i.d.}}{\\sim}N(\\mu,\\sigma^2)\\text{，则：}\\\\ &\\text{① }\\bar X\\sim N\\!\\left(\\mu,\\frac{\\sigma^2}{n}\\right) \\Longleftrightarrow Z=\\frac{\\bar X-\\mu}{\\sigma/\\sqrt n}\\sim N(0,1),　　 \\frac{n(\\bar X-\\mu)^2}{\\sigma^2}\\sim\\chi^2(1)\\\\ &\\text{② }\\frac{(n-1)S^2}{\\sigma^2}=\\frac{1}{\\sigma^2}\\sum_{i=1}^{n}(X_i-\\bar X)^2\\sim\\chi^2(n-1)\\implies E(S^2)=\\sigma^2,　 D(S^2)=\\frac{2\\sigma^4}{n-1}\\\\ &\\text{③ 核心独立性（正态专属）：}\\bar X\\text{ 与 }S^2\\text{ 相互独立}　\\Big(\\text{更强：}\\bar X\\perp (X_1-\\bar X,\\dots,X_n-\\bar X)\\Big)\\\\ &\\text{④ 科克伦分解：}\\underbrace{\\frac{1}{\\sigma^2}\\sum_{i=1}^n (X_i-\\mu)^2}_{\\chi^2(n)}=\\underbrace{\\frac{(n-1)S^2}{\\sigma^2}}_{\\chi^2(n-1)}+\\underbrace{\\frac{n(\\bar X-\\mu)^2}{\\sigma^2}}_{\\chi^2(1)}　(\\text{两项独立，自由度 }n=(n-1)+1)\\\\ &\\text{⑤ }\\sigma\\text{ 未知消参 }t\\text{ 统计量：}T=\\frac{\\bar X-\\mu}{S/\\sqrt n}=\\frac{\\sqrt n(\\bar X-\\mu)}{S}\\sim t(n-1),　　 T^2\\sim F(1,n-1)\\end{aligned}$$",
+      "conditions": "**严格限定总体为正态分布 $N(\\mu,\\sigma^2)$**！只要总体非正态，②③④⑤ 全部失效（唯有 ① 中 $E\\bar X=\\mu, D\\bar X=\\sigma^2/n$ 保留，且大样本仅近似正态）。",
+      "pitfalls": "**绝命对比（2018 真题）**：把分母 $S$ 换成 $S^*=\\sqrt{\\frac1n\\sum(X_i-\\mu)^2}$ 后，虽然 $\\frac{n(S^*)^2}{\\sigma^2}\\sim\\chi^2(n)$，但 $S^*$ 含 $\\sum(X_i-\\mu)^2=(n-1)S^2+n(\\bar X-\\mu)^2$，**与分子 $\\bar X-\\mu$ 强相关不独立**，故 $\\frac{\\sqrt n(\\bar X-\\mu)}{S^*}$ 绝不是 $t$ 分布！",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 680 360\" role=\"img\" aria-label=\"单双正态总体抽样分布定理与科克伦正交分解网络\">\n  <title>单双正态总体抽样分布定理与科克伦正交分解网络</title>\n  <defs>\n    <marker id=\"m1_pr08_n_arr\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n      <path d=\"M0 1 L9 5 L0 9 Z\" fill=\"#2563eb\"/>\n    </marker>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"680\" height=\"360\" rx=\"12\" fill=\"#f8fafc\"/>\n  <text x=\"340\" y=\"26\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"700\" fill=\"#0f172a\">单/双正态总体抽样分布定理全景网络（区间估计与假设检验基石）</text>\n\n  <!-- Top block: Single normal population -->\n  <rect x=\"18\" y=\"42\" width=\"644\" height=\"156\" rx=\"10\" fill=\"#ffffff\" stroke=\"#3b82f6\" stroke-width=\"1.3\"/>\n  <rect x=\"18\" y=\"42\" width=\"644\" height=\"28\" rx=\"10\" fill=\"#eff6ff\"/>\n  <text x=\"340\" y=\"61\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#1e40af\">一、单正态总体 X₁,…,Xₙ ~ N(μ, σ²) —— 科克伦（Cochran）自由度分解</text>\n\n  <!-- Cochran equation bar -->\n  <rect x=\"36\" y=\"78\" width=\"608\" height=\"34\" rx=\"7\" fill=\"#f8fafc\" stroke=\"#cbd5e1\"/>\n  <text x=\"340\" y=\"99\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#0f172a\">∑(Xᵢ - μ)² / σ²  [χ²(n)]   =   (n - 1)S² / σ²  [χ²(n - 1)]   +   n(X̄ - μ)² / σ²  [χ²(1)]</text>\n\n  <!-- 3 core single-normal cards -->\n  <rect x=\"36\" y=\"122\" width=\"186\" height=\"64\" rx=\"7\" fill=\"#ecfdf5\" stroke=\"#10b981\"/>\n  <text x=\"129\" y=\"141\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#065f46\">① 独立性核心（仅正态！）</text>\n  <text x=\"129\" y=\"159\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#047857\">X̄  ⊥  S²</text>\n  <text x=\"129\" y=\"176\" text-anchor=\"middle\" font-size=\"10\" fill=\"#334155\">Z = (X̄ - μ)/(σ/√n) ~ N(0,1)</text>\n\n  <rect x=\"247\" y=\"122\" width=\"186\" height=\"64\" rx=\"7\" fill=\"#eff6ff\" stroke=\"#3b82f6\"/>\n  <text x=\"340\" y=\"141\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1d4ed8\">② 样本方差卡方与方差</text>\n  <text x=\"340\" y=\"159\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#2563eb\">(n - 1)S² / σ² ~ χ²(n - 1)</text>\n  <text x=\"340\" y=\"176\" text-anchor=\"middle\" font-size=\"10\" fill=\"#334155\">⇒ E(S²)=σ², D(S²)=2σ⁴/(n-1)</text>\n\n  <rect x=\"458\" y=\"122\" width=\"186\" height=\"64\" rx=\"7\" fill=\"#f5f3ff\" stroke=\"#8b5cf6\"/>\n  <text x=\"551\" y=\"141\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#6d28d9\">③ σ 未知消参（t 与 F）</text>\n  <text x=\"551\" y=\"159\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#7c3aed\">T = √n(X̄ - μ) / S ~ t(n - 1)</text>\n  <text x=\"551\" y=\"176\" text-anchor=\"middle\" font-size=\"10\" fill=\"#334155\">⇒ T² ~ F(1, n - 1)</text>\n\n  <!-- Bottom block: Dual normal populations -->\n  <rect x=\"18\" y=\"210\" width=\"644\" height=\"136\" rx=\"10\" fill=\"#ffffff\" stroke=\"#0f766e\" stroke-width=\"1.3\"/>\n  <rect x=\"18\" y=\"210\" width=\"644\" height=\"28\" rx=\"10\" fill=\"#ecfdf5\"/>\n  <text x=\"340\" y=\"229\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#065f46\">二、两独立正态总体 X ~ N(μ₁, σ₁²) (容量 n₁) 与 Y ~ N(μ₂, σ₂²) (容量 n₂)</text>\n\n  <!-- Dual card 1 -->\n  <rect x=\"36\" y=\"248\" width=\"192\" height=\"84\" rx=\"7\" fill=\"#f8fafc\" stroke=\"#cbd5e1\"/>\n  <text x=\"132\" y=\"267\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1e40af\">均值差正态枢轴量</text>\n  <text x=\"132\" y=\"287\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#2563eb\">(X̄ - Ȳ) - (μ₁ - μ₂)</text>\n  <line x1=\"68\" y1=\"294\" x2=\"196\" y2=\"294\" stroke=\"#2563eb\" stroke-width=\"1\"/>\n  <text x=\"132\" y=\"309\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#2563eb\">√(σ₁²/n₁ + σ₂²/n₂)</text>\n  <text x=\"132\" y=\"325\" text-anchor=\"middle\" font-size=\"10\" fill=\"#475569\">~ N(0, 1)（方差已知）</text>\n\n  <!-- Dual card 2 -->\n  <rect x=\"242\" y=\"248\" width=\"212\" height=\"84\" rx=\"7\" fill=\"#fffbeb\" stroke=\"#f59e0b\"/>\n  <text x=\"348\" y=\"267\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#b45309\">同方差 σ₁² = σ₂² = σ² 合并 t 统计量</text>\n  <text x=\"348\" y=\"287\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#92400e\">[(X̄ - Ȳ)-(μ₁ - μ₂)] / (S_w√(1/n₁+1/n₂))</text>\n  <text x=\"348\" y=\"306\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#b45309\">~ t(n₁ + n₂ - 2)</text>\n  <text x=\"348\" y=\"324\" text-anchor=\"middle\" font-size=\"9.8\" fill=\"#78350f\">S_w² = [(n₁-1)S₁² + (n₂-1)S₂²] / (n₁+n₂-2)</text>\n\n  <!-- Dual card 3 -->\n  <rect x=\"468\" y=\"248\" width=\"176\" height=\"84\" rx=\"7\" fill=\"#f5f3ff\" stroke=\"#8b5cf6\"/>\n  <text x=\"556\" y=\"267\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#6d28d9\">方差比 F 统计量</text>\n  <text x=\"556\" y=\"289\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#7c3aed\">(S₁² / σ₁²) / (S₂² / σ₂²)</text>\n  <text x=\"556\" y=\"308\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#5b21b6\">~ F(n₁ - 1, n₂ - 1)</text>\n  <text x=\"556\" y=\"325\" text-anchor=\"middle\" font-size=\"9.8\" fill=\"#475569\">不依赖 μ₁, μ₂ 是否已知</text>\n</svg>",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "基础 P.143-145 / 9讲 P.66 / 方浩 P.148-151 / 猪狗 P.6-6",
+        "pdfPage": 149,
+        "itemRef": "单正态总体抽样分布五大定理"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_normal_sampling_theorems",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "单正态抽样分布五大定理是整个数理统计的「发动机」：因为 $\\bar X$ 与 $S^2$ 相互独立，才能在 $\\sigma$ 未知时用样本标准差 $S$ 替换 $\\sigma$ 构造出精确的 $t(n-1)$ 枢轴量；同时利用 $\\frac{(n-1)S^2}{\\sigma^2}\\sim\\chi^2(n-1)$ 可一秒推出 $D(S^2)=\\frac{2\\sigma^4}{n-1}$ 与 $E(S^4)=\\frac{n+1}{n-1}\\sigma^4$！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「正态抽样五件套：均值正态、方差卡方自由度 $n-1$、均值方差必独立、商变 $t(n-1)$ 平方 $F(1,n-1)$；样本方差的方差 $2\\sigma^4/(n-1)$ 倒背如流！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr08-f-06",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "六、双正态总体抽样分布定理",
+      "title": "两独立正态总体抽样分布三大定理与合并样本方差 S_w²",
+      "formulaLatex": "$$\\begin{aligned} &\\text{设 }X_1,\\dots,X_{n_1}\\sim N(\\mu_1,\\sigma_1^2)\\text{ 与 }Y_1,\\dots,Y_{n_2}\\sim N(\\mu_2,\\sigma_2^2)\\text{ 为两独立样本：}\\\\ &\\text{① 均值差正态枢轴量：}\\frac{(\\bar X-\\bar Y)-(\\mu_1-\\mu_2)}{\\sqrt{\\dfrac{\\sigma_1^2}{n_1}+\\dfrac{\\sigma_2^2}{n_2}}}\\sim N(0,1)\\\\ &\\text{② 同方差 }(\\sigma_1^2=\\sigma_2^2=\\sigma^2)\\text{ 合并 }t\\text{ 统计量：}\\\\ &　　 S_w^2=\\frac{(n_1-1)S_1^2+(n_2-1)S_2^2}{n_1+n_2-2}\\implies \\frac{(n_1+n_2-2)S_w^2}{\\sigma^2}\\sim\\chi^2(n_1+n_2-2)\\\\ &　　 T=\\frac{(\\bar X-\\bar Y)-(\\mu_1-\\mu_2)}{S_w\\sqrt{\\dfrac{1}{n_1}+\\dfrac{1}{n_2}}}\\sim t(n_1+n_2-2)\\\\ &\\text{③ 一般方差比 }F\\text{ 统计量（不要求 }\\mu_1,\\mu_2\\text{ 已知或相等）：}\\frac{S_1^2/\\sigma_1^2}{S_2^2/\\sigma_2^2}\\sim F(n_1-1,\\,n_2-1)\\\\ &\\text{④ 推广（方差成比例 }\\sigma_2^2/\\sigma_1^2=c\\text{ 已知）：}S_w^2=\\frac{(n_1-1)S_1^2+(n_2-1)S_2^2/c}{n_1+n_2-2},　 \\frac{(\\bar X-\\bar Y)-(\\mu_1-\\mu_2)}{S_w\\sqrt{\\frac{1}{n_1}+\\frac{c}{n_2}}}\\sim t(n_1+n_2-2)\\end{aligned}$$",
+      "conditions": "要求**两总体均为正态且两样本相互独立**；第 ② 条额外要求两总体方差相等（或第 ④ 条方差比 $c$ 已知）。",
+      "pitfalls": "**异方差比例因子防坑（2023 真题）**：若 $X\\sim N(\\mu_1,\\sigma^2)$ 而 $Y\\sim N(\\mu_2,2\\sigma^2)$，则 $\\frac{S_1^2/\\sigma^2}{S_2^2/(2\\sigma^2)}=\\frac{2S_1^2}{S_2^2}\\sim F(n_1-1,n_2-1)$，绝不是 $\\frac{S_1^2}{S_2^2}$！",
+      "tables": [
+        {
+          "caption": "表 P8-3 · 单/双正态总体核心抽样统计量全景速查表",
+          "headers": [
+            "场景",
+            "统计量结构",
+            "精确抽样分布",
+            "核心用途"
+          ],
+          "rows": [
+            [
+              "单总体 $\\sigma^2$ 已知",
+              "$\\frac{\\bar X-\\mu}{\\sigma/\\sqrt n}$",
+              "$N(0,1)$",
+              "$\\mu$ 的 $Z$ 区间估计 / $Z$ 检验"
+            ],
+            [
+              "单总体 $\\sigma^2$ 未知",
+              "$\\frac{\\sqrt n(\\bar X-\\mu)}{S}$",
+              "$t(n-1)$",
+              "$\\mu$ 的 $t$ 区间估计 / $t$ 检验"
+            ],
+            [
+              "单总体方差（$\\mu$ 未知）",
+              "$\\frac{(n-1)S^2}{\\sigma^2}$",
+              "$\\chi^2(n-1)$",
+              "$\\sigma^2$ 的 $\\chi^2$ 区间 / $\\chi^2$ 检验"
+            ],
+            [
+              "双总体 $\\sigma_1^2=\\sigma_2^2$ 未知",
+              "$\\frac{(\\bar X-\\bar Y)-(\\mu_1-\\mu_2)}{S_w\\sqrt{1/n_1+1/n_2}}$",
+              "$t(n_1+n_2-2)$",
+              "$\\mu_1-\\mu_2$ 合并 $t$ 区间 / 检验"
+            ],
+            [
+              "双总体方差比",
+              "$\\frac{S_1^2/\\sigma_1^2}{S_2^2/\\sigma_2^2}$",
+              "$F(n_1-1,n_2-1)$",
+              "$\\sigma_1^2/\\sigma_2^2$ 的 $F$ 区间 / $F$ 检验"
+            ]
+          ]
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "基础 P.145 / 9讲 P.66,69 / 方浩 P.152-154 / 猪狗 P.6-6,7-8",
+        "pdfPage": 151,
+        "itemRef": "双独立正态总体抽样分布三大定理"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_normal_sampling_theorems",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "双正态总体定理通过「卡方独立可加性」把两个样本的残差平方和拼成一个自由度为 $n_1+n_2-2$ 的合并卡方，从而在未知公共方差 $\\sigma^2$ 时消去 $\\sigma$ 得到精确 $t(n_1+n_2-2)$ 统计量；方差比 $F$ 统计量则在 $2023$ 真题中直接高频考查！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「合并方差 $S_w^2$ 是两样本方差按自由度 $(n_1-1),(n_2-1)$ 的加权平均，总自由度 $n_1+n_2-2$；算方差比 $F$ 务必每个 $S_i^2$ 先除以各自的 $\\sigma_i^2$！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr08-c-01",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "一、方浩强化大招：见到平方找卡方",
+      "title": "「见到平方找卡方」降维速算正态二次统计量的期望与方差",
+      "conditions": "前提必须是**正态总体**；若为非零均值 $N(\\mu,\\sigma^2)$ 求 $D(\\bar X^2)$，可写成 $\\bar X=\\mu+\\frac{\\sigma}{\\sqrt n}Z$ 展开，免除四阶矩死算。",
+      "application": "方浩强化例 5–8 与多道近年数理统计数字特征压轴填空题，30 秒稳拿满分！",
+      "pitfalls": "套独立卡方加法拆方差时，必须先确认两卡方项**确实相互独立**（典型独立对：$\\bar X$ 与 $S^2$，或下标互不重叠的子样本块）。",
+      "source": {
+        "book": "27 方浩强化 & 27 张宇概率9讲",
+        "printedPage": "方浩 P.136-138 例5-8 / 9讲 P.67",
+        "pdfPage": 141,
+        "itemRef": "见到平方找卡方降维速算二次统计量方差"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_fanghao_chi2_tricks",
+        "verified": true
+      },
+      "summary": "求来自正态总体 $N(\\mu,\\sigma^2)$ 的二次型统计量（如 $S^2$、$A_2$、$\\bar X^2-\\frac1n S^2$、$\\sum(X_i-X_j)^2$）的**方差**时，直接展开四阶矩极繁易错；**终极秒杀招是将其表为独立卡方变量的线性组合**，再用 $E[\\chi^2(k)]=k,\\;D[\\chi^2(k)]=2k$ 一行秒杀！例如：\n- $S^2=\\frac{\\sigma^2}{n-1}\\chi^2(n-1)\\implies D(S^2)=\\frac{2\\sigma^4}{n-1}$；\n- 若 $X_i\\sim N(0,\\sigma^2)$，则 $A_2=\\frac{\\sigma^2}{n}\\chi^2(n)\\implies D(A_2)=\\frac{2\\sigma^4}{n}$；\n- 若 $X_i\\sim N(0,1)$，由 $\\bar X\\perp S^2$，把 $\\bar X^2-\\frac1n S^2=\\frac1n\\chi^2(1)-\\frac{1}{n(n-1)}\\chi^2(n-1)$ 拆成两独立卡方差，立得 $D(\\bar X^2-\\frac1n S^2)=\\frac{2}{n^2}+\\frac{2}{n^2(n-1)}=\\frac{2}{n(n-1)}$！"
+    },
+    {
+      "id": "m1-pr08-c-02",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、抽样分布判定决策树",
+      "title": "抽样分布判定四步法与四大「假阳性」高频雷区",
+      "conditions": "对正态线性组合 $U=\\sum a_i X_i$ 与 $V=\\sum b_i X_i$，检验独立只需算内积 $\\sum a_i b_i=0$（系数向量正交 $\\iff$ 独立！），比硬算协方差快三倍！",
+      "application": "通杀 1998–2023 所有抽样分布辨析选择题。",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 680 350\" role=\"img\" aria-label=\"抽样分布判定四步决策树\">\n  <title>抽样分布判定四步决策树</title>\n  <defs>\n    <marker id=\"m1_pr08_r_arr\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n      <path d=\"M0 1 L9 5 L0 9 Z\" fill=\"#334155\"/>\n    </marker>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"680\" height=\"350\" rx=\"12\" fill=\"#f8fafc\"/>\n  <text x=\"340\" y=\"26\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"700\" fill=\"#0f172a\">抽样分布判定四步实战路由（“见到平方找卡方 · 见到比值辨 t / F”）</text>\n\n  <!-- Step 1 -->\n  <rect x=\"20\" y=\"46\" width=\"186\" height=\"60\" rx=\"8\" fill=\"#eff6ff\" stroke=\"#2563eb\" stroke-width=\"1.4\"/>\n  <text x=\"113\" y=\"67\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1d4ed8\">Step 1 · 标准化归零</text>\n  <text x=\"113\" y=\"84\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#1e40af\">任意正态线组合先化为</text>\n  <text x=\"113\" y=\"99\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#2563eb\">U = (Y - EY) / √DY ~ N(0,1)</text>\n\n  <line x1=\"206\" y1=\"76\" x2=\"238\" y2=\"76\" stroke=\"#334155\" stroke-width=\"1.6\" marker-end=\"url(#m1_pr08_r_arr)\"/>\n\n  <!-- Step 2 -->\n  <rect x=\"242\" y=\"46\" width=\"206\" height=\"60\" rx=\"8\" fill=\"#ecfdf5\" stroke=\"#10b981\" stroke-width=\"1.4\"/>\n  <text x=\"345\" y=\"67\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#065f46\">Step 2 · 核验独立性与自由度</text>\n  <text x=\"345\" y=\"84\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#047857\">① 下标不重叠或协方差为 0（正态）</text>\n  <text x=\"345\" y=\"99\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#047857\">② 样本均值 X̄ 与 S² 必独立；n 个减 1 约束</text>\n\n  <line x1=\"448\" y1=\"76\" x2=\"480\" y2=\"76\" stroke=\"#334155\" stroke-width=\"1.6\" marker-end=\"url(#m1_pr08_r_arr)\"/>\n\n  <!-- Step 3 -->\n  <rect x=\"484\" y=\"46\" width=\"176\" height=\"60\" rx=\"8\" fill=\"#f5f3ff\" stroke=\"#8b5cf6\" stroke-width=\"1.4\"/>\n  <text x=\"572\" y=\"67\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#6d28d9\">Step 3 · 辨结构定型</text>\n  <text x=\"572\" y=\"84\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#5b21b6\">对号入座下述三大模板</text>\n  <text x=\"572\" y=\"99\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#5b21b6\">并反查数字特征 / 概率</text>\n\n  <!-- 3 branches down -->\n  <line x1=\"120\" y1=\"122\" x2=\"560\" y2=\"122\" stroke=\"#94a3b8\" stroke-width=\"1.4\"/>\n  <line x1=\"345\" y1=\"106\" x2=\"345\" y2=\"122\" stroke=\"#94a3b8\" stroke-width=\"1.4\"/>\n  <line x1=\"120\" y1=\"122\" x2=\"120\" y2=\"140\" stroke=\"#334155\" stroke-width=\"1.4\" marker-end=\"url(#m1_pr08_r_arr)\"/>\n  <line x1=\"340\" y1=\"122\" x2=\"340\" y2=\"140\" stroke=\"#334155\" stroke-width=\"1.4\" marker-end=\"url(#m1_pr08_r_arr)\"/>\n  <line x1=\"560\" y1=\"122\" x2=\"560\" y2=\"140\" stroke=\"#334155\" stroke-width=\"1.4\" marker-end=\"url(#m1_pr08_r_arr)\"/>\n\n  <!-- Branch A: Chi2 -->\n  <rect x=\"20\" y=\"144\" width=\"200\" height=\"122\" rx=\"9\" fill=\"#ffffff\" stroke=\"#2563eb\" stroke-width=\"1.3\"/>\n  <text x=\"120\" y=\"165\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#1d4ed8\">A. 独立平方和 → χ²(k)</text>\n  <text x=\"32\" y=\"186\" font-size=\"10.5\" fill=\"#334155\">• ∑((Xᵢ-μ)/σ)² ~ χ²(n)</text>\n  <text x=\"32\" y=\"205\" font-size=\"10.5\" fill=\"#334155\">• (n-1)S²/σ² ~ χ²(n-1)</text>\n  <text x=\"32\" y=\"224\" font-size=\"10.5\" fill=\"#2563eb\" font-weight=\"600\">• 技巧：拆成 χ²(k) 速算方差</text>\n  <text x=\"32\" y=\"242\" font-size=\"10\" fill=\"#475569\">  D(∑) = 2k·σ⁴（无需四阶矩！）</text>\n  <text x=\"32\" y=\"257\" font-size=\"10\" fill=\"#475569\">• 拓展：-2∑ln F(Xᵢ) ~ χ²(2n)</text>\n\n  <!-- Branch B: t -->\n  <rect x=\"240\" y=\"144\" width=\"200\" height=\"122\" rx=\"9\" fill=\"#ffffff\" stroke=\"#0f766e\" stroke-width=\"1.3\"/>\n  <text x=\"340\" y=\"165\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#065f46\">B. N(0,1)/√(χ²/k) → t(k)</text>\n  <text x=\"252\" y=\"186\" font-size=\"10.5\" fill=\"#334155\">• √n(X̄-μ)/S ~ t(n-1)</text>\n  <text x=\"252\" y=\"205\" font-size=\"10.5\" fill=\"#334155\">• (X₁-X₂)/|X₃+X₄-2μ| ~ t(1)</text>\n  <text x=\"252\" y=\"224\" font-size=\"10.5\" fill=\"#0f766e\" font-weight=\"600\">• 分母加绝对值：√U² = |U| 合法！</text>\n  <text x=\"252\" y=\"242\" font-size=\"10\" fill=\"#b91c1c\">• 分子绝对值 |U| 恒非负 ≠ t！</text>\n  <text x=\"252\" y=\"257\" font-size=\"10\" fill=\"#475569\">• U / |V|（拉普拉斯亦转 F(2,2)）</text>\n\n  <!-- Branch C: F -->\n  <rect x=\"460\" y=\"144\" width=\"200\" height=\"122\" rx=\"9\" fill=\"#ffffff\" stroke=\"#7c3aed\" stroke-width=\"1.3\"/>\n  <text x=\"560\" y=\"165\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#6d28d9\">C. 独立 χ² 均方比 → F(m,n)</text>\n  <text x=\"472\" y=\"186\" font-size=\"10.5\" fill=\"#334155\">• (χ²₁/m) / (χ²₂/n) ~ F(m, n)</text>\n  <text x=\"472\" y=\"205\" font-size=\"10.5\" fill=\"#334155\">• (S₁²/σ₁²) / (S₂²/σ₂²) ~ F(n₁-1,n₂-1)</text>\n  <text x=\"472\" y=\"224\" font-size=\"10.5\" fill=\"#6d28d9\" font-weight=\"600\">• 降维桥：t(n)² ~ F(1, n)</text>\n  <text x=\"472\" y=\"242\" font-size=\"10\" fill=\"#475569\">• 比例系数 σ² 自动约消（同方差）</text>\n  <text x=\"472\" y=\"257\" font-size=\"10\" fill=\"#475569\">• 含异方差 σ₂²=2σ₁² 切记留系数 2</text>\n\n  <!-- Pitfall warning banner -->\n  <rect x=\"20\" y=\"280\" width=\"640\" height=\"54\" rx=\"8\" fill=\"#fef2f2\" stroke=\"#fca5a5\" stroke-width=\"1.2\"/>\n  <text x=\"340\" y=\"300\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#b91c1c\">三大高频雷区排雷（真题反复埋坑！）</text>\n  <text x=\"340\" y=\"320\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#7f1d1d\">① √n(X̄-μ)/S* 不是 t 分布（S* 与 X̄ 不独立！）  ② 分子分母共用同一 Xᵢ 不独立  ③ 求 E|X| 记：Z~N(0,1) ⇒ E|Z|=√(2/π)</text>\n</svg>",
+      "pitfalls": "**正交即独立神技**：对 i.i.d. 正态样本，$X_1+X_2$ 与 $X_1-X_2$ 的系数向量 $(1,1)\\cdot(1,-1)=0$，故二者**相互独立**！由此 $\\frac{X_1+X_2}{|X_1-X_2|}\\sim t(1)$、$\\left(\\frac{X_1+X_2}{X_1-X_2}\\right)^2\\sim F(1,1)$！",
+      "source": {
+        "book": "27 方浩强化 & 27 猪狗百宝书 & 27 张宇概率9讲",
+        "printedPage": "方浩 P.140-147 / 猪狗 P.6-8~6-11 / 9讲 P.67-68",
+        "pdfPage": 145,
+        "itemRef": "抽样分布判定四步决策树与四大假阳性雷区"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_three_dists_props",
+        "verified": true
+      },
+      "summary": "判断给定统计量服从 $\\chi^2,t,F$ 哪一种分布，严格按四步走：**① 标准化归 $N(0,1)$** $\\to$ **② 验独立性**（下标不重叠或正态 $\\bar X\\perp S^2$ 或正态协方差为 $0$）$\\to$ **③ 核对系数与自由度**（$\\chi^2$ 前系数必须配平，$t/F$ 分母卡方必须除自身自由度）$\\to$ **④ 辨识形态**。严防四大假阳性陷阱：\n1. 分母含未知均值估计后的 $S^*=\\sqrt{\\frac1n\\sum(X_i-\\mu)^2}$ 与 $\\bar X$ **不独立** $\\implies$ 非 $t$ 分布；\n2. 分子分母共用同一个 $X_k$（如 $\\frac{X_1}{\\sqrt{\\sum_{i=1}^n X_i^2/n}}$）不独立 $\\implies$ 非 $t$/非 $F$；\n3. 分子带绝对值 $|Z|/\\sqrt{\\chi^2(n)/n}$ 恒非负 $\\implies$ 非 $t$ 分布；\n4. 二维非独立标准正态 $X,Y$ 不能由边缘 $N(0,1)$ 推出 $X^2+Y^2\\sim\\chi^2(2)$ 或 $X+Y$ 正态！"
+    },
+    {
+      "id": "m1-pr08-c-03",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "三、样本标准差与绝对偏差期望",
+      "title": "样本标准差有偏性 E(S) < σ（含猪狗 P.6-4 严谨补注）与半正态均值 E|Z| = √(2/π)",
+      "conditions": "**原书严谨补注**：`猪狗百宝书 P.6-4` 原文写 `E(s)<E(\\sigma)`——因总体标准差 $\\sigma$ 是确定常数而非随机变量，直接写 $E(S)<\\sigma$ 才严谨（由严格 Jensen 不等式或 $D(S)>0$ 一步得证）。",
+      "application": "2023 真题 $\\hat\\sigma=a|X_1-X_2|$、2017 真题绝对误差 $Z_i=|X_i-\\mu|$ 与方浩例 4 全部直接依赖 $E|Z|=\\sqrt{2/\\pi}$！",
+      "pitfalls": "注意 $E|X-\\mu|=\\sigma\\sqrt{2/\\pi}$ 仅对**正态分布**成立；若是均匀或拉普拉斯分布，绝对偏差期望须另行积分。",
+      "source": {
+        "book": "27 猪狗百宝书 & 27 方浩强化 & 2023 真题",
+        "printedPage": "猪狗 P.6-4（严谨补注）, P.6-7 例6.1 / 方浩 P.136 例4",
+        "pdfPage": 138,
+        "itemRef": "样本标准差有偏性与半正态绝对期望金式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_sample_moments",
+        "verified": true
+      },
+      "summary": "1. **样本标准差恒向下有偏**：只要总体非常值（$\\sigma>0$），由 $D(S)=E(S^2)-[E(S)]^2>0$ 立得 $$[E(S)]^2<E(S^2)=\\sigma^2\\implies E(S)<\\sigma$$ 故 $S$ 是 $\\sigma$ 的**有偏估计量**（向下低估）；\n2. **半正态绝对期望金式**：若 $Z\\sim N(0,1)$，则 $$E|Z|=\\sqrt{\\frac{2}{\\pi}},\\qquad D|Z|=1-\\frac{2}{\\pi}$$ 若 $X\\sim N(0,\\sigma^2)$，则 $E|X|=\\sigma\\sqrt{\\frac{2}{\\pi}}$，$D|X|=\\sigma^2\\left(1-\\frac{2}{\\pi}\\right)$！"
+    },
+    {
+      "id": "m1-pr08-c-04",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、自由度直觉与样本拆分",
+      "title": "自由度（df）的约束扣减规律与单样本分段拆分构造独立统计量",
+      "conditions": "样本必须是独立抽样（简单随机样本）；最经典考法见 `方浩例 30`（$9$ 样本拆 $6+3$ 构 $t(2)$）与 `猪狗例 6.23`（前 $n$ 个均值方差与第 $n+1$ 个新样本构 $t(n-1)$）。",
+      "application": "遇到单样本中出现 $X_{n+1}-\\bar X$ 或两段子样本均值差时，一眼看穿独立性并快速标准化！",
+      "pitfalls": "计算 $X_{n+1}-\\bar X_n$ 的方差时切记两项独立相加：$D(X_{n+1}-\\bar X_n)=\\sigma^2+\\frac{\\sigma^2}{n}=\\frac{n+1}{n}\\sigma^2$，故标准化须乘 $\\sqrt{\\frac{n}{n+1}}$！",
+      "source": {
+        "book": "27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "方浩 P.154 例30 / 猪狗 P.6-11 例6.18, P.6-13 例6.23",
+        "pdfPage": 159,
+        "itemRef": "自由度约束规律与单样本分段拆分定理"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_normal_sampling_theorems",
+        "verified": true
+      },
+      "summary": "1. **自由度直觉**：$n$ 个独立变量每用样本均值替代一个未知总体均值，就施加 $1$ 条线性约束 $\\sum(X_i-\\bar X)=0$，自由度精确减 $1$（单样本 $n\\to n-1$，双样本合并 $n_1+n_2\\to n_1+n_2-2$）；\n2. **单样本分段拆分原理**：把同一样本 $X_1,\\dots,X_{m+k}$ 按下标不重叠拆为前 $m$ 个与后 $k$ 个两组，则前组任何函数（如 $\\bar X_{(1)}$）与后组任何函数（如 $\\bar X_{(2)}, S_{(2)}^2$）**全部相互独立**，可直接跨组拼出 $Z,\\chi^2,t,F$ 分布！"
+    },
+    {
+      "id": "m1-pr08-c-05",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "extended",
+      "section": "五、非正态总体构造三大分布",
+      "title": "借道 χ²(2) = E(1/2)：拉普拉斯商转 F(2,2) 与概率积分变换转 χ²(2n)",
+      "conditions": "第 1 条要求各指数变量独立；第 2 条要求总体为连续型随机变量。",
+      "application": "秒杀 `概率 9 讲 例 8.3`（拉普拉斯 $|X_1/X_2|\\sim F(2,2)$）与 `猪狗 例 6.25`（茆书经典 $-2\\sum\\ln F(X_i)\\sim\\chi^2(2n)$）！",
+      "pitfalls": "系数 **$2$** 千万别丢：$-\\ln U\\sim E(1)$ 不是 $\\chi^2(2)$，必须乘以 $2$ 变成 $E(1/2)$ 才是 $\\chi^2(2)$！",
+      "source": {
+        "book": "27 张宇概率9讲 & 27 猪狗百宝书（茆书汇编）",
+        "printedPage": "9讲 P.68 例8.3 / 猪狗 P.6-14 例6.25",
+        "pdfPage": 79,
+        "itemRef": "非正态总体借道E(1/2)构造卡方与F分布"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_nonnormal_bridges",
+        "verified": true
+      },
+      "summary": "并非只有正态总体才能造出 $\\chi^2$ 与 $F$ 分布！桥梁是恒等式 **$\\chi^2(2)=E\\!\\left(\\frac12\\right)$**：\n1. 若 $Y\\sim E(\\lambda)$，则 $2\\lambda Y\\sim E\\!\\left(\\frac12\\right)=\\chi^2(2)$；故 $n$ 个独立 $E(\\lambda)$ 之和满足 $2\\lambda\\sum_{i=1}^n Y_i\\sim\\chi^2(2n)$，两独立指数之比 $Y_1/Y_2\\sim F(2,2)$！\n2. 对任意连续严格单增分布函数 $F(x)$，因 $F(X_i)\\sim U(0,1)\\implies -\\ln F(X_i)\\sim E(1)\\implies -2\\ln F(X_i)\\sim\\chi^2(2)$，从而 **$-2\\sum_{i=1}^n\\ln F(X_i)\\sim\\chi^2(2n)$**（Fisher 合并 $p$ 值检验基石）！"
+    },
+    {
+      "id": "m1-pr08-e-01",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、统计量概念与代数恒等式",
+      "title": "【基础习题 6.1 + 方浩例 1】统计量甄别与三类离差平方和恒等式",
+      "problem": "(1) 设 $X_1,\\dots,X_n$ 来自总体 $N(\\mu,\\sigma^2)$，其中 $\\mu$ 已知、$\\sigma^2$ 未知，下列哪些是统计量？① $\\bar X-\\mu$；② $\\frac{1}{n}\\sum(X_i-\\mu)^2$；③ $\\frac{\\bar X-\\mu}{\\sigma/\\sqrt n}$；④ $\\frac{\\sqrt n(\\bar X-\\mu)}{S}$。\n(2) 证明代数恒等式：$\\sum_{i=1}^n (X_i-\\mu)^2=\\sum_{i=1}^n (X_i-\\bar X)^2+n(\\bar X-\\mu)^2$，并化简 $\\sum_{i=1}^n\\sum_{j=1}^n (X_i-X_j)^2$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "判统计量只盯一条红线：表达式里有没有**未知参数**！恒等式证明一律加减 $\\bar X$ 展开，利用 $\\sum(X_i-\\bar X)=0$ 消交叉项。"
+        },
+        {
+          "stepTitle": "求解 (1)：逐项核查是否含未知参数 σ",
+          "detail": "$\\mu$ 已知、$\\sigma$ 未知：①②④ 中均只含样本与已知数 $\\mu$，**是统计量**；③ 中含有未知参数 $\\sigma$，**不是统计量**！"
+        },
+        {
+          "stepTitle": "求解 (2)：加减 X̄ 消交叉项",
+          "detail": "$$\\sum_{i=1}^n (X_i-\\mu)^2=\\sum_{i=1}^n [(X_i-\\bar X)+(\\bar X-\\mu)]^2=\\sum_{i=1}^n (X_i-\\bar X)^2+2(\\bar X-\\mu)\\underbrace{\\sum_{i=1}^n (X_i-\\bar X)}_{=0}+n(\\bar X-\\mu)^2$$ 同理对双和插入 $\\bar X$：$$\\sum_{i=1}^n\\sum_{j=1}^n [(X_i-\\bar X)-(X_j-\\bar X)]^2=2n\\sum_{i=1}^n (X_i-\\bar X)^2-2\\left(\\sum_{i=1}^n (X_i-\\bar X)\\right)^2=2n(n-1)S^2$$"
+        }
+      ],
+      "finalAnswer": "(1) ①②④ 是统计量，③ 不是；　　 (2) $\\sum\\sum(X_i-X_j)^2=2n(n-1)S^2$。",
+      "source": {
+        "book": "27 张宇基础30讲 & 27 方浩强化",
+        "printedPage": "基础 P.158 习题6.1 / 方浩 P.134 例1",
+        "pdfPage": 164,
+        "itemRef": "统计量合法性甄别与离差平方和恒等式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_sample_moments",
+        "verified": true
+      },
+      "takeaway": "做区间估计/假设检验构造枢轴量时，$\\frac{\\bar X-\\mu}{\\sigma/\\sqrt n}$ 若含未知 $\\mu$ 则称「枢轴量」而非统计量；但检验时把 $H_0$ 下的具体数值 $\\mu_0$ 代入后，$\\frac{\\bar X-\\mu_0}{\\sigma/\\sqrt n}$ 就成为合法的检验统计量！"
+    },
+    {
+      "id": "m1-pr08-e-02",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、统计量数字特征真题",
+      "title": "【2015 真题】二项总体样本离差平方和的数学期望",
+      "problem": "设总体 $X\\sim B(m,\\theta)$，$X_1,X_2,\\dots,X_n$ 为来自总体的简单随机样本，$\\bar X$ 为样本均值，则 $E\\!\\left[\\sum_{i=1}^n (X_i-\\bar X)^2\\right]=(\\quad)$。\nA. $(m-1)n\\theta(1-\\theta)$　 B. $m(n-1)\\theta(1-\\theta)$　 C. $(m-1)(n-1)\\theta(1-\\theta)$　 D. $mn\\theta(1-\\theta)$",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "认出 $\\sum_{i=1}^n (X_i-\\bar X)^2=(n-1)S^2$，立即套普适公式 $E(S^2)=DX$（无须总体正态！）。"
+        },
+        {
+          "stepTitle": "识别总体方差并套用 E(S²) = σ²",
+          "detail": "总体 $X\\sim B(m,\\theta)$ 的方差为 $DX=m\\theta(1-\\theta)$。由任意总体无偏性 $E(S^2)=DX$，直接得：$$E\\!\\left[\\sum_{i=1}^n (X_i-\\bar X)^2\\right]=(n-1)E(S^2)=(n-1)DX=m(n-1)\\theta(1-\\theta)$$ 故选 **B**。"
+        }
+      ],
+      "finalAnswer": "选 **B**：$m(n-1)\\theta(1-\\theta)$。",
+      "source": {
+        "book": "2015 考研真题 · 猪狗百宝书 / 基础30讲",
+        "printedPage": "猪狗 P.6-8 例6.6 / 基础 P.138 例6.1",
+        "pdfPage": 141,
+        "itemRef": "2015真题：二项总体离差平方和期望"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_sample_moments",
+        "verified": true
+      },
+      "takeaway": "防把参数 $m$（二项试验次数）与样本容量 $n$ 搞混——是样本容量 $n$ 减 $1$，不是 $m$ 减 $1$！"
+    },
+    {
+      "id": "m1-pr08-e-03",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、统计量数字特征真题",
+      "title": "【2023 真题 + 方浩例 4 进阶】正态绝对差与残差绝对值和的期望",
+      "problem": "(1)（2023 真题）设 $X_1,X_2$ 为来自 $N(\\mu,\\sigma^2)$ 的简单随机样本（$\\sigma>0$ 未知），记 $\\hat\\sigma=a|X_1-X_2|$，若 $E(\\hat\\sigma)=\\sigma$，则 $a=(\\quad)$。\nA. $\\frac{\\sqrt\\pi}{2}$　　 B. $\\frac{\\sqrt{2\\pi}}{2}$　　 C. $\\sqrt\\pi$　　 D. $\\sqrt{2\\pi}$\n(2)（方浩强化例 4）设 $X_1,\\dots,X_n$ 来自 $N(\\mu,\\sigma^2)$，求 $E\\!\\left(\\sum_{k=1}^n |X_k-\\bar X|\\right)$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "两题的核心完全一致：先把绝对值里的零均值正态随机变量 $Y$ 求出方差 $DY$，再直接套半正态金式 $E|Y|=\\sqrt{DY}\\cdot\\sqrt{\\frac{2}{\\pi}}$！"
+        },
+        {
+          "stepTitle": "求解 (1)：2023 真题两行秒杀",
+          "detail": "因 $X_1,X_2\\overset{\\text{i.i.d.}}{\\sim}N(\\mu,\\sigma^2)$，故 $X_1-X_2\\sim N(0,2\\sigma^2)$，标准差 $\\sqrt 2\\sigma$。套金式：$$E|X_1-X_2|=\\sqrt 2\\sigma\\cdot\\sqrt{\\frac{2}{\\pi}}=\\frac{2\\sigma}{\\sqrt\\pi}$$ 令 $a\\cdot\\frac{2\\sigma}{\\sqrt\\pi}=\\sigma\\implies a=\\frac{\\sqrt\\pi}{2}$，选 **A**！"
+        },
+        {
+          "stepTitle": "求解 (2)：残差 X_k - X̄ 的分布与期望",
+          "detail": "展开 $X_k-\\bar X=\\frac{n-1}{n}X_k-\\frac1n\\sum_{j\\ne k}X_j$，因其为独立正态线性组合，必服从正态分布：$$E(X_k-\\bar X)=0,\\qquad D(X_k-\\bar X)=\\left(\\frac{n-1}{n}\\right)^2\\sigma^2+(n-1)\\frac{1}{n^2}\\sigma^2=\\frac{n-1}{n}\\sigma^2$$ 故 $E|X_k-\\bar X|=\\sigma\\sqrt{\\frac{n-1}{n}}\\sqrt{\\frac{2}{\\pi}}$，累加 $n$ 项（线性性无须独立！）得：$$E\\!\\left(\\sum_{k=1}^n |X_k-\\bar X|\\right)=n\\cdot\\sigma\\sqrt{\\frac{n-1}{n}}\\sqrt{\\frac{2}{\\pi}}=\\sigma\\sqrt{\\frac{2n(n-1)}{\\pi}}$$"
+        }
+      ],
+      "finalAnswer": "(1) 选 **A**：$\\dfrac{\\sqrt\\pi}{2}$；　　 (2) $\\sigma\\sqrt{\\dfrac{2n(n-1)}{\\pi}}$。",
+      "source": {
+        "book": "2023 考研真题 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "猪狗 P.6-7 例6.1 / 方浩 P.136 例4",
+        "pdfPage": 140,
+        "itemRef": "2023真题与方浩例4正态绝对偏差期望"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_sample_moments",
+        "verified": true
+      },
+      "takeaway": "第 (2) 问 $X_k-\\bar X$ 彼此并不独立，但算**期望之和**完全不要求独立！同时切记 $D(X_k-\\bar X)$ 不是 $\\sigma^2+\\frac{\\sigma^2}{n}$（因为 $X_k$ 与 $\\bar X$ 有正协方差 $\\frac{\\sigma^2}{n}$！）。"
+    },
+    {
+      "id": "m1-pr08-e-04",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、统计量数字特征真题",
+      "title": "【2021 真题】二维正态配对样本均值差的期望与方差",
+      "problem": "设 $(X_1,Y_1),\\dots,(X_n,Y_n)$ 为来自二维正态总体 $N(\\mu_1,\\mu_2;\\sigma_1^2,\\sigma_2^2;\\rho)$ 的简单随机样本，令 $\\theta=\\mu_1-\\mu_2$，$\\hat\\theta=\\bar X-\\bar Y$，则（ ）。\nA. $E(\\hat\\theta)=\\theta,\\;D(\\hat\\theta)=\\frac{\\sigma_1^2+\\sigma_2^2}{n}$　　 B. $E(\\hat\\theta)=\\theta,\\;D(\\hat\\theta)=\\frac{\\sigma_1^2+\\sigma_2^2-2\\rho\\sigma_1\\sigma_2}{n}$\nC. $E(\\hat\\theta)\\ne\\theta,\\;D(\\hat\\theta)=\\frac{\\sigma_1^2+\\sigma_2^2}{n}$　　 D. $E(\\hat\\theta)\\ne\\theta,\\;D(\\hat\\theta)=\\frac{\\sigma_1^2+\\sigma_2^2-2\\rho\\sigma_1\\sigma_2}{n}$",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "把 $\\hat\\theta=\\frac1n\\sum_{i=1}^n (X_i-Y_i)$ 改写成 $n$ 个**相互独立同分布的配对差 $Z_i=X_i-Y_i$** 的均值，立刻避免把成对数据错当成两独立样本！"
+        },
+        {
+          "stepTitle": "打包配对差 Z_i = X_i - Y_i",
+          "detail": "因 $(X_1,Y_1),\\dots,(X_n,Y_n)$ 相互独立同分布，故 $Z_i=X_i-Y_i\\;(i=1,\\dots,n)$ 独立同分布，且 $$EZ_i=\\mu_1-\\mu_2=\\theta,\\qquad DZ_i=DX_i+DY_i-2\\operatorname{Cov}(X_i,Y_i)=\\sigma_1^2+\\sigma_2^2-2\\rho\\sigma_1\\sigma_2$$"
+        },
+        {
+          "stepTitle": "套用样本均值期望方差公式",
+          "detail": "$\\hat\\theta=\\bar Z=\\frac1n\\sum_{i=1}^n Z_i$，立得 $E(\\hat\\theta)=EZ_1=\\theta$，$D(\\hat\\theta)=\\frac{DZ_1}{n}=\\frac{\\sigma_1^2+\\sigma_2^2-2\\rho\\sigma_1\\sigma_2}{n}$，选 **B**！"
+        }
+      ],
+      "finalAnswer": "选 **B**：$E(\\hat\\theta)=\\theta,\\;D(\\hat\\theta)=\\dfrac{\\sigma_1^2+\\sigma_2^2-2\\rho\\sigma_1\\sigma_2}{n}$。",
+      "source": {
+        "book": "2021 考研真题 · 猪狗百宝书",
+        "printedPage": "猪狗 P.6-7 例6.3",
+        "pdfPage": 140,
+        "itemRef": "2021真题：二维正态配对样本均值差期望方差"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_sample_moments",
+        "verified": true
+      },
+      "takeaway": "**看清是「二维配对样本」还是「两独立样本」**：同一对 $(X_i,Y_i)$ 之间有相关系数 $\\rho$，唯有不同下标 $(X_i,Y_i)$ 与 $(X_j,Y_j)$ 才独立，切莫手快选 A！"
+    },
+    {
+      "id": "m1-pr08-e-05",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、统计量数字特征深化",
+      "title": "【概率 9 讲 例 8.1/8.2】样本残差协方差与均值—残差正交独立性",
+      "problem": "设 $X_1,\\dots,X_n\\;(n\\ge 2)$ 为来自总体 $N(\\mu,\\sigma^2)$ 的简单随机样本：\n(1) 计算 $\\operatorname{Cov}(X_1-\\bar X,\\;X_n-\\bar X)$ 与相关系数 $\\rho(X_1-\\bar X,\\;X_n-\\bar X)$；\n(2) 证明 $\\bar X$ 与 $X_i-\\bar X$ 相互独立（从而直观理解为何正态总体下 $\\bar X\\perp S^2$）。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "用协方差双线性展开；对第 (2) 问利用联合正态分布中「不相关 $\\iff$ 独立」！"
+        },
+        {
+          "stepTitle": "求解 (1)：双线性展开求残差协方差",
+          "detail": "因 $X_1,\\dots,X_n$ 独立同方差 $\\sigma^2$，有 $\\operatorname{Cov}(X_1,X_n)=0$，$\\operatorname{Cov}(X_k,\\bar X)=\\frac{\\sigma^2}{n}$，$D(\\bar X)=\\frac{\\sigma^2}{n}$。于是：$$\\operatorname{Cov}(X_1-\\bar X,\\,X_n-\\bar X)=\\operatorname{Cov}(X_1,X_n)-\\operatorname{Cov}(X_1,\\bar X)-\\operatorname{Cov}(\\bar X,X_n)+D(\\bar X)=0-\\frac{\\sigma^2}{n}-\\frac{\\sigma^2}{n}+\\frac{\\sigma^2}{n}=-\\frac{\\sigma^2}{n}$$ 又 $D(X_k-\\bar X)=\\frac{n-1}{n}\\sigma^2$，故相关系数 $\\rho=-\\dfrac{1}{n-1}$（当 $\\sigma=1$ 时协方差为 $-\\frac1n$）。"
+        },
+        {
+          "stepTitle": "求解 (2)：正态不相关即独立",
+          "detail": "$$\\operatorname{Cov}(\\bar X,\\,X_i-\\bar X)=\\operatorname{Cov}(\\bar X,X_i)-D(\\bar X)=\\frac{\\sigma^2}{n}-\\frac{\\sigma^2}{n}=0$$ 由于 $(\\bar X,X_1-\\bar X,\\dots,X_n-\\bar X)$ 是独立正态向量 $(X_1,\\dots,X_n)$ 的线性变换，服从多维正态分布，而 $\\bar X$ 与所有 $X_i-\\bar X$ 协方差均为 $0$，故 $\\bar X$ 与残差向量 $(X_1-\\bar X,\\dots,X_n-\\bar X)$ 相互独立，进与 $S^2=\\frac{1}{n-1}\\sum(X_i-\\bar X)^2$ 独立！"
+        }
+      ],
+      "finalAnswer": "(1) $\\operatorname{Cov}=-\\dfrac{\\sigma^2}{n}$，$\\rho=-\\dfrac{1}{n-1}$；　　 (2) 由多维正态协方差为 $0$ 证得 $\\bar X\\perp (X_i-\\bar X)$ 及 $\\bar X\\perp S^2$。",
+      "source": {
+        "book": "27 张宇概率9讲",
+        "printedPage": "9讲 P.67 例8.1, 例8.2",
+        "pdfPage": 78,
+        "itemRef": "概率9讲例8.1-8.2：样本残差协方差与独立性"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_sample_moments",
+        "verified": true
+      },
+      "takeaway": "检验一致性：将所有 $n$ 个残差相加 $\\sum_{j=1}^n (X_j-\\bar X)=0$，与 $X_1-\\bar X$ 取协方差得 $\\frac{n-1}{n}\\sigma^2+(n-1)\\left(-\\frac{\\sigma^2}{n}\\right)=0$，完美自洽！"
+    },
+    {
+      "id": "m1-pr08-e-06",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、「见到平方找卡方」专项实战",
+      "title": "【方浩例 5–8 连击】免四阶矩秒算 D(X̄² - S²/n)、D(A₂) 与 E(双差平方和)",
+      "problem": "(1) 设 $X_1,\\dots,X_n\\;(n\\ge 2)$ 来自 $N(0,1)$，求 $D\\!\\left(\\bar X^2-\\frac{1}{n}S^2\\right)$；\n(2) 设 $X_1,\\dots,X_n$ 来自 $N(0,\\sigma^2)$，求样本二阶原点矩 $A_2=\\frac1n\\sum_{i=1}^n X_i^2$ 的方差 $D(A_2)$；\n(3) 设 $X_1,\\dots,X_n$ 来自任意总体（$DX=\\sigma^2$），求 $Y=\\sum_{i=1}^{n-1}(X_i-X_{i+1})^2$ 的数学期望 $E(Y)$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "第 (1)(2) 问坚决不展四阶矩，直接套「见到平方找卡方」化为独立卡方组合秒杀；第 (3) 问利用期望线性性无须独立直接拆！"
+        },
+        {
+          "stepTitle": "求解 (1)：独立卡方差一步秒杀",
+          "detail": "因 $X_i\\sim N(0,1)$，有 $n\\bar X^2\\sim\\chi^2(1)$，$(n-1)S^2\\sim\\chi^2(n-1)$，且 **$\\bar X^2$ 与 $S^2$ 相互独立**！故 $$D\\!\\left(\\bar X^2-\\frac{1}{n}S^2\\right)=D\\!\\left(\\frac{1}{n}\\chi^2(1)\\right)+D\\!\\left(\\frac{1}{n(n-1)}\\chi^2(n-1)\\right)=\\frac{2}{n^2}+\\frac{2(n-1)}{n^2(n-1)^2}=\\frac{2}{n^2}\\left(1+\\frac{1}{n-1}\\right)=\\frac{2}{n(n-1)}$$"
+        },
+        {
+          "stepTitle": "求解 (2) 与 (3)",
+          "detail": "(2) $\\frac{nA_2}{\\sigma^2}=\\sum_{i=1}^n\\left(\\frac{X_i}{\\sigma}\\right)^2\\sim\\chi^2(n)$，故 $D(A_2)=\\frac{\\sigma^4}{n^2}\\cdot 2n=\\frac{2\\sigma^4}{n}$。\n(3) 对每个相邻差 $X_i-X_{i+1}$，$E(X_i-X_{i+1})=0$，$D(X_i-X_{i+1})=2\\sigma^2\\implies E[(X_i-X_{i+1})^2]=2\\sigma^2$。虽相邻项不独立，由期望线性性直接得 $E(Y)=(n-1)\\cdot 2\\sigma^2=2(n-1)\\sigma^2$！"
+        }
+      ],
+      "finalAnswer": "(1) $\\dfrac{2}{n(n-1)}$；　　 (2) $\\dfrac{2\\sigma^4}{n}$；　　 (3) $2(n-1)\\sigma^2$。",
+      "source": {
+        "book": "27 方浩强化",
+        "printedPage": "方浩 P.136-138 例5, 例6, 例7, 例8",
+        "pdfPage": 141,
+        "itemRef": "方浩例5-8：见到平方找卡方速算方差期望"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_fanghao_chi2_tricks",
+        "verified": true
+      },
+      "takeaway": "第 (1) 问中 $\\bar X^2-\\frac1n S^2$ 在第 9 讲还会作为 $\\mu^2$ 的无偏估计量登场！用独立卡方拆方差，比硬算 $E[(\\bar X^2-\\frac1n S^2)^2]$ 节省 $90\\%$ 计算量。"
+    },
+    {
+      "id": "m1-pr08-e-07",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "四、卡方分布构造与真题排雷",
+      "title": "【1998/2002/2017 真题 · 含方浩例 10 勘误】卡方分布配系数与陷阱甄别",
+      "problem": "(1)（1998 真题）设 $X_1,X_2,X_3,X_4\\overset{\\text{i.i.d.}}{\\sim}N(0,2^2)$，令 $X=a(X_1-2X_2)^2+b(3X_3-4X_4)^2$，当 $a=\\underline{\\quad},b=\\underline{\\quad}$ 时 $X\\sim\\chi^2$，其自由度为 $\\underline{\\quad}$；\n(2)（2017 真题）设 $X_1,\\dots,X_n\\;(n\\ge 2)$ 来自 $N(\\mu,1)$，下列结论中**不正确**的是（ ）。\nA. $\\sum_{i=1}^n (X_i-\\mu)^2\\sim\\chi^2$　 B. $2(X_n-X_1)^2\\sim\\chi^2$　 C. $\\sum_{i=1}^n (X_i-\\bar X)^2\\sim\\chi^2$　 D. $n(\\bar X-\\mu)^2\\sim\\chi^2$\n(3)（2002 真题）设 $X,Y$ 都服从 $N(0,1)$（未说独立！），必成立的是：$X^2$ 和 $Y^2$ 都服从 $\\chi^2(1)$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "每项独立正态平方必须**除以该线性组合自身的方差**才能变成 $\\chi^2(1)$；未明说独立时，任何联合式（$X+Y, X^2+Y^2, X^2/Y^2$）均不可断言分布！"
+        },
+        {
+          "stepTitle": "求解 (1)：按线性组合方差配平系数",
+          "detail": "$X_1-2X_2\\sim N(0, 1^2\\cdot 4+2^2\\cdot 4)=N(0,20)$，$3X_3-4X_4\\sim N(0, 9\\cdot 4+16\\cdot 4)=N(0,100)$，且两块下标不重叠故相互独立！配成两独立 $\\chi^2(1)$ 之和必取 $a=\\frac{1}{20},\\;b=\\frac{1}{100}$，自由度 $1+1=2$！"
+        },
+        {
+          "stepTitle": "求解 (2) 与 (3)：识破系数错配与缺独立陷阱",
+          "detail": "(2) $X_n-X_1\\sim N(0,2)$，故标准化平方应是 $\\frac{1}{2}(X_n-X_1)^2\\sim\\chi^2(1)$！选项 **B** 乘以 $2$（差了 $4$ 倍）错误！\n(3) 缺独立条件时 $X+Y$、$X^2+Y^2$、$X^2/Y^2$ 均未必服从正态/卡方/$F$，唯有边缘平方 $X^2\\sim\\chi^2(1)$ 与 $Y^2\\sim\\chi^2(1)$ 恒真！"
+        }
+      ],
+      "finalAnswer": "(1) $a=\\frac{1}{20},\\;b=\\frac{1}{100},\\;\\text{df}=2$；　　 (2) 选 **B**；　　 (3) 仅 $X^2,Y^2$ 各自服从 $\\chi^2(1)$ 必真。",
+      "source": {
+        "book": "1998/2002/2017 真题 · 猪狗百宝书 & 方浩强化",
+        "printedPage": "猪狗 P.6-8~6-9 例6.5,6.10,6.11 / 方浩 P.140 例10（勘误）",
+        "pdfPage": 141,
+        "itemRef": "1998-2017真题卡方构造与方浩P.140勘误"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_three_dists_props",
+        "verified": true
+      },
+      "takeaway": "**五书原书印刷勘误**：`方浩强化 P.140 例题 10` 选项 (D) 解析中将平方项误印成立方 `((X_1+X_2+X_3-3)/sqrt(6))^3 ~ χ^2(1)`，应修正为平方 `^2`！"
+    },
+    {
+      "id": "m1-pr08-e-08",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "五、t 分布构造与真题陷阱",
+      "title": "【2018 & 2012 真题】S 与 S* 绝命辨析及绝对值分母构造 t(1)",
+      "problem": "(1)（2018 真题）设 $X_1,\\dots,X_n\\;(n\\ge 2)$ 来自 $N(\\mu,\\sigma^2)$，令 $S=\\sqrt{\\frac{1}{n-1}\\sum(X_i-\\bar X)^2}$，$S^*=\\sqrt{\\frac1n\\sum(X_i-\\mu)^2}$，则（ ）。\nA. $\\frac{\\sqrt n(\\bar X-\\mu)}{S}\\sim t(n)$　 B. $\\frac{\\sqrt n(\\bar X-\\mu)}{S}\\sim t(n-1)$　 C. $\\frac{\\sqrt n(\\bar X-\\mu)}{S^*}\\sim t(n)$　 D. $\\frac{\\sqrt n(\\bar X-\\mu)}{S^*}\\sim t(n-1)$\n(2)（2012 真题）设 $X_1,X_2,X_3,X_4$ 来自 $N(1,\\sigma^2)$，则 $\\dfrac{X_1-X_2}{|X_3+X_4-2|}$ 的分布为（ ）。\nA. $N(0,1)$　　 B. $t(1)$　　 C. $\\chi^2(1)$　　 D. $F(1,1)$",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "第 (1) 问看独立性：$\\bar X\\perp S$ 但 $\\bar X$ 与 $S^*$ 绝不独立！第 (2) 问分子分母同除 $\\sqrt 2\\sigma$，利用 $|U|=\\sqrt{U^2/1}$ 对准 $t(1)$！"
+        },
+        {
+          "stepTitle": "求解 (1)：排雷 S*",
+          "detail": "由单正态抽样分布定理，$\\bar X\\perp S^2$ 且 $\\frac{(n-1)S^2}{\\sigma^2}\\sim\\chi^2(n-1)$，故 $\\frac{\\sqrt n(\\bar X-\\mu)}{S}\\sim t(n-1)$（选 **B**）。而 $n(S^*)^2=(n-1)S^2+n(\\bar X-\\mu)^2$ 显式包含分子平方，故 $\\bar X-\\mu$ 与 $S^*$ 不独立，C、D 皆错！"
+        },
+        {
+          "stepTitle": "求解 (2)：标准化分子分母凑 t(1)",
+          "detail": "分子 $X_1-X_2\\sim N(0,2\\sigma^2)\\implies U=\\frac{X_1-X_2}{\\sqrt 2\\sigma}\\sim N(0,1)$；分母内 $X_3+X_4-2\\sim N(0,2\\sigma^2)\\implies V=\\frac{X_3+X_4-2}{\\sqrt 2\\sigma}\\sim N(0,1)$，且 $U\\perp V$！于是 $$\\frac{X_1-X_2}{|X_3+X_4-2|}=\\frac{U}{|V|}=\\frac{U}{\\sqrt{V^2/1}}\\sim t(1)$$ 故选 **B**（顺带记住 `猪狗例 6.12` 中 $\\frac{X_1-1}{|1-X_2|}\\sim t(1)$ 同理！）。"
+        }
+      ],
+      "finalAnswer": "(1) 选 **B**：$\\frac{\\sqrt n(\\bar X-\\mu)}{S}\\sim t(n-1)$；　　 (2) 选 **B**：$t(1)$。",
+      "source": {
+        "book": "2018 & 2012 真题 · 猪狗百宝书 / 方浩强化",
+        "printedPage": "猪狗 P.6-8~6-10 例6.4,6.8,6.12 / 方浩 P.149 例22-23",
+        "pdfPage": 141,
+        "itemRef": "2018与2012真题：S与S*辨析及t(1)构造"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_normal_sampling_theorems",
+        "verified": true
+      },
+      "takeaway": "**小字勘误顺记**：`猪狗百宝书 P.6-10 例 6.12` 原文将「服从」误印为「付出服从」。"
+    },
+    {
+      "id": "m1-pr08-e-09",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "五、t 分布构造深度对比",
+      "title": "【方浩例 11–14 · 含 P.141 例 12 勘误】分母「平方和开方」vs「和的绝对值」一字之差",
+      "problem": "设 $X_1,X_2,X_3,X_4,X_5$ 独立同分布于 $N(0,\\sigma^2)$，试确定常数 $c_1,c_2$ 使下列统计量分别服从 $t$ 分布，并指出自由度：\n(1) $T_1=c_1\\dfrac{X_1+X_2}{\\sqrt{X_3^2+X_4^2+X_5^2}}$；　　 (2) $T_2=c_2\\dfrac{X_1+X_2}{|X_3+X_4+X_5|}$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "看清分母本质：第 (1) 问分母是 $3$ 个独立平方之和 $\\to\\chi^2(3)$；第 (2) 问分母是**一个和变量的绝对值** $\\to\\sqrt{\\chi^2(1)}$，自由度从 $3$ 骤降为 $1$！"
+        },
+        {
+          "stepTitle": "求解 (1)：3 自由度 t(3)",
+          "detail": "分子 $\\frac{X_1+X_2}{\\sqrt 2\\sigma}\\sim N(0,1)$；分母 $\\frac{X_3^2+X_4^2+X_5^2}{\\sigma^2}\\sim\\chi^2(3)$，除以自由度 $3$ 得 $\\sqrt{\\frac{X_3^2+X_4^2+X_5^2}{3\\sigma^2}}$。二者独立相除：$$\\frac{(X_1+X_2)/(\\sqrt 2\\sigma)}{\\sqrt{(X_3^2+X_4^2+X_5^2)/(3\\sigma^2)}}=\\sqrt{\\frac{3}{2}}\\frac{X_1+X_2}{\\sqrt{X_3^2+X_4^2+X_5^2}}\\sim t(3)\\implies c_1=\\sqrt{\\frac32}$$"
+        },
+        {
+          "stepTitle": "求解 (2)：1 自由度 t(1)",
+          "detail": "分母 $X_3+X_4+X_5\\sim N(0,3\\sigma^2)$，故 $\\frac{|X_3+X_4+X_5|}{\\sqrt 3\\sigma}=\\sqrt{\\chi^2(1)/1}$！相除得：$$\\frac{(X_1+X_2)/(\\sqrt 2\\sigma)}{|X_3+X_4+X_5|/(\\sqrt 3\\sigma)}=\\sqrt{\\frac{3}{2}}\\frac{X_1+X_2}{|X_3+X_4+X_5|}\\sim t(1)\\implies c_2=\\sqrt{\\frac32}$$ 惊人巧合：两题常数恰好都是 $\\sqrt{\\frac32}$，自由度却是 **$t(3)$ 与 $t(1)$ 天壤之别**！"
+        }
+      ],
+      "finalAnswer": "(1) $c_1=\\sqrt{\\dfrac32},\\;T_1\\sim t(3)$；　　 (2) $c_2=\\sqrt{\\dfrac32},\\;T_2\\sim t(1)$。",
+      "source": {
+        "book": "27 方浩强化",
+        "printedPage": "方浩 P.141-142 例11-14（含P.141例12勘误）",
+        "pdfPage": 146,
+        "itemRef": "方浩例11-14：t(3)与t(1)构造对比及P.141勘误"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_three_dists_props",
+        "verified": true
+      },
+      "takeaway": "**五书原书印刷勘误**：`方浩强化 P.141 例题 12` 解析分母将 `X_3+X_4+X_5` 误印为下标重复的 `((X_3+X_4+X_4-0)/sqrt(3))^2`，应修正为 `X_3+X_4+X_5`！"
+    },
+    {
+      "id": "m1-pr08-e-10",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "六、F 分布与双总体真题",
+      "title": "【2023 真题 · 含方浩例 28 勘误】异方差双正态总体样本方差比 F 分布",
+      "problem": "设 $X_1,\\dots,X_n$ 来自 $N(\\mu_1,\\sigma^2)$，$Y_1,\\dots,Y_m$ 来自 $N(\\mu_2,2\\sigma^2)$，两样本相互独立，$S_1^2,S_2^2$ 为各自样本方差，则（ ）。\nA. $\\frac{S_1^2}{S_2^2}\\sim F(n,m)$　 B. $\\frac{S_1^2}{S_2^2}\\sim F(n-1,m-1)$　 C. $\\frac{2S_1^2}{S_2^2}\\sim F(n,m)$　 D. $\\frac{2S_1^2}{S_2^2}\\sim F(n-1,m-1)$",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "严格写出双总体 $F$ 统计量标准式 $\\frac{S_1^2/\\sigma_1^2}{S_2^2/\\sigma_2^2}\\sim F(n-1,m-1)$，代入 $\\sigma_1^2=\\sigma^2,\\;\\sigma_2^2=2\\sigma^2$ 一行定胜负！"
+        },
+        {
+          "stepTitle": "代入异方差比并核对自由度",
+          "detail": "由单正态抽样定理得 $\\frac{(n-1)S_1^2}{\\sigma^2}\\sim\\chi^2(n-1)$ 与 $\\frac{(m-1)S_2^2}{2\\sigma^2}\\sim\\chi^2(m-1)$ 且相互独立，分别除以自由度相除：$$\\frac{S_1^2/\\sigma^2}{S_2^2/(2\\sigma^2)}=\\frac{2S_1^2}{S_2^2}\\sim F(n-1,\\,m-1)$$ 故选 **D**。"
+        }
+      ],
+      "finalAnswer": "选 **D**：$\\dfrac{2S_1^2}{S_2^2}\\sim F(n-1,m-1)$。",
+      "source": {
+        "book": "2023 考研真题 · 猪狗百宝书 & 方浩强化",
+        "printedPage": "猪狗 P.6-7 例6.2 / 方浩 P.153 例28（勘误）",
+        "pdfPage": 140,
+        "itemRef": "2023真题异方差F分布与方浩P.153勘误"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_normal_sampling_theorems",
+        "verified": true
+      },
+      "takeaway": "**五书原书印刷勘误**：`方浩强化 P.153 例题 28` 类似双总体 $F$ 分布解析中，将分母 `(9 S_Y^2 / 5) / 9` 误印为四次方 `(9 S_Y^4 / 5) / 9`，应修正为平方 `S_Y^2`！"
+    },
+    {
+      "id": "m1-pr08-e-11",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "六、F 分布与 t 分布联动",
+      "title": "【2013 真题 + 概率 9 讲 例 8.4】由 t(n) 分位数秒算 F(1, n) 尾概率",
+      "problem": "(1)（2013 真题）设 $X\\sim t(n)$，$Y\\sim F(1,n)$，给定 $\\alpha\\in(0,0.5)$，常数 $c$ 满足 $P\\{X>c\\}=\\alpha$，则 $P\\{Y>c^2\\}=(\\quad)$。\nA. $\\alpha$　　 B. $1-\\alpha$　　 C. $2\\alpha$　　 D. $1-2\\alpha$\n(2)（方浩例 18 变式）若 $Y\\sim F(1,n)$，且 $t_{0.05}(n)=2$，求 $P\\{Y<4\\}$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "认准分布等同桥：$Y\\overset{d}{=}X^2$（因为 $X\\sim t(n)\\implies X^2\\sim F(1,n)$）！再结合 $t(n)$ 偶对称性秒杀！"
+        },
+        {
+          "stepTitle": "求解 (1)：利用 c > 0 与对称性",
+          "detail": "因 $0<\\alpha<0.5$ 且 $t(n)$ 关于 $0$ 对称，故 $c=t_\\alpha(n)>0$！又 $Y$ 与 $X^2$ 同分布，于是：$$P\\{Y>c^2\\}=P\\{X^2>c^2\\}=P\\{X>c\\}+P\\{X<-c\\}=2P\\{X>c\\}=2\\alpha$$ 选 **C**！"
+        },
+        {
+          "stepTitle": "求解 (2)：直接转化双侧概率",
+          "detail": "$P\\{Y<4\\}=P\\{X^2<2^2\\}=P\\{|X|<2\\}=1-2P\\{X>2\\}=1-2\\times 0.05=0.90$！"
+        }
+      ],
+      "finalAnswer": "(1) 选 **C**：$2\\alpha$；　　 (2) $0.90$。",
+      "source": {
+        "book": "2013 考研真题 · 概率9讲 / 猪狗百宝书 / 方浩强化",
+        "printedPage": "9讲 P.68 例8.4 / 猪狗 P.6-8 例6.7 / 方浩 P.144-145 例15-18",
+        "pdfPage": 79,
+        "itemRef": "2013真题：t(n)与F(1,n)尾概率联动"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_three_dists_props",
+        "verified": true
+      },
+      "takeaway": "**一定要检验 $c$ 的符号**：本题给出 $0<\\alpha<0.5$ 才保证 $c>0$；若题干改成 $0.5<\\alpha<1$，则 $c<0$，此时 $P\\{X>c\\}=\\alpha$ 对应 $P\\{X>|c|\\}=1-\\alpha$，于是 $P\\{Y>c^2\\}=2(1-\\alpha)$！"
+    },
+    {
+      "id": "m1-pr08-e-12",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、非正态总体构造抽样分布",
+      "title": "【概率 9 讲 例 8.3】拉普拉斯分布样本比值 |X₁/X₂| 竟然服从 F(2, 2)！",
+      "problem": "设总体 $X$ 的概率密度为 $f(x)=\\frac12 e^{-|x|}\\;(-\\infty<x<+\\infty)$，$X_1,X_2$ 为简单随机样本，求统计量 $T=\\left|\\dfrac{X_1}{X_2}\\right|$ 的精确分布。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "先求 $|X_i|$ 的分布（立刻认出指数分布 $E(1)$！），再乘以 $2$ 化为 $\\chi^2(2)$，两独立 $\\chi^2(2)$ 均方之比自然是 $F(2,2)$！"
+        },
+        {
+          "stepTitle": "求 |X_i| 的分布并对接卡方 χ²(2)",
+          "detail": "对 $y>0$，$P\\{|X_i|\\le y\\}=\\int_{-y}^{y}\\frac12 e^{-|x|}\\,\\mathrm{d}x=\\int_0^y e^{-x}\\,\\mathrm{d}x=1-e^{-y}$，故 $|X_i|\\sim E(1)$！进一步 $2|X_i|\\sim E\\!\\left(\\frac12\\right)=\\chi^2(2)$。"
+        },
+        {
+          "stepTitle": "构造 F(2, 2) 分布",
+          "detail": "由于 $2|X_1|\\sim\\chi^2(2)$ 与 $2|X_2|\\sim\\chi^2(2)$ 相互独立，于是：$$T=\\left|\\frac{X_1}{X_2}\\right|=\\frac{2|X_1|/2}{2|X_2|/2}\\sim F(2,2)$$"
+        }
+      ],
+      "finalAnswer": "$T=\\left|\\dfrac{X_1}{X_2}\\right|\\sim F(2,2)$（密度 $f_T(t)=\\frac{1}{(1+t)^2},\\;t>0$）。",
+      "source": {
+        "book": "27 张宇概率9讲",
+        "printedPage": "9讲 P.68 例8.3",
+        "pdfPage": 79,
+        "itemRef": "概率9讲例8.3：拉普拉斯样本绝对比服从F(2,2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_nonnormal_bridges",
+        "verified": true
+      },
+      "takeaway": "顺手验证密度：由商卷积直接算 $E(1)$ 之比 $Z=U/V$ 的密度恰为 $\\int_0^\\infty v e^{-zv}e^{-v}\\mathrm{d}v=\\frac{1}{(1+z)^2}$，与 $F(2,2)$ 密度分毫不差！"
+    },
+    {
+      "id": "m1-pr08-e-13",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "六、F 分布性质与分位数技巧",
+      "title": "【茆书汇编 · 猪狗例 6.21 & 6.22】F(n, n) 中位数为 1 与正交比值反求临界常数",
+      "problem": "(1) 设随机变量 $X\\sim F(n,n)$，求 $P\\{X<1\\}$；\n(2) 设 $X_1,X_2$ 来自 $N(0,\\sigma^2)$，求 $Y=\\left(\\dfrac{X_1+X_2}{X_1-X_2}\\right)^2$ 的分布，并求常数 $k$ 使得 $P\\!\\left\\{\\dfrac{(X_1+X_2)^2}{(X_1-X_2)^2+(X_1+X_2)^2}>k\\right\\}=0.05$（已知 $F_{0.05}(1,1)=161.45$）。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "第 (1) 问利用 $1/X\\sim F(n,n)$ 与 $X$ 同分布秒证 $P\\{X<1\\}=P\\{X>1\\}=\\frac12$；第 (2) 问由系数向量正交 $(1,1)\\cdot(1,-1)=0$ 得独立正态比 $Y\\sim F(1,1)$，再把所求事件等价改写成 $Y$ 的上尾！"
+        },
+        {
+          "stepTitle": "求解 (1)：F(n, n) 倒数自对称",
+          "detail": "因 $X\\sim F(n,n)\\implies \\frac1X\\sim F(n,n)$，且 $X$ 连续（$P\\{X=1\\}=0$），故 $$P\\{X<1\\}=P\\!\\left\\{\\frac{1}{X}>1\\right\\}=P\\{X>1\\}=1-P\\{X<1\\}\\implies P\\{X<1\\}=\\frac{1}{2}$$ 即 $F_{0.5}(n,n)=1$！"
+        },
+        {
+          "stepTitle": "求解 (2)：正交构造 F(1, 1) 并反解 k",
+          "detail": "因 $X_1+X_2\\sim N(0,2\\sigma^2)$，$X_1-X_2\\sim N(0,2\\sigma^2)$，且 $\\operatorname{Cov}(X_1+X_2,X_1-X_2)=DX_1-DX_2=0$，由二维正态知二者相互独立！从而 $U=\\frac{X_1+X_2}{\\sqrt 2\\sigma}\\perp V=\\frac{X_1-X_2}{\\sqrt 2\\sigma}$ 且均 $\\sim N(0,1)$，故 $Y=\\frac{U^2}{V^2}\\sim F(1,1)$。\n事件改写（分子分母同除 $(X_1-X_2)^2$）：$$\\frac{Y}{1+Y}>k\\iff Y>\\frac{k}{1-k}\\quad(0<k<1)$$ 令 $\\frac{k}{1-k}=F_{0.05}(1,1)=161.45\\implies k=\\frac{161.45}{162.45}\\approx 0.9938$！"
+        }
+      ],
+      "finalAnswer": "(1) $\\dfrac{1}{2}$；　　 (2) $Y\\sim F(1,1)$，$k=\\dfrac{161.45}{162.45}\\approx 0.9938$。",
+      "source": {
+        "book": "27 猪狗百宝书（茆书汇编）& 27 张宇基础30讲",
+        "printedPage": "猪狗 P.6-13 例6.21-6.22 / 基础 P.143 例6.4",
+        "pdfPage": 147,
+        "itemRef": "F(n,n)中位数与正交比值反求分位数常数"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_three_dists_props",
+        "verified": true
+      },
+      "takeaway": "注意第 (2) 问化简 $\\frac{Y}{1+Y}>k$ 前先确认 $0<k<1$（因为 $\\frac{Y}{1+Y}\\in(0,1)$），解出 $Y>\\frac{k}{1-k}$ 恰好对应上侧 $0.05$ 分位数！"
+    },
+    {
+      "id": "m1-pr08-e-14",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、单样本预测统计量与样本拆分",
+      "title": "【猪狗例 6.15/6.19/6.23】新观测值 X_{n+1} 与前 n 个样本均值 X̄ 的 χ²(1) 与 t(n-1) 构造",
+      "problem": "设 $X_1,\\dots,X_n,X_{n+1}$ 是来自 $N(\\mu,\\sigma^2)$ 的简单随机样本，记前 $n$ 个样本的均值与方差为 $\\bar X=\\frac1n\\sum_{i=1}^n X_i$，$S^2=\\frac{1}{n-1}\\sum_{i=1}^n (X_i-\\bar X)^2$：\n(1) 求 $T=\\dfrac{n}{(n+1)\\sigma^2}(X_{n+1}-\\bar X)^2$ 的分布、期望与方差（特别当 $n=9,\\sigma=1$ 时求 $DT$）；\n(2) 求常数 $c>0$ 使 $t_c=c\\dfrac{X_{n+1}-\\bar X}{S}$ 服从 $t$ 分布，并指出自由度。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "$X_{n+1}$ 独立于 $(X_1,\\dots,X_n)$，故 $X_{n+1}-\\bar X\\sim N\\left(0,\\frac{n+1}{n}\\sigma^2\\right)$，且 **$X_{n+1}-\\bar X$ 与 $S^2$ 相互独立**（因 $X_{n+1}\\perp S^2$ 且 $\\bar X\\perp S^2$）！"
+        },
+        {
+          "stepTitle": "求解 (1)：标准化 X_{n+1} - X̄",
+          "detail": "因 $X_{n+1}$ 与 $\\bar X$ 相互独立且同均值 $\\mu$，有 $X_{n+1}-\\bar X\\sim N\\!\\left(0,\\;\\sigma^2+\\frac{\\sigma^2}{n}\\right)=N\\!\\left(0,\\;\\frac{n+1}{n}\\sigma^2\\right)$。因此 $$U=\\sqrt{\\frac{n}{n+1}}\\frac{X_{n+1}-\\bar X}{\\sigma}\\sim N(0,1)\\implies T=U^2=\\frac{n}{(n+1)\\sigma^2}(X_{n+1}-\\bar X)^2\\sim\\chi^2(1)$$ 于是 $ET=1,\\;DT=2$（与 $n$ 无关！故 `猪狗例 6.15` 中 $n=9,\\sigma=1$ 时 $DY=2$！）。"
+        },
+        {
+          "stepTitle": "求解 (2)：构造预测 t(n-1) 统计量",
+          "detail": "因 $X_{n+1}$ 独立于前 $n$ 个样本，且前 $n$ 个样本中 $\\bar X\\perp S^2$，故 $(X_{n+1},\\bar X)$ 联合独立于 $S^2$，进而 $U\\perp\\frac{(n-1)S^2}{\\sigma^2}\\sim\\chi^2(n-1)$！相除即得：$$\\frac{U}{\\sqrt{S^2/\\sigma^2}}=\\sqrt{\\frac{n}{n+1}}\\frac{X_{n+1}-\\bar X}{S}\\sim t(n-1)\\implies c=\\sqrt{\\frac{n}{n+1}}$$"
+        }
+      ],
+      "finalAnswer": "(1) $T\\sim\\chi^2(1)$，$ET=1,\\;DT=2$；　　 (2) $c=\\sqrt{\\dfrac{n}{n+1}}$，$t_c\\sim t(n-1)$。",
+      "source": {
+        "book": "27 猪狗百宝书（茆书汇编）",
+        "printedPage": "猪狗 P.6-10 例6.15, P.6-12 例6.19, P.6-13 例6.23",
+        "pdfPage": 144,
+        "itemRef": "新样本X_{n+1}与前n样本均值方差构造卡方与t分布"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_normal_sampling_theorems",
+        "verified": true
+      },
+      "takeaway": "工程意义：统计量 $t_c$ 给出未来单个新观测值 $X_{n+1}$ 的**预测区间** $\\bar X\\pm t_{\\alpha/2}(n-1)S\\sqrt{1+\\frac1n}$，比均值 $\\mu$ 的置信区间宽得多（多了一个个体方差 $1$）！"
+    },
+    {
+      "id": "m1-pr08-e-15",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、单样本分段拆分技巧",
+      "title": "【方浩例 30 / 猪狗例 6.18】9 样本拆 6+3 构造独立 t(2) 统计量",
+      "problem": "设 $X_1,X_2,\\dots,X_9$ 是来自正态总体 $N(\\mu,\\sigma^2)$ 的简单随机样本，记 $Y_1=\\frac16\\sum_{i=1}^6 X_i$，$Y_2=\\frac13(X_7+X_8+X_9)$，$S^2=\\frac12\\sum_{i=7}^9 (X_i-Y_2)^2$，证明：$Z=\\dfrac{\\sqrt 2(Y_1-Y_2)}{|S|}\\sim t(2)$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "前 $6$ 个样本与后 $3$ 个样本下标完全不重叠 $\\implies Y_1\\perp (Y_2,S^2)$；后 $3$ 个样本内正态抽样定理给出 $Y_2\\perp S^2$！故 $Y_1-Y_2$ 与 $S^2$ 相互独立！"
+        },
+        {
+          "stepTitle": "标准化分子 Y₁ - Y₂",
+          "detail": "$Y_1\\sim N(\\mu,\\sigma^2/6)$，$Y_2\\sim N(\\mu,\\sigma^2/3)$，且 $Y_1\\perp Y_2$，故 $$Y_1-Y_2\\sim N\\!\\left(0,\\;\\frac{\\sigma^2}{6}+\\frac{\\sigma^2}{3}\\right)=N\\!\\left(0,\\;\\frac{\\sigma^2}{2}\\right)\\implies U=\\frac{\\sqrt 2(Y_1-Y_2)}{\\sigma}\\sim N(0,1)$$"
+        },
+        {
+          "stepTitle": "识别分母卡方并验证独立性",
+          "detail": "对后 $3$ 个样本 $X_7,X_8,X_9$，$Y_2$ 是样本均值、$S^2$ 是样本方差，故 $V=\\frac{2S^2}{\\sigma^2}\\sim\\chi^2(2)$ 且 $Y_2\\perp S^2$。又 $Y_1$ 仅依赖 $X_1,\\dots,X_6$，从而 $Y_1\\perp(Y_2,S^2)$，故 $(Y_1-Y_2)\\perp S^2$（即 $U\\perp V$）！于是 $$Z=\\frac{\\sqrt 2(Y_1-Y_2)}{|S|}=\\frac{U}{\\sqrt{V/2}}\\sim t(2)$$ 证毕！"
+        }
+      ],
+      "finalAnswer": "利用前 $6$ 与后 $3$ 独立及后 $3$ 内 $Y_2\\perp S^2$，证得 $Z=\\frac{U}{\\sqrt{V/2}}\\sim t(2)$。",
+      "source": {
+        "book": "27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "方浩 P.154 例30 / 猪狗 P.6-11 例6.18",
+        "pdfPage": 159,
+        "itemRef": "9样本拆6+3构造独立t(2)分布证明"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_normal_sampling_theorems",
+        "verified": true
+      },
+      "takeaway": "注意题干写 $|S|$（与正平方根 $S=\\sqrt{S^2}$ 相同），分母绝对值完全合法；切莫因看到分母有 $|S|$ 就误判非 $t$ 分布！"
+    },
+    {
+      "id": "m1-pr08-e-16",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "六、双正态总体抽样定理真题",
+      "title": "【2004 真题 + 概率 9 讲 例 8.5 + 茆书例 6.24】双总体合并离差期望与广义线性组合 t 统计量",
+      "problem": "设两独立正态样本 $X_1,\\dots,X_{n_1}\\sim N(\\mu_1,\\sigma^2)$ 与 $Y_1,\\dots,Y_{n_2}\\sim N(\\mu_2,\\sigma^2)$：\n(1)（2004 真题）求 $E\\!\\left[\\dfrac{\\sum_{i=1}^{n_1}(X_i-\\bar X)^2+\\sum_{j=1}^{n_2}(Y_j-\\bar Y)^2}{n_1+n_2}\\right]$；\n(2)（概率 9 讲例 8.5 / 猪狗例 6.24）对任意非零常数 $c,d$，证明 $T=\\dfrac{c(\\bar X-\\mu_1)+d(\\bar Y-\\mu_2)}{S_w\\sqrt{\\frac{c^2}{n_1}+\\frac{d^2}{n_2}}}\\sim t(n_1+n_2-2)$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "两样本离差平方和分别期望为 $(n_1-1)\\sigma^2$ 与 $(n_2-1)\\sigma^2$；合并后除以 $\\sigma^2$ 服从 $\\chi^2(n_1+n_2-2)$，与 $(\\bar X,\\bar Y)$ 独立！"
+        },
+        {
+          "stepTitle": "求解 (1)：2004 真题合并离差期望",
+          "detail": "$$E\\!\\left[\\frac{(n_1-1)S_1^2+(n_2-1)S_2^2}{n_1+n_2}\\right]=\\frac{(n_1-1)\\sigma^2+(n_2-1)\\sigma^2}{n_1+n_2}=\\frac{n_1+n_2-2}{n_1+n_2}\\sigma^2$$"
+        },
+        {
+          "stepTitle": "求解 (2)：广义合并 t(n₁+n₂-2) 证明",
+          "detail": "分子 $c(\\bar X-\\mu_1)+d(\\bar Y-\\mu_2)\\sim N\\!\\left(0,\\;\\left(\\frac{c^2}{n_1}+\\frac{d^2}{n_2}\\right)\\sigma^2\\right)$，标准化得 $U\\sim N(0,1)$。分母 $\\frac{(n_1+n_2-2)S_w^2}{\\sigma^2}=\\frac{(n_1-1)S_1^2}{\\sigma^2}+\\frac{(n_2-1)S_2^2}{\\sigma^2}\\sim\\chi^2(n_1+n_2-2)$ 且独立于 $(\\bar X,\\bar Y)$，故 $T=\\frac{U}{\\sqrt{S_w^2/\\sigma^2}}\\sim t(n_1+n_2-2)$！（取 $c=1,d=-1$ 即得教材标准双总体均值差 $t$ 统计量！）"
+        }
+      ],
+      "finalAnswer": "(1) $\\dfrac{n_1+n_2-2}{n_1+n_2}\\sigma^2$；　　 (2) $T\\sim t(n_1+n_2-2)$ 证毕。",
+      "source": {
+        "book": "2004 真题 · 概率9讲 / 猪狗百宝书",
+        "printedPage": "猪狗 P.6-9 例6.9, P.6-14 例6.24 / 9讲 P.69 例8.5",
+        "pdfPage": 142,
+        "itemRef": "2004真题双总体合并离差期望与广义t统计量"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_normal_sampling_theorems",
+        "verified": true
+      },
+      "takeaway": "第 (1) 问分母特意挖坑写成 $n_1+n_2$ 而非 $n_1+n_2-2$，故期望不是 $\\sigma^2$ 而是 $\\frac{n_1+n_2-2}{n_1+n_2}\\sigma^2$！"
+    },
+    {
+      "id": "m1-pr08-e-17",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "四、三大分布速判精选",
+      "title": "【猪狗例 6.16 & 6.17】二元密度拆独立正态与 F(1, n-1) 选项秒辨",
+      "problem": "(1) 已知 $(X,Y)$ 联合概率密度 $f(x,y)=\\dfrac{1}{4\\pi}e^{-\\frac{x^2}{2}-\\frac{(y-1)^2}{8}}$，则 $\\dfrac{4X^2}{(Y-1)^2}$ 服从（ ）。\nA. $\\chi^2(2)$　　 B. $t(1)$　　 C. $N(0,4)$　　 D. $F(1,1)$\n(2) 设 $X_1,\\dots,X_n\\;(n>2)$ 是来自 $N(0,4)$ 的简单随机样本，则（ ）。\nA. $\\frac{1}{2n}(\\sum_{i=1}^n X_i)^2\\sim\\chi^2(1)$　 B. $\\frac{1}{16}\\sum_{i=1}^n X_i^2\\sim\\chi^2(n)$　 C. $\\sqrt{\\frac{(n-1)X_n^2}{\\sum_{i=1}^n X_i^2}}\\sim t(n-1)$　 D. $\\frac{(n-1)X_1^2}{\\sum_{i=2}^n X_i^2}\\sim F(1,n-1)$",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "第 (1) 问把指数拆乘积，立刻读出 $X\\sim N(0,1)$、$Y\\sim N(1,4)$ 且独立！第 (2) 问逐项查系数（$\\sigma^2=4$ 而非 $2$ 或 $16$！）和独立性。"
+        },
+        {
+          "stepTitle": "求解 (1)：因子分解读独立正态",
+          "detail": "$$f(x,y)=\\left(\\frac{1}{\\sqrt{2\\pi}}e^{-\\frac{x^2}{2}}\\right)\\cdot\\left(\\frac{1}{\\sqrt{2\\pi}\\cdot 2}e^{-\\frac{(y-1)^2}{2\\cdot 2^2}}\\right)$$ 故 $X\\sim N(0,1)$，$Y\\sim N(1,2^2)$ 且 $X\\perp Y$！因此 $U=X\\sim N(0,1)$，$V=\\frac{Y-1}{2}\\sim N(0,1)$ 独立，从而 $\\frac{U^2}{V^2}=\\frac{4X^2}{(Y-1)^2}\\sim F(1,1)$，选 **D**！"
+        },
+        {
+          "stepTitle": "求解 (2)：排除 A/B/C 锁定 D",
+          "detail": "$\\sigma^2=4$：\n- A 错：$\\sum X_i\\sim N(0,4n)$，系数应为 $\\frac{1}{4n}$；\n- B 错：$(X_i/2)^2=X_i^2/4$，系数应为 $\\frac{1}{4}$；\n- C 错：既恒非负（根号下非负）又分子分母共用 $X_n^2$；\n- **D 对**：$X_1^2/4\\sim\\chi^2(1)$ 与 $\\sum_{i=2}^n X_i^2/4\\sim\\chi^2(n-1)$ 独立，相除约掉 $4$ 得 $\\frac{(n-1)X_1^2}{\\sum_{i=2}^n X_i^2}\\sim F(1,n-1)$！"
+        }
+      ],
+      "finalAnswer": "(1) 选 **D**：$F(1,1)$；　　 (2) 选 **D**：$\\frac{(n-1)X_1^2}{\\sum_{i=2}^n X_i^2}\\sim F(1,n-1)$。",
+      "source": {
+        "book": "27 猪狗百宝书",
+        "printedPage": "猪狗 P.6-11 例6.16, 例6.17",
+        "pdfPage": 145,
+        "itemRef": "联合密度拆独立正态与F(1,n-1)选项排雷"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_three_dists_props",
+        "verified": true
+      },
+      "takeaway": "永远看清正态第二参数是**方差 $\\sigma^2$**（如 $N(0,4)$ 的标准差是 $2$，方差是 $4$，平方后除以 $4$ 不是除以 $16$！）。"
+    },
+    {
+      "id": "m1-pr08-e-18",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、统计量数字特征精选",
+      "title": "【猪狗例 6.13 & 6.14】混合统计量 E[(X̄ - S)²] 与绝对均值方差 D((1/n)∑|X_i - μ|)",
+      "problem": "(1) 设 $X_1,\\dots,X_n\\;(n\\ge 2)$ 来自 $N(0,1)$，记 $Y=\\bar X-S$，求 $E(Y^2)$；\n(2) 设 $X_1,\\dots,X_n$ 来自 $N(\\mu,\\sigma^2)$，记 $W=\\dfrac{1}{n}\\sum_{i=1}^n |X_i-\\mu|$，求 $D(W)$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "第 (1) 问展开 $Y^2=\\bar X^2-2\\bar X S+S^2$，巧妙利用 $\\bar X\\perp S$ 且 $E(\\bar X)=0$ 直接消灭交叉项（根本不用算 $E(S)$！）；第 (2) 问直接用 $D|X_i-\\mu|=\\sigma^2(1-2/\\pi)$！"
+        },
+        {
+          "stepTitle": "求解 (1)：独立性 + 零均值秒消交叉项",
+          "detail": "因总体 $N(0,1)$，有 $\\bar X\\perp S$ 且 $E(\\bar X)=0$，$E(\\bar X^2)=D(\\bar X)=\\frac1n$，$E(S^2)=\\sigma^2=1$。于是：$$E(Y^2)=E(\\bar X^2)-2E(\\bar X)E(S)+E(S^2)=\\frac{1}{n}-0+1=1+\\frac{1}{n}$$"
+        },
+        {
+          "stepTitle": "求解 (2)：半正态方差一步出解",
+          "detail": "令 $Z_i=\\frac{X_i-\\mu}{\\sigma}\\overset{\\text{i.i.d.}}{\\sim}N(0,1)$，则 $|X_i-\\mu|=\\sigma|Z_i|$ 相互独立同分布，且 $D|Z_i|=E(Z_i^2)-(E|Z_i|)^2=1-\\frac{2}{\\pi}$。故 $$D(W)=\\frac{\\sigma^2}{n}D|Z_1|=\\frac{\\sigma^2}{n}\\left(1-\\frac{2}{\\pi}\\right)$$"
+        }
+      ],
+      "finalAnswer": "(1) $1+\\dfrac{1}{n}$；　　 (2) $\\dfrac{\\sigma^2}{n}\\left(1-\\dfrac{2}{\\pi}\\right)$。",
+      "source": {
+        "book": "27 猪狗百宝书",
+        "printedPage": "猪狗 P.6-10 例6.13, 例6.14",
+        "pdfPage": 144,
+        "itemRef": "混合统计量二阶矩与正态绝对偏差均值方差"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_sample_moments",
+        "verified": true
+      },
+      "takeaway": "第 (1) 问如果忘了 $\\bar X\\perp S$ 和 $E\\bar X=0$，试图去算 $E(S)$ 的伽马函数表达式就会彻底走弯路！记住：零均值正态下任何关于 $S$ 的函数与 $\\bar X$ 的乘积期望都直接为 $0$！"
+    },
+    {
+      "id": "m1-pr08-e-19",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "extended",
+      "section": "七、非正态总体构造抽样分布",
+      "title": "【茆书经典 · 猪狗例 6.25】概率积分变换证 T = -2∑ln F(X_i) ~ χ²(2n)",
+      "problem": "设 $X_1,X_2,\\dots,X_n$ 是某连续总体的简单随机样本，总体分布函数 $F(x)$ 连续严格单调递增，证明：统计量 $T=-2\\sum_{i=1}^n \\ln F(X_i)\\sim\\chi^2(2n)$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "三步黄金链：$U_i=F(X_i)\\sim U(0,1)\\implies -2\\ln U_i\\sim E(1/2)=\\chi^2(2)\\implies$ 独立卡方可加得 $\\chi^2(2n)$！"
+        },
+        {
+          "stepTitle": "第一步：验证 F(X_i) ~ U(0,1)",
+          "detail": "对任意 $u\\in(0,1)$，由 $F$ 连续严格递增存在反函数 $F^{-1}$，故 $$P\\{F(X_i)\\le u\\}=P\\{X_i\\le F^{-1}(u)\\}=F(F^{-1}(u))=u$$ 即 $U_i=F(X_i)\\overset{\\text{i.i.d.}}{\\sim}U(0,1)$。"
+        },
+        {
+          "stepTitle": "第二步：验证 -2 ln U_i ~ χ²(2) 并叠加",
+          "detail": "令 $Y_i=-2\\ln U_i>0$，对 $y>0$：$$P\\{Y_i\\le y\\}=P\\!\\left\\{U_i\\ge e^{-y/2}\\right\\}=1-e^{-\\frac{1}{2}y}$$ 故 $Y_i\\overset{\\text{i.i.d.}}{\\sim}E\\!\\left(\\frac12\\right)=\\chi^2(2)$。由卡方分布的独立可加性，立得 $$T=\\sum_{i=1}^{n}Y_i\\sim\\chi^2(2n)$$"
+        }
+      ],
+      "finalAnswer": "由 $F(X_i)\\sim U(0,1)\\Rightarrow -2\\ln F(X_i)\\sim E(\\frac12)=\\chi^2(2)$ 及可加性，证得 $T\\sim\\chi^2(2n)$。",
+      "source": {
+        "book": "27 猪狗百宝书（茆书汇编）",
+        "printedPage": "猪狗 P.6-14 例6.25",
+        "pdfPage": 148,
+        "itemRef": "茆书经典：概率积分变换构造χ²(2n)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_nonnormal_bridges",
+        "verified": true
+      },
+      "takeaway": "跨讲呼应：本题直接串联了第 3 讲的概率积分变换与本讲 $\\chi^2(2)=E(1/2)$ 及卡方独立可加性，是压轴综合证明的绝佳母题！"
+    },
+    {
+      "id": "m1-pr08-e-20",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "五、单正态抽样分布自由度辨析",
+      "title": "【基础例 6.2/6.3 + 方浩例 19–21】减真值 μ 与减均值 X̄ 自由度一字之差",
+      "problem": "设 $X_1,\\dots,X_{10}$ 来自 $N(\\mu,\\sigma^2)$（已知 $\\mu=1,\\sigma=2$），求：\n(1) $P\\!\\left\\{\\sum_{i=1}^{10}(X_i-1)^2\\le 73.24\\right\\}$（已知 $\\chi^2_{0.05}(10)=18.31$）；\n(2) $P\\!\\left\\{\\sum_{i=1}^{10}(X_i-\\bar X)^2\\le 67.68\\right\\}$（已知 $\\chi^2_{0.05}(9)=16.92$）；\n(3) 计算 $E\\!\\left(\\sum_{i=1}^{10}(X_i-\\bar X)^2\\right)$ 与 $D\\!\\left(\\sum_{i=1}^{10}(X_i-\\bar X)^2\\right)$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "除以 $\\sigma^2=4$ 化为标准卡方：减已知真值 $\\mu=1$ 是 $\\chi^2(10)$；减样本均值 $\\bar X$ 扣 $1$ 自由度是 $\\chi^2(9)$！"
+        },
+        {
+          "stepTitle": "求解 (1) 与 (2)：除以 σ² = 4 查上侧分位数",
+          "detail": "(1) $\\frac14\\sum_{i=1}^{10}(X_i-1)^2\\sim\\chi^2(10)$，且 $\\frac{73.24}{4}=18.31=\\chi^2_{0.05}(10)$，故所求概率为 $1-0.05=0.95$！\n(2) $\\frac14\\sum_{i=1}^{10}(X_i-\\bar X)^2\\sim\\chi^2(9)$，且 $\\frac{67.68}{4}=16.92=\\chi^2_{0.05}(9)$，故所求概率亦为 $1-0.05=0.95$！"
+        },
+        {
+          "stepTitle": "求解 (3)：由 4·χ²(9) 秒算期望与方差",
+          "detail": "记 $W=\\sum_{i=1}^{10}(X_i-\\bar X)^2=4\\cdot\\chi^2(9)$，则 $EW=4\\times 9=36$，$DW=4^2\\times(2\\times 9)=288$！"
+        }
+      ],
+      "finalAnswer": "(1) $0.95$；　　 (2) $0.95$；　　 (3) $EW=36,\\;DW=288$。",
+      "source": {
+        "book": "27 张宇基础30讲 & 27 方浩强化",
+        "printedPage": "基础 P.144 例6.2-6.3 / 方浩 P.147-148 例19-21",
+        "pdfPage": 150,
+        "itemRef": "减真值与减均值卡方自由度及概率方差对比"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_normal_sampling_theorems",
+        "verified": true
+      },
+      "takeaway": "求 $DW$ 时切记常数 $4$ 提到方差外面要**平方成 $16$**！用 $\\sigma^2$ 符号记即 $D[(n-1)S^2]=2(n-1)\\sigma^4$。"
+    },
+    {
+      "id": "m1-pr08-e-21",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "extended",
+      "section": "五、正态独立性反例辨析",
+      "title": "【概念反例】非正态总体（0-1 分布）下 X̄ 与 S² 虽不相关却强相依！",
+      "problem": "设 $X_1,X_2$ 是来自 $B(1,p)\\;(0<p<1)$ 的简单随机样本，验证：$\\bar X$ 与 $S^2$ 不仅不独立，甚至存在确定函数关系！",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "列举 $(X_1,X_2)$ 的全部 $4$ 种取值并列出 $(\\bar X, S^2)$ 对应表，一眼看出 $S^2$ 被 $\\bar X$ 完全决定！"
+        },
+        {
+          "stepTitle": "枚举 4 种样本点求 (X̄, S²)",
+          "detail": "- $(0,0)\\implies \\bar X=0,\\;S^2=0$；\n- $(1,1)\\implies \\bar X=1,\\;S^2=0$；\n- $(0,1)$ 与 $(1,0)\\implies \\bar X=\\frac12,\\;S^2=\\frac{(0-1/2)^2+(1-1/2)^2}{2-1}=\\frac12$。\n显然恒有 $S^2=2\\bar X(1-\\bar X)$！"
+        },
+        {
+          "stepTitle": "验证不独立性（但当 p=1/2 时协方差仍为 0！）",
+          "detail": "$P\\{\\bar X=0,S^2=\\frac12\\}=0\\ne P\\{\\bar X=0\\}P\\{S^2=\\frac12\\}=(1-p)^2\\cdot 2p(1-p)>0$，故 **$\\bar X$ 与 $S^2$ 绝不独立**！特别当 $p=\\frac12$ 时，$\\operatorname{Cov}(\\bar X,S^2)=0$（不相关却完全非线性函数相依！）。"
+        }
+      ],
+      "finalAnswer": "对 $B(1,p)$ 两样本有 $S^2=2\\bar X(1-\\bar X)$，严格不独立（仅正态总体保证 $\\bar X\\perp S^2$）。",
+      "source": {
+        "book": "27 张宇基础30讲 / 概率9讲 概念深化",
+        "printedPage": "基础 P.144 注 / 9讲 P.66",
+        "pdfPage": 150,
+        "itemRef": "非正态总体样本均值与样本方差不独立反例"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_sample_moments",
+        "verified": true
+      },
+      "takeaway": "著名定理（Geary 定理）：简单随机样本的 $\\bar X$ 与 $S^2$ 相互独立**当且仅当**总体服从正态分布！做概念选择题看到「任意总体 $\\bar X$ 与 $S^2$ 独立」直接打叉！"
+    },
+    {
+      "id": "m1-pr08-e-22",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、「见到平方找卡方」专项实战",
+      "title": "【方浩例 24–25】由卡方均值方差秒算正态样本方差的高阶矩 E(S⁴) 与 E(1/S²)",
+      "problem": "设 $X_1,\\dots,X_n\\;(n\\ge 4)$ 来自正态总体 $N(\\mu,\\sigma^2)$，$S^2$ 为样本方差：\n(1) 求 $E(S^4)$；　　 (2) 求 $E\\!\\left(\\dfrac{1}{S^2}\\right)$（已知若 $V\\sim\\chi^2(k)\\;(k>2)$，则 $E(1/V)=\\frac{1}{k-2}$）。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "紧扣 $V=\\frac{(n-1)S^2}{\\sigma^2}\\sim\\chi^2(n-1)$：第 (1) 问用 $E(S^4)=D(S^2)+[E(S^2)]^2$ 一行秒杀；第 (2) 问直接用逆卡方期望！"
+        },
+        {
+          "stepTitle": "求解 (1)：方差加期望平方秒出 E(S⁴)",
+          "detail": "由 $E(S^2)=\\sigma^2$ 与 $D(S^2)=\\frac{2\\sigma^4}{n-1}$，直接得：$$E(S^4)=D(S^2)+[E(S^2)]^2=\\frac{2\\sigma^4}{n-1}+\\sigma^4=\\frac{n+1}{n-1}\\sigma^4$$"
+        },
+        {
+          "stepTitle": "求解 (2)：逆卡方期望（Γ 函数性质验证）",
+          "detail": "因 $V\\sim\\chi^2(n-1)=\\Gamma(\\frac{n-1}{2},\\frac12)$，当 $n-1>2$（即 $n\\ge 4$）时：$$E\\!\\left(\\frac{1}{V}\\right)=\\frac{(1/2)^{\\frac{n-1}{2}}}{\\Gamma(\\frac{n-1}{2})}\\int_0^\\infty v^{\\frac{n-3}{2}-1}e^{-v/2}\\,\\mathrm{d}v=\\frac{\\frac12\\Gamma(\\frac{n-3}{2})}{\\Gamma(\\frac{n-1}{2})}=\\frac{1}{n-3}$$ 故 $E\\!\\left(\\frac{1}{S^2}\\right)=\\frac{n-1}{\\sigma^2}E\\!\\left(\\frac1V\\right)=\\frac{n-1}{(n-3)\\sigma^2}$！"
+        }
+      ],
+      "finalAnswer": "(1) $E(S^4)=\\dfrac{n+1}{n-1}\\sigma^4$；　　 (2) $E\\!\\left(\\dfrac{1}{S^2}\\right)=\\dfrac{n-1}{(n-3)\\sigma^2}\\;(n\\ge 4)$。",
+      "source": {
+        "book": "27 方浩强化",
+        "printedPage": "方浩 P.150-151 例24-25",
+        "pdfPage": 155,
+        "itemRef": "卡方矩公式速算E(S^4)与E(1/S^2)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_fanghao_chi2_tricks",
+        "verified": true
+      },
+      "takeaway": "注意 $E(1/S^2)=\\frac{n-1}{(n-3)\\sigma^2}>\\frac{1}{\\sigma^2}$（再次印证凸函数 $1/x$ 的 Jensen 不等式！），故 $\\frac{n-3}{n-1}\\cdot\\frac{1}{S^2}$ 才是精度参数 $1/\\sigma^2$ 的无偏估计量。"
+    },
+    {
+      "id": "m1-pr08-e-23",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "extended",
+      "section": "四、三大抽样分布对称性速算",
+      "title": "【方浩例 16–18】利用 t 与 F 分布对称性直接化简复杂分位数不等式",
+      "problem": "(1) 设 $T\\sim t(n)$，已知 $P\\{T>a\\}=0.05$，求 $P\\{|T|\\le a\\}$ 与 $P\\{T<-a\\}$；\n(2) 设 $X\\sim F(n_1,n_2)$，若 $P\\{X\\ge c\\}=\\alpha$，试用 $F_\\alpha(n_2,n_1)$ 表示满足 $P\\{X\\le d\\}=\\alpha$ 的常数 $d$；\n(3) 设 $T\\sim t(10)$，若 $P\\{T^2>k\\}=0.10$，试用 $t$ 分位数表示 $k$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "画草图盯住右尾面积 $\\alpha$：偶对称直接翻负号，$F$ 左尾用三转公式取倒数并互换自由度，$T^2$ 转双向 $|T|$！"
+        },
+        {
+          "stepTitle": "求解 (1) 与 (2)",
+          "detail": "(1) 由 $t(n)$ 偶对称性，$P\\{T<-a\\}=P\\{T>a\\}=0.05$，故 $P\\{|T|\\le a\\}=1-2\\times 0.05=0.90$。\n(2) $P\\{X\\le d\\}=\\alpha\\iff P\\{X>d\\}=1-\\alpha\\implies d=F_{1-\\alpha}(n_1,n_2)=\\dfrac{1}{F_\\alpha(n_2,n_1)}$！"
+        },
+        {
+          "stepTitle": "求解 (3)：t² 尾概率切勿丢 /2",
+          "detail": "$P\\{T^2>k\\}=P\\{|T|>\\sqrt k\\}=2P\\{T>\\sqrt k\\}=0.10\\implies P\\{T>\\sqrt k\\}=0.05\\implies \\sqrt k=t_{0.05}(10)\\implies k=[t_{0.05}(10)]^2=F_{0.10}(1,10)$！"
+        }
+      ],
+      "finalAnswer": "(1) $0.90$ 与 $0.05$；　　 (2) $d=\\dfrac{1}{F_\\alpha(n_2,n_1)}$；　　 (3) $k=[t_{0.05}(10)]^2$。",
+      "source": {
+        "book": "27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "方浩 P.144-145 例16-18 / 猪狗 P.6-5~6-6",
+        "pdfPage": 149,
+        "itemRef": "t与F分布对称性与分位数换算三连题"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "takeaway": "第 (3) 问极易写成 $[t_{0.10}(10)]^2$——记住平方把左右两尾合并到右尾，因此 $F$ 的 $\\alpha$ 分位数等于 $t$ 的 $\\alpha/2$ 分位数的平方！"
+    },
+    {
+      "id": "m1-pr08-e-24",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "七、顺序统计量与第 9 讲衔接",
+      "title": "【跨讲衔接】顺序统计量 X_(1), X_(n) 的密度与均匀/指数分布期望方差",
+      "problem": "设 $X_1,\\dots,X_n$ 为简单随机样本，记 $X_{(1)}=\\min\\{X_1,\\dots,X_n\\}$，$X_{(n)}=\\max\\{X_1,\\dots,X_n\\}$：\n(1) 若总体 $X\\sim U(0,\\theta)\\;(\\theta>0)$，求 $X_{(n)}$ 的密度、期望 $E(X_{(n)})$ 与方差 $D(X_{(n)})$；\n(2) 若总体 $X\\sim E(\\lambda)$（或均值 $\\theta=1/\\lambda$），求 $X_{(1)}$ 的分布、期望与方差。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "直接套第 5 讲 i.i.d. 最值公式：$F_{X_{(n)}}(x)=[F(x)]^n$，$F_{X_{(1)}}(x)=1-[1-F(x)]^n$，为第 9 讲 2024/2026 真题热身！"
+        },
+        {
+          "stepTitle": "求解 (1)：U(0, θ) 最大值统计量（2024 真题核心）",
+          "detail": "对 $0<x<\\theta$，$F_{X_{(n)}}(x)=\\left(\\frac{x}{\\theta}\\right)^n\\implies f_{X_{(n)}}(x)=\\frac{n x^{n-1}}{\\theta^n}$。于是：$$E(X_{(n)})=\\int_0^\\theta\\frac{n x^n}{\\theta^n}\\,\\mathrm{d}x=\\frac{n}{n+1}\\theta,\\qquad E(X_{(n)}^2)=\\frac{n}{n+2}\\theta^2$$ $$D(X_{(n)})=\\frac{n}{n+2}\\theta^2-\\left(\\frac{n}{n+1}\\right)^2\\theta^2=\\frac{n}{(n+1)^2(n+2)}\\theta^2$$"
+        },
+        {
+          "stepTitle": "求解 (2)：指数最小值统计量（2026 真题核心）",
+          "detail": "对 $x>0$，$1-F_{X_{(1)}}(x)=[e^{-\\lambda x}]^n=e^{-n\\lambda x}\\implies X_{(1)}\\sim E(n\\lambda)$！故 $$E(X_{(1)})=\\frac{1}{n\\lambda}=\\frac{\\theta}{n},\\qquad D(X_{(1)})=\\frac{1}{n^2\\lambda^2}=\\frac{\\theta^2}{n^2}$$"
+        }
+      ],
+      "finalAnswer": "(1) $E(X_{(n)})=\\frac{n}{n+1}\\theta,\\;D(X_{(n)})=\\frac{n\\theta^2}{(n+1)^2(n+2)}$；　　 (2) $X_{(1)}\\sim E(n\\lambda)$，$E=\\frac{1}{n\\lambda},\\;D=\\frac{1}{n^2\\lambda^2}$。",
+      "source": {
+        "book": "2024 & 2026 真题基础衔接 · 概率9讲 / 猪狗百宝书",
+        "printedPage": "9讲 P.72,74 / 猪狗 P.7-10 例7.1-7.2",
+        "pdfPage": 157,
+        "itemRef": "顺序统计量均匀最大值与指数最小值数字特征"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr08_order_stats_bridge",
+        "verified": true
+      },
+      "takeaway": "**直觉秒检**：$U(0,\\theta)$ 下 $n$ 个点均匀铺在 $[0,\\theta]$ 把区间大致分成 $n+1$ 等份，因此 $E(X_{(k)})=\\frac{k}{n+1}\\theta$（第 1 个点期望 $\\frac{1}{n+1}\\theta$，最大点期望 $\\frac{n}{n+1}\\theta$），永久不忘！"
+    },
+    {
+      "id": "m1-pr08-e-25",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "extended",
+      "section": "七、双总体样本组合综合题",
+      "title": "【方浩例 26–29 精粹】双正态总体样本组合的卡方、t 与 F 综合判定",
+      "problem": "设 $X_1,\\dots,X_n\\sim N(0,\\sigma^2)$ 与 $Y_1,\\dots,Y_m\\sim N(0,\\sigma^2)$ 相互独立（均值已知为 $0$，公共方差 $\\sigma^2$ 未知），指出下列四个统计量的精确分布：\n(1) $\\dfrac{\\sum_{i=1}^n X_i^2+\\sum_{j=1}^m Y_j^2}{\\sigma^2}$；　 (2) $\\dfrac{m\\sum_{i=1}^n X_i^2}{n\\sum_{j=1}^m Y_j^2}$；　 (3) $\\dfrac{\\sqrt{n}\\bar X}{\\sqrt{\\frac1m\\sum_{j=1}^m Y_j^2}}$；　 (4) $\\dfrac{\\bar X-\\bar Y}{\\sqrt{\\frac1n+\\frac1m}\\cdot\\sqrt{\\frac{\\sum(X_i-\\bar X)^2+\\sum(Y_j-\\bar Y)^2}{n+m-2}}}$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "紧盯「减已知均值 $0$ 自由度不减 $1$」与「减样本均值 $\\bar X,\\bar Y$ 自由度各减 $1$」的黄金分界线，逐一核验独立性与自由度！"
+        },
+        {
+          "stepTitle": "判定 (1)(2)：无样本均值，自由度全保留 n 与 m",
+          "detail": "(1) $\\frac{\\sum X_i^2}{\\sigma^2}\\sim\\chi^2(n)$ 与 $\\frac{\\sum Y_j^2}{\\sigma^2}\\sim\\chi^2(m)$ 独立相加 $\\implies \\chi^2(n+m)$！\n(2) 各自除以自由度 $n,m$ 再相除约掉 $\\sigma^2\\implies \\dfrac{\\sum X_i^2/n}{\\sum Y_j^2/m}\\sim F(n,m)$！"
+        },
+        {
+          "stepTitle": "判定 (3)(4)：核对独立性与自由度",
+          "detail": "(3) 分子 $\\frac{\\sqrt n\\bar X}{\\sigma}\\sim N(0,1)$，分母 $\\sqrt{\\frac{\\sum Y_j^2/\\sigma^2}{m}}$ 来自独立样本 $Y$ 且自由度为 $m\\implies t(m)$！\n(4) 即双正态同方差标准合并 $t$ 统计量，自由度为 $n+m-2\\implies t(n+m-2)$！"
+        }
+      ],
+      "finalAnswer": "(1) $\\chi^2(n+m)$；　 (2) $F(n,m)$；　 (3) $t(m)$；　 (4) $t(n+m-2)$。",
+      "source": {
+        "book": "27 方浩强化",
+        "printedPage": "方浩 P.152-153 例26-29",
+        "pdfPage": 157,
+        "itemRef": "双正态总体已知均值与未知均值抽样分布四连判"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "takeaway": "对比 (2) 与 (4)：均值已知为 $0$ 时直接用 $\\sum X_i^2$ 自由度为 $n$（信息量多 $1$ 个自由度！）；均值未知时只能用 $\\sum(X_i-\\bar X)^2$ 自由度降为 $n-1$。"
+    },
+    {
+      "id": "m1-pr08-s-01",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "一、抽样分布判定 4 步决策树",
+      "title": "三大抽样分布（χ² · t · F）考场 10 秒判定与 6 大排雷清单",
+      "takeaway": "所有抽样分布大题本质都在考「标准化系数 + 独立性 + 自由度」三件套（三大分布构造速查见表 P8-1、常用分位数见表 P8-2），按步核对绝不掉坑。",
+      "source": {
+        "book": "27 张宇概率9讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.64-69 / 方浩 P.139-154 / 猪狗 P.6-15~6-16",
+        "pdfPage": 75,
+        "itemRef": "三大抽样分布四步判定决策总结"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "patterns": [
+        {
+          "typeName": "第一步：标准化归一化",
+          "triggers": "一、抽样分布判定 4 步决策树",
+          "method": "把一切正态线性组合 $a_1X_1+\\dots+a_kX_k$ 先减均值、除以标准差，变成 $N(0,1)$ 砖块。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "第二步：核验独立性",
+          "triggers": "一、抽样分布判定 4 步决策树",
+          "method": "① 不同下标子样本天然独立；② 同一样本正态线性组合看系数向量内积 $\\sum a_ib_i=0$；③ 单正态 $\\bar X\\perp S^2$（但 $\\bar X$ 与 $S^*$ 绝不独立！）。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "第三步：对号入座定型并查自由度",
+          "triggers": "一、抽样分布判定 4 步决策树",
+          "method": "纯独立平方和 $\\to\\chi^2(k)$（每用一次样本均值扣 $1$ 自由度）；$N(0,1)/\\sqrt{\\chi^2(k)/k}\\to t(k)$（分子禁带绝对值、分母绝对值合法）；两独立均方卡方比 $\\to F(m,n)$（记住 $t(n)^2\\sim F(1,n)$ 与 $\\chi^2(2)=E(1/2)$）。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "第四步：分位数换算核验",
+          "triggers": "一、抽样分布判定 4 步决策树",
+          "method": "上侧 $\\alpha$ 看右尾；$z,t$ 换负号；$F$ 用三转公式 $F_{1-\\alpha}(m,n)=1/F_\\alpha(n,m)$；$F_\\alpha(1,n)=[t_{\\alpha/2}(n)]^2$ 切莫漏掉 $/2$！",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        }
+      ],
+      "overview": "三大抽样分布（χ² · t · F）考场 10 秒判定与 6 大排雷清单"
+    },
+    {
+      "id": "m1-pr08-s-02",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、统计量数字特征三大速算通道",
+      "title": "统计量期望与方差计算三大通道（普适 3 式 · 双线性 · 见到平方找卡方）",
+      "takeaway": "记住「非正态只敢用期望方差普适 3 式，正态二次方统统走卡方」，统计量数字特征计算题将变成最稳的送分题。",
+      "source": {
+        "book": "27 方浩强化 & 27 张宇概率9讲 & 27 猪狗百宝书",
+        "printedPage": "方浩 P.135-138 / 9讲 P.67 / 猪狗 P.6-15",
+        "pdfPage": 140,
+        "itemRef": "统计量数字特征三大速算通道总结"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "patterns": [
+        {
+          "typeName": "通道一（任意总体普适 3 式）",
+          "triggers": "二、统计量数字特征三大速算通道",
+          "method": "先看能否直接化成 $\\bar X$ 与 $S^2$，立即套 $E\\bar X=\\mu, D\\bar X=\\sigma^2/n, E(S^2)=\\sigma^2$（2015/2021 真题 10 秒出解，无须正态！）。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "通道二（半正态绝对期望与双线性协方差）",
+          "triggers": "二、统计量数字特征三大速算通道",
+          "method": "见正态绝对值 $|Y|$（$EY=0$），直接套 $E|Y|=\\sqrt{DY}\\sqrt{2/\\pi}$、$D|Y|=DY(1-2/\\pi)$（2023 真题！）；见残差协方差直接展开得 $\\operatorname{Cov}(X_i-\\bar X,X_j-\\bar X)=-\\sigma^2/n$。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "通道三（见到平方找卡方）",
+          "triggers": "二、统计量数字特征三大速算通道",
+          "method": "遇到正态二次统计量求方差（$D(S^2), D(A_2), D(\\bar X^2-\\frac1n S^2)$）或四阶矩 $E(S^4)$，坚决不硬展四阶矩，立刻改写为独立卡方组合，套 $E[\\chi^2(k)]=k,\\;D[\\chi^2(k)]=2k$ 秒杀！",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        }
+      ],
+      "overview": "统计量期望与方差计算三大通道（普适 3 式 · 双线性 · 见到平方找卡方）"
+    },
+    {
+      "id": "m1-pr08-s-03",
+      "kind": "summary",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、真题复盘与本讲五书勘误总览",
+      "title": "1998–2023 抽样分布真题脉络与第 8 讲五书实锤勘误汇总",
+      "takeaway": "吃透本讲的 5 条正态抽样分布结论（全景速查见表 P8-3）与三大分布分位数性质，下一讲（第 9 讲）的区间估计与假设检验公式将全部自然推导出、再也不用死记硬背！",
+      "source": {
+        "book": "五书交叉审校（基础30讲/概率9讲/方浩强化/猪狗百宝书/27全总结）",
+        "printedPage": "方浩 P.140,141,153 / 猪狗 P.6-4,6-10",
+        "pdfPage": 145,
+        "itemRef": "概率第8讲真题复盘与五书勘误总览"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "patterns": [
+        {
+          "typeName": "真题高频双核",
+          "triggers": "三、真题复盘与本讲五书勘误总览",
+          "method": "近十年（2015/2017/2018/2021/2023）几乎隔年就考抽样分布辨析或统计量数字特征，其中 2023 年单年双考（绝对差无偏系数 + 异方差双正态 $F$ 统计量），是数理统计大题与选择题的最高频底座。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "本讲勘误 #1（方浩强化 P.140 例题 10 & P.141 例题 12）",
+          "triggers": "三、真题复盘与本讲五书勘误总览",
+          "method": "P.140 选项 (D) 解析误将卡方平方项印成立方 `^3`（应为 `^2`）；P.141 例 12 解析分母误将 `X_3+X_4+X_5` 印成重复下标 `X_3+X_4+X_4`。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "本讲勘误 #2（方浩强化 P.153 例题 28）",
+          "triggers": "三、真题复盘与本讲五书勘误总览",
+          "method": "双总体 $F$ 统计量分母误将样本方差 `S_Y^2` 印成四次方 `S_Y^4`。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "本讲勘误 #3（猪狗百宝书 P.6-4 & P.6-10 例 6.12）",
+          "triggers": "三、真题复盘与本讲五书勘误总览",
+          "method": "P.6-4 将样本标准差有偏性误写为 `E(s)<E(\\sigma)`（$\\sigma$ 为常数，严谨式为 $E(S)<\\sigma$）；P.6-10 例 6.12 题干「服从」误印为「付出服从」。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        }
+      ],
+      "overview": "1998–2023 抽样分布真题脉络与第 8 讲五书实锤勘误汇总"
+    }
+  ]
+}

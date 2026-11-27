@@ -1,0 +1,1450 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "prob-05",
+  "title": "概率 · 第 5 讲　多维随机变量函数的分布",
+  "sourceMeta": "深度融合《27 张宇基础30讲·概率》第3讲后半（P.79–90, 96–102）+《27 张宇概率9讲》第5讲（P.36–46 全 9 例）+《27 方浩概率强化》第3章题型五～八（P.72–90 例24–38）+《27 猪狗概率统计百宝书》第4章（P.4-14~4-28 含 2009–2026 真题与茆书汇编）+《27 版概率论全总结》P.11–12，100% 逐页核图与 SymPy 验算",
+  "basicRequirements": {
+    "master": "熟练掌握多维随机变量函数五大题型路由：二维离散枚举与五大可加性、连续和差积商广义卷积（「积谁不换谁，换完求偏导」）与二维雅可比换元、非线性分布函数划线定域（极坐标/面积比）、离散+连续全概率分解（含跳点识别）与一般/独立最值分布。",
+    "understand": "理解独立同指数分布四大王炸结论（|X-Y|~E(λ)、min~E(2λ)、max=^d X+Y/2、商分布 1/(1+z)²）、倒数同分布对称秒杀 2026 真题 P(XY≤1)=1/2，以及非独立情形回退交集二重积分与最值容斥恒等式的解题思维。",
+    "familiar": "熟悉标准正态之商服从柯西分布、菱形 45° 旋转独立化、卢卡斯独立定理与 Box-Muller 极坐标变换，以及本讲跨书 3 处实锤勘误（方浩 P.72 蓝框连续/离散误印、概率9讲 P.46 例5.9 表标互换、猪狗 P.4-26 例4.29 不可能事件硬伤）。"
+  },
+  "items": [
+    {
+      "id": "m1-pr05-f-01",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "一、多维随机变量函数分布总框架与二维离散函数",
+      "title": "多维函数三大转换类型与二维离散函数分布律（含方浩 P.72 蓝框勘误）",
+      "formulaLatex": "$$\\begin{aligned} &\\text{三大维度转换：}\\text{① 多维}\\to\\text{一维 }Z=g(X,Y)\\quad\\text{② 一维}\\to\\text{多维 }(g(X),h(X))\\quad\\text{③ 多维}\\to\\text{多维 }(U,V)\\\\ &\\text{二维离散函数 }Z=g(X,Y)\\text{：}P\\{Z=z_k\\}=\\sum_{g(x_i,y_j)=z_k}P\\{X=x_i,\\,Y=y_j\\}\\\\ &\\text{独立非负整数特例：}P\\{X+Y=k\\}=\\sum_{i=0}^{k}p_i q_{k-i}\\quad(\\text{离散卷积})\\\\ &\\qquad P\\{\\max\\{X,Y\\}=k\\}=p_k\\sum_{j=0}^{k}q_j+q_k\\sum_{i=0}^{k-1}p_i\\end{aligned}$$",
+      "conditions": "离散求和时特别警惕漏掉「$0$ 吞并」合并项（例如求 $Z=XY$ 时，$X=0$ 会把所有 $Y=y_j$ 全部吸收到 $Z=0$ 这一格，见概率 9 讲例 5.1）。",
+      "pitfalls": "**跨书勘误补注①（方浩强化 P.72 题型五蓝框误印）**：原书题型五标题为「二维**离散型**随机变量函数的分布」，紧接公式亦为离散求和 $\\sum_{g(x_i,y_j)=z_k}p_{ij}$，但蓝框第一行正文误印为「对二维**连续型**随机变量函数对应的结果进行列举」，应更正为「二维**离散型**」。",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 256\" width=\"100%\" style=\"max-width:640px;height:auto;display:block;margin:8px auto;\" font-family=\"system-ui,-apple-system,'Segoe UI',sans-serif\"><title>多维随机变量函数分布五大题型解题路由总览图</title><defs><marker id=\"m1_pr05_rt_arr\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#475569\"/></marker></defs><rect x=\"2\" y=\"2\" width=\"636\" height=\"252\" rx=\"12\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/><text x=\"320\" y=\"22\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">多维随机变量函数 Z = g(X,Y) 五大题型一键路由决策树</text><rect x=\"190\" y=\"32\" width=\"260\" height=\"32\" rx=\"8\" fill=\"#1e293b\"/><text x=\"320\" y=\"52\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#ffffff\">已知 (X,Y) 分布 → 先判分量类型，再选武器</text><line x1=\"320\" y1=\"64\" x2=\"320\" y2=\"78\" stroke=\"#475569\" stroke-width=\"1.5\"/><line x1=\"72\" y1=\"78\" x2=\"568\" y2=\"78\" stroke=\"#475569\" stroke-width=\"1.5\"/><line x1=\"72\" y1=\"78\" x2=\"72\" y2=\"92\" stroke=\"#475569\" stroke-width=\"1.4\" marker-end=\"url(#m1_pr05_rt_arr)\"/><line x1=\"196\" y1=\"78\" x2=\"196\" y2=\"92\" stroke=\"#475569\" stroke-width=\"1.4\" marker-end=\"url(#m1_pr05_rt_arr)\"/><line x1=\"320\" y1=\"78\" x2=\"320\" y2=\"92\" stroke=\"#475569\" stroke-width=\"1.4\" marker-end=\"url(#m1_pr05_rt_arr)\"/><line x1=\"444\" y1=\"78\" x2=\"444\" y2=\"92\" stroke=\"#475569\" stroke-width=\"1.4\" marker-end=\"url(#m1_pr05_rt_arr)\"/><line x1=\"568\" y1=\"78\" x2=\"568\" y2=\"92\" stroke=\"#475569\" stroke-width=\"1.4\" marker-end=\"url(#m1_pr05_rt_arr)\"/><rect x=\"14\" y=\"96\" width=\"116\" height=\"142\" rx=\"8\" fill=\"#eff6ff\" stroke=\"#3b82f6\" stroke-width=\"1.3\"/><text x=\"72\" y=\"114\" text-anchor=\"middle\" font-size=\"10.8\" font-weight=\"700\" fill=\"#1d4ed8\">① 离散 + 离散</text><text x=\"72\" y=\"132\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#334155\">列取值 → 合并同类项</text><text x=\"72\" y=\"148\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#334155\">Σ p_ij</text><rect x=\"22\" y=\"160\" width=\"100\" height=\"68\" rx=\"5\" fill=\"#ffffff\" stroke=\"#bfdbfe\"/><text x=\"72\" y=\"176\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#1e40af\">优先看可加性：</text><text x=\"72\" y=\"191\" text-anchor=\"middle\" font-size=\"9\" fill=\"#475569\">B(n,p)+B(m,p)</text><text x=\"72\" y=\"205\" text-anchor=\"middle\" font-size=\"9\" fill=\"#475569\">P(λ₁)+P(λ₂)</text><text x=\"72\" y=\"220\" text-anchor=\"middle\" font-size=\"8.8\" fill=\"#dc2626\">必检 Σp_k = 1</text><rect x=\"138\" y=\"96\" width=\"116\" height=\"142\" rx=\"8\" fill=\"#ecfdf5\" stroke=\"#10b981\" stroke-width=\"1.3\"/><text x=\"196\" y=\"114\" text-anchor=\"middle\" font-size=\"10.8\" font-weight=\"700\" fill=\"#047857\">② 连续和差积商</text><text x=\"196\" y=\"132\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#334155\">广义卷积 / 雅可比</text><text x=\"196\" y=\"148\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#065f46\">∫ f(x,h)|∂_z h| dx</text><rect x=\"146\" y=\"160\" width=\"100\" height=\"68\" rx=\"5\" fill=\"#ffffff\" stroke=\"#a7f3d0\"/><text x=\"196\" y=\"176\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#065f46\">神级口诀：</text><text x=\"196\" y=\"191\" text-anchor=\"middle\" font-size=\"9\" fill=\"#475569\">积谁不换谁</text><text x=\"196\" y=\"205\" text-anchor=\"middle\" font-size=\"9\" fill=\"#475569\">换完求偏导</text><text x=\"196\" y=\"220\" text-anchor=\"middle\" font-size=\"8.8\" fill=\"#047857\">不积先定限！</text><rect x=\"262\" y=\"96\" width=\"116\" height=\"142\" rx=\"8\" fill=\"#f5f3ff\" stroke=\"#8b5cf6\" stroke-width=\"1.3\"/><text x=\"320\" y=\"114\" text-anchor=\"middle\" font-size=\"10.8\" font-weight=\"700\" fill=\"#6d28d9\">③ 连续非线性</text><text x=\"320\" y=\"132\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#334155\">X²+Y², |X-Y|, Y/X</text><text x=\"320\" y=\"148\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#5b21b6\">划线定域求 F_Z(z)</text><rect x=\"270\" y=\"160\" width=\"100\" height=\"68\" rx=\"5\" fill=\"#ffffff\" stroke=\"#ddd6fe\"/><text x=\"320\" y=\"176\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#5b21b6\">高频杀招：</text><text x=\"320\" y=\"191\" text-anchor=\"middle\" font-size=\"9\" fill=\"#475569\">圆域→极坐标</text><text x=\"320\" y=\"205\" text-anchor=\"middle\" font-size=\"9\" fill=\"#475569\">均匀→面积比</text><text x=\"320\" y=\"220\" text-anchor=\"middle\" font-size=\"8.8\" fill=\"#6d28d9\">再求导得 f_Z(z)</text><rect x=\"386\" y=\"96\" width=\"116\" height=\"142\" rx=\"8\" fill=\"#fffbeb\" stroke=\"#f59e0b\" stroke-width=\"1.3\"/><text x=\"444\" y=\"114\" text-anchor=\"middle\" font-size=\"10.8\" font-weight=\"700\" fill=\"#b45309\">④ 离散 + 连续</text><text x=\"444\" y=\"132\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#334155\">压轴高频大题！</text><text x=\"444\" y=\"148\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#92400e\">全概率拆离散分支</text><rect x=\"394\" y=\"160\" width=\"100\" height=\"68\" rx=\"5\" fill=\"#ffffff\" stroke=\"#fde68a\"/><text x=\"444\" y=\"176\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#92400e\">标准两步走：</text><text x=\"444\" y=\"191\" text-anchor=\"middle\" font-size=\"9\" fill=\"#475569\">Σ P(Y=y_i)·</text><text x=\"444\" y=\"205\" text-anchor=\"middle\" font-size=\"9\" fill=\"#475569\">P(g≤z | Y=y_i)</text><text x=\"444\" y=\"220\" text-anchor=\"middle\" font-size=\"8.8\" fill=\"#dc2626\">查是否有跳点！</text><rect x=\"510\" y=\"96\" width=\"116\" height=\"142\" rx=\"8\" fill=\"#fff1f2\" stroke=\"#f43f5e\" stroke-width=\"1.3\"/><text x=\"568\" y=\"114\" text-anchor=\"middle\" font-size=\"10.8\" font-weight=\"700\" fill=\"#be123c\">⑤ 最值 max/min</text><text x=\"568\" y=\"132\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#334155\">次序统计量核心</text><text x=\"568\" y=\"148\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#9f1239\">独立乘积秒写</text><rect x=\"518\" y=\"160\" width=\"100\" height=\"68\" rx=\"5\" fill=\"#ffffff\" stroke=\"#fecdd3\"/><text x=\"568\" y=\"176\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#9f1239\">必背双式：</text><text x=\"568\" y=\"191\" text-anchor=\"middle\" font-size=\"9\" fill=\"#475569\">F_max = ∏ F_i(z)</text><text x=\"568\" y=\"205\" text-anchor=\"middle\" font-size=\"9\" fill=\"#475569\">F_min=1-∏(1-F_i)</text><text x=\"568\" y=\"220\" text-anchor=\"middle\" font-size=\"8.8\" fill=\"#be123c\">非独立回退容斥</text></svg>",
+      "source": {
+        "book": "27 张宇概率9讲/基础30讲 & 27 方浩强化",
+        "printedPage": "9讲 P.36-38 / 基础 P.79 / 方浩 P.72",
+        "pdfPage": 47,
+        "itemRef": "多维函数总框架与二维离散函数分布"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "求多维随机变量函数分布的第一步永远是**先判分量类型与输出维度**（参见总路由图）：若 $(X,Y)$ 为二维离散型，无论 $g$ 本身是否连续，$Z=g(X,Y)$ 必仍是离散型，直接枚举所有可能取值 $z_k$，把映射到同一 $z_k$ 的格子概率合并相加，并务必校核 $\\sum_k P\\{Z=z_k\\}=1$！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「先看分量类型，再选五路武器；离散一律枚举并同类，最后必验和为 1！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr05-f-02",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、连续型通用分布函数法与二重积分雅可比换元法",
+      "title": "二维连续函数分布函数法与 (U,V) 雅可比变换通用公式",
+      "formulaLatex": "$$\\begin{aligned} &\\text{分布函数法（划线定域，万能兜底）：}F_Z(z)=P\\{g(X,Y)\\le z\\}=\\iint_{g(x,y)\\le z}f(x,y)\\,\\mathrm{d}x\\mathrm{d}y,\\qquad f_Z(z)=F_Z'(z)\\\\ &\\text{二维雅可比换元法：设 }u=u(x,y),\\;v=v(x,y)\\text{ 有唯一可微反函数 }x=x(u,v),\\;y=y(u,v),\\\\ &\\qquad f_{U,V}(u,v)=f\\!\\left(x(u,v),y(u,v)\\right)\\cdot|J|,\\qquad J=\\frac{\\partial(x,y)}{\\partial(u,v)}=\\begin{vmatrix}\\frac{\\partial x}{\\partial u}&\\frac{\\partial x}{\\partial v}\\\\[3pt]\\frac{\\partial y}{\\partial u}&\\frac{\\partial y}{\\partial v}\\end{vmatrix}=\\left[\\frac{\\partial(u,v)}{\\partial(x,y)}\\right]^{-1}\\ne 0\\\\ &\\text{消去辅助变量 }v\\text{ 得一维密度：}f_U(u)=\\int_{-\\infty}^{+\\infty}f\\!\\left(x(u,v),y(u,v)\\right)|J|\\,\\mathrm{d}v\\end{aligned}$$",
+      "conditions": "雅可比公式要求变换在非零密度区域上**一一对应且一阶偏导连续**，且**必须加绝对值 $|J|$**（切记 $J=\\frac{\\partial(x,y)}{\\partial(u,v)}$ 是旧变量对新变量求偏导，若先算 $\\frac{\\partial(u,v)}{\\partial(x,y)}$ 则需取倒数再加绝对值！）。",
+      "pitfalls": "① 求完新联合密度 $f_{U,V}(u,v)$ 后，**务必把原非零区域同步翻译成 $(u,v)$ 的新范围**（如 $0<x<y<1$ 在 $u=x/y,v=y$ 下化为 $0<uv<v<1\\iff 0<u<1,0<v<1$，正方形一秒积完！）。 ② 非线性多值映射（如 $u=x^2+y^2$）不满足单射时，直接用极坐标分布函数法或分段加总各分支雅可比，切忌生套单支公式！",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 猪狗百宝书",
+        "printedPage": "基础 P.80 / 9讲 P.38-39 / 猪狗 P.4-28",
+        "pdfPage": 86,
+        "itemRef": "分布函数法与雅可比换元公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_jacobian_convs",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "面对二维连续型 $(X,Y)$：① **分布函数法**普适性最强（尤其适用于非线性函数 $X^2+Y^2,\\;|X-Y|$ 与均匀分布面积比），先在 $xOy$ 平面画出不等式区域 $g(x,y)\\le z$ 与密度非零域的交集算二重积分，再对 $z$ 求导；② **雅可比换元法**（张宇「二元变二元，补一个辅助元 $V=Y$ 或 $V=X$」）可一次性推导出全部和、差、积、商卷积公式，并能直接拿下二维联合密度 $(U,V)$ 考题（如 Box-Muller 变换与 Lukacs 独立证明）！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「线性单调走换元，非线性画域走定义；雅可比旧对新求导，千万别忘绝对值！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr05-f-03",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "三、和差积商四大卷积公式与广义卷积万能公式",
+      "title": "和、差、积、商四大卷积公式 & 方浩广义卷积公式（「积谁不换谁，换完求偏导」）",
+      "formulaLatex": "$$\\begin{aligned} &\\text{广义卷积（单调解出 }y=h(x,z)\\text{）：}f_Z(z)=\\int_{-\\infty}^{+\\infty}f\\!\\left(x,\\,h(x,z)\\right)\\left|\\frac{\\partial h(x,z)}{\\partial z}\\right|\\mathrm{d}x\\\\ &\\text{① 和 }Z=X+Y\\text{：}f_Z(z)=\\int_{-\\infty}^{+\\infty}f(x,z-x)\\,\\mathrm{d}x=\\int_{-\\infty}^{+\\infty}f(z-y,y)\\,\\mathrm{d}y\\\\ &\\text{② 差 }Z=X-Y\\text{：}f_Z(z)=\\int_{-\\infty}^{+\\infty}f(x,x-z)\\,\\mathrm{d}x=\\int_{-\\infty}^{+\\infty}f(z+y,y)\\,\\mathrm{d}y\\\\ &\\text{③ 积 }Z=XY\\text{：}f_Z(z)=\\int_{-\\infty}^{+\\infty}\\frac{1}{|x|}f\\!\\left(x,\\frac{z}{x}\\right)\\mathrm{d}x=\\int_{-\\infty}^{+\\infty}\\frac{1}{|y|}f\\!\\left(\\frac{z}{y},y\\right)\\mathrm{d}y\\\\ &\\text{④ 商 }Z=\\frac{X}{Y}\\text{：}f_Z(z)=\\int_{-\\infty}^{+\\infty}|y|\\,f(yz,y)\\,\\mathrm{d}y\\qquad\\left(\\text{特别 }aX+bY\\text{：}\\int\\frac{1}{|b|}f\\!\\left(x,\\frac{z-ax}{b}\\right)\\mathrm{d}x\\right)\\end{aligned}$$",
+      "conditions": "公式要求在固定 $x$ 下方程 $g(x,y)=z$ 可唯一可微地反解出 $y=h(x,z)$（如 $Z=aX+bY, XY, X/Y$ 等，注意 $Z=XY$ 与 $Z=X/Y$ 剔除零测线 $x=0$ 或 $y=0$ 不影响积分）。",
+      "pitfalls": "① 积分布 $\\frac{1}{|x|}$ 与商分布 $|y|$ 的绝对值**绝不能省**！当变量可取负值时（如标准正态商 $X_1/X_2$ 推柯西分布），少绝对值会导致负半轴与正半轴正负抵消变成 $0$！ ② 写 $Z=X-Y$ 时看清符号顺序：积 $x$ 则 $y=x-z$，积 $y$ 则 $x=y+z$，用口诀现推绝不会背反！",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 250\" width=\"100%\" style=\"max-width:640px;height:auto;display:block;margin:8px auto;\" font-family=\"system-ui,-apple-system,'Segoe UI',sans-serif\"><title>二维连续卷积积分限几何画法与积分布双曲线定域演示</title><defs><marker id=\"m1_pr05_c_arr\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"5\" markerHeight=\"5\" orient=\"auto\"><path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#475569\"/></marker></defs><rect x=\"2\" y=\"2\" width=\"636\" height=\"246\" rx=\"12\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/><text x=\"320\" y=\"22\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">连续卷积定限绝技：和分布带状穿线（左）&amp; 积分布双曲线切域（右）</text><rect x=\"14\" y=\"32\" width=\"300\" height=\"204\" rx=\"8\" fill=\"#ffffff\" stroke=\"#e2e8f0\"/><text x=\"164\" y=\"50\" text-anchor=\"middle\" font-size=\"11.2\" font-weight=\"700\" fill=\"#047857\">① 和卷积 Z=X+Y（在 x-z 平面穿线定限！）</text><line x1=\"52\" y1=\"176\" x2=\"220\" y2=\"176\" stroke=\"#475569\" stroke-width=\"1.3\" marker-end=\"url(#m1_pr05_c_arr)\"/><line x1=\"68\" y1=\"186\" x2=\"68\" y2=\"62\" stroke=\"#475569\" stroke-width=\"1.3\" marker-end=\"url(#m1_pr05_c_arr)\"/><text x=\"225\" y=\"180\" font-size=\"10\" fill=\"#475569\">x</text><text x=\"76\" y=\"68\" font-size=\"10\" fill=\"#475569\">z</text><polygon points=\"68,176 118,126 118,76 68,126\" fill=\"#d1fae5\" fill-opacity=\"0.75\" stroke=\"#059669\" stroke-width=\"1.7\"/><line x1=\"68\" y1=\"150\" x2=\"94\" y2=\"150\" stroke=\"#2563eb\" stroke-width=\"2.2\"/><line x1=\"94\" y1=\"100\" x2=\"118\" y2=\"100\" stroke=\"#dc2626\" stroke-width=\"2.2\"/><circle cx=\"68\" cy=\"150\" r=\"2.6\" fill=\"#2563eb\"/><circle cx=\"94\" cy=\"150\" r=\"2.6\" fill=\"#2563eb\"/><circle cx=\"94\" cy=\"100\" r=\"2.6\" fill=\"#dc2626\"/><circle cx=\"118\" cy=\"100\" r=\"2.6\" fill=\"#dc2626\"/><text x=\"118\" y=\"188\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#334155\">1</text><text x=\"58\" y=\"130\" text-anchor=\"end\" font-size=\"9.5\" fill=\"#334155\">1</text><text x=\"58\" y=\"80\" text-anchor=\"end\" font-size=\"9.5\" fill=\"#334155\">2</text><text x=\"126\" y=\"86\" font-size=\"9.2\" fill=\"#065f46\">z=x+1</text><text x=\"124\" y=\"132\" font-size=\"9.2\" fill=\"#065f46\">z=x</text><rect x=\"166\" y=\"72\" width=\"138\" height=\"92\" rx=\"6\" fill=\"#f8fafc\" stroke=\"#cbd5e1\"/><text x=\"235\" y=\"88\" text-anchor=\"middle\" font-size=\"9.8\" font-weight=\"700\" fill=\"#dc2626\">1 ≤ z &lt; 2（红线）</text><text x=\"235\" y=\"103\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#475569\">x ∈ [z-1, 1] → f=2-z</text><line x1=\"176\" y1=\"114\" x2=\"294\" y2=\"114\" stroke=\"#e2e8f0\"/><text x=\"235\" y=\"130\" text-anchor=\"middle\" font-size=\"9.8\" font-weight=\"700\" fill=\"#2563eb\">0 &lt; z &lt; 1（蓝线）</text><text x=\"235\" y=\"145\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#475569\">x ∈ [0, z] → f=z</text><text x=\"235\" y=\"159\" text-anchor=\"middle\" font-size=\"8.8\" fill=\"#047857\">合得等腰三角分布！</text><rect x=\"24\" y=\"196\" width=\"280\" height=\"32\" rx=\"6\" fill=\"#ecfdf5\" stroke=\"#6ee7b7\"/><text x=\"164\" y=\"216\" text-anchor=\"middle\" font-size=\"9.8\" font-weight=\"700\" fill=\"#065f46\">三步口诀：求 z 不积 z · 不积先定限 · 限内水平穿线</text><rect x=\"326\" y=\"32\" width=\"300\" height=\"204\" rx=\"8\" fill=\"#ffffff\" stroke=\"#e2e8f0\"/><text x=\"476\" y=\"50\" text-anchor=\"middle\" font-size=\"11.2\" font-weight=\"700\" fill=\"#6d28d9\">② 积分布 Z=XY（矩形 [0,2]×[0,1] 双曲线切域）</text><line x1=\"358\" y1=\"172\" x2=\"594\" y2=\"172\" stroke=\"#475569\" stroke-width=\"1.3\" marker-end=\"url(#m1_pr05_c_arr)\"/><line x1=\"376\" y1=\"184\" x2=\"376\" y2=\"62\" stroke=\"#475569\" stroke-width=\"1.3\" marker-end=\"url(#m1_pr05_c_arr)\"/><text x=\"598\" y=\"176\" font-size=\"10\" fill=\"#475569\">x</text><text x=\"384\" y=\"68\" font-size=\"10\" fill=\"#475569\">y</text><rect x=\"376\" y=\"92\" width=\"160\" height=\"80\" fill=\"#f8fafc\" stroke=\"#94a3b8\" stroke-width=\"1.4\"/><path d=\"M 376 172 L 376 92 L 424 92 Q 465 130 536 148 L 536 172 Z\" fill=\"#ddd6fe\" fill-opacity=\"0.78\" stroke=\"#7c3aed\" stroke-width=\"1.7\"/><line x1=\"424\" y1=\"92\" x2=\"424\" y2=\"172\" stroke=\"#7c3aed\" stroke-width=\"1.2\" stroke-dasharray=\"3 2\"/><text x=\"400\" y=\"136\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#5b21b6\">区①</text><text x=\"480\" y=\"158\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#5b21b6\">区②: y≤z/x</text><text x=\"492\" y=\"114\" font-size=\"9.5\" font-weight=\"700\" fill=\"#6d28d9\">xy = z</text><text x=\"424\" y=\"185\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#6d28d9\">z</text><text x=\"536\" y=\"185\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#334155\">2</text><text x=\"366\" y=\"96\" text-anchor=\"end\" font-size=\"9.5\" fill=\"#334155\">1</text><text x=\"556\" y=\"96\" font-size=\"9\" fill=\"#64748b\">(2,1)</text><rect x=\"338\" y=\"196\" width=\"276\" height=\"32\" rx=\"6\" fill=\"#faf5ff\" stroke=\"#d8b4fe\"/><text x=\"476\" y=\"216\" text-anchor=\"middle\" font-size=\"9.8\" font-weight=\"700\" fill=\"#5b21b6\">卷积法直接写：f_Z(z) = (1/2)∫_z^2 (1/x) dx = ½(ln2 - lnz)</text></svg>",
+      "tables": [
+        {
+          "caption": "表 P5-1 · 五大常见卷积公式速查与「积谁不换谁」推导验证表",
+          "headers": [
+            "函数 Z=g(X,Y)",
+            "积分变量与替换式",
+            "偏导绝对值 |∂h/∂z|",
+            "独立情形展开式",
+            "高频代表例题"
+          ],
+          "rows": [
+            [
+              "和 Z=X+Y",
+              "积 $x$，换 $y=z-x$",
+              "$1$",
+              "$\\int f_X(x)f_Y(z-x)\\mathrm{d}x$",
+              "基础例3.8 / 习题3.8 / U(0,1)和"
+            ],
+            [
+              "差 Z=X-Y",
+              "积 $y$，换 $x=z+y$",
+              "$1$",
+              "$\\int f_X(z+y)f_Y(y)\\mathrm{d}y$",
+              "9讲例5.4 ($|X_1-X_2|$) / 双指数"
+            ],
+            [
+              "线性 Z=aX+bY",
+              "积 $x$，换 $y=\\frac{z-ax}{b}$",
+              "$\\frac{1}{|b|}$",
+              "$\\frac{1}{|b|}\\int f_X(x)f_Y(\\frac{z-ax}{b})\\mathrm{d}x$",
+              "独立正态线性可加性证明"
+            ],
+            [
+              "积 Z=XY",
+              "积 $x$，换 $y=\\frac zx$",
+              "$\\frac{1}{|x|}$",
+              "$\\int \\frac{1}{|x|}f_X(x)f_Y(\\frac zx)\\mathrm{d}x$",
+              "基础例3.9 / 9讲例5.5 ($XY\\sim E(1)$)"
+            ],
+            [
+              "商 Z=X/Y",
+              "积 $y$，换 $x=yz$",
+              "$|y|$",
+              "$\\int |y|f_X(yz)f_Y(y)\\mathrm{d}y$",
+              "9讲例5.3 / 习题3.16 / 柯西分布"
+            ]
+          ]
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲 & 27 方浩强化 & 27 版概率论全总结",
+        "printedPage": "基础 P.81-82 / 方浩 P.74-78 / 全总结 P.11",
+        "pdfPage": 87,
+        "itemRef": "和差积商与广义卷积公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_jacobian_convs",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "四大卷积公式全部是广义卷积公式 $f_Z(z)=\\int f(x,h(x,z))|\\partial_z h|\\mathrm{d}x$ 的特例（亦即张宇「**积谁不换谁，换完求偏导**」神诀）！当 $X,Y$ 相互独立时，只需把被积函数中的 $f(\\cdot,\\cdot)$ 拆为 $f_X(\\cdot)f_Y(\\cdot)$。注意：**卷积积分限的确定才是真正考点**——画 $(x,z)$ 新平面区域后水平穿线（张宇三步曲：①换字母 ②画区域 ③求 $z$ 不积 $z$、不积先定限、限内画条线）零失误！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「积谁不换谁，换完求偏导（加绝对值！）：商乘 $|y|$、积除 $|x|$、线性除系数；定限必画 $x$-$z$ 图水平穿线！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr05-f-04",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "四、最值函数 max / min 的分布（次序统计量核心）",
+      "title": "一般与独立同分布的 max/min 分布函数及密度公式",
+      "formulaLatex": "$$\\begin{aligned} &\\text{一般二维情形（未必独立！）：}F_{\\max}(z)=P\\{X\\le z,Y\\le z\\}=F(z,z)\\\\ &\\qquad F_{\\min}(z)=P\\{\\{X\\le z\\}\\cup\\{Y\\le z\\}\\}=F_X(z)+F_Y(z)-F(z,z)=1-P\\{X>z,Y>z\\}\\\\ &\\text{n 元相互独立情形：}F_{\\max}(z)=\\prod_{i=1}^{n}F_{X_i}(z),\\qquad F_{\\min}(z)=1-\\prod_{i=1}^{n}\\left[1-F_{X_i}(z)\\right]\\\\ &\\text{n 元 i.i.d. 连续情形：}F_{\\max}(z)=[F(z)]^n\\implies f_{\\max}(z)=n[F(z)]^{n-1}f(z)\\\\ &\\qquad F_{\\min}(z)=1-[1-F(z)]^n\\implies f_{\\min}(z)=n[1-F(z)]^{n-1}f(z)\\end{aligned}$$",
+      "conditions": "连乘公式 $F_{\\max}=\\prod F_i$ 与 $F_{\\min}=1-\\prod(1-F_i)$ **严格依赖相互独立前提**；求导公式 $nF^{n-1}f$ 要求母分布为连续型。",
+      "pitfalls": "① 求 $P\\{\\max\\{X,Y\\}\\ge c\\}$ 或 $P\\{\\min\\{X,Y\\}\\le c\\}$ 时最容易方向搞反！死记：**能直接拆成积事件交的永远只有 $\\{\\max\\le c\\}=\\{X\\le c,Y\\le c\\}$ 和 $\\{\\min>c\\}=\\{X>c,Y>c\\}$**，其余方向一律先取对立事件！ ② 特别警示：串联系统寿命看 $\\min$（一个坏全坏），并联系统寿命看 $\\max$（全坏才坏），结合指数分布立即得串联寿命 $\\min E(\\lambda_i)\\sim E(\\sum\\lambda_i)$！",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 244\" width=\"100%\" style=\"max-width:640px;height:auto;display:block;margin:8px auto;\" font-family=\"system-ui,-apple-system,'Segoe UI',sans-serif\"><title>最大值与最小值分布几何域对照及指数分布次序统计量无记忆分解图</title><rect x=\"2\" y=\"2\" width=\"636\" height=\"240\" rx=\"12\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/><text x=\"320\" y=\"22\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">最值分布几何本质：max 取左下（直接）· min 取右上补集（反面）</text><rect x=\"14\" y=\"34\" width=\"186\" height=\"194\" rx=\"8\" fill=\"#ffffff\" stroke=\"#e2e8f0\"/><text x=\"107\" y=\"52\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1d4ed8\">M = max(X,Y) ≤ z</text><rect x=\"44\" y=\"64\" width=\"126\" height=\"96\" rx=\"4\" fill=\"#f8fafc\" stroke=\"#cbd5e1\"/><rect x=\"44\" y=\"102\" width=\"76\" height=\"58\" fill=\"#93c5fd\" fill-opacity=\"0.72\" stroke=\"#2563eb\" stroke-width=\"1.6\"/><line x1=\"120\" y1=\"64\" x2=\"120\" y2=\"160\" stroke=\"#2563eb\" stroke-dasharray=\"3 2\"/><line x1=\"44\" y1=\"102\" x2=\"170\" y2=\"102\" stroke=\"#2563eb\" stroke-dasharray=\"3 2\"/><text x=\"82\" y=\"135\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#1e3a8a\">X≤z 且 Y≤z</text><text x=\"128\" y=\"96\" font-size=\"9.5\" fill=\"#1d4ed8\">(z,z)</text><text x=\"107\" y=\"180\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#1e40af\">F_M(z) = F(z, z)</text><text x=\"107\" y=\"196\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">独立：F_X(z)·F_Y(z)</text><text x=\"107\" y=\"213\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#047857\">i.i.d. n 元：f = n[F(z)]^(n-1)f(z)</text><rect x=\"212\" y=\"34\" width=\"186\" height=\"194\" rx=\"8\" fill=\"#ffffff\" stroke=\"#e2e8f0\"/><text x=\"305\" y=\"52\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#be123c\">N = min(X,Y) ≤ z（取对立！）</text><rect x=\"242\" y=\"64\" width=\"126\" height=\"96\" rx=\"4\" fill=\"#ffe4e6\" fill-opacity=\"0.55\" stroke=\"#cbd5e1\"/><rect x=\"318\" y=\"64\" width=\"50\" height=\"44\" fill=\"#ffffff\" stroke=\"#e11d48\" stroke-width=\"1.6\"/><text x=\"343\" y=\"90\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#be123c\">均&gt;z</text><text x=\"278\" y=\"136\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#9f1239\">至少一个≤z</text><text x=\"305\" y=\"180\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#be123c\">F_N(z) = 1 - P(X&gt;z, Y&gt;z)</text><text x=\"305\" y=\"196\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">独立：1 - [1-F_X(z)][1-F_Y(z)]</text><text x=\"305\" y=\"213\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#047857\">i.i.d. n 元：f = n[1-F(z)]^(n-1)f(z)</text><rect x=\"410\" y=\"34\" width=\"216\" height=\"194\" rx=\"8\" fill=\"#fffbeb\" stroke=\"#f59e0b\" stroke-width=\"1.4\"/><text x=\"518\" y=\"53\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#92400e\">指数分布 i.i.d. E(λ) 压轴神拆！</text><rect x=\"424\" y=\"66\" width=\"188\" height=\"42\" rx=\"6\" fill=\"#ffffff\" stroke=\"#fcd34d\"/><text x=\"518\" y=\"83\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#b45309\">① 串联最小：min(X,Y) ~ E(2λ)</text><text x=\"518\" y=\"99\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#475569\">推广：min(X₁…X_n) ~ E(Σλ_i)</text><rect x=\"424\" y=\"116\" width=\"188\" height=\"42\" rx=\"6\" fill=\"#ffffff\" stroke=\"#fcd34d\"/><text x=\"518\" y=\"133\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#047857\">② 极差间距：|X-Y| ~ E(λ)</text><text x=\"518\" y=\"149\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#475569\">无记忆性！与 min(X,Y) 相互独立</text><rect x=\"424\" y=\"166\" width=\"188\" height=\"50\" rx=\"6\" fill=\"#fef3c7\" stroke=\"#d97706\"/><text x=\"518\" y=\"183\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#92400e\">③ 2024真题 &amp; 并联最大推论：</text><text x=\"518\" y=\"199\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#1d4ed8\">max(X,Y) = min + |X-Y| =ᵈ ½Y + X</text><text x=\"518\" y=\"212\" text-anchor=\"middle\" font-size=\"8.8\" fill=\"#64748b\">均值立刻得 E(max) = 1/(2λ)+1/λ = 3/(2λ)</text></svg>",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "基础 P.83 / 9讲 P.41-42 / 方浩 P.86-88 / 猪狗 P.4-28",
+        "pdfPage": 89,
+        "itemRef": "最值函数max与min的分布公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_order_stats",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "最值分布是概率第 5 讲与数理统计第 8 讲（最大/最小次序统计量）的共同基石：核心翻译原则是**最大值看「$\\le$」（全体都不超 $z$），最小值看「$>$」（全体都大于 $z$，取对立事件！）**。独立时直接拆为连乘；不独立时必须退回一般容斥式 $F_{\\min}(z)=F_X(z)+F_Y(z)-F(z,z)$。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「max 全小直接乘（$F^n$），min 全大取反面（$1-(1-F)^n$）；不独立别乱乘，容斥原式兜全场！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr05-f-05",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "五、离散 + 连续混合型函数的全概率分解公式",
+      "title": "「离散 + 连续」混合型随机变量函数 Z=g(X,Y) 的全概率求分布函数通法",
+      "formulaLatex": "$$\\begin{aligned} &\\text{设 }X\\text{ 离散（取值 }x_i,\\;P\\{X=x_i\\}=p_i\\text{），}Y\\text{ 连续，求 }Z=g(X,Y)\\text{ 的分布函数：}\\\\ &\\qquad F_Z(z)=P\\{g(X,Y)\\le z\\}=\\sum_{i}P\\{X=x_i\\}\\cdot P\\{g(x_i,Y)\\le z\\mid X=x_i\\}\\\\ &\\text{若 }X,Y\\text{ 相互独立，则直接退化为一维分布函数加权平均：}\\\\ &\\qquad F_Z(z)=\\sum_{i}p_i\\,P\\{g(x_i,Y)\\le z\\}\\\\ &\\text{混合型（}X\\text{ 含离散跳点与连续段）+ 独立连续 }Y\\text{：按 }X\\text{ 的跳点集合与连续区间全集分解！}\\end{aligned}$$",
+      "conditions": "若 $X$ 与 $Y$ **不独立**（如 2016 真题 `方浩例 31` 中 $U=\\mathbb{I}\\{X\\le Y\\}$ 与 $X$ 强相依），此时严禁强套独立乘积，必须把 $P\\{g(x_i,Y)\\le z,X=x_i\\}$ 直接还原为 $(X,Y)$ 平面区域上的**联合二重积分**（见方浩 P.82 注 ③！）。",
+      "pitfalls": "混合乘法 $Z=XY$ 当离散变量 $X$ 可取值 $0$（如 $P\\{X=0\\}=\\frac12$）时，$Z$ 在 $z=0$ 处会产生高度为 $P\\{X=0\\}$ 的**跳跃间断点**，成为非离散非连续的混合型变量（2009 真题经典考点），绝不可盲目求导当连续型！",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化",
+        "printedPage": "基础 P.79,87-88 / 9讲 P.42-45 / 方浩 P.80-85",
+        "pdfPage": 48,
+        "itemRef": "离散加连续混合型全概率分解公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_mixed_cases",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "「离散 + 连续」混合函数是考研解答压轴大题的绝对常青树（2009、2016、2017、2020 真题反复翻新！）。因为混合后既没有二维联合分布律也没有二维联合密度，**唯一正道是对离散变量 $X$ 的全部取值做完备事件组全概率分解**，把每个分支化归为已知的一维连续概率！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「离加连、无密度，全概率拆离散！独立直接加权和，不独立化交集算二重积分；最后必检有无跳点！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr05-f-06",
+      "kind": "formula",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "六、五大经典分布的可加性（再生性）定理",
+      "title": "二项、泊松、正态、卡方与同尺度伽马分布的独立可加性总览",
+      "formulaLatex": "$$\\begin{aligned} &\\text{设 }X,Y\\text{ 相互独立，则：}\\\\ &\\text{① 二项（须 }p\\text{ 相同！）：}X\\sim B(n,p),\\;Y\\sim B(m,p)\\implies X+Y\\sim B(n+m,p)\\\\ &\\text{② 泊松（任意 }\\lambda\\text{）：}X\\sim P(\\lambda_1),\\;Y\\sim P(\\lambda_2)\\implies X+Y\\sim P(\\lambda_1+\\lambda_2)\\\\ &\\text{③ 正态（线性组合皆可）：}X\\sim N(\\mu_1,\\sigma_1^2),\\;Y\\sim N(\\mu_2,\\sigma_2^2)\\implies aX+bY\\sim N(a\\mu_1+b\\mu_2,\\,a^2\\sigma_1^2+b^2\\sigma_2^2)\\\\ &\\text{④ 卡方（自由度相加）：}X\\sim\\chi^2(n),\\;Y\\sim\\chi^2(m)\\implies X+Y\\sim\\chi^2(n+m)\\\\ &\\text{⑤ 伽马（须 }\\lambda\\text{ 相同，含指数和）：}X\\sim\\Gamma(\\alpha_1,\\lambda),\\;Y\\sim\\Gamma(\\alpha_2,\\lambda)\\implies X+Y\\sim\\Gamma(\\alpha_1+\\alpha_2,\\lambda)\\end{aligned}$$",
+      "conditions": "全部 5 条均要求**相互独立**（其中正态可弱化为联合二维正态）；二项要求成功概率 $p$ 必须一致，伽马要求尺度参数 $\\lambda$ 必须一致。",
+      "pitfalls": "选择题常问「$X,Y$ 独立且与 $X+Y$ 服从同一类分布（不要求参数相同），可能成立的是？」（猪狗例 4.13）：答案选**泊松分布**（注意二项若 $p_1\\ne p_2$ 不可加，故「一定成立」选泊松！）。",
+      "tables": [
+        {
+          "caption": "表 P5-2 · 八大常见分布独立可加性 & 特殊变换再生速查表",
+          "headers": [
+            "分布族",
+            "独立之和 X+Y 是否同族？",
+            "成立附加条件 / 真实结果",
+            "高频联动结论"
+          ],
+          "rows": [
+            [
+              "正态 N(μ,σ²)",
+              "是（且任意线性组合皆是）",
+              "仅需联合二维正态（独立必满足）",
+              "$\\bar X\\sim N(\\mu,\\sigma^2/n)$"
+            ],
+            [
+              "泊松 P(λ)",
+              "是（无附加参数限制）",
+              "$P(\\lambda_1)+P(\\lambda_2)=P(\\lambda_1+\\lambda_2)$",
+              "猪狗例4.13「一定成立」首选"
+            ],
+            [
+              "二项 B(n,p)",
+              "有条件成立",
+              "必须满足 $p_1=p_2=p$；否则不再是二项",
+              "$n$ 个独立 $B(1,p)$ 之和为 $B(n,p)$"
+            ],
+            [
+              "卡方 χ²(n)",
+              "是（自由度直接相加）",
+              "$\\chi^2(n)+\\chi^2(m)=\\chi^2(n+m)$",
+              "本质是 $\\Gamma(n/2,1/2)$ 可加性"
+            ],
+            [
+              "伽马 Γ(α,λ)",
+              "有条件成立",
+              "必须满足 $\\lambda_1=\\lambda_2=\\lambda$",
+              "$n$ 个独立 $E(\\lambda)$ 之和为 $\\Gamma(n,\\lambda)$"
+            ],
+            [
+              "指数 E(λ)",
+              "否！",
+              "和为 $\\Gamma(2,\\lambda)$，但 $\\min\\sim E(\\sum\\lambda_i)$ 且 $|X-Y|\\sim E(\\lambda)$！",
+              "2024真题：$|X-Y|$ 与 $X$ 同分布"
+            ],
+            [
+              "均匀 U(a,b)",
+              "否！",
+              "两独立 $U(0,1)$ 之和为等腰三角分布",
+              "方浩例16高频排伪选项"
+            ],
+            [
+              "几何 G(p)",
+              "否！",
+              "两独立 $G(p)$ 之和为负二项分布（帕斯卡分布）",
+              "$P\\{X+Y=k\\}=(k-1)p^2(1-p)^{k-2}$"
+            ]
+          ]
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲 & 27 猪狗百宝书 & 27 版概率论全总结",
+        "printedPage": "基础 P.83-84 / 猪狗 P.4-19 例 4.13 / 全总结 P.12",
+        "pdfPage": 89,
+        "itemRef": "五大常见分布可加性与不可加反例"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_additivity_and_exp",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "可加性（又称分布再生性）指独立同族随机变量之和仍落回同一分布族，是考研选择题与证明题直接跳步的核心利器（推广至任意有限个 $n$ 元独立变量亦全成立）。特别注意反面：**均匀分布 $U$ 与指数分布 $E$ 均不具有可加性**（两个独立 $E(\\lambda)$ 之和为 $\\Gamma(2,\\lambda)$ 而非 $E$；两个独立 $U(0,1)$ 之和为三角分布而非 $U$）！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「可加四天王：二项同 $p$、泊松随意、正态全能、卡方加自由度；均匀指数不可加！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr05-c-01",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "一、指数分布独立同分布三大王炸结论（2024/2026 真题母源）",
+      "title": "独立同指数 E(λ) 的四大神级分布：差绝对值、最小值、最大值拆解与商分布",
+      "pitfalls": "切勿把 $|X-Y|\\sim E(\\lambda)$ 推广到两个不同参数 $E(\\lambda_1),E(\\lambda_2)$ 误以为仍服从单一指数分布（异参时 $|X-Y|$ 是两个指数分布的混合！）。",
+      "source": {
+        "book": "27 张宇概率9讲 & 27 猪狗百宝书 & 27 张宇基础30讲",
+        "printedPage": "9讲 P.39 例 5.2 / 基础 P.101 习题 3.16 / 猪狗 P.4-14,4-20,4-22,4-25",
+        "pdfPage": 50,
+        "itemRef": "独立同指数分布四大王炸结论"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_additivity_and_exp",
+        "verified": true
+      },
+      "summary": "设 $X,Y$ 独立同分布于 $E(\\lambda)$，则有四条考场秒杀结论：① **串联最小**：$\\min\\{X,Y\\}\\sim E(2\\lambda)$（且与 $|X-Y|$ **相互独立**！）；② **无记忆极差**：$|X-Y|\\sim E(\\lambda)$（2024 真题！）；③ **并联最大分解**：$\\max\\{X,Y\\}=\\min\\{X,Y\\}+|X-Y|\\stackrel{d}{=}\\frac{Y}{2}+X$（猪狗例 4.16！）；④ **商分布与卢卡斯独立**：$\\frac XY$ 的密度为 $f(z)=\\frac{1}{(1+z)^2}\\;(z>0)$（与 $\\lambda$ 无关，正是 **2026 真题**的母密度！），且 $U=X+Y\\sim\\Gamma(2,\\lambda)$ 与 $V=\\frac{X}{X+Y}\\sim U(0,1)$ **相互独立**（猪狗例 4.20、4.27）！",
+      "conditions": "这四条结论把 2024 真题、2026 真题、基础习题 3.16 和茆书压轴题串成一条完整黄金链！记忆核心就是指数分布的**无记忆性**：先失效者耗时 $\\min\\sim E(2\\lambda)$，此后剩余那件仿佛全新开启，再耗 $|X-Y|\\sim E(\\lambda)$ 且与过去完全独立！"
+    },
+    {
+      "id": "m1-pr05-c-02",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、倒数对称与极差/比值对称秒杀法（2026 真题绝杀）",
+      "title": "独立同分布对称破题法：若 1/X 与 X 同分布，则 P{XY≤1}=1/2（秒杀 2026 真题！）",
+      "pitfalls": "**跨书勘误补注②（猪狗百宝书 P.4-26 例 4.29 不可能事件硬伤）**：原书印为「证明 $P\\{X_n>\\max\\{X_1,X_2,\\dots,X_n\\}\\}=\\frac1n$」。因 $\\max\\{X_1,\\dots,X_n\\}\\ge X_n$ 恒成立，严格大于号令该事件为**空集（概率恒为 0！）**；茆书正确原题应为 $P\\{X_n>\\max\\{X_1,\\dots,X_{n-1}\\}\\}=\\frac1n$（右侧下标止于 $n-1$）或把 $>$ 改为 $=$！",
+      "source": {
+        "book": "27 猪狗百宝书",
+        "printedPage": "猪狗 P.4-14 例 4.1(2026), P.4-26 例 4.29",
+        "pdfPage": 106,
+        "itemRef": "i.i.d.对称性与倒数同分布秒杀法及勘误"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_2026_symmetry",
+        "verified": true
+      },
+      "summary": "① 若 $X,Y$ 独立同分布且为连续型，则必有 $P\\{X\\le Y\\}=P\\{X\\ge Y\\}=\\frac12$；推广至 $n$ 个 i.i.d. 连续变量，由完全对称性知任一 $X_k$ 成为严格最大者的概率恒为 $\\frac{1}{n}$：**$P\\{X_n>\\max\\{X_1,\\dots,X_{n-1}\\}\\}=P\\{X_n=\\max\\{X_1,\\dots,X_n\\}\\}=\\frac{1}{n}$**（修正猪狗 P.4-26 例 4.29 原书印错！）。② 若正连续变量 $X$ 满足 **$1/X\\stackrel{d}{=}X$**（如 $F_X(x)=\\frac{x}{1+x}\\;(x>0)$ 或对数对称分布），则对独立同分布的 $X,Y$ 立刻得 $P\\{XY\\le 1\\}=P\\{Y\\le 1/X\\}=\\frac12$！",
+      "conditions": "对称性是考研客观题最强降维武器：2026 真题给 $f(x)=\\frac{1}{(1+x)^2}\\;(x>0)$，一眼识出它就是 $E(1)/E(1)$ 的商分布，故 $1/X$ 必与 $X$ 同分布，0 秒出答案 $\\frac12$！"
+    },
+    {
+      "id": "m1-pr05-c-03",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、标准正态的商与极坐标变换（柯西分布与 Box-Muller 定理）",
+      "title": "独立标准正态之商服从柯西分布 & Box-Muller 均匀转独立正态定理",
+      "pitfalls": "注意 $X_1,X_2\\sim N(0,\\sigma^2)$ 同方差但均值均为 $0$ 时，比值 $X_1/X_2$ 的 $\\sigma$ 自动约去，依然服从标准柯西分布（这正是自由度为 1 的 $t(1)$ 分布！）。",
+      "source": {
+        "book": "27 猪狗百宝书 & 27 方浩强化",
+        "printedPage": "猪狗 P.4-20 例 4.15, P.4-26 例 4.28 / 方浩 P.79 例 30",
+        "pdfPage": 112,
+        "itemRef": "正态商柯西分布与Box-Muller变换"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_cauchy_boxmuller",
+        "verified": true
+      },
+      "summary": "① **标准正态商为柯西**：若 $X_1,X_2$ 独立同服从 $N(0,1)$，则 $Z=\\frac{X_1}{X_2}$ 服从标准柯西分布 $f_Z(z)=\\frac{1}{\\pi(1+z^2)}\\;(z\\in\\mathbb{R})$（期望不存在！）。② **Box-Muller 变换（猪狗例 4.28）**：若 $X,Y$ 独立同服从 $U(0,1)$，令 $U=-2\\ln X\\sim E(\\frac12),\\;V=2\\pi Y\\sim U(0,2\\pi)$，则 $S=\\sqrt{U}\\cos V$ 与 $T=\\sqrt{U}\\sin V$ 是**相互独立的标准正态随机变量** $N(0,1)$！③ **正态平方和分布**：独立 $X,Y\\sim N(0,\\sigma^2)\\implies X^2+Y^2\\sim E(\\frac{1}{2\\sigma^2})$，极径 $R=\\sqrt{X^2+Y^2}$ 服从瑞利分布 $f_R(r)=\\frac{r}{\\sigma^2}e^{-r^2/(2\\sigma^2)}\\;(r>0)$。",
+      "conditions": "三条结论全源于标准二维正态密度的旋转不变性 $\\frac{1}{2\\pi}e^{-(x^2+y^2)/2}\\mathrm{d}x\\mathrm{d}y=\\left(\\frac12 e^{-r^2/2}\\cdot 2r\\mathrm{d}r\\right)\\left(\\frac{\\mathrm{d}\\theta}{2\\pi}\\right)$——极半径平方 $R^2\\sim E(\\frac12)$ 与极角 $\\Theta\\sim U(0,2\\pi)$ 相互独立！"
+    },
+    {
+      "id": "m1-pr05-c-04",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、最值不等式与非独立对称最值恒等式",
+      "title": "同分布和不等式 G(2x)≤2F(x) & 非独立正态最值对称恒等式",
+      "pitfalls": "切勿对非独立题滥用 $F_{\\max}=F_XF_Y$！遇到题目**刻意省略「相互独立」四字**时，99% 考的就是事件包含关系或容斥恒等式。",
+      "source": {
+        "book": "27 方浩强化",
+        "printedPage": "方浩 P.86-87 例题 34, 例题 36",
+        "pdfPage": 91,
+        "itemRef": "同分布和上界与非独立正态最值恒等式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_order_stats",
+        "verified": true
+      },
+      "summary": "① **无独立前提的和分布上界（方浩例 34）**：只要 $X,Y$ 同分布（无需独立！）且分布函数均为 $F(x)$，记 $Z=X+Y$ 的分布函数为 $G(z)$，则对一切 $x\\in\\mathbb{R}$ 恒有 **$G(2x)\\le 2F(x)$**（由 $\\{X+Y\\le 2x\\}\\subseteq\\{X\\le x\\}\\cup\\{Y\\le x\\}$ 与次可加性一行证毕！）。② **非独立正态最值互补律（方浩例 36）**：若 $X,Y$ 均服从 $N(\\mu,\\sigma^2)$（无需独立！），且 $P\\{\\max\\{X,Y\\}\\ge\\mu\\}=a$，则必有 **$P\\{\\min\\{X,Y\\}\\le\\mu\\}=a$**！",
+      "conditions": "第二条的本质在于 $P\\{X\\le\\mu\\}=P\\{Y\\le\\mu\\}=\\frac12$：$P\\{\\min\\le\\mu\\}=\\frac12+\\frac12-P\\{X\\le\\mu,Y\\le\\mu\\}=1-P\\{\\max\\le\\mu\\}=P\\{\\max>\\mu\\}=a$，丝毫不依赖 $X,Y$ 是否独立！"
+    },
+    {
+      "id": "m1-pr05-c-05",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "五、连续对称旋转与混合分布的跳点识别法",
+      "title": "菱形旋转独立化 & 离散乘连续 $Z=XY$ 间断点个数秒判法则",
+      "pitfalls": "注意若 $X$ 为连续型而 $Y$ 为离散型，**加法 $Z=X+Y$ 永远是纯连续型（0 个间断点！）**，因为对每个 $y_i$，$X+y_i$ 只是平移后的连续变量，加权和处处连续可导。",
+      "source": {
+        "book": "27 猪狗百宝书 & 27 张宇基础30讲",
+        "printedPage": "猪狗 P.4-19 例 4.11(2009), P.4-21 例 4.17 / 基础 P.93,102 习题 3.18",
+        "pdfPage": 110,
+        "itemRef": "菱形旋转独立化与混合乘积跳点法则"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_mixed_cases",
+        "verified": true
+      },
+      "summary": "① **菱形 45° 旋转独立化（猪狗例 4.17）**：若 $(X,Y)$ 在菱形 $|x|+|y|\\le 1$ 上均匀分布，则 $U=X+Y,\\;V=X-Y$ 必在正方形 $[-1,1]^2$ 上均匀分布，即 **$U,V$ 独立同服从 $U(-1,1)$**！② **乘积混合跳点判据（2009 真题）**：设连续型 $X$ 与离散型 $Y$ 独立，$Z=XY$；若 $P\\{Y=0\\}=p_0>0$，则 $F_Z(z)$ 在且仅在 **$z=0$** 处存在一个跳跃间断点（跳高恰好等于 $p_0$！）；若 $Y$ 全取非零值（如 $Y\\in\\{-1,1\\}$），则 $Z=XY$ 仍是纯连续型，**间断点个数为 $0$**！",
+      "conditions": "原因极其朴素：当 $Y=y_i\\ne 0$ 时，$y_i X$ 仍是连续型随机变量（分布函数处处连续）；唯有 $Y=0$ 会把全部概率质量 $p_0$ 瞬间坍缩到单点 $z=0$ 上，制造唯一跳高 $p_0$！"
+    },
+    {
+      "id": "m1-pr05-e-01",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、二维离散函数的分布",
+      "title": "基础例 3.7：两信投三箱中构造和 Y₁=X₁+X₂ 与差 Y₂=X₁-X₂ 的分布律",
+      "problem": "沿用基础例 3.1（两封信随机投入 3 个信箱，$X_1,X_2$ 为前两信箱信数），求 $Y_1=X_1+X_2$ 与 $Y_2=X_1-X_2$ 的概率分布。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "按 $Y_1,Y_2$ 所有可能取值枚举对应的 $(X_1,X_2)$ 格子并求和（$Y_1$ 也可直接看作「落入前两箱的信数」$\\sim B(2,\\frac23)$，0 秒出答案！）。"
+        },
+        {
+          "stepTitle": "步骤 1：合并格子求 Y₁=X₁+X₂（对照二项分布秒验）",
+          "detail": "$Y_1\\in\\{0,1,2\\}$：$P\\{Y_1=0\\}=p_{00}=\\frac19$，$P\\{Y_1=1\\}=p_{01}+p_{10}=\\frac49$，$P\\{Y_1=2\\}=p_{02}+p_{11}+p_{20}=\\frac49$（恰好就是 $B(2,\\frac23)$！）。"
+        },
+        {
+          "stepTitle": "步骤 2：合并格子求 Y₂=X₁-X₂",
+          "detail": "$Y_2\\in\\{-2,-1,0,1,2\\}$：$P(Y_2=-2)=p_{02}=\\frac19$，$P(Y_2=-1)=p_{01}=\\frac29$，$P(Y_2=0)=p_{00}+p_{11}=\\frac13$，$P(Y_2=1)=p_{10}=\\frac29$，$P(Y_2=2)=p_{20}=\\frac19$（完美对称，总和为 1）。"
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲",
+        "printedPage": "基础 P.84 例 3.7",
+        "pdfPage": 90,
+        "itemRef": "基础例3.7 二维离散和差分布律"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_discrete_funcs",
+        "verified": true
+      },
+      "finalAnswer": "$Y_1\\sim\\binom{0\\;\\;1\\;\\;2}{1/9\\;4/9\\;4/9}$；$Y_2\\sim\\binom{-2\\;\\;-1\\;\\;0\\;\\;1\\;\\;2}{1/9\\;2/9\\;1/3\\;2/9\\;1/9}$。",
+      "takeaway": "注意虽然 $X_1,X_2$ 各自可取 $2$，但因总信数为 $2$，故 $Y_1$ 取不到 $3,4$（概率为 $0$ 的值直接剔除）。"
+    },
+    {
+      "id": "m1-pr05-e-02",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、二维连续卷积公式三步曲",
+      "title": "基础例 3.8：E(1) 与 f_Y=2y (0<y<1) 独立之和 Z=X+Y 的双解法",
+      "problem": "设 $X,Y$ 相互独立，$f_X(x)=e^{-x}\\;(x>0)$，$f_Y(y)=2y\\;(0<y<1)$，求：(1) 联合密度 $f(x,y)$；(2) $Z=X+Y$ 的概率密度 $f_Z(z)$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "展示卷积三步曲（①换字母 ②画 $(x,z)$ 带状域 ③水平穿线分 $0<z<1$ 与 $z\\ge 1$ 两段）与雅可比换元法（令 $u=x+y,v=y$ 换积 $v$ 更省分部积分！）。"
+        },
+        {
+          "stepTitle": "步骤 1：写出联合密度与卷积非零区",
+          "detail": "(1) $f(x,y)=2ye^{-x}\\;(x>0,0<y<1)$，其他 $0$。(2) 选积 $y$ 更妙（换 $x=z-y$）：$f_Z(z)=\\int_{-\\infty}^{+\\infty}f_X(z-y)f_Y(y)\\mathrm{d}y$，非零条件为 $0<y<1$ 且 $z-y>0\\iff y<z$！"
+        },
+        {
+          "stepTitle": "步骤 2：分段定限并计算分部积分",
+          "detail": "当 $z\\le 0$ 时 $f_Z(z)=0$；当 $0<z<1$ 时 $y\\in(0,z)$，$f_Z(z)=2e^{-z}\\int_0^z ye^y\\,\\mathrm{d}y=2e^{-z}[(y-1)e^y]_0^z=2z+2e^{-z}-2$；当 $z\\ge 1$ 时 $y\\in(0,1)$，$f_Z(z)=2e^{-z}\\int_0^1 ye^y\\,\\mathrm{d}y=2e^{-z}[0-(-1)]=2e^{-z}$！"
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲",
+        "printedPage": "基础 P.84-86 例 3.8",
+        "pdfPage": 90,
+        "itemRef": "基础例3.8 指数加多项式和卷积"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_jacobian_convs",
+        "verified": true
+      },
+      "finalAnswer": "(1) $f(x,y)=2ye^{-x}\\;(x>0,0<y<1)$；(2) $f_Z(z)=\\begin{cases}2z+2e^{-z}-2,&0<z<1\\\\2e^{-z},&z\\ge 1\\\\0,&z\\le 0\\end{cases}$。",
+      "takeaway": "选对积分变量事半功倍：本题把有限区间 $y\\in(0,1)$ 留作积分变量，指数 $e^{-(z-y)}=e^{-z}e^y$ 可把 $e^{-z}$ 直接提出积分号外，比积 $x$ 省一半出错率！"
+    },
+    {
+      "id": "m1-pr05-e-03",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、二维连续积分布与和卷积习题",
+      "title": "基础例 3.9 & 习题 3.8：矩形均匀积分布 Z=XY + 正方形 f=2-x-y 和分布",
+      "problem": "(1)（例 3.9）$(X,Y)$ 在矩形 $[0,2]\\times[0,1]$ 上服从均匀分布，求矩形面积 $Z=XY$ 的概率密度；(2)（习题 3.8）$f(x,y)=2-x-y\\;(0<x<1,0<y<1)$，求 $Z=X+Y$ 的概率密度。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "(1) 直接套积卷积公式 $f_Z(z)=\\int\\frac{1}{|x|}f(x,\\frac zx)\\mathrm{d}x$，由 $0<x<2,\\;0<\\frac zx<1\\iff z<x<2$ 一行出对数；(2) 被积函数 $f(x,z-x)=2-z$ 竟与积分变量 $x$ 无关，直接乘区间长度秒出！"
+        },
+        {
+          "stepTitle": "步骤 1：例 3.9 积卷积一行出答案",
+          "detail": "$f(x,y)=\\frac12\\;(0\\le x\\le 2,0\\le y\\le 1)$。代入 $y=z/x$ 得非零条件 $0<z<x<2$（须 $0<z<2$），故 $f_Z(z)=\\frac12\\int_z^2 \\frac1x\\,\\mathrm{d}x=\\frac12(\\ln 2-\\ln z)\\;(0<z<2)$，其他为 $0$。"
+        },
+        {
+          "stepTitle": "步骤 2：习题 3.8 常数被积函数秒杀",
+          "detail": "把 $y=z-x$ 代入 $2-x-y$ 得 $2-z$（与 $x$ 无关！）。在单位正方形带域中：$0<z<1$ 时 $x\\in(0,z)$ 长度 $z\\implies f_Z(z)=z(2-z)$；$1\\le z<2$ 时 $x\\in(z-1,1)$ 长度 $2-z\\implies f_Z(z)=(2-z)^2$！"
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲",
+        "printedPage": "基础 P.86-87 例 3.9, P.92,96 习题 3.8",
+        "pdfPage": 92,
+        "itemRef": "基础例3.9与习题3.8 积分布与和卷积"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_jacobian_convs",
+        "verified": true
+      },
+      "finalAnswer": "(1) $f_Z(z)=\\frac12(\\ln 2-\\ln z)\\;(0<z<2)$，其他 $0$；(2) $f_Z(z)=\\begin{cases}z(2-z),&0<z<1\\\\(2-z)^2,&1\\le z<2\\\\0,&\\text{其他}\\end{cases}$。",
+      "takeaway": "校核积分归一化：$\\int_0^2 \\frac12\\ln\\frac2z\\mathrm{d}z=1$；$\\int_0^1(2z-z^2)\\mathrm{d}z+\\int_1^2(2-z)^2\\mathrm{d}z=\\frac23+\\frac13=1$，全准！"
+    },
+    {
+      "id": "m1-pr05-e-04",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "四、最值分布与独立指数商分布基础母题",
+      "title": "基础例 3.11 & 习题 3.16-3.17：均匀分布 max/min 密度 + 指数商密度 1/(1+z)²",
+      "problem": "(1)（例 3.11 & 习题 3.17）$X,Y$ 独立同服从 $U(a,b)$，求 $M=\\max\\{X,Y\\}$ 与 $N=\\min\\{X,Y\\}$ 的概率密度；(2)（习题 3.16）$X,Y$ 独立同服从 $E(\\lambda)$，求商 $Z=\\frac XY$ 的概率密度。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "(1) 套 i.i.d. 两元最值公式 $2Ff$ 与 $2(1-F)f$ 一秒写完；(2) 套商卷积公式 $f_Z(z)=\\int_0^{+\\infty}y\\lambda^2 e^{-\\lambda(1+z)y}\\mathrm{d}y$，配伽马积分 $\\Gamma(2)=1$ 发现结果竟与 $\\lambda$ 无关！"
+        },
+        {
+          "stepTitle": "步骤 1：均匀最值公式秒出",
+          "detail": "$F(z)=\\frac{z-a}{b-a},\\;f(z)=\\frac{1}{b-a}\\;(a\\le z\\le b)$，故 $f_M(z)=2F(z)f(z)=\\frac{2(z-a)}{(b-a)^2}$，$f_N(z)=2[1-F(z)]f(z)=\\frac{2(b-z)}{(b-a)^2}\\;(a\\le z\\le b)$，其他为 $0$。"
+        },
+        {
+          "stepTitle": "步骤 2：指数商分布（2026 真题母源！）",
+          "detail": "当 $z\\le 0$ 时 $f_Z(z)=0$；当 $z>0$ 时，$f_Z(z)=\\int_0^{+\\infty}y\\cdot\\lambda e^{-\\lambda yz}\\cdot\\lambda e^{-\\lambda y}\\,\\mathrm{d}y=\\lambda^2\\int_0^{+\\infty}ye^{-\\lambda(1+z)y}\\,\\mathrm{d}y$。令 $t=\\lambda(1+z)y$，得 $f_Z(z)=\\frac{1}{(1+z)^2}\\int_0^{+\\infty}te^{-t}\\,\\mathrm{d}t=\\frac{1}{(1+z)^2}$！"
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲",
+        "printedPage": "基础 P.88-89 例 3.11, P.93,101-102 习题 3.16, 3.17",
+        "pdfPage": 94,
+        "itemRef": "基础例3.11与习题3.16 均匀最值与指数商分布"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_additivity_and_exp",
+        "verified": true
+      },
+      "finalAnswer": "(1) $f_M(z)=\\frac{2(z-a)}{(b-a)^2},\\;f_N(z)=\\frac{2(b-z)}{(b-a)^2}\\;(a\\le z\\le b)$；(2) $f_Z(z)=\\frac{1}{(1+z)^2}\\;(z>0)$，其他为 $0$。",
+      "takeaway": "惊艳跨年联动：基础习题 3.16 算出的 $f_Z(z)=\\frac{1}{(1+z)^2}\\;(z>0)$ 正是 **2026 考研真题**（猪狗例 4.1）直接给出的母密度，牢记其分布函数 $F(z)=\\frac{z}{1+z}$ 且满足 $1/Z\\stackrel{d}{=}Z$！"
+    },
+    {
+      "id": "m1-pr05-e-05",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "一、强化离散乘积与 2018 真题同源",
+      "title": "强化例 5.1：独立泊松 X~P(λ) 与随机变号 Y∈{-1,1} 乘积分布律",
+      "problem": "设随机变量 $X,Y$ 相互独立，$X\\sim P(\\lambda)$，$Y$ 的分布律为 $P\\{Y=-1\\}=\\frac14,\\;P\\{Y=1\\}=\\frac34$，求 $Z=XY$ 的概率分布。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "$Z$ 取遍全部整数 $0,\\pm 1,\\pm 2,\\dots$；务必把 $Z=0$ 单独列出（此时无论 $Y$ 取 $-1$ 还是 $1$，只要 $X=0$ 即得 $Z=0$，绝不能再乘 $\\frac14$ 或 $\\frac34$！）。"
+        },
+        {
+          "stepTitle": "步骤 1：单独剥离 Z=0 吞并事件",
+          "detail": "$P\\{Z=0\\}=P\\{X=0\\}=e^{-\\lambda}$。"
+        },
+        {
+          "stepTitle": "步骤 2：分正负整数写出概率",
+          "detail": "对任意正整数 $k=1,2,3,\\dots$：$P\\{Z=k\\}=P\\{X=k\\}P\\{Y=1\\}=\\frac{3}{4}\\frac{\\lambda^k}{k!}e^{-\\lambda}$；$P\\{Z=-k\\}=P\\{X=k\\}P\\{Y=-1\\}=\\frac{1}{4}\\frac{\\lambda^k}{k!}e^{-\\lambda}$。校核全和：$e^{-\\lambda}+(\\frac34+\\frac14)(1-e^{-\\lambda})=1$！"
+        }
+      ],
+      "source": {
+        "book": "27 张宇概率9讲 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.38 例 5.1 / 猪狗 P.4-17 例 4.8(2018)",
+        "pdfPage": 49,
+        "itemRef": "强化例5.1 泊松随机变号乘积分布律"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_discrete_funcs",
+        "verified": true
+      },
+      "finalAnswer": "$P\\{Z=0\\}=e^{-\\lambda}$；对 $k=1,2,\\dots$，$P\\{Z=k\\}=\\frac{3\\lambda^k}{4\\cdot k!}e^{-\\lambda}$，$P\\{Z=-k\\}=\\frac{\\lambda^k}{4\\cdot k!}e^{-\\lambda}$。",
+      "takeaway": "对比 2018 真题（猪狗例 4.8，将权重改为 $\\frac12,\\frac12$）：常见错解把 $k=0$ 合并进正负两枝导致 $Z=0$ 被错算成 $\\frac34 e^{-\\lambda}$ 或漏掉，切记单独列出 $Z=0$！"
+    },
+    {
+      "id": "m1-pr05-e-06",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、连续非线性与无记忆极差（2024 考研真题）",
+      "title": "强化例 5.2（2024 真题）：独立同指数 E(λ) 极差 |X-Y| 与 X 同分布",
+      "problem": "（2024 真题）设随机变量 $X,Y$ 相互独立，且均服从参数为 $\\lambda$ 的指数分布，令 $Z=|X-Y|$，则与 $Z$ 同分布的是（ ）：(A) $X+Y$；(B) $\\frac{X+Y}{2}$；(C) $2X$；(D) $X$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "双解法兼备：① **分布函数划线对称法**：利用 $X,Y$ 对称性化为 $2P\\{0\\le X-Y\\le z\\}$，两行算出 $1-e^{-\\lambda z}$；② **无记忆性口算**：先发生者已过时间不影响剩余等待时间，故差值必服从 $E(\\lambda)$！"
+        },
+        {
+          "stepTitle": "步骤 1：对称化简二重积分",
+          "detail": "当 $z<0$ 时 $F_Z(z)=0$；当 $z\\ge 0$ 时，因 $(X,Y)$ 对称于直线 $y=x$，$F_Z(z)=P\\{-z\\le X-Y\\le z\\}=2P\\{0\\le X-Y\\le z\\}=2\\int_0^{+\\infty}\\lambda e^{-\\lambda y}\\,\\mathrm{d}y\\int_y^{y+z}\\lambda e^{-\\lambda x}\\,\\mathrm{d}x$。"
+        },
+        {
+          "stepTitle": "步骤 2：两行算出指数分布函数",
+          "detail": "内层积分 $=e^{-\\lambda y}-e^{-\\lambda(y+z)}=(1-e^{-\\lambda z})e^{-\\lambda y}$，故 $F_Z(z)=2(1-e^{-\\lambda z})\\int_0^{+\\infty}\\lambda e^{-2\\lambda y}\\,\\mathrm{d}y=2(1-e^{-\\lambda z})\\cdot\\frac12=1-e^{-\\lambda z}$！即 $Z\\sim E(\\lambda)$，与 $X$ 同分布！"
+        }
+      ],
+      "source": {
+        "book": "27 张宇概率9讲 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.39 例 5.2 / 猪狗 P.4-14 例 4.2(2024)",
+        "pdfPage": 50,
+        "itemRef": "强化例5.2 2024真题独立指数差绝对值"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_additivity_and_exp",
+        "verified": true
+      },
+      "finalAnswer": "选 (D)（$Z=|X-Y|\\sim E(\\lambda)$）。",
+      "takeaway": "顺便排除干扰项：A 为 $\\Gamma(2,\\lambda)$，B 为 $\\Gamma(2,2\\lambda)$，C 为 $E(\\lambda/2)$；唯有 D 与 $Z$ 同服从 $E(\\lambda)$！"
+    },
+    {
+      "id": "m1-pr05-e-07",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、雅可比换元法三连发",
+      "title": "强化例 5.3：三角域 f=8xy (0<x<y<1) 求商分布 Z=X/Y 与点条件概率",
+      "problem": "设 $(X,Y)$ 联合密度 $f(x,y)=8xy\\;(0<x<y<1)$，其他为 $0$，记 $Z=\\frac XY$。求：(1) $Z$ 的概率密度 $f_Z(z)$；(2) $P\\{Y<\\frac23\\mid X=\\frac12\\}$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "(1) 雅可比换元 $u=x/y,v=y$ 把三角形域 $0<x<y<1$ 一秒「拉直」成单位正方形 $0<u<1,0<v<1$，积分神爽！(2) 零概率点条件用条件密度 $f_{Y\\mid X}(y\\mid\\frac12)$ 做一维积分。"
+        },
+        {
+          "stepTitle": "步骤 1：雅可比换元将三角拉直为正方形",
+          "detail": "令 $u=\\frac xy,v=y\\implies x=uv,y=v$，$|J|=|v|=v$。原域 $0<uv<v<1\\iff 0<u<1,\\;0<v<1$！于是 $f_{U,V}(u,v)=8(uv)v\\cdot v=8uv^3\\;(0<u<1,0<v<1)$。对 $v$ 积分得 $f_U(u)=8u\\int_0^1 v^3\\,\\mathrm{d}v=2u\\;(0<u<1)$，即 $f_Z(z)=2z\\;(0<z<1)$（可见 $Z=X/Y$ 与 $Y$ 竟相互独立！）。"
+        },
+        {
+          "stepTitle": "步骤 2：求点条件概率 P(Y<2/3 | X=1/2)",
+          "detail": "$f_X(x)=\\int_x^1 8xy\\,\\mathrm{d}y=4x(1-x^2)\\;(0<x<1)$，故 $f_X(\\frac12)=\\frac32$，$f_{Y\\mid X}(y\\mid\\frac12)=\\frac{4y}{3/2}=\\frac83 y\\;(\\frac12<y<1)$。积分得 $P\\{Y<\\frac23\\mid X=\\frac12\\}=\\int_{1/2}^{2/3}\\frac83 y\\,\\mathrm{d}y=\\frac43(\\frac49-\\frac14)=\\frac{7}{27}$。"
+        }
+      ],
+      "source": {
+        "book": "27 张宇概率9讲",
+        "printedPage": "9讲 P.40 例 5.3",
+        "pdfPage": 51,
+        "itemRef": "强化例5.3 雅可比拉直三角域求商分布与条件概率"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_jiu53_54_55",
+        "verified": true
+      },
+      "finalAnswer": "(1) $f_Z(z)=2z\\;(0<z<1)$，其他 $0$；(2) $\\frac{7}{27}$。",
+      "takeaway": "第 (2) 问积分下限是 $y=\\frac12$（由 $x<y<1$ 决定），绝不能从 $0$ 积到 $\\frac23$！"
+    },
+    {
+      "id": "m1-pr05-e-08",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、极差恒等式与换元法（强化例 5.4 & 5.5）",
+      "title": "强化例 5.4 & 例 5.5：极差 max-min=|X₁-X₂| 密度 + 层次分布奇迹 XY~E(1)",
+      "problem": "(1)（例 5.4）$X_1,X_2$ 独立同分布，$f(x)=ax\\;(0<x<1)$，求 $a$ 及 $Z=\\max\\{X_1,X_2\\}-\\min\\{X_1,X_2\\}$ 的概率密度；(2)（例 5.5）$X\\sim U(1,2)$，给定 $X=x$ 时 $Y\\sim E(x)$，求 $D(XY)$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "(1) 先用二元极差恒等式 $\\max-\\min=|X_1-X_2|$ 化归为差分布 $U=X_1-X_2$，再由 $f_{|U|}(z)=f_U(z)+f_U(-z)$ 出密度；(2) 雅可比换元 $u=xy,v=x$（或直接用条件分布：给定 $X=x$ 时 $xY\\sim E(1)$ 与 $x$ 无关！）一秒秒杀 $XY\\sim E(1)$！"
+        },
+        {
+          "stepTitle": "步骤 1：例 5.4 先求差 U=X₁-X₂ 再折叠取绝对值",
+          "detail": "由 $\\int_0^1 ax\\,\\mathrm{d}x=1\\implies a=2$。$Z=|X_1-X_2|$，记 $U=X_1-X_2$：因 $U$ 对称于 $0$，仅算 $0<u<1$ 即可：$f_U(u)=\\int_0^{1-u}4(u+v)v\\,\\mathrm{d}v=\\frac23 u^3-2u+\\frac43$；由对称性 $f_Z(z)=2f_U(z)=\\frac43 z^3-4z+\\frac83\\;(0<z<1)$，其他为 $0$！"
+        },
+        {
+          "stepTitle": "步骤 2：例 5.5 雅可比法 & 条件独立秒杀法双验证",
+          "detail": "**法一（雅可比）**：$f(x,y)=xe^{-xy}\\;(1<x<2,y>0)$，令 $u=xy,v=y$ 则 $1<\\frac uv<2\\iff \\frac u2<v<u$，$|J|=\\frac1v$，于是 $f_U(u)=\\int_{u/2}^{u}\\frac uv e^{-u}\\cdot\\frac1v\\,\\mathrm{d}v=ue^{-u}\\left[-\\frac1v\\right]_{u/2}^{u}=e^{-u}\\;(u>0)$，即 $XY\\sim E(1)\\implies D(XY)=1$！**法二（1 秒秒杀）**：对任意 $x\\in(1,2)$，$Y\\mid(X=x)\\sim E(x)\\implies xY\\mid(X=x)\\sim E(1)$（与 $x$ 完全无关！），故无条件分布必为 $XY\\sim E(1)\\implies D(XY)=1$！"
+        }
+      ],
+      "source": {
+        "book": "27 张宇概率9讲 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.40-41 例 5.4, 例 5.5 / 猪狗 P.4-24 例 4.25",
+        "pdfPage": 51,
+        "itemRef": "强化例5.4与5.5 极差密度与层次乘积E(1)"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_jiu53_54_55",
+        "verified": true
+      },
+      "finalAnswer": "(1) $a=2$，$f_Z(z)=\\frac43 z^3-4z+\\frac83\\;(0<z<1)$；(2) $D(XY)=1$（选 A）。",
+      "takeaway": "例 5.5 的法二堪称神技：只要条件分布 $g(X,Y)\\mid(X=x)$ 的结果不含 $x$，它就自动等于 $g(X,Y)$ 的无条件分布（而且还说明 $g(X,Y)$ 与 $X$ 相互独立！）。"
+    },
+    {
+      "id": "m1-pr05-e-09",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、样本最值次序统计量（强化例 5.6）",
+      "title": "强化例 5.6：U(0,θ) 容量 n=3 样本最大值与最小值的分布函数及密度",
+      "problem": "设总体 $X\\sim U(0,\\theta)\\;(\\theta>0)$，$X_1,X_2,X_3$ 为来自该总体的简单随机样本，求 $Y=\\max\\{X_1,X_2,X_3\\}$ 与 $Z=\\min\\{X_1,X_2,X_3\\}$ 的分布函数与概率密度。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "简单随机样本即 i.i.d.，直接代入 $n=3$ 的最值公式 $F^3,\\;3F^2f$ 与 $1-(1-F)^3,\\;3(1-F)^2f$，为第 8-9 讲样本最大/最小值参数估计打下铺垫！"
+        },
+        {
+          "stepTitle": "步骤 1：写最大值 Y 的分布函数与密度",
+          "detail": "在 $0\\le y<\\theta$ 上 $F(y)=\\frac{y}{\\theta},\\;f(y)=\\frac{1}{\\theta}$，故 $F_Y(y)=\\left(\\frac y\\theta\\right)^3\\;(0\\le y<\\theta)$（$<0$ 取 0，$\\ge\\theta$ 取 1）；$f_Y(y)=\\frac{3y^2}{\\theta^3}\\;(0\\le y<\\theta)$，其他为 $0$。"
+        },
+        {
+          "stepTitle": "步骤 2：写最小值 Z 的分布函数与密度",
+          "detail": "$F_Z(z)=1-\\left(1-\\frac z\\theta\\right)^3\\;(0\\le z<\\theta)$（$<0$ 取 0，$\\ge\\theta$ 取 1）；$f_Z(z)=\\frac{3}{\\theta}\\left(1-\\frac z\\theta\\right)^2\\;(0\\le z<\\theta)$，其他为 $0$。"
+        }
+      ],
+      "source": {
+        "book": "27 张宇概率9讲",
+        "printedPage": "9讲 P.42 例 5.6",
+        "pdfPage": 53,
+        "itemRef": "强化例5.6 均匀总体样本最值分布"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_order_stats",
+        "verified": true
+      },
+      "finalAnswer": "$f_Y(y)=\\frac{3y^2}{\\theta^3}\\;(0\\le y<\\theta)$；$f_Z(z)=\\frac{3(\\theta-z)^2}{\\theta^3}\\;(0\\le z<\\theta)$。",
+      "takeaway": "推广至一般样本容量 $n$：$E(Y)=\\frac{n}{n+1}\\theta$（第 9 讲无偏修正系数 $\\frac{n+1}{n}$ 之源！），$E(Z)=\\frac{1}{n+1}\\theta$。"
+    },
+    {
+      "id": "m1-pr05-e-10",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "五、离散 + 连续混合压轴大题（2020 考研真题）",
+      "title": "强化例 5.7（2020 真题）：随机切换开关 Y=X₃X₁+(1-X₃)X₂ 联合分布与边缘正态",
+      "problem": "（2020 真题）设 $X_1,X_2,X_3$ 相互独立，$X_1,X_2\\sim N(0,1)$，$P\\{X_3=0\\}=P\\{X_3=1\\}=\\frac12$，令 $Y=X_3 X_1+(1-X_3)X_2$。求：(1) $(X_1,Y)$ 的联合分布函数 $F(x,y)$（用 $\\Phi$ 表示）；(2) 证明 $Y\\sim N(0,1)$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "按开关 $X_3\\in\\{0,1\\}$ 做全集分解：$X_3=0$ 时 $Y=X_2$（与 $X_1$ 独立）；$X_3=1$ 时 $Y=X_1$（完全重合，化为 $P\\{X_1\\le\\min(x,y)\\}$！）。"
+        },
+        {
+          "stepTitle": "步骤 1：对 X₃ 全概率分解求联合 CDF",
+          "detail": "$F(x,y)=P\\{X_3=0\\}P\\{X_1\\le x,X_2\\le y\\}+P\\{X_3=1\\}P\\{X_1\\le x,X_1\\le y\\}=\\frac12\\Phi(x)\\Phi(y)+\\frac12\\Phi(\\min\\{x,y\\})$。"
+        },
+        {
+          "stepTitle": "步骤 2：令 x→+∞ 取边缘证 Y~N(0,1)",
+          "detail": "$F_Y(y)=\\lim_{x\\to+\\infty}F(x,y)=\\frac12\\cdot 1\\cdot\\Phi(y)+\\frac12\\Phi(y)=\\Phi(y)$，故 $Y\\sim N(0,1)$！（顺带一提：$X_1,Y$ 边缘均正态但联合分布含 $\\Phi(\\min\\{x,y\\})$ 在对角线 $x=y$ 有奇异质量 $\\frac12$，绝非二维正态！）"
+        }
+      ],
+      "source": {
+        "book": "27 张宇概率9讲/基础30讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.43 例 5.7 / 基础 P.87-88 例 3.10 / 方浩 P.83 例 32 / 猪狗 P.4-16 例 4.6",
+        "pdfPage": 54,
+        "itemRef": "强化例5.7 2020真题随机开关混合正态"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_mixed_cases",
+        "verified": true
+      },
+      "finalAnswer": "(1) $F(x,y)=\\frac12\\Phi(x)\\Phi(y)+\\frac12\\Phi(\\min\\{x,y\\})$；(2) $F_Y(y)=\\Phi(y)\\implies Y\\sim N(0,1)$。",
+      "takeaway": "在 $X_3=1$ 分支中，$\\{X_1\\le x,X_1\\le y\\}$ 是**同一随机变量**的两个不等式取交集，故化为 $\\{X_1\\le\\min\\{x,y\\}\\}$，切忌错拆成 $\\Phi(x)\\Phi(y)$！"
+    },
+    {
+      "id": "m1-pr05-e-11",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "五、混合型随机变量 + 连续型卷积（张宇新命重点题）",
+      "title": "强化例 5.8：混合型 X（双端点跳点+中间均匀）与独立 E(1) 之和 Z=X+Y",
+      "problem": "设随机变量 $X$ 满足 $|X|\\le 1$，$P\\{X=-1\\}=P\\{X=1\\}=\\frac14$，当 $|X|<1$ 时 $X$ 服从 $(-1,1)$ 上的均匀分布；$Y\\sim E(1)$ 与 $X$ 相互独立，令 $Z=X+Y$。求：(1) $F_X(x)$；(2) $F_Z(z)$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "把 $X$ 的样本空间彻底拆成三块互斥事件：$\\{X=-1\\}$（概率 $\\frac14$）、$\\{X=1\\}$（概率 $\\frac14$）与 $\\{-1<X<1\\}$（条件均匀、概率密度权重 $\\frac12\\cdot\\frac12=\\frac14$）！分别算三块再相加，奇迹般化简出极简表达式！"
+        },
+        {
+          "stepTitle": "步骤 1：三块分解写出混合分布函数 F_X(x)",
+          "detail": "当 $x<-1$ 时 $F_X(x)=0$；当 $-1\\le x<1$ 时 $F_X(x)=P\\{X=-1\\}+P\\{-1<X\\le x\\}=\\frac14+\\frac12\\cdot\\frac{x+1}{2}=\\frac{2+x}{4}$；当 $x\\ge 1$ 时 $F_X(x)=1$。"
+        },
+        {
+          "stepTitle": "步骤 2：全集分解三分支求和并神奇抵消",
+          "detail": "$F_Z(z)=\\frac14 P\\{Y\\le z+1\\}+\\frac14 P\\{Y\\le z-1\\}+P\\{X+Y\\le z,-1<X<1\\}$。当 $z<-1$ 时三项全 $0$；当 $-1\\le z<1$ 时：第 1 项 $\\frac14(1-e^{-(z+1)})$，第 2 项 $0$，第 3 项 $\\int_{-1}^{z}\\frac14(1-e^{x-z})\\mathrm{d}x=\\frac14(z+e^{-(z+1)})$，相加指数项恰抵消得 $\\frac{1+z}{4}$！当 $z\\ge 1$ 时：$\\frac14(1-e^{-z-1})+\\frac14(1-e^{1-z})+\\frac12-\\frac14(e^{1-z}-e^{-1-z})=1-\\frac12 e^{1-z}$！"
+        }
+      ],
+      "source": {
+        "book": "27 张宇概率9讲",
+        "printedPage": "9讲 P.43-45 例 5.8",
+        "pdfPage": 54,
+        "itemRef": "强化例5.8 混合型加指数分布全集分解"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_mixed_cases",
+        "verified": true
+      },
+      "finalAnswer": "(1) $F_X(x)=\\frac{2+x}{4}\\;(-1\\le x<1)$，左 $0$ 右 $1$；(2) $F_Z(z)=\\begin{cases}0,&z<-1\\\\\\frac{1+z}{4},&-1\\le z<1\\\\1-\\frac12 e^{1-z},&z\\ge 1\\end{cases}$。",
+      "takeaway": "注意校核连续性：$F_Z(-1)=0,\\;F_Z(1^-)=\\frac12=F_Z(1^+)$——虽然 $X$ 有两个跳点，但加上纯连续的 $Y\\sim E(1)$ 后，$Z=X+Y$ 竟然**处处连续**！"
+    },
+    {
+      "id": "m1-pr05-e-12",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、多维→多维映射（含概率 9 讲 P.46 勘误补注）",
+      "title": "强化例 5.9（含勘误补注）：混合 (X,Y) 映射二维离散 (U,V) 分布律",
+      "problem": "设 $X,Y$ 相互独立，$X\\sim B(1,\\frac34)$，$Y\\sim E(1)$，定义 $U=\\mathbb{I}\\{X\\ge Y\\},\\;V=\\mathbb{I}\\{X\\ge 2Y\\}$，求 $(U,V)$ 的联合分布律。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "先用全概率公式（按 $X\\in\\{0,1\\}$）算出 $U,V$ 两个边缘分布；再盯住**不可能组合** $\\{U=0,V=1\\}=\\{X<Y\\text{ 且 }X\\ge 2Y\\}$（因 $Y>0$ 不可能成立，概率为 $0$！），靠一个零格反推全部四格！"
+        },
+        {
+          "stepTitle": "步骤 1：按 X 拆分求两边缘概率",
+          "detail": "$P\\{U=0\\}=P\\{X<Y\\}=\\frac14\\cdot 1+\\frac34 P\\{Y>1\\}=\\frac14+\\frac34 e^{-1}$，故 $P\\{U=1\\}=\\frac34-\\frac34 e^{-1}$；同理 $P\\{V=0\\}=P\\{X<2Y\\}=\\frac14+\\frac34 P\\{Y>\\frac12\\}=\\frac14+\\frac34 e^{-1/2}$，$P\\{V=1\\}=\\frac34-\\frac34 e^{-1/2}$。"
+        },
+        {
+          "stepTitle": "步骤 2：锁定零格反推 2×2 联合表",
+          "detail": "因 $Y>0$ 时 $X\\ge 2Y\\implies X>Y\\implies U=1$，故 $P\\{U=0,V=1\\}=0$！立得 $P\\{U=0,V=0\\}=P\\{U=0\\}=\\frac14+\\frac34 e^{-1}$，$P\\{U=1,V=1\\}=P\\{V=1\\}=\\frac34-\\frac34 e^{-1/2}$，余格 $P\\{U=1,V=0\\}=P\\{V=0\\}-P\\{U=0,V=0\\}=\\frac34(e^{-1/2}-e^{-1})$。"
+        }
+      ],
+      "source": {
+        "book": "27 张宇概率9讲",
+        "printedPage": "9讲 P.45-46 例 5.9",
+        "pdfPage": 56,
+        "itemRef": "强化例5.9 混合转二维离散分布及表标勘误"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_mixed_cases",
+        "verified": true
+      },
+      "finalAnswer": "$p_{U=0,V=0}=\\frac14+\\frac34 e^{-1},\\;p_{U=0,V=1}=0,\\;p_{U=1,V=0}=\\frac34(e^{-1/2}-e^{-1}),\\;p_{U=1,V=1}=\\frac34(1-e^{-1/2})$。",
+      "takeaway": "**跨书勘误补注③（概率 9 讲 P.46 例 5.9 边缘记号互换）**：原书联合表以 $V$ 为行、$U$ 为列，却将右列（行和 $P(V=v_i)$）错标为 $p_{\\cdot j}$、将底行（列和 $P(U=u_j)$）错标为 $p_{i\\cdot}$，两边缘下标恰好写反（数值本身无误，读表时以变量名 $U,V$ 为准）。"
+    },
+    {
+      "id": "m1-pr05-e-13",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "一、多维离散奇偶联动与对称零格法",
+      "title": "方浩例题 24 & 例题 25：独立 0-1 变量奇偶联立表 + X₁+X₂=0 约束反推",
+      "problem": "(1)（例题 24）$X_1,X_2,X_3$ 独立同服从 $B(1,p)\\;(q=1-p)$，$U=(X_1+X_2)\\bmod 2,\\;V=(X_2+X_3)\\bmod 2$，求 $(U,V)$ 联合分布律；(2)（例题 25）$X_1,X_2$ 边缘均为 $(-1,0,1)$ 对应 $(\\frac14,\\frac12,\\frac14)$，且 $P\\{X_1+X_2=0\\}=1$，求 $P\\{X_1=X_2\\}$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "(1) 先求边缘 $P(U=1)=P(V=1)=2pq$，再按中间共享变量 $X_2\\in\\{0,1\\}$ 拆算 $P\\{U=1,V=1\\}=pq$，一格定全表！(2) 由 $P\\{X_1+X_2\\ne 0\\}=0$ 知仅副对角线 3 格非零，边缘直接定出全部概率！"
+        },
+        {
+          "stepTitle": "步骤 1：例题 24 按共享变量 X₂ 拆解核心格",
+          "detail": "$P\\{U=1\\}=P\\{X_1+X_2=1\\}=2pq=P\\{V=1\\}$。按 $X_2$ 拆分：$P\\{U=1,V=1\\}=P\\{X_2=0,X_1=1,X_3=1\\}+P\\{X_2=1,X_1=0,X_3=0\\}=qp^2+pq^2=pq(p+q)=pq$！于是 $p_{01}=p_{10}=2pq-pq=pq$，$p_{00}=1-3pq$！（特别当 $p=\\frac12$ 时四格全为 $\\frac14$，$U,V$ 竟独立！）。"
+        },
+        {
+          "stepTitle": "步骤 2：例题 25 副对角非零秒解",
+          "detail": "由 $P\\{X_1+X_2=0\\}=1$ 知仅 $(-1,1),(0,0),(1,-1)$ 三格非零，故 $P\\{X_1=0,X_2=0\\}=P\\{X_1=0\\}=\\frac12$；而 $(-1,-1),(1,1)$ 均为 $0$，故 $P\\{X_1=X_2\\}=P\\{X_1=0,X_2=0\\}=\\frac12$！"
+        }
+      ],
+      "source": {
+        "book": "27 方浩强化 & 27 张宇基础30讲",
+        "printedPage": "方浩 P.72-73 例题 24, 例题 25 / 基础 P.91,94 习题 3.2",
+        "pdfPage": 77,
+        "itemRef": "方浩例题24与25 奇偶联立表与约束反推"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_discrete_funcs",
+        "verified": true
+      },
+      "finalAnswer": "(1) $p_{00}=1-3pq,\\;p_{01}=p_{10}=p_{11}=pq$；(2) $P\\{X_1=X_2\\}=\\frac12$（选 C）。",
+      "takeaway": "对比基础习题 3.2（条件为 $P\\{X_1X_2=0\\}=1$ 给出 $P\\{X_1=X_2\\}=0$）与方浩例题 25（条件为 $P\\{X_1+X_2=0\\}=1$ 给出 $P\\{X_1=X_2\\}=\\frac12$）：切勿背答案，一定要把非零格子圈在 $3\\times 3$ 表上！"
+    },
+    {
+      "id": "m1-pr05-e-14",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "五、非独立离散 + 连续压轴（2016 考研真题）",
+      "title": "方浩例题 31（2016 真题）：透镜域均匀分布 + 相依混合变量 Z=U+X 分布函数",
+      "problem": "（2016 真题）设 $(X,Y)$ 在区域 $D=\\{(x,y)\\mid 0<x<1,\\;x^2<y<\\sqrt x\\}$ 上服从均匀分布，令 $U=\\mathbb{I}\\{X\\le Y\\}$。求：(1) $f(x,y)$；(2) $U$ 与 $X$ 是否独立；(3) $Z=U+X$ 的分布函数 $F_Z(z)$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "区域 $D$ 是两抛物线 $y=x^2$ 与 $y=\\sqrt x$ 围成的对称透镜，面积 $\\int_0^1(\\sqrt x-x^2)\\mathrm{d}x=\\frac13$（故 $f=3$），对角线 $y=x$ 恰将其平分为上下两半（$P\\{U=1\\}=P\\{U=0\\}=\\frac12$）。求 $F_Z(z)$ 时因 $U,X$ **不独立**，务必按交集事件直接算二维积分（用方浩「端点联立刚好遇见你」分 $0\\le z<1$ 与 $1\\le z<2$ 两段！）。"
+        },
+        {
+          "stepTitle": "步骤 1：求联合密度并举反例证 U,X 不独立",
+          "detail": "(1) $S_D=\\frac23-\\frac13=\\frac13\\implies f(x,y)=3\\;((x,y)\\in D)$。(2) 对 $0<x_0<1$，如取 $x_0=\\frac12$：$P\\{U=0,X\\le\\frac12\\}=3\\int_0^{1/2}(x-x^2)\\mathrm{d}x=\\frac14$，但 $P\\{U=0\\}=\\frac12$，$P\\{X\\le\\frac12\\}=3\\int_0^{1/2}(\\sqrt x-x^2)\\mathrm{d}x=\\frac{4\\sqrt2-1}{8}$，乘积显然不等于 $\\frac14$，故 $U,X$ 不独立！"
+        },
+        {
+          "stepTitle": "步骤 2：交集二重积分精准分段算 F_Z(z)",
+          "detail": "$F_Z(z)=P\\{Y<X,X\\le z\\}+P\\{Y\\ge X,X\\le z-1\\}$。① $z<0$ 时 $0$；② $0\\le z<1$ 时仅前项非空：$3\\int_0^z(x-x^2)\\mathrm{d}x=\\frac32 z^2-z^3$；③ $1\\le z<2$ 时前项覆盖整个下半透镜得 $\\frac12$，后项积上半透镜：$3\\int_0^{z-1}(\\sqrt x-x)\\mathrm{d}x=2(z-1)^{3/2}-\\frac32(z-1)^2$，合得 $\\frac12+2(z-1)^{3/2}-\\frac32(z-1)^2$；④ $z\\ge 2$ 时 $1$。"
+        }
+      ],
+      "source": {
+        "book": "27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "方浩 P.81-82 例题 31 / 猪狗 P.4-18 例 4.10(2016)",
+        "pdfPage": 86,
+        "itemRef": "方浩例题31 2016真题透镜域非独立混合和"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_lens_2016",
+        "verified": true
+      },
+      "finalAnswer": "(1) $f(x,y)=3\\;((x,y)\\in D)$；(2) $U,X$ 不独立；(3) $F_Z(z)=\\begin{cases}0,&z<0\\\\\\frac32 z^2-z^3,&0\\le z<1\\\\\\frac12+2(z-1)^{3/2}-\\frac32(z-1)^2,&1\\le z<2\\\\1,&z\\ge 2\\end{cases}$。",
+      "takeaway": "方浩 P.82 注 ③ 点睛提醒：本题因 $X$ 与 $U$ 不独立，硬写 $P\\{U=0\\}P\\{X\\le z\\mid U=0\\}$ 徒增麻烦，直接拆成互斥交集 $P\\{U=0,X\\le z\\}+P\\{U=1,X\\le z-1\\}$ 在原 $(x,y)$ 平面积分最清爽！"
+    },
+    {
+      "id": "m1-pr05-e-15",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、2026 最新真题 · 倒数对称与直接二重积分双解",
+      "title": "猪狗例 4.1（2026 最新真题！）：f(x)=1/(1+x)² (x>0) 独立同分布求 P{XY≤1}",
+      "problem": "（2026 考研真题）设随机变量 $X$ 与 $Y$ 独立同分布，$X$ 的概率密度为 $f(x)=\\frac{1}{(1+x)^2}\\;(x>0)$，其他为 $0$，则 $P\\{XY\\le 1\\}=$（ ）：(A) $\\frac34$；(B) $\\frac12$；(C) $\\frac13$；(D) $\\frac16$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "两种绝妙解法并呈：**秒杀法**看出 $1/X\\stackrel{d}{=}X$，故 $P\\{Y\\le 1/X\\}=\\frac12$ 零积分出答案；**稳妥法**直接算一维条件期望积分 $\\int_0^{+\\infty}f(x)F(1/x)\\mathrm{d}x$ 仅两行！"
+        },
+        {
+          "stepTitle": "步骤 1：秒杀法（倒数同分布对称性）",
+          "detail": "先算分布函数 $F(x)=\\int_0^x\\frac{1}{(1+t)^2}\\mathrm{d}t=\\frac{x}{1+x}\\;(x>0)$。检验 $1/X$ 的分布函数：$P\\{\\frac1X\\le y\\}=P\\{X\\ge\\frac1y\\}=1-\\frac{1/y}{1+1/y}=\\frac{y}{1+y}=F(y)$！可见 $1/X$ 与 $Y$ 独立同分布，由连续对称性立得 $P\\{XY\\le 1\\}=P\\{Y\\le\\frac1X\\}=\\frac12$！"
+        },
+        {
+          "stepTitle": "步骤 2：稳妥法（二重积分直接验证）",
+          "detail": "$P\\{XY\\le 1\\}=\\int_0^{+\\infty}f(x)F\\!\\left(\\frac1x\\right)\\mathrm{d}x=\\int_0^{+\\infty}\\frac{1}{(1+x)^2}\\cdot\\frac{1/x}{1+1/x}\\,\\mathrm{d}x=\\int_0^{+\\infty}\\frac{1}{(1+x)^3}\\,\\mathrm{d}x=\\left[-\\frac{1}{2(1+x)^2}\\right]_0^{+\\infty}=\\frac12$！"
+        }
+      ],
+      "source": {
+        "book": "27 猪狗百宝书",
+        "printedPage": "猪狗 P.4-14 例 4.1(2026)",
+        "pdfPage": 106,
+        "itemRef": "猪狗例4.1 2026真题倒数同分布乘积概率"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_2026_symmetry",
+        "verified": true
+      },
+      "finalAnswer": "选 (B)（$P\\{XY\\le 1\\}=\\frac12$）。",
+      "takeaway": "记住这道 2026 新真题的源头正是基础习题 3.16 的指数商分布 $E(1)/E(1)$！遇到正区间上幂次分式密度，先顺手试一下 $F(1/x)$ 与 $1-F(x)$ 的关系往往有惊喜！"
+    },
+    {
+      "id": "m1-pr05-e-16",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、2021 真题 · 折棒模型长短比分布与期望",
+      "title": "猪狗例 4.5（2021 真题）：区间 (0,2) 随机切点较短段 X、较长段 Y 与比值 Z=Y/X",
+      "problem": "（2021 真题）在区间 $(0,2)$ 上随机取一点，将该区间分成两段，较短一段长度记为 $X$，较长一段记为 $Y$，令 $Z=\\frac YX$。求：(1) $X$ 的概率密度；(2) $Z$ 的概率密度；(3) $E\\!\\left(\\frac XY\\right)$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "设落点 $V\\sim U(0,2)$，则 $X=\\min\\{V,2-V\\}$、$Y=2-X$，直接把看似二维的 $(X,Y)$ 降维成一维函数问题！"
+        },
+        {
+          "stepTitle": "步骤 1：求较短段 X 的分布（对称折叠）",
+          "detail": "对 $0\\le x<1$，$F_X(x)=P\\{\\min(V,2-V)\\le x\\}=1-P\\{x<V<2-x\\}=1-\\frac{2-2x}{2}=x$，故 $X\\sim U(0,1)$，$f_X(x)=1\\;(0<x<1)$！"
+        },
+        {
+          "stepTitle": "步骤 2：降维求 Z=Y/X 密度与 E(X/Y)",
+          "detail": "$Y=2-X\\implies Z=\\frac{2-X}{X}=\\frac2X-1\\in(1,+\\infty)$，严格单调递减，反函数 $x=\\frac{2}{1+z},\\;|x'(z)|=\\frac{2}{(1+z)^2}$，故 $f_Z(z)=\\frac{2}{(1+z)^2}\\;(z>1)$，其他 $0$！期望：$E\\!\\left(\\frac XY\\right)=\\int_0^1\\frac{x}{2-x}\\,\\mathrm{d}x=\\int_0^1\\left(-1+\\frac{2}{2-x}\\right)\\mathrm{d}x=2\\ln 2-1$。"
+        }
+      ],
+      "source": {
+        "book": "27 猪狗百宝书 & 27 张宇基础30讲",
+        "printedPage": "猪狗 P.4-16 例 4.5(2021) / 基础 P.115-116 例 4.12",
+        "pdfPage": 108,
+        "itemRef": "猪狗例4.5 2021真题随机折棒比值分布与期望"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_stick_2021",
+        "verified": true
+      },
+      "finalAnswer": "(1) $X\\sim U(0,1)$；(2) $f_Z(z)=\\frac{2}{(1+z)^2}\\;(z>1)$；(3) $2\\ln 2-1$。",
+      "takeaway": "注意 $Z=Y/X$ 的期望 $E(Z)=\\int_1^{+\\infty}\\frac{2z}{(1+z)^2}\\mathrm{d}z=+\\infty$ 发散不存在，而题目问的是倒数 $E(X/Y)=2\\ln 2-1$，切勿看反！"
+    },
+    {
+      "id": "m1-pr05-e-17",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "五、2017 & 2009 真题 · 随机变号/清零乘积 Z=XY",
+      "title": "猪狗例 4.7（2017 真题）& 例 4.11（2009 真题）：指数随机变号与正态随机清零跳点",
+      "problem": "(1)（2017 真题）$X\\sim E(1)$ 与 $Y$ 独立，$P\\{Y=-1\\}=p,\\;P\\{Y=1\\}=1-p\\;(0<p<1)$，$Z=XY$，求 $f_Z(z)$、何时 $X,Z$ 不相关、是否独立；(2)（2009 真题）$X\\sim N(0,1)$ 与 $Y\\sim B(1,\\frac12)$ 独立，$Z=XY$，求 $F_Z(z)$ 的间断点个数。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "两道真题一对比立见分晓：(1) $Y\\in\\{-1,1\\}$ 无零值，全概率给出纯连续非对称拉普拉斯密度，且 $p=\\frac12$ 时不相关但必不独立（$|Z|=X$！）；(2) $Y\\in\\{0,1\\}$ 含零值，在 $z=0$ 制造唯一跳高 $\\frac12$！"
+        },
+        {
+          "stepTitle": "步骤 1：2017 真题全概率求非对称拉普拉斯密度",
+          "detail": "$F_Z(z)=pP\\{-X\\le z\\}+(1-p)P\\{X\\le z\\}$。当 $z<0$ 时 $F_Z(z)=pP\\{X\\ge -z\\}=pe^z\\implies f_Z(z)=pe^z$；当 $z\\ge 0$ 时 $F_Z(z)=p+(1-p)(1-e^{-z})\\implies f_Z(z)=(1-p)e^{-z}$。协方差：$\\operatorname{Cov}(X,XY)=EY\\cdot DX=(1-2p)\\cdot 1=0\\iff p=\\frac12$；但无论 $p$ 取何值，$|Z|=X$ 导致 $P\\{X>1,|Z|\\le 1\\}=0\\ne P\\{X>1\\}P\\{|Z|\\le 1\\}$，绝不独立！"
+        },
+        {
+          "stepTitle": "步骤 2：2009 真题检出唯一跳跃间断点",
+          "detail": "$F_Z(z)=\\frac12 P\\{0\\le z\\}+\\frac12\\Phi(z)=\\begin{cases}\\frac12\\Phi(z),&z<0\\\\\\frac12+\\frac12\\Phi(z),&z\\ge 0\\end{cases}$。可见 $F_Z(0^-)=\\frac14\\ne\\frac34=F_Z(0^+)$，在 $z=0$ 处有且仅有 **1 个** 间断点！"
+        }
+      ],
+      "source": {
+        "book": "27 猪狗百宝书 & 27 张宇基础30讲",
+        "printedPage": "猪狗 P.4-17 例 4.7(2017), P.4-19 例 4.11(2009) / 基础 P.102 习题 3.18",
+        "pdfPage": 109,
+        "itemRef": "猪狗例4.7与4.11 2017及2009真题混合乘积"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_mixed_cases",
+        "verified": true
+      },
+      "finalAnswer": "(1) $f_Z(z)=pe^z\\;(z<0),\\;(1-p)e^{-z}\\;(z\\ge 0)$；$p=\\frac12$ 时不相关；对任何 $p\\in(0,1)$ 均不独立；(2) 间断点个数为 $1$（选 B）。",
+      "takeaway": "算 2017 真题 $\\operatorname{Cov}(X,XY)$ 用性质提取：$E(X^2Y)-EX\\cdot E(XY)=EY[E(X^2)-(EX)^2]=EY\\cdot DX$，两秒口算完毕，不必硬积分！"
+    },
+    {
+      "id": "m1-pr05-e-18",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "五、2017 真题 · 离散加连续平移卷积",
+      "title": "猪狗例 4.9（2017 真题）：X∈{0,2} 等概与独立 Y~2y (0<y<1) 之和 Z=X+Y",
+      "problem": "（2017 真题）设 $X,Y$ 相互独立，$P\\{X=0\\}=P\\{X=2\\}=\\frac12$，$Y$ 的概率密度 $f_Y(y)=2y\\;(0<y<1)$，其他为 $0$。求：(1) $P\\{Y\\le EY\\}$；(2) $Z=X+Y$ 的概率密度 $f_Z(z)$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "按 $X=0$ 与 $X=2$ 做全概率展开，本质上就是把 $f_Y(y)$ 压半分别铺在 $(0,1)$ 与 $(2,3)$ 两段互不重叠的区间上（中间 $[1,2]$ 密度为 $0$）！"
+        },
+        {
+          "stepTitle": "步骤 1：计算 EY 与 P(Y≤EY)",
+          "detail": "$EY=\\int_0^1 2y^2\\,\\mathrm{d}y=\\frac23\\implies P\\{Y\\le\\frac23\\}=\\int_0^{2/3}2y\\,\\mathrm{d}y=\\frac49$。"
+        },
+        {
+          "stepTitle": "步骤 2：全概率直接平移密度",
+          "detail": "$F_Z(z)=\\frac12 F_Y(z)+\\frac12 F_Y(z-2)\\implies f_Z(z)=\\frac12 f_Y(z)+\\frac12 f_Y(z-2)=\\begin{cases}z,&0<z<1\\\\z-2,&2<z<3\\\\0,&\\text{其他}\\end{cases}$！"
+        }
+      ],
+      "source": {
+        "book": "27 猪狗百宝书",
+        "printedPage": "猪狗 P.4-18 例 4.9(2017)",
+        "pdfPage": 110,
+        "itemRef": "猪狗例4.9 2017真题离散加连续平移密度"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_mixed_cases",
+        "verified": true
+      },
+      "finalAnswer": "(1) $\\frac49$；(2) $f_Z(z)=z\\;(0<z<1),\\;z-2\\;(2<z<3)$，其他 $0$。",
+      "takeaway": "注意当 $X$ 的取值间隔大于 $Y$ 的支集长度时，平移出的两段密度完全不重叠（中间留白 $[1,2]$）；若 $X\\in\\{0,0.5\\}$ 则两段重叠，必须把重叠区间的两项密度**相加**！"
+    },
+    {
+      "id": "m1-pr05-e-19",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、非独立最值与最值不等式综合（方浩例 34–36）",
+      "title": "方浩例题 34 & 例题 36：无独立假设的和分布上界 G(2x)≤2F(x) + 非独立正态最值",
+      "problem": "(1)（例题 34）$X,Y$ 具有相同分布函数 $F(x)$（未必独立），$Z=X+Y$ 的分布函数为 $G(z)$，比较 $G(2x)$ 与 $2F(x)$；(2)（例题 36）$X,Y$ 均服从 $N(\\mu,\\sigma^2)$（未必独立），已知 $P\\{\\max\\{X,Y\\}\\ge\\mu\\}=a\\;(0<a<1)$，求 $P\\{\\min\\{X,Y\\}\\le\\mu\\}$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "两题都不给「相互独立」，专门检验能否脱离乘积公式、回到**事件包含与容斥原理**！"
+        },
+        {
+          "stepTitle": "步骤 1：例题 34 反证包含关系秒出上界",
+          "detail": "若 $X+Y\\le 2x$，则 $X,Y$ 中至少有一个 $\\le x$（否则若都 $>x$ 则和必 $>2x$！），即 $\\{X+Y\\le 2x\\}\\subseteq\\{X\\le x\\}\\cup\\{Y\\le x\\}$。由概率单调性与次可加性得 $G(2x)\\le P\\{X\\le x\\}+P\\{Y\\le x\\}=2F(x)$！"
+        },
+        {
+          "stepTitle": "步骤 2：例题 36 容斥与正态对称消去联合项",
+          "detail": "由题设 $a=P\\{\\max\\ge\\mu\\}=1-P\\{X<\\mu,Y<\\mu\\}=1-P\\{X\\le\\mu,Y\\le\\mu\\}$（连续型边界概率 0）。于是 $P\\{\\min\\le\\mu\\}=P\\{X\\le\\mu\\}+P\\{Y\\le\\mu\\}-P\\{X\\le\\mu,Y\\le\\mu\\}=\\frac12+\\frac12-(1-a)=a$！"
+        }
+      ],
+      "source": {
+        "book": "27 方浩强化",
+        "printedPage": "方浩 P.86-87 例题 34, 例题 36",
+        "pdfPage": 91,
+        "itemRef": "方浩例题34与36 非独立最值不等式与恒等式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_order_stats",
+        "verified": true
+      },
+      "finalAnswer": "(1) $G(2x)\\le 2F(x)$（选 C）；(2) $a$。",
+      "takeaway": "注意例题 36 对任意**中位数为 $\\mu$ 的连续随机变量**都成立，绝不仅限于正态分布！"
+    },
+    {
+      "id": "m1-pr05-e-20",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、标准正态商与指数 max 同分布神题",
+      "title": "猪狗例 4.15 & 例 4.16：标准正态之商为柯西 + max E(λ) 与 (2X+Y)/2 同分布",
+      "problem": "(1)（例 4.15）$X_1,X_2$ 独立同服从 $N(0,1)$，求 $Y=\\frac{X_1}{X_2}$ 的概率密度 $f_Y(y)$；(2)（例 4.16）$X,Y$ 独立同服从 $E(\\lambda)$，令 $Z=\\max\\{X,Y\\}$，则与 $Z$ 同分布的是（ ）：(A) $\\frac{X+Y}{2}$；(B) $\\frac{2X+Y}{2}$；(C) $\\frac{2X+Y}{3}$；(D) $Y$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "(1) 套商卷积公式并用偶函数折叠为 $2\\int_0^{+\\infty}$ 一步凑出分母 $1+y^2$；(2) 用指数次序统计量黄金拆解 $\\max\\{X,Y\\}=\\min\\{X,Y\\}+|X-Y|\\stackrel{d}{=}\\frac Y2+X=\\frac{2X+Y}{2}$，1 秒秒杀！"
+        },
+        {
+          "stepTitle": "步骤 1：例 4.15 商卷积求标准柯西密度",
+          "detail": "$f_Y(y)=\\int_{-\\infty}^{+\\infty}|x|\\frac{1}{2\\pi}e^{-\\frac{x^2(1+y^2)}{2}}\\mathrm{d}x=\\frac{1}{\\pi}\\int_0^{+\\infty}xe^{-\\frac{1+y^2}{2}x^2}\\mathrm{d}x=\\frac{1}{\\pi(1+y^2)}\\left[-e^{-\\frac{1+y^2}{2}x^2}\\right]_0^{+\\infty}=\\frac{1}{\\pi(1+y^2)}\\;(y\\in\\mathbb{R})$！"
+        },
+        {
+          "stepTitle": "步骤 2：例 4.16 双验证 max E(λ) 与 X+Y/2 同分布",
+          "detail": "**法一（无记忆拆解）**：$\\max\\{X,Y\\}=\\min\\{X,Y\\}+|X-Y|$，其中 $\\min\\sim E(2\\lambda)\\stackrel{d}{=}\\frac Y2$ 与 $|X-Y|\\sim E(\\lambda)\\stackrel{d}{=}X$ 相互独立，故 $\\max\\stackrel{d}{=}X+\\frac Y2=\\frac{2X+Y}{2}$！**法二（直接算密度对比）**：$f_{\\max}(z)=2\\lambda(1-e^{-\\lambda z})e^{-\\lambda z}=2\\lambda(e^{-\\lambda z}-e^{-2\\lambda z})$；而 $X\\sim E(\\lambda)$ 与 $\\frac Y2\\sim E(2\\lambda)$ 独立卷积亦恰为 $\\int_0^z \\lambda e^{-\\lambda(z-t)}\\cdot 2\\lambda e^{-2\\lambda t}\\mathrm{d}t=2\\lambda(e^{-\\lambda z}-e^{-2\\lambda z})$！"
+        }
+      ],
+      "source": {
+        "book": "27 猪狗百宝书",
+        "printedPage": "猪狗 P.4-20 例 4.15, 例 4.16",
+        "pdfPage": 112,
+        "itemRef": "猪狗例4.15与4.16 正态商柯西与指数最大值"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_cauchy_boxmuller",
+        "verified": true
+      },
+      "finalAnswer": "(1) $f_Y(y)=\\frac{1}{\\pi(1+y^2)}\\;(y\\in\\mathbb{R})$；(2) 选 (B)（$\\frac{2X+Y}{2}$）。",
+      "takeaway": "例 4.16 也能用均值方差排伪迅速锁定：$E(\\max)=\\frac{3}{2\\lambda}$，直接排除 A ($\\frac1\\lambda$)、C ($\\frac1\\lambda$)、D ($\\frac1\\lambda$)，唯有 B 均值为 $\\frac{1}{\\lambda}+\\frac{1}{2\\lambda}=\\frac{3}{2\\lambda}$！"
+    },
+    {
+      "id": "m1-pr05-e-21",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、二维→二维高阶经典（茆书卢卡斯独立 & Box-Muller & 菱形旋转）",
+      "title": "猪狗例 4.17 & 例 4.27-4.28：菱形旋转独立 + 卢卡斯定理 (X+Y, X/(X+Y)) + Box-Muller",
+      "problem": "(1)（例 4.17）$(X,Y)$ 在菱形 $|x|+|y|\\le 1$ 上均匀分布，$U=X+Y,\\;V=X-Y$，求 $f_U,f_V$ 及 $\\rho_{UV}$；(2)（例 4.27）$X,Y$ 独立同服从 $E(1)$，求 $U=X+Y,\\;V=\\frac{X}{X+Y}$ 的联合密度并判独立性；(3)（例 4.28）$X,Y$ 独立同服从 $U(0,1)$，$U=-2\\ln X,V=2\\pi Y$，证 $S=\\sqrt U\\cos V,T=\\sqrt U\\sin V$ 独立同服从 $N(0,1)$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "三道茆书镇馆名题全部用**二维雅可比换元法**行云流水一气呵成！记住核心技巧：先算反解与 $|J|$，再同步映射新区域，变量自动分离即证独立！"
+        },
+        {
+          "stepTitle": "步骤 1：例 4.17 菱形旋转成正方形（|J|=1/2）",
+          "detail": "$x=\\frac{u+v}{2},y=\\frac{u-v}{2}\\implies |J|=\\frac12$。约束 $|x|+|y|\\le 1\\iff |u|\\le 1\\text{ 且 }|v|\\le 1$！于是 $f_{U,V}(u,v)=\\frac12\\cdot\\frac12=\\frac14\\;(|u|\\le 1,|v|\\le 1)$，即 $U,V$ 独立同服从 $U(-1,1)$，故 $\\operatorname{Cov}(U,V)=\\rho_{UV}=0$！"
+        },
+        {
+          "stepTitle": "步骤 2：例 4.27 卢卡斯独立性（|J|=u）",
+          "detail": "$x=uv,\\;y=u(1-v)\\implies J=\\begin{vmatrix}v&u\\\\1-v&-u\\end{vmatrix}=-u\\implies |J|=u$。原域 $x>0,y>0\\iff u>0,\\;0<v<1$！故 $f_{U,V}(u,v)=e^{-u}\\cdot u=(ue^{-u})\\cdot 1$！瞬间分离：$U\\sim\\Gamma(2,1)$ 与 $V\\sim U(0,1)$ **相互独立**（同步秒解猪狗例 4.20 选 D）！"
+        },
+        {
+          "stepTitle": "步骤 3：例 4.28 Box-Muller 极坐标还原标准正态",
+          "detail": "$U=-2\\ln X\\sim E(\\frac12)$（$f_U=\\frac12 e^{-u/2},u>0$）与 $V=2\\pi Y\\sim U(0,2\\pi)$ 独立，联合密度 $\\frac{1}{4\\pi}e^{-u/2}$。反解 $u=s^2+t^2,\\;v=\\operatorname{atan2}(t,s)$，算正雅可比 $\\frac{\\partial(u,v)}{\\partial(s,t)}=\\begin{vmatrix}2s&2t\\\\-\\frac{t}{s^2+t^2}&\\frac{s}{s^2+t^2}\\end{vmatrix}=2\\implies |J|=\\left|\\frac{\\partial(u,v)}{\\partial(s,t)}\\right|^{-1}=\\frac12$? 注意应是 $f_{S,T}(s,t)=f_{U,V}(u,v)\\left|\\frac{\\partial(u,v)}{\\partial(s,t)}\\right|=\\frac{1}{4\\pi}e^{-(s^2+t^2)/2}\\cdot 2=\\frac{1}{2\\pi}e^{-(s^2+t^2)/2}$！故 $S,T$ 独立同服从 $N(0,1)$！"
+        }
+      ],
+      "source": {
+        "book": "27 猪狗百宝书",
+        "printedPage": "猪狗 P.4-21 例 4.17, P.4-22 例 4.20, P.4-25-26 例 4.27, 例 4.28",
+        "pdfPage": 113,
+        "itemRef": "猪狗例4.17与4.27-28 菱形旋转与卢卡斯及Box-Muller"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_cauchy_boxmuller",
+        "verified": true
+      },
+      "finalAnswer": "(1) $U,V$ i.i.d. $U(-1,1)$，$\\rho_{UV}=0$；(2) $f_{U,V}(u,v)=ue^{-u}\\;(u>0,0<v<1)$，$U,V$ 相互独立；(3) $f_{S,T}(s,t)=\\frac{1}{\\sqrt{2\\pi}}e^{-s^2/2}\\cdot\\frac{1}{\\sqrt{2\\pi}}e^{-t^2/2}$，证毕。",
+      "takeaway": "步骤 3 雅可比方向千万盯紧：由 $(U,V)$ 变到新变量 $(S,T)$ 时，公式是 $f_{S,T}(s,t)=f_{U,V}(u,v)\\left|\\frac{\\partial(u,v)}{\\partial(s,t)}\\right|$（旧对新求偏导！），这里旧是 $(u,v)$、新是 $(s,t)$，故直接乘 $|\\frac{\\partial(u,v)}{\\partial(s,t)}|=2$，切勿取倒数！"
+    },
+    {
+      "id": "m1-pr05-e-22",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "五、层次分布叠加取整函数的综合高难母题",
+      "title": "猪狗例 4.19：层次密度 f_X=2x, Y|X~U(-x,x) 求混合取整和 W=X+[Y] 分布函数",
+      "problem": "设 $X$ 的概率密度 $f_X(x)=2x\\;(0<x<1)$，在 $X=x$ 条件下 $Y\\sim U(-x,x)$。求：(1) 联合密度 $f(x,y)$；(2) 令 $[Y]$ 表示不超过 $Y$ 的最大整数，求 $W=X+[Y]$ 的分布函数 $F_W(w)$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "看清 $[Y]$ 的取值范围是解题关键：由于 $0<x<1$ 且 $-x<y<x$，故 $Y\\in(-1,1)$，取整 $[Y]$ 只能取 **$-1$（当 $Y<0$）与 $0$（当 $Y\\ge 0$）** 两个值！并且对称性一眼看出 $P\\{Y<0\\mid X=x\\}=P\\{Y\\ge 0\\mid X=x\\}=\\frac12$ 与 $x$ 无关——即 **$[Y]$ 与 $X$ 相互独立**！"
+        },
+        {
+          "stepTitle": "步骤 1：乘法公式写联合密度并洞察 [Y] 与 X 独立",
+          "detail": "(1) $f_{Y\\mid X}(y\\mid x)=\\frac{1}{2x}\\;(-x<y<x)\\implies f(x,y)=2x\\cdot\\frac{1}{2x}=1\\;(0<x<1,-x<y<x)$（原来 $(X,Y)$ 是底在 $x=1$、顶在原点的等腰三角形上的二维均匀分布！）。(2) 因 $-1<Y<1$，有 $[Y]=-1\\iff Y<0$ 且 $[Y]=0\\iff Y\\ge 0$；对任意 $x\\in(0,1)$，$Y\\mid x$ 对称于 $0$，故 $[Y]$ 取 $-1,0$ 概率各为 $\\frac12$ 且与 $X$ 独立！"
+        },
+        {
+          "stepTitle": "步骤 2：全概率两行秒出 F_W(w)",
+          "detail": "$F_W(w)=\\frac12 F_X(w+1)+\\frac12 F_X(w)$，其中 $F_X(x)=x^2\\;(0\\le x<1)$！代入得：当 $w<-1$ 为 $0$；$-1\\le w<0$ 为 $\\frac12(w+1)^2$；$0\\le w<1$ 为 $\\frac12+\\frac12 w^2$；$w\\ge 1$ 为 $1$！"
+        }
+      ],
+      "source": {
+        "book": "27 猪狗百宝书",
+        "printedPage": "猪狗 P.4-22 例 4.19",
+        "pdfPage": 114,
+        "itemRef": "猪狗例4.19 层次三角均匀叠加取整混合和"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_mixed_cases",
+        "verified": true
+      },
+      "finalAnswer": "(1) $f(x,y)=1\\;(0<x<1,-x<y<x)$；(2) $F_W(w)=\\begin{cases}0,&w<-1\\\\\\frac12(w+1)^2,&-1\\le w<0\\\\\\frac12(1+w^2),&0\\le w<1\\\\1,&w\\ge 1\\end{cases}$。",
+      "takeaway": "这道题最容易在 $[Y]$ 上吓懵——只要写出 $Y\\in(-1,1)$，就能瞬间把取整函数简化成两点离散随机变量，再用对称性发现 $[Y]\\perp X$ 直接全概率平移秒杀！"
+    },
+    {
+      "id": "m1-pr05-e-23",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、i.i.d. 对称性证明与原书不可能事件勘误",
+      "title": "猪狗例 4.29（含原书不可能事件勘误！）：连续 i.i.d. 中 X_n 独占最大值的概率为 1/n",
+      "problem": "设连续型随机变量 $X_1,X_2,\\dots,X_n$ 独立同分布，证明：$P\\{X_n>\\max\\{X_1,X_2,\\dots,X_{n-1}\\}\\}=\\frac{1}{n}$（并指出原书印为 $\\max\\{X_1,\\dots,X_n\\}$ 的硬伤）。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "双证法秒杀：**法一（全对称性）** $n$ 个 i.i.d. 连续变量两两相等概率为 $0$，谁居首位完全等价，各占 $\\frac1n$；**法二（条件分布函数法）** 令 $M_{n-1}=\\max\\{X_1,\\dots,X_{n-1}\\}$ 独立于 $X_n$，直接积分 $\\int_{-\\infty}^{+\\infty}[F(x)]^{n-1}f(x)\\mathrm{d}x=\\frac1n$！"
+        },
+        {
+          "stepTitle": "步骤 1：指出原书硬伤并修正事件",
+          "detail": "原书 P.4-26 例 4.29 误印为 $P\\{X_n>\\max\\{X_1,\\dots,X_n\\}\\}=\\frac1n$——由于 $\\max\\{X_1,\\dots,X_n\\}\\ge X_n$ 恒成立，事件 $\\{X_n>\\max\\{X_1,\\dots,X_n\\}\\}=\\varnothing$，概率恒为 $0$！正确表述应为 $P\\{X_n>\\max\\{X_1,\\dots,X_{n-1}\\}\\}=\\frac1n$ 或 $P\\{X_n=\\max\\{X_1,\\dots,X_n\\}\\}=\\frac1n$。"
+        },
+        {
+          "stepTitle": "步骤 2：严密积分证明",
+          "detail": "记 $M_{n-1}=\\max\\{X_1,\\dots,X_{n-1}\\}$，其分布函数为 $[F(x)]^{n-1}$ 且与 $X_n$ 独立。于是 $P\\{X_n>M_{n-1}\\}=\\int_{-\\infty}^{+\\infty}P\\{M_{n-1}<x\\}\\,f(x)\\,\\mathrm{d}x=\\int_{-\\infty}^{+\\infty}[F(x)]^{n-1}\\,\\mathrm{d}F(x)=\\left.\\frac{[F(x)]^n}{n}\\right|_{-\\infty}^{+\\infty}=\\frac{1}{n}$！"
+        }
+      ],
+      "source": {
+        "book": "27 猪狗百宝书",
+        "printedPage": "猪狗 P.4-26 例 4.29（已勘误）",
+        "pdfPage": 118,
+        "itemRef": "猪狗例4.29 i.i.d.最大值对称概率与勘误"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr05_2026_symmetry",
+        "verified": true
+      },
+      "finalAnswer": "严密积分与对称性均证得 $P\\{X_n>\\max\\{X_1,\\dots,X_{n-1}\\}\\}=\\frac1n$。",
+      "takeaway": "注意若 $X_i$ 为**离散型**，由于可能出现并列最大（$P\\{X_i=X_j\\}>0$），结论不再等于 $\\frac1n$（严格大于的概率会小于 $\\frac1n$，而允许并列的 $\\ge$ 概率会大于 $\\frac1n$）！"
+    },
+    {
+      "id": "m1-pr05-s-01",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "题型总揽一：二维连续函数三大武器选型指南",
+      "title": "题型一答题流水线：分布函数划线 · 广义卷积穿线 · 雅可比拉直",
+      "overview": "二维连续随机变量函数的分布是概率论计算量最大的一讲，选对工具可省去 70% 的无效分段与积分误差：",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "基础 P.79-89 / 9讲 P.36-42 / 方浩 P.74-80 / 猪狗 P.4-27",
+        "pdfPage": 47,
+        "itemRef": "第5讲题型一 连续函数分布三大武器选型"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "patterns": [
+        {
+          "typeName": "优先检查「已知分布可加性 / 秒杀结论」",
+          "triggers": "题型总揽一：二维连续函数三大武器选型指南",
+          "method": "见独立同正态/泊松/卡方/同 $p$ 二项直接写分布；见独立同 $E(\\lambda)$ 的 $|X-Y|,\\;\\min,\\;\\max,\\;X/Y$ 或标准正态之商直接调用必背结论！",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "和、差、积、商线性/单调类 $\\to$ 广义卷积 / 雅可比",
+          "triggers": "题型总揽一：二维连续函数三大武器选型指南",
+          "method": "套「**积谁不换谁，换完求偏导（加绝对值！）**」，再画 $(x,z)$ 或 $(u,v)$ 新平面区域水平穿线定限；遇到三角形域 $0<x<y<1$ 求 $X/Y$ 时，雅可比换元 $u=x/y,v=y$ 可把三角形一键拉直为正方形！",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "非线性函数（$X^2+Y^2,\\;|X-Y|$）或均匀分布面积比 $\\to$ 分布函数法划线定域",
+          "triggers": "题型总揽一：二维连续函数三大武器选型指南",
+          "method": "画 $g(x,y)\\le z$ 与原非零区域的交集，圆域上极坐标，均匀分布直接算几何面积比，再对 $z$ 求导得 $f_Z(z)$。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "收尾自检",
+          "triggers": "题型总揽一：二维连续函数三大武器选型指南",
+          "method": "算完 $f_Z(z)$ 必须快速验算两点：① 全区间积分是否等于 $1$；② 分段端点处 $F_Z(z)$ 是否连续（除非确认是混合型含跳点）。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        }
+      ],
+      "takeaway": "结合本讲核心模型与速查表反复对照练习，确保公式选型、定限与边界自检一步到位。"
+    },
+    {
+      "id": "m1-pr05-s-02",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "题型总揽二：离散+连续混合与最值分布压轴套路",
+      "title": "题型二答题流水线：混合型全概率拆解 + 最值/对称压轴速查表",
+      "overview": "「离散 + 连续」与「最值 $\\max/\\min$」几乎垄断近年概率解答与压轴小题（2016、2017、2020、2021、2024、2026 真题），核心方法高度固定：",
+      "tables": [
+        {
+          "caption": "表 P5-3 · 历年真题与茆书高频函数变换「结论直出」宝典",
+          "headers": [
+            "原始分布与变换",
+            "最终精确分布 / 结论",
+            "来源 / 真题年份"
+          ],
+          "rows": [
+            [
+              "$X,Y$ i.i.d. $E(\\lambda)$，$Z=|X-Y|$",
+              "$Z\\sim E(\\lambda)$（与 $X$ 同分布）",
+              "2024 真题 / 9讲例5.2"
+            ],
+            [
+              "$X,Y$ i.i.d. $E(\\lambda)$，$Z=\\min\\{X,Y\\}$ / $\\max\\{X,Y\\}$",
+              "$\\min\\sim E(2\\lambda)$；$\\max\\stackrel{d}{=}X+\\frac Y2$",
+              "猪狗例4.16 / 串联寿命"
+            ],
+            [
+              "$X,Y$ i.i.d. $E(\\lambda)$，$Z=X/Y$",
+              "$f_Z(z)=\\frac{1}{(1+z)^2}\\;(z>0)$（满足 $1/Z\\stackrel{d}{=}Z$）",
+              "基础习题3.16 / 2026真题母源"
+            ],
+            [
+              "$X,Y$ i.i.d. $f=\\frac{1}{(1+x)^2}\\;(x>0)$",
+              "$P\\{XY\\le 1\\}=\\frac12$（因 $1/X\\stackrel{d}{=}X$）",
+              "2026 最新真题（猪狗例4.1）"
+            ],
+            [
+              "$X,Y$ i.i.d. $E(1)$，$U=X+Y,\\;V=\\frac{X}{X+Y}$",
+              "$U\\sim\\Gamma(2,1)$ 与 $V\\sim U(0,1)$ 相互独立",
+              "卢卡斯定理（猪狗例4.27）"
+            ],
+            [
+              "$X_1,X_2$ i.i.d. $N(0,1)$，$Z=X_1/X_2$",
+              "标准柯西分布 $f_Z(z)=\\frac{1}{\\pi(1+z^2)}$",
+              "猪狗例4.15 / $t(1)$ 分布"
+            ],
+            [
+              "$X\\sim U(1,2),\\;Y\\mid x\\sim E(x)$，$Z=XY$",
+              "$XY\\sim E(1)$（与 $X$ 独立），$D(XY)=1$",
+              "9讲例5.5"
+            ],
+            [
+              "$(X,Y)$ 菱形 $|x|+|y|\\le 1$ 均匀，$U=X+Y,V=X-Y$",
+              "$U,V$ i.i.d. $U(-1,1)$，独立且 $\\rho=0$",
+              "猪狗例4.17"
+            ]
+          ]
+        }
+      ],
+      "source": {
+        "book": "五书高频真题汇总",
+        "printedPage": "9讲 P.38-46 / 方浩 P.72-90 / 猪狗 P.4-14~4-28",
+        "pdfPage": 49,
+        "itemRef": "第5讲题型二 混合型与最值压轴速查"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "patterns": [
+        {
+          "typeName": "离散 + 连续（独立）",
+          "triggers": "题型总揽二：离散+连续混合与最值分布压轴套路",
+          "method": "直接按离散变量取值 $x_i$ 全概率加权 $F_Z(z)=\\sum p_i P\\{g(x_i,Y)\\le z\\}$；特别检查乘法 $Z=XY$ 当 $P\\{X=0\\}>0$ 时在 $z=0$ 处产生跳点！",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "离散 + 连续（不独立，如 2016 真题透镜域）",
+          "triggers": "题型总揽二：离散+连续混合与最值分布压轴套路",
+          "method": "切忌硬套独立条件概率，直接把 $\\{g(X,Y)\\le z\\}$ 拆成互斥交集 $\\sum P\\{g(x_i,Y)\\le z, X=x_i\\}$，回退到原始二维平面上做二重积分并用「端点联立刚好遇见你」划清 $z$ 的分段节点！",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "最值 $\\max/\\min$ 与次序统计量",
+          "triggers": "题型总揽二：离散+连续混合与最值分布压轴套路",
+          "method": "独立时直接套 $F^n$ 与 $1-(1-F)^n$；不独立时死守 $F_{\\max}(z)=F(z,z)$ 与 $F_{\\min}(z)=F_X(z)+F_Y(z)-F(z,z)$。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        }
+      ],
+      "takeaway": "结合本讲核心模型与速查表反复对照练习，确保公式选型、定限与边界自检一步到位。"
+    },
+    {
+      "id": "m1-pr05-s-03",
+      "kind": "summary",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "考场防坑清单与本讲三处跨书实锤勘误汇总",
+      "title": "第 5 讲高危失分陷阱与五书实锤勘误全景复盘",
+      "overview": "本讲在五书深度交叉核验中累计捕获 **3 处实锤印刷/表述硬伤** 与 4 大高频丢分坑点，务必重点排雷：",
+      "source": {
+        "book": "五书跨校勘误审计",
+        "printedPage": "方浩 P.72 / 9讲 P.46 / 猪狗 P.4-26",
+        "pdfPage": 57,
+        "itemRef": "第5讲防坑清单与三处跨书勘误"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "patterns": [
+        {
+          "typeName": "失分点① 雅可比行列式倒数方向与绝对值",
+          "triggers": "考场防坑清单与本讲三处跨书实锤勘误汇总",
+          "method": "由 $(X,Y)\\to(U,V)$ 时密度乘 $\\left|\\frac{\\partial(x,y)}{\\partial(u,v)}\\right|$（旧变量对新变量求偏导！），若先算了 $\\frac{\\partial(u,v)}{\\partial(x,y)}$ 必须取倒数，且永远别漏绝对值！",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "失分点② 积/商卷积漏写 $|x|,|y|$ 与离散 $Z=0$ 吞并项",
+          "triggers": "考场防坑清单与本讲三处跨书实锤勘误汇总",
+          "method": "变量可取负值时漏绝对值必错；离散乘法 $Z=XY$ 务必把 $Z=0$ 单独拆出（$P\\{X=0\\text{ 或 }Y=0\\}$）。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "失分点③ 混合乘法跳点漏检",
+          "triggers": "考场防坑清单与本讲三处跨书实锤勘误汇总",
+          "method": "连续 $X$ 乘离散 $Y$，只要 $P\\{Y=0\\}>0$ 就会在 $z=0$ 生出跳点，此时 $F_Z(z)$ 不可直接求导当纯连续型；而混合加法 $X+Y$ 永远无跳点！",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "本讲三处跨书实锤勘误留档",
+          "triggers": "考场防坑清单与本讲三处跨书实锤勘误汇总",
+          "method": "① **方浩强化 P.72 题型五蓝框**：正文首行误将「二维离散型」印为「二维连续型」；② **概率 9 讲 P.46 例 5.9 联合表**：以 $V$ 为行、$U$ 为列却将两边缘下标 $p_{i\\cdot},p_{\\cdot j}$ 互换标反；③ **猪狗百宝书 P.4-26 例 4.29**：误印为 $P\\{X_n>\\max\\{X_1,\\dots,X_n\\}\\}=\\frac1n$（实为概率 0 的不可能事件，右侧下标须改至 $n-1$ 或把 $>$ 改为 $=$！）。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        }
+      ],
+      "takeaway": "结合本讲核心模型与速查表反复对照练习，确保公式选型、定限与边界自检一步到位。"
+    }
+  ]
+}

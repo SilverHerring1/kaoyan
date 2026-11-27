@@ -1,0 +1,1410 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "prob-01",
+  "title": "概率 · 第 1 讲　随机事件和概率",
+  "sourceMeta": "深度融合《27 张宇基础30讲·概率》第1讲（P.1-32）+《27 张宇概率9讲》第1讲（P.1-8 全 10 例）+《27 方浩概率强化》第1章（P.3-26 全 34 例精选）+《27 猪狗概率统计百宝书》第1章（P.1-1~1-26 含 2015–2025 真题）+《27 版概率论全总结》P.2，100% 逐页核图与 SymPy 验算",
+  "basicRequirements": {
+    "master": "熟练掌握随机事件关系与八大运算法则（差集转交逆、分配律、德·摩根律）、完备事件组与概率公理化定义、古典概型（随机占位/三种抽样/抓阄对称）与几何概型面积比、七大基本公式（三事件容斥、全概率与贝叶斯双阶段更新）及事件独立性判定。",
+    "understand": "理解零概率事件与不可能事件的单向蕴含差异、条件概率作为缩减样本空间正规概率的运算继承性、最值事件 11 组转化恒等式、连续单点零概率条件的密度解法以及独立/互斥/相互有利/相互抑止的完整等价链。",
+    "familiar": "熟悉方浩明星不等式 P(A∪B)P(AB)≤P(A)P(B)、两两独立与相互独立的两硬币反例、独立重复先胜停止公式 p/(p+q) 以及线代方程组有解与古典概型的跨学科综合题。"
+  },
+  "items": [
+    {
+      "id": "m1-pr01-f-01",
+      "kind": "formula",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、随机事件的关系、运算与完备事件组",
+      "title": "事件关系、差集等价式、八大运算法则（德·摩根律）与完备事件组定义",
+      "formulaLatex": "$$\\begin{aligned} &A-B=A-AB=A\\bar{B};\\qquad B=\\bar{A}\\iff AB=\\varnothing\\text{ 且 }A\\cup B=\\Omega\\\\ &\\text{分配律：}A\\cap(B\\cup C)=(AB)\\cup(AC),\\quad A\\cup(BC)=(A\\cup B)\\cap(A\\cup C)\\\\ &\\text{德摩根律：}\\overline{\\bigcup_{i=1}^{n}A_i}=\\bigcap_{i=1}^{n}\\bar{A}_i,\\qquad \\overline{\\bigcap_{i=1}^{n}A_i}=\\bigcup_{i=1}^{n}\\bar{A}_i\\\\ &\\text{完备事件组：}\\bigcup_{i=1}^{n}A_i=\\Omega\\;\\text{且}\\;A_iA_j=\\varnothing\\;(\\forall i\\ne j)\\end{aligned}$$",
+      "conditions": "德·摩根律与分配律对有限个乃至可列无穷个事件均成立；化简复杂事件表达式时，优先将差集一律改为 $A-B=A\\bar{B}$，再用分配律与对偶律处理（也可画文氏图秒验）。",
+      "pitfalls": "① 事件运算**无消去律**（基础习题 1.1）：由 $A\\cup C=B\\cup C$ 或 $AC=BC$ 或 $A-C=B-C$ 均**推不出** $A=B$！ ② 括号切勿乱移（基础习题 1.16）：$A-(B-C)=A\\overline{B\\bar{C}}=A(\\bar{B}\\cup C)=(A-B)\\cup AC\\ne(A-B)\\cup C$；$(A\\cup B)-B=A-B\\ne A$；$(A-B)\\cup B=A\\cup B\\ne A$！",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 258\" width=\"100%\" style=\"max-width:640px;height:auto;display:block;margin:8px auto;\" font-family=\"system-ui,-apple-system,'Segoe UI',sans-serif\"><title>随机事件六大基本关系、德摩根对偶律与完备事件组文氏图</title><defs><clipPath id=\"m1_pr01_clip_a\"><circle cx=\"298\" cy=\"60\" r=\"24\"/></clipPath><clipPath id=\"m1_pr01_clip_diff\"><rect x=\"424\" y=\"28\" width=\"192\" height=\"64\"/></clipPath></defs><rect x=\"2\" y=\"2\" width=\"636\" height=\"254\" rx=\"12\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/><text x=\"320\" y=\"22\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">随机事件六大核心关系与完备划分全景图（矩形表示样本空间 Ω）</text><rect x=\"14\" y=\"32\" width=\"196\" height=\"102\" rx=\"8\" fill=\"#ffffff\" stroke=\"#e2e8f0\"/><rect x=\"34\" y=\"42\" width=\"156\" height=\"58\" rx=\"4\" fill=\"#f8fafc\" stroke=\"#94a3b8\" stroke-width=\"1\"/><circle cx=\"96\" cy=\"71\" r=\"22\" fill=\"#93c5fd\" fill-opacity=\"0.72\" stroke=\"#2563eb\" stroke-width=\"1.5\"/><circle cx=\"128\" cy=\"71\" r=\"22\" fill=\"#93c5fd\" fill-opacity=\"0.72\" stroke=\"#2563eb\" stroke-width=\"1.5\"/><text x=\"86\" y=\"75\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1e3a8a\">A</text><text x=\"138\" y=\"75\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1e3a8a\">B</text><text x=\"182\" y=\"54\" text-anchor=\"end\" font-size=\"10\" fill=\"#64748b\">Ω</text><text x=\"112\" y=\"116\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1d4ed8\">并（和）A ∪ B</text><text x=\"112\" y=\"129\" text-anchor=\"middle\" font-size=\"10\" fill=\"#475569\">A, B 至少发生一个</text><rect x=\"222\" y=\"32\" width=\"196\" height=\"102\" rx=\"8\" fill=\"#ffffff\" stroke=\"#e2e8f0\"/><rect x=\"242\" y=\"42\" width=\"156\" height=\"58\" rx=\"4\" fill=\"#f8fafc\" stroke=\"#94a3b8\" stroke-width=\"1\"/><circle cx=\"304\" cy=\"71\" r=\"22\" fill=\"#ffffff\" stroke=\"#2563eb\" stroke-width=\"1.5\"/><circle cx=\"336\" cy=\"71\" r=\"22\" fill=\"#ffffff\" stroke=\"#7c3aed\" stroke-width=\"1.5\"/><clipPath id=\"m1_pr01_clip_a2\"><circle cx=\"304\" cy=\"71\" r=\"22\"/></clipPath><circle cx=\"336\" cy=\"71\" r=\"22\" fill=\"#a78bfa\" fill-opacity=\"0.78\" clip-path=\"url(#m1_pr01_clip_a2)\"/><circle cx=\"304\" cy=\"71\" r=\"22\" fill=\"none\" stroke=\"#2563eb\" stroke-width=\"1.5\"/><circle cx=\"336\" cy=\"71\" r=\"22\" fill=\"none\" stroke=\"#7c3aed\" stroke-width=\"1.5\"/><text x=\"292\" y=\"75\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1e40af\">A</text><text x=\"348\" y=\"75\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#5b21b6\">B</text><text x=\"320\" y=\"116\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#6d28d9\">交（积）AB = A ∩ B</text><text x=\"320\" y=\"129\" text-anchor=\"middle\" font-size=\"10\" fill=\"#475569\">A, B 同时发生</text><rect x=\"430\" y=\"32\" width=\"196\" height=\"102\" rx=\"8\" fill=\"#ffffff\" stroke=\"#e2e8f0\"/><rect x=\"450\" y=\"42\" width=\"156\" height=\"58\" rx=\"4\" fill=\"#f8fafc\" stroke=\"#94a3b8\" stroke-width=\"1\"/><circle cx=\"512\" cy=\"71\" r=\"22\" fill=\"#34d399\" fill-opacity=\"0.72\" stroke=\"#059669\" stroke-width=\"1.5\"/><circle cx=\"544\" cy=\"71\" r=\"22\" fill=\"#f8fafc\" stroke=\"#475569\" stroke-width=\"1.5\"/><text x=\"502\" y=\"75\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#065f46\">A</text><text x=\"546\" y=\"75\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#475569\">B</text><text x=\"528\" y=\"116\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#047857\">差 A - B = A - AB = AB̄</text><text x=\"528\" y=\"129\" text-anchor=\"middle\" font-size=\"10\" fill=\"#475569\">A 发生且 B 不发生</text><rect x=\"14\" y=\"144\" width=\"196\" height=\"102\" rx=\"8\" fill=\"#ffffff\" stroke=\"#e2e8f0\"/><rect x=\"34\" y=\"154\" width=\"156\" height=\"58\" rx=\"4\" fill=\"#f8fafc\" stroke=\"#94a3b8\" stroke-width=\"1\"/><circle cx=\"80\" cy=\"183\" r=\"20\" fill=\"#fecaca\" fill-opacity=\"0.7\" stroke=\"#dc2626\" stroke-width=\"1.5\"/><circle cx=\"144\" cy=\"183\" r=\"20\" fill=\"#fed7aa\" fill-opacity=\"0.7\" stroke=\"#ea580c\" stroke-width=\"1.5\"/><text x=\"80\" y=\"187\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#991b1b\">A</text><text x=\"144\" y=\"187\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#9a3412\">B</text><text x=\"112\" y=\"228\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#dc2626\">互斥（互不相容）AB = ∅</text><text x=\"112\" y=\"241\" text-anchor=\"middle\" font-size=\"10\" fill=\"#475569\">不能同生（对立需另加 A∪B=Ω）</text><rect x=\"222\" y=\"144\" width=\"196\" height=\"102\" rx=\"8\" fill=\"#ffffff\" stroke=\"#e2e8f0\"/><rect x=\"242\" y=\"154\" width=\"156\" height=\"58\" rx=\"4\" fill=\"#fde68a\" fill-opacity=\"0.75\" stroke=\"#d97706\" stroke-width=\"1.2\"/><circle cx=\"304\" cy=\"183\" r=\"21\" fill=\"#ffffff\" stroke=\"#475569\" stroke-width=\"1.4\"/><circle cx=\"336\" cy=\"183\" r=\"21\" fill=\"#ffffff\" stroke=\"#475569\" stroke-width=\"1.4\"/><text x=\"296\" y=\"187\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#475569\">A</text><text x=\"344\" y=\"187\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#475569\">B</text><text x=\"320\" y=\"228\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#b45309\">德·摩根律：Ā∩B̄ = (A∪B)̄</text><text x=\"320\" y=\"241\" text-anchor=\"middle\" font-size=\"10\" fill=\"#475569\">长杠变短杠，开口换方向</text><rect x=\"430\" y=\"144\" width=\"196\" height=\"102\" rx=\"8\" fill=\"#ffffff\" stroke=\"#e2e8f0\"/><rect x=\"450\" y=\"154\" width=\"39\" height=\"58\" fill=\"#dbeafe\" stroke=\"#2563eb\" stroke-width=\"1.2\"/><rect x=\"489\" y=\"154\" width=\"39\" height=\"58\" fill=\"#ede9fe\" stroke=\"#7c3aed\" stroke-width=\"1.2\"/><rect x=\"528\" y=\"154\" width=\"39\" height=\"58\" fill=\"#d1fae5\" stroke=\"#059669\" stroke-width=\"1.2\"/><rect x=\"567\" y=\"154\" width=\"39\" height=\"58\" fill=\"#ffedd5\" stroke=\"#ea580c\" stroke-width=\"1.2\"/><ellipse cx=\"528\" cy=\"183\" rx=\"58\" ry=\"17\" fill=\"#dc2626\" fill-opacity=\"0.16\" stroke=\"#dc2626\" stroke-width=\"1.5\" stroke-dasharray=\"4 2\"/><text x=\"469\" y=\"168\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#1e40af\">A₁</text><text x=\"508\" y=\"168\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#5b21b6\">A₂</text><text x=\"547\" y=\"168\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#065f46\">A₃</text><text x=\"586\" y=\"168\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#9a3412\">A₄</text><text x=\"528\" y=\"191\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#b91c1c\">B = ⋃ BAᵢ</text><text x=\"528\" y=\"228\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#0f172a\">完备事件组（全集分解）</text><text x=\"528\" y=\"241\" text-anchor=\"middle\" font-size=\"10\" fill=\"#475569\">两两互斥且并集为 Ω（不重不漏）</text></svg>",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化",
+        "printedPage": "基础 P.2-6 / 9讲 P.1-2 / 方浩 P.3-5",
+        "pdfPage": 11,
+        "itemRef": "随机事件的关系与八大运算律"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "随机试验 $E$ 的全体可能结果构成样本空间 $\\Omega$，随机事件 $A\\subseteq\\Omega$ 是其子集。事件运算与集合论完全同构，优先级约定为**先逆、次交、后并/差**：① **包含 $A\\subseteq B$** 指 $A$ 发生必导致 $B$ 发生；② **互斥（互不相容）$AB=\\varnothing$** 指不能同时发生，而**对立（逆事件）$B=\\bar{A}$** 除互斥外还要求并集为 $\\Omega$（对立必互斥，互斥未必对立）；③ **完备事件组**（全集分解/划分）是对 $\\Omega$ 的「不重不漏」切分，是全概率与贝叶斯公式的基石。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「长杠变短杠，开口换方向；差集化交逆，对立必互斥，互斥不定对立！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr01-f-02",
+      "kind": "formula",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、概率公理化定义、古典概型与几何概型",
+      "title": "概率公理化三要素、古典概型（占位/抽样）与几何概型度量比公式",
+      "formulaLatex": "$$\\begin{aligned} &\\text{公理化定义：}\\text{① }P(A)\\ge 0;\\quad \\text{② }P(\\Omega)=1;\\quad \\text{③ 两两互斥时 }P\\left(\\bigcup_{i=1}^{\\infty}A_i\\right)=\\sum_{i=1}^{\\infty}P(A_i)\\\\ &\\text{古典概型（有限等可能）：}P(A)=\\frac{n_A}{n_\\Omega};\\qquad \\text{排列 }P_n^m=\\frac{n!}{(n-m)!},\\quad \\text{组合 }C_n^m=\\frac{n!}{m!(n-m)!}\\\\ &\\text{几何概型（无限等可能）：}P(A)=\\frac{\\mu(S_A)}{\\mu(S_\\Omega)}\\quad(\\mu\\text{ 为一维长度、二维面积或三维体积})\\end{aligned}$$",
+      "conditions": "古典概型必须同时验证「样本点总数有限」且「每个基本事件等可能」，分子分母必须采用**同一口径**（同有序或同无序）；几何概型要求 $\\Omega$ 为有界可度量区域且分布均匀。",
+      "pitfalls": "① 古典概型最隐蔽失误：把「有序」的分母配「无序」的分子，或把不可区分物体误当等可能基本事件（掷两骰子点数和为 7 与和为 2 绝非等可能，必须按 $(i,j)$ 共 36 个有序对计数！）。 ② 公理化第 ③ 条是**可列可加性**（无穷个两两互斥事件），不能弱化为有限可加性。",
+      "source": {
+        "book": "27 张宇基础30讲 & 27 猪狗百宝书",
+        "printedPage": "基础 P.6-14 / 猪狗 P.1-5~1-9",
+        "pdfPage": 13,
+        "itemRef": "概率公理化定义与古典几何概型"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "概率的公理化定义（柯尔莫哥洛夫）只界定事件函数 $P(\\cdot)$ 必须满足的三条底线（非负性、规范性、**可列可加性**），用于严格推导一切性质；具体算概率依靠三大基础概型：① **古典概型**（基本事件有限且等可能）：核心是分清「放（随机占位：可重复 $N^n$，每盒至多 1 球 $P_N^n$）」与「取（有放回 $N^n$、先后无放回 $P_N^n$、一次任取 $C_N^n$）」；② **几何概型**：样本点落在有界可度量区域 $\\Omega$ 内任一子域的概率仅与几何测度成正比，与形状、位置无关（数一偶考三维体积比）。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「古典看有限等可能，分子分母同口径（有序对有序、无序对无序）；几何画图比长面积！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr01-f-03",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "三、概率七大基本公式（容斥、减法、条件与乘法链）",
+      "title": "逆事件、单调性、加减法、三事件容斥、条件概率与一般乘法公式",
+      "formulaLatex": "$$\\begin{aligned} &P(\\bar{A})=1-P(A);\\qquad A\\subseteq B\\implies P(B-A)=P(B)-P(A)\\ge 0\\\\ &P(A\\cup B)=P(A)+P(B)-P(AB);\\qquad P(A-B)=P(A)-P(AB)=P(A\\bar{B})\\\\ &P(A\\cup B\\cup C)=P(A)+P(B)+P(C)-P(AB)-P(AC)-P(BC)+P(ABC)\\\\ &P(B\\mid A)=\\frac{P(AB)}{P(A)}\\;(P(A)>0);\\qquad P(A_1A_2\\cdots A_n)=P(A_1)P(A_2\\mid A_1)\\cdots P(A_n\\mid A_1\\cdots A_{n-1})\\end{aligned}$$",
+      "conditions": "条件概率 $P(B\\mid A)$ 要求 $P(A)>0$；$n$ 步乘法链要求前置积事件概率 $P(A_1A_2\\cdots A_{n-1})>0$。",
+      "pitfalls": "① 经典大坑：对固定结果 $B$ 而言，$P(B\\mid A)+P(B\\mid\\bar{A})$ **一般不等于 $1$**！固定条件 $A$ 才有 $P(B\\mid A)+P(\\bar{B}\\mid A)=1$（方浩强化高频辨析）。 ② 三事件「恰有一个发生」的黄金展开：$P(A)+P(B)+P(C)-2[P(AB)+P(AC)+P(BC)]+3P(ABC)$（2020/2025 真题核心！），千万别漏掉系数 $-2$ 与 $+3$！",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 版概率论全总结",
+        "printedPage": "基础 P.15-16 / 9讲 P.1-3 / 全总结 P.2",
+        "pdfPage": 21,
+        "itemRef": "概率七大基本性质与公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_identities",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "七大基本公式是整个概率论计算的通用齿轮：① **逆事件公式**专克「至少一个」「至多」「全不」；② **减法公式**记住一般情形 $P(A-B)=P(A)-P(AB)$，**只有当 $B\\subseteq A$ 时**才能写成 $P(A)-P(B)$！③ **条件概率 $P(\\cdot\\mid A)$ 本身就是缩减样本空间 $A$ 上的正规概率**，因此加法、减法、逆事件、单调性对条件概率全部原样成立（如 $P(\\bar{B}\\mid A)=1-P(B\\mid A)$、$P(B\\cup C\\mid A)=P(B\\mid A)+P(C\\mid A)-P(BC\\mid A)$）；④ **乘法公式**用于分步串联求交事件概率。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「减法永远减交集 $P(AB)$，切忌直接 $P(A)-P(B)$；条件概率是真概率，加减对立全照搬！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr01-f-04",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "四、完备事件组、全概率公式与贝叶斯公式",
+      "title": "全概率公式（执因索果）与贝叶斯公式（执果索因）",
+      "formulaLatex": "$$\\begin{aligned} &\\text{设 }A_1,\\dots,A_n\\text{ 为完备事件组且 }P(A_i)>0\\;(i=1,\\dots,n)\\text{：}\\\\ &\\text{全概率公式：}P(B)=\\sum_{i=1}^{n}P(A_i)P(B\\mid A_i)\\\\ &\\text{贝叶斯公式：}P(A_j\\mid B)=\\frac{P(A_jB)}{P(B)}=\\frac{P(A_j)P(B\\mid A_j)}{\\sum_{i=1}^{n}P(A_i)P(B\\mid A_i)}\\quad(P(B)>0,\\;j=1,\\dots,n)\\end{aligned}$$",
+      "conditions": "完备事件组 $A_1,\\dots,A_n$（可推广至可列无穷 $n=\\infty$）满足两两互斥、并集为 $\\Omega$（或至少覆盖 $B\\subseteq\\bigcup A_i$）且 $P(A_i)>0$；贝叶斯公式另需 $P(B)>0$。",
+      "pitfalls": "① 注意 $\\sum_{i=1}^{n}P(A_i)=1$ 必须成立，但条件概率之和 $\\sum_{i=1}^{n}P(B\\mid A_i)$ **没有任何等于 1 的要求**（如三个小偷成功率 $0,\\frac34,\\frac16$）！ ② 两阶段联动大题（如基础例 1.12 放回再抽）：第二次抽样前，先验权重已由第一次观测结果通过贝叶斯公式更新为**后验权重** $P(H_i\\mid A)$，绝不能继续沿用初始先验 $\\frac12$！",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 264\" width=\"100%\" style=\"max-width:640px;height:auto;display:block;margin:8px auto;\" font-family=\"system-ui,-apple-system,'Segoe UI',sans-serif\"><title>全概率公式（执因索果）与贝叶斯公式（执果索因）双视角树状图</title><defs><marker id=\"m1_pr01_arr_b\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M0 1 L9 5 L0 9 Z\" fill=\"#2563eb\"/></marker><marker id=\"m1_pr01_arr_r\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M0 1 L9 5 L0 9 Z\" fill=\"#dc2626\"/></marker><marker id=\"m1_pr01_arr_s\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M0 1 L9 5 L0 9 Z\" fill=\"#475569\"/></marker></defs><rect x=\"2\" y=\"2\" width=\"636\" height=\"260\" rx=\"12\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/><rect x=\"18\" y=\"12\" width=\"604\" height=\"32\" rx=\"8\" fill=\"#eff6ff\" stroke=\"#93c5fd\"/><text x=\"320\" y=\"32\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#1d4ed8\">正向 · 全概率公式（执因索果）：P(B) = Σ P(Aᵢ) · P(B | Aᵢ)  （先分原因，再汇总结果）</text><circle cx=\"62\" cy=\"134\" r=\"24\" fill=\"#0f172a\"/><text x=\"62\" y=\"138\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#ffffff\">样本 Ω</text><rect x=\"236\" y=\"56\" width=\"128\" height=\"38\" rx=\"8\" fill=\"#dbeafe\" stroke=\"#2563eb\" stroke-width=\"1.5\"/><text x=\"300\" y=\"74\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#1e40af\">原因 A₁</text><text x=\"300\" y=\"88\" text-anchor=\"middle\" font-size=\"10\" fill=\"#1e3a8a\">先验权重 P(A₁)</text><rect x=\"236\" y=\"115\" width=\"128\" height=\"38\" rx=\"8\" fill=\"#ede9fe\" stroke=\"#7c3aed\" stroke-width=\"1.5\"/><text x=\"300\" y=\"133\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#5b21b6\">原因 A₂</text><text x=\"300\" y=\"147\" text-anchor=\"middle\" font-size=\"10\" fill=\"#4c1d95\">先验权重 P(A₂)</text><rect x=\"236\" y=\"174\" width=\"128\" height=\"38\" rx=\"8\" fill=\"#d1fae5\" stroke=\"#059669\" stroke-width=\"1.5\"/><text x=\"300\" y=\"192\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#065f46\">原因 Aₙ</text><text x=\"300\" y=\"206\" text-anchor=\"middle\" font-size=\"10\" fill=\"#064e3b\">先验权重 P(Aₙ)</text><rect x=\"518\" y=\"102\" width=\"102\" height=\"64\" rx=\"10\" fill=\"#fef2f2\" stroke=\"#dc2626\" stroke-width=\"1.8\"/><text x=\"569\" y=\"129\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#b91c1c\">结果事件 B</text><text x=\"569\" y=\"148\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#991b1b\">总概率 P(B) &gt; 0</text><line x1=\"86\" y1=\"124\" x2=\"230\" y2=\"77\" stroke=\"#2563eb\" stroke-width=\"1.8\" marker-end=\"url(#m1_pr01_arr_b)\"/><line x1=\"86\" y1=\"134\" x2=\"230\" y2=\"134\" stroke=\"#2563eb\" stroke-width=\"1.8\" marker-end=\"url(#m1_pr01_arr_b)\"/><line x1=\"86\" y1=\"144\" x2=\"230\" y2=\"191\" stroke=\"#2563eb\" stroke-width=\"1.8\" marker-end=\"url(#m1_pr01_arr_b)\"/><text x=\"150\" y=\"92\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"600\" fill=\"#1d4ed8\">P(A₁)</text><text x=\"154\" y=\"128\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"600\" fill=\"#1d4ed8\">P(A₂)</text><text x=\"150\" y=\"182\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"600\" fill=\"#1d4ed8\">P(Aₙ)</text><line x1=\"364\" y1=\"75\" x2=\"512\" y2=\"118\" stroke=\"#475569\" stroke-width=\"1.8\" marker-end=\"url(#m1_pr01_arr_s)\"/><line x1=\"364\" y1=\"134\" x2=\"512\" y2=\"134\" stroke=\"#475569\" stroke-width=\"1.8\" marker-end=\"url(#m1_pr01_arr_s)\"/><line x1=\"364\" y1=\"193\" x2=\"512\" y2=\"150\" stroke=\"#475569\" stroke-width=\"1.8\" marker-end=\"url(#m1_pr01_arr_s)\"/><text x=\"444\" y=\"88\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"600\" fill=\"#334155\">P(B | A₁)</text><text x=\"440\" y=\"127\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"600\" fill=\"#334155\">P(B | A₂)</text><text x=\"444\" y=\"186\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"600\" fill=\"#334155\">P(B | Aₙ)</text><path d=\"M552 166 C520 226, 360 226, 312 158\" fill=\"none\" stroke=\"#dc2626\" stroke-width=\"1.8\" stroke-dasharray=\"5 3\" marker-end=\"url(#m1_pr01_arr_r)\"/><rect x=\"18\" y=\"220\" width=\"604\" height=\"32\" rx=\"8\" fill=\"#fef2f2\" stroke=\"#fca5a5\"/><text x=\"320\" y=\"240\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#b91c1c\">逆向 · 贝叶斯公式（执果索因）：P(Aⱼ | B) = P(Aⱼ)P(B|Aⱼ) / Σ P(Aᵢ)P(B|Aᵢ)  （单支贡献 / 全部汇总）</text></svg>",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化",
+        "printedPage": "基础 P.16-18 / 9讲 P.3 / 方浩 P.11-18",
+        "pdfPage": 22,
+        "itemRef": "全概率公式与贝叶斯公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_bayes_cases",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "面对两阶段或多原因触发的复杂结果事件 $B$，用全集分解 $B=B\\Omega=\\bigcup_{i=1}^{n}(A_iB)$ 把 $B$ 拆到互不重叠的原因分支上：① **全概率公式（正向：由因推果）**：各原因先验概率 $P(A_i)$ 与该原因下引发 $B$ 的条件概率 $P(B\\mid A_i)$ 乘积之和；② **贝叶斯公式（逆向：由果溯因）**：已知结果 $B$ 已发生，反求它源自第 $j$ 个原因的后验概率 $P(A_j\\mid B)$，结构上永远是「单支分子 ÷ 全概率分母」。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「画树分原因：正向加权求和是全概率，逆向单支除总和是贝叶斯；新信息一到先验立刻变后验！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr01-f-05",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "五、事件独立性与 n 重伯努利概型",
+      "title": "两事件/三事件/n 事件相互独立定义、夫唱妇随四等价与伯努利概率式",
+      "formulaLatex": "$$\\begin{aligned} &A\\perp B\\iff P(AB)=P(A)P(B)\\iff A\\perp\\bar{B}\\iff\\bar{A}\\perp B\\iff\\bar{A}\\perp\\bar{B}\\\\ &A_1,A_2,A_3\\text{ 相互独立}\\iff \\begin{cases}P(A_1A_2)=P(A_1)P(A_2),\\;P(A_1A_3)=P(A_1)P(A_3),\\;P(A_2A_3)=P(A_2)P(A_3)\\;(\\text{两两独立})\\\\ P(A_1A_2A_3)=P(A_1)P(A_2)P(A_3)\\;(\\text{必加第 4 式!})\\end{cases}\\\\ &\\text{独立并事件转化：}P\\left(\\bigcup_{i=1}^{n}A_i\\right)=1-\\prod_{i=1}^{n}[1-P(A_i)];\\qquad n\\text{ 重伯努利：}P_n(k)=C_n^k p^k(1-p)^{n-k}\\end{aligned}$$",
+      "conditions": "$n$ 重伯努利概型要求三要素齐备：① 每次试验仅有两种互斥结果（成功 $A$ / 失败 $\\bar{A}$）；② 每次成功概率 $p$ 恒定不变；③ 各次试验相互独立。",
+      "pitfalls": "① 千万别漏掉「不含相同事件」前提：若 $A,B$ 独立且 $0<P(A),P(B)<1$，则 $A$ 与 $AB$、$A\\cup B$、$A-B$、$B-A$ **全部不独立**（方浩例题 29）！ ② 仅满足 $P(ABC)=P(A)P(B)P(C)$ **不能**推出两两独立；反之两两独立也**不能**推出相互独立（基础例 1.13 两硬币反例）。",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 256\" width=\"100%\" style=\"max-width:640px;height:auto;display:block;margin:8px auto;\" font-family=\"system-ui,-apple-system,'Segoe UI',sans-serif\"><title>事件独立性、互斥性与相互有利/抑止判别罗盘</title><defs><marker id=\"m1_pr01_arr_ind\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M0 1 L9 5 L0 9 Z\" fill=\"#475569\"/></marker></defs><rect x=\"2\" y=\"2\" width=\"636\" height=\"252\" rx=\"12\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/><text x=\"320\" y=\"24\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">独立 vs 互斥 vs 相互有利/抑止 判别罗盘（设 0 &lt; P(A), P(B) &lt; 1）</text><rect x=\"16\" y=\"38\" width=\"194\" height=\"148\" rx=\"9\" fill=\"#fef2f2\" stroke=\"#fca5a5\" stroke-width=\"1.4\"/><text x=\"113\" y=\"58\" text-anchor=\"middle\" font-size=\"12.5\" font-weight=\"700\" fill=\"#b91c1c\">相互抑止（负相关）</text><text x=\"113\" y=\"77\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"600\" fill=\"#991b1b\">P(AB) &lt; P(A)P(B)</text><text x=\"113\" y=\"95\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#7f1d1d\">⇔ P(B|A) &lt; P(B) &lt; P(B|Ā)</text><text x=\"113\" y=\"112\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#7f1d1d\">⇔ P(ĀB̄) &lt; P(Ā)P(B̄)</text><rect x=\"26\" y=\"124\" width=\"174\" height=\"52\" rx=\"6\" fill=\"#ffffff\" stroke=\"#ef4444\" stroke-dasharray=\"3 2\"/><text x=\"113\" y=\"142\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#dc2626\">极端情形：互斥 AB = ∅</text><text x=\"113\" y=\"157\" text-anchor=\"middle\" font-size=\"10\" fill=\"#991b1b\">P(AB)=0 &lt; P(A)P(B)</text><text x=\"113\" y=\"170\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#dc2626\">正概率互斥必不独立！</text><rect x=\"223\" y=\"38\" width=\"194\" height=\"148\" rx=\"9\" fill=\"#ecfdf5\" stroke=\"#6ee7b7\" stroke-width=\"1.6\"/><text x=\"320\" y=\"58\" text-anchor=\"middle\" font-size=\"12.5\" font-weight=\"700\" fill=\"#047857\">相互独立（A ⊥ B）</text><text x=\"320\" y=\"77\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#065f46\">P(AB) = P(A)P(B)</text><text x=\"320\" y=\"95\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#065f46\">⇔ P(B|A) = P(B) = P(B|Ā)</text><text x=\"320\" y=\"112\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#065f46\">⇔ P(B|A) + P(B̄|Ā) = 1</text><rect x=\"233\" y=\"124\" width=\"174\" height=\"52\" rx=\"6\" fill=\"#ffffff\" stroke=\"#10b981\"/><text x=\"320\" y=\"142\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#059669\">夫唱妇随四等价</text><text x=\"320\" y=\"157\" text-anchor=\"middle\" font-size=\"10\" fill=\"#065f46\">(A,B) ⇔ (A,B̄) ⇔ (Ā,B) ⇔ (Ā,B̄)</text><text x=\"320\" y=\"170\" text-anchor=\"middle\" font-size=\"10\" fill=\"#047857\">零/一概率事件与任意事件独立</text><rect x=\"430\" y=\"38\" width=\"194\" height=\"148\" rx=\"9\" fill=\"#eff6ff\" stroke=\"#93c5fd\" stroke-width=\"1.4\"/><text x=\"527\" y=\"58\" text-anchor=\"middle\" font-size=\"12.5\" font-weight=\"700\" fill=\"#1d4ed8\">相互有利（正相关）</text><text x=\"527\" y=\"77\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"600\" fill=\"#1e40af\">P(AB) &gt; P(A)P(B)</text><text x=\"527\" y=\"95\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#1e3a8a\">⇔ P(B|A) &gt; P(B) &gt; P(B|Ā)</text><text x=\"527\" y=\"112\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#1e3a8a\">⇔ P(ĀB̄) &gt; P(Ā)P(B̄)</text><rect x=\"440\" y=\"124\" width=\"174\" height=\"52\" rx=\"6\" fill=\"#ffffff\" stroke=\"#3b82f6\" stroke-dasharray=\"3 2\"/><text x=\"527\" y=\"142\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#2563eb\">极端情形：包含 A ⊂ B</text><text x=\"527\" y=\"157\" text-anchor=\"middle\" font-size=\"10\" fill=\"#1e40af\">P(B|A) = 1 &gt; P(B)</text><text x=\"527\" y=\"170\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#1d4ed8\">正概率包含亦不独立！</text><rect x=\"16\" y=\"198\" width=\"608\" height=\"44\" rx=\"8\" fill=\"#fffbeb\" stroke=\"#fcd34d\" stroke-width=\"1.2\"/><text x=\"320\" y=\"216\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#92400e\">三事件高频大坑：两两独立（3 式） ⇎ 相互独立（需全部 4 式：额外补 P(ABC) = P(A)P(B)P(C)）</text><text x=\"320\" y=\"233\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#78350f\">若 A⊥C 且 B⊥C，则 (A∪B)⊥C ⇔ AB⊥C；但仅知 A⊥B、B⊥C 推不出 A⊥C（独立性无传递性）！</text></svg>",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化",
+        "printedPage": "基础 P.22-24 / 9讲 P.6-7 / 方浩 P.21-26",
+        "pdfPage": 28,
+        "itemRef": "事件独立性与n重伯努利概型"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_indep_cases",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "独立性刻画「一事件发生与否不改变另一事件发生概率」。$n$ 个事件相互独立需对**任意 $2\\le k\\le n$ 个子集**均满足乘积公式（共 $2^n-n-1$ 个等式；$n=3$ 为 4 式）。独立性的三大运算红利：① 任意替换若干事件为对立事件仍保持独立；② 对相互独立事件组**不含相同事件**作任意集合运算（交/并/差/逆），所得新事件组仍相互独立（如 $A,B,C,D$ 独立 $\\Rightarrow AB\\perp(C-D)$）；③ 求并事件概率必用德·摩根律转成对立之交连乘！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「三事件独立要查四式（两两三式+三交一式）；见独立求并立刻取反变连乘！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr01-f-06",
+      "kind": "formula",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、强化高频武器：最值事件 11 式与零概率条件密度警示",
+      "title": "$\\max\\{X,Y\\}$、$\\min\\{X,Y\\}$ 11 组转化恒等式与连续条件概率（$P(B)=0$ 禁区）",
+      "formulaLatex": "$$\\begin{aligned} &\\text{① }\\{\\max\\le a\\}=\\{X\\le a\\}\\cap\\{Y\\le a\\};\\qquad \\text{② }\\{\\max>a\\}=\\{X>a\\}\\cup\\{Y>a\\}\\\\ &\\text{③ }\\{\\min\\le a\\}=\\{X\\le a\\}\\cup\\{Y\\le a\\};\\qquad \\text{④ }\\{\\min>a\\}=\\{X>a\\}\\cap\\{Y>a\\}\\\\ &\\text{⑤ }\\{\\max\\le a\\}\\subseteq\\{\\min\\le a\\};\\qquad \\text{⑥ }\\{\\min>a\\}\\subseteq\\{\\max>a\\}\\\\ &\\text{⑦ }\\max=\\frac{X+Y+|X-Y|}{2},\\;\\text{⑧ }\\min=\\frac{X+Y-|X-Y|}{2};\\;\\text{⑨ }\\max+\\min=X+Y,\\;\\text{⑩ }\\max-\\min=|X-Y|,\\;\\text{⑪ }\\max\\cdot\\min=XY\\\\ &\\text{零概率条件警示：}P(Y=y_0)=0\\text{ 时禁写 }\\frac{P(A,Y=y_0)}{P(Y=y_0)}\\text{，应由条件密度 }P(x_1\\le X\\le x_2\\mid Y=y_0)=\\int_{x_1}^{x_2}\\frac{f(x,y_0)}{f_Y(y_0)}\\,\\mathrm{d}x\\end{aligned}$$",
+      "conditions": "关系式 ①–⑪ 对任意实随机变量 $X,Y$ 均无条件恒成立（不需要独立，也不限制离散或连续）；零概率条件密度公式要求边缘密度 $f_Y(y_0)>0$。",
+      "pitfalls": "若问 $P\\{\\max(X,Y)\\ge 0,\\;\\min(X,Y)<0\\}$（强化例 1.6），千万别硬拆绝对值——利用包含关系 $\\{\\min\\ge 0\\}\\subseteq\\{\\max\\ge 0\\}$，一步写出 $P\\{\\max\\ge 0\\}-P\\{X\\ge 0,Y\\ge 0\\}$ 秒杀！",
+      "source": {
+        "book": "27 张宇《概率9讲》",
+        "printedPage": "9讲 P.3, P.5",
+        "pdfPage": 16,
+        "itemRef": "最值事件11式与连续条件概率警示"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "《概率 9 讲》第 1 讲专设模块五「最值关系式」与模块三「零概率条件警示」：① 凡见 $\\max\\{X,Y\\}\\le a$（全都要 $\\le a$，化交集）或 $\\min\\{X,Y\\}>a$（全都要 $>a$，化交集）直接化交求积；若遇反向不等号（如 $\\max>a$ 或 $\\min\\le a$）立刻用对立事件转回交集！② 第 ⑦–⑪ 式用于把带 $\\max/\\min$ 的随机变量和、差、积直接消去最值符号（第 5、6 讲求期望方差的超级利器）。③ 当条件事件是连续变量取单点 $\\{Y=y_0\\}$ 时，因 $P(Y=y_0)=0$，古典商式 $P(AB)/P(B)$ 呈现 $0/0$ 失效，必须改用条件概率密度积分。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「最大小于全小于，最小大于全大于；和为 X+Y、差为 |X-Y|、积为 XY，连续单点条件必找条件密度！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr01-f-07",
+      "kind": "formula",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、强化高频武器：独立性与相互有利/抑止充要等价链",
+      "title": "独立性三大充要判别式与相互有利（$P(AB)>P(A)P(B)$）四大等价链",
+      "formulaLatex": "$$\\begin{aligned} &\\text{当 }0<P(A)<1,\\;0<P(B)<1\\text{ 时：}\\\\ &\\text{独立等价链：}A\\perp B\\iff P(B\\mid A)=P(B)\\iff P(B\\mid A)=P(B\\mid\\bar{A})\\iff P(B\\mid A)+P(\\bar{B}\\mid\\bar{A})=1\\\\ &\\text{有利等价链：}P(AB)>P(A)P(B)\\iff P(\\bar{A}\\bar{B})>P(\\bar{A})P(\\bar{B})\\iff P(B\\mid A)>P(B)\\iff P(B\\mid A)>P(B\\mid\\bar{A})\\\\ &\\text{对称转向：}A,B\\text{ 相互有利}\\iff A,\\bar{B}\\text{ 相互抑止}\\iff \\bar{A},B\\text{ 相互抑止}\\iff \\bar{A},\\bar{B}\\text{ 相互有利}\\end{aligned}$$",
+      "conditions": "含条件概率 $P(B\\mid A)$ 与 $P(B\\mid\\bar{A})$ 的等价链要求 $0<P(A)<1$（保证分母 $P(A),P(\\bar{A})$ 均大于 0）；不含条件概率的 $\\Delta$ 符号等价对任意事件均成立。",
+      "pitfalls": "2021 真题高频陷阱（方浩例题 31）：由 $P(A\\mid A\\cup B)>P(\\bar{A}\\mid A\\cup B)$ 只能推出 $P(A)>P(B)-P(AB)=P(\\bar{A}B)$，**绝对推不出** $P(A)>P(B)$（例如 $A\\subset B$ 且 $P(A)=0.6,P(B)=0.8$ 时左侧 $0.75>0.25$ 但 $P(A)<P(B)$）！",
+      "source": {
+        "book": "27 张宇《概率9讲》 & 27 方浩强化",
+        "printedPage": "9讲 P.6-8 / 方浩 P.23-24",
+        "pdfPage": 18,
+        "itemRef": "独立性与相互有利抑止等价链"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_indep_cases",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "令协方差型记号 $\\Delta=P(AB)-P(A)P(B)$，恒有 $\\Delta=P(\\bar{A}\\bar{B})-P(\\bar{A})P(\\bar{B})=- [P(A\\bar{B})-P(A)P(\\bar{B})]=-[P(\\bar{A}B)-P(\\bar{A})P(B)]$，且 $\\Delta=P(A)[P(B\\mid A)-P(B)]=P(A)P(\\bar{A})[P(B\\mid A)-P(B\\mid\\bar{A})]$！一条恒等式瞬间打通 2017、2021 等全部真题选择题：只要记住「换一个杠变一次号，换两个杠符号复原」，所有有利/抑止/独立等价命题 3 秒通杀！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「一个 Δ 管全局：单杠反号双杠同，有利就是条件拉高均值 P(B|A)>P(B)>P(B|Ā)！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr01-c-01",
+      "kind": "conclusion",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、零概率事件与概率为 1 事件的本质辨析",
+      "title": "$P(A)=0\\nRightarrow A=\\varnothing$、$P(A)=1\\nRightarrow A=\\Omega$（单向蕴含与几何概型反例）",
+      "conditions": "在**有限等可能古典概型**中，每个基本事件概率均严格大于 $0$，此时 $P(A)=0\\iff A=\\varnothing$ 才成立；一旦进入连续区间（如 $[0,2]$ 上任取一点，$A=[0,1],B=[1,2]$ 则 $AB=\\{1\\}\\ne\\varnothing$ 但 $P(AB)=0$），逆命题立即失效！",
+      "pitfalls": "高频选择题干扰项（基础例 1.6 / 习题 1.2）：给 $P(A)=P(B)=\\frac12$ 且 $P(A\\cup B)=1$，只能算出 $P(AB)=0\\Rightarrow P(\\bar{A}\\cup\\bar{B})=P(\\overline{AB})=1$，切勿误选 $A\\cup B=\\Omega$ 或 $AB=\\varnothing$！",
+      "source": {
+        "book": "27 张宇基础30讲 & 27 方浩强化",
+        "printedPage": "基础 P.15, P.19 / 方浩 P.10 例题10",
+        "pdfPage": 21,
+        "itemRef": "零概率与必然事件单向蕴含辨析"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "summary": "必然事件必有 $P(\\Omega)=1$、不可能事件必有 $P(\\varnothing)=0$，但**逆命题均不成立**：在无限样本空间（如几何概型或连续型随机变量）中，$P(A)=0$ 不能断言 $A=\\varnothing$，$P(A)=1$ 不能断言 $A=\\Omega$；同理 $P(AB)=0\\nRightarrow AB=\\varnothing$，$P(A\\cup B)=1\\nRightarrow A\\cup B=\\Omega$。"
+    },
+    {
+      "id": "m1-pr01-c-02",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、抓阄模型（抽签公平性）与抽样等价法则",
+      "title": "无放回逐个抽签与次序无关（抓阄定理）及「先后无放回」等价「一次任取」",
+      "conditions": "抽签公平性指的是**无条件概率**（未告知前面抽签结果）；若已知前 $k-1$ 次结果，则退化为条件概率，此时不再等于 $\\frac{M}{N}$。",
+      "pitfalls": "考场常见心理误区：误以为「先抽中奖率高」或「后抽吃亏」——可用全集占位法 1 秒自证：将 $N$ 个球随机排入 $N$ 个位置，第 $k$ 个位置落入白球的放法为 $M\\cdot(N-1)!/N!=M/N$（基础例 1.3(4) / 方浩例题 22）！",
+      "source": {
+        "book": "27 张宇基础30讲 & 27 方浩强化",
+        "printedPage": "基础 P.12-13, P.21 / 方浩 P.18 例题22",
+        "pdfPage": 19,
+        "itemRef": "抓阄模型与抽签公平性"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_sampling",
+        "verified": true
+      },
+      "summary": "① **抓阄定理**：$N$ 个球中含 $M$ 个白球，逐个**不放回**抽取，在不知前 $k-1$ 次结果的条件下，第 $k$ 次抽到白球的无条件概率恒为 $\\frac{M}{N}$（与抽签次序 $k$ 完全无关！）；② **无放回降维**：只要事件只关心「所取 $n$ 个球中含白球的个数」而不涉顺序，则「先后无放回取 $n$ 个」与「一次任取 $n$ 个」概率完全相同（分子分母同时约去 $n!$），直接用组合数超几何式计算最省力。"
+    },
+    {
+      "id": "m1-pr01-c-03",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、概率不等式金库（布尔、邦费罗尼与方浩明星不等式）",
+      "title": "交并上下界、邦费罗尼不等式与明星不等式 $P(A\\cup B)P(AB)\\le P(A)P(B)$",
+      "conditions": "上述全部不等式对**任意**随机事件均无条件成立（不要求独立，也不要求互斥）；明星不等式的绝妙证明：$P(A)P(B)-P(A\\cup B)P(AB)=[P(A)-P(AB)][P(B)-P(AB)]=P(A\\bar{B})P(\\bar{A}B)\\ge 0$！",
+      "pitfalls": "千万不要把 2015 真题选错：$P(AB)$ 与 $P(A)P(B)$ 一般**没有固定大小关系**（取决于有利/独立/抑止），但 $P(AB)\\le\\frac{P(A)+P(B)}{2}$ 和 $P(A\\cup B)P(AB)\\le P(A)P(B)$ 永远成立！",
+      "source": {
+        "book": "27 方浩强化 & 27 猪狗百宝书 & 27 张宇基础30讲",
+        "printedPage": "方浩 P.8 例题7 / 猪狗 P.1-18~1-19 / 基础 P.18",
+        "pdfPage": 13,
+        "itemRef": "概率五大核心不等式与方浩明星不等式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_identities",
+        "verified": true
+      },
+      "summary": "对任意事件 $A,B$ 恒有五大核心不等式：① **单调夹逼**：$P(AB)\\le\\min\\{P(A),P(B)\\}\\le\\frac{P(A)+P(B)}{2}\\le\\max\\{P(A),P(B)\\}\\le P(A\\cup B)$；② **邦费罗尼下界**：$P(AB)\\ge P(A)+P(B)-1$（推广：$P(A_1\\cdots A_n)\\ge\\sum_{i=1}^{n}P(A_i)-(n-1)$）；③ **布尔次可加**：$P(\\bigcup_{i=1}^{n}A_i)\\le\\sum_{i=1}^{n}P(A_i)$；④ **差集下界**：$P(A-B)\\ge P(A)-P(B)$，$P(AB)+P(\\bar{A}\\bar{B})\\le 1$；⑤ **方浩明星不等式**：$P(A\\cup B)P(AB)\\le P(A)P(B)$（等号成立 $\\iff A\\subseteq B$ 或 $B\\subseteq A$ 概率意义下成立）！"
+    },
+    {
+      "id": "m1-pr01-c-04",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、互斥与独立核心辨析及「自交必不独立」定理",
+      "title": "正概率互斥/包含必不独立、零一事件万能独立、$A\\perp B$ 下 $A$ 与复合事件必不独立",
+      "conditions": "第 ①、③ 条必须满足 $0<P(A)<1$ 且 $0<P(B)<1$（一旦端点取 $0$ 或 $1$，退化事件与任意事件都独立，结论反转）。",
+      "pitfalls": "考场秒验第 ③ 条：$A\\subseteq A\\cup B$（包含必不独立），$AB\\subseteq A$（包含必不独立），$A-B\\subseteq A$（包含必不独立），$A\\cap(B-A)=\\varnothing$（互斥必不独立）——四个全被「正概率包含/互斥必不独立」一招秒杀！",
+      "source": {
+        "book": "27 张宇《概率9讲》 & 27 方浩强化",
+        "printedPage": "9讲 P.7 / 方浩 P.22 例题29",
+        "pdfPage": 18,
+        "itemRef": "互斥与独立核心辨析及复合事件不独立"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_indep_cases",
+        "verified": true
+      },
+      "summary": "① 若 $0<P(A)<1$ 且 $0<P(B)<1$，则 **互斥 ($AB=\\varnothing$) $\\implies$ 必不独立**，**包含 ($A\\subseteq B$) $\\implies$ 必不独立**，且 **独立 $\\implies$ 必相容 ($AB\\ne\\varnothing$)**；② 若 $P(A)=0$ 或 $P(A)=1$，则 $A$ 与**任意事件 $B$** 相互独立（这是「既互斥又独立」的唯一缝隙，例如 $A=\\varnothing$）；③ **方浩例 29 黄金结论**：若 $0<P(A),P(B)<1$ 且 $A\\perp B$，则 $A$ 与 $A\\cup B$、$AB$、$A-B$、$B-A$ **全都不独立**！"
+    },
+    {
+      "id": "m1-pr01-c-05",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "五、三事件独立性陷阱与并/交独立充要桥",
+      "title": "$A\\perp C,B\\perp C$ 下 $(A\\cup B)\\perp C\\iff AB\\perp C$，以及独立性四大反例清单",
+      "conditions": "并/交独立桥要求已知 $A\\perp C$ 与 $B\\perp C$；特别地，若 $A,B$ 互斥 ($AB=\\varnothing$)，则 $P(ABC)=0=P(AB)P(C)$ 自动成立，故「两两互斥且各自独立于 $C$ $\\implies$ 并集也独立于 $C$」是充分非必要条件！",
+      "pitfalls": "方浩例题 30 印刷易误读提醒：选项 (D) 中考察事件为 $A\\bar{C}$（横杠仅在 $C$ 上，因 $P(\\bar{C})=0\\Rightarrow P(A\\bar{C})=0$，与任意事件独立），切勿看花眼当成 $\\overline{AC}$（$P(\\overline{AC})=1-P(A)$ 并不为 $0$）！",
+      "source": {
+        "book": "27 方浩强化 & 27 张宇基础30讲 & 27 猪狗百宝书",
+        "printedPage": "方浩 P.23-24 例题30,32 / 基础 P.25,28 / 猪狗 P.1-17~1-18",
+        "pdfPage": 28,
+        "itemRef": "三事件并交独立充要桥与四大反例"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_indep_cases",
+        "verified": true
+      },
+      "summary": "① **2017 真题充要桥（方浩例 32 / 基础习题 1.5）**：已知 $A\\perp C$ 且 $B\\perp C$，由 $P((A\\cup B)C)=P(AC)+P(BC)-P(ABC)$ 与 $P(A\\cup B)P(C)=P(A)P(C)+P(B)P(C)-P(AB)P(C)$ 对比立得：$(A\\cup B)\\perp C\\iff P(ABC)=P(AB)P(C)\\iff AB\\perp C$！② **四大必背反例**：(a) 独立无传递性（$A\\perp B,B\\perp C\\nRightarrow A\\perp C$，取 $C=A$）；(b) 子事件不遗传独立性（$A\\perp B,C\\subset A,D\\subset B\\nRightarrow C\\perp D$）；(c) 已知 $P(C)=1$ 且 $A\\perp B$ 时，$(A,B,AC)$ **未必相互独立**（方浩例 30：因 $P(AB\\cdot AC)=P(AB)=P(A)P(B)\\ne P(A)^2P(B)$！）；(d) 两两独立 $\\nRightarrow$ 相互独立。"
+    },
+    {
+      "id": "m1-pr01-c-06",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、独立重复试验「先发生先停止」公式与题眼翻译",
+      "title": "互斥事件独立重复试验 $P(A\\text{ 先于 }B)=\\frac{p}{p+q}$ 与高频文字题眼速译",
+      "conditions": "要求 $A$ 与 $B$ 在单次试验中**互斥**（$AB=\\varnothing$，不能同一局同时胜出）且各次试验独立同分布。若 $A,B$ 可同时发生（如两人同时射箭），则将「单方胜出」重定义为互斥事件 $A\\bar{B}$ 与 $\\bar{A}B$ 即可套用！",
+      "pitfalls": "文字题眼必译精准（概率 9 讲 P.8 注）：「既不…又不…」$=\\bar{A}\\bar{B}=\\overline{A\\cup B}$；「不都发生」$=\\overline{ABC}=\\bar{A}\\cup\\bar{B}\\cup\\bar{C}$；「都不发生」$=\\bar{A}\\bar{B}\\bar{C}$；「不多于一个发生」$=$ 至多一个发生 $=$ 至少两个不发生 $=\\bar{A}\\bar{B}\\cup\\bar{A}\\bar{C}\\cup\\bar{B}\\bar{C}$！",
+      "source": {
+        "book": "27 方浩强化 & 27 张宇《概率9讲》 & 基础30讲",
+        "printedPage": "方浩 P.19 例题24 / 9讲 P.8 / 基础 P.26,29-30",
+        "pdfPage": 24,
+        "itemRef": "先出现先停止公式与文字题眼翻译"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_first_win",
+        "verified": true
+      },
+      "summary": "在一系列独立重复试验中，每次试验互斥事件 $A,B$ 发生的概率分别为 $p>0,q>0$（$p+q\\le 1$），其余结果概率为 $r=1-p-q$，则「$A$ 先于 $B$ 发生」的概率为 $P=\\sum_{k=0}^{\\infty}r^k p=\\frac{p}{1-r}=\\frac{p}{p+q}$！直观理解：忽略一切「平局/无效局」，只看首次分出胜负的那一局，条件概率即为 $\\frac{p}{p+q}$！"
+    },
+    {
+      "id": "m1-pr01-e-01",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、古典概型基础：随机占位（生日模型）与三种抽样",
+      "title": "基础例 1.1：将 $n$ 个球随机放入 $N\\;(n\\le N)$ 个盒子（指定 $n$ 盒/恰有 $n$ 盒/指定 $k$ 盒各一球）",
+      "problem": "将 $n$ 个可辨球随机放入 $N\\;(n\\le N)$ 个编号盒子中，每盒可放任意多个球，求下列事件概率：$A=\\{\\text{某指定 }n\\text{ 个盒子各有一球}\\}$；$B=\\{\\text{恰有 }n\\text{ 个盒子各有一球}\\}$；$C=\\{\\text{指定 }k\\;(k\\le n)\\text{ 个盒子各有一球}\\}$。",
+      "steps": [
+        {
+          "stepTitle": "确定样本空间总数",
+          "detail": "每个球均有 $N$ 种独立放法，故基本事件总数为 $N^n$。"
+        },
+        {
+          "stepTitle": "分别计算事件 A、B（全排列 vs 先选盒再排列）",
+          "detail": "$A$ 中 $n$ 个盒子位置已固定，只需把 $n$ 个球全排列，故 $n_A=n!\\Rightarrow P(A)=\\frac{n!}{N^n}$；$B$ 中 $n$ 个盒子未指定，先从 $N$ 盒中任选 $n$ 盒（$C_N^n$），再把 $n$ 球全排列入盒（$n!$），故 $P(B)=\\frac{C_N^n n!}{N^n}=\\frac{P_N^n}{N^n}$。"
+        },
+        {
+          "stepTitle": "计算事件 C（选球入指定盒 + 余球放余盒）",
+          "detail": "先从 $n$ 球中选 $k$ 球（$C_n^k$）全排列放入指定 $k$ 盒（$k!$），再将剩余 $n-k$ 球任意放入其余 $N-k$ 盒（确保指定 $k$ 盒**恰有**一球不再多放！），共 $(N-k)^{n-k}$ 种，故 $P(C)=\\frac{C_n^k k!(N-k)^{n-k}}{N^n}=\\frac{n!(N-k)^{n-k}}{(n-k)!N^n}$。"
+        }
+      ],
+      "finalAnswer": "$P(A)=\\frac{n!}{N^n},\\quad P(B)=\\frac{C_N^n n!}{N^n},\\quad P(C)=\\frac{n!(N-k)^{n-k}}{(n-k)!N^n}$",
+      "takeaway": "生日问题（$N=365$）、乘客下车、住房分配全同构于此母题；算事件 $C$ 最易忘把剩余 $n-k$ 球限制在其余 $N-k$ 盒里！",
+      "source": {
+        "book": "27 张宇《考研数学基础30讲·概率》",
+        "printedPage": "基础 P.10",
+        "pdfPage": 16,
+        "itemRef": "例 1.1 随机占位问题"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_sampling",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr01-e-02",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、古典概型基础：随机占位（生日模型）与三种抽样",
+      "title": "基础例 1.2 & 1.3：三种抽样方式对比与抓阄模型第 20 次取白球",
+      "problem": "(1) 袋中 5 球（3 白 2 黑），分别按「先后有放回取 2 球」「先后无放回取 2 球」「任取 2 球」，求至少 1 白的概率；(2) 袋中 100 球（40 白 60 黑），按先后有放回 / 先后无放回取 20 球，求「恰取 15 白 5 黑」与「第 20 次取到白球」的概率。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：逆数法算「两球全黑」",
+          "detail": "放回：$p_1=1-\\frac{2^2}{5^2}=\\frac{21}{25}$；先后无放回：$p_2=1-\\frac{2\\times 1}{5\\times 4}=\\frac{9}{10}$；一次任取：$p_3=1-\\frac{C_2^2}{C_5^2}=\\frac{9}{10}$。可见 $p_2=p_3$（上下约去 $2!$）。"
+        },
+        {
+          "stepTitle": "第 (2) 问：二项模型 vs 超几何模型",
+          "detail": "先后有放回取 20 球恰 15 白：$P_1=C_{20}^{15}\\left(\\frac{40}{100}\\right)^{15}\\left(\\frac{60}{100}\\right)^5$；先后无放回等价于一次任取 20 球：$P_2=\\frac{C_{40}^{15}C_{60}^5}{C_{100}^{20}}$。"
+        },
+        {
+          "stepTitle": "第 20 次取白球（抓阄对称性）",
+          "detail": "有放回每次样本空间不变，故 $p_3=\\frac{40}{100}=\\frac25$；无放回按占位模型把 100 球排入 100 格，第 20 格放 1 白球余 99 球全排，故 $p_4=\\frac{C_{40}^1\\cdot 99!}{100!}=\\frac{40}{100}=\\frac25$！"
+        }
+      ],
+      "finalAnswer": "(1) $\\frac{21}{25},\\;\\frac{9}{10},\\;\\frac{9}{10}$；(2) $C_{20}^{15}0.4^{15}0.6^5$，$\\frac{C_{40}^{15}C_{60}^5}{C_{100}^{20}}$，有/无放回第 20 次取白球概率均为 $\\frac{2}{5}$",
+      "takeaway": "不涉次序时，先后无放回直接按「任取」用组合数算；问「第 $k$ 次抽到某类」的无条件概率，立刻用抓阄定理一步出 $\\frac{M}{N}$！",
+      "source": {
+        "book": "27 张宇《考研数学基础30讲·概率》",
+        "printedPage": "基础 P.12-13",
+        "pdfPage": 18,
+        "itemRef": "例 1.2 与例 1.3 三种抽样及抓阄模型"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_sampling",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr01-e-03",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、几何概型基础：会面问题与曲线围面积",
+      "title": "基础例 1.4 & 习题 1.7：区间 $(0,1)$ 任取两数（会面 $|x-y|<0.5$ 与曲线 $xy>\\frac14,x+y<\\frac54$）",
+      "problem": "在区间 $[0,1]$ 中独立随机取两个数 $x,y$，分别求：(1) $|x-y|<0.5$ 的概率；(2) $xy>\\frac14$ 且 $x+y<\\frac54$ 的概率。",
+      "steps": [
+        {
+          "stepTitle": "建立二维单位正方形样本空间",
+          "detail": "$\\Omega=[0,1]\\times[0,1]$，总面积 $S_\\Omega=1$。"
+        },
+        {
+          "stepTitle": "第 (1) 问：挖去两角等腰直角三角形",
+          "detail": "$|x-y|\\ge 0.5$ 对应左上、右下两个直角边均为 $0.5$ 的等腰直角三角形，合面积 $2\\times\\frac12\\times 0.5^2=0.25$，故 $P=1-0.25=0.75$。"
+        },
+        {
+          "stepTitle": "第 (2) 问：求直线与双曲线交点并定积分",
+          "detail": "联立 $x+y=\\frac54$ 与 $xy=\\frac14$ 得 $x^2-\\frac54 x+\\frac14=0\\Rightarrow x=\\frac14$ 或 $x=1$。区域在 $[\\frac14,1]$ 上由下曲线 $y=\\frac{1}{4x}$ 与上直线 $y=\\frac54-x$ 围成，故 $P=\\int_{1/4}^{1}\\left(\\frac54-x-\\frac{1}{4x}\\right)\\mathrm{d}x=\\left[\\frac54 x-\\frac12 x^2-\\frac14\\ln x\\right]_{1/4}^{1}=\\frac{15}{32}-\\frac12\\ln 2$。"
+        }
+      ],
+      "finalAnswer": "(1) $0.75$；(2) $\\frac{15}{32}-\\frac{1}{2}\\ln 2$",
+      "takeaway": "几何概型本质就是高数二重积分/定积分算面积比：直线边界用割补三角形，曲线边界先求交点再上下做差定积分。",
+      "source": {
+        "book": "27 张宇《考研数学基础30讲·概率》",
+        "printedPage": "基础 P.14, P.26, P.28",
+        "pdfPage": 20,
+        "itemRef": "例 1.4 与习题 1.7 几何概型面积比"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_geom",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr01-e-04",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "三、概率公式与容斥原理基础例题",
+      "title": "基础例 1.5 & 1.6：任意两事件概率不等式与 $P(A)=P(B)=\\frac12,P(A\\cup B)=1$ 零概率辨析",
+      "problem": "(1) 设 $A,B$ 为任意两个随机事件，判断下列哪项恒成立：(A) $P(AB)+P(\\bar{A}\\bar{B})\\le 1$；(B) $P(AB)+P(\\bar{A}\\bar{B})\\ge 1$；(C) $P(A-B)\\le P(A)-P(B)$；(D) $P(A\\cup B)+P(\\bar{A}\\cup\\bar{B})\\le 1$。(2) 若 $P(A)=P(B)=\\frac12$ 且 $P(A\\cup B)=1$，求必然成立的结论：(A) $A\\cup B=\\Omega$；(B) $AB=\\varnothing$；(C) $P(\\bar{A}\\cup\\bar{B})=1$；(D) $P(A-B)=0$。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：用包含关系 $AB\\subseteq A\\cup B$ 一步推出",
+          "detail": "因 $AB\\subseteq A\\cup B$，故 $P(AB)\\le P(A\\cup B)=1-P(\\overline{A\\cup B})=1-P(\\bar{A}\\bar{B})$，移项立得 $P(AB)+P(\\bar{A}\\bar{B})\\le 1$，选 (A)！同时 $P(A\\cup B)+P(\\bar{A}\\cup\\bar{B})=P(A\\cup B)+1-P(AB)\\ge 1$（否决 D），$P(A-B)=P(A)-P(AB)\\ge P(A)-P(B)$（否决 C）。"
+        },
+        {
+          "stepTitle": "第 (2) 问：区分集合相等与概率为 0/1",
+          "detail": "由加法公式得 $P(AB)=P(A)+P(B)-P(A\\cup B)=\\frac12+\\frac12-1=0$，但由零概率辨析，既不能推 $A\\cup B=\\Omega$（否 A），也不能推 $AB=\\varnothing$（否 B）；又 $P(A-B)=P(A)-P(AB)=\\frac12\\ne 0$（否 D）；唯独 $P(\\bar{A}\\cup\\bar{B})=P(\\overline{AB})=1-P(AB)=1$ 严格恒成立，选 (C)！"
+        }
+      ],
+      "finalAnswer": "(1) 选 (A)；(2) 选 (C)",
+      "takeaway": "记住两大速判原则：给纯概率条件永远只能推出「概率等式/不等式」，绝不能反推「集合必然相等/互不相容」！",
+      "source": {
+        "book": "27 张宇《考研数学基础30讲·概率》",
+        "printedPage": "基础 P.18-19",
+        "pdfPage": 24,
+        "itemRef": "例 1.5 与例 1.6 概率不等式与零概率陷阱"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_identities",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr01-e-05",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "三、概率公式与容斥原理基础例题",
+      "title": "基础例 1.9：经典装错信封问题（4 封信全装对与全装错——容斥原理范例）",
+      "problem": "某人给四位亲友各写一封信，随机地装入 4 个写好地址的信封中，每信封一封信。求：(1) 4 封信都装对的概率；(2) 4 封信都装错的概率。",
+      "steps": [
+        {
+          "stepTitle": "设事件并用乘法公式求全装对",
+          "detail": "设 $A_i=\\{\\text{第 }i\\text{ 封信装对了}\\}\\;(i=1,2,3,4)$。全装对概率 $P(A_1A_2A_3A_4)=\\frac14\\times\\frac13\\times\\frac12\\times 1=\\frac{1}{24}$。"
+        },
+        {
+          "stepTitle": "德·摩根律 + 4 事件容斥求全装错",
+          "detail": "全装错即 $\\bar{A}_1\\bar{A}_2\\bar{A}_3\\bar{A}_4=\\overline{A_1\\cup A_2\\cup A_3\\cup A_4}$，按对称容斥展开：$P=1-C_4^1\\cdot\\frac14+C_4^2\\cdot\\frac{1}{4\\cdot 3}-C_4^3\\cdot\\frac{1}{4\\cdot 3\\cdot 2}+C_4^4\\cdot\\frac{1}{4!}=1-1+\\frac12-\\frac16+\\frac{1}{24}=\\frac{9}{24}=\\frac38$。"
+        }
+      ],
+      "finalAnswer": "(1) $\\frac{1}{24}$；(2) $\\frac{3}{8}$（一般 $n$ 封信全装错概率为 $\\sum_{k=0}^{n}\\frac{(-1)^k}{k!}\\to e^{-1}\\approx 0.3679$）",
+      "takeaway": "全装错（错排问题）是对立事件 + 容斥原理的教科书级范本，对称项直接乘组合数 $C_n^k$，切忌把「全装错」与「全装对」误认为互为对立事件！",
+      "source": {
+        "book": "27 张宇《考研数学基础30讲·概率》",
+        "printedPage": "基础 P.20",
+        "pdfPage": 26,
+        "itemRef": "例 1.9 四封信装错容斥原理"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_derangement",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr01-e-06",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "四、全概率与贝叶斯双阶段更新",
+      "title": "基础例 1.10 & 1.12：两步嵌套全概率与「抽检放回后再抽」贝叶斯接力",
+      "problem": "(1) 从 $1,2,3,4$ 任取一数记为 $X$，再从 $1,\\dots,X$ 任取一数记为 $Y$，求 $P\\{Y=2\\}$；(2) 两批同量零件，一批全合格，另一批 $25\\%$ 不合格；任选一批取 1 只检得正品放回原处，再从原所在批取 1 只，求此次为次品的概率。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：按 X 取值划分完备事件组",
+          "detail": "$P\\{X=i\\}=\\frac14\\;(i=1,2,3,4)$，对应 $P\\{Y=2\\mid X=i\\}$ 分别为 $0,\\frac12,\\frac13,\\frac14$，由全概率公式 $P\\{Y=2\\}=\\frac14\\left(0+\\frac12+\\frac13+\\frac14\\right)=\\frac{13}{48}$。"
+        },
+        {
+          "stepTitle": "第 (2) 问第一步：贝叶斯公式更新后验权重",
+          "detail": "设 $H_i=\\{\\text{选到第 }i\\text{ 批}\\}$（$P(H_1)=P(H_2)=\\frac12$），$A=\\{\\text{首次取正品}\\}$。先算全概率 $P(A)=\\frac12\\cdot 1+\\frac12\\cdot\\frac34=\\frac78$；再由贝叶斯得后验权重 $P(H_1\\mid A)=\\frac{1/2}{7/8}=\\frac47$，$P(H_2\\mid A)=\\frac{3/8}{7/8}=\\frac37$。"
+        },
+        {
+          "stepTitle": "第 (2) 问第二步：以后验权重作先验再用全概率",
+          "detail": "记 $B=\\{\\text{第二次取次品}\\}$，则 $P(B\\mid A)=P(H_1\\mid A)\\cdot 0+P(H_2\\mid A)\\cdot\\frac14=\\frac37\\times\\frac14=\\frac{3}{28}$。"
+        }
+      ],
+      "finalAnswer": "(1) $\\frac{13}{48}$；(2) $\\frac{3}{28}$",
+      "takeaway": "「贝叶斯更新后验 → 作为下轮全概率先验」是考研解答题超高频套路；也可以直接用条件概率定义 $P(AB)/P(A)=\\frac{\\frac12\\cdot\\frac34\\cdot\\frac14}{7/8}=\\frac{3}{28}$ 一步核验！",
+      "source": {
+        "book": "27 张宇《考研数学基础30讲·概率》",
+        "printedPage": "基础 P.20-22",
+        "pdfPage": 26,
+        "itemRef": "例 1.10 与例 1.12 全概率与贝叶斯接力"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_bayes_cases",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr01-e-07",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "五、事件独立性与伯努利概型基础例题",
+      "title": "基础例 1.13 / 方浩例 33：抛两枚均匀硬币——两两独立但不相互独立经典反例",
+      "problem": "将一枚均匀硬币独立抛掷两次，定义 $A_1=\\{\\text{第一次正面}\\}$，$A_2=\\{\\text{第二次正面}\\}$，$A_3=\\{\\text{正反面各一次}\\}$，$A_4=\\{\\text{正面出现两次}\\}$，判定 $(A_1,A_2,A_3)$ 与 $(A_2,A_3,A_4)$ 的独立性。",
+      "steps": [
+        {
+          "stepTitle": "列出 4 个等可能样本点并算单事件概率",
+          "detail": "$\\Omega=\\{HH,HT,TH,TT\\}$，$P(A_1)=P(A_2)=P(A_3)=\\frac12$，$P(A_4)=\\frac14$。"
+        },
+        {
+          "stepTitle": "检验 (A₁, A₂, A₃)：两两全成立，三交爆零",
+          "detail": "$A_1A_2=\\{HH\\},A_1A_3=\\{HT\\},A_2A_3=\\{TH\\}$ 概率全为 $\\frac14=\\frac12\\times\\frac12$，故**两两独立**；但 $A_1A_2A_3=\\varnothing$，故 $P(A_1A_2A_3)=0\\ne\\frac18=P(A_1)P(A_2)P(A_3)$，故**不相互独立**！"
+        },
+        {
+          "stepTitle": "检验 (A₂, A₃, A₄)",
+          "detail": "$A_3A_4=\\varnothing$ 而 $P(A_3)P(A_4)=\\frac18>0$，故连两两独立都不满足。"
+        }
+      ],
+      "finalAnswer": "$A_1,A_2,A_3$ 两两独立但不相互独立（基础例 1.13 选 C / 方浩例题 33 选 C）",
+      "takeaway": "牢记这组「两硬币三事件」最小反例，遇到任何声称「两两独立 $\\Rightarrow$ 相互独立」的选择题直接 1 秒证伪！",
+      "source": {
+        "book": "27 张宇基础30讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "基础 P.24 / 方浩 P.25 例题33 / 猪狗 P.1-20",
+        "pdfPage": 30,
+        "itemRef": "例 1.13 两两独立与相互独立反例"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_indep_cases",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr01-e-08",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "五、事件独立性与伯努利概型基础例题",
+      "title": "基础例 1.15 (2007 真题)：第 4 次射击恰好第 2 次命中目标（负二项雏形）",
+      "problem": "某人向同一目标独立重复射击，每次命中概率为 $p\\;(0<p<1)$，求此人第 4 次射击恰好第 2 次命中目标的概率。",
+      "steps": [
+        {
+          "stepTitle": "拆分为独立的两段事件（锁定最后一次！）",
+          "detail": "「第 4 次恰好第 2 次命中」$\\iff$「前 3 次恰命中 1 次」$\\cap$「第 4 次命中」。两事件由不同试验轮次决定，相互独立！"
+        },
+        {
+          "stepTitle": "前 3 次用二项分布，第 4 次乘 p",
+          "detail": "$P=C_3^1 p(1-p)^2\\cdot p=3p^2(1-p)^2$。"
+        }
+      ],
+      "finalAnswer": "$3p^2(1-p)^2$（选 C）",
+      "takeaway": "千万不能误算成 $C_4^2 p^2(1-p)^2=6p^2(1-p)^2$（那包含第 4 次未命中的情形！）——凡遇「第 $k$ 次恰好第 $r$ 次成功」，永远先锁死最后一次必成功，前 $k-1$ 次选 $r-1$ 次成功：$C_{k-1}^{r-1}p^r(1-p)^{k-r}$！",
+      "source": {
+        "book": "27 张宇基础30讲 & 27 猪狗百宝书",
+        "printedPage": "基础 P.24-25 / 猪狗 P.2-16 例2.17",
+        "pdfPage": 30,
+        "itemRef": "例 1.15 第4次恰第2次命中"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_sampling",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr01-e-09",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、强化六大核心思维与历年真题精析",
+      "title": "强化例 1.1：对立思想 + 德·摩根律秒杀整除计数（1–100 既不被 2 也不被 3 整除）",
+      "problem": "从 $1,2,\\dots,100$ 中任取一个整数，求它既不能被 $2$ 整除，也不能被 $3$ 整除的概率。",
+      "steps": [
+        {
+          "stepTitle": "翻译事件并用德·摩根律转对立",
+          "detail": "记 $A=\\{\\text{能被 }2\\text{ 整除}\\}$，$B=\\{\\text{能被 }3\\text{ 整除}\\}$，所求为 $P(\\bar{A}\\bar{B})=P(\\overline{A\\cup B})=1-P(A\\cup B)=1-[P(A)+P(B)-P(AB)]$。"
+        },
+        {
+          "stepTitle": "用取整函数数清 2、3、6 的倍数个数",
+          "detail": "$n_A=\\lfloor 100/2\\rfloor=50$，$n_B=\\lfloor 100/3\\rfloor=33$，$n_{AB}=\\lfloor 100/6\\rfloor=16$，代入得 $P=1-\\frac{50+33-16}{100}=\\frac{33}{100}$。"
+        }
+      ],
+      "finalAnswer": "$\\frac{33}{100}=0.33$",
+      "takeaway": "见「既不…又不…」立刻写 $P(\\bar{A}\\bar{B})=1-P(A\\cup B)$；若涉及三个素因子整除，同理接三事件容斥公式即可。",
+      "source": {
+        "book": "27 张宇《概率9讲》",
+        "printedPage": "9讲 P.1",
+        "pdfPage": 12,
+        "itemRef": "强化例 1.1 对立思想整除计数"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_jiu_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr01-e-10",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、强化六大核心思维与历年真题精析",
+      "title": "强化例 1.2 (2020 真题)：三事件恰有一个发生（互斥分解 + 容斥法）",
+      "problem": "设 $A,B,C$ 为三个随机事件，且 $P(A)=P(B)=P(C)=\\frac14$，$P(AB)=0$，$P(AC)=P(BC)=\\frac{1}{12}$，求 $A,B,C$ 中恰有一个事件发生的概率。",
+      "steps": [
+        {
+          "stepTitle": "挖掘隐含条件 $P(ABC)=0$",
+          "detail": "因 $ABC\\subseteq AB$，由单调性 $0\\le P(ABC)\\le P(AB)=0\\implies P(ABC)=0$。"
+        },
+        {
+          "stepTitle": "拆分三个互斥的「独发」事件并套用差集",
+          "detail": "所求事件 $D=A\\bar{B}\\bar{C}\\cup\\bar{A}B\\bar{C}\\cup\\bar{A}\\bar{B}C$（三者两两互斥）。分别拆算：$P(A\\bar{B}\\bar{C})=P(A)-P(AB)-P(AC)+P(ABC)=\\frac14-0-\\frac{1}{12}+0=\\frac16$；同理 $P(\\bar{A}B\\bar{C})=\\frac16$，$P(\\bar{A}\\bar{B}C)=\\frac14-\\frac{1}{12}-\\frac{1}{12}+0=\\frac{1}{12}$。"
+        },
+        {
+          "stepTitle": "三支相加（或直接代黄金公式）",
+          "detail": "$P(D)=\\frac16+\\frac16+\\frac{1}{12}=\\frac{5}{12}$；亦可用通式 $\\sum P(A)-2\\sum P(AB)+3P(ABC)=\\frac34-2\\cdot\\frac2{12}+0=\\frac{5}{12}$。"
+        }
+      ],
+      "finalAnswer": "$\\frac{5}{12}$（选 D）",
+      "takeaway": "三事件「恰 1 个」$= \\sum P(A)-2\\sum P(AB)+3P(ABC)$，「恰 2 个」$= \\sum P(AB)-3P(ABC)$，「至少 2 个」$= \\sum P(AB)-2P(ABC)$，考前熟记 3 秒速算！",
+      "source": {
+        "book": "27 张宇《概率9讲》 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.2 / 猪狗 P.1-16 例1.5",
+        "pdfPage": 13,
+        "itemRef": "强化例 1.2 (2020真题) 恰一个事件发生"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_jiu_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr01-e-11",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、强化六大核心思维与历年真题精析",
+      "title": "强化例 1.3 (2022 真题)：互斥与独立混搭求条件概率 $P(B\\cup C\\mid A\\cup B\\cup C)$",
+      "problem": "设 $A,B,C$ 为随机事件，且 $A$ 与 $B$ 互不相容，$A$ 与 $C$ 互不相容，$B$ 与 $C$ 相互独立。若 $P(A)=P(B)=P(C)=\\frac13$，求 $P(B\\cup C\\mid A\\cup B\\cup C)$。",
+      "steps": [
+        {
+          "stepTitle": "翻译全部已知交概率",
+          "detail": "由题设 $P(AB)=0$，$P(AC)=0$，从而 $P(ABC)=0$；由 $B\\perp C$ 得 $P(BC)=P(B)P(C)=\\frac19$。"
+        },
+        {
+          "stepTitle": "用包含关系化简分子交集并代入容斥",
+          "detail": "因 $(B\\cup C)\\subseteq(A\\cup B\\cup C)$，故分子即 $P(B\\cup C)=\\frac13+\\frac13-\\frac19=\\frac59$；分母 $P(A\\cup B\\cup C)=\\frac13+\\frac13+\\frac13-0-0-\\frac19+0=\\frac89$，相除得 $\\frac{5/9}{8/9}=\\frac58$。"
+        }
+      ],
+      "finalAnswer": "$\\frac{5}{8}$",
+      "takeaway": "条件概率遇 $P(E\\mid F)$ 时先看 $E$ 与 $F$ 有无包含关系：$E\\subseteq F$ 时分子直接就是 $P(E)$，省去繁琐分配律展开！",
+      "source": {
+        "book": "27 张宇《概率9讲》 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.3 / 猪狗 P.1-15 例1.3",
+        "pdfPage": 14,
+        "itemRef": "强化例 1.3 (2022真题) 互斥独立混搭条件概率"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_jiu_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr01-e-12",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、强化六大核心思维与历年真题精析",
+      "title": "强化例 1.4：离散 × 连续独立混合全概率（$X\\sim B(1,\\frac34),\\,Y\\sim E(1)$）",
+      "problem": "已知随机变量 $X$ 与 $Y$ 相互独立，$X\\sim\\begin{pmatrix}0&1\\\\1/4&3/4\\end{pmatrix}$，$Y\\sim E(1)$。记 $U=\\begin{cases}0,&X<Y\\\\1,&X\\ge Y\\end{cases}$，$V=\\begin{cases}0,&X<2Y\\\\1,&X\\ge 2Y\\end{cases}$，求 $P\\{U=0\\}$ 及 $P\\{V=0\\}$。",
+      "steps": [
+        {
+          "stepTitle": "按离散变量 X 的完备事件组 {X=0}, {X=1} 分解",
+          "detail": "$P\\{U=0\\}=P\\{X<Y\\}=P\\{X=0,Y>0\\}+P\\{X=1,Y>1\\}$。"
+        },
+        {
+          "stepTitle": "利用独立性拆分乘积并代入 E(1) 生存概率",
+          "detail": "因 $Y\\sim E(1)$，故 $P\\{Y>0\\}=1$ 且 $P\\{Y>a\\}=e^{-a}\\;(a\\ge 0)$。从而 $P\\{U=0\\}=\\frac14\\cdot 1+\\frac34\\int_{1}^{+\\infty}e^{-y}\\,\\mathrm{d}y=\\frac14+\\frac34 e^{-1}$。"
+        },
+        {
+          "stepTitle": "同理计算 P{V=0}",
+          "detail": "$P\\{V=0\\}=P\\{X<2Y\\}=P\\{X=0\\}P\\{Y>0\\}+P\\{X=1\\}P\\{Y>\\frac12\\}=\\frac14+\\frac34 e^{-1/2}$。"
+        }
+      ],
+      "finalAnswer": "$P\\{U=0\\}=\\frac{1}{4}+\\frac{3}{4}e^{-1},\\qquad P\\{V=0\\}=\\frac{1}{4}+\\frac{3}{4}e^{-1/2}$",
+      "takeaway": "只要见到「一个离散 $X$ + 一个连续 $Y$」求事件概率或分布函数，永远以**离散变量的取值**作完备事件组套全概率公式（贯穿第 1、3、5 讲的万能钥匙）！",
+      "source": {
+        "book": "27 张宇《概率9讲》",
+        "printedPage": "9讲 P.4",
+        "pdfPage": 15,
+        "itemRef": "强化例 1.4 离散连续混合全概率"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_jiu_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr01-e-13",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、强化六大核心思维与历年真题精析",
+      "title": "强化例 1.5：单调性与有界性证明三事件两两交概率和的上下界",
+      "problem": "对任意三个事件 $A,B,C$，证明：(1) $P(AB)+P(AC)+P(BC)\\le P(A)+P(B)+P(C)$；(2) 当 $P(ABC)=\\frac12$ 时，$P(AB)+P(AC)+P(BC)\\ge P(A)+P(B)+P(C)-\\frac12$。",
+      "steps": [
+        {
+          "stepTitle": "证 (1)：逐项单调放缩",
+          "detail": "由 $AB\\subseteq B,\\;AC\\subseteq A,\\;BC\\subseteq C$（任选配对覆盖 $A,B,C$ 各一次），按概率单调性得 $P(AB)\\le P(B),\\;P(AC)\\le P(A),\\;P(BC)\\le P(C)$，三式相加即得结论。"
+        },
+        {
+          "stepTitle": "证 (2)：利用隐含有界条件 $P(A\\cup B\\cup C)\\le 1$ 切入容斥",
+          "detail": "$1\\ge P(A\\cup B\\cup C)=P(A)+P(B)+P(C)-[P(AB)+P(AC)+P(BC)]+P(ABC)$，移项并代入 $P(ABC)=\\frac12$ 得 $P(AB)+P(AC)+P(BC)\\ge P(A)+P(B)+P(C)+\\frac12-1=P(A)+P(B)+P(C)-\\frac12$。"
+        }
+      ],
+      "finalAnswer": "两式均已严格证毕（隐含条件 $0\\le P(\\cdot)\\le 1$ 是核心破题点）",
+      "takeaway": "概率证明不等式三大起手式：① 包含单调性；② 有界性 $0\\le P(\\text{某并/交事件})\\le 1$；③ $P(A\\bar{B})\\ge 0$（猪狗例 1.27 亦同源）。",
+      "source": {
+        "book": "27 张宇《概率9讲》 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.4-5 / 猪狗 P.1-22 例1.27",
+        "pdfPage": 15,
+        "itemRef": "强化例 1.5 单调性与容斥上下界"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr01-e-14",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、强化六大核心思维与历年真题精析",
+      "title": "强化例 1.6：最值事件关系式求 $P(\\max\\ge 0)$ 与 $P(\\max\\ge 0,\\min<0)$",
+      "problem": "设 $X,Y$ 为连续型随机变量，且 $P\\{X\\ge 0,Y\\ge 0\\}=\\frac37$，$P\\{X\\ge 0\\}=P\\{Y\\ge 0\\}=\\frac47$，求：(1) $A=\\{\\max\\{X,Y\\}\\ge 0\\}$ 的概率；(2) $B=\\{\\max\\{X,Y\\}\\ge 0,\\;\\min\\{X,Y\\}<0\\}$ 的概率。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：把 max ≥ 0 转化为并事件",
+          "detail": "$\\{\\max\\{X,Y\\}\\ge 0\\}=\\{X\\ge 0\\}\\cup\\{Y\\ge 0\\}$，由加法公式得 $P(A)=\\frac47+\\frac47-\\frac37=\\frac57$。"
+        },
+        {
+          "stepTitle": "第 (2) 问：全集分解（或直接看包含关系）",
+          "detail": "将 $A$ 按 $\\{\\min<0\\}$ 与 $\\{\\min\\ge 0\\}$ 互斥拆分：$A=B\\cup\\{\\max\\ge 0,\\min\\ge 0\\}=B\\cup\\{\\min\\ge 0\\}=B\\cup\\{X\\ge 0,Y\\ge 0\\}$，故 $P(B)=P(A)-P\\{X\\ge 0,Y\\ge 0\\}=\\frac57-\\frac37=\\frac27$。"
+        }
+      ],
+      "finalAnswer": "(1) $P(A)=\\frac{5}{7}$；(2) $P(B)=\\frac{2}{7}$",
+      "takeaway": "事件 $\\{\\max\\ge 0,\\min<0\\}$ 的本质就是「$X,Y$ 一正一负（异号）」！由对称图一秒看出 $P(\\text{至少一正})-P(\\text{全正})$。",
+      "source": {
+        "book": "27 张宇《概率9讲》",
+        "printedPage": "9讲 P.5-6",
+        "pdfPage": 16,
+        "itemRef": "强化例 1.6 最值事件概率计算"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_jiu_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr01-e-15",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、强化六大核心思维与历年真题精析",
+      "title": "强化例 1.7–1.10 & 方浩例 31 (2017/2021 真题)：独立、相互有利与假命题四连击",
+      "problem": "设 $0<P(A)<1,\\,0<P(B)<1$：(1) 判断① $P(B\\mid\\bar{A})=P(B\\mid A)$、② $P(B\\mid A)+P(\\bar{B}\\mid\\bar{A})=1$ 是否均为 $A\\perp B$ 的充要条件；(2) 判定 $P(AB)>P(A)P(B)$ 与 $P(B\\mid A)>P(B)$ 及 $P(B\\mid A)>P(B\\mid\\bar{A})$ 的关系；(3) （2021 真题）为何由 $P(A\\mid A\\cup B)>P(\\bar{A}\\mid A\\cup B)$ 推不出 $P(A)>P(B)$？",
+      "steps": [
+        {
+          "stepTitle": "验证独立双充要式（强化例 1.8）",
+          "detail": "由 $\\frac{P(\\bar{A}B)}{1-P(A)}=\\frac{P(AB)}{P(A)}\\iff P(A)[P(B)-P(AB)]=P(AB)[1-P(A)]\\iff P(A)P(B)=P(AB)$，故 ① 充要；又 $P(B\\mid\\bar{A})=1-P(\\bar{B}\\mid\\bar{A})$，故 ② 与 ① 完全同构，亦充要！"
+        },
+        {
+          "stepTitle": "验证有利等价链（强化例 1.9 & 1.10）",
+          "detail": "$P(AB)>P(A)P(B)$ 两边同除 $P(A)$ 即得 $P(B\\mid A)>P(B)$；两边同乘 $1-P(A)$ 移项化简即得 $\\frac{P(AB)}{P(A)}>\\frac{P(B)-P(AB)}{1-P(A)}=P(B\\mid\\bar{A})$，全程可逆，均为充要条件！"
+        },
+        {
+          "stepTitle": "击破 2021 真题假命题（方浩例 31）",
+          "detail": "$P(A\\mid A\\cup B)>P(\\bar{A}\\mid A\\cup B)\\iff \\frac{P(A)}{P(A\\cup B)}>\\frac{P(\\bar{A}B)}{P(A\\cup B)}\\iff P(A)>P(B)-P(AB)$。取 $A\\subset B$ 且 $P(A)=0.6,P(B)=0.8$，满足 $0.6>0.8-0.6=0.2$，却有 $P(A)<P(B)$，故原命题为假！"
+        }
+      ],
+      "finalAnswer": "(1) ①② 均充要（选 C）；(2) 均为充要条件（均选 C）；(3) 2021 真题假命题为 D",
+      "takeaway": "只要把所有条件概率写成 $P(AB)/P(A)$ 通分去分母，立刻暴露出 $\\Delta=P(AB)-P(A)P(B)$ 的符号，考场零失误！",
+      "source": {
+        "book": "27 张宇《概率9讲》 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.7-8 / 方浩 P.24 例题31 / 猪狗 P.1-15,1-17",
+        "pdfPage": 18,
+        "itemRef": "强化例 1.7至1.10 与2021真题独立有利四连"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_indep_cases",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr01-e-16",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、方浩强化与近年高分真题精选（2016–2025）",
+      "title": "方浩例 7 / 猪狗例 1.15：任意两事件的明星乘积不等式 $P(A\\cup B)P(AB)\\le P(A)P(B)$",
+      "problem": "对任意两个随机事件 $A,B$，判断下列哪个不等式恒成立：(A) $P(A\\cup B)P(AB)\\ge P(A)P(B)$；(B) $P(A\\cup B)P(AB)\\le P(A)P(B)$；(C) $P(A)+P(B)\\le 2P(AB)$；(D) $P(A)+P(B)\\le P(A\\cup B)P(AB)$。",
+      "steps": [
+        {
+          "stepTitle": "将 $P(A\\cup B)$ 用加法公式代换并因式分解",
+          "detail": "计算差值：$P(A)P(B)-P(A\\cup B)P(AB)=P(A)P(B)-[P(A)+P(B)-P(AB)]P(AB)=P(A)P(B)-P(A)P(AB)-P(B)P(AB)+[P(AB)]^2=[P(A)-P(AB)][P(B)-P(AB)]$。"
+        },
+        {
+          "stepTitle": "由单调性判断两因子均非负",
+          "detail": "因 $AB\\subseteq A$ 且 $AB\\subseteq B$，故 $P(A)-P(AB)=P(A\\bar{B})\\ge 0$，$P(B)-P(AB)=P(\\bar{A}B)\\ge 0$，两非负数乘积 $\\ge 0$，从而恒有 $P(A\\cup B)P(AB)\\le P(A)P(B)$！"
+        }
+      ],
+      "finalAnswer": "恒有 $P(A\\cup B)P(AB)\\le P(A)P(B)$（方浩例 7 选 B / 猪狗例 1.15 选 A）",
+      "takeaway": "这个因式分解 $[P(A)-P(AB)][P(B)-P(AB)]=P(A\\bar{B})P(\\bar{A}B)\\ge 0$ 堪称概率第 1 讲最优雅的恒等变形，比代特值排除更有底气！",
+      "source": {
+        "book": "27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "方浩 P.8 例题7 / 猪狗 P.1-19 例1.15",
+        "pdfPage": 13,
+        "itemRef": "方浩例题 7 明星乘积不等式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_identities",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr01-e-17",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、方浩强化与近年高分真题精选（2016–2025）",
+      "title": "2025 真题（方浩例 14 / 猪狗例 1.2）：至少一个发生条件下恰有一个发生的概率",
+      "problem": "设 $A,B,C$ 为三个随机事件，且 $A\\perp B$，$B\\perp C$，$A$ 与 $C$ 互不相容。已知 $P(A)=P(C)=\\frac14$，$P(B)=\\frac12$，求在事件 $A,B,C$ 至少有一个发生的条件下，$A,B,C$ 恰有一个发生的概率。",
+      "steps": [
+        {
+          "stepTitle": "列出全部交事件概率",
+          "detail": "由 $AC=\\varnothing\\Rightarrow P(AC)=P(ABC)=0$；由独立性得 $P(AB)=P(A)P(B)=\\frac18$，$P(BC)=P(B)P(C)=\\frac18$。"
+        },
+        {
+          "stepTitle": "分别算分母「至少一个」与分子「恰有一个」",
+          "detail": "分母 $P(A\\cup B\\cup C)=\\frac14+\\frac12+\\frac14-\\frac18-\\frac18-0+0=\\frac34$；分子 $P(\\text{恰 1 个})=\\sum P(A)-2\\sum P(AB)+3P(ABC)=1-2\\cdot\\frac14+0=\\frac12$（或因「恰 1 个」与「恰 2 个」互斥且 $P(ABC)=0$，直接 $\\frac34-\\frac18-\\frac18=\\frac12$）。"
+        },
+        {
+          "stepTitle": "相除求条件概率",
+          "detail": "因 $\\{\\text{恰 1 个}\\}\\subseteq\\{\\text{至少 1 个}\\}$，故所求条件概率为 $\\frac{1/2}{3/4}=\\frac23$。"
+        }
+      ],
+      "finalAnswer": "$\\frac{2}{3}$",
+      "takeaway": "2025 最新真题直接把「2020 真题恰 1 个」与「2022 真题条件概率」合二为一！画文氏图可发现 $A,C$ 不相交就像哑铃两头，$B$ 横跨中间，5 秒无错算出答案！",
+      "source": {
+        "book": "27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "方浩 P.13 例题14 / 猪狗 P.1-15 例1.2",
+        "pdfPage": 18,
+        "itemRef": "2025真题 至少一个条件下恰一个发生"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_real_exams",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr01-e-18",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、方浩强化与近年高分真题精选（2016–2025）",
+      "title": "2018 真题（方浩例 16 / 猪狗例 1.7）：由 $P(AC\\mid AB\\cup C)=\\frac14$ 反求 $P(C)$",
+      "problem": "设随机事件 $A$ 与 $B$ 相互独立，$A$ 与 $C$ 相互独立，$BC=\\varnothing$。若 $P(A)=P(B)=\\frac12$，$P(AC\\mid AB\\cup C)=\\frac14$，求 $P(C)$。",
+      "steps": [
+        {
+          "stepTitle": "化简分子与分母的交并关系",
+          "detail": "因 $AC\\subseteq C\\subseteq(AB\\cup C)$，故分子 $P(AC\\cap(AB\\cup C))=P(AC)=P(A)P(C)=\\frac12 P(C)$。"
+        },
+        {
+          "stepTitle": "利用互斥条件 $BC=\\varnothing$ 展开分母",
+          "detail": "因 $BC=\\varnothing\\Rightarrow (AB)\\cap C=ABC=\\varnothing$，故分母 $P(AB\\cup C)=P(AB)+P(C)=P(A)P(B)+P(C)=\\frac14+P(C)$。"
+        },
+        {
+          "stepTitle": "列方程解出 $P(C)$",
+          "detail": "$\\frac{\\frac12 P(C)}{\\frac14+P(C)}=\\frac14\\implies 2P(C)=\\frac14+P(C)\\implies P(C)=\\frac14$。"
+        }
+      ],
+      "finalAnswer": "$P(C)=\\frac{1}{4}$",
+      "takeaway": "看到 $BC=\\varnothing$ 立刻敏感意识到 $AB$ 与 $C$ 也必然互斥（$ABC\\subseteq BC=\\varnothing$），分母加法公式零交叉项！",
+      "source": {
+        "book": "27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "方浩 P.14 例题16 / 猪狗 P.1-16 例1.7",
+        "pdfPage": 19,
+        "itemRef": "2018真题 条件概率反求未知事件概率"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_real_exams",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr01-e-19",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、方浩强化与近年高分真题精选（2016–2025）",
+      "title": "方浩例 19（线代×概率跨学科）：有放回抽样使线性方程组 $Ax=b$ 有解的概率",
+      "problem": "从数字 $1,2,3,4,5$ 中有放回地任取 3 次，依次记为 $b_1,b_2,b_3$，设 $A=\\begin{pmatrix}1&2&3\\\\2&3&4\\\\3&4&5\\end{pmatrix}$，$b=(b_1,b_2,b_3)^T$，求线性方程组 $Ax=b$ 有解的概率。",
+      "steps": [
+        {
+          "stepTitle": "对增广矩阵作初等行变换求有解充要条件",
+          "detail": "$\\begin{pmatrix}1&2&3&b_1\\\\2&3&4&b_2\\\\3&4&5&b_3\\end{pmatrix}\\xrightarrow{\\text{行变换}}\\begin{pmatrix}1&2&3&b_1\\\\0&-1&-2&b_2-2b_1\\\\0&0&0&b_3-2b_2+b_1\\end{pmatrix}$，故 $Ax=b$ 有解 $\\iff b_1+b_3=2b_2$（即 $b_1,b_2,b_3$ 成等差数列！）。"
+        },
+        {
+          "stepTitle": "按 $b_2=1,2,3,4,5$ 分类枚举有序三元组",
+          "detail": "样本总数 $5^3=125$。使 $b_1+b_3=2b_2$ 的 $(b_1,b_3)$ 对数：$b_2=1$ 有 $1$ 种 $(1,1)$；$b_2=2$ 有 $3$ 种 $(1,3),(2,2),(3,1)$；$b_2=3$ 有 $5$ 种；$b_2=4$ 有 $3$ 种；$b_2=5$ 有 $1$ 种；合计 $1+3+5+3+1=13$ 种。"
+        }
+      ],
+      "finalAnswer": "$\\frac{13}{125}$",
+      "takeaway": "线代与概率跨界命题越来越受命题组青睐：先用线代工具译出等式/秩约束，再用古典概型精准分类计数（注意「有放回」允许 $b_1=b_2=b_3$，公差 $d=0$ 不可漏！）。",
+      "source": {
+        "book": "27 方浩《概率统计就这点事·强化篇》",
+        "printedPage": "方浩 P.16 例题19",
+        "pdfPage": 21,
+        "itemRef": "方浩例题 19 线代方程组有解古典概型"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_fh_gems",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr01-e-20",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、方浩强化与近年高分真题精选（2016–2025）",
+      "title": "2016 真题（方浩例 20 / 猪狗例 1.11）：三色球有放回取球，恰在第 4 次集齐三色",
+      "problem": "袋中有红、白、黑球各 1 个，从中有放回地每次取 1 球，直到三种颜色的球都取到时停止，求取球次数恰好为 4 的概率。",
+      "steps": [
+        {
+          "stepTitle": "拆分「第 4 次刚集齐」的结构特征",
+          "detail": "第 4 次才停止 $\\iff$ 前 3 次恰好只出现 **2 种颜色**，且第 4 次恰好取到**剩下的第 3 种颜色**。总样本数为 $3^4=81$。"
+        },
+        {
+          "stepTitle": "计数法（或条件概率法）精准计算",
+          "detail": "先从 3 色中选 1 色留给第 4 次（$C_3^1=3$ 种）；前 3 次只能从其余 2 色中取且两色必须都出现（避免只出现 1 色！），故有 $2^3-2=6$ 种。因此有利样本数为 $3\\times 6=18$，概率 $P=\\frac{18}{81}=\\frac29$。"
+        }
+      ],
+      "finalAnswer": "$\\frac{2}{9}$",
+      "takeaway": "「前 3 次恰出现 2 色」用 $2^3-2=6$（减去全同色的 2 种）绝不会重算漏算！也可先定 2 色重复那色出现 2 次：$C_3^1\\cdot C_2^1\\cdot C_3^2=18$ 交叉核验。",
+      "source": {
+        "book": "27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "方浩 P.17 例题20 / 猪狗 P.1-18 例1.11",
+        "pdfPage": 22,
+        "itemRef": "2016真题 三色有放回第4次集齐"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_real_exams",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr01-e-21",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、方浩强化与近年高分真题精选（2016–2025）",
+      "title": "方浩例 21（含原书勘误）：两袋往返传球状态转移全概率法（甲袋白球数不变概率）",
+      "problem": "已知甲袋有 3 个白球、6 个黑球，乙袋有 5 个白球、4 个黑球。先从甲袋任取 1 球放入乙袋，然后再从乙袋任取 1 球放回甲袋，求甲袋中白球数不变的概率。",
+      "steps": [
+        {
+          "stepTitle": "建立两阶段状态转移完备事件组（含勘误标注）",
+          "detail": "记 $A_1=\\{\\text{甲}\\to\\text{乙为白}\\},\\;A_2=\\{\\text{甲}\\to\\text{乙为黑}\\}$；$B_1=\\{\\text{乙}\\to\\text{甲为白}\\},\\;B_2=\\{\\text{乙}\\to\\text{甲为黑}\\}$（**【方浩 P.17 勘误】**原书文字第二行误将 $B_2$ 印为 $A_2$，下方状态转移图已正确标为 $B_2$）。甲袋白球数不变 $\\iff$ 两条互斥路径 $A_1B_1$（出白回白）或 $A_2B_2$（出黑回黑）！"
+        },
+        {
+          "stepTitle": "计算两条状态转移路径概率",
+          "detail": "路径 ①：$P(A_1)=\\frac{3}{9}=\\frac13$，此时乙袋变为 6 白 4 黑，故 $P(B_1\\mid A_1)=\\frac{6}{10}$；路径 ②：$P(A_2)=\\frac{6}{9}=\\frac23$，此时乙袋变为 5 白 5 黑，故 $P(B_2\\mid A_2)=\\frac{5}{10}$。"
+        },
+        {
+          "stepTitle": "由全概率公式汇总",
+          "detail": "$P(\\text{白球数不变})=P(A_1)P(B_1\\mid A_1)+P(A_2)P(B_2\\mid A_2)=\\frac13\\times\\frac{6}{10}+\\frac23\\times\\frac{5}{10}=\\frac{16}{30}=\\frac{8}{15}$。"
+        }
+      ],
+      "finalAnswer": "$\\frac{8}{15}$（并订正原书 P.17 文字第二行 $A_2$ 误植为 $B_2$）",
+      "takeaway": "往返传球问「原袋颜色数不变」必走「出白回白 + 出黑回黑」双支全概率，画完状态转移图就能一眼看出各步袋内球数变化，零失误！",
+      "source": {
+        "book": "27 方浩《概率统计就这点事·强化篇》",
+        "printedPage": "方浩 P.17-18 例题21（含勘误）",
+        "pdfPage": 22,
+        "itemRef": "方浩例题 21 两袋往返传球全概率"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_fh_gems",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr01-e-22",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、方浩强化与近年高分真题精选（2016–2025）",
+      "title": "方浩例 23：几何概型 × 定积分条件概率 $P(XY<\\frac{3}{64}\\mid X+Y<\\frac12)$",
+      "problem": "在区间 $(0,1)$ 内独立随机取两个数 $X,Y$，求在 $X+Y<\\frac12$ 的条件下，$XY<\\frac{3}{64}$ 的概率。",
+      "steps": [
+        {
+          "stepTitle": "确定分母三角形区域面积",
+          "detail": "$B=\\{0<x,y<1,\\;x+y<\\frac12\\}$ 是直角边为 $\\frac12$ 的等腰直角三角形，面积 $S_B=\\frac12\\cdot\\frac12\\cdot\\frac12=\\frac18$。"
+        },
+        {
+          "stepTitle": "求直线 $x+y=\\frac12$ 与双曲线 $xy=\\frac{3}{64}$ 的交点",
+          "detail": "联立 $x(\\frac12-x)=\\frac{3}{64}\\implies 64x^2-32x+3=0\\implies (8x-1)(8x-3)=0\\implies x=\\frac18$ 或 $x=\\frac38$。"
+        },
+        {
+          "stepTitle": "用补集算双曲线上方弓形面积再求条件概率",
+          "detail": "区域 $B$ 中满足 $xy\\ge\\frac{3}{64}$ 的弓形面积为 $S_{\\text{弓}}=\\int_{1/8}^{3/8}\\left(\\frac12-x-\\frac{3}{64x}\\right)\\mathrm{d}x=\\left[\\frac12 x-\\frac12 x^2-\\frac{3}{64}\\ln x\\right]_{1/8}^{3/8}=\\frac{1}{16}-\\frac{3}{64}\\ln 3$。故所求条件概率 $P=1-\\frac{S_{\\text{弓}}}{S_B}=1-8\\left(\\frac{1}{16}-\\frac{3}{64}\\ln 3\\right)=\\frac12+\\frac38\\ln 3$。"
+        }
+      ],
+      "finalAnswer": "$\\frac{1}{2}+\\frac{3}{8}\\ln 3$",
+      "takeaway": "几何条件概率直接等于「子区域面积 ÷ 条件区域面积」，遇到不规则凹区域，先算「补块（凸弓形）」积分再 $1-$ 减去最不易出错！",
+      "source": {
+        "book": "27 方浩《概率统计就这点事·强化篇》",
+        "printedPage": "方浩 P.18-19 例题23",
+        "pdfPage": 23,
+        "itemRef": "方浩例题 23 几何概型积分条件概率"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_geom",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr01-e-23",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、方浩强化与近年高分真题精选（2016–2025）",
+      "title": "2019 真题（猪狗例 1.6）+ 猪狗例 1.18 印刷勘误：$P(A)=P(B)$ 充要条件与条件运算",
+      "problem": "(1) （2019 真题）设 $A,B$ 为随机事件，判断 $P(A)=P(B)$ 的充要条件：(A) $P(A\\cup B)=P(A)+P(B)$；(B) $P(AB)=P(A)P(B)$；(C) $P(A\\bar{B})=P(\\bar{A}B)$；(D) $P(AB)=P(\\bar{A}\\bar{B})$。(2) （猪狗例 1.18 修正版）若 $A\\perp B$，$AC=\\varnothing$，$P(A)=P(C)=0.4,P(B)=0.3,P(B\\mid C)=0.2$，求 $P(C\\mid A\\cup B)$ 与 $P(AB\\mid\\bar{C})$。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：差集展开一眼见真章",
+          "detail": "$P(A\\bar{B})=P(\\bar{A}B)\\iff P(A)-P(AB)=P(B)-P(AB)\\iff P(A)=P(B)$，全程充要，选 (C)！顺便记住 (D)：$P(AB)=P(\\bar{A}\\bar{B})\\iff P(AB)=1-P(A)-P(B)+P(AB)\\iff P(A)+P(B)=1$（极高频二级结论！）。"
+        },
+        {
+          "stepTitle": "第 (2) 问：勘误说明与条件概率速算",
+          "detail": "**【猪狗百宝书 P.1-19 例 1.18 勘误】**原书误印为 `P(B|C=0.2)`，右括号位置错位，应为 $P(B\\mid C)=0.2$。由此得 $P(BC)=0.4\\times 0.2=0.08$，$P(AC)=P(ABC)=0$，$P(AB)=0.4\\times 0.3=0.12$。于是 $P(A\\cup B)=0.4+0.3-0.12=0.58$，$P(C(A\\cup B))=P(AC\\cup BC)=0+0.08=0.08\\Rightarrow P(C\\mid A\\cup B)=\\frac{0.08}{0.58}=\\frac{4}{29}$；又 $P(AB\\bar{C})=P(AB)-P(ABC)=0.12$，$P(\\bar{C})=0.6\\Rightarrow P(AB\\mid\\bar{C})=\\frac{0.12}{0.6}=0.2$。"
+        }
+      ],
+      "finalAnswer": "(1) 选 (C)（注：选项 D 等价于 $P(A)+P(B)=1$）；(2) $P(C\\mid A\\cup B)=\\frac{4}{29},\\;P(AB\\mid\\bar{C})=0.2$",
+      "takeaway": "牢记两条对称充要恒等式：$P(A\\bar{B})=P(\\bar{A}B)\\iff P(A)=P(B)$；$P(AB)=P(\\bar{A}\\bar{B})\\iff P(A)+P(B)=1$（猪狗例 1.26 亦同源）！",
+      "source": {
+        "book": "27 猪狗《概率统计百宝书》",
+        "printedPage": "猪狗 P.1-16 例1.6 / P.1-19 例1.18（含勘误）",
+        "pdfPage": 21,
+        "itemRef": "2019真题与猪狗例1.18条件概率勘误"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr01_real_exams",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr01-s-01",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "八、第 1 讲题型方法总纲与五书速查表",
+      "title": "题型总路由：事件翻译、四大概型识别与核心切入点（表 P1-1）",
+      "overview": "第 1 讲本质上做两件事：① **翻译事件**（文字→集合→化简）；② **匹配概型与公式**（古典/几何/条件全概率贝叶斯/独立伯努利）。下表将最易卡壳的文字题眼与四大计算模型一网打尽。",
+      "patterns": [
+        {
+          "typeName": "题型一：复杂事件文字翻译与集合化简",
+          "triggers": "出现「至少」「至多」「不多于」「既不…又不…」「恰有 $k$ 个」「不都发生」等字眼",
+          "method": "一律先翻译成交/并/逆，再套德·摩根律把「并」化为「对立之交」；「恰 1 个」直接套 $\\sum P(A)-2\\sum P(AB)+3P(ABC)$。",
+          "pitfall": "混淆「都不发生 ($\\bar{A}\\bar{B}\\bar{C}$)」与「不都发生 ($\\overline{ABC}$)」！",
+          "relatedRefs": "强化例 1.1, 强化例 1.2, 2025 真题"
+        },
+        {
+          "typeName": "题型二：古典/几何概型与跨学科建模",
+          "triggers": "放球入盒、摸球抽签、随机取数满足不等式/方程组有解/矩阵可逆",
+          "method": "有限等可能用古典（分子分母同口径；不涉顺序的无放回转组合数；单次次序用抓阄对称）；连续区间随机取点画平面区域求面积比。",
+          "pitfall": "有放回允许重复取值（如 $b_1=b_2=b_3$）；几何概型曲线边界漏求交点。",
+          "relatedRefs": "基础例 1.1–1.4, 方浩例 19, 方浩例 23"
+        },
+        {
+          "typeName": "题型三：两阶段多原因（全概率 / 贝叶斯）",
+          "triggers": "「先选盒/批/袋，再抽球」「已知结果发生，反求源自某原因」「传球/转移后再取」",
+          "method": "画出从「先验原因 $A_i$」到「结果 $B$」的树状图：正向乘积求和=全概率，逆向单支除总和=贝叶斯；两轮抽检别忘更新后验权重。",
+          "pitfall": "误以为 $\\sum P(B\\mid A_i)=1$；或第二次抽检沿用旧先验。",
+          "relatedRefs": "基础例 1.10, 基础例 1.12, 强化例 1.4, 方浩例 21"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 P1-1　随机事件高频文字题眼与集合表达式速译表",
+          "headers": [
+            "文字表述",
+            "事件表达式",
+            "常用计算化简式"
+          ],
+          "rows": [
+            [
+              "$A,B,C$ 都不发生",
+              "$\\bar{A}\\bar{B}\\bar{C}$",
+              "$1-P(A\\cup B\\cup C)$（独立时 $\\prod(1-p_i)$）"
+            ],
+            [
+              "$A,B,C$ 不都发生",
+              "$\\overline{ABC}=\\bar{A}\\cup\\bar{B}\\cup\\bar{C}$",
+              "$1-P(ABC)$"
+            ],
+            [
+              "$A,B,C$ 至少一个发生",
+              "$A\\cup B\\cup C$",
+              "$1-P(\\bar{A}\\bar{B}\\bar{C})$（独立优先取反）"
+            ],
+            [
+              "$A,B,C$ 恰有一个发生",
+              "$A\\bar{B}\\bar{C}\\cup\\bar{A}B\\bar{C}\\cup\\bar{A}\\bar{B}C$",
+              "$\\sum P(A)-2\\sum P(AB)+3P(ABC)$"
+            ],
+            [
+              "$A,B,C$ 不多于一个（至多一个）",
+              "$\\bar{A}\\bar{B}\\cup\\bar{A}\\bar{C}\\cup\\bar{B}\\bar{C}$",
+              "$1-P(\\text{至少两个})=1-\\sum P(AB)+2P(ABC)$"
+            ],
+            [
+              "$\\max\\{X,Y\\}\\le a$ / $\\min\\{X,Y\\}>a$",
+              "$\\{X\\le a\\}\\{Y\\le a\\}$ / $\\{X>a\\}\\{Y>a\\}$",
+              "直接拆交事件（独立时乘积）"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "文字译对就赢了一半：任何带「至少/既不又不/独立求并」的题，第一时间反射德·摩根律转成交集连乘！",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化",
+        "printedPage": "第1讲题眼总表",
+        "pdfPage": 19,
+        "itemRef": "表 P1-1 事件题眼与四大概型速查表"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr01-s-02",
+      "kind": "summary",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "八、第 1 讲题型方法总纲与五书速查表",
+      "title": "强化思维图谱：六大概率解题思想与独立/互斥/有利判别矩阵（表 P1-2）",
+      "overview": "整合《概率 9 讲》六大概率思维与《方浩强化》独立性题型，把概念选择题的全部判据浓缩在一张速查矩阵中，做到客观题 15 秒锁定唯一真/假命题。",
+      "patterns": [
+        {
+          "typeName": "题型四：抽象事件概率等式与不等式证明",
+          "triggers": "只给 $P(A),P(B),P(C)$ 与交/条件关系，求最值界或判恒成立不等式",
+          "method": "优先调取五大不等式工具（含 $P(A\\cup B)P(AB)\\le P(A)P(B)$），或用 $P(A\\cup B\\cup C)\\le 1$ 切入容斥，亦可画文氏图赋值各小块概率 $x_1,\\dots,x_8\\ge 0$ 代数验算。",
+          "pitfall": "误把 $P(AB)$ 与 $P(A)P(B)$ 当成固定大小关系。",
+          "relatedRefs": "强化例 1.5, 方浩例 7, 2015/2019 真题"
+        },
+        {
+          "typeName": "题型五：独立、互斥、相互有利/抑止概念辨析",
+          "triggers": "出现 $0<P(A),P(B)<1$、两两独立、$P(B\\mid A)\\gtrless P(B\\mid\\bar{A})$、$(A\\cup B)\\perp C$",
+          "method": "紧盯 $\\Delta=P(AB)-P(A)P(B)$ 符号（单杠反号、双杠不变）；遇三事件独立立刻查第 4 式 $P(ABC)=P(A)P(B)P(C)$ 与两硬币反例。",
+          "pitfall": "忘记 $P(A)=0$ 或 $1$ 是「既互斥/包含又独立」的边界特例。",
+          "relatedRefs": "强化例 1.7–1.10, 方浩例 29–33"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 P1-2　独立性、互斥性与相互有利/抑止全维度对比速查表（设 $0<P(A),P(B)<1$）",
+          "headers": [
+            "关系类型",
+            "定义判据",
+            "条件概率等价特征",
+            "对立变换性质",
+            "与其余关系兼容度"
+          ],
+          "rows": [
+            [
+              "相互独立 $A\\perp B$",
+              "$P(AB)=P(A)P(B)$",
+              "$P(B\\mid A)=P(B)=P(B\\mid\\bar{A})$",
+              "四组 $(A,B),(A,\\bar{B}),(\\bar{A},B),(\\bar{A},\\bar{B})$ 全独立",
+              "必相容；绝不互斥、绝不包含"
+            ],
+            [
+              "相互有利（正相关）",
+              "$P(AB)>P(A)P(B)$",
+              "$P(B\\mid A)>P(B)>P(B\\mid\\bar{A})$",
+              "$(\\bar{A},\\bar{B})$ 亦有利；$(A,\\bar{B}),(\\bar{A},B)$ 抑止",
+              "包含 $A\\subset B$ 属极端有利"
+            ],
+            [
+              "相互抑止（负相关）",
+              "$P(AB)<P(A)P(B)$",
+              "$P(B\\mid A)<P(B)<P(B\\mid\\bar{A})$",
+              "$(\\bar{A},\\bar{B})$ 亦抑止；$(A,\\bar{B}),(\\bar{A},B)$ 有利",
+              "互斥 $AB=\\varnothing$ 属极端抑止"
+            ],
+            [
+              "互斥 $AB=\\varnothing$",
+              "$P(AB)=0$（集合无交）",
+              "$P(B\\mid A)=0<P(B)$",
+              "未必对立；$P(A\\cup B)=P(A)+P(B)$",
+              "正概率时必不独立（特例：$P=0$ 可兼得）"
+            ],
+            [
+              "三事件两两独立",
+              "仅满足 3 个两两乘积式",
+              "任意两事件互不影响",
+              "各换对立仍两两独立",
+              "推不出相互独立（反例：两硬币 $A_1,A_2,A_3$）"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "记住「正概率互斥/包含必不独立、零一概率万能独立、单杠反号双杠不变」，第 1 讲所有概念选择题全部秒杀！",
+      "source": {
+        "book": "27 张宇《概率9讲》 & 27 方浩强化",
+        "printedPage": "9讲 P.6-8 / 方浩 P.21-26",
+        "pdfPage": 17,
+        "itemRef": "表 P1-2 独立互斥有利判别矩阵"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr01-s-03",
+      "kind": "summary",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "八、第 1 讲题型方法总纲与五书速查表",
+      "title": "第 1 讲五书勘误、高频坑点与 2015–2025 真题母题映射表（表 P1-3）",
+      "overview": "汇总本讲深度核对五书时发现的原书印刷勘误、极易误读点及近十年考研数学一/三概率第 1 讲真题母题对应关系。",
+      "patterns": [
+        {
+          "typeName": "五书交叉核查实锤勘误（2 处印刷误植 + 1 处易误读注）",
+          "triggers": "核对《方浩强化》例题 21/30 与《猪狗百宝书》例 1.18 时",
+          "method": "对照状态转移图与条件概率语法结构即时修正，切勿照抄原书错印符号。",
+          "pitfall": "原书方浩 P.23 例 30 的 $A\\bar{C}$ 横杠极短，若误读成 $\\overline{AC}$ 会彻底推翻 $P=0$ 的结论！",
+          "relatedRefs": "方浩例 21, 方浩例 30, 猪狗例 1.18"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 P1-3　第 1 讲五书勘误与 2015–2025 真题母题映射速查表",
+          "headers": [
+            "来源 / 年份",
+            "位置 / 考点",
+            "核心结论或勘误修正"
+          ],
+          "rows": [
+            [
+              "方浩强化（勘误）",
+              "P.17 例题 21 文字第 2 行",
+              "误将「从乙放入甲为黑球」$B_2$ 印为 $A_2$（下方状态转移图已正确标为 $B_2$）"
+            ],
+            [
+              "猪狗百宝书（勘误）",
+              "P.1-19 例 1.18 题干",
+              "误印为 `P(B|C=0.2)`，括号错位，应修正为 $P(B\\mid C)=0.2$"
+            ],
+            [
+              "方浩强化（易误读）",
+              "P.23 例题 30 选项 D",
+              "事件为 $A\\bar{C}$（杠仅在 $C$ 上，故概率为 $0$），切勿误读为 $\\overline{AC}$"
+            ],
+            [
+              "2025 真题",
+              "方浩例 14 / 猪狗例 1.2",
+              "$A\\perp B,B\\perp C,AC=\\varnothing$，求 $P(\\text{恰1个}\\mid\\text{至少1个})=\\frac{2}{3}$"
+            ],
+            [
+              "2022 真题",
+              "概率9讲 例 1.3 / 猪狗例 1.3",
+              "$AB=AC=\\varnothing,B\\perp C$，求 $P(B\\cup C\\mid A\\cup B\\cup C)=\\frac{5}{8}$"
+            ],
+            [
+              "2021 真题",
+              "方浩例 31 / 猪狗例 1.4",
+              "假命题：$P(A\\mid A\\cup B)>P(\\bar{A}\\mid A\\cup B)\\nRightarrow P(A)>P(B)$"
+            ],
+            [
+              "2020 真题",
+              "概率9讲 例 1.2 / 猪狗例 1.5",
+              "$P(A)=P(B)=P(C)=\\frac14,P(AB)=0,P(AC)=P(BC)=\\frac{1}{12}\\Rightarrow$ 恰 1 个 $=\\frac{5}{12}$"
+            ],
+            [
+              "2019 / 2018 / 2016",
+              "猪狗例 1.6, 1.7, 1.11",
+              "$P(A)=P(B)\\iff P(A\\bar{B})=P(\\bar{A}B)$；$P(AC\\mid AB\\cup C)=\\frac14\\Rightarrow P(C)=\\frac14$；三色第 4 次集齐 $=\\frac29$"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "近十年第 1 讲真题几乎 100% 集中在「三事件交并容斥 + 互斥/独立混搭 + 条件概率化简」，练透表 P1-3 即可稳拿满分！",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "第1讲五书勘误与真题汇总",
+        "pdfPage": 22,
+        "itemRef": "表 P1-3 第1讲勘误与十年真题映射"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    }
+  ]
+}

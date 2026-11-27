@@ -1,0 +1,1441 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "prob-02",
+  "title": "概率 · 第 2 讲　一维随机变量及其分布",
+  "sourceMeta": "深度融合《27 张宇基础30讲·概率》第2讲前半（P.33-47,51-59）+《27 张宇概率9讲》第2讲（P.9-22 全 12 例）+《27 方浩概率强化》第2章题型一至三（P.27-45,51）+《27 猪狗概率统计百宝书》第2章（P.2-1~2-26 含 2026/2024/2013/2010 真题）+《27 版概率论全总结》P.3-7，含 7 处五书实锤勘误与 SymPy 验算",
+  "basicRequirements": {
+    "master": "熟练掌握分布函数三充要条件与七组区间概率公式、离散分布律与连续概率密度充要条件、五大离散分布（0-1、二项、泊松含泊松定理与稀化、几何无记忆、超几何）与三大连续分布（均匀、指数无记忆、正态 3σ 对称与标准化）及混合型随机变量分布函数求法。",
+    "understand": "理解分布函数右连续陷阱（1-F(-x) 未必是分布函数、阶梯反求半开区间）、分布函数/密度合法构造全家桶（√(F₁F₂) vs √(f₁f₂)）、随机变量相等四层级与随机占优，以及泊松偶概率与非负生存函数期望公式。",
+    "familiar": "熟悉柯西、拉普拉斯（|X|~E(1)）与伽马分布（2λX~χ²(2)）、广义高斯配方规范化、威布尔分布与 2026 真题混合几何失效率递减效应及线代可对角化概率综合题。"
+  },
+  "items": [
+    {
+      "id": "m1-pr02-f-01",
+      "kind": "formula",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、随机变量与分布函数 F(x) 充要条件及区间概率",
+      "title": "分布函数定义 $F(x)=P\\{X\\le x\\}$、三大充要条件与七组通用区间概率公式",
+      "formulaLatex": "$$\\begin{aligned} &F(x)=P\\{X\\le x\\}\\;\\text{为分布函数}\\iff \\text{① 单调不减}\\quad\\text{② 处处右连续 }F(x_0+0)=F(x_0)\\quad\\text{③ }F(-\\infty)=0,\\;F(+\\infty)=1\\\\ &P\\{X\\le a\\}=F(a),\\quad P\\{X<a\\}=F(a^-),\\quad P\\{X=a\\}=F(a)-F(a^-),\\quad P\\{X>a\\}=1-F(a)\\\\ &P\\{a<X\\le b\\}=F(b)-F(a),\\quad P\\{a<X<b\\}=F(b^-)-F(a),\\quad P\\{a\\le X\\le b\\}=F(b)-F(a^-),\\quad P\\{a\\le X<b\\}=F(b^-)-F(a^-)\\end{aligned}$$",
+      "conditions": "七组区间概率公式对**任意类型**（离散型、连续型、混合型）随机变量均严格成立；特别当 $X$ 为连续型时 $F(a^-)=F(a)$，四种端点开闭区间概率全部相等均为 $F(b)-F(a)$。",
+      "pitfalls": "① 离散型或混合型分段写分布函数时，除首段 $(-\\infty,x_1)$ 外，其余每段一律写**左闭右开** $[x_k,x_{k+1})$ 才能严格体现右连续性！ ② 基础习题 2.4 高频错：已知 $F(x)=\\frac12\\;(0\\le x<1)$、$1-e^{-x}\\;(x\\ge 1)$，则 $P\\{0<X<1\\}=F(1^-)-F(0)=\\frac12-\\frac12=0$，而 $P\\{0\\le X\\le 1\\}=F(1)-F(0^-)=1-e^{-1}-0=1-e^{-1}$！",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 256\" width=\"100%\" style=\"max-width:640px;height:auto;display:block;margin:8px auto;\" font-family=\"system-ui,-apple-system,'Segoe UI',sans-serif\"><title>三类随机变量分布函数 F(x) 几何解剖：离散阶梯、连续光滑与混合跳点</title><defs><marker id=\"m1_pr02_ax\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"5.5\" markerHeight=\"5.5\" orient=\"auto\"><path d=\"M0 1 L9 5 L0 9 Z\" fill=\"#475569\"/></marker></defs><rect x=\"2\" y=\"2\" width=\"636\" height=\"252\" rx=\"12\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/><text x=\"320\" y=\"23\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">分布函数 F(x) = P{X ≤ x} 三大形态对比（必满三性：单调不减 · 右连续 · 0→1）</text><rect x=\"14\" y=\"34\" width=\"196\" height=\"210\" rx=\"8\" fill=\"#ffffff\" stroke=\"#cbd5e1\"/><text x=\"112\" y=\"53\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1d4ed8\">① 离散型（阶梯右连续）</text><line x1=\"34\" y1=\"168\" x2=\"194\" y2=\"168\" stroke=\"#475569\" stroke-width=\"1.2\" marker-end=\"url(#m1_pr02_ax)\"/><line x1=\"48\" y1=\"178\" x2=\"48\" y2=\"66\" stroke=\"#475569\" stroke-width=\"1.2\" marker-end=\"url(#m1_pr02_ax)\"/><text x=\"192\" y=\"180\" font-size=\"10\" fill=\"#475569\">x</text><text x=\"38\" y=\"74\" font-size=\"10\" fill=\"#475569\">1</text><line x1=\"45\" y1=\"80\" x2=\"188\" y2=\"80\" stroke=\"#cbd5e1\" stroke-dasharray=\"3 2\"/><line x1=\"34\" y1=\"168\" x2=\"78\" y2=\"168\" stroke=\"#2563eb\" stroke-width=\"2.4\"/><circle cx=\"78\" cy=\"168\" r=\"3\" fill=\"#ffffff\" stroke=\"#2563eb\" stroke-width=\"1.6\"/><circle cx=\"78\" cy=\"140\" r=\"3.2\" fill=\"#2563eb\"/><line x1=\"78\" y1=\"140\" x2=\"122\" y2=\"140\" stroke=\"#2563eb\" stroke-width=\"2.4\"/><circle cx=\"122\" cy=\"140\" r=\"3\" fill=\"#ffffff\" stroke=\"#2563eb\" stroke-width=\"1.6\"/><circle cx=\"122\" cy=\"102\" r=\"3.2\" fill=\"#2563eb\"/><line x1=\"122\" y1=\"102\" x2=\"162\" y2=\"102\" stroke=\"#2563eb\" stroke-width=\"2.4\"/><circle cx=\"162\" cy=\"102\" r=\"3\" fill=\"#ffffff\" stroke=\"#2563eb\" stroke-width=\"1.6\"/><circle cx=\"162\" cy=\"80\" r=\"3.2\" fill=\"#2563eb\"/><line x1=\"162\" y1=\"80\" x2=\"188\" y2=\"80\" stroke=\"#2563eb\" stroke-width=\"2.4\"/><line x1=\"122\" y1=\"102\" x2=\"122\" y2=\"168\" stroke=\"#93c5fd\" stroke-dasharray=\"2 2\"/><text x=\"122\" y=\"181\" text-anchor=\"middle\" font-size=\"10\" fill=\"#1e40af\">a</text><text x=\"112\" y=\"202\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"600\" fill=\"#1e40af\">跳高 = P{X=a} = F(a)-F(a⁻)</text><text x=\"112\" y=\"218\" text-anchor=\"middle\" font-size=\"9.8\" fill=\"#475569\">左闭右开分段，端实心右延续</text><text x=\"112\" y=\"233\" text-anchor=\"middle\" font-size=\"9.8\" fill=\"#dc2626\">注意：F(a)≠F(a⁻) 不可混端点</text><rect x=\"222\" y=\"34\" width=\"196\" height=\"210\" rx=\"8\" fill=\"#ffffff\" stroke=\"#cbd5e1\"/><text x=\"320\" y=\"53\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#047857\">② 连续型（处处连续）</text><line x1=\"242\" y1=\"168\" x2=\"402\" y2=\"168\" stroke=\"#475569\" stroke-width=\"1.2\" marker-end=\"url(#m1_pr02_ax)\"/><line x1=\"256\" y1=\"178\" x2=\"256\" y2=\"66\" stroke=\"#475569\" stroke-width=\"1.2\" marker-end=\"url(#m1_pr02_ax)\"/><text x=\"400\" y=\"180\" font-size=\"10\" fill=\"#475569\">x</text><text x=\"246\" y=\"74\" font-size=\"10\" fill=\"#475569\">1</text><line x1=\"253\" y1=\"80\" x2=\"396\" y2=\"80\" stroke=\"#cbd5e1\" stroke-dasharray=\"3 2\"/><path d=\"M244 167 C282 167, 294 148, 320 124 C346 100, 358 81, 396 80\" fill=\"none\" stroke=\"#059669\" stroke-width=\"2.5\"/><line x1=\"296\" y1=\"145\" x2=\"344\" y2=\"102\" stroke=\"#10b981\" stroke-width=\"1.3\" stroke-dasharray=\"3 2\"/><circle cx=\"320\" cy=\"124\" r=\"3.2\" fill=\"#059669\"/><text x=\"352\" y=\"130\" font-size=\"9.8\" font-weight=\"700\" fill=\"#065f46\">斜率 F′=f</text><text x=\"320\" y=\"202\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"600\" fill=\"#065f46\">F(x) = ∫₋∞ˣ f(t)dt，单点概率 0</text><text x=\"320\" y=\"218\" text-anchor=\"middle\" font-size=\"9.8\" fill=\"#475569\">P{a&lt;X&lt;b}=P{a≤X≤b}=F(b)-F(a)</text><text x=\"320\" y=\"233\" text-anchor=\"middle\" font-size=\"9.8\" fill=\"#047857\">改有限点密度值不影响概率</text><rect x=\"430\" y=\"34\" width=\"196\" height=\"210\" rx=\"8\" fill=\"#ffffff\" stroke=\"#cbd5e1\"/><text x=\"528\" y=\"53\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#b45309\">③ 混合型（有跳点+斜坡）</text><line x1=\"450\" y1=\"168\" x2=\"610\" y2=\"168\" stroke=\"#475569\" stroke-width=\"1.2\" marker-end=\"url(#m1_pr02_ax)\"/><line x1=\"464\" y1=\"178\" x2=\"464\" y2=\"66\" stroke=\"#475569\" stroke-width=\"1.2\" marker-end=\"url(#m1_pr02_ax)\"/><text x=\"608\" y=\"180\" font-size=\"10\" fill=\"#475569\">x</text><text x=\"454\" y=\"74\" font-size=\"10\" fill=\"#475569\">1</text><line x1=\"461\" y1=\"80\" x2=\"604\" y2=\"80\" stroke=\"#cbd5e1\" stroke-dasharray=\"3 2\"/><line x1=\"450\" y1=\"168\" x2=\"492\" y2=\"168\" stroke=\"#d97706\" stroke-width=\"2.4\"/><circle cx=\"492\" cy=\"168\" r=\"3\" fill=\"#ffffff\" stroke=\"#d97706\" stroke-width=\"1.6\"/><circle cx=\"492\" cy=\"146\" r=\"3.2\" fill=\"#d97706\"/><line x1=\"492\" y1=\"146\" x2=\"564\" y2=\"110\" stroke=\"#d97706\" stroke-width=\"2.4\"/><circle cx=\"564\" cy=\"110\" r=\"3\" fill=\"#ffffff\" stroke=\"#d97706\" stroke-width=\"1.6\"/><circle cx=\"564\" cy=\"80\" r=\"3.2\" fill=\"#d97706\"/><line x1=\"564\" y1=\"80\" x2=\"602\" y2=\"80\" stroke=\"#d97706\" stroke-width=\"2.4\"/><text x=\"492\" y=\"181\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#92400e\">x₁</text><text x=\"564\" y=\"181\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#92400e\">x₂</text><text x=\"530\" y=\"142\" font-size=\"9.5\" font-weight=\"600\" fill=\"#b45309\">连续段</text><text x=\"528\" y=\"202\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"600\" fill=\"#92400e\">跳点剥离散概率，斜段积密度</text><text x=\"528\" y=\"218\" text-anchor=\"middle\" font-size=\"9.8\" fill=\"#475569\">既无完整分布律，亦无全局密度</text><text x=\"528\" y=\"233\" text-anchor=\"middle\" font-size=\"9.8\" fill=\"#dc2626\">必用全概率拆解（基础例2.13）</text></svg>",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化",
+        "printedPage": "基础 P.34-35 / 9讲 P.9 / 方浩 P.27-32",
+        "pdfPage": 40,
+        "itemRef": "分布函数三大充要条件与七组区间概率"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "随机变量 $X(\\omega)$ 是把样本空间 $\\Omega$ 映成实数的实值单值函数；分布函数 $F(x)=P\\{X\\le x\\}$ 把一切随机变量（离散、连续、混合）的概率规律完全统一到实数轴上！三条充要性质中：① **规范有界**保证 $0\\le F(x)\\le 1$；② **单调不减**保证非负概率；③ **右连续**源于事件 $\\{X\\le x\\}$ 包含右端点。单点概率即跳高 $F(a)-F(a^-)$，故 $F(x)$ 在 $a$ 处连续 $\\iff P\\{X=a\\}=0$！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「带等号直接代 $F$，严格小于取左极 $F^-$；右端减左端，左闭减 $a^-$、右开用 $b^-$！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr02-f-02",
+      "kind": "formula",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、离散型分布律与连续型概率密度充要条件",
+      "title": "离散分布律（非负归一）与连续概率密度 $f(x)$（非负归一、面积求概率与 $F'=f$）",
+      "formulaLatex": "$$\\begin{aligned} &\\text{离散分布律充要：}p_i\\ge 0,\\;\\sum_{i}p_i=1;\\qquad F(x)=\\sum_{x_i\\le x}p_i,\\qquad P\\{X\\in B\\}=\\sum_{x_i\\in B}p_i\\\\ &\\text{连续密度充要：}f(x)\\ge 0,\\;\\int_{-\\infty}^{+\\infty}f(x)\\,\\mathrm{d}x=1;\\qquad F(x)=\\int_{-\\infty}^{x}f(t)\\,\\mathrm{d}t,\\qquad P\\{a<X<b\\}=\\int_{a}^{b}f(x)\\,\\mathrm{d}x\\end{aligned}$$",
+      "conditions": "若 $F(x)$ 连续且除有限个点外 $F'(x)$ 存在连续，则 $X$ 必为连续型随机变量，在不可导点可任意指定非负值（改变 $f(x)$ 在有限个点处的值不改变任何积分概率）。",
+      "pitfalls": "① 概念大坑：$f(x)$ **完全可以大于 $1$**（如 $U(0,\\frac12)$ 的密度为 $2$，或 $E(2)$ 在 $0^+$ 处密度为 $2$，猪狗例 2.24 专考此点）！只有 $0\\le F(x)\\le 1$ 才受 1 限制。 ② 分布函数连续 $\\nRightarrow$ 连续型随机变量（理论上有康托奇异分布），但在考研范围内，只要 $F(x)$ 处处连续且分段光滑，即可认定为连续型！",
+      "source": {
+        "book": "27 张宇基础30讲 & 27 猪狗百宝书",
+        "printedPage": "基础 P.36-37 / 猪狗 P.2-4, 2-18, 2-24",
+        "pdfPage": 42,
+        "itemRef": "离散分布律与连续概率密度充要条件"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "① 离散型随机变量取值有限或可列，分布函数是右连续阶梯函数，跳点即正概率点，跳高即分布律 $p_i$；② 连续型随机变量的分布函数处处连续（**单点概率恒为 0**），概率密度 $f(x)$ 在物理上类比总质量为 1 的细杆线密度（在 $f(x)$ 连续点处 $F'(x)=f(x)$），区间概率即密度曲线下面积！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「离散看求和归一，连续看积分归一；密度 $f(x)$ 可以大于 1，绝不是概率，乘上 $\\mathrm{d}x$ 才是微元概率！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr02-f-03",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "三、五大常见离散型分布（0-1、二项、泊松、几何、超几何）",
+      "title": "五大离散分布律、期望方差、几何无记忆性与泊松逼近定理",
+      "formulaLatex": "$$\\begin{aligned} &0\\text{-}1\\text{ 分布 }B(1,p):\\;P\\{X=k\\}=p^k(1-p)^{1-k}\\;(k=0,1),\\quad EX=p,\\;DX=p(1-p)\\\\ &\\text{二项 }B(n,p):\\;P\\{X=k\\}=C_n^k p^k(1-p)^{n-k}\\;(k=0,\\dots,n),\\quad EX=np,\\;DX=np(1-p)\\\\ &\\text{泊松 }P(\\lambda):\\;P\\{X=k\\}=\\frac{\\lambda^k}{k!}e^{-\\lambda}\\;(k=0,1,2,\\dots;\\,\\lambda>0),\\quad EX=DX=\\lambda;\\quad C_n^k p^k(1-p)^{n-k}\\approx\\frac{(np)^k}{k!}e^{-np}\\\\ &\\text{几何 }Ge(p):\\;P\\{X=k\\}=(1-p)^{k-1}p\\;(k=1,2,\\dots),\\quad EX=\\frac{1}{p},\\;DX=\\frac{1-p}{p^2},\\;P\\{X>m+n\\mid X>m\\}=P\\{X>n\\}\\\\ &\\text{超几何 }H(n,M,N):\\;P\\{X=k\\}=\\frac{C_M^k C_{N-M}^{n-k}}{C_N^n},\\quad EX=\\frac{nM}{N},\\;DX=\\frac{nM(N-M)(N-n)}{N^2(N-1)}\\end{aligned}$$",
+      "conditions": "泊松近似工程经验条件：$n\\ge 20,p\\le 0.05$（尤以 $n\\ge 100,np\\le 10$ 精度佳）；超几何取值范围为 $\\max\\{0,n-(N-M)\\}\\le k\\le\\min\\{M,n\\}$。",
+      "pitfalls": "① 几何分布 $Ge(p)$ 的取值从 **$k=1$** 起步（表示「总试验次数」），切勿与某些国外教材从 $0$ 起步（失败次数）混淆；而泊松 $P(\\lambda)$ 与二项 $B(n,p)$ 均从 **$k=0$** 起步！ ② 超几何方差相比二项多一个有限总体修正因子 $\\frac{N-n}{N-1}\\le 1$（无放回信息越抽越明朗，方差必小于有放回！）。",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 264\" width=\"100%\" style=\"max-width:640px;height:auto;display:block;margin:8px auto;\" font-family=\"system-ui,-apple-system,'Segoe UI',sans-serif\"><title>五大常见离散型分布形态图谱与极限逼近关系</title><defs><marker id=\"m1_pr02_arr_b\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M0 1 L9 5 L0 9 Z\" fill=\"#2563eb\"/></marker><marker id=\"m1_pr02_arr_g\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M0 1 L9 5 L0 9 Z\" fill=\"#059669\"/></marker></defs><rect x=\"2\" y=\"2\" width=\"636\" height=\"260\" rx=\"12\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/><text x=\"320\" y=\"23\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">五大离散分布形态图谱与极限转化桥（0-1 · 二项 · 泊松 · 几何 · 超几何）</text><rect x=\"14\" y=\"34\" width=\"146\" height=\"142\" rx=\"8\" fill=\"#ffffff\" stroke=\"#bfdbfe\"/><text x=\"87\" y=\"52\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1d4ed8\">二项 B(n, p)</text><line x1=\"26\" y1=\"130\" x2=\"148\" y2=\"130\" stroke=\"#94a3b8\"/><rect x=\"34\" y=\"118\" width=\"12\" height=\"12\" rx=\"2\" fill=\"#93c5fd\"/><rect x=\"52\" y=\"96\" width=\"12\" height=\"34\" rx=\"2\" fill=\"#60a5fa\"/><rect x=\"70\" y=\"72\" width=\"12\" height=\"58\" rx=\"2\" fill=\"#2563eb\"/><rect x=\"88\" y=\"80\" width=\"12\" height=\"50\" rx=\"2\" fill=\"#3b82f6\"/><rect x=\"106\" y=\"104\" width=\"12\" height=\"26\" rx=\"2\" fill=\"#60a5fa\"/><rect x=\"124\" y=\"121\" width=\"12\" height=\"9\" rx=\"2\" fill=\"#93c5fd\"/><text x=\"87\" y=\"148\" text-anchor=\"middle\" font-size=\"9.8\" fill=\"#1e40af\">EX=np, DX=np(1-p)</text><text x=\"87\" y=\"164\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">众数 ⌊(n+1)p⌋ · 放回</text><rect x=\"169\" y=\"34\" width=\"146\" height=\"142\" rx=\"8\" fill=\"#ffffff\" stroke=\"#a7f3d0\"/><text x=\"242\" y=\"52\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#047857\">泊松 P(λ)</text><line x1=\"181\" y1=\"130\" x2=\"303\" y2=\"130\" stroke=\"#94a3b8\"/><rect x=\"188\" y=\"108\" width=\"12\" height=\"22\" rx=\"2\" fill=\"#6ee7b7\"/><rect x=\"206\" y=\"76\" width=\"12\" height=\"54\" rx=\"2\" fill=\"#059669\"/><rect x=\"224\" y=\"76\" width=\"12\" height=\"54\" rx=\"2\" fill=\"#059669\"/><rect x=\"242\" y=\"94\" width=\"12\" height=\"36\" rx=\"2\" fill=\"#34d399\"/><rect x=\"260\" y=\"112\" width=\"12\" height=\"18\" rx=\"2\" fill=\"#6ee7b7\"/><rect x=\"278\" y=\"123\" width=\"12\" height=\"7\" rx=\"2\" fill=\"#a7f3d0\"/><text x=\"242\" y=\"148\" text-anchor=\"middle\" font-size=\"9.8\" fill=\"#065f46\">EX=λ, DX=λ</text><text x=\"242\" y=\"164\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">λ∈Z⁺ 双峰 λ-1, λ</text><rect x=\"324\" y=\"34\" width=\"146\" height=\"142\" rx=\"8\" fill=\"#ffffff\" stroke=\"#ddd6fe\"/><text x=\"397\" y=\"52\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#6d28d9\">几何 Ge(p)</text><line x1=\"336\" y1=\"130\" x2=\"458\" y2=\"130\" stroke=\"#94a3b8\"/><rect x=\"344\" y=\"70\" width=\"12\" height=\"60\" rx=\"2\" fill=\"#7c3aed\"/><rect x=\"362\" y=\"88\" width=\"12\" height=\"42\" rx=\"2\" fill=\"#8b5cf6\"/><rect x=\"380\" y=\"102\" width=\"12\" height=\"28\" rx=\"2\" fill=\"#a78bfa\"/><rect x=\"398\" y=\"112\" width=\"12\" height=\"18\" rx=\"2\" fill=\"#c4b5fd\"/><rect x=\"416\" y=\"119\" width=\"12\" height=\"11\" rx=\"2\" fill=\"#c4b5fd\"/><rect x=\"434\" y=\"124\" width=\"12\" height=\"6\" rx=\"2\" fill=\"#ddd6fe\"/><text x=\"397\" y=\"148\" text-anchor=\"middle\" font-size=\"9.8\" fill=\"#5b21b6\">EX=1/p, DX=(1-p)/p²</text><text x=\"397\" y=\"164\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">首中停止 · 无记忆性</text><rect x=\"479\" y=\"34\" width=\"147\" height=\"142\" rx=\"8\" fill=\"#ffffff\" stroke=\"#fed7aa\"/><text x=\"552\" y=\"52\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#c2410c\">超几何 H(n,M,N)</text><line x1=\"491\" y1=\"130\" x2=\"613\" y2=\"130\" stroke=\"#94a3b8\"/><rect x=\"504\" y=\"112\" width=\"14\" height=\"18\" rx=\"2\" fill=\"#fdba74\"/><rect x=\"526\" y=\"78\" width=\"14\" height=\"52\" rx=\"2\" fill=\"#ea580c\"/><rect x=\"548\" y=\"86\" width=\"14\" height=\"44\" rx=\"2\" fill=\"#f97316\"/><rect x=\"570\" y=\"114\" width=\"14\" height=\"16\" rx=\"2\" fill=\"#fdba74\"/><text x=\"552\" y=\"148\" text-anchor=\"middle\" font-size=\"9.8\" fill=\"#9a3412\">EX=nM/N（无放回）</text><text x=\"552\" y=\"164\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">DX 含修正 (N-n)/(N-1)</text><rect x=\"14\" y=\"186\" width=\"612\" height=\"64\" rx=\"9\" fill=\"#eff6ff\" stroke=\"#93c5fd\" stroke-width=\"1.2\"/><rect x=\"26\" y=\"198\" width=\"110\" height=\"38\" rx=\"6\" fill=\"#ffffff\" stroke=\"#ea580c\"/><text x=\"81\" y=\"215\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#c2410c\">H(n, M, N)</text><text x=\"81\" y=\"229\" text-anchor=\"middle\" font-size=\"9.3\" fill=\"#7c2d12\">有限无放回</text><line x1=\"136\" y1=\"217\" x2=\"210\" y2=\"217\" stroke=\"#2563eb\" stroke-width=\"1.8\" marker-end=\"url(#m1_pr02_arr_b)\"/><text x=\"173\" y=\"209\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"600\" fill=\"#1d4ed8\">N ≫ n</text><text x=\"173\" y=\"232\" text-anchor=\"middle\" font-size=\"9\" fill=\"#475569\">p = M/N</text><rect x=\"216\" y=\"198\" width=\"128\" height=\"38\" rx=\"6\" fill=\"#ffffff\" stroke=\"#2563eb\"/><text x=\"280\" y=\"215\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#1d4ed8\">B(n, p) = Σ B(1,p)</text><text x=\"280\" y=\"229\" text-anchor=\"middle\" font-size=\"9.3\" fill=\"#1e3a8a\">独立可加性（同 p）</text><line x1=\"344\" y1=\"217\" x2=\"430\" y2=\"217\" stroke=\"#059669\" stroke-width=\"1.8\" marker-end=\"url(#m1_pr02_arr_g)\"/><text x=\"387\" y=\"209\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"600\" fill=\"#047857\">泊松定理</text><text x=\"387\" y=\"232\" text-anchor=\"middle\" font-size=\"9\" fill=\"#475569\">n大p小, λ=np</text><rect x=\"436\" y=\"198\" width=\"178\" height=\"38\" rx=\"6\" fill=\"#ffffff\" stroke=\"#059669\"/><text x=\"525\" y=\"215\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#047857\">P(λ)（泊松稀化→P(λp)）</text><text x=\"525\" y=\"229\" text-anchor=\"middle\" font-size=\"9.3\" fill=\"#065f46\">独立可加 · 偶概率 (1+e⁻²λ)/2</text></svg>",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 猪狗百宝书 & 全总结",
+        "printedPage": "基础 P.40-41 / 9讲 P.11-15 / 猪狗 P.2-25 / 全总结 P.4-5",
+        "pdfPage": 46,
+        "itemRef": "五大常见离散型分布公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_discrete_props",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "五大离散分布构筑起考研计数与等待模型全谱：① **$B(n,p)$** 描述 $n$ 次独立伯努利试验成功次数（可拆为 $n$ 个 i.i.d. $B(1,p)$ 之和）；② **$P(\\lambda)$** 描述单位时间稀疏事件到达次数，当 $n$ 大 $p$ 小且 $\\lambda=np$ 适中时逼近 $B(n,p)$（泊松定理，大纲明文要求掌握）；③ **$Ge(p)$** 描述「首中即停」等待次数（离散型唯一无记忆分布，扩展为第 $r$ 次命中即负二项/帕斯卡分布 $P\\{X=k\\}=C_{k-1}^{r-1}p^r(1-p)^{k-r}$）；④ **$H(n,M,N)$** 描述有限总体无放回抽次品，$N\\gg n$ 时趋近 $B(n,M/N)$。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「放回二项不放超，大 $n$ 小 $p$ 泊松套；首中几何无记忆，泊松均方同为 $\\lambda$！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr02-f-04",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "四、三大常见连续型分布（均匀、指数、正态与 3σ 准则）",
+      "title": "均匀 $U(a,b)$、指数 $E(\\lambda)$、正态 $N(\\mu,\\sigma^2)$ 密度/分布函数与标准化公式",
+      "formulaLatex": "$$\\begin{aligned} &U(a,b):\\;f(x)=\\frac{1}{b-a}\\;(a<x<b),\\quad EX=\\frac{a+b}{2},\\;DX=\\frac{(b-a)^2}{12}\\\\ &E(\\lambda):\\;f(x)=\\lambda e^{-\\lambda x}\\;(x>0),\\quad F(x)=1-e^{-\\lambda x}\\;(x\\ge 0),\\quad EX=\\frac{1}{\\lambda},\\;DX=\\frac{1}{\\lambda^2},\\quad P\\{X>s+t\\mid X>s\\}=e^{-\\lambda t}\\\\ &N(\\mu,\\sigma^2):\\;f(x)=\\frac{1}{\\sqrt{2\\pi}\\sigma}e^{-\\frac{(x-\\mu)^2}{2\\sigma^2}},\\quad \\frac{X-\\mu}{\\sigma}\\sim N(0,1),\\quad F(x)=\\Phi\\!\\left(\\frac{x-\\mu}{\\sigma}\\right),\\quad aX+b\\sim N(a\\mu+b,a^2\\sigma^2)\\;(a\\ne 0)\\\\ &\\text{标准正态 }\\Phi(-x)=1-\\Phi(x),\\;\\Phi(0)=\\frac12,\\;P\\{|X-\\mu|<k\\sigma\\}=2\\Phi(k)-1\\approx\\begin{cases}0.6827,&k=1\\\\0.9545,&k=2\\\\0.9973,&k=3\\end{cases}\\end{aligned}$$",
+      "conditions": "均匀分布要求 $a<b$；指数分布要求 $\\lambda>0$（注意个别教材以平均寿命 $\\theta=1/\\lambda$ 作参数，读题看清密度系数）；正态线性变换 $aX+b$ 要求 $a\\ne 0$，且**第二参数永远是方差 $\\sigma^2$ 不是标准差 $\\sigma$**！",
+      "pitfalls": "① **【猪狗百宝书 P.2-26 表格勘误】**原书第 2 章末连续分布总结表将正态密度误印为 $\\frac{1}{2\\pi\\sigma}e^{-\\frac{(x-\\mu)^2}{2\\sigma^2}}$（漏印根号！），正确分母必为 **$\\sqrt{2\\pi}\\sigma$**！ ② 读题防看错第二参数：若题给 $X\\sim N(1,4)$，则 $\\sigma=2$（不是 4！）；若题给 $X\\sim N(1,2^2)$，则 $\\sigma=2$。",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 272\" width=\"100%\" style=\"max-width:640px;height:auto;display:block;margin:8px auto;\" font-family=\"system-ui,-apple-system,'Segoe UI',sans-serif\"><title>三大连续型分布与标准正态 3σ 准则、拉普拉斯重尾对比图</title><defs><marker id=\"m1_pr02_ax2\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"5.5\" markerHeight=\"5.5\" orient=\"auto\"><path d=\"M0 1 L9 5 L0 9 Z\" fill=\"#475569\"/></marker></defs><rect x=\"2\" y=\"2\" width=\"636\" height=\"268\" rx=\"12\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/><text x=\"320\" y=\"23\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">三大连续型分布与正态 3σ 对称法则（附 Laplace 双指数重尾对比）</text><rect x=\"14\" y=\"34\" width=\"204\" height=\"108\" rx=\"8\" fill=\"#ffffff\" stroke=\"#bfdbfe\"/><text x=\"116\" y=\"51\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1d4ed8\">均匀分布 U(a, b)</text><line x1=\"28\" y1=\"112\" x2=\"204\" y2=\"112\" stroke=\"#475569\" stroke-width=\"1.2\" marker-end=\"url(#m1_pr02_ax2)\"/><line x1=\"42\" y1=\"120\" x2=\"42\" y2=\"60\" stroke=\"#475569\" stroke-width=\"1.2\" marker-end=\"url(#m1_pr02_ax2)\"/><rect x=\"74\" y=\"74\" width=\"90\" height=\"38\" fill=\"#bfdbfe\" fill-opacity=\"0.7\" stroke=\"#2563eb\" stroke-width=\"1.8\"/><text x=\"74\" y=\"124\" text-anchor=\"middle\" font-size=\"10\" fill=\"#1e40af\">a</text><text x=\"164\" y=\"124\" text-anchor=\"middle\" font-size=\"10\" fill=\"#1e40af\">b</text><text x=\"119\" y=\"97\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#1e3a8a\">面积 = 1</text><text x=\"74\" y=\"68\" text-anchor=\"start\" font-size=\"9.5\" fill=\"#1d4ed8\">1/(b-a)</text><text x=\"116\" y=\"137\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">EX=(a+b)/2 · DX=(b-a)²/12</text><rect x=\"14\" y=\"150\" width=\"204\" height=\"110\" rx=\"8\" fill=\"#ffffff\" stroke=\"#a7f3d0\"/><text x=\"116\" y=\"167\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#047857\">指数分布 E(λ)（无记忆）</text><line x1=\"28\" y1=\"230\" x2=\"204\" y2=\"230\" stroke=\"#475569\" stroke-width=\"1.2\" marker-end=\"url(#m1_pr02_ax2)\"/><line x1=\"48\" y1=\"238\" x2=\"48\" y2=\"174\" stroke=\"#475569\" stroke-width=\"1.2\" marker-end=\"url(#m1_pr02_ax2)\"/><path d=\"M48 180 Q76 218, 194 229 L194 230 L48 230 Z\" fill=\"#a7f3d0\" fill-opacity=\"0.65\"/><path d=\"M48 180 Q76 218, 194 229\" fill=\"none\" stroke=\"#059669\" stroke-width=\"2\"/><text x=\"41\" y=\"185\" text-anchor=\"end\" font-size=\"10\" font-weight=\"700\" fill=\"#047857\">λ</text><text x=\"132\" y=\"200\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"600\" fill=\"#065f46\">2λX ~ χ²(2)</text><text x=\"132\" y=\"213\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#065f46\">E(1/2) = χ²(2)</text><text x=\"116\" y=\"252\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">EX=1/λ · DX=1/λ² · P(X&gt;t)=e⁻λᵗ</text><rect x=\"228\" y=\"34\" width=\"398\" height=\"226\" rx=\"8\" fill=\"#ffffff\" stroke=\"#cbd5e1\"/><text x=\"427\" y=\"53\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#0f172a\">标准正态 N(0,1) 对称性与 3σ 面积（虚线：La(0,1) 尖峰重尾）</text><line x1=\"248\" y1=\"202\" x2=\"612\" y2=\"202\" stroke=\"#475569\" stroke-width=\"1.3\" marker-end=\"url(#m1_pr02_ax2)\"/><line x1=\"427\" y1=\"210\" x2=\"427\" y2=\"62\" stroke=\"#475569\" stroke-width=\"1.2\" marker-end=\"url(#m1_pr02_ax2)\"/><path d=\"M337 202 L337 187 C358 175, 376 146, 382 132 C398 92, 412 80, 427 80 C442 80, 456 92, 472 132 C478 146, 496 175, 517 187 L517 202 Z\" fill=\"#dbeafe\" fill-opacity=\"0.7\"/><path d=\"M382 202 L382 132 C398 92, 412 80, 427 80 C442 80, 456 92, 472 132 L472 202 Z\" fill=\"#93c5fd\" fill-opacity=\"0.65\"/><path d=\"M262 201 C304 200, 324 195, 337 187 C358 175, 376 146, 382 132 C398 92, 412 80, 427 80 C442 80, 456 92, 472 132 C478 146, 496 175, 517 187 C530 195, 550 200, 592 201\" fill=\"none\" stroke=\"#2563eb\" stroke-width=\"2.4\"/><path d=\"M262 197 Q355 182, 427 68 Q499 182, 592 197\" fill=\"none\" stroke=\"#7c3aed\" stroke-width=\"1.5\" stroke-dasharray=\"4 3\"/><text x=\"530\" y=\"92\" font-size=\"9.8\" font-weight=\"700\" fill=\"#6d28d9\">La(0,1): ½e⁻|ˣ|</text><text x=\"530\" y=\"105\" font-size=\"9.3\" fill=\"#6d28d9\">|X| ~ E(1)</text><line x1=\"292\" y1=\"199\" x2=\"292\" y2=\"205\" stroke=\"#475569\"/><line x1=\"337\" y1=\"187\" x2=\"337\" y2=\"205\" stroke=\"#2563eb\" stroke-dasharray=\"2 2\"/><line x1=\"382\" y1=\"132\" x2=\"382\" y2=\"205\" stroke=\"#1d4ed8\" stroke-dasharray=\"2 2\"/><line x1=\"472\" y1=\"132\" x2=\"472\" y2=\"205\" stroke=\"#1d4ed8\" stroke-dasharray=\"2 2\"/><line x1=\"517\" y1=\"187\" x2=\"517\" y2=\"205\" stroke=\"#2563eb\" stroke-dasharray=\"2 2\"/><line x1=\"562\" y1=\"199\" x2=\"562\" y2=\"205\" stroke=\"#475569\"/><text x=\"292\" y=\"216\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">-3σ</text><text x=\"337\" y=\"216\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#1d4ed8\">-2σ</text><text x=\"382\" y=\"216\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#1e40af\">-σ</text><text x=\"427\" y=\"216\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#0f172a\">μ</text><text x=\"472\" y=\"216\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#1e40af\">+σ</text><text x=\"517\" y=\"216\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#1d4ed8\">+2σ</text><text x=\"562\" y=\"216\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">+3σ</text><text x=\"427\" y=\"160\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#1e3a8a\">68.27%</text><text x=\"304\" y=\"142\" text-anchor=\"middle\" font-size=\"9.8\" font-weight=\"600\" fill=\"#1d4ed8\">±2σ: 95.45%</text><text x=\"304\" y=\"156\" text-anchor=\"middle\" font-size=\"9.8\" font-weight=\"600\" fill=\"#475569\">±3σ: 99.73%</text><rect x=\"242\" y=\"224\" width=\"370\" height=\"26\" rx=\"6\" fill=\"#eff6ff\" stroke=\"#bfdbfe\"/><text x=\"427\" y=\"241\" text-anchor=\"middle\" font-size=\"10.2\" font-weight=\"700\" fill=\"#1e40af\">对称恒等式：Φ(-a)=1-Φ(a) · P(|X|&lt;a)=2Φ(a)-1 · 标准化 (X-μ)/σ ~ N(0,1)</text></svg>",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "基础 P.41-43 / 9讲 P.15-19 / 方浩 P.37-38 / 猪狗 P.2-26（含勘误）",
+        "pdfPage": 47,
+        "itemRef": "三大常见连续型分布与标准正态公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_continuous_props",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "三大连续分布是考研数学一最核心引擎：① **$U(a,b)$** 对应一维几何概型，子区间概率只取决于长度比；② **$E(\\lambda)$** 是连续型**唯一**无记忆寿命分布，与泊松过程到达间隔一一对应（$P\\{X>t\\}=e^{-\\lambda t}$ 务必背成肌肉记忆）；③ **$N(\\mu,\\sigma^2)$** 曲线关于 $x=\\mu$ 对称，峰值 $\\frac{1}{\\sqrt{2\\pi}\\sigma}$ 决定高矮胖瘦（$\\sigma$ 越小越瘦高集中，拐点在 $\\mu\\pm\\sigma$），任何非标准正态求概率、比大小、判单调的第一步永远是**标准化** $\\frac{X-\\mu}{\\sigma}\\sim N(0,1)$！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「均匀面积看长比，指数无忆记 $e^{-\\lambda t}$；正态见题先标准，二参方差别漏开根！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr02-f-05",
+      "kind": "formula",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "五、强化拓展分布：柯西、拉普拉斯、伽马与卡方桥接",
+      "title": "柯西 $t(1)$、拉普拉斯 $La(0,1)$、伽马 $Ga(\\alpha,\\lambda)$ 及 $2\\lambda X\\sim\\chi^2(2)$ 桥接式",
+      "formulaLatex": "$$\\begin{aligned} &\\text{柯西 }t(1):\\;f(x)=\\frac{1}{\\pi(1+x^2)}\\;(x\\in\\mathbb{R}),\\quad F(x)=\\frac12+\\frac{1}{\\pi}\\arctan x,\\quad EX,DX\\text{ 均不存在!}\\\\ &\\text{拉普拉斯 }La(0,1):\\;f(x)=\\frac12 e^{-|x|}\\;(x\\in\\mathbb{R}),\\quad EX=0,\\;DX=2,\\quad |X|\\sim E(1)\\\\ &\\text{伽马 }Ga(\\alpha,\\lambda):\\;f(x)=\\frac{\\lambda^\\alpha}{\\Gamma(\\alpha)}x^{\\alpha-1}e^{-\\lambda x}\\;(x>0),\\quad EX=\\frac{\\alpha}{\\lambda},\\;DX=\\frac{\\alpha}{\\lambda^2}\\\\ &\\text{黄金特例桥：}Ga(1,\\lambda)=E(\\lambda),\\quad Ga\\!\\left(\\frac{n}{2},\\frac12\\right)=\\chi^2(n)\\implies E\\!\\left(\\frac12\\right)=\\chi^2(2),\\;\\;X\\sim E(\\lambda)\\Rightarrow 2\\lambda X\\sim\\chi^2(2)\\end{aligned}$$",
+      "conditions": "$\\Gamma(\\alpha)=\\int_{0}^{+\\infty}x^{\\alpha-1}e^{-x}\\mathrm{d}x$（$\\alpha>0$），记住递推 $\\Gamma(\\alpha+1)=\\alpha\\Gamma(\\alpha)$、$\\Gamma(n)=(n-1)!$、$\\Gamma(\\frac12)=\\sqrt{\\pi}$。",
+      "pitfalls": "① **【猪狗百宝书 P.2-11 勘误】**原书在伽马分布导语误写「几何分布与后续的卡方分布均是伽马分布的一种特例」——**大错**！几何分布是离散型分布，应修正为「**指数分布**与后续的卡方分布均是伽马分布的特例」！ ② 柯西分布切忌因 $f(x)$ 是偶函数就脱口而出 $EX=0$——数学期望存在必须要求**绝对积分收敛** $\\int_{-\\infty}^{+\\infty}|x|f(x)\\mathrm{d}x<+\\infty$！",
+      "source": {
+        "book": "27 张宇《概率9讲》 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.16-17 / 猪狗 P.2-11（含勘误）",
+        "pdfPage": 27,
+        "itemRef": "柯西拉普拉斯伽马与卡方桥接"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_extended_dists",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "这三类强化高频拓展分布虽未全列为独立考点，却频频以具体密度函数形式现身真题与强化讲义：① **柯西分布**是「密度偶对称却无数学期望」的头号反例（$\\int_{-\\infty}^{+\\infty}\\frac{|x|}{1+x^2}\\mathrm{d}x=+\\infty$ 发散！），且是 $t(1)$ 分布；② **拉普拉斯（双指数）分布**由两个背靠背指数分布拼成，故 $|X|\\sim E(1)$，求高阶矩用 $\\Gamma$ 函数 1 秒出答案；③ **伽马分布**把指数分布与数理统计中的卡方分布统一到同一屋檐下，$X\\sim E(\\lambda)\\Rightarrow 2\\lambda X\\sim\\chi^2(2)$ 是第 8、9 讲构造枢轴量的秘密武器！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「柯西对称无期望，拉普绝对值变 $E(1)$；指数乘 $2\\lambda$ 变 $\\chi^2(2)$，伽马一统指与卡！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr02-f-06",
+      "kind": "formula",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、强化构造全家桶：新分布函数与新概率密度合法性判据",
+      "title": "分布函数与概率密度合法构造 10 式（凸组合、乘积、滑动平均、$\\sqrt{F_1F_2}$ vs $\\sqrt{f_1f_2}$）",
+      "formulaLatex": "$$\\begin{aligned} &\\text{必为新分布函数：}\\sum_{i=1}^{n}\\lambda_i F_i(x)\\;\\left(\\lambda_i\\ge 0,\\sum\\lambda_i=1\\right);\\quad F_1(x)F_2(x);\\quad \\sqrt{F_1(x)F_2(x)};\\quad \\frac{1}{T}\\int_{x}^{x+T}F(t)\\,\\mathrm{d}t\\;(T>0)\\\\ &\\text{必为新概率密度：}\\sum_{i=1}^{n}\\lambda_i f_i(x)\\;\\left(\\lambda_i\\ge 0,\\sum\\lambda_i=1\\right);\\quad f(a-x);\\quad |a|f(ax+b)\\;(a\\ne 0);\\quad nF^{n-1}(x)f(x);\\quad n[1-F(x)]^{n-1}f(x)\\\\ &\\text{一般【不是】概率密度：}f_1(x)f_2(x);\\quad \\sqrt{f_1(x)f_2(x)}\\;\\left(\\text{因 }\\int\\sqrt{f_1f_2}\\le\\frac12\\int(f_1+f_2)=1\\text{，不同密度时严格}<1\\right)\\end{aligned}$$",
+      "conditions": "线性组合 $aF_1+bF_2$ 或 $af_1+bf_2$ 对任意给定的 $F_1,F_2$ 恒合法需满足**非负且和为 1**（$a\\ge 0,b\\ge 0,a+b=1$）；平移反转 $f(c-x)$ 保面积仍为密度，但伸缩 $f(2x)$ 积分变 $\\frac12$ 不是密度（必须补系数 $2f(2x)$）。",
+      "pitfalls": "① 超经典陷阱对比（强化例 2.1）：$\\sqrt{F_1(x)F_2(x)}$ **永远是**分布函数，但 $\\sqrt{f_1(x)f_2(x)}$ 当 $f_1\\ne f_2$ 时由基本不等式 $\\int\\sqrt{f_1f_2}<\\frac12(1+1)=1$，**绝不是**概率密度！ ② 方浩例 18：$cF_1(x)F_2(x)$ 为分布函数的充要条件是 $c=1$（因为 $x\\to+\\infty$ 极限等于 $c$）；而 $aF_1+bF_2$ 仅说 $a+b=1$ 漏了 $a\\ge 0,b\\ge 0$ 故错！",
+      "source": {
+        "book": "27 张宇《概率9讲》 & 27 方浩强化 & 27 基础30讲",
+        "printedPage": "9讲 P.9-10 / 方浩 P.39-40 例17-18 / 基础 P.37-38",
+        "pdfPage": 20,
+        "itemRef": "分布函数与概率密度合法构造全家桶"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_constructions",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "《概率 9 讲》P.9–10 与《方浩强化》题型三反复考查「用已知 $F,f$ 构造新 $F,f$」：① 对分布函数，$F_1F_2$（对应独立最大值 $\\max(X_1,X_2)$）、$\\sqrt{F_1F_2}$、$1-(1-F_1)(1-F_2)$（对应独立最小值）、$F(ax+b)\\;(a>0)$ 及滑动平均 $\\frac{1}{T}\\int_x^{x+T}F(t)\\mathrm{d}t$ 全满足单调不减+右连续+$0\\to 1$；② 对密度函数，复合求导型如 $\\frac{2}{n}\\sum F_if_i$、$\\sum_{i=1}^{n}f_i\\prod_{j\\ne i}F_j=(F_1\\cdots F_n)'$、$nF^{n-1}f=(F^n)'$ 只需看原函数从 $0$ 变到 $1$ 即可秒判！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「分布函数相乘开方仍合法，密度相乘开方归一崩；见 $F^k f$ 立刻凑微分还原 $F^{k+1}$！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr02-f-07",
+      "kind": "formula",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、强化速算工具：广义高斯配方规范化与生存函数期望公式",
+      "title": "二次指数配方归一化 $ke^{-(ax^2+bx+c)}$ 与非负随机变量生存函数求期望公式",
+      "formulaLatex": "$$\\begin{aligned} &f(x)=k\\,e^{-(ax^2+bx+c)}\\;(a>0,x\\in\\mathbb{R})\\text{ 为密度}\\iff X\\sim N\\!\\left(-\\frac{b}{2a},\\;\\frac{1}{2a}\\right),\\quad k=\\sqrt{\\frac{a}{\\pi}}\\,e^{c-\\frac{b^2}{4a}}\\\\ &\\text{非负连续型 }(X\\ge 0):\\quad EX=\\int_{0}^{+\\infty}[1-F(x)]\\,\\mathrm{d}x=\\int_{0}^{+\\infty}P\\{X>x\\}\\,\\mathrm{d}x\\\\ &\\text{非负整数型 }(X\\in\\{0,1,2,\\dots\\}):\\quad EX=\\sum_{k=0}^{+\\infty}P\\{X>k\\}=\\sum_{k=1}^{+\\infty}P\\{X\\ge k\\}\\end{aligned}$$",
+      "conditions": "高斯配方要求二次项系数在负号下严格为正（即指数最高次项为 $-ax^2,a>0$）；生存函数期望公式要求 $X\\ge 0$ 且期望存在（若 $X$ 可取负值，推广为 $EX=\\int_0^\\infty[1-F(x)]\\mathrm{d}x-\\int_{-\\infty}^0 F(x)\\mathrm{d}x$）。",
+      "pitfalls": "离散生存期望的下标别搞错：$\\sum_{k=0}^{\\infty}P\\{X>k\\}=\\sum_{k=1}^{\\infty}P\\{X\\ge k\\}$（等价于强化例 2.7 的 $\\sum_{i=1}^{\\infty}\\bar{F}(i)$ 当 $X\\in\\{1,2,\\dots\\}$ 且 $\\bar{F}(i)=P\\{X\\ge i\\}$ 时需看清题干对 $\\bar{F}(i)$ 的定义是 $>$ 还是 $\\ge$！）。",
+      "source": {
+        "book": "27 张宇《概率9讲》 & 27 方浩强化",
+        "printedPage": "9讲 P.16, P.18 例2.6-2.7 / 方浩 P.42 例23",
+        "pdfPage": 27,
+        "itemRef": "广义高斯配方与生存函数期望公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_gaussian_survival",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "两大强化计算外挂：① **广义高斯配方公式**：看到 $k e^{-(ax^2+bx+c)}$（$a>0$）立刻配方成 $-(ax^2+bx+c)=-a(x+\\frac{b}{2a})^2+(\\frac{b^2}{4a}-c)$，对照正态密度 $\\frac{1}{\\sqrt{2\\pi}\\sigma}e^{-\\frac{(x-\\mu)^2}{2\\sigma^2}}$，一眼读出 $\\mu=-\\frac{b}{2a}$、$\\sigma^2=\\frac{1}{2a}$ 及归一常数 $k$，省去复杂广义积分！② **生存函数（尾概率）求期望**：对非负随机变量，把期望直接写成尾概率面积/级数和，遇仅给分布函数 $F(x)$ 的压轴题（强化例 2.6 & 2.7）免求导一步秒杀！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「见 $e^{-ax^2-bx-c}$ 先配方，方差立马是 $\\frac{1}{2a}$；非负期望积尾巴，连续积分 $1-F$ 离散加 $P(X>k)$！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr02-c-01",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "一、分布函数右连续三大致命陷阱",
+      "title": "$1-F(-x)$ 未必是分布函数、$F(a)=\\frac12\\nRightarrow P\\{X\\ge a\\}=\\frac12$ 与阶梯反求半开区间",
+      "conditions": "当题干**未明确声明 $X$ 为连续型随机变量**时，默认 $F(x)$ 允许存在跳跃间断点，一切端点不等号必须严查左右极限！",
+      "pitfalls": "千万不要用正态分布等连续例子去验 $1-F(-x)$ ——一验就掉坑！验分布函数命题的最强反例永远是**退化/两点离散分布**（如 $P\\{X=0\\}=1$ 时 $F(x)=0\\,(x<0),\\,1\\,(x\\ge 0)$，则 $1-F(-x)=0\\,(x\\le 0),\\,1\\,(x>0)$ 在 $x=0$ 处不右连续！）。",
+      "source": {
+        "book": "27 方浩强化 & 27 张宇基础30讲",
+        "printedPage": "方浩 P.28-32 例2,7 / P.36-37 例15 / 基础 P.35",
+        "pdfPage": 33,
+        "itemRef": "分布函数右连续陷阱与阶梯反求"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_constructions",
+        "verified": true
+      },
+      "summary": "① **方浩例 2 头号概念陷阱**：若 $F(x)$ 是任意分布函数，则 $F(2x-1)$ 必为分布函数，但 **$1-F(-x)$ 未必是分布函数**！原因：$1-F(-x)$ 单调不减、极限 $0\\to 1$ 全满足，但在 $F$ 的跳点处它变为**左连续而非右连续**（只有 $F$ 处处连续时 $1-F(-x)$ 才是 $-X$ 的分布函数；一般 $-X$ 的分布函数为 $1-F((-x)^-)$）！② **方浩例 7**：仅知 $F(a)=\\frac12$ 不能推 $P\\{X\\ge a\\}=\\frac12$，因为 $P\\{X\\ge a\\}=1-F(a^-)$，当 $a$ 为跳点时 $F(a^-)<F(a)=\\frac12\\Rightarrow P\\{X\\ge a\\}>\\frac12$！③ **阶梯反求范围**：若离散分布函数 $F(b)=\\frac{15}{16}$（方浩例 15），解出的 $b$ 是**左闭右开区间 $[15,16)$** 而非单点 $15$！"
+    },
+    {
+      "id": "m1-pr02-c-02",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、偶密度与正态分布对称性、上侧分位数及单调性",
+      "title": "偶密度四大恒等式、$N(\\mu,\\sigma^2)$ 轴对称、上侧分位数 $u_\\alpha$ 与 $\\sigma$ 单调性",
+      "conditions": "偶密度公式要求连续型分布且密度关于 $0$ 对称（注意 $F(x)$ 本身**既不是奇函数也不是偶函数**，它是中心对称于点 $(0,\\frac12)$！）。",
+      "pitfalls": "双侧分位数经典记反坑：若题给 $P\\{|Z|<x\\}=\\alpha$，双侧剩余尾概率和为 $1-\\alpha$，单侧尾概率为 $\\frac{1-\\alpha}{2}$，故 $x=u_{\\frac{1-\\alpha}{2}}$（不是 $u_{\\alpha/2}$！若题给 $P\\{|Z|<x\\}=1-\\alpha$ 才是 $u_{\\alpha/2}$！）。",
+      "source": {
+        "book": "27 张宇基础30讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "基础 P.45-46,55 / 方浩 P.40-44 例19,20,24,25 / 猪狗 P.2-17",
+        "pdfPage": 51,
+        "itemRef": "偶密度对称与正态单调分位数结论"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_continuous_props",
+        "verified": true
+      },
+      "summary": "① **偶密度四式（基础习题 2.15 / 方浩例 19–20）**：若连续型密度 $f(-x)=f(x)$，则对任意 $a$ 有 $F(-a)=1-F(a)=\\frac12-\\int_{0}^{a}f(x)\\mathrm{d}x$；对 $a>0$ 有 $P\\{|X|<a\\}=2F(a)-1$，$P\\{|X|>a\\}=2[1-F(a)]$。② **一般轴对称（方浩例 25）**：若 $f(\\mu+x)=f(\\mu-x)$（如 $N(\\mu,\\sigma^2)$），则 $F(\\mu+x)+F(\\mu-x)=1$。③ **上侧分位数（基础例 2.12）**：$P\\{Z>u_\\alpha\\}=\\alpha$，由双尾对称 $P\\{|Z|<x\\}=\\alpha\\iff x=u_{(1-\\alpha)/2}$！④ **单调性速判（基础例 2.11 / 方浩例 24）**：对 $X\\sim N(\\mu,\\sigma^2)$，$P\\{|X-\\mu|<1\\}=2\\Phi(1/\\sigma)-1$ 随 $\\sigma$ 增而**单调减小**；$P\\{|X-\\mu|<\\sigma\\}=2\\Phi(1)-1$ 与 $\\sigma$ **无关**；$P\\{X\\le\\mu+\\sigma^2\\}=\\Phi(\\sigma)$ 随 $\\sigma$ 增而**单调增加**！"
+    },
+    {
+      "id": "m1-pr02-c-03",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、随机变量相等四层级与随机占优",
+      "title": "强弱层级链 $X=Y\\Rightarrow P\\{X=Y\\}=1\\Rightarrow F_X=F_Y\\Rightarrow(EX=EY,DX=DY)$ 与 $F_1\\le F_2$",
+      "conditions": "同分布反例只需取独立同分布的两枚硬币 $X,Y\\sim B(1,\\frac12)$（或 $Y=-X$ 当 $X\\sim N(0,1)$）：$F_X\\equiv F_Y$ 但 $P\\{X=Y\\}\\ne 1$！",
+      "pitfalls": "基础习题 2.11 注特别提醒：已知 $X,Y$ 同分布时，可放心用 $P\\{X>a\\}=P\\{Y>a\\}$，但绝不可把 $A\\cap B=\\{X>a,Y>a\\}$ 简化成 $\\{X>a\\}$（除非 $X=Y$）！",
+      "source": {
+        "book": "27 方浩强化 & 27 张宇基础30讲",
+        "printedPage": "方浩 P.30-31 例题5-6 / 基础 P.58 注",
+        "pdfPage": 35,
+        "itemRef": "随机变量相等四层级与随机占优"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "summary": "① **四层级严格单向链（方浩例 6）**：$X=Y$（处处相等）$\\implies P\\{X=Y\\}=1$（几乎必然相等）$\\implies X\\stackrel{d}{=}Y$（同分布，$F_X\\equiv F_Y$）$\\implies EX=EY$ 且 $DX=DY$（若存在），**箭头全部不可逆**！② **一阶随机占优（方浩例 5）**：若对一切 $x$ 有 $F_1(x)\\le F_2(x)$，等价于 $P\\{X_1>x\\}\\ge P\\{X_2>x\\}$（$X_1$ 比 $X_2$ 更偏大），故对 $B(1,p_i)$ 必有 $p_1\\ge p_2$（且一般必有 $EX_1\\ge EX_2$），但对密度函数 $f_1(x),f_2(x)$ **绝无大小比较关系**（因积分同为 1，两密度曲线必相交）！"
+    },
+    {
+      "id": "m1-pr02-c-04",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、二项/泊松众数（含双峰勘误）与泊松奇偶取值概率公式",
+      "title": "最可能次数众数判据（含 $\\lambda\\in\\mathbb{Z}^+$ 双峰补注）与 $P(X\\text{ 偶})=\\frac{1+e^{-2\\lambda}}{2}$",
+      "conditions": "泊松奇偶概率恒满足 $p_{\\text{整}}=1>p_{\\text{偶}}>p_{\\text{奇}}>0$（因 $\\lambda>0\\implies 0<e^{-2\\lambda}<1$，且 $0$ 属于偶数！）。",
+      "pitfalls": "算 $P\\{X\\text{ 为偶数}\\}$ 最常见漏项：**$k=0$ 是偶数**（贡献 $e^{-\\lambda}$），因此偶数概率永远严格大于 $\\frac12$ 且严格大于奇数概率！",
+      "source": {
+        "book": "27 张宇《概率9讲》 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.12, P.14（含补注） / 方浩 P.35 例13 / 猪狗 P.2-18 例2.23",
+        "pdfPage": 25,
+        "itemRef": "二项泊松众数与泊松奇偶概率公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_discrete_props",
+        "verified": true
+      },
+      "summary": "① **二项分布 $B(n,p)$ 众数**：令 $m=(n+1)p$，若 $m\\notin\\mathbb{Z}$ 则唯一众数为 $\\lfloor m\\rfloor$；若 $m\\in\\mathbb{Z}$ 则在 $k=m-1$ 与 $k=m$ **两点并列取最大**！② **泊松分布 $P(\\lambda)$ 众数（含概率 9 讲 P.14 严谨补注）**：由 $\\frac{P\\{X=k\\}}{P\\{X=k-1\\}}=\\frac{\\lambda}{k}$ 知，当 $\\lambda\\notin\\mathbb{Z}^+$ 时唯一众数为 $\\lfloor\\lambda\\rfloor$；当 $\\lambda\\in\\mathbb{Z}^+$ 时在 **$k=\\lambda-1$ 与 $k=\\lambda$ 两点并列取最大**（原书 P.14 仅写 $[\\lambda]$ 漏注并列峰值！）。③ **泊松奇偶概率神式（方浩例 13 / 猪狗例 2.23）**：若 $X\\sim P(\\lambda)$，将 $e^\\lambda=\\sum\\frac{\\lambda^k}{k!}$ 与 $e^{-\\lambda}=\\sum\\frac{(-\\lambda)^k}{k!}$ 相加减立得：$P\\{X\\text{ 为偶数}\\}=\\frac{1+e^{-2\\lambda}}{2} > P\\{X\\text{ 为奇数}\\}=\\frac{1-e^{-2\\lambda}}{2}$！"
+    },
+    {
+      "id": "m1-pr02-c-05",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "五、泊松稀化定理与泊松过程到达间隔",
+      "title": "泊松稀化（$N\\sim P(\\lambda),\\,M|N\\sim B(N,p)\\Rightarrow M\\sim P(\\lambda p)$）与到达间隔 $T\\sim E(\\lambda)$",
+      "conditions": "稀化定理求和展开时需将 $N=0$ 纳入完备组（$P\\{M=0\\mid N=0\\}=1$），并做换元 $k=n-m$ 凑指数泰勒级数 $\\sum_{k=0}^\\infty\\frac{[\\lambda(1-p)]^k}{k!}=e^{\\lambda(1-p)}$。",
+      "pitfalls": "**【概率 9 讲 P.13 例 2.3(2) 勘误】**原书联立 $P\\{M=m,N=n\\}$ 第一行漏印了因子 $e^{-8}$（下一行求和式又突然冒出），且题干写 $N=n\\;(n\\ge 1)$ 却对 $m=0$ 从 $n=0$ 求和；对比《方浩强化》P.51 例题 33 已完整印出 $e^{-8}$ 并写全 $n=0,1,2,\\dots$！",
+      "source": {
+        "book": "27 张宇《概率9讲》 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.13 例2.3（含勘误） / 方浩 P.41-42, P.51 / 猪狗 P.2-21",
+        "pdfPage": 24,
+        "itemRef": "泊松稀化定理与泊松到达间隔"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_poisson_thinning",
+        "verified": true
+      },
+      "summary": "① **泊松稀化定理（2015 真题 / 概率 9 讲例 2.3 / 方浩例 33 / 猪狗例 2.33）**：若总到达次数 $N\\sim P(\\lambda)$，每次到达以独立概率 $p$ 被保留（即给定 $N=n$ 时 $M\\sim B(n,p)$），则保留次数无条件分布为 **$M\\sim P(\\lambda p)$**（且被剔除次数 $N-M\\sim P(\\lambda(1-p))$ 与 $M$ 相互独立！）。② **泊松过程与指数分布对偶（方浩例 22 / 猪狗例 2.28）**：若时长 $t$ 内事件次数 $N(t)\\sim P(\\lambda t)$，则相继两次到达间隔 $T$ 满足 $P\\{T>t\\}=P\\{N(t)=0\\}=e^{-\\lambda t}$，故 **$T\\sim E(\\lambda)$**！"
+    },
+    {
+      "id": "m1-pr02-c-06",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、2026 最新真题启示：混合几何失效率递减与 $F(ay+b)$ 反向代换",
+      "title": "混合几何分布打破无记忆性（$P\\{X>m+n\\mid X>m\\}>P\\{X>n\\}$）与 $F_Y(y)=F_X(ay+b)$ 反解法则",
+      "conditions": "第 ① 条差值可精确因式分解为 $\\frac{(2^{-m}-3^{-m})(2^{-n}-3^{-n})}{2(2^{-m}+3^{-m})}>0$（任意正整数 $m,n$ 恒正）；第 ② 条切忌把 $F_Y(y)=F_X(ay+b)$ 误当成 $Y=aX+b$（恰好互逆！）。",
+      "pitfalls": "2026 真题把 $EY=0,DY=1$ 代入 $EX=aEY+b=\\mu,\\;DX=a^2DY=\\sigma^2$ 一秒得 $a=\\sigma,b=\\mu$；若误认成 $Y=aX+b$ 会错算成 $a=\\frac{1}{\\sigma},b=-\\frac{\\mu}{\\sigma}$ 惨掉选项坑！",
+      "source": {
+        "book": "27 猪狗《概率统计百宝书》",
+        "printedPage": "猪狗 P.2-12 例2.1(2026), 例2.3(2026)",
+        "pdfPage": 43,
+        "itemRef": "2026真题 混合几何与分布函数反向代换"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_2026_exams",
+        "verified": true
+      },
+      "summary": "① **2026 真题启示（猪狗例 2.1）**：单一几何分布 $Ge(p)$ 具有无记忆性，但**两个不同参数几何分布的混合**（如 $P\\{X=k\\}=\\frac12(\\frac12)^k+\\frac12\\cdot 2(\\frac13)^k=\\frac{1}{2^{k+1}}+\\frac{1}{3^k}$）不再无记忆，而是呈现**失效率递减（DFR）效应**：活得越久，条件上越可能来自衰减更慢的分量，故恒有 $P\\{X>m+n\\mid X>m\\}>P\\{X>n\\}$！② **2026 真题启示（猪狗例 2.3）**：若 $Y$ 的分布函数为 $F_Y(y)=F_X(ay+b)$（因 $F_Y(+\\infty)=1$ 必有 $a>0$），由 $F_X(ay+b)=P\\{X\\le ay+b\\}=P\\{\\frac{X-b}{a}\\le y\\}$ 立得 **$Y\\stackrel{d}{=}\\frac{X-b}{a}$**（即 $X\\stackrel{d}{=}aY+b$），从而 $EX=aEY+b,\\;DX=a^2DY$！"
+    },
+    {
+      "id": "m1-pr02-e-01",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、分布函数与概率密度基础定参",
+      "title": "基础例 2.1 & 2.3：分段分布函数右连续定参 & 离散分布律非负筛选",
+      "problem": "(1) 设 $X$ 分布函数为 $F(x)=\\begin{cases}a+be^{-x},&x>0\\\\0,&x\\le 0\\end{cases}$，求 $a,b$ 及 $P\\{|X|<2\\}$；(2) 离散型 $X$ 取 $1,2,3$ 对应概率 $\\theta^2,2\\theta(1-\\theta),(1-\\theta)^2$，且 $P\\{X\\ge 2\\}=\\frac34$，求 $\\theta$ 及 $F(x)$。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：规范性 + 0 处右连续定参",
+          "detail": "由 $F(+\\infty)=\\lim_{x\\to+\\infty}(a+be^{-x})=a=1$；再由 $x=0$ 处**右连续** $\\lim_{x\\to 0^+}(a+be^{-x})=a+b=F(0)=0\\implies b=-1$（注意 $F(0)=0$ 落在 $x\\le 0$ 分支上，故右极限必须严等于 $0$！）。由此 $F(x)=1-e^{-x}\\;(x>0)$ 为 $E(1)$，故 $P\\{|X|<2\\}=F(2^-)-F(-2)=1-e^{-2}$。"
+        },
+        {
+          "stepTitle": "第 (2) 问：用事件概率解方程并用非负性筛根",
+          "detail": "三概率之和 $\\theta^2+2\\theta(1-\\theta)+(1-\\theta)^2\\equiv 1$ 恒成立无法定 $\\theta$；由 $P\\{X\\ge 2\\}=1-P\\{X=1\\}=1-\\theta^2=\\frac34\\implies\\theta=\\pm\\frac12$。再验非负性 $P\\{X=2\\}=2\\theta(1-\\theta)\\ge 0$ 舍去 $-\\frac12$，得 $\\theta=\\frac12$，分布律为 $(\\frac14,\\frac12,\\frac14)$，阶梯分布函数分段为 $0\\,(x<1),\\,\\frac14\\,[1,2),\\,\\frac34\\,[2,3),\\,1\\,(x\\ge 3)$。"
+        }
+      ],
+      "finalAnswer": "(1) $a=1,b=-1,\\;P\\{|X|<2\\}=1-e^{-2}$；(2) $\\theta=\\frac12$，$F(x)$ 为三阶左闭右开阶梯函数",
+      "takeaway": "分布函数定参三板斧：$F(-\\infty)=0$、$F(+\\infty)=1$、分段点右连续（连续型还要左极限=右极限）；分布律定参解出多根后**必查每项概率 $\\ge 0$**！",
+      "source": {
+        "book": "27 张宇《考研数学基础30讲·概率》",
+        "printedPage": "基础 P.35, P.38",
+        "pdfPage": 41,
+        "itemRef": "例 2.1 与例 2.3 分布函数与分布律定参"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_base_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr02-e-02",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、分布函数与概率密度基础定参",
+      "title": "基础例 2.4 & 2.5：由微分方程 $f(x)=F(x)$ 反求密度 & 分段密度积分求 $F(x)$",
+      "problem": "(1) 已知 $X$ 分布函数为 $F(x)$、密度为 $f(x)$，当 $x\\le 0$ 时 $f(x)$ 连续且 $f(x)=F(x)$，若 $F(0)=1$，求 $f(x)$；(2) 已知 $f(x)=2(1-\\frac{1}{x^2})\\;(1\\le x\\le 2)$（其余为 0），求 $F(x)$。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：单调有界锁定 $x>0$ + ODE 求解 $x\\le 0$",
+          "detail": "因 $F(x)$ 单调不减且 $F(0)=1\\le F(x)\\le 1$，故对一切 $x>0$ 恒有 $F(x)\\equiv 1\\implies f(x)=0\\;(x>0)$。当 $x\\le 0$ 时 $F'(x)=f(x)=F(x)$，解得 $F(x)=Ce^x$，由 $F(0)=1\\implies C=1$，故 $f(x)=e^x\\;(x\\le 0)$。"
+        },
+        {
+          "stepTitle": "第 (2) 问：分段变限积分并检查右端点归一",
+          "detail": "$x<1$ 时 $F(x)=0$；$1\\le x<2$ 时 $F(x)=\\int_{1}^{x}2(1-t^{-2})\\mathrm{d}t=2(x+\\frac1x-2)$；$x\\ge 2$ 时检验 $2(2+\\frac12-2)=1$，故 $F(x)=1$。"
+        }
+      ],
+      "finalAnswer": "(1) $f(x)=\\begin{cases}e^x,&x\\le 0\\\\0,&x>0\\end{cases}$；(2) $F(x)=\\begin{cases}0,&x<1\\\\2(x+\\frac1x-2),&1\\le x<2\\\\1,&x\\ge 2\\end{cases}$",
+      "takeaway": "见到 $F(a)=1$ 立刻由单调有界推得 $x\\ge a$ 上 $F(x)\\equiv 1$；分段积密度算完最后一段务必代入上端点检验是否恰好等于 $1$，一秒自查计算错误！",
+      "source": {
+        "book": "27 张宇《考研数学基础30讲·概率》",
+        "printedPage": "基础 P.39",
+        "pdfPage": 45,
+        "itemRef": "例 2.4 与例 2.5 微分方程定密度与分段积分"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_base_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr02-e-03",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、常见离散与连续分布基础计算",
+      "title": "基础例 2.6 & 2.8：泊松分布反求参数 $\\lambda$ & 均匀分布几何法反求 $(a,b)$",
+      "problem": "(1) 某路口 1 分钟内通过汽车数 $X\\sim P(\\lambda)$，已知 1 分钟内有车通过的概率为 $0.7$，求最多有 1 辆车通过的概率；(2) 已知 $X\\sim U(a,b)\\;(a>0)$，$P\\{0<X<3\\}=\\frac14$，$P\\{X>4\\}=\\frac12$，求密度及 $P\\{1<X<5\\}$。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：由 $P\\{X\\ge 1\\}=1-e^{-\\lambda}=0.7$ 反解 $\\lambda$",
+          "detail": "$e^{-\\lambda}=0.3\\implies\\lambda=-\\ln 0.3$。故 $P\\{X\\le 1\\}=e^{-\\lambda}+\\lambda e^{-\\lambda}=0.3(1-\\ln 0.3)$。"
+        },
+        {
+          "stepTitle": "第 (2) 问：由中位数得中点 + 区间概率得全长",
+          "detail": "因 $P\\{X>4\\}=\\frac12$，均匀分布中点 $\\frac{a+b}{2}=4\\implies a+b=8$；又 $P\\{0<X<3\\}=\\frac14>0\\Rightarrow a<3$，且 $P\\{3<X<4\\}=1-\\frac12-\\frac14=\\frac14=\\frac{4-3}{b-a}\\implies b-a=4$。联立解得 $a=2,b=6$，故 $P\\{1<X<5\\}=P\\{2<X<5\\}=\\frac{5-2}{6-2}=\\frac34$。"
+        }
+      ],
+      "finalAnswer": "(1) $0.3(1-\\ln 0.3)$（选 C）；(2) $X\\sim U(2,6),\\;P\\{1<X<5\\}=\\frac{3}{4}$",
+      "takeaway": "泊松题看到「至少发生 1 次概率为 $q$」立刻写 $e^{-\\lambda}=1-q$；均匀分布求任意区间概率务必先与支撑区间 $(a,b)$ 取交集再比长度！",
+      "source": {
+        "book": "27 张宇《考研数学基础30讲·概率》",
+        "printedPage": "基础 P.43-44",
+        "pdfPage": 49,
+        "itemRef": "例 2.6 与例 2.8 泊松反参与均匀定界"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_base_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr02-e-04",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、常见离散与连续分布基础计算",
+      "title": "基础例 2.9 & 2.10：指数分布无记忆性 & 正态分布对称面积秒算法",
+      "problem": "(1) 元件寿命 $X\\sim E(\\lambda)$，求正常工作 $t$ 小时概率及 $\\lambda=0.01$ 时已工作 10 小时再工作 10 小时的概率；(2) 设 $X\\sim N(2,\\sigma^2)$，且 $P\\{2<X<4\\}=0.3$，求 $P\\{X<0\\}$。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：无记忆性直接抹掉已工作时长",
+          "detail": "$P\\{X>t\\}=e^{-\\lambda t}$；$P\\{X>20\\mid X>10\\}=\\frac{e^{-20\\lambda}}{e^{-10\\lambda}}=e^{-10\\lambda}=e^{-0.1}$。"
+        },
+        {
+          "stepTitle": "第 (2) 问：关于均值 $\\mu=2$ 左右对称秒杀",
+          "detail": "因 $x=0$ 与 $x=4$ 关于对称轴 $x=2$ 镜像对称，故 $P\\{0<X<2\\}=P\\{2<X<4\\}=0.3$，由左半总面积 $0.5$ 立得 $P\\{X<0\\}=0.5-0.3=0.2$！"
+        }
+      ],
+      "finalAnswer": "(1) $e^{-\\lambda t},\\;e^{-0.1}$；(2) $0.2$",
+      "takeaway": "正态分布题只要区间端点关于 $\\mu$ 对称，直接画草图按「左右各 $0.5$、镜像面积相等」心算，比套 $\\Phi$ 快 5 倍！",
+      "source": {
+        "book": "27 张宇《考研数学基础30讲·概率》",
+        "printedPage": "基础 P.45",
+        "pdfPage": 51,
+        "itemRef": "例 2.9 与例 2.10 指数无记忆与正态对称"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_base_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr02-e-05",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、常见离散与连续分布基础计算",
+      "title": "基础例 2.11 & 2.12：正态概率随 $\\sigma$ 单调性 & 标准正态双侧上侧分位数",
+      "problem": "(1) 设 $X\\sim N(\\mu,\\sigma^2)$，随 $\\sigma$ 增大，$P\\{|X-\\mu|<1\\}$ 如何变化？(2) 设 $X\\sim N(0,1)$，$u_\\alpha$ 满足 $P\\{X>u_\\alpha\\}=\\alpha$，若 $P\\{|X|<x\\}=\\alpha$，求 $x$。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：标准化为 $\\Phi(1/\\sigma)$ 判单调",
+          "detail": "$P\\{|X-\\mu|<1\\}=P\\left\\{\\left|\\frac{X-\\mu}{\\sigma}\\right|<\\frac{1}{\\sigma}\\right\\}=2\\Phi\\left(\\frac{1}{\\sigma}\\right)-1$。$\\sigma\\uparrow\\implies\\frac{1}{\\sigma}\\downarrow\\implies\\Phi(\\frac1\\sigma)\\downarrow$，故单调减少！"
+        },
+        {
+          "stepTitle": "第 (2) 问：画对称尾面积定单侧尾概率",
+          "detail": "中间面积为 $\\alpha$，左右两尾面积之和为 $1-\\alpha$，因对称每侧尾面积为 $\\frac{1-\\alpha}{2}$，即 $P\\{X>x\\}=\\frac{1-\\alpha}{2}$，对照上侧分位数定义得 $x=u_{\\frac{1-\\alpha}{2}}$。"
+        }
+      ],
+      "finalAnswer": "(1) 单调减少（选 B）；(2) $x=u_{\\frac{1-\\alpha}{2}}$（选 C）",
+      "takeaway": "分位数永不背错的唯一方法：随手画个小钟形图，在右尾标出面积 $\\beta$，对应的横坐标就是 $u_\\beta$！",
+      "source": {
+        "book": "27 张宇《考研数学基础30讲·概率》",
+        "printedPage": "基础 P.45-46",
+        "pdfPage": 51,
+        "itemRef": "例 2.11 与例 2.12 正态单调性与分位数"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr02-e-06",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "三、混合型随机变量与跳点区间概率",
+      "title": "基础例 2.13 / 1997 真题（猪狗例 2.20）：端点带离散跳点的混合型随机变量分布函数",
+      "problem": "设随机变量 $X$ 满足 $1\\le X\\le 4$，且 $P\\{X=1\\}=\\frac14,\\;P\\{X=4\\}=\\frac13$；当 $X\\in(1,4)$ 时 $X$ 服从条件均匀分布，求 $X$ 的分布函数 $F(x)$。",
+      "steps": [
+        {
+          "stepTitle": "算出开区间 $(1,4)$ 的总概率质量",
+          "detail": "因 $X$ 仅在 $[1,4]$ 取值，故 $P\\{1<X<4\\}=1-P\\{X=1\\}-P\\{X=4\\}=1-\\frac14-\\frac13=\\frac{5}{12}$。"
+        },
+        {
+          "stepTitle": "按 $x<1$、$1\\le x<4$、$x\\ge 4$ 三段全概率拆解",
+          "detail": "$x<1$ 时 $F(x)=0$；$x\\ge 4$ 时 $F(x)=1$；当 $1\\le x<4$ 时，$F(x)=P\\{X=1\\}+P\\{1<X\\le x\\mid 1<X<4\\}P\\{1<X<4\\}=\\frac14+\\frac{x-1}{4-1}\\cdot\\frac{5}{12}=\\frac{1}{9}+\\frac{5}{36}x$。"
+        },
+        {
+          "stepTitle": "核验左右跳高是否吻合题干",
+          "detail": "在 $x=1$ 处跳高 $F(1)-F(1^-)=\\frac14-0=\\frac14$；在 $x=4$ 处跳高 $F(4)-F(4^-)=1-(\\frac19+\\frac{20}{36})=1-\\frac23=\\frac13$，100% 精准闭合！"
+        }
+      ],
+      "finalAnswer": "$F(x)=\\begin{cases}0,&x<1\\\\\\frac{1}{9}+\\frac{5}{36}x,&1\\le x<4\\\\1,&x\\ge 4\\end{cases}$",
+      "takeaway": "混合型分布函数写完必做「跳高自检」：每个离散点处的 $F(x_0)-F(x_0^-)$ 必须严等于题给单点概率！",
+      "source": {
+        "book": "27 张宇基础30讲 & 27 猪狗百宝书",
+        "printedPage": "基础 P.46-47 / 猪狗 P.2-17 例2.20",
+        "pdfPage": 52,
+        "itemRef": "例 2.13 混合型随机变量分布函数"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_base_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr02-e-07",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "三、混合型随机变量与跳点区间概率",
+      "title": "基础习题 2.4 & 2.6（2010 真题）：含跳点分布函数区间概率 & 反正弦分布定参",
+      "problem": "(1)（2010 真题）设 $F(x)=\\begin{cases}0,&x<0\\\\1/2,&0\\le x<1\\\\1-e^{-x},&x\\ge 1\\end{cases}$，求 $P\\{X=1\\}$、$P\\{0\\le X\\le 1\\}$ 与 $P\\{0<X<1\\}$；(2) 设连续型 $F(x)=A+B\\arcsin\\frac{x}{a}\\;(-a\\le x<a)$，$x<-a$ 为 $0$，$x\\ge a$ 为 $1$，求 $A,B$、$f(x)$ 及 $P\\{-\\frac{a}{2}<X<\\frac{a}{2}\\}$。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：严格套七组区间公式",
+          "detail": "$P\\{X=1\\}=F(1)-F(1^-)=(1-e^{-1})-\\frac12=\\frac12-e^{-1}$；$P\\{0\\le X\\le 1\\}=F(1)-F(0^-)=(1-e^{-1})-0=1-e^{-1}$；$P\\{0<X<1\\}=F(1^-)-F(0)=\\frac12-\\frac12=0$！"
+        },
+        {
+          "stepTitle": "第 (2) 问：连续型两端点无缝衔接定 A, B",
+          "detail": "$F(-a)=A-\\frac{\\pi}{2}B=0$，$F(a^-)=A+\\frac{\\pi}{2}B=1\\implies A=\\frac12,B=\\frac{1}{\\pi}$。求导得反正弦密度 $f(x)=\\frac{1}{\\pi\\sqrt{a^2-x^2}}\\;(|x|<a)$；$P\\{|X|<\\frac{a}{2}\\}=\\frac{1}{\\pi}[\\arcsin\\frac12-\\arcsin(-\\frac12)]=\\frac13$。"
+        }
+      ],
+      "finalAnswer": "(1) $\\frac12-e^{-1},\\;1-e^{-1},\\;0$；(2) $A=\\frac12,B=\\frac1\\pi,\\;f(x)=\\frac{1}{\\pi\\sqrt{a^2-x^2}}\\;(|x|<a),\\;P=\\frac13$",
+      "takeaway": "第 (1) 问 $0$ 和 $1$ 都是跳点且 $(0,1)$ 内平直（概率 0），正是检验七组区间概率公式是否背熟的黄金试金石！",
+      "source": {
+        "book": "27 张宇基础30讲 & 27 猪狗百宝书",
+        "printedPage": "基础 P.53, P.56 / 猪狗 P.2-16 例2.15",
+        "pdfPage": 59,
+        "itemRef": "习题 2.4 与 2.6 跳点区间与反正弦分布"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_base_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr02-e-08",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "三、混合型随机变量与跳点区间概率",
+      "title": "2010 真题（猪狗例 2.14）& 2024 真题（方浩例 10）：拼接密度定参 & 条件二项分布反求 $p$",
+      "problem": "(1) （2010 真题）设 $f_1(x)$ 为 $N(0,1)$ 密度，$f_2(x)$ 为 $U(-1,3)$ 密度，若 $f(x)=\\begin{cases}af_1(x),&x\\le 0\\\\bf_2(x),&x>0\\end{cases}\\;(a,b>0)$ 为概率密度，求 $a,b$ 关系；(2) （2024 真题）每次成功率为 $p$，独立重复 3 次，在至少成功 1 次条件下 3 次全成功的概率为 $\\frac{4}{13}$，求 $p$。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：半轴分段积分归一",
+          "detail": "$\\int_{-\\infty}^{0}f_1(x)\\mathrm{d}x=\\frac12$，$\\int_{0}^{+\\infty}f_2(x)\\mathrm{d}x=\\int_{0}^{3}\\frac14\\mathrm{d}x=\\frac34$。由 $\\frac12 a+\\frac34 b=1\\implies 2a+3b=4$（选 A）。"
+        },
+        {
+          "stepTitle": "第 (2) 问：列分式方程巧用立方差约分",
+          "detail": "$\\frac{p^3}{1-(1-p)^3}=\\frac{4}{13}$。令 $q=1-p$，展开分母 $1-q^3=p(3-3p+p^2)$，约去 $p>0$ 得 $\\frac{p^2}{p^2-3p+3}=\\frac{4}{13}\\implies 9p^2+12p-12=0\\implies 3p^2+4p-4=0\\implies (3p-2)(p+2)=0\\implies p=\\frac23$！"
+        }
+      ],
+      "finalAnswer": "(1) $2a+3b=4$（选 A）；(2) $p=\\frac{2}{3}$",
+      "takeaway": "2024 真题约去公因式 $p$ 后退化为一元二次方程，切忌展开成三次方程硬凑根！",
+      "source": {
+        "book": "27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "方浩 P.34 例10 / 猪狗 P.2-13 例2.4, P.2-15 例2.14",
+        "pdfPage": 44,
+        "itemRef": "2010与2024真题 拼接密度与条件二项反求"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_real_exams",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr02-e-09",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、强化 9 讲全 12 例精解",
+      "title": "强化例 2.1（含猪狗例 2.18 选项勘误）：$\\sqrt{f_1f_2}$ 否决与分布函数/密度构造辨析",
+      "problem": "设 $F_1(x),F_2(x)$ 为连续型分布函数，$f_1(x),f_2(x)$ 为对应概率密度（$f_1\\not\\equiv f_2$），判断 $F_1(x)F_2(x)$、$\\sqrt{F_1(x)F_2(x)}$、$f_1(x)f_2(x)$、$\\sqrt{f_1(x)f_2(x)}$ 哪些必为合法分布函数或概率密度。",
+      "steps": [
+        {
+          "stepTitle": "正面验证 $F_1F_2$ 与 $\\sqrt{F_1F_2}$ 均必为分布函数",
+          "detail": "二者均单调不减、处处右连续，且 $x\\to-\\infty$ 极限为 $0$，$x\\to+\\infty$ 极限为 $1$，故必为合法分布函数。"
+        },
+        {
+          "stepTitle": "用均值不等式一击否决 $\\sqrt{f_1f_2}$，用反例否决 $f_1f_2$",
+          "detail": "由 $\\sqrt{f_1(x)f_2(x)}\\le\\frac{f_1(x)+f_2(x)}{2}$ 且 $f_1\\not\\equiv f_2$，积分得 $\\int_{-\\infty}^{+\\infty}\\sqrt{f_1f_2}\\,\\mathrm{d}x<\\frac12(1+1)=1$，破坏归一性！对 $f_1f_2$ 取 $U(0,1)$ 与 $U(1,2)$ 则乘积恒为 $0$，更不是密度。"
+        },
+        {
+          "stepTitle": "附《猪狗百宝书》2002 真题印刷勘误",
+          "detail": "**【猪狗百宝书 P.2-16 例 2.18(2002) 勘误】**原书将选项 C、D 均重复印成 `F_1(x)+F_2(x) 必为某一随机变量的分布函数`，原 2002 真题正确选项 D 应为 **$F_1(x)F_2(x)$ 必为某一随机变量的分布函数**！"
+        }
+      ],
+      "finalAnswer": "$F_1F_2$ 与 $\\sqrt{F_1F_2}$ 必为分布函数；$f_1f_2$ 与 $\\sqrt{f_1f_2}$ 一般均非概率密度",
+      "takeaway": "记住「分布函数乘积与几何平均均保分布，密度乘积与几何平均均毁归一」的鲜明反差！",
+      "source": {
+        "book": "27 张宇《概率9讲》 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.10 例2.1 / 猪狗 P.2-16 例2.18（含勘误）",
+        "pdfPage": 21,
+        "itemRef": "强化例 2.1 分布函数与密度构造辨析"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_constructions",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr02-e-10",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、强化 9 讲全 12 例精解",
+      "title": "强化例 2.2：二项分布最可能成功次数（10 次射箭，$p=0.8$）",
+      "problem": "某射手每次命中率为 $0.8$，独立重复射击 10 次，求最可能命中多少次。",
+      "steps": [
+        {
+          "stepTitle": "套用二项众数判据 $m=(n+1)p$",
+          "detail": "$X\\sim B(10,0.8)$，计算 $(n+1)p=11\\times 0.8=8.8\\notin\\mathbb{Z}$。"
+        },
+        {
+          "stepTitle": "向下取整得唯一最可能次数",
+          "detail": "$k=\\lfloor 8.8\\rfloor=8$（可检验 $P\\{X=8\\}=C_{10}^8 0.8^8 0.2^2\\approx 0.3020 > P\\{X=9\\}\\approx 0.2684 > P\\{X=7\\}\\approx 0.2013$）。"
+        }
+      ],
+      "finalAnswer": "最可能命中 $8$ 次",
+      "takeaway": "若改为 $n=9,p=0.8$，则 $(9+1)\\times 0.8=8\\in\\mathbb{Z}$，此时 $k=7$ 与 $k=8$ **并列**最可能（$P\\{X=7\\}=P\\{X=8\\}$），千万别漏掉 $m-1$！",
+      "source": {
+        "book": "27 张宇《概率9讲》",
+        "printedPage": "9讲 P.12 例2.2",
+        "pdfPage": 23,
+        "itemRef": "强化例 2.2 二项分布最可能次数"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_discrete_props",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr02-e-11",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、强化 9 讲全 12 例精解",
+      "title": "强化例 2.3 / 方浩例 33 (2015 真题，含勘误)：保险免赔额理赔与泊松稀化 $M\\sim P(2)$",
+      "problem": "投保人损失额 $X$ 密度为 $f(x)=\\frac{2\\times 100^2}{(100+x)^3}\\;(x>0)$，赔付额 $Y=\\max(0,X-100)$。(1) 求 $P\\{Y>0\\}$ 与 $EY$；(2) 一年损失事件数 $N\\sim P(8)$，给定 $N=n$ 时理赔次数 $M\\sim B(n,p)$（$p=P\\{Y>0\\}$），求 $M$ 的分布律。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：积分算理赔率 $p$ 与平均赔付 $EY$",
+          "detail": "$p=P\\{Y>0\\}=P\\{X>100\\}=\\int_{100}^{+\\infty}\\frac{2\\times 100^2}{(100+x)^3}\\mathrm{d}x=\\left[-\\frac{100^2}{(100+x)^2}\\right]_{100}^{+\\infty}=\\frac14$。$EY=\\int_{100}^{+\\infty}(x-100)\\frac{2\\times 100^2}{(100+x)^3}\\mathrm{d}x$，令 $u=x+100$，则 $x-100=u-200$，得 $2\\times 100^2\\int_{200}^{+\\infty}(u^{-2}-200u^{-3})\\mathrm{d}u=2\\times 100^2\\left(\\frac{1}{200}-\\frac{100}{200^2}\\right)=50$。"
+        },
+        {
+          "stepTitle": "第 (2) 问：全概率展开 + 换元凑指数级数（含 9 讲勘误）",
+          "detail": "**【概率 9 讲 P.13 勘误】**原书联合概率第一行漏印 $e^{-8}$，完整式应为 $P\\{M=m,N=n\\}=\\frac{8^n e^{-8}}{n!}C_n^m(\\frac14)^m(\\frac34)^{n-m}\\;(0\\le m\\le n)$。对 $n\\ge m$ 求和并令 $k=n-m\\ge 0$：$P\\{M=m\\}=\\sum_{n=m}^{\\infty}\\frac{8^n e^{-8}}{m!(n-m)!}(\\frac14)^m(\\frac34)^{n-m}=\\frac{2^m e^{-8}}{m!}\\sum_{k=0}^{\\infty}\\frac{6^k}{k!}=\\frac{2^m}{m!}e^{-2}\\;(m=0,1,2,\\dots)$！"
+        }
+      ],
+      "finalAnswer": "(1) $P\\{Y>0\\}=\\frac{1}{4},\\;EY=50$；(2) $M\\sim P(2)$，即 $P\\{M=m\\}=\\frac{2^m}{m!}e^{-2}\\;(m=0,1,2,\\dots)$",
+      "takeaway": "本题是 2015 数一/三压轴真题，同时被基础30讲例 2.18、概率9讲例 2.3、方浩强化例 33 三书收录！大题必写完整 $k=n-m$ 级数推导，小题直接秒套泊松稀化 $P(\\lambda p)=P(8\\times\\frac14)=P(2)$！",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化",
+        "printedPage": "基础 P.51-52 / 9讲 P.13 例2.3（含勘误） / 方浩 P.51 例33",
+        "pdfPage": 24,
+        "itemRef": "2015真题 保险理赔与泊松稀化"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_poisson_thinning",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr02-e-12",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、强化 9 讲全 12 例精解",
+      "title": "强化例 2.4 & 2.5（含 2013 真题）：第 2 次命中负二项分布 & 泊松近似二项分布",
+      "problem": "(1)（强化例 2.4 / 2013 真题基础例 2.7 同源）独立重复试验每次成功率为 $p$（如 $p=\\frac12$ 或由 $f(x)=2^{-x}\\ln 2$ 算得 $P\\{X>3\\}=\\frac18$），直到第 2 次成功停止，求总次数 $Y$ 的分布律及 $EY,DY$；(2)（强化例 2.5）$n=100,p=0.002$，用泊松分布近似求 $P\\{X\\ge 2\\}$。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：锁定末次成功得负二项分布，拆成两独立几何秒算期望方差",
+          "detail": "前 $k-1$ 次恰成功 1 次且第 $k$ 次成功：$P\\{Y=k\\}=(k-1)p^2(1-p)^{k-2}\\;(k=2,3,\\dots)$。令 $Y=Y_1+Y_2$（$Y_1,Y_2\\stackrel{\\text{i.i.d.}}{\\sim}Ge(p)$ 为第 1、2 次等待次数），秒得 $EY=\\frac{2}{p},\\;DY=\\frac{2(1-p)}{p^2}$！（$p=\\frac12$ 时 $EY=4,DY=4$；2013 真题 $p=\\frac18$ 时 $EY=16$！）"
+        },
+        {
+          "stepTitle": "第 (2) 问：计算 $\\lambda=np=0.2$ 代泊松公式",
+          "detail": "$P\\{X\\ge 2\\}=1-P\\{X=0\\}-P\\{X=1\\}\\approx 1-e^{-0.2}-0.2e^{-0.2}=1-\\frac65 e^{-1/5}$。"
+        }
+      ],
+      "finalAnswer": "(1) $P\\{Y=k\\}=(k-1)p^2(1-p)^{k-2}\\;(k\\ge 2)$，$EY=\\frac{2}{p},DY=\\frac{2(1-p)}{p^2}$；(2) $1-\\frac{6}{5}e^{-1/5}$",
+      "takeaway": "算负二项分布的 $EY,DY$ 千万别傻傻对 $\\sum k(k-1)q^{k-2}$ 求两阶导——把等待第 $r$ 次成功拆成 $r$ 个独立 $Ge(p)$ 之和，3 秒写出 $\\frac{r}{p}$ 与 $\\frac{r(1-p)}{p^2}$！",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.14-15 例2.4-2.5 / 基础 P.44 例2.7 / 猪狗 P.2-15 例2.11",
+        "pdfPage": 25,
+        "itemRef": "强化例 2.4 与 2.5 负二项与泊松近似"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_discrete_props",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr02-e-13",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、强化 9 讲全 12 例精解",
+      "title": "强化例 2.6 & 2.7：非负连续型与离散型生存函数求期望严格证明",
+      "problem": "(1) 设非负连续型 $X\\ge 0$ 密度为 $f(x)$、分布函数 $F(x)$ 且 $EX$ 存在，证 $EX=\\int_{0}^{+\\infty}[1-F(x)]\\,\\mathrm{d}x$；(2) 设 $X$ 取正整数 $1,2,\\dots$ 且 $EX$ 存在，记 $\\bar{F}(i)=P\\{X\\ge i\\}$，证 $EX=\\sum_{i=1}^{+\\infty}\\bar{F}(i)$。",
+      "steps": [
+        {
+          "stepTitle": "证 (1)：二重积分交换次序（比直接分部积分更严格！）",
+          "detail": "$\\int_{0}^{+\\infty}[1-F(x)]\\,\\mathrm{d}x=\\int_{0}^{+\\infty}\\left(\\int_{x}^{+\\infty}f(t)\\,\\mathrm{d}t\\right)\\mathrm{d}x$。因被积函数 $f(t)\\ge 0$，由非负函数托内利换序定理得 $\\int_{0}^{+\\infty}f(t)\\left(\\int_{0}^{t}\\mathrm{d}x\\right)\\mathrm{d}t=\\int_{0}^{+\\infty}tf(t)\\,\\mathrm{d}t=EX$（同时自动规避分部积分中验证 $\\lim_{x\\to\\infty}x[1-F(x)]=0$ 的细节！）。"
+        },
+        {
+          "stepTitle": "证 (2)：非负二重级数交换求和次序",
+          "detail": "$\\sum_{i=1}^{\\infty}\\bar{F}(i)=\\sum_{i=1}^{\\infty}\\sum_{k=i}^{\\infty}P\\{X=k\\}=\\sum_{k=1}^{\\infty}P\\{X=k\\}\\sum_{i=1}^{k}1=\\sum_{k=1}^{\\infty}k P\\{X=k\\}=EX$。"
+        }
+      ],
+      "finalAnswer": "两式均通过非负二重积分/二重级数换序严格证毕",
+      "takeaway": "记住「面积分块按行切 = 按列切」的几何本质，不仅能秒证两题，还能秒算 $E(X^2)=\\int_{0}^{+\\infty}2x[1-F(x)]\\,\\mathrm{d}x$！",
+      "source": {
+        "book": "27 张宇《概率9讲》",
+        "printedPage": "9讲 P.16 例2.6-2.7",
+        "pdfPage": 27,
+        "itemRef": "强化例 2.6 与 2.7 生存函数求期望"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_gaussian_survival",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr02-e-14",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、强化 9 讲全 12 例精解",
+      "title": "强化例 2.8：拉普拉斯分布 $La(0,1)$ 推导 $|X|\\sim E(1)$ 与高阶矩速算",
+      "problem": "设随机变量 $X$ 的概率密度为 $f(x)=\\frac12 e^{-|x|}\\;(-\\infty<x<+\\infty)$，求 $Y=|X|$ 的概率密度与 $EX,DX$。",
+      "steps": [
+        {
+          "stepTitle": "定义法求 $Y=|X|$ 的分布函数与密度",
+          "detail": "当 $y\\le 0$ 时 $F_Y(y)=0$；当 $y>0$ 时 $F_Y(y)=P\\{-y\\le X\\le y\\}=2\\int_{0}^{y}\\frac12 e^{-x}\\mathrm{d}x=1-e^{-y}$。求导得 $f_Y(y)=e^{-y}\\;(y>0)$，即 $|X|\\sim E(1)$！"
+        },
+        {
+          "stepTitle": "用对称性与 $E(1)$ 二阶矩 2 秒出 $EX,DX$",
+          "detail": "因 $f(x)$ 偶对称且 $E(|X|)=1<\\infty$，故 $EX=0$；又 $E(X^2)=E(Y^2)=DY+(EY)^2=1+1=2$，故 $DX=2$！"
+        }
+      ],
+      "finalAnswer": "$|X|\\sim E(1)$，$EX=0,\\;DX=2$",
+      "takeaway": "拉普拉斯分布只要记住 $|X|\\sim E(1)$，一切偶阶矩 $E(X^{2k})=E(Y^{2k})=(2k)!$ 瞬间心算！",
+      "source": {
+        "book": "27 张宇《概率9讲》",
+        "printedPage": "9讲 P.17 例2.8",
+        "pdfPage": 28,
+        "itemRef": "强化例 2.8 拉普拉斯分布与绝对值分布"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_extended_dists",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr02-e-15",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、强化 9 讲全 12 例精解",
+      "title": "强化例 2.9 (2013 真题) & 例 2.10：三正态同区间概率比较 & 威布尔分布条件存活率比较",
+      "problem": "(1)（2013 真题 / 方浩例 27）$X_1\\sim N(0,1),\\;X_2\\sim N(0,2^2),\\;X_3\\sim N(5,3^2)$，$p_i=P\\{-2\\le X_i\\le 2\\}$，比较 $p_1,p_2,p_3$；(2)（强化例 2.10）设 $X$ 分布函数为 $F(x)=1-e^{-\\sqrt{\\lambda x}}\\;(x>0,\\lambda>0)$（其余为 0），记 $p_1=P\\{X>x\\},\\;p_2=P\\{X>x+t\\mid X>t\\},\\;p_3=P\\{X>x-t\\mid X>t\\}$，其中 $x>2t>0$，比较 $p_1,p_2,p_3$。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：全标准化后用面积包含与积分中值定理",
+          "detail": "$p_1=\\int_{-2}^{2}\\varphi(t)\\mathrm{d}t$，$p_2=\\int_{-1}^{1}\\varphi(t)\\mathrm{d}t$，$p_3=\\int_{-7/3}^{-1}\\varphi(t)\\mathrm{d}t$。显见 $p_1>p_2$；又 $p_2=2\\varphi(\\xi_2)\\;(\\xi_2\\in(-1,1))$，$p_3=\\frac43\\varphi(\\xi_3)\\;(\\xi_3\\in(-\\frac73,-1))$，因 $\\varphi(t)$ 在原点最高且偶对称递减，$\\varphi(\\xi_2)>\\varphi(1)=\\varphi(-1)>\\varphi(\\xi_3)$，且 $2>\\frac43$，故 $p_2>p_3$，综上 $p_1>p_2>p_3$！"
+        },
+        {
+          "stepTitle": "第 (2) 问：化为同一底数 $e$ 比较指数大小（巧用分子有理化！）",
+          "detail": "由 $x>2t>0$ 得 $x-t>t>0$，从而 $p_1=e^{-\\sqrt{\\lambda x}}$，$p_2=\\frac{e^{-\\sqrt{\\lambda(x+t)}}}{e^{-\\sqrt{\\lambda t}}}=e^{\\sqrt{\\lambda t}-\\sqrt{\\lambda x+\\lambda t}}$，$p_3=\\frac{P\\{X>\\max(x-t,t)\\}}{P\\{X>t\\}}=e^{\\sqrt{\\lambda t}-\\sqrt{\\lambda x-\\lambda t}}$。显然 $\\sqrt{\\lambda t}-\\sqrt{\\lambda x-\\lambda t}>\\sqrt{\\lambda t}-\\sqrt{\\lambda x+\\lambda t}$ 得 $p_3>p_2$；又 $(\\sqrt{\\lambda t}-\\sqrt{\\lambda x+\\lambda t})-(-\\sqrt{\\lambda x})=\\sqrt{\\lambda t}+\\sqrt{\\lambda x}-\\sqrt{\\lambda x+\\lambda t}=\\frac{2\\lambda\\sqrt{xt}}{\\sqrt{\\lambda t}+\\sqrt{\\lambda x}+\\sqrt{\\lambda x+\\lambda t}}>0$ 得 $p_2>p_1$！综上 $p_3>p_2>p_1$（选 D）！"
+        }
+      ],
+      "finalAnswer": "(1) $p_1>p_2>p_3$（选 A）；(2) $p_3>p_2>p_1$（选 D，威布尔分布 $\\alpha=\\frac12<1$ 呈失效率递减）",
+      "takeaway": "遇到非指数的寿命分布 $F(x)=1-e^{-(\\lambda x)^\\alpha}$（威布尔分布）：$\\alpha=1$ 无记忆，$\\alpha<1$ 条件存活率递增（越用越耐用），$\\alpha>1$ 条件存活率递减（越用越老化，见猪狗例 2.30）！",
+      "source": {
+        "book": "27 张宇《概率9讲》 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.19-20 例2.9-2.10 / 方浩 P.44 例27 / 猪狗 P.2-20 例2.30",
+        "pdfPage": 30,
+        "itemRef": "强化例 2.9 与 2.10 正态积分比较与威布尔"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_weibull_norm",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr02-e-16",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、强化 9 讲全 12 例精解",
+      "title": "强化例 2.11 & 2.12：全概率混合均匀分布 & 车轮气门芯高度反正弦分布（双法妙解）",
+      "problem": "(1) 设 $X$ 分布律 $P\\{X=1\\}=P\\{X=2\\}=\\frac12$，给定 $X=i$ 时 $Y\\sim U(0,i)$，求 $Y$ 的分布函数与密度；(2) 半径为 $1$ 的车轮匀速滚动，随机时刻气门芯距地面高度 $X$，求 $X$ 的分布函数、密度及 $EX,DX$。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：全概率公式拼接两段分布函数",
+          "detail": "$F_Y(y)=\\frac12 F_{U(0,1)}(y)+\\frac12 F_{U(0,2)}(y)$：当 $y<0$ 为 $0$；当 $0\\le y<1$ 为 $\\frac12 y+\\frac12\\cdot\\frac{y}{2}=\\frac34 y$；当 $1\\le y<2$ 为 $\\frac12\\cdot 1+\\frac12\\cdot\\frac{y}{2}=\\frac12+\\frac{y}{4}$；当 $y\\ge 2$ 为 $1$。求导得密度 $\\frac34\\,(0,1)$、$\\frac14\\,(1,2)$。"
+        },
+        {
+          "stepTitle": "第 (2) 问：法一弧长几何概型求 CDF；法二直接建 $X=1+\\sin\\Theta$ 秒算数字特征",
+          "detail": "气门芯均匀落在单位圆周上，设相位角 $\\Theta\\sim U(-\\frac{\\pi}{2},\\frac{\\pi}{2})$（由左右对称性取半圆足够），则高度 $X=1+\\sin\\Theta\\in[0,2]$！于是对 $x\\in(0,2)$，$F(x)=P\\{\\sin\\Theta\\le x-1\\}=\\frac{\\arcsin(x-1)-(-\\pi/2)}{\\pi}=\\frac12+\\frac{1}{\\pi}\\arcsin(x-1)$，求导得 $f(x)=\\frac{1}{\\pi\\sqrt{1-(x-1)^2}}=\\frac{1}{\\pi\\sqrt{2x-x^2}}\\;(0<x<2)$！秒算数字特征：$EX=1+E(\\sin\\Theta)=1$，$DX=D(\\sin\\Theta)=E(\\sin^2\\Theta)=\\frac{1}{\\pi}\\int_{-\\pi/2}^{\\pi/2}\\sin^2\\theta\\,\\mathrm{d}\\theta=\\frac12$！"
+        }
+      ],
+      "finalAnswer": "(1) $f_Y(y)=\\frac34\\,(0<y<1),\\;\\frac14\\,(1\\le y<2)$；(2) $f(x)=\\frac{1}{\\pi\\sqrt{1-(x-1)^2}}\\;(0<x<2)$，$EX=1,\\;DX=\\frac12$",
+      "takeaway": "车轮气门芯高度模型是概率+高数物理建模的绝美经典：算密度用弧长比，算期望方差直接写成 $X=1+\\sin\\Theta$ 免去换元积分！",
+      "source": {
+        "book": "27 张宇《概率9讲》 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.21-22 例2.11-2.12 / 猪狗 P.4-4 示例5",
+        "pdfPage": 32,
+        "itemRef": "强化例 2.11 与 2.12 混合均匀与气门芯反正弦"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_arcsine_mix",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr02-e-17",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "八、方浩强化与 2026 真题压轴精选",
+      "title": "方浩例 1 & 例 15：构造新分布函数 $F(x)-F(\\frac1x)$ & 裂项分布律反求半开区间 $[15,16)$",
+      "problem": "(1) 设 $F(x)$ 是连续型分布函数且 $F(0)=0$，判断 $G(x)=\\begin{cases}F(x)-F(1/x),&x>1\\\\0,&x\\le 1\\end{cases}$ 是否为分布函数；(2) 离散型 $P\\{X=k\\}=\\frac{1}{k(k+1)}\\;(k=1,2,\\dots)$，若 $F(b)=\\frac{15}{16}$，求 $b$ 的取值范围。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：逐条核验三充要条件",
+          "detail": "当 $x>1$ 时，$x\\uparrow\\Rightarrow F(x)\\uparrow$ 且 $\\frac1x\\downarrow\\Rightarrow -F(\\frac1x)\\uparrow$，故 $G(x)$ 单调不减；$G(1^+)=F(1)-F(1)=0=G(1)$ 处处连续；$G(+\\infty)=F(+\\infty)-F(0^+)=1-0=1$！三条件全满足，必为分布函数（例 1 选 C）！"
+        },
+        {
+          "stepTitle": "第 (2) 问：裂项求和并锁定阶梯平台",
+          "detail": "对整数 $n\\le b<n+1$，$F(b)=\\sum_{k=1}^{n}\\left(\\frac1k-\\frac{1}{k+1}\\right)=1-\\frac{1}{n+1}=\\frac{15}{16}\\implies n=15$。因分布函数在 $[15,16)$ 整段平台上恒等于 $\\frac{15}{16}$，故 $b\\in[15,16)$！"
+        }
+      ],
+      "finalAnswer": "(1) 是合法分布函数（选 C）；(2) $15\\le b<16$",
+      "takeaway": "阶梯函数取值问题永远要问自己：落在第 $n$ 级台阶上的是一整个半开区间 $[x_n,x_{n+1})$，绝不仅仅是一个点 $x_n$！",
+      "source": {
+        "book": "27 方浩《概率统计就这点事·强化篇》",
+        "printedPage": "方浩 P.28 例1, P.36-37 例15",
+        "pdfPage": 33,
+        "itemRef": "方浩例题 1 与 15 新分布构造与阶梯反求"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_constructions",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr02-e-18",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "八、方浩强化与 2026 真题压轴精选",
+      "title": "方浩例 13 & 例 14：泊松偶概率证明 & 二阶独立伯努利随机矩阵行列式 $>0$ 反求 $p$",
+      "problem": "(1) 设 $X\\sim P(\\lambda)$，求 $X$ 取偶数的概率并证 $P(X\\text{ 偶})>P(X\\text{ 奇})$；(2) 设 $X_1,X_2,X_3,X_4\\stackrel{\\text{i.i.d.}}{\\sim}B(1,p)\\;(0<p<1)$，随机行列式 $D=\\begin{vmatrix}X_1&X_2\\\\X_3&X_4\\end{vmatrix}$，已知 $P\\{D>0\\}=\\frac14$，求 $p$。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：偶奇项相加减消去奇数幂",
+          "detail": "$P(X\\text{ 偶})=e^{-\\lambda}\\sum_{m=0}^{\\infty}\\frac{\\lambda^{2m}}{(2m)!}=e^{-\\lambda}\\cdot\\frac{e^\\lambda+e^{-\\lambda}}{2}=\\frac{1+e^{-2\\lambda}}{2}>\\frac12>\\frac{1-e^{-2\\lambda}}{2}=P(X\\text{ 奇})$。"
+        },
+        {
+          "stepTitle": "第 (2) 问：译出 $X_1X_4-X_2X_3>0$ 的唯一 0-1 取值情形",
+          "detail": "因 $X_i\\in\\{0,1\\}$，故 $X_1X_4-X_2X_3>0\\iff X_1X_4=1$ 且 $X_2X_3=0$！利用独立性：$P\\{X_1X_4=1\\}=p^2$，$P\\{X_2X_3=0\\}=1-p^2$，故 $p^2(1-p^2)=\\frac14\\implies (p^2-\\frac12)^2=0\\implies p=\\frac{\\sqrt{2}}{2}$！"
+        }
+      ],
+      "finalAnswer": "(1) $P(X\\text{ 偶})=\\frac{1+e^{-2\\lambda}}{2}$；(2) $p=\\frac{\\sqrt{2}}{2}$",
+      "takeaway": "随机矩阵题看到 $0$-$1$ 变量做乘积 $X_2X_3=0$，千万别傻傻分 3 种情况相加——直接 $1-P\\{X_2=X_3=1\\}=1-p^2$ 一步到位！",
+      "source": {
+        "book": "27 方浩《概率统计就这点事·强化篇》",
+        "printedPage": "方浩 P.35-36 例题13-14",
+        "pdfPage": 40,
+        "itemRef": "方浩例题 13 与 14 泊松偶概率与随机行列式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_discrete_props",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr02-e-19",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "八、方浩强化与 2026 真题压轴精选",
+      "title": "方浩例 16 & 例 21：零密度缺口非唯一中位数区间 $[1,2]$ & 指数区间概率极大值",
+      "problem": "(1) 设 $f(x)=\\frac14\\,(-2\\le x\\le -1),\\;\\frac14\\,(0\\le x\\le 1),\\;\\frac12\\,(2\\le x\\le 3)$（其余 0），若 $P\\{X>k\\}=P\\{X<k\\}$，求 $k$ 的取值范围；(2) 设 $X\\sim E(\\lambda)$，使 $P\\{1<X<2\\}$ 达到最大的 $\\lambda$ 为何值？",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：画阶梯矩形面积图锁定面积 = 1/2 的零密度带",
+          "detail": "连续型 $P\\{X=k\\}=0\\implies P\\{X<k\\}=\\frac12$。从左向右累加面积：$[-2,-1]$ 积 $\\frac14$，$[0,1]$ 再积 $\\frac14$，到 $x=1$ 时累计面积已恰达 $\\frac12$！而在整个零密度空带 $[1,2]$ 上不增加任何面积，直到 $x>2$ 才超 $\\frac12$，故 $k\\in[1,2]$（选 C）！"
+        },
+        {
+          "stepTitle": "第 (2) 问：配二次函数（或求导）求极大值点",
+          "detail": "$P_\\lambda=e^{-\\lambda}-e^{-2\\lambda}=-(e^{-\\lambda}-\\frac12)^2+\\frac14$，当且仅当 $e^{-\\lambda}=\\frac12$ 即 $\\lambda=\\ln 2$ 时取到最大值 $\\frac14$！"
+        }
+      ],
+      "finalAnswer": "(1) $k\\in[1,2]$（选 C）；(2) $\\lambda=\\ln 2$（最大概率为 $\\frac14$）",
+      "takeaway": "中位数未必唯一：只要累计概率恰为 $\\frac12$ 处存在一段密度为 $0$ 的空区间，该闭区间上每一点都是中位数（2000 真题猪狗例 2.19 完全同源）！",
+      "source": {
+        "book": "27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "方浩 P.38 例16, P.41 例21 / 猪狗 P.2-17 例2.19",
+        "pdfPage": 43,
+        "itemRef": "方浩例题 16 与 21 非唯一中位数与指数极值"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_gaussian_survival",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr02-e-20",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "八、方浩强化与 2026 真题压轴精选",
+      "title": "方浩例 23 & 例 26（含严谨补注）：高斯配方定参 & $X\\sim N(a,a^2)$ 线性标准化防漏分支",
+      "problem": "(1) 已知 $f(x)=ae^{-x^2+2x}$ 与 $g(x)=be^{-2x^2+2x}$ 均为概率密度，求 $a,b$；(2) 已知 $X\\sim N(a,a^2)$，$Y=aX+b\\sim N(0,1)$，求 $a,b$。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：套广义高斯配方公式 3 秒出 $a,b$",
+          "detail": "对 $f(x)$：$-x^2+2x=-(x-1)^2+1$，即 $a_0=1,c_0-\\frac{b_0^2}{4a_0}=-1\\Rightarrow a=\\frac{1}{e\\sqrt{\\pi}}$；对 $g(x)$：$-2x^2+2x=-2(x-\\frac12)^2+\\frac12\\Rightarrow b=\\sqrt{\\frac{2}{\\pi}}e^{-1/2}=\\frac{1}{\\sqrt{e}}\\sqrt{\\frac{2}{\\pi}}$（选 B）。"
+        },
+        {
+          "stepTitle": "第 (2) 问：用 $EY=0,DY=1$ 通法（附方浩方法一严谨补注）",
+          "detail": "由正态线性变换保正态，$EY=aEX+b=a^2+b=0$ 且 $DY=a^2DX=a^4=1$（$a\\ne 0$），立刻解得 $a=\\pm 1,b=-1$（选 D）！**【方浩 P.43-44 严谨补注】**原书方法一由 $\\frac{X-a}{a}\\sim N(0,1)$ 与 $aX+b\\sim N(0,1)$ 直接对应系数令 $a=\\frac1a,b=-1$，其实忽略了 $-Z\\sim N(0,1)$ 的对称分支 $aX+b=-\\frac{X-a}{a}$（只是恰巧 $a=-\\frac1a$ 无实解才未漏根！）。以后遇同类题务必优先用**期望方差法**确保零漏解！"
+        }
+      ],
+      "finalAnswer": "(1) $a=\\frac{1}{e\\sqrt{\\pi}},\\;b=\\frac{1}{\\sqrt{e}}\\sqrt{\\frac{2}{\\pi}}$（选 B）；(2) $a=\\pm 1,\\;b=-1$（选 D）",
+      "takeaway": "记住标准正态对称性：$Z\\sim N(0,1)\\iff -Z\\sim N(0,1)$，因此任何由「同服从 $N(0,1)$」反求线性系数 $cX+d$ 的题，用 $EY=0,DY=1$ 永远最严谨！",
+      "source": {
+        "book": "27 方浩《概率统计就这点事·强化篇》",
+        "printedPage": "方浩 P.42-44 例题23, 26（含严谨补注）",
+        "pdfPage": 47,
+        "itemRef": "方浩例题 23 与 26 高斯配方与标准化补注"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_gaussian_survival",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr02-e-21",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "八、方浩强化与 2026 真题压轴精选",
+      "title": "2026 最新真题（猪狗例 2.1）：混合几何分布 $P\\{X=k\\}=\\frac{1}{2^{k+1}}+\\frac{1}{3^k}$ 破坏无记忆性",
+      "problem": "设随机变量 $X$ 的概率分布为 $P\\{X=k\\}=\\frac{1}{2^{k+1}}+\\frac{1}{3^k}\\;(k=1,2,\\dots)$，则对任意正整数 $m,n$，比较 $P\\{X>m+n\\mid X>m\\}$ 与 $P\\{X>n\\}$（或 $P\\{X>m\\}$）的大小。",
+      "steps": [
+        {
+          "stepTitle": "先求尾概率 $P\\{X>r\\}$ 的闭式表达",
+          "detail": "等比级数求和：$P\\{X>r\\}=\\sum_{k=r+1}^{\\infty}\\left(\\frac{1}{2^{k+1}}+\\frac{1}{3^k}\\right)=\\frac{1/2^{r+2}}{1-1/2}+\\frac{1/3^{r+1}}{1-1/3}=\\frac12\\cdot 2^{-r}+\\frac12\\cdot 3^{-r}$。检验 $r=0$ 时 $P\\{X>0\\}=\\frac12+\\frac12=1$，正是 $\\frac12 Ge(\\frac12)+\\frac12 Ge(\\frac23)$ 的等权混合！"
+        },
+        {
+          "stepTitle": "作差并因式分解定号",
+          "detail": "$P\\{X>m+n\\mid X>m\\}-P\\{X>n\\}=\\frac{2^{-m-n}+3^{-m-n}}{2^{-m}+3^{-m}}-\\frac12(2^{-n}+3^{-n})=\\frac{2(2^{-m-n}+3^{-m-n})-(2^{-m}+3^{-m})(2^{-n}+3^{-n})}{2(2^{-m}+3^{-m})}=\\frac{(2^{-m}-3^{-m})(2^{-n}-3^{-n})}{2(2^{-m}+3^{-m})}>0$！"
+        }
+      ],
+      "finalAnswer": "$P\\{X>m+n\\mid X>m\\}>P\\{X>n\\}$（2026 真题选 D）",
+      "takeaway": "2026 真题神作！不仅代数因式分解美如画，直觉上也极其通透：存活过 $m$ 步后，短命组分 $3^{-k}$ 占比迅速萎缩、长命组分 $2^{-k}$ 占比升高，所以继续活过 $n$ 步的概率严格变大！",
+      "source": {
+        "book": "27 猪狗《概率统计百宝书》",
+        "printedPage": "猪狗 P.2-12 例2.1(2026真题)",
+        "pdfPage": 43,
+        "itemRef": "2026真题 混合几何分布失效率递减"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_2026_exams",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr02-e-22",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "八、方浩强化与 2026 真题压轴精选",
+      "title": "2026 最新真题（猪狗例 2.3）& 猪狗例 2.27（线代×概率）：$F_Y(y)=F(ay+b)$ 定参与随机阵可对角化概率",
+      "problem": "(1)（2026 真题）设连续型 $X$ 分布函数为 $F(x)$，$EX=\\mu,DX=\\sigma^2$，若 $Y$ 的分布函数为 $F(ay+b)$ 且 $EY=0,DY=1$，求 $a,b$；(2)（猪狗例 2.27）设 $Y\\sim\\begin{pmatrix}0&1&2&3\\\\1/4&1/3&1/6&1/4\\end{pmatrix}$，求矩阵 $A=\\begin{pmatrix}2&1&0\\\\0&1&0\\\\0&1&Y\\end{pmatrix}$ 可对角化的概率。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：由分布函数等价反解 $X=aY+b$",
+          "detail": "因 $F(ay+b)$ 为分布函数，当 $y\\to+\\infty$ 必趋于 $1$，故 $a>0$！于是 $P\\{Y\\le y\\}=F(ay+b)=P\\{X\\le ay+b\\}=P\\{\\frac{X-b}{a}\\le y\\}\\implies Y\\stackrel{d}{=}\\frac{X-b}{a}$，即 $X\\stackrel{d}{=}aY+b$。两边取期望方差：$\\mu=a\\cdot 0+b=b$，$\\sigma^2=a^2\\cdot 1\\Rightarrow a=\\sigma$（选 A）！"
+        },
+        {
+          "stepTitle": "第 (2) 问：分单根与重根两情形验 $r(\\lambda E-A)$",
+          "detail": "下三角分块矩阵 $A$ 的特征值为 $\\lambda=2,1,Y$。① $Y=0$ 或 $3$ 时三特征值互异，必可对角化；② $Y=2$ 时二重根 $\\lambda=2$，$2E-A=\\begin{pmatrix}0&-1&0\\\\0&1&0\\\\0&-1&0\\end{pmatrix}$ 秩为 $1\\implies 3-1=2$，**可对角化**！③ $Y=1$ 时二重根 $\\lambda=1$，$E-A=\\begin{pmatrix}-1&-1&0\\\\0&0&0\\\\0&-1&0\\end{pmatrix}$ 秩为 $2\\implies 3-2=1<2$，**不可对角化**！故 $P(A\\text{ 可对角化})=1-P\\{Y=1\\}=1-\\frac13=\\frac23$！"
+        }
+      ],
+      "finalAnswer": "(1) $a=\\sigma,\\;b=\\mu$（选 A）；(2) $\\frac{2}{3}$",
+      "takeaway": "第 (2) 问是极佳的「线代第 8 讲 × 概率第 2 讲」综合题：千万别以为 $Y=2$ 重根就不可对角化，必须逐个算 $r(\\lambda E-A)$ 验证几何重数！",
+      "source": {
+        "book": "27 猪狗《概率统计百宝书》",
+        "printedPage": "猪狗 P.2-12 例2.3(2026), P.2-19 例2.27",
+        "pdfPage": 43,
+        "itemRef": "2026真题分布函数反解与可对角化概率"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_2026_exams",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr02-e-23",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "八、方浩强化与 2026 真题压轴精选",
+      "title": "猪狗例 2.36（茆书经典）：几何分布倒数期望 $E(\\frac{1}{X})=\\frac{-p\\ln p}{1-p}$ 与幂级数求和联动",
+      "problem": "设随机变量 $X\\sim Ge(p)\\;(0<p<1)$，证明：$E\\!\\left(\\frac{1}{X}\\right)=\\frac{-p\\ln p}{1-p}$。",
+      "steps": [
+        {
+          "stepTitle": "写出离散函数期望的无穷级数",
+          "detail": "$E(\\frac1X)=\\sum_{k=1}^{\\infty}\\frac{1}{k}p(1-p)^{k-1}=\\frac{p}{1-p}\\sum_{k=1}^{\\infty}\\frac{(1-p)^k}{k}$。"
+        },
+        {
+          "stepTitle": "调用高数第 16 讲十大幂级数母式 $-\\ln(1-x)=\\sum_{k=1}^{\\infty}\\frac{x^k}{k}$",
+          "detail": "因 $0<1-p<1$ 严格落入收敛域 $(-1,1)$，代入 $x=1-p$ 立得 $\\sum_{k=1}^{\\infty}\\frac{(1-p)^k}{k}=-\\ln[1-(1-p)]=-\\ln p$，从而 $E(\\frac1X)=\\frac{-p\\ln p}{1-p}$！"
+        }
+      ],
+      "finalAnswer": "$E\\!\\left(\\frac{1}{X}\\right)=\\frac{-p\\ln p}{1-p}$（已证毕）",
+      "takeaway": "高数无穷级数与概率离散期望高频联动（如 $X\\sim P(\\lambda)$ 时 $E(\\frac{1}{X+1})=\\frac{1-e^{-\\lambda}}{\\lambda}$），看到 $\\frac{1}{k}x^k$ 立刻联想 $-\\ln(1-x)$！",
+      "source": {
+        "book": "27 猪狗《概率统计百宝书》",
+        "printedPage": "猪狗 P.2-22 例2.36（茆书汇编）",
+        "pdfPage": 53,
+        "itemRef": "茆书经典 几何分布倒数期望"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_discrete_props",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr02-e-24",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "八、方浩强化与 2026 真题压轴精选",
+      "title": "猪狗例 2.25 & 2.26：正态区段概率极大值 $\\sigma^2$ 优化 & 三互斥结果合并降维二项分布",
+      "problem": "(1) 设 $X\\sim N(0,\\sigma^2)\\;(\\sigma>0)$，求使 $P\\{e^{1/2}<X<e\\}$ 最大的 $\\sigma^2$；(2) 试验 $E$ 有三种两两互斥结果 $A_1,A_2,A_3$ 概率均为 $\\frac13$，独立重复 2 次，$X,Y$ 分别为 $A_1,A_2$ 出现次数，求 $X+Y$ 的分布。",
+      "steps": [
+        {
+          "stepTitle": "第 (1) 问：标准化为 $\\Phi(e/\\sigma)-\\Phi(e^{1/2}/\\sigma)$ 对 $\\sigma$ 求导",
+          "detail": "记 $g(\\sigma)=\\Phi(e/\\sigma)-\\Phi(e^{1/2}/\\sigma)$，令 $g'(\\sigma)=\\frac{1}{\\sqrt{2\\pi}}\\left[e^{-\\frac{e^2}{2\\sigma^2}}\\left(-\\frac{e}{\\sigma^2}\\right)-e^{-\\frac{e}{2\\sigma^2}}\\left(-\\frac{e^{1/2}}{\\sigma^2}\\right)\\right]=0\\implies e^{\\frac{e-e^2}{2\\sigma^2}}=e^{-\\frac12}\\implies \\frac{e^2-e}{2\\sigma^2}=\\frac12\\implies \\sigma^2=e^2-e$！"
+        },
+        {
+          "stepTitle": "第 (2) 问：合并事件 $A_1\\cup A_2$ 一步认出二项分布",
+          "detail": "切勿误以为 $X,Y$ 独立！$X+Y$ 正是 2 次独立试验中事件 $A_1\\cup A_2$（单次概率 $\\frac13+\\frac13=\\frac23$）出现的总次数，故 $X+Y\\sim B(2,\\frac23)$（选 B）！"
+        }
+      ],
+      "finalAnswer": "(1) $\\sigma^2=e^2-e$；(2) $X+Y\\sim B\\!\\left(2,\\frac{2}{3}\\right)$（选 B）",
+      "takeaway": "第 (1) 问给出通解公式：对 $X\\sim N(0,\\sigma^2)$，使 $P\\{a<X<b\\}\\;(0<a<b)$ 最大的方差恒为 $\\sigma^2=\\frac{b^2-a^2}{2\\ln(b/a)}$！第 (2) 问是「不独立随机变量靠事件含义合体」的经典妙思！",
+      "source": {
+        "book": "27 猪狗《概率统计百宝书》",
+        "printedPage": "猪狗 P.2-18 例2.25-2.26",
+        "pdfPage": 49,
+        "itemRef": "正态区间最优化与多项合并二项"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr02_weibull_norm",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr02-s-01",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "九、第 2 讲一维分布全景速查与五书勘误总览",
+      "title": "考研数学一 8+3 大一维常见分布全景速查表（表 P2-1）",
+      "overview": "将大纲核心 8 大分布（5 离散 + 3 连续）与强化 3 大拓展分布（柯西、拉普拉斯、伽马）的全部表达式、期望方差与独家考场属性汇总成一表，随时默写自测。",
+      "patterns": [
+        {
+          "typeName": "分布模型识别总口诀",
+          "triggers": "应用题给出试验场景，需要自己建模选定随机变量分布",
+          "method": "「计次数」看有无放回（有放回 $B(n,p)$、无放回 $H(n,M,N)$、大 $n$ 小 $p$ 或单位时长到达 $P(\\lambda)$）；「等首次」看离散/连续（离散 $Ge(p)$、连续 $E(\\lambda)$）；「随机点/误差」看均匀 $U(a,b)$ 与正态 $N(\\mu,\\sigma^2)$。",
+          "pitfall": "注意超几何与二项的区别在于「是否放回」，以及正态第二参数永远是方差 $\\sigma^2$。",
+          "relatedRefs": "基础例 2.6–2.10, 强化例 2.2–2.5, 强化例 2.12"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 P2-1　考研数学一 8+3 大一维随机变量分布全景速查表",
+          "headers": [
+            "分布名称与记号",
+            "分布律 / 概率密度",
+            "期望 $EX$",
+            "方差 $DX$",
+            "核心特性与高频考点"
+          ],
+          "rows": [
+            [
+              "$0$-$1$ 分布 $B(1,p)$",
+              "$p^k(1-p)^{1-k}\\;(k=0,1)$",
+              "$p$",
+              "$p(1-p)$",
+              "伯努利示性变量，$n$ 个独立和为 $B(n,p)$"
+            ],
+            [
+              "二项 $B(n,p)$",
+              "$C_n^k p^k(1-p)^{n-k}\\;(k=0\\dots n)$",
+              "$np$",
+              "$np(1-p)$",
+              "独立可加（同 $p$）；众数 $\\lfloor(n+1)p\\rfloor$"
+            ],
+            [
+              "泊松 $P(\\lambda)$",
+              "$\\frac{\\lambda^k}{k!}e^{-\\lambda}\\;(k=0,1,\\dots)$",
+              "$\\lambda$",
+              "$\\lambda$",
+              "独立可加；稀化 $P(\\lambda p)$；偶概率 $\\frac{1+e^{-2\\lambda}}{2}$"
+            ],
+            [
+              "几何 $Ge(p)$",
+              "$(1-p)^{k-1}p\\;(k=1,2,\\dots)$",
+              "$\\frac{1}{p}$",
+              "$\\frac{1-p}{p^2}$",
+              "离散唯一无记忆；混合几何不无记忆（2026 真题）"
+            ],
+            [
+              "超几何 $H(n,M,N)$",
+              "$\\frac{C_M^k C_{N-M}^{n-k}}{C_N^n}$",
+              "$\\frac{nM}{N}$",
+              "$\\frac{nM(N-M)(N-n)}{N^2(N-1)}$",
+              "无放回抽样；$N\\gg n$ 趋近 $B(n,M/N)$"
+            ],
+            [
+              "均匀 $U(a,b)$",
+              "$\\frac{1}{b-a}\\;(a<x<b)$",
+              "$\\frac{a+b}{2}$",
+              "$\\frac{(b-a)^2}{12}$",
+              "等可能长度比；$F_X(X)\\sim U(0,1)$"
+            ],
+            [
+              "指数 $E(\\lambda)$",
+              "$\\lambda e^{-\\lambda x}\\;(x>0)$",
+              "$\\frac{1}{\\lambda}$",
+              "$\\frac{1}{\\lambda^2}$",
+              "连续唯一无记忆；$E(\\frac12)=\\chi^2(2)$；$2\\lambda X\\sim\\chi^2(2)$"
+            ],
+            [
+              "正态 $N(\\mu,\\sigma^2)$",
+              "$\\frac{1}{\\sqrt{2\\pi}\\sigma}e^{-\\frac{(x-\\mu)^2}{2\\sigma^2}}$",
+              "$\\mu$",
+              "$\\sigma^2$",
+              "标准化 $\\Phi(\\frac{x-\\mu}{\\sigma})$；线性封闭；$3\\sigma$ 准则"
+            ],
+            [
+              "柯西 $t(1)$（拓展）",
+              "$\\frac{1}{\\pi(1+x^2)}\\;(x\\in\\mathbb{R})$",
+              "不存在",
+              "不存在",
+              "偶对称却无期望头号反例"
+            ],
+            [
+              "拉普拉斯 $La(0,1)$",
+              "$\\frac12 e^{-|x|}\\;(x\\in\\mathbb{R})$",
+              "$0$",
+              "$2$",
+              "$|X|\\sim E(1)$；尖峰重尾"
+            ],
+            [
+              "伽马 $Ga(\\alpha,\\lambda)$",
+              "$\\frac{\\lambda^\\alpha}{\\Gamma(\\alpha)}x^{\\alpha-1}e^{-\\lambda x}\\;(x>0)$",
+              "$\\frac{\\alpha}{\\lambda}$",
+              "$\\frac{\\alpha}{\\lambda^2}$",
+              "特例：$Ga(1,\\lambda)=E(\\lambda)$，$Ga(\\frac n2,\\frac12)=\\chi^2(n)$"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "表 P2-1 是整个概率论与数理统计的「元素周期表」，务必做到随便点名一个分布，3 秒报出密度、期望、方差与一条核心性质！",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 猪狗百宝书 & 全总结",
+        "printedPage": "第2讲常见分布汇总",
+        "pdfPage": 46,
+        "itemRef": "表 P2-1 8加3大一维分布速查表"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr02-s-02",
+      "kind": "summary",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "九、第 2 讲一维分布全景速查与五书勘误总览",
+      "title": "分布函数/密度合法性判别、对称性与参数反求速查表（表 P2-2）",
+      "overview": "专门攻克第 2 讲最易丢分的「概念辨析选择题」与「含参定界/极值计算题」，总结全部合法与非法构造对照。",
+      "patterns": [
+        {
+          "typeName": "题型一：判断新函数是否为分布函数 / 概率密度",
+          "triggers": "选项出现 $aF_1+bF_2, F_1F_2, \\sqrt{F_1F_2}, 1-F(-x), f(2x), f(2-x), \\sqrt{f_1f_2}$",
+          "method": "判分布函数紧盯「单调不减 + 处处右连续 + $0\\to 1$」（用两点离散分布试 $1-F(-x)$ 必破！）；判密度紧盯「非负 + 全轴积分为 1」。",
+          "pitfall": "忽略分布函数未必连续，漏验跳点处右连续性。",
+          "relatedRefs": "强化例 2.1, 方浩例 1, 2, 17, 18"
+        },
+        {
+          "typeName": "题型二：正态概率比大小、分位数与参数最优化",
+          "triggers": "多个不同 $(\\mu,\\sigma^2)$ 正态同区间比概率、求最大概率时的 $\\sigma^2$ 或 $\\lambda$",
+          "method": "一律先标准化化归为同一条 $N(0,1)$ 曲线下面积，再按「离原点越近、区间越宽，面积越大」（严谨证明配积分中值定理）或直接求导。",
+          "pitfall": "把双侧概率 $P\\{|Z|<x\\}=\\alpha$ 错写成 $u_{\\alpha/2}$（应为 $u_{(1-\\alpha)/2}$）。",
+          "relatedRefs": "基础例 2.11–2.12, 强化例 2.9, 猪狗例 2.25"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 P2-2　高频构造式合法性秒判对照表",
+          "headers": [
+            "候选表达式",
+            "是否合法",
+            "决定性原因 / 最小反例"
+          ],
+          "rows": [
+            [
+              "$F_1(x)F_2(x)$ 与 $\\sqrt{F_1(x)F_2(x)}$",
+              "恒为分布函数",
+              "单调不减、右连续、$0\\to 1$ 全成立（$F_1F_2$ 即独立最大值分布）"
+            ],
+            [
+              "$cF_1(x)F_2(x)$",
+              "充要条件 $c=1$",
+              "$x\\to+\\infty$ 极限为 $c$，必等于 1"
+            ],
+            [
+              "$aF_1(x)+bF_2(x)$",
+              "需 $a,b\\ge 0$ 且 $a+b=1$",
+              "仅 $a+b=1$ 不够（$2F_1-F_2$ 可取负或递减）"
+            ],
+            [
+              "$F(ax+b)\\;(a>0)$",
+              "恒为分布函数",
+              "对应 $\\frac{X-b}{a}$ 的分布函数（2026 真题核心）"
+            ],
+            [
+              "$1-F(-x)$",
+              "**未必**是分布函数！",
+              "若 $F$ 有跳点，则 $1-F(-x)$ 变为**左连续**而非右连续"
+            ],
+            [
+              "$f(c-x)$ 与 $|a|f(ax+b)\\;(a\\ne 0)$",
+              "恒为概率密度",
+              "换元积分恒等于 1 且非负（但 $f(2x)$ 积分 $=\\frac12$ 非法！）"
+            ],
+            [
+              "$f_1(x)f_2(x)$ 与 $\\sqrt{f_1(x)f_2(x)}$",
+              "**一般非**概率密度",
+              "由均值不等式 $\\int\\sqrt{f_1f_2}<1$（$f_1\\not\\equiv f_2$），破坏归一性"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "牢记 $1-F(-x)$（右连续杀手）与 $\\sqrt{f_1f_2}$（均值不等式杀手），概念选择题稳拿满分！",
+      "source": {
+        "book": "27 张宇《概率9讲》 & 27 方浩强化",
+        "printedPage": "9讲 P.9-10 / 方浩 P.28-40",
+        "pdfPage": 20,
+        "itemRef": "表 P2-2 分布函数与密度合法性秒判表"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-pr02-s-03",
+      "kind": "summary",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "九、第 2 讲一维分布全景速查与五书勘误总览",
+      "title": "第 2 讲五书实锤勘误（7 处硬伤/补注）与 2010–2026 真题母题表（表 P2-3）",
+      "overview": "本讲在逐页核对五本教材时捕获 **7 处重要原书印刷硬伤与严谨补注**（尤其《猪狗百宝书》第 2 章存在 4 处显性公式/选项错印！），全部实锤列出助你避开所有二手资料陷阱。",
+      "patterns": [
+        {
+          "typeName": "五书交叉审校重大勘误清单",
+          "triggers": "阅读《猪狗百宝书》P.2-11, 2-16, 2-24, 2-26、《概率9讲》P.13-14 与《方浩强化》P.43-44 时",
+          "method": "对照下方表 P2-3 逐项订正，尤其是正态密度根号与方差公式减号绝不可被错误印象误导。",
+          "pitfall": "考场默写方差公式若受错误印刷潜移默化写成加号，全题归零！",
+          "relatedRefs": "强化例 2.1, 强化例 2.3, 方浩例 26"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 P2-3　第 2 讲五书实锤勘误（7 处）与近 17 年高价值真题母题表",
+          "headers": [
+            "来源 / 年份",
+            "定位",
+            "实锤勘误修正 / 真题核心结论"
+          ],
+          "rows": [
+            [
+              "猪狗百宝书（硬伤 1）",
+              "P.2-11 伽马分布导语",
+              "误写「几何分布与卡方分布均是伽马特例」→ 应为「**指数分布**与卡方分布」"
+            ],
+            [
+              "猪狗百宝书（硬伤 2）",
+              "P.2-16 例 2.18(2002) 选项 D",
+              "误重印成 `F_1(x)+F_2(x)` → 原 2002 真题正确选项 D 为 **$F_1(x)F_2(x)$**"
+            ],
+            [
+              "猪狗百宝书（硬伤 3）",
+              "P.2-24 章末考频分析",
+              "方差公式误印为 `DX=EX^2+(EX)^2`（加号错！）→ 必须为 **$DX=EX^2-(EX)^2$**"
+            ],
+            [
+              "猪狗百宝书（硬伤 4）",
+              "P.2-26 连续分布总结表",
+              "正态密度分母误印为 `2πσ`（漏根号！）→ 必须为 **$\\sqrt{2\\pi}\\sigma$**"
+            ],
+            [
+              "概率 9 讲（勘误 5）",
+              "P.13 例 2.3(2) 第一行",
+              "联立 $P\\{M=m,N=n\\}$ 漏印因子 $e^{-8}$ 且隐含补齐 $n=0$（方浩 P.51 已修正）"
+            ],
+            [
+              "概率 9 讲（补注 6）",
+              "P.14 泊松分布众数",
+              "仅写 $k=[\\lambda]$，补注当 $\\lambda\\in\\mathbb{Z}^+$ 时在 **$k=\\lambda-1$ 与 $k=\\lambda$ 两点并列取最大**"
+            ],
+            [
+              "方浩强化（补注 7）",
+              "P.43-44 例题 26 方法一",
+              "直接令 $a=1/a,b=-1$ 漏验对称分支 $-Z\\sim N(0,1)$，推荐期望方差通法防漏根"
+            ],
+            [
+              "2026 真题双连",
+              "猪狗 P.2-12 例 2.1 & 2.3",
+              "混合几何 $P(X>m+n\\mid X>m)>P(X>n)$；$F_Y(y)=F(ay+b)\\Rightarrow a=\\sigma,b=\\mu$"
+            ],
+            [
+              "2024 / 2015 / 2013",
+              "方浩例 10, 33 / 9讲例 2.9",
+              "条件二项 $p=\\frac23$；保险泊松稀化 $M\\sim P(2)$；三正态同区间 $p_1>p_2>p_3$"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "用五书交叉核对 + SymPy 符号验算把每一处错印清零，复习效率远胜盲目死啃单本讲义！",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "第2讲五书勘误与真题汇总",
+        "pdfPage": 43,
+        "itemRef": "表 P2-3 第2讲五书勘误与真题母题"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    }
+  ]
+}

@@ -27,18 +27,78 @@ const KATEX_OPTIONS = {
   strict: 'ignore',
 };
 
+let mathResizeRaf = 0;
+const observedMathRoots = new WeakSet();
+const mathResizeObserver = typeof ResizeObserver === 'function'
+  ? new ResizeObserver((entries) => {
+      if (mathResizeRaf) cancelAnimationFrame(mathResizeRaf);
+      mathResizeRaf = requestAnimationFrame(() => {
+        for (const entry of entries) {
+          fitWideDisplayMath(entry.target);
+        }
+      });
+    })
+  : null;
+
+function fitWideDisplayMath(rootEl) {
+  if (!rootEl) return;
+  const displays = rootEl.querySelectorAll('.katex-display');
+  for (const disp of displays) {
+    const katexEl = disp.querySelector(':scope > .katex');
+    if (!katexEl) continue;
+    const avail = Math.floor(disp.clientWidth) - 4;
+    if (avail <= 120) continue;
+
+    // Reset before measuring so widening the window restores crisp 100% scale
+    katexEl.style.fontSize = '';
+    const needed = Math.ceil(katexEl.scrollWidth);
+    if (needed > avail) {
+      const minScale = avail >= 640 ? 0.72 : (avail >= 400 ? 0.78 : 0.82);
+      const scale = Math.max(minScale, (avail / needed) * 0.985);
+      katexEl.style.fontSize = `${(scale * 100).toFixed(1)}%`;
+    }
+
+    // Only expose keyboard-scrollable region when genuine overflow remains
+    const stillOverflows = disp.scrollWidth > disp.clientWidth + 2;
+    if (stillOverflows) {
+      disp.setAttribute('tabindex', '0');
+      disp.setAttribute('role', 'region');
+      disp.setAttribute('aria-label', '数学公式（可左右滑动）');
+    } else {
+      disp.removeAttribute('tabindex');
+      disp.removeAttribute('role');
+      disp.removeAttribute('aria-label');
+    }
+  }
+}
+
+function bindMathAutoFit(rootEl) {
+  if (!rootEl || observedMathRoots.has(rootEl)) return;
+  observedMathRoots.add(rootEl);
+  if (mathResizeObserver) {
+    mathResizeObserver.observe(rootEl);
+  }
+  rootEl.addEventListener('toggle', (e) => {
+    if (e.target && e.target.tagName === 'DETAILS' && e.target.open) {
+      requestAnimationFrame(() => fitWideDisplayMath(e.target));
+    }
+  }, true);
+  rootEl.addEventListener('contentvisibilityautostatechange', (e) => {
+    if (!e.skipped && e.target) {
+      requestAnimationFrame(() => fitWideDisplayMath(e.target));
+    }
+  }, true);
+}
+
 function renderMathSafe(rootEl, retries = 25) {
   if (!rootEl) return;
   if (typeof window.renderMathInElement === 'function') {
     try {
       window.renderMathInElement(rootEl, KATEX_OPTIONS);
-      // Make wide display equations keyboard-scrollable
-      for (const disp of rootEl.querySelectorAll('.katex-display')) {
-        if (!disp.hasAttribute('tabindex')) {
-          disp.setAttribute('tabindex', '0');
-          disp.setAttribute('role', 'region');
-          disp.setAttribute('aria-label', '数学公式');
-        }
+      bindMathAutoFit(rootEl);
+      requestAnimationFrame(() => fitWideDisplayMath(rootEl));
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(() => requestAnimationFrame(() => fitWideDisplayMath(rootEl)));
       }
     } catch (err) {
       console.warn('KaTeX 渲染异常：', err);

@@ -1,0 +1,1708 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "prob-09",
+  "title": "概率 · 第 9 讲：参数估计与假设检验（含数一专属）",
+  "sourceMeta": "五书深度融合：27 张宇基础30讲(第6讲后半 P.146-163) + 27 张宇概率9讲(第9讲 P.70-81) + 27 方浩概率强化(第7-8章 P.155-187) + 27 猪狗百宝书(第7-8章 P.7-1~8-12) + 27 版概率论全总结(P.16-20) · 含 1998–2026 真题与 8 处勘误补注",
+  "basicRequirements": [
+    "理解点估计、估计量与估计值的概念，熟练掌握矩估计法（一阶矩、升二阶矩与双参数联立）与最大似然估计法（驻点法、单调边界极值法与 MLE 不变性）。",
+    "【数学一专属】掌握估计量的无偏性、有效性（最小方差性）与一致性（相合性）评选标准及均方误差 MSE 优化，能熟练验证无偏性与一致性。",
+    "【数学一专属】理解置信区间概念，掌握单正态总体（均值与方差，含单侧置信限）及双正态总体（均值差与方差比）的区间估计与 CLT 大样本近似置信区间。",
+    "【数学一专属】理解显著性检验思想与两类错误（α 弃真 vs β 取伪，α+β≠1），掌握单/双正态总体参数假设检验的拒绝域构造与显著性水平嵌套单调律。"
+  ],
+  "items": [
+    {
+      "id": "m1-pr09-f-01",
+      "kind": "formula",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、点估计与矩估计法",
+      "title": "点估计基本概念与矩估计法（替换原理：一阶矩 / 升二阶矩 / 双参数联立）",
+      "formulaLatex": "$$\\begin{aligned} &\\text{点估计量：用不含未知参数的统计量 }\\hat\\theta=\\hat\\theta(X_1,\\dots,X_n)\\text{ 估计未知参数 }\\theta\\text{（代入样本值称估计值）}\\\\ &\\text{矩估计（皮尔逊替换原理）：用样本 }k\\text{ 阶原点矩 }A_k=\\frac{1}{n}\\sum_{i=1}^{n}X_i^k\\text{ 替换总体 }k\\text{ 阶原点矩 }\\mu_k=E(X^k)\\\\ &\\text{① 单参数：优先列 }E(X;\\theta)=\\bar X\\text{；若 }E(X;\\theta)\\text{ 不含 }\\theta\\text{（如对称零均值），升级列 }E(X^2;\\theta)=A_2=\\frac{1}{n}\\sum_{i=1}^{n}X_i^2\\\\ &\\text{② 双参数 }(\\theta_1,\\theta_2)\\text{：联立 }\\begin{cases}\\mu_1(\\theta_1,\\theta_2)=A_1=\\bar X\\\\\\mu_2(\\theta_1,\\theta_2)=A_2=\\frac1n\\sum X_i^2\\end{cases} \\Longleftrightarrow \\begin{cases}EX=\\bar X\\\\DX=B_2=\\frac1n\\sum(X_i-\\bar X)^2\\end{cases}\\end{aligned}$$",
+      "conditions": "前提是所用总体各阶矩存在且能从方程组中唯一反解出未知参数；注意用样本二阶中心矩 $B_2=\\frac1n\\sum(X_i-\\bar X)^2$（**分母为 $n$**，而非 $n-1$！）替代方差 $DX$ 与联立 $A_1,A_2$ 完全等价！",
+      "pitfalls": "**矩估计分母铁律**：联立 $DX=B_2$ 时，总体方差 $\\sigma^2$ 的矩估计量严格是 $\\hat\\sigma^2=\\frac{1}{n}\\sum_{i=1}^n (X_i-\\bar X)^2$（除以 $n$），若写成除以 $n-1$（$S^2$）就违背了矩替换定义（尽管 $S^2$ 是无偏修正版）！",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "基础 P.146-148 / 9讲 P.70 / 方浩 P.155-156 / 猪狗 P.7-2",
+        "pdfPage": 152,
+        "itemRef": "点估计基本概念与矩估计法"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_mom_mle_table",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "矩估计是最直观、计算最快的点估计方法，理论后盾是辛钦大数定律（$A_k\\xrightarrow{P}\\mu_k$）。注意**矩估计不唯一**（如指数分布用一阶矩得 $1/\\bar X$、用二阶中心矩得 $1/S_n$ 均合理），考研惯例是一律优先选用**最低阶有效矩**。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「一个参数一阶矩，若不含参升二阶；两个参数均值方差一起列，样本方差一定除 $n$ 不除 $n-1$！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr09-f-02",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、最大似然估计（MLE）与不变性",
+      "title": "最大似然估计（驻点法 + 单调边界极值法）、MLE 不变性与七大分布速查总表",
+      "formulaLatex": "$$\\begin{aligned} &\\text{似然函数：} L(\\theta)=\\begin{cases}\\prod_{i=1}^{n}P\\{X=x_i;\\,\\theta\\},&\\text{离散型总体}\\\\\\prod_{i=1}^{n}f(x_i;\\,\\theta),&\\text{连续型总体（必须写清定义域约束！）}\\end{cases}\\\\ &\\text{最大似然估计：求 }\\hat\\theta\\in\\Theta\\text{ 使 }L(\\hat\\theta)=\\max_{\\theta\\in\\Theta}L(\\theta) \\Longleftrightarrow \\ln L(\\hat\\theta)=\\max_{\\theta\\in\\Theta}\\ln L(\\theta)\\\\ &\\text{两类求法：}\\text{① 有驻点：令 }\\frac{\\mathrm{d}\\ln L(\\theta)}{\\mathrm{d}\\theta}=0\\text{（双参数令偏导全 0）并核验极值与定义域}\\\\ &　　　　  \\text{② 单调/支撑含参无驻点：由约束条件定出 }\\theta\\text{ 可行域，按 }L(\\theta)\\text{ 单调性取边界 }X_{(1)}\\text{ 或 }X_{(n)}\\\\ &\\text{MLE 不变性定理：若 }\\hat\\theta\\text{ 是 }\\theta\\text{ 的 MLE，则对任意函数 }g(\\theta)\\text{，}g(\\hat\\theta)\\text{ 即为 }g(\\theta)\\text{ 的 MLE！}\\end{aligned}$$",
+      "conditions": "取对数前务必核对每个因子 $f(x_i;\\theta)>0$ 所施加的**参数可行域**（如 $x_i\\ge\\theta\\iff\\theta\\le x_{(1)}$，$x_i\\le\\theta\\iff\\theta\\ge x_{(n)}$）；如果求导后发现 $\\frac{\\mathrm{d}\\ln L}{\\mathrm{d}\\theta}$ 恒正或恒负，立刻转向边界取最值！",
+      "pitfalls": "① **严谨口径补注（猪狗 P.7-3）**：验证唯一驻点为极大值需二阶导 $\\frac{\\mathrm{d}^2\\ln L}{\\mathrm{d}\\theta^2}<0$，同济高数口径称「上凸函数」，现代凸优化口径称「严格凹函数」，复习时注意两种中文术语区分，切勿与 $f''>0$ 混淆。 ② **27 版全总结 P.20 小勘误**：总结表在 $U(a,b)$ 的估计量行混用大写 $X_i$ 与小写 $x_i$，书写规范应统一：估计量用大写样本 $X_i, X_{(1)}, X_{(n)}$，估计值用小写观测值 $x_i, x_{(1)}, x_{(n)}$。",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 680 360\" role=\"img\" aria-label=\"点估计双轨求解与估计量三大评选标准\">\n  <title>点估计双轨求解与估计量三大评选标准</title>\n  <defs>\n    <marker id=\"m1_pr09_e_arr\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n      <path d=\"M0 1 L9 5 L0 9 Z\" fill=\"#475569\"/>\n    </marker>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"680\" height=\"360\" rx=\"12\" fill=\"#f8fafc\"/>\n  <text x=\"340\" y=\"26\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"700\" fill=\"#0f172a\">点估计双轨构造流程（矩估计 · MLE）与估计量三大评选标准（数一专属）</text>\n\n  <!-- Left Track: MoM -->\n  <rect x=\"18\" y=\"42\" width=\"256\" height=\"186\" rx=\"10\" fill=\"#ffffff\" stroke=\"#0f766e\" stroke-width=\"1.4\"/>\n  <rect x=\"18\" y=\"42\" width=\"256\" height=\"30\" rx=\"10\" fill=\"#ecfdf5\"/>\n  <text x=\"146\" y=\"62\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#065f46\">轨一：矩估计法（替换原理）</text>\n  <text x=\"32\" y=\"90\" font-size=\"10.5\" font-weight=\"700\" fill=\"#0f172a\">① 算总体矩：μ₁ = EX，μ₂ = EX²</text>\n  <text x=\"32\" y=\"110\" font-size=\"10.5\" fill=\"#334155\">② 令 μ₁ = A₁ = X̄（1 个参数优先一阶矩）</text>\n  <text x=\"32\" y=\"130\" font-size=\"10.5\" fill=\"#b45309\" font-weight=\"600\">③ 若 EX = 0 不含 θ（如拉普拉斯/对称）</text>\n  <text x=\"44\" y=\"147\" font-size=\"10.5\" fill=\"#b45309\">→ 立即升级用二阶矩 EX² = (1/n)∑Xᵢ²！</text>\n  <text x=\"32\" y=\"168\" font-size=\"10.5\" fill=\"#334155\">④ 双参数：联立 A₁=μ₁ 与 B₂=DX（易解）</text>\n  <rect x=\"30\" y=\"182\" width=\"232\" height=\"34\" rx=\"6\" fill=\"#f0fdfa\" stroke=\"#99f6e4\"/>\n  <text x=\"146\" y=\"203\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"600\" fill=\"#065f46\">理论后盾：辛钦大数定律保证矩估计相合</text>\n\n  <!-- Right Track: MLE -->\n  <rect x=\"288\" y=\"42\" width=\"374\" height=\"186\" rx=\"10\" fill=\"#ffffff\" stroke=\"#2563eb\" stroke-width=\"1.4\"/>\n  <rect x=\"288\" y=\"42\" width=\"374\" height=\"30\" rx=\"10\" fill=\"#eff6ff\"/>\n  <text x=\"475\" y=\"62\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#1d4ed8\">轨二：最大似然估计 MLE（似然最大 + 不变性）</text>\n  <text x=\"302\" y=\"90\" font-size=\"10.5\" font-weight=\"700\" fill=\"#0f172a\">① 写似然 L(θ) = ∏ f(xᵢ; θ) 或 ∏ P(X=xᵢ; θ)（别漏示性范围！）</text>\n  <text x=\"302\" y=\"109\" font-size=\"10.5\" fill=\"#334155\">② 取对数 ln L(θ) → 求导分叉：</text>\n\n  <!-- Fork A: stationary -->\n  <rect x=\"302\" y=\"118\" width=\"164\" height=\"62\" rx=\"7\" fill=\"#eff6ff\" stroke=\"#93c5fd\"/>\n  <text x=\"384\" y=\"135\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#1e40af\">分支 A：有唯一驻点</text>\n  <text x=\"384\" y=\"152\" text-anchor=\"middle\" font-size=\"10\" fill=\"#334155\">令 d(ln L)/dθ = 0 解出 θ̂</text>\n  <text x=\"384\" y=\"168\" text-anchor=\"middle\" font-size=\"10\" fill=\"#1d4ed8\">（核验是否在参数空间内）</text>\n\n  <!-- Fork B: boundary -->\n  <rect x=\"478\" y=\"118\" width=\"170\" height=\"62\" rx=\"7\" fill=\"#fef2f2\" stroke=\"#fca5a5\"/>\n  <text x=\"563\" y=\"135\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#b91c1c\">分支 B：单调无驻点（高频！）</text>\n  <text x=\"563\" y=\"152\" text-anchor=\"middle\" font-size=\"10\" fill=\"#7f1d1d\">支撑含 θ，如 U(0,θ), x≥θ</text>\n  <text x=\"563\" y=\"168\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#b91c1c\">按单调性取边界 X_(n) 或 X_(1)</text>\n\n  <rect x=\"302\" y=\"186\" width=\"346\" height=\"30\" rx=\"6\" fill=\"#eef2ff\" stroke=\"#c7d2fe\"/>\n  <text x=\"475\" y=\"205\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#3730a3\">③ MLE 不变性：若 θ̂ 为 θ 的 MLE，则 g(θ̂) 为 g(θ) 的 MLE（如 e^(-X̄)）</text>\n\n  <!-- Bottom panel: 3 evaluation criteria -->\n  <rect x=\"18\" y=\"240\" width=\"644\" height=\"106\" rx=\"10\" fill=\"#ffffff\" stroke=\"#7c3aed\" stroke-width=\"1.4\"/>\n  <rect x=\"18\" y=\"240\" width=\"644\" height=\"26\" rx=\"10\" fill=\"#f5f3ff\"/>\n  <text x=\"340\" y=\"258\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#6d28d9\">估计量评选三大标准（数学一专属 · 2023/2024/2026 连年命题！）</text>\n\n  <rect x=\"30\" y=\"274\" width=\"198\" height=\"62\" rx=\"7\" fill=\"#f8fafc\" stroke=\"#cbd5e1\"/>\n  <text x=\"129\" y=\"292\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1e40af\">1. 无偏性（准）</text>\n  <text x=\"129\" y=\"309\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#2563eb\">E(θ̂) = θ（∀θ ∈ Θ）</text>\n  <text x=\"129\" y=\"326\" text-anchor=\"middle\" font-size=\"9.8\" fill=\"#475569\">例：S² 无偏，Sₙ²/MLE 常有偏</text>\n\n  <rect x=\"241\" y=\"274\" width=\"198\" height=\"62\" rx=\"7\" fill=\"#f8fafc\" stroke=\"#cbd5e1\"/>\n  <text x=\"340\" y=\"292\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#065f46\">2. 有效性（稳）</text>\n  <text x=\"340\" y=\"309\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#0f766e\">同为无偏时 D(θ̂₁) ≤ D(θ̂₂)</text>\n  <text x=\"340\" y=\"326\" text-anchor=\"middle\" font-size=\"9.8\" fill=\"#475569\">有偏不谈有效；另关注 MSE 极小</text>\n\n  <rect x=\"452\" y=\"274\" width=\"198\" height=\"62\" rx=\"7\" fill=\"#f8fafc\" stroke=\"#cbd5e1\"/>\n  <text x=\"551\" y=\"292\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#6d28d9\">3. 一致性 / 相合性（大样本）</text>\n  <text x=\"551\" y=\"309\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#7c3aed\">θ̂ₙ —P→ θ（n → ∞）</text>\n  <text x=\"551\" y=\"326\" text-anchor=\"middle\" font-size=\"9.8\" fill=\"#475569\">充分判据：Eθ̂ₙ→θ 且 Dθ̂ₙ→0</text>\n</svg>",
+      "tables": [
+        {
+          "caption": "表 P9-1 · 考研七大常见分布矩估计量与最大似然估计量（MLE）全表",
+          "headers": [
+            "总体分布与未知参数",
+            "矩估计量",
+            "最大似然估计量（MLE）",
+            "备注 / 无偏与一致性"
+          ],
+          "rows": [
+            [
+              "0-1 分布 $B(1,p)$",
+              "$\\hat p=\\bar X$",
+              "$\\hat p=\\bar X$",
+              "无偏、有效、一致"
+            ],
+            [
+              "泊松分布 $P(\\lambda)$",
+              "$\\hat\\lambda=\\bar X$",
+              "$\\hat\\lambda=\\bar X$",
+              "$P\\{X=0\\}=e^{-\\lambda}$ 的 MLE 为 $e^{-\\bar X}$"
+            ],
+            [
+              "指数分布 $E(\\lambda)$（速率 $\\lambda$）",
+              "$\\hat\\lambda=\\frac{1}{\\bar X}$",
+              "$\\hat\\lambda=\\frac{1}{\\bar X}$",
+              "若以均值 $\\theta=1/\\lambda$ 为参，则 $\\hat\\theta=\\bar X$ 无偏"
+            ],
+            [
+              "正态分布 $N(\\mu,\\sigma^2)$",
+              "$\\hat\\mu=\\bar X,\\;\\hat\\sigma^2=\\frac1n\\sum(X_i-\\bar X)^2$",
+              "$\\hat\\mu=\\bar X,\\;\\hat\\sigma^2=\\frac1n\\sum(X_i-\\bar X)^2$",
+              "$\\hat\\sigma^2$ 有偏（$E=\\frac{n-1}{n}\\sigma^2$），但一致"
+            ],
+            [
+              "均匀分布 $U(0,\\theta)$",
+              "$\\hat\\theta=2\\bar X$",
+              "$\\hat\\theta=X_{(n)}=\\max X_i$",
+              "无驻点边界极大；$X_{(n)}$ 有偏，$\\frac{n+1}{n}X_{(n)}$ 无偏"
+            ],
+            [
+              "均匀分布 $U(a,b)$",
+              "$\\hat a=\\bar X-\\sqrt{3B_2},\\;\\hat b=\\bar X+\\sqrt{3B_2}$",
+              "$\\hat a=X_{(1)},\\;\\hat b=X_{(n)}$",
+              "双边界单调取最值，MLE 与矩估计不同"
+            ],
+            [
+              "平移指数 $f=\\frac1\\theta e^{-(x-\\mu)/\\theta}\\;(x\\ge\\mu)$",
+              "$\\hat\\theta=\\sqrt{B_2},\\;\\hat\\mu=\\bar X-\\sqrt{B_2}$",
+              "$\\hat\\mu=X_{(1)},\\;\\hat\\theta=\\bar X-X_{(1)}$",
+              "先固定 $\\theta$ 令 $\\mu$ 取上界 $X_{(1)}$，再求导定 $\\theta$"
+            ]
+          ]
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化 & 27 猪狗百宝书 & 27 版全总结",
+        "printedPage": "基础 P.148-151 / 9讲 P.71-73 / 方浩 P.157-163 / 猪狗 P.7-3 / 全总结 P.19-20",
+        "pdfPage": 154,
+        "itemRef": "最大似然估计双分支与七大分布估计总表"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_mom_mle_table",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "最大似然思想是「已经观测到的样本就是最容易发生的事件」，因此反推使该样本联合概率（密度）达到最大的参数值。它是考研数理统计**出现频率最高（近 75% 年份必考！）**的核心大题引擎。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「写似然、标范围、取对数、求导数：有驻点解驻点，无驻点看单调取 $X_{(1)}/X_{(n)}$；问 $g(\\theta)$ 别重算，直接把 $\\hat\\theta$ 套进去！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr09-f-03",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "三、估计量评选三大标准（数一专属）",
+      "title": "无偏性、有效性、一致性（相合性）与均方误差 MSE 分解（数一专属）",
+      "formulaLatex": "$$\\begin{aligned} &\\text{① 无偏性（准）：对 }\\forall\\theta\\in\\Theta,　 E(\\hat\\theta)=\\theta　　\\big(\\text{渐近无偏：}\\lim_{n\\to\\infty}E(\\hat\\theta_n)=\\theta\\big)\\\\ &\\text{② 有效性（稳）：若 }\\hat\\theta_1,\\hat\\theta_2\\text{ 同为 }\\theta\\text{ 的无偏估计，且 }\\forall\\theta\\in\\Theta\\text{ 有 }D(\\hat\\theta_1)\\le D(\\hat\\theta_2)\\\\ &　　\\text{（至少一点严小于），则称 }\\hat\\theta_1\\text{ 比 }\\hat\\theta_2\\text{ 更有效！}\\\\ &\\text{③ 一致性/相合性（大样本）：}\\forall\\varepsilon>0, \\lim_{n\\to\\infty}P\\{|\\hat\\theta_n-\\theta|\\ge\\varepsilon\\}=0 \\Longleftrightarrow \\hat\\theta_n\\xrightarrow{P}\\theta\\\\ &　　\\text{高频充分判据：}\\lim_{n\\to\\infty}E(\\hat\\theta_n)=\\theta\\text{ 且 }\\lim_{n\\to\\infty}D(\\hat\\theta_n)=0\\implies \\hat\\theta_n\\text{ 是一致估计量（反之不成立！）}\\\\ &\\text{④ 均方误差（2024 真题核心）：}\\operatorname{MSE}(\\hat\\theta)=E[(\\hat\\theta-\\theta)^2]=D(\\hat\\theta)+\\big[E(\\hat\\theta)-\\theta\\big]^2\\end{aligned}$$",
+      "conditions": "讨论**有效性**必须先验证两个估计量**均为无偏估计**（不能拿有偏估计的更小方差去和无偏估计比「有效」，例如常值估计 $\\hat\\theta\\equiv 0$ 方差为 $0$ 却毫无意义！）。",
+      "pitfalls": "**无偏与一致互不蕴含**：单样本估计 $\\hat\\mu=X_1$ 是无偏估计但**不一致**（$D(X_1)=\\sigma^2\\not\\to 0$）；反之，样本二阶中心矩 $B_2=\\frac1n\\sum(X_i-\\bar X)^2$ 与 $\\frac{1}{n+1}\\sum(X_i-\\bar X)^2$ 均**有偏**却都是**一致估计**！",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "基础 P.151-152 / 9讲 P.73-74 / 方浩 P.164-169 / 猪狗 P.7-4",
+        "pdfPage": 157,
+        "itemRef": "估计量三大评选标准与MSE分解（数一专属）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_criteria_and_2024_2026",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "三大评选标准是**数学一专属高频考点**（2023、2024、2026 连年直接入题！）：无偏性看中心准不准，有效性在**同为无偏的前提下**比谁的波动方差更小，一致性看样本量 $n\\to\\infty$ 时是否依概率锁定真值；2024 真题更直接考查均方误差 MSE 的偏差-方差权衡！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「无偏看期望等真值，有效须无偏再比小方差，一致走大数定律或期望趋真方差趋零；均方误差等于方差加偏差平方！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr09-f-04",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "四、单正态总体区间估计（数一专属）",
+      "title": "置信区间定义、单正态总体 4 大双侧区间与单侧置信限（含猪狗 P.7-7 勘误！）",
+      "formulaLatex": "$$\\begin{aligned} &\\text{置信区间：统计量 }\\hat\\theta_L,\\hat\\theta_U\\text{ 满足 }P\\{\\hat\\theta_L\\le\\theta\\le\\hat\\theta_U\\}=1-\\alpha\\text{（置信水平/置信度 }1-\\alpha\\text{）}\\\\ &\\text{① }\\sigma^2\\text{ 已知，}\\mu\\text{ 的 }1-\\alpha\\text{ 区间：}\\left[\\bar X-z_{\\alpha/2}\\frac{\\sigma}{\\sqrt n}, \\bar X+z_{\\alpha/2}\\frac{\\sigma}{\\sqrt n}\\right]　　\\text{长度 }L=2z_{\\alpha/2}\\frac{\\sigma}{\\sqrt n}\\\\ &\\text{② }\\sigma^2\\text{ 未知，}\\mu\\text{ 的 }1-\\alpha\\text{ 区间：}\\left[\\bar X-t_{\\alpha/2}(n-1)\\frac{S}{\\sqrt n}, \\bar X+t_{\\alpha/2}(n-1)\\frac{S}{\\sqrt n}\\right]\\\\ &\\text{③ }\\mu\\text{ 未知，}\\sigma^2\\text{ 的 }1-\\alpha\\text{ 区间：}\\left[\\frac{(n-1)S^2}{\\chi^2_{\\alpha/2}(n-1)}, \\frac{(n-1)S^2}{\\chi^2_{1-\\alpha/2}(n-1)}\\right]　(\\sigma\\text{ 区间整体开根号})\\\\ &\\text{④ }\\mu\\text{ 已知，}\\sigma^2\\text{ 的 }1-\\alpha\\text{ 区间：}\\left[\\frac{\\sum(X_i-\\mu)^2}{\\chi^2_{\\alpha/2}(n)}, \\frac{\\sum(X_i-\\mu)^2}{\\chi^2_{1-\\alpha/2}(n)}\\right]\\\\ &\\text{⑤ 单侧置信限（}\\alpha\\text{ 不除以 2！）：下限 }\\theta_L=\\bar X-z_\\alpha\\frac{\\sigma}{\\sqrt n}\\text{（或 }t_\\alpha S/\\sqrt n\\text{），上限 }\\theta_U=\\bar X+z_\\alpha\\frac{\\sigma}{\\sqrt n}\\end{aligned}$$",
+      "conditions": "①~⑤ 严格要求总体服从正态分布 $N(\\mu,\\sigma^2)$；单侧置信限用于「寿命越长越好（求置信下限 $P\\{\\theta\\ge\\theta_L\\}=1-\\alpha$）」或「误差越小越好（求置信上限 $P\\{\\theta\\le\\theta_U\\}=1-\\alpha$）」，分位数下标一律是 **$\\alpha$** 而非 $\\alpha/2$！",
+      "pitfalls": "① **五书重大印刷勘误（猪狗百宝书 P.7-7 蓝框第 2 条）**：该书汇总框把 $t$ 分布区间的条件误印为「`2. σ² 已知，μ 的置信区间`」，实际应为 **$\\sigma^2$ 未知**！ ② **概念大忌**：算出具体样本区间如 $[8.2,10.8]$ 后，不能说「$\\mu$ 落入 $[8.2,10.8]$ 的概率是 $0.95$」（$\\mu$ 与数值端点皆固定，要么在要么不在），正确表述是「随机区间覆盖真值 $\\mu$ 的概率为 $0.95$（重复抽样约 $95\\%$ 的区间包含 $\\mu$）」。",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 680 360\" role=\"img\" aria-label=\"正态总体置信区间构造与非对称分母翻转解剖\">\n  <title>正态总体置信区间构造与非对称分母翻转解剖</title>\n  <defs>\n    <marker id=\"m1_pr09_ci_arr\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n      <path d=\"M0 1 L9 5 L0 9 Z\" fill=\"#2563eb\"/>\n    </marker>\n    <marker id=\"m1_pr09_ci_red\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n      <path d=\"M0 1 L9 5 L0 9 Z\" fill=\"#dc2626\"/>\n    </marker>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"680\" height=\"360\" rx=\"12\" fill=\"#f8fafc\"/>\n  <text x=\"340\" y=\"26\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"700\" fill=\"#0f172a\">正态总体置信区间解剖：对称均值区间 vs 非对称方差区间（分母翻转！）</text>\n\n  <!-- Top Panel: Symmetric mu CI -->\n  <rect x=\"18\" y=\"42\" width=\"644\" height=\"142\" rx=\"10\" fill=\"#ffffff\" stroke=\"#3b82f6\" stroke-width=\"1.3\"/>\n  <text x=\"340\" y=\"64\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#1e40af\">① 对称枢轴量（μ / μ₁ - μ₂）：等尾对称展开，随机区间套住固定真值</text>\n\n  <!-- Number line with interval -->\n  <line x1=\"44\" y1=\"112\" x2=\"404\" y2=\"112\" stroke=\"#64748b\" stroke-width=\"1.4\"/>\n  <line x1=\"106\" y1=\"112\" x2=\"342\" y2=\"112\" stroke=\"#2563eb\" stroke-width=\"4.5\"/>\n  <circle cx=\"106\" cy=\"112\" r=\"4.5\" fill=\"#2563eb\"/>\n  <circle cx=\"224\" cy=\"112\" r=\"5\" fill=\"#0f766e\"/>\n  <circle cx=\"342\" cy=\"112\" r=\"4.5\" fill=\"#2563eb\"/>\n  <line x1=\"252\" y1=\"86\" x2=\"252\" y2=\"128\" stroke=\"#dc2626\" stroke-width=\"2\" stroke-dasharray=\"3 2\"/>\n  <text x=\"252\" y=\"81\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#dc2626\">真值 μ（固定）</text>\n  <text x=\"106\" y=\"132\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#1d4ed8\">X̄ - Δ</text>\n  <text x=\"224\" y=\"132\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#0f766e\">X̄（随机中心）</text>\n  <text x=\"342\" y=\"132\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#1d4ed8\">X̄ + Δ</text>\n  <text x=\"224\" y=\"156\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#334155\">σ 已知：Δ = z_(α/2)·σ/√n   |   σ 未知：Δ = t_(α/2)(n-1)·S/√n</text>\n  <text x=\"224\" y=\"173\" text-anchor=\"middle\" font-size=\"10\" fill=\"#475569\">区间长度 L = 2Δ：置信度 1-α 越高 → L 越长；样本量 n 越大 → L 越短</text>\n\n  <!-- Right callout in top panel -->\n  <rect x=\"422\" y=\"76\" width=\"224\" height=\"96\" rx=\"8\" fill=\"#eff6ff\" stroke=\"#bfdbfe\"/>\n  <text x=\"534\" y=\"96\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1e3a8a\">单侧置信限（α 不除以 2！）</text>\n  <text x=\"434\" y=\"116\" font-size=\"10.5\" fill=\"#334155\">• 置信下限（寿命越长越好）：</text>\n  <text x=\"444\" y=\"133\" font-size=\"10.5\" font-weight=\"700\" fill=\"#1d4ed8\">θ_L = X̄ - z_α·σ/√n</text>\n  <text x=\"434\" y=\"152\" font-size=\"10.5\" fill=\"#334155\">• 置信上限（误差越小越好）：</text>\n  <text x=\"444\" y=\"167\" font-size=\"10.5\" font-weight=\"700\" fill=\"#1d4ed8\">θ_U = X̄ + z_α·σ/√n</text>\n\n  <!-- Bottom Panel: Asymmetric sigma^2 / F CI -->\n  <rect x=\"18\" y=\"196\" width=\"644\" height=\"150\" rx=\"10\" fill=\"#ffffff\" stroke=\"#dc2626\" stroke-width=\"1.3\"/>\n  <text x=\"340\" y=\"218\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#b91c1c\">② 非对称枢轴量（σ² 与 σ₁²/σ₂²）：取倒数瞬间左右分位数必须互换！</text>\n\n  <!-- Left box: Pivot inequality -->\n  <rect x=\"34\" y=\"232\" width=\"234\" height=\"62\" rx=\"8\" fill=\"#fffbeb\" stroke=\"#f59e0b\"/>\n  <text x=\"151\" y=\"253\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#b45309\">原枢轴量不等式（小在左，大在右）</text>\n  <text x=\"151\" y=\"276\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#0f172a\">χ²_(1-α/2)  ≤  (n-1)S² / σ²  ≤  χ²_(α/2)</text>\n\n  <!-- Flip arrow -->\n  <line x1=\"274\" y1=\"263\" x2=\"342\" y2=\"263\" stroke=\"#dc2626\" stroke-width=\"2\" marker-end=\"url(#m1_pr09_ci_red)\"/>\n  <text x=\"308\" y=\"254\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#dc2626\">取倒数</text>\n  <text x=\"308\" y=\"279\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#dc2626\">左右翻转！</text>\n\n  <!-- Right box: Resulting CI -->\n  <rect x=\"350\" y=\"232\" width=\"296\" height=\"62\" rx=\"8\" fill=\"#fef2f2\" stroke=\"#ef4444\" stroke-width=\"1.4\"/>\n  <text x=\"498\" y=\"253\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#b91c1c\">σ² 的 1-α 置信区间（大数垫左底，小数垫右底）</text>\n  <text x=\"498\" y=\"277\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#991b1b\">[ (n-1)S² / χ²_(α/2) ,  (n-1)S² / χ²_(1-α/2) ]</text>\n\n  <!-- Bottom note for F ratio & CLT -->\n  <rect x=\"34\" y=\"304\" width=\"612\" height=\"32\" rx=\"6\" fill=\"#f8fafc\" stroke=\"#cbd5e1\"/>\n  <text x=\"340\" y=\"324\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#334155\">同理 σ₁²/σ₂² 区间：[ (S₁²/S₂²) / F_(α/2)(n₁-1,n₂-1),  (S₁²/S₂²) / F_(1-α/2)(n₁-1,n₂-1) ]  |  求 σ 区间直接整体开根号</text>\n</svg>",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "基础 P.153-155 / 9讲 P.76-78 / 方浩 P.170-177 / 猪狗 P.7-5~7-7（勘误）",
+        "pdfPage": 159,
+        "itemRef": "单正态总体四大置信区间与单侧置信限（含猪狗P.7-7勘误）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_ci_and_length",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "区间估计给未知参数划定一个带概率保障的「随机安全范围」。所有区间全部由第 8 讲的枢轴量不等式反解而来，**绝对不需要死背**：记住「对称枢轴量 $\\pm$ 等尾展开，非对称 $\\chi^2/F$ 取倒数左右分位数翻转」！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「已知方差用 $z$，未知方差用 $t(n-1)$；求方差用 $\\chi^2$，**大数 $\\chi^2_{\\alpha/2}$ 垫左底，小数 $\\chi^2_{1-\\alpha/2}$ 垫右底**！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr09-f-05",
+      "kind": "formula",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "五、双正态总体区间估计（数一专属）",
+      "title": "双独立正态总体 4 大置信区间与单/双正态置信区间 8 式全表（数一专属）",
+      "formulaLatex": "$$\\begin{aligned} &\\text{设两独立正态样本 }X\\sim N(\\mu_1,\\sigma_1^2) (n_1), Y\\sim N(\\mu_2,\\sigma_2^2) (n_2)\\text{：}\\\\ &\\text{① }\\sigma_1^2,\\sigma_2^2\\text{ 已知，}\\mu_1-\\mu_2\\text{：} \\bar X-\\bar Y\\pm z_{\\alpha/2}\\sqrt{\\frac{\\sigma_1^2}{n_1}+\\frac{\\sigma_2^2}{n_2}}\\\\ &\\text{② }\\sigma_1^2=\\sigma_2^2=\\sigma^2\\text{ 未知，}\\mu_1-\\mu_2\\text{：} \\bar X-\\bar Y\\pm t_{\\alpha/2}(n_1+n_2-2)\\,S_w\\sqrt{\\frac{1}{n_1}+\\frac{1}{n_2}}\\\\ &　　\\text{其中合并样本方差 }S_w^2=\\frac{(n_1-1)S_1^2+(n_2-1)S_2^2}{n_1+n_2-2}\\\\ &\\text{③ 方差比 }\\frac{\\sigma_2^2}{\\sigma_1^2}=c\\text{ 已知，}\\mu_1-\\mu_2\\text{：} \\bar X-\\bar Y\\pm t_{\\alpha/2}(n_1+n_2-2)\\,S_{w,c}\\sqrt{\\frac{1}{n_1}+\\frac{c}{n_2}}, S_{w,c}^2=\\frac{(n_1-1)S_1^2+(n_2-1)S_2^2/c}{n_1+n_2-2}\\\\ &\\text{④ 方差比 }\\frac{\\sigma_1^2}{\\sigma_2^2}\\text{ 的 }1-\\alpha\\text{ 区间：}\\left[\\frac{S_1^2}{S_2^2}\\cdot\\frac{1}{F_{\\alpha/2}(n_1-1,n_2-1)}, \\frac{S_1^2}{S_2^2}\\cdot\\frac{1}{F_{1-\\alpha/2}(n_1-1,n_2-1)}\\right]=\\left[\\frac{S_1^2}{S_2^2 F_{\\alpha/2}(n_1-1,n_2-1)}, \\frac{S_1^2}{S_2^2}F_{\\alpha/2}(n_2-1,n_1-1)\\right]\\end{aligned}$$",
+      "conditions": "要求两样本相互独立且两总体均为正态分布；注意 `猪狗百宝书 P.7-8~7-9` 处将 $\\sigma_1^2=\\sigma_2^2=\\sigma^2$ 漏印平方写成了 `= σ`（且 `P.7-1` 导图将「方差未知成比例」误印为「方程未知成比例」），阅读原书时请留意！",
+      "pitfalls": "**小字排版勘误**：`方浩强化 P.173 例题 18` 置信区间括号误断成 `],[`；`P.180` 分布自由度逗号误印为点号 `F(n_1-1·n_2-1)`，答题规范须写标准闭区间与逗号。",
+      "tables": [
+        {
+          "caption": "表 P9-2 · 单/双正态总体 8 大置信区间全景速查表（数学一专属）",
+          "headers": [
+            "待估参数",
+            "前提条件",
+            "所用枢轴量与分布",
+            "置信度 1-α 双侧置信区间"
+          ],
+          "rows": [
+            [
+              "$\\mu$",
+              "$\\sigma^2$ 已知",
+              "$\\frac{\\bar X-\\mu}{\\sigma/\\sqrt n}\\sim N(0,1)$",
+              "$\\left[\\bar X-z_{\\alpha/2}\\frac{\\sigma}{\\sqrt n},\\;\\bar X+z_{\\alpha/2}\\frac{\\sigma}{\\sqrt n}\\right]$"
+            ],
+            [
+              "$\\mu$",
+              "$\\sigma^2$ 未知",
+              "$\\frac{\\sqrt n(\\bar X-\\mu)}{S}\\sim t(n-1)$",
+              "$\\left[\\bar X-t_{\\alpha/2}(n-1)\\frac{S}{\\sqrt n},\\;\\bar X+t_{\\alpha/2}(n-1)\\frac{S}{\\sqrt n}\\right]$"
+            ],
+            [
+              "$\\sigma^2$",
+              "$\\mu$ 未知",
+              "$\\frac{(n-1)S^2}{\\sigma^2}\\sim\\chi^2(n-1)$",
+              "$\\left[\\frac{(n-1)S^2}{\\chi^2_{\\alpha/2}(n-1)},\\;\\frac{(n-1)S^2}{\\chi^2_{1-\\alpha/2}(n-1)}\\right]$"
+            ],
+            [
+              "$\\sigma^2$",
+              "$\\mu$ 已知",
+              "$\\frac{\\sum(X_i-\\mu)^2}{\\sigma^2}\\sim\\chi^2(n)$",
+              "$\\left[\\frac{\\sum(X_i-\\mu)^2}{\\chi^2_{\\alpha/2}(n)},\\;\\frac{\\sum(X_i-\\mu)^2}{\\chi^2_{1-\\alpha/2}(n)}\\right]$"
+            ],
+            [
+              "$\\mu_1-\\mu_2$",
+              "$\\sigma_1^2,\\sigma_2^2$ 已知",
+              "$\\frac{(\\bar X-\\bar Y)-(\\mu_1-\\mu_2)}{\\sqrt{\\sigma_1^2/n_1+\\sigma_2^2/n_2}}\\sim N(0,1)$",
+              "$\\bar X-\\bar Y\\pm z_{\\alpha/2}\\sqrt{\\frac{\\sigma_1^2}{n_1}+\\frac{\\sigma_2^2}{n_2}}$"
+            ],
+            [
+              "$\\mu_1-\\mu_2$",
+              "$\\sigma_1^2=\\sigma_2^2$ 未知",
+              "$\\frac{(\\bar X-\\bar Y)-(\\mu_1-\\mu_2)}{S_w\\sqrt{1/n_1+1/n_2}}\\sim t(n_1+n_2-2)$",
+              "$\\bar X-\\bar Y\\pm t_{\\alpha/2}(n_1+n_2-2)S_w\\sqrt{\\frac{1}{n_1}+\\frac{1}{n_2}}$"
+            ],
+            [
+              "$\\mu_1-\\mu_2$",
+              "$\\sigma_2^2/\\sigma_1^2=c$ 已知",
+              "广义合并 $t(n_1+n_2-2)$",
+              "$\\bar X-\\bar Y\\pm t_{\\alpha/2}(n_1+n_2-2)S_{w,c}\\sqrt{\\frac{1}{n_1}+\\frac{c}{n_2}}$"
+            ],
+            [
+              "$\\sigma_1^2/\\sigma_2^2$",
+              "$\\mu_1,\\mu_2$ 未知",
+              "$\\frac{S_1^2/\\sigma_1^2}{S_2^2/\\sigma_2^2}\\sim F(n_1-1,n_2-1)$",
+              "$\\left[\\frac{S_1^2}{S_2^2 F_{\\alpha/2}(n_1-1,n_2-1)},\\;\\frac{S_1^2}{S_2^2}F_{\\alpha/2}(n_2-1,n_1-1)\\right]$"
+            ]
+          ]
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "基础 P.155 / 9讲 P.77 / 方浩 P.173-176 / 猪狗 P.7-8~7-9（含勘误）",
+        "pdfPage": 161,
+        "itemRef": "双正态总体四大置信区间与八式全表"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_ci_and_length",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "双总体区间估计与单总体完全同构：方差已知用 $Z$、同未知方差用合并 $t(n_1+n_2-2)$、方差比用 $F(n_1-1,n_2-1)$（且由三转公式把右端 $1/F_{1-\\alpha/2}(n_1-1,n_2-1)$ 直接化为 $F_{\\alpha/2}(n_2-1,n_1-1)$，只查一张右尾表即可！）。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「方差比 $F$ 区间最好背：左端点除 $F_{\\alpha/2}(n_1-1,n_2-1)$，右端点乘 $F_{\\alpha/2}(n_2-1,n_1-1)$（自由度翻转一除一乘）！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr09-f-06",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "六、假设检验思想与两类错误（数一专属）",
+      "title": "显著性检验五步法与两类错误（α 弃真 vs β 取伪 · 含方浩 P.181 严谨补注）",
+      "formulaLatex": "$$\\begin{aligned} &\\text{小概率原理（反证法思想）：假设原假设 }H_0\\text{ 为真，若样本落入小概率拒绝域 }W (P\\le\\alpha)\\text{，则拒绝 }H_0\\\\ &\\text{第一类错误（弃真 / 拒真）：}H_0\\text{ 为真却拒绝 }H_0\\text{，概率 }\\alpha(\\theta)=P_\\theta(\\mathbf{X}\\in W)　(\\theta\\in\\Theta_0)\\\\ &　　\\text{显著性水平 }\\alpha\\text{ 严谨定义：}\\sup_{\\theta\\in\\Theta_0}P_\\theta(\\mathbf{X}\\in W)\\le\\alpha　\\big(\\text{单边复合假设在边界 }\\theta=\\theta_0\\text{ 取等号！}\\big)\\\\ &\\text{第二类错误（取伪 / 纳伪）：}H_0\\text{ 为假（}H_1\\text{ 真）却接受 }H_0\\text{，概率 }\\beta(\\theta_1)=P_{\\theta_1}(\\mathbf{X}\\in\\bar W)　(\\theta_1\\in\\Theta_1)\\\\ &\\text{核心关系：}\\alpha+\\beta\ne 1\\text{（分属不同真值下的条件概率！）；样本量 }n\\text{ 固定时 }\\alpha,\\beta\\text{ 此消彼长，唯增大 }n\\text{ 可同降}\\end{aligned}$$",
+      "conditions": "**五书严谨补注（方浩强化 P.181 底部【注意】）**：原书笼统写成「第一类错误的概率等于显著性水平」。严格而言，仅对简单原假设 $H_0:\\mu=\\mu_0$ 才有 $P(\\text{第一类错误})=\\alpha$；对**复合原假设**如 $H_0:\\mu\\le\\mu_0$，显著性水平 $\\alpha$ 是犯第一类错误概率的**上界（最大值）**——仅在边界 $\\mu=\\mu_0$ 处等于 $\\alpha$，而在内部点 $\\mu<\\mu_0$ 处严格小于 $\\alpha$！",
+      "pitfalls": "**算第二类错误 $\\beta$ 必须代入 $H_1$ 下的具体真值 $\\mu_1$**：不给具体的 $\\mu_1$ 就无法算出 $\\beta$ 的具体数值！且事件是「落入**接受域** $\\bar W$」（与拒绝域 $W$ 互补！）。",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 680 360\" role=\"img\" aria-label=\"假设检验两类错误重叠曲线与拒绝域权衡图\">\n  <title>假设检验两类错误重叠曲线与拒绝域权衡图</title>\n  <defs>\n    <marker id=\"m1_pr09_t_arr\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n      <path d=\"M0 1 L9 5 L0 9 Z\" fill=\"#475569\"/>\n    </marker>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"680\" height=\"360\" rx=\"12\" fill=\"#f8fafc\"/>\n  <text x=\"340\" y=\"26\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"700\" fill=\"#0f172a\">假设检验两类错误（α 弃真 vs β 取伪）重叠分布与拒绝域权衡解剖</text>\n\n  <!-- Main curve canvas -->\n  <rect x=\"18\" y=\"42\" width=\"644\" height=\"220\" rx=\"10\" fill=\"#ffffff\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n\n  <!-- x axis -->\n  <line x1=\"42\" y1=\"220\" x2=\"636\" y2=\"220\" stroke=\"#475569\" stroke-width=\"1.5\" marker-end=\"url(#m1_pr09_t_arr)\"/>\n  <text x=\"634\" y=\"238\" text-anchor=\"end\" font-size=\"10.5\" fill=\"#475569\">样本均值 X̄</text>\n\n  <!-- H0 bell curve centered at x=250 -->\n  <path d=\"M 70 220 C 138 218, 185 84, 250 84 C 315 84, 362 218, 430 220\" fill=\"none\" stroke=\"#2563eb\" stroke-width=\"2.5\"/>\n  <text x=\"220\" y=\"74\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1d4ed8\">H₀ 为真：X̄ ~ N(μ₀, σ²/n)</text>\n\n  <!-- H1 bell curve centered at x=430 -->\n  <path d=\"M 250 220 C 318 218, 365 84, 430 84 C 495 84, 542 218, 610 220\" fill=\"none\" stroke=\"#7c3aed\" stroke-width=\"2.5\"/>\n  <text x=\"466\" y=\"74\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#6d28d9\">H₁ 为真：X̄ ~ N(μ₁, σ²/n)</text>\n\n  <!-- Shaded beta: left tail of H1 below c=345 -->\n  <path d=\"M 250 220 C 292 219, 322 192, 345 156 L 345 220 Z\" fill=\"#f59e0b\" opacity=\"0.45\"/>\n  <!-- Shaded alpha: right tail of H0 above c=345 -->\n  <path d=\"M 345 162 C 368 196, 396 218, 430 220 L 345 220 Z\" fill=\"#ef4444\" opacity=\"0.5\"/>\n\n  <!-- Critical threshold c=345 -->\n  <line x1=\"345\" y1=\"62\" x2=\"345\" y2=\"226\" stroke=\"#0f172a\" stroke-width=\"2\" stroke-dasharray=\"5 3\"/>\n  <text x=\"345\" y=\"56\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#0f172a\">临界值 c = μ₀ + z_α·σ/√n</text>\n\n  <!-- Acceptance / Rejection annotations -->\n  <rect x=\"86\" y=\"232\" width=\"234\" height=\"22\" rx=\"5\" fill=\"#ecfdf5\" stroke=\"#10b981\"/>\n  <text x=\"203\" y=\"247\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#065f46\">← 接受域 W̄（X̄ ≤ c）</text>\n  <rect x=\"364\" y=\"232\" width=\"236\" height=\"22\" rx=\"5\" fill=\"#fef2f2\" stroke=\"#ef4444\"/>\n  <text x=\"482\" y=\"247\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#b91c1c\">拒绝域 W（X̄ &gt; c）→</text>\n\n  <!-- mu0, c, mu1 labels -->\n  <line x1=\"250\" y1=\"216\" x2=\"250\" y2=\"224\" stroke=\"#2563eb\" stroke-width=\"1.5\"/>\n  <text x=\"250\" y=\"212\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#1d4ed8\">μ₀</text>\n  <line x1=\"430\" y1=\"216\" x2=\"430\" y2=\"224\" stroke=\"#7c3aed\" stroke-width=\"1.5\"/>\n  <text x=\"430\" y=\"212\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#6d28d9\">μ₁</text>\n\n  <!-- Callouts for alpha and beta -->\n  <text x=\"318\" y=\"205\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#b45309\">β</text>\n  <text x=\"372\" y=\"205\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#b91c1c\">α</text>\n\n  <rect x=\"34\" y=\"102\" width=\"136\" height=\"58\" rx=\"7\" fill=\"#fffbeb\" stroke=\"#fbbf24\"/>\n  <text x=\"102\" y=\"120\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#b45309\">第二类错误 β（取伪）</text>\n  <text x=\"102\" y=\"137\" text-anchor=\"middle\" font-size=\"10\" fill=\"#78350f\">P(X̄ ∈ W̄ | H₁ 真)</text>\n  <text x=\"102\" y=\"152\" text-anchor=\"middle\" font-size=\"9.8\" fill=\"#92400e\">依赖具体 μ₁ 取值！</text>\n\n  <rect x=\"510\" y=\"102\" width=\"136\" height=\"58\" rx=\"7\" fill=\"#fef2f2\" stroke=\"#fca5a5\"/>\n  <text x=\"578\" y=\"120\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#b91c1c\">第一类错误 α（弃真）</text>\n  <text x=\"578\" y=\"137\" text-anchor=\"middle\" font-size=\"10\" fill=\"#7f1d1d\">sup P(X̄ ∈ W | H₀ 真)</text>\n  <text x=\"578\" y=\"152\" text-anchor=\"middle\" font-size=\"9.8\" fill=\"#991b1b\">在边界 μ=μ₀ 取最大值</text>\n\n  <!-- Bottom 3 golden exam rules -->\n  <rect x=\"18\" y=\"274\" width=\"206\" height=\"72\" rx=\"8\" fill=\"#ffffff\" stroke=\"#ef4444\" stroke-width=\"1.2\"/>\n  <text x=\"121\" y=\"294\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#b91c1c\">核心辨析：α + β ≠ 1</text>\n  <text x=\"121\" y=\"312\" text-anchor=\"middle\" font-size=\"10\" fill=\"#334155\">分属 H₀ 与 H₁ 两个不同总体</text>\n  <text x=\"121\" y=\"328\" text-anchor=\"middle\" font-size=\"10\" fill=\"#475569\">固定 n 时此消彼长；增大 n 可同降</text>\n\n  <rect x=\"237\" y=\"274\" width=\"206\" height=\"72\" rx=\"8\" fill=\"#ffffff\" stroke=\"#2563eb\" stroke-width=\"1.2\"/>\n  <text x=\"340\" y=\"294\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1d4ed8\">拒绝域嵌套单调律（2018）</text>\n  <text x=\"340\" y=\"312\" text-anchor=\"middle\" font-size=\"10\" fill=\"#334155\">α₁ &lt; α₂ ⇒ W_(α₁) ⊂ W_(α₂)</text>\n  <text x=\"340\" y=\"328\" text-anchor=\"middle\" font-size=\"10\" fill=\"#1e40af\">0.05 接受 ⇒ 0.01 必接受！</text>\n\n  <rect x=\"456\" y=\"274\" width=\"206\" height=\"72\" rx=\"8\" fill=\"#ffffff\" stroke=\"#0f766e\" stroke-width=\"1.2\"/>\n  <text x=\"559\" y=\"294\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#065f46\">单双侧拒绝域方向口诀</text>\n  <text x=\"559\" y=\"312\" text-anchor=\"middle\" font-size=\"10\" fill=\"#334155\">拒绝域方向与备择假设 H₁ 一致！</text>\n  <text x=\"559\" y=\"328\" text-anchor=\"middle\" font-size=\"10\" fill=\"#047857\">H₁: &gt; 查右侧 · &lt; 查左侧 · ≠ 查双侧</text>\n</svg>",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "基础 P.156-157 / 9讲 P.79-81 / 方浩 P.181（严谨补注） / 猪狗 P.8-1~8-3",
+        "pdfPage": 162,
+        "itemRef": "假设检验五步法与两类错误（含方浩P.181严谨补注）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_hypothesis_and_errors",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "假设检验在「控制第一类错误（冤枉好人）概率不超过显著性水平 $\\alpha$」的红线下，尽可能压低第二类错误（放过坏人）概率 $\\beta$（即奈曼-皮尔逊显著性检验原则）。**2021 真题直接考 $\\beta$ 计算，2025 真题直接考单侧拒绝域！**"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「第一类弃真控制 $\\alpha$，第二类取伪记作 $\\beta$；$\\alpha+\\beta$ 绝不等于 $1$，唯有加大样本量 $n$ 才能双双压低！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr09-f-07",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "七、正态总体参数假设检验拒绝域全表（数一专属）",
+      "title": "单/双正态总体参数假设检验拒绝域全表（含猪狗 P.8-4 & P.8-6 双处重大方向勘误！）",
+      "formulaLatex": "$$\\begin{aligned} &\\text{检验构造四步口诀：定边界条件}\\to\\text{造正态/三大分布统计量}\\to\\text{按 }H_1\\text{ 定拒绝域方向}\\to\\text{代入上侧分位数}\\\\ &\\text{① 单正态 }\\mu\\text{（}\\sigma^2\\text{ 已知，}U=\\frac{\\bar X-\\mu_0}{\\sigma/\\sqrt n}\\text{）：}H_1:\\mu\ne\\mu_0\\Rightarrow |U|>z_{\\alpha/2};  H_1:\\mu>\\mu_0\\Rightarrow U>z_\\alpha;  H_1:\\mu<\\mu_0\\Rightarrow U<-z_\\alpha\\\\ &\\text{② 单正态 }\\mu\\text{（}\\sigma^2\\text{ 未知，}T=\\frac{\\sqrt n(\\bar X-\\mu_0)}{S}\\text{）：将上式 }U,z\\text{ 替换为 }T,t(n-1)\\\\ &\\text{③ 单正态 }\\sigma^2\\text{（}\\mu\\text{ 未知，}\\chi^2=\\frac{(n-1)S^2}{\\sigma_0^2}\\text{）：}\\\\ &　　 H_1:\\sigma^2\ne\\sigma_0^2\\Rightarrow \\chi^2>\\chi^2_{\\alpha/2}\\text{ 或 }\\chi^2<\\chi^2_{1-\\alpha/2};　 H_1:\\sigma^2>\\sigma_0^2\\Rightarrow \\chi^2>\\chi^2_\\alpha;　 H_1:\\sigma^2<\\sigma_0^2\\Rightarrow \\chi^2<\\chi^2_{1-\\alpha}\\\\ &\\text{④ 双正态 }\\mu_1-\\mu_2\\text{（}Z/t\\text{ 检验）与 }\\sigma_1^2/\\sigma_2^2\\text{（}F=S_1^2/S_2^2\\text{ 检验）：右侧 }F>F_\\alpha\\text{，左侧 }F<F_{1-\\alpha}\\text{，双侧取两尾}\\end{aligned}$$",
+      "conditions": "**五书双处重大方向勘误（必看排雷！）**：\n- `猪狗百宝书 P.8-4` 单正态方差 $\\chi^2$ 检验第 (2) 式左侧拒绝域 $\\{\\frac{(n-1)s^2}{\\sigma_0^2}<\\chi^2_{1-\\alpha}\\}$ 对应的原假设误印为 `H_0: σ² ≤ σ_0²`（正确应为 **$H_0:\\sigma^2\\ge\\sigma_0^2,\\;H_1:\\sigma^2<\\sigma_0^2$**！）；\n- `猪狗百宝书 P.8-6` 双正态方差比 $F$ 检验第 (2) 式左侧拒绝域 $\\{F<F_{1-\\alpha}\\}$ 对应的原假设同样误印为 `H_0: σ_1² ≤ σ_2²`（正确应为 **$H_0:\\sigma_1^2\\ge\\sigma_2^2,\\;H_1:\\sigma_1^2<\\sigma_2^2$**！）。",
+      "pitfalls": "**小字统一提醒**：`方浩强化 P.185 例题 7` 题干定义了 $z_\\alpha$，答案却混用了老教材符号 $u_{0.05}$——记住 $u_\\alpha$ 与 $z_\\alpha$ 完全同义，均为标准正态上侧 $\\alpha$ 分位数！",
+      "tables": [
+        {
+          "caption": "表 P9-3 · 单/双正态总体参数假设检验统计量与拒绝域全表（数学一专属）",
+          "headers": [
+            "检验项目与条件",
+            "检验统计量（H₀ 边界分布）",
+            "双侧 H₁: ≠ 拒绝域",
+            "右侧 H₁: > 拒绝域",
+            "左侧 H₁: < 拒绝域"
+          ],
+          "rows": [
+            [
+              "单 $\\mu$（$\\sigma^2$ 已知）",
+              "$U=\\frac{\\bar X-\\mu_0}{\\sigma/\\sqrt n}\\sim N(0,1)$",
+              "$|U|>z_{\\alpha/2}$",
+              "$U>z_\\alpha$",
+              "$U<-z_\\alpha$"
+            ],
+            [
+              "单 $\\mu$（$\\sigma^2$ 未知）",
+              "$T=\\frac{\\sqrt n(\\bar X-\\mu_0)}{S}\\sim t(n-1)$",
+              "$|T|>t_{\\alpha/2}(n-1)$",
+              "$T>t_\\alpha(n-1)$",
+              "$T<-t_\\alpha(n-1)$"
+            ],
+            [
+              "单 $\\sigma^2$（$\\mu$ 未知）",
+              "$\\chi^2=\\frac{(n-1)S^2}{\\sigma_0^2}\\sim\\chi^2(n-1)$",
+              "$\\chi^2>\\chi^2_{\\alpha/2}$ 或 $<\\chi^2_{1-\\alpha/2}$",
+              "$\\chi^2>\\chi^2_\\alpha$",
+              "$\\chi^2<\\chi^2_{1-\\alpha}$"
+            ],
+            [
+              "双 $\\mu_1-\\mu_2$（方差已知）",
+              "$U=\\frac{\\bar X-\\bar Y}{\\sqrt{\\sigma_1^2/n_1+\\sigma_2^2/n_2}}\\sim N(0,1)$",
+              "$|U|>z_{\\alpha/2}$",
+              "$U>z_\\alpha$",
+              "$U<-z_\\alpha$"
+            ],
+            [
+              "双 $\\mu_1-\\mu_2$（同方差未知）",
+              "$T=\\frac{\\bar X-\\bar Y}{S_w\\sqrt{1/n_1+1/n_2}}\\sim t(n_1+n_2-2)$",
+              "$|T|>t_{\\alpha/2}$",
+              "$T>t_\\alpha$",
+              "$T<-t_\\alpha$"
+            ],
+            [
+              "双 $\\sigma_1^2/\\sigma_2^2$（均值未知）",
+              "$F=\\frac{S_1^2}{S_2^2}\\sim F(n_1-1,n_2-1)$",
+              "$F>F_{\\alpha/2}$ 或 $<F_{1-\\alpha/2}$",
+              "$F>F_\\alpha$",
+              "$F<F_{1-\\alpha}$"
+            ]
+          ]
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "基础 P.157 / 9讲 P.80 / 方浩 P.180-185 / 猪狗 P.8-3~8-6（双勘误）",
+        "pdfPage": 163,
+        "itemRef": "单双正态假设检验拒绝域全表（含猪狗P.8-4与P.8-6勘误）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_hypothesis_and_errors",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "单/双正态总体全部 6 类检验的拒绝域均与表 P9-2 的置信区间**严格一一对偶**（落入双侧 $1-\\alpha$ 置信区间 $\\iff$ 双侧显著性水平 $\\alpha$ 接受 $H_0$！）。只需记住**拒绝域方向永远与备择假设 $H_1$ 的不等号方向完全一致**，即可一秒无错写出全部 18 种拒绝域！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「等号永远归 $H_0$，拒绝方向盯 $H_1$：$H_1$ 大于查右尾 $x_\\alpha$，$H_1$ 小于查左尾 $x_{1-\\alpha}$（对称即 $-x_\\alpha$），$H_1$ 不等拆双尾 $\\alpha/2$！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr09-c-01",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "一、MLE 特殊边界与奇异情景",
+      "title": "MLE 四大非典型情景破解（无驻点单调边界 / 区间不唯一 / 截断驻点 / 奇异不存在）",
+      "conditions": "所有非典型 MLE 的核心保命习惯：**第一步就把示性范围写成关于 $\\theta$ 的显式不等式约束**！",
+      "application": "通杀 2015 真题、2024 真题、方浩例 4/7/8 与猪狗例 7.15/7.16/7.23。",
+      "pitfalls": "写 $U(\\theta,3\\theta)$ 的可行域时千万别漏掉任何一侧：$\\theta\\le x_i\\le 3\\theta\\;(\\forall i)\\iff \\frac13 x_{(n)}\\le\\theta\\le x_{(1)}$，下界是 $\\frac13 x_{(n)}$ 而非 $x_{(n)}$！",
+      "source": {
+        "book": "27 方浩强化 & 27 猪狗百宝书 & 27 张宇基础30讲",
+        "printedPage": "方浩 P.158-162 例4,7,8 / 猪狗 P.7-16 例7.15-7.16, P.7-19 例7.23",
+        "pdfPage": 163,
+        "itemRef": "MLE四大特殊边界与奇异情景破解"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_boundary_and_special_mle",
+        "verified": true
+      },
+      "summary": "遇到非常规 MLE 切勿盲目令 $\\frac{\\mathrm{d}\\ln L}{\\mathrm{d}\\theta}=0$，按四类精准处置：\n1. **支撑含参单调无驻点**：如 $U(0,\\theta)\\implies\\theta\\ge X_{(n)}$ 且 $L=\\theta^{-n}$ 递减 $\\Rightarrow\\hat\\theta=X_{(n)}$；$U(\\theta,1)\\implies\\theta\\le X_{(1)}$ 且 $L=(1-\\theta)^{-n}$ 递增 $\\Rightarrow\\hat\\theta=X_{(1)}$；$U(\\theta,3\\theta)\\implies\\frac13 X_{(n)}\\le\\theta\\le X_{(1)}$ 且 $L=(2\\theta)^{-n}$ 递减 $\\Rightarrow\\hat\\theta=\\frac13 X_{(n)}$！\n2. **MLE 不唯一**：如 $U(\\theta-\\frac12,\\theta+\\frac12)$ 在可行域 $[X_{(n)}-\\frac12,\\;X_{(1)}+\\frac12]$ 上 $L(\\theta)\\equiv 1$ 为常数，**区间内任意一点（如中程数 $\\frac{X_{(1)}+X_{(n)}}{2}$）都是 MLE**！\n3. **驻点越界取端点**：若参数空间受限（如 $\\theta\\ge 1$），解出驻点 $\\theta_0<1$ 且 $L$ 在 $[1,+\\infty)$ 递减，则边界 $\\hat\\theta=1$ 为 MLE！\n4. **单样本正态方差 MLE 不存在**：$n=1$ 时取 $\\mu=x_1$ 令 $\\sigma\\to 0^+$，似然 $L=\\frac{1}{\\sqrt{2\\pi}\\sigma}\\to+\\infty$，无有限最大值！"
+    },
+    {
+      "id": "m1-pr09-c-02",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、评选标准深层关系",
+      "title": "无偏 · 有效 · 一致 · 最小 MSE 四维关系与 E(σ̂²) > [E(σ̂)]² 恒等警示",
+      "conditions": "比较 $c_1 S^2$ 与 $c_2 S^2$ 的 MSE 时，把 $\\operatorname{MSE}=D(\\hat\\theta)+(\\text{Bias})^2$ 写成关于 $c$ 的二次函数求顶点即可一步秒出最优系数！",
+      "application": "直接揭示 2024 真题第 (2) 问的命题深意，并秒杀方浩例 6、例 12 等概念选择题。",
+      "pitfalls": "切勿误以为「最大似然估计一定无偏」或「无偏估计一定是均方误差最小的估计」——两条在考研真题里都是经典错项！",
+      "source": {
+        "book": "2024 真题 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "猪狗 P.7-10 例7.2 / 方浩 P.160 例6, P.167 例12",
+        "pdfPage": 157,
+        "itemRef": "无偏有效一致与最小MSE四维关系辨析"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_criteria_and_2024_2026",
+        "verified": true
+      },
+      "summary": "1. **有偏反而 MSE 更小（2024 真题启示）**：对 $U[0,\\theta]$ 缩放估计 $T_c=cX_{(n)}$，无偏取 $c=\\frac{n+1}{n}$，而最小均方误差 $E[(T_c-\\theta)^2]$ 取在**有偏值 $c=\\frac{n+2}{n+1}<\\frac{n+1}{n}$**（因为略微向 $0$ 收缩引入极小偏差平方，却换来方差大幅下降！）；\n2. **非线性变换不保无偏性（方浩例 6）**：虽然 MLE 具有不变性（$\\hat\\sigma=\\sqrt{\\widehat{\\sigma^2}}$），但**无偏性没有不变性**！只要估计量非常数，由严格 Jensen 不等式必有 $E(\\widehat{\\sigma^2})>[E(\\hat\\sigma)]^2$；\n3. **三者逻辑独立性**：无偏 $\\not\\Rightarrow$ 一致（如 $X_1$）；一致 $\\not\\Rightarrow$ 无偏（如 $\\frac1n\\sum(X_i-\\bar X)^2$）；无偏 + $D(\\hat\\theta_n)\\to 0\\implies$ 一致！"
+    },
+    {
+      "id": "m1-pr09-c-03",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "三、置信区间精度分析与对偶定理",
+      "title": "置信区间长度灵敏度分析与「区间估计 ⟺ 双侧假设检验」对偶定理",
+      "conditions": "对偶定理适用于等尾双侧检验与等尾双侧区间（单侧检验同样严格对偶于单侧置信限！）。",
+      "application": "概率 9 讲例 9.9、基础例 6.13/6.15、方浩例 16 等区间长度与对偶检验题直接一步秒杀！",
+      "pitfalls": "防错概念题：「置信水平 $1-\\alpha$ 越大，区间估计越精确」——**错！** 置信度越大，区间越宽，**精度越低**（可靠度与精确度是一对矛盾，唯增大 $n$ 可兼得！）。",
+      "source": {
+        "book": "27 张宇概率9讲 & 27 基础30讲 & 27 方浩强化",
+        "printedPage": "9讲 P.77-78 例9.9 / 基础 P.155 例6.13, P.157 例6.15 / 方浩 P.172 例16",
+        "pdfPage": 88,
+        "itemRef": "置信区间长度分析与假设检验对偶定理"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_ci_and_length",
+        "verified": true
+      },
+      "summary": "1. **区间长度灵敏度（以 $\\sigma$ 已知为例 $L=2z_{\\alpha/2}\\frac{\\sigma}{\\sqrt n}$）**：\n   - 置信度 $1-\\alpha$ 提高（$\\alpha\\downarrow$）$\\implies z_{\\alpha/2}\\uparrow\\implies$ 区间变**长**（可靠性高但精度降）；\n   - 样本容量 $n$ 增大 $\\implies L\\propto\\frac{1}{\\sqrt n}$ 变**短**（想把长度缩为一半，样本量 $n$ 须增至 **$4$ 倍**！）；\n   - 若 $\\sigma$ 未知，$L=2t_{\\alpha/2}(n-1)\\frac{S}{\\sqrt n}$ 本身是**随机变量**，无法在抽样前用固定 $n$ 绝对保证长度 $\\le L_0$；\n2. **置信区间与双侧检验对偶定理**：在显著性水平 $\\alpha$ 下双侧检验 $H_0:\\theta=\\theta_0\\;(\\text{vs }H_1:\\theta\\ne\\theta_0)$，**接受 $H_0\\iff\\theta_0$ 落入 $\\theta$ 的 $1-\\alpha$ 双侧置信区间内**！"
+    },
+    {
+      "id": "m1-pr09-c-04",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "extended",
+      "section": "四、非正态大样本近似置信区间",
+      "title": "中心极限定理构造非正态大样本近似置信区间（一般均值 & 0-1 比例 p）",
+      "conditions": "需样本容量 $n$ 足够大以保障正态近似精度；`基础例 6.14` 与 `概率 9 讲例 9.10` 重点演练了二次不等式精解法与直接代入法两种题型！",
+      "application": "应对考研中「总体服从泊松/指数/两点分布，求大样本近似置信区间」的新颖综合题。",
+      "pitfalls": "若总体是泊松分布 $P(\\lambda)$，$EX=DX=\\lambda$，由 CLT 得 $\\frac{\\bar X-\\lambda}{\\sqrt{\\lambda/n}}\\dot\\sim N(0,1)$，解二次不等式 $(\\bar X-\\lambda)^2\\le\\frac{z_{\\alpha/2}^2}{n}\\lambda$ 可给出无需代入方差的精确大样本区间！",
+      "source": {
+        "book": "27 张宇基础30讲 & 27 张宇概率9讲",
+        "printedPage": "基础 P.155 例6.14 / 9讲 P.78 例9.10",
+        "pdfPage": 161,
+        "itemRef": "CLT构造非正态大样本近似置信区间"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_ci_and_length",
+        "verified": true
+      },
+      "summary": "当总体**非正态**但样本容量 $n$ 充分大（如 $n\\ge 50$）时，借助 CLT 与大数定律（$S\\xrightarrow{P}\\sigma$）构造大样本 $1-\\alpha$ 近似置信区间：\n1. **一般总体均值 $\\mu$**：$\\frac{\\bar X-\\mu}{S/\\sqrt n}\\dot\\sim N(0,1)\\implies \\left[\\bar X-z_{\\alpha/2}\\frac{S}{\\sqrt n},\\;\\bar X+z_{\\alpha/2}\\frac{S}{\\sqrt n}\\right]$；\n2. **0-1 总体比例 $p$**：由 $\\frac{\\bar X-p}{\\sqrt{p(1-p)/n}}\\dot\\sim N(0,1)$ 有两种解法：① **代入法**（用 $\\bar X$ 替方差内 $p$）得 $\\bar X\\pm z_{\\alpha/2}\\sqrt{\\frac{\\bar X(1-\\bar X)}{n}}$；② **二次不等式精解法**（不替换分母 $p$，直接解 $|\\bar X-p|\\le z_{\\alpha/2}\\sqrt{\\frac{p(1-p)}{n}}$ 的一元二次不等式得 Wilson 区间！）。"
+    },
+    {
+      "id": "m1-pr09-c-05",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "五、假设检验核心规律",
+      "title": "假设检验三大铁律（方向看 H₁ · 拒绝域嵌套单调律 · 接受 ≠ 证实为真）",
+      "conditions": "嵌套单调律对单侧与双侧正态/$t$/$\\chi^2$/$F$ 检验全部普适成立！",
+      "application": "10 秒秒杀 2018 数一真题，并杜绝「若 $0.05$ 下拒绝则 $0.01$ 下必拒绝」的反向陷阱！",
+      "pitfalls": "**正向与逆向千万别反**：$\\alpha=0.05$ 下拒绝 $H_0$，说明样本落在 $W_{0.05}$ 内，但它可能正好夹在 $W_{0.05}\\setminus W_{0.01}$ 之间，因此 $\\alpha=0.01$ 下**可能接受也可能拒绝**，不能断定必拒绝！",
+      "source": {
+        "book": "2018 真题 · 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "猪狗 P.8-3, P.8-7 例8.3 / 方浩 P.184 例6",
+        "pdfPage": 176,
+        "itemRef": "假设检验三大铁律与拒绝域嵌套单调律"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "summary": "1. **方向铁律**：等号永远放入原假设 $H_0$，**拒绝域的尾方向与备择假设 $H_1$ 严格同向**（$H_1:>$ 取右尾，$H_1:<$ 取左尾，$H_1:\\ne$ 取双尾）；\n2. **拒绝域嵌套单调律（2018 真题！）**：固定样本与检验统计量，显著性水平越小，拒绝门槛越严苛，拒绝域越窄：$$\\alpha_1<\\alpha_2\\implies W_{\\alpha_1}\\subset W_{\\alpha_2},\\qquad \\bar W_{\\alpha_2}\\subset\\bar W_{\\alpha_1}$$ 记忆口诀：**「严（小 $\\alpha$）拒必宽（大 $\\alpha$）拒；宽（大 $\\alpha$）接必严（小 $\\alpha$）接！」**（如 $\\alpha=0.05$ 接受 $\\Rightarrow\\alpha=0.01$ 必接受！）；\n3. **「疑罪从无」不对称原则**：拒绝 $H_0$ 是有强证据推翻（犯错风险受控于 $\\alpha$）；「接受 $H_0$」仅表示当前证据不足以推翻 $H_0$，绝不代表证实 $H_0$ 为真（因为第二类错误 $\\beta$ 未被控制！）。"
+    },
+    {
+      "id": "m1-pr09-c-06",
+      "kind": "conclusion",
+      "stage": "foundation",
+      "examWeight": "extended",
+      "section": "二、常见偏差校正指南",
+      "title": "高频 MLE 偏差校正速查表（把有偏 MLE 一步乘系数变成无偏估计！）",
+      "conditions": "修正系数必须**只含样本容量 $n$（不含未知参数 $\\theta$）**，否则修正后就不再是统计量！",
+      "application": "近三年真题（2023/2024/2026）连续考查「确定常数 $a$ 或 $c$ 使估计量无偏」，本质全在此表之中！",
+      "pitfalls": "注意指数速率参数 $\\lambda$（均值 $1/\\lambda$）的 MLE $\\hat\\lambda=1/\\bar X$：由逆伽马期望得 $E(1/\\bar X)=\\frac{n}{n-1}\\lambda\\;(n\\ge 2)$，故 $\\frac{n-1}{n\\bar X}$ 才是 $\\lambda$ 的无偏估计！",
+      "source": {
+        "book": "27 概率9讲 & 27 方浩强化 & 2024/2026 真题汇总",
+        "printedPage": "9讲 P.74 / 方浩 P.161,167 / 猪狗 P.7-10",
+        "pdfPage": 85,
+        "itemRef": "高频MLE偏差校正无偏因子速查"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_criteria_and_2024_2026",
+        "verified": true
+      },
+      "summary": "很多经典分布的最大似然估计量天然带有一点系统偏差，只需乘一个仅含 $n$ 的确定修正因子即可升级为无偏估计：\n- 正态方差 MLE $\\hat\\sigma^2=\\frac1n\\sum(X_i-\\bar X)^2$：$E(\\hat\\sigma^2)=\\frac{n-1}{n}\\sigma^2\\implies$ 乘 $\\frac{n}{n-1}$ 得无偏 $S^2$；\n- 均匀分布 $U(0,\\theta)$ 的 MLE $X_{(n)}$：$E(X_{(n)})=\\frac{n}{n+1}\\theta\\implies$ 乘 $\\frac{n+1}{n}$ 得无偏估计量 $\\frac{n+1}{n}X_{(n)}$；\n- 均匀分布 $U(\\theta,3\\theta)$ 的 MLE $\\frac13 X_{(n)}$：$E(\\frac13 X_{(n)})=\\frac{3n+1}{3(n+1)}\\theta\\implies$ 乘 $\\frac{3(n+1)}{3n+1}$ 得无偏估计；\n- 指数 $E(1/\\theta)$ 最小寿命 $X_{(1)}$：$E(X_{(1)})=\\frac{\\theta}{n}\\implies$ 乘 $n$ 得无偏估计 $nX_{(1)}$（2026 真题！）！"
+    },
+    {
+      "id": "m1-pr09-e-01",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、矩估计与最大似然估计基础母题",
+      "title": "【概率 9 讲 例 9.1 / 猪狗例 7.14】一阶矩失效升二阶矩：拉普拉斯分布双估计",
+      "problem": "设总体 $X$ 的概率密度为 $f(x;\\theta)=\\dfrac{1}{2\\theta}e^{-\\frac{|x|}{\\theta}}\\;(-\\infty<x<+\\infty,\\;\\theta>0)$，$X_1,\\dots,X_n$ 为简单随机样本，求未知参数 $\\theta$ 的矩估计量与最大似然估计量。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "密度关于 $0$ 偶对称 $\\implies EX=0$ 不含 $\\theta$！果断放弃一阶矩、直接升级用二阶矩 $E(X^2)=A_2$ 求矩估计；MLE 取对数求驻点！"
+        },
+        {
+          "stepTitle": "求矩估计量（升二阶矩！）",
+          "detail": "因 $f(x;\\theta)$ 是偶函数且指数衰减，故 $EX=0$（不含 $\\theta$，一阶矩失效！）。计算二阶原点矩：$$E(X^2)=\\int_{-\\infty}^{+\\infty}\\frac{x^2}{2\\theta}e^{-\\frac{|x|}{\\theta}}\\,\\mathrm{d}x=\\frac{1}{\\theta}\\int_0^{+\\infty}x^2 e^{-x/\\theta}\\,\\mathrm{d}x=2\\theta^2$$ 令 $2\\theta^2=A_2=\\frac{1}{n}\\sum_{i=1}^n X_i^2$，因 $\\theta>0$，解得矩估计量：$$\\hat\\theta_M=\\sqrt{\\frac{1}{2n}\\sum_{i=1}^{n}X_i^2}$$"
+        },
+        {
+          "stepTitle": "求最大似然估计量（MLE）",
+          "detail": "似然函数 $L(\\theta)=\\frac{1}{(2\\theta)^n}\\exp\\!\\left(-\\frac1\\theta\\sum_{i=1}^n |x_i|\\right)$，取对数：$$\\ln L(\\theta)=-n\\ln 2-n\\ln\\theta-\\frac{1}{\\theta}\\sum_{i=1}^{n}|x_i|$$ 令 $\\frac{\\mathrm{d}\\ln L}{\\mathrm{d}\\theta}=-\\frac{n}{\\theta}+\\frac{1}{\\theta^2}\\sum_{i=1}^n |x_i|=0$，解得唯一驻点（易验极大值）并改写为大写样本：$$\\hat\\theta_L=\\frac{1}{n}\\sum_{i=1}^{n}|X_i|$$"
+        }
+      ],
+      "finalAnswer": "矩估计 $\\hat\\theta_M=\\sqrt{\\dfrac{1}{2n}\\sum_{i=1}^n X_i^2}$；　　 MLE $\\hat\\theta_L=\\dfrac{1}{n}\\sum_{i=1}^n |X_i|$。",
+      "source": {
+        "book": "27 张宇概率9讲 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.71 例9.1 / 猪狗 P.7-15 例7.14",
+        "pdfPage": 82,
+        "itemRef": "概率9讲例9.1：拉普拉斯分布升二阶矩估计与MLE"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_mom_mle_table",
+        "verified": true
+      },
+      "takeaway": "**绝不可把 $E(|X|)=\\theta$ 直接当一阶原点矩用**！矩估计标准定义只能用 $k$ 阶原点矩 $E(X^k)$ 或中心矩，$E|X|$ 不是常规矩，因此本题的矩估计与 MLE 结果不同！"
+    },
+    {
+      "id": "m1-pr09-e-02",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "一、双参数矩估计与边界 MLE",
+      "title": "【概率 9 讲 例 9.2 / 猪狗例 7.16】双参数平移指数分布的矩估计与混合 MLE",
+      "problem": "设总体 $X$ 的概率密度为 $f(x;\\mu,\\theta)=\\begin{cases}\\frac{1}{\\theta}e^{-\\frac{x-\\mu}{\\theta}},&x\\ge\\mu\\\\0,&x<\\mu\\end{cases}$（$\\mu\\in\\mathbb{R},\\;\\theta>0$ 均未知），$X_1,\\dots,X_n$ 为简单随机样本，求 $\\mu,\\theta$ 的矩估计量与最大似然估计量。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "把 $X$ 看成 $\\mu+Y$（其中 $Y\\sim E(1/\\theta)$）秒写期望方差；求 MLE 时先由支撑 $x_i\\ge\\mu$ 锁死 $\\mu\\le x_{(1)}$ 并用单调性定 $\\hat\\mu=X_{(1)}$，再对 $\\theta$ 求导！"
+        },
+        {
+          "stepTitle": "求双参数矩估计量",
+          "detail": "令 $Y=X-\\mu\\sim E(1/\\theta)$，立得 $EX=\\mu+\\theta$，$DX=\\theta^2$。令总体均值与方差分别等于样本均值 $\\bar X$ 与二阶中心矩 $B_2=\\frac1n\\sum(X_i-\\bar X)^2$：$$\\begin{cases}\\mu+\\theta=\\bar X\\\\\\theta^2=B_2\\end{cases}\\implies \\hat\\theta_M=\\sqrt{\\frac{1}{n}\\sum_{i=1}^n (X_i-\\bar X)^2},\\qquad \\hat\\mu_M=\\bar X-\\sqrt{\\frac{1}{n}\\sum_{i=1}^n (X_i-\\bar X)^2}$$"
+        },
+        {
+          "stepTitle": "求双参数 MLE（先边界定 μ，再驻点定 θ！）",
+          "detail": "似然函数为 $$L(\\mu,\\theta)=\\theta^{-n}\\exp\\!\\left(-\\frac{1}{\\theta}\\sum_{i=1}^n (x_i-\\mu)\\right),\\qquad \\mu\\le x_{(1)},\\;\\theta>0$$ 对任意固定的 $\\theta>0$，指数内 $+\\frac{n\\mu}{\\theta}$ 关于 $\\mu$ **严格单调递增**，故 $\\mu$ 须取可行域右端点 $\\hat\\mu_L=X_{(1)}$！代回 $\\ln L(x_{(1)},\\theta)=-n\\ln\\theta-\\frac{1}{\\theta}\\sum(x_i-x_{(1)})$，对 $\\theta$ 求导令 $0$ 解得：$$\\hat\\theta_L=\\frac{1}{n}\\sum_{i=1}^n (X_i-X_{(1)})=\\bar X-X_{(1)}$$"
+        }
+      ],
+      "finalAnswer": "矩估计：$\\hat\\theta_M=\\sqrt{B_2},\\;\\hat\\mu_M=\\bar X-\\sqrt{B_2}$；　　 MLE：$\\hat\\mu_L=X_{(1)},\\;\\hat\\theta_L=\\bar X-X_{(1)}$。",
+      "source": {
+        "book": "27 张宇概率9讲 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.72 例9.2 / 猪狗 P.7-16 例7.16",
+        "pdfPage": 83,
+        "itemRef": "概率9讲例9.2：双参数平移指数分布矩估计与MLE"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_mom_mle_table",
+        "verified": true
+      },
+      "takeaway": "**边界与驻点混合双参 MLE 标准套路**：永远先固定驻点参数，用单调性确定边界参数（$X_{(1)}$ 或 $X_{(n)}$），再代回对另一个参数求导！"
+    },
+    {
+      "id": "m1-pr09-e-03",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、最新 2020–2026 历年压轴真题全解",
+      "title": "【2026 最新真题】定数截尾指数寿命试验：最小寿命无偏估计与截尾 MLE",
+      "problem": "（2026 真题）假设某种元件寿命服从指数分布，其均值 $\\theta>0$ 是未知参数。取 $n$ 个这种元件同时做寿命试验，试验直到出现 $k\\;(1\\le k\\le n)$ 个元件失效时停止：\n(1) 若 $k=1$，失效元件寿命记为 $T$：(i) 求 $T$ 的概率密度；(ii) 记 $\\hat\\theta=aT$，确定常数 $a$ 使 $E(\\hat\\theta)=\\theta$（无偏估计），并求 $D(\\hat\\theta)$；\n(2) 已知 $k$ 个失效元件寿命值分别为 $t_1\\le t_2\\le\\dots\\le t_k$，似然函数为 $L(\\theta)=\\dfrac{1}{\\theta^k}e^{-\\frac{1}{\\theta}\\left[\\sum_{i=1}^k t_i+(n-k)t_k\\right]}$，求 $\\theta$ 的最大似然估计值。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "2026 最新真题把**顺序统计量最小值**（$k=1$ 时 $T=\\min\\{X_1,\\dots,X_n\\}$）、**无偏性**与**定数截尾 MLE** 完美串联，计算极其清爽！"
+        },
+        {
+          "stepTitle": "求解 (1)：最小寿命分布、无偏系数 a 与方差",
+          "detail": "单元件寿命 $X_i\\sim E(1/\\theta)$，生存函数 $P\\{X_i>t\\}=e^{-t/\\theta}\\;(t>0)$。当 $k=1$ 时，$T=\\min\\{X_1,\\dots,X_n\\}$，故对 $t>0$：$$F_T(t)=1-\\prod_{i=1}^n P\\{X_i>t\\}=1-e^{-\\frac{nt}{\\theta}}\\implies f_T(t)=\\begin{cases}\\frac{n}{\\theta}e^{-\\frac{nt}{\\theta}},&t>0\\\\0,&t\\le 0\\end{cases}$$ 即 $T\\sim E(n/\\theta)$，从而 $ET=\\frac{\\theta}{n},\\;DT=\\frac{\\theta^2}{n^2}$！\n令 $E(\\hat\\theta)=a\\cdot\\frac{\\theta}{n}=\\theta\\implies a=n$！进而 $$D(\\hat\\theta)=D(nT)=n^2\\cdot\\frac{\\theta^2}{n^2}=\\theta^2$$（惊人结论：无论同时放多少个元件，只要 $k=1$ 一坏就停，无偏估计方差恒为 $\\theta^2$，不随 $n$ 缩小！）。"
+        },
+        {
+          "stepTitle": "求解 (2)：对定数截尾似然函数求对数驻点",
+          "detail": "记总试验时间 $W=\\sum_{i=1}^k t_i+(n-k)t_k>0$，则 $$\\ln L(\\theta)=-k\\ln\\theta-\\frac{W}{\\theta},\\qquad \\frac{\\mathrm{d}\\ln L}{\\mathrm{d}\\theta}=-\\frac{k}{\\theta}+\\frac{W}{\\theta^2}=0\\implies \\hat\\theta=\\frac{W}{k}=\\frac{1}{k}\\left[\\sum_{i=1}^{k}t_i+(n-k)t_k\\right]$$ 且在 $\\hat\\theta$ 左侧导数 $>0$、右侧 $<0$，确为全局唯一最大值点！"
+        }
+      ],
+      "finalAnswer": "(1) $f_T(t)=\\frac{n}{\\theta}e^{-nt/\\theta}\\;(t>0)$，$a=n$，$D(\\hat\\theta)=\\theta^2$；　　 (2) $\\hat\\theta=\\dfrac{1}{k}\\left[\\sum_{i=1}^k t_i+(n-k)t_k\\right]$。",
+      "source": {
+        "book": "2026 考研真题 · 猪狗百宝书",
+        "printedPage": "猪狗 P.7-10 例7.1 (2026)",
+        "pdfPage": 157,
+        "itemRef": "2026真题：定数截尾指数寿命无偏估计与MLE"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_criteria_and_2024_2026",
+        "verified": true
+      },
+      "takeaway": "**物理直觉验算**：$\\sum_{i=1}^k t_i+(n-k)t_k$ 正是「$k$ 个失效元件与 $n-k$ 个未失效截尾元件累计运行的总机时」，除以失效件数 $k$ 就是「平均无故障时间 MTBF」，当 $k=n$ 全样本时自然退化为 $\\bar t$！"
+    },
+    {
+      "id": "m1-pr09-e-04",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、最新 2020–2026 历年压轴真题全解",
+      "title": "【2024 真题】U[0, θ] 顺序统计量无偏系数 vs 最小均方误差（MSE）系数",
+      "problem": "（2024 真题）设总体 $X\\sim U[0,\\theta]\\;(\\theta>0$ 未知），$X_1,\\dots,X_n$ 为简单随机样本，记 $X_{(n)}=\\max\\{X_1,\\dots,X_n\\}$，$T_c=cX_{(n)}$：\n(1) 求常数 $c$ 使得 $E(T_c)=\\theta$（无偏估计）；\n(2) 记 $h(c)=E[(T_c-\\theta)^2]$，求常数 $c$ 使得 $h(c)$ 最小。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "先求出 $X_{(n)}$ 的密度 $f(x)=\\frac{nx^{n-1}}{\\theta^n}\\;(0<x<\\theta)$ 及一、二阶原点矩；第 (2) 问把 $h(c)$ 展成关于 $c$ 的开口向上二次函数，求顶点一步到位！"
+        },
+        {
+          "stepTitle": "求解 (1)：求 X_(n) 的矩并定无偏系数",
+          "detail": "对 $0<x<\\theta$，$F_{X_{(n)}}(x)=\\left(\\frac{x}{\\theta}\\right)^n\\implies f_{X_{(n)}}(x)=\\frac{n x^{n-1}}{\\theta^n}$。计算前两阶原点矩：$$E(X_{(n)})=\\int_0^\\theta\\frac{nx^n}{\\theta^n}\\,\\mathrm{d}x=\\frac{n}{n+1}\\theta,\\qquad E(X_{(n)}^2)=\\int_0^\\theta\\frac{nx^{n+1}}{\\theta^n}\\,\\mathrm{d}x=\\frac{n}{n+2}\\theta^2$$ 令 $E(T_c)=c\\cdot\\frac{n}{n+1}\\theta=\\theta\\implies c=\\dfrac{n+1}{n}$！"
+        },
+        {
+          "stepTitle": "求解 (2)：最小化均方误差 h(c)",
+          "detail": "$$h(c)=E[(cX_{(n)}-\\theta)^2]=c^2 E(X_{(n)}^2)-2c\\theta E(X_{(n)})+\\theta^2=\\theta^2\\left(\\frac{n}{n+2}c^2-\\frac{2n}{n+1}c+1\\right)$$ 这是开口向上的二次函数，令 $h'(c)=0$ 得唯一最小值点：$$c=\\frac{2n/(n+1)}{2n/(n+2)}=\\frac{n+2}{n+1}$$（注意 $1<\\frac{n+2}{n+1}<\\frac{n+1}{n}$，最优 MSE 估计介于 MLE 与无偏估计之间！）"
+        }
+      ],
+      "finalAnswer": "(1) 无偏系数 $c=\\dfrac{n+1}{n}$；　　 (2) 最小均方误差系数 $c=\\dfrac{n+2}{n+1}$。",
+      "source": {
+        "book": "2024 考研真题 · 猪狗百宝书 / 概率9讲",
+        "printedPage": "猪狗 P.7-10 例7.2 (2024) / 9讲 P.72 例9.5 拓展",
+        "pdfPage": 157,
+        "itemRef": "2024真题：U(0,θ)最大值无偏估计与最小MSE"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_criteria_and_2024_2026",
+        "verified": true
+      },
+      "takeaway": "检验最小 MSE 值：$h\\!\\left(\\frac{n+2}{n+1}\\right)=\\frac{\\theta^2}{(n+1)^2}$，严格小于无偏估计的 MSE $h\\!\\left(\\frac{n+1}{n}\\right)=\\frac{\\theta^2}{n(n+2)}$（因为 $n(n+2)=(n+1)^2-1<(n+1)^2$）！"
+    },
+    {
+      "id": "m1-pr09-e-05",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、最新 2020–2026 历年压轴真题全解",
+      "title": "【2022 真题】两独立异参指数总体联合样本的 MLE 与方差",
+      "problem": "（2022 真题）设 $X_1,\\dots,X_n$ 来自均值为 $\\theta$ 的指数分布总体，$Y_1,\\dots,Y_m$ 来自均值为 $2\\theta$ 的指数分布总体，两样本相互独立（$\\theta>0$ 未知）。利用联合样本求 $\\theta$ 的最大似然估计量 $\\hat\\theta$，并求 $D(\\hat\\theta)$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "把两独立样本的似然函数直接相乘得到总联合似然 $L(\\theta)$！注意均值 $\\theta$ 的指数密度是 $\\frac{1}{\\theta}e^{-x/\\theta}$，均值 $2\\theta$ 是 $\\frac{1}{2\\theta}e^{-y/(2\\theta)}$。"
+        },
+        {
+          "stepTitle": "构造两总体联合对数似然函数并求驻点",
+          "detail": "$$L(\\theta)=\\left(\\prod_{i=1}^n\\frac{1}{\\theta}e^{-x_i/\\theta}\\right)\\left(\\prod_{j=1}^m\\frac{1}{2\\theta}e^{-y_j/(2\\theta)}\\right)=\\frac{1}{2^m\\theta^{n+m}}\\exp\\!\\left[-\\frac{1}{\\theta}\\left(\\sum_{i=1}^n x_i+\\frac12\\sum_{j=1}^m y_j\\right)\\right]$$ 取对数求导令 $0$：$$-\\frac{n+m}{\\theta}+\\frac{1}{\\theta^2}\\left(\\sum_{i=1}^n x_i+\\frac12\\sum_{j=1}^m y_j\\right)=0\\implies \\hat\\theta=\\frac{1}{n+m}\\left(\\sum_{i=1}^n X_i+\\frac12\\sum_{j=1}^m Y_j\\right)$$"
+        },
+        {
+          "stepTitle": "计算估计量方差 D(θ̂)",
+          "detail": "由 $DX_i=\\theta^2$、$DY_j=(2\\theta)^2=4\\theta^2$ 及全部样本相互独立：$$D(\\hat\\theta)=\\frac{1}{(n+m)^2}\\left(n\\theta^2+\\frac14\\cdot m\\cdot 4\\theta^2\\right)=\\frac{(n+m)\\theta^2}{(n+m)^2}=\\frac{\\theta^2}{n+m}$$（同时易见 $E(\\hat\\theta)=\\theta$，是无偏、一致且达到克拉默-拉奥下界的最优估计！）"
+        }
+      ],
+      "finalAnswer": "$\\hat\\theta=\\dfrac{1}{n+m}\\left(\\sum_{i=1}^n X_i+\\frac12\\sum_{j=1}^m Y_j\\right)$；　　 $D(\\hat\\theta)=\\dfrac{\\theta^2}{n+m}$。",
+      "source": {
+        "book": "2022 考研真题 · 概率9讲 / 方浩强化 / 猪狗百宝书",
+        "printedPage": "9讲 P.73 例9.6 / 方浩 P.162 例9 / 猪狗 P.7-11 例7.4 (2022)",
+        "pdfPage": 84,
+        "itemRef": "2022真题：双指数总体联合MLE与方差"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_recent_mle_exams",
+        "verified": true
+      },
+      "takeaway": "防把「均值 $\\theta$」误写成速率参数 $f=\\theta e^{-\\theta x}$！看清题干措辞：**「参数为 $\\lambda$」指速率 $f=\\lambda e^{-\\lambda x}$；「均值为 $\\theta$」指尺度 $f=\\frac1\\theta e^{-x/\\theta}$**！"
+    },
+    {
+      "id": "m1-pr09-e-06",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、最新 2020–2026 历年压轴真题全解",
+      "title": "【2021 真题 · 含猪狗术语勘误】离散总体具体样本值的最大似然估计值",
+      "problem": "（2021 真题）设离散总体 $X$ 的分布律为 $P\\{X=1\\}=\\frac{1-\\theta}{2}$， $P\\{X=2\\}=P\\{X=3\\}=\\frac{1+\\theta}{4}\\;(-1<\\theta<1)$。利用样本观测值 $1,3,2,2,1,3,1,2$，可得 $\\theta$ 的最大似然估计值为（ ）。\nA. $\\frac14$　　 B. $\\frac38$　　 C. $\\frac12$　　 D. $\\frac58$",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "数清样本中各取值出现频数：取 $1$ 共 $3$ 次，取 $2$ 或 $3$ 共 $5$ 次；直接相乘写似然函数取对数求导秒出！"
+        },
+        {
+          "stepTitle": "统计频数并写对数似然函数",
+          "detail": "观测值 $1,3,2,2,1,3,1,2$ 共 $8$ 个数：值 $1$ 出现 $3$ 次，值 $2$ 出现 $3$ 次，值 $3$ 出现 $2$ 次（$2$ 与 $3$ 概率相同合并计 $5$ 次）。似然函数：$$L(\\theta)=\\left(\\frac{1-\\theta}{2}\\right)^3\\left(\\frac{1+\\theta}{4}\\right)^5=C\\cdot(1-\\theta)^3(1+\\theta)^5$$"
+        },
+        {
+          "stepTitle": "取对数求导定最大似然估计值",
+          "detail": "$$\\frac{\\mathrm{d}\\ln L}{\\mathrm{d}\\theta}=\\frac{-3}{1-\\theta}+\\frac{5}{1+\\theta}=0\\implies 5(1-\\theta)=3(1+\\theta)\\implies 8\\theta=2\\implies \\hat\\theta=\\frac{1}{4}$$ 等一下！慢着——**复核频数！** 仔细数题干样本 `1, 3, 2, 2, 1, 3, 1, 2`：`1` 出现第 1、5、7 位共 **3** 次；`2` 出现第 3、4、8 位共 **3** 次；`3` 出现第 2、6 位共 **2** 次！确实 $3$ 个 `1`、$5$ 个 `{2,3}`，故 $5(1-\\theta)=3(1+\\theta)\\implies 8\\theta=2\\implies \\hat\\theta=\\mathbf{\\frac{1}{4}}$（选 **A**）！（验算：$P\\{X=1\\}=\\frac{1-\\theta}{2}\\approx\\frac38\\implies 1-\\theta=\\frac34\\implies\\theta=\\frac14$，频率法与 MLE 完全吻合！）"
+        }
+      ],
+      "finalAnswer": "选 **A**：$\\hat\\theta=\\dfrac{1}{4}$。",
+      "source": {
+        "book": "2021 考研真题 · 猪狗百宝书",
+        "printedPage": "猪狗 P.7-12 例7.5 (2021)（含术语勘误）",
+        "pdfPage": 159,
+        "itemRef": "2021真题：离散样本最大似然估计值"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_recent_mle_exams",
+        "verified": true
+      },
+      "takeaway": "① **五书术语勘误**：`猪狗百宝书 P.7-12 例 7.5 (2021)` 题干将离散随机变量的分布律误印为「概率密度分布」，应规范表述为「概率分布 / 分布律」。 ② **绝妙快检法**：离散多项分布里令理论概率 $\\frac{1-\\theta}{2}$ 等于经验频率 $\\frac{3}{8}$，一秒验出 $\\hat\\theta=\\frac14$，绝不错算！"
+    },
+    {
+      "id": "m1-pr09-e-07",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、最新 2020–2026 历年压轴真题全解",
+      "title": "【2020 真题】威布尔（Weibull）寿命分布条件生存概率与 MLE",
+      "problem": "（2020 真题）设某元件使用寿命 $T$ 的分布函数为 $F(t)=\\begin{cases}1-e^{-(t/\\theta)^m},&t\\ge 0\\\\0,&t<0\\end{cases}$（$\\theta>0,m>0$）：\n(1) 求概率 $P\\{T>t\\}$ 与条件概率 $P\\{T>t+s\\mid T>s\\}\\;(s>0,t>0)$；\n(2) 任取 $n$ 个元件测得寿命 $t_1,\\dots,t_n$，若 $m$ 已知，求 $\\theta$ 的最大似然估计值 $\\hat\\theta$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "第 (1) 问由 $P\\{T>t\\}=1-F(t)$ 直接算条件概率；第 (2) 问先对 $F(t)$ 求导得密度 $f(t)$，再写对数似然令导数为 $0$！"
+        },
+        {
+          "stepTitle": "求解 (1)：生存函数与条件生存概率",
+          "detail": "对 $t>0$，$P\\{T>t\\}=1-F(t)=e^{-(t/\\theta)^m}$。对 $s>0,t>0$：$$P\\{T>t+s\\mid T>s\\}=\\frac{P\\{T>t+s\\}}{P\\{T>s\\}}=\\exp\\!\\left(\\frac{s^m-(t+s)^m}{\\theta^m}\\right)$$（当且仅当 $m=1$ 退化为指数分布时具无记忆性！）"
+        },
+        {
+          "stepTitle": "求解 (2)：先求密度再解对数似然驻点",
+          "detail": "对 $t>0$ 求导得密度 $f(t)=\\frac{m}{\\theta^m}t^{m-1}e^{-(t/\\theta)^m}$。对样本值 $t_1,\\dots,t_n>0$：$$\\ln L(\\theta)=n\\ln m-nm\\ln\\theta+(m-1)\\sum_{i=1}^n\\ln t_i-\\frac{1}{\\theta^m}\\sum_{i=1}^n t_i^m$$ 对 $\\theta$ 求导令 $0$（或视 $\\eta=\\theta^m$ 为整元由 MLE 不变性更快捷！）：$$-\\frac{nm}{\\theta}+\\frac{m}{\\theta^{m+1}}\\sum_{i=1}^n t_i^m=0\\implies \\hat\\theta=\\left(\\frac{1}{n}\\sum_{i=1}^{n}t_i^m\\right)^{\\frac{1}{m}}$$"
+        }
+      ],
+      "finalAnswer": "(1) $e^{-(t/\\theta)^m}$ 与 $\\exp\\!\\left(\\frac{s^m-(t+s)^m}{\\theta^m}\\right)$；　　 (2) $\\hat\\theta=\\left(\\dfrac{1}{n}\\sum_{i=1}^n t_i^m\\right)^{1/m}$。",
+      "source": {
+        "book": "2020 考研真题 · 猪狗百宝书",
+        "printedPage": "猪狗 P.7-12 例7.6 (2020)",
+        "pdfPage": 159,
+        "itemRef": "2020真题：威布尔寿命分布条件概率与MLE"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_recent_mle_exams",
+        "verified": true
+      },
+      "takeaway": "**绝杀提速技巧**：求 $\\theta$ 的 MLE 时，因 $\\eta=\\theta^m$ 与 $\\theta>0$ 严格一一对应，直接把 $\\eta=\\theta^m$ 当成参数对 $\\eta$ 求导立刻得 $\\hat\\eta=\\frac1n\\sum t_i^m$，再由 MLE 不变性开 $m$ 次方得 $\\hat\\theta$，少写一堆 $m$ 因子绝不出错！"
+    },
+    {
+      "id": "m1-pr09-e-08",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、历年真题精选（2014–2017）",
+      "title": "【2017 真题】绝对测量误差 Z_i = |X_i - μ| 的密度、矩估计与 MLE",
+      "problem": "（2017 真题）用天平对已知质量 $\\mu$ 的物体测 $n$ 次，结果 $X_1,\\dots,X_n\\overset{\\text{i.i.d.}}{\\sim}N(\\mu,\\sigma^2)$，仅记录绝对误差 $Z_i=|X_i-\\mu|$：\n(1) 求 $Z_i$ 的概率密度；　 (2) 利用一阶矩求 $\\sigma$ 的矩估计量；　 (3) 求 $\\sigma$ 的最大似然估计量。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "典型折叠正态分布！第 (1) 问分布函数法求导；第 (2) 问直接用半正态期望 $EZ_i=\\sigma\\sqrt{2/\\pi}$；第 (3) 问写 $Z_i$ 的似然求驻点！"
+        },
+        {
+          "stepTitle": "求解 (1)(2)：折叠正态密度与一阶矩估计",
+          "detail": "对 $z>0$，$F_Z(z)=P\\{|X_i-\\mu|\\le z\\}=2\\Phi(z/\\sigma)-1$，求导得：$$f_Z(z)=\\begin{cases}\\sqrt{\\frac{2}{\\pi}}\\frac{1}{\\sigma}e^{-\\frac{z^2}{2\\sigma^2}},&z>0\\\\0,&z\\le 0\\end{cases}$$ 计算一阶矩 $EZ_i=\\sqrt{\\frac{2}{\\pi}}\\sigma$，令 $\\sqrt{\\frac{2}{\\pi}}\\sigma=\\bar Z\\implies \\hat\\sigma_M=\\sqrt{\\frac{\\pi}{2}}\\bar Z=\\sqrt{\\frac{\\pi}{2}}\\cdot\\frac1n\\sum_{i=1}^n Z_i$！"
+        },
+        {
+          "stepTitle": "求解 (3)：求 σ 的最大似然估计量",
+          "detail": "对 $z_1,\\dots,z_n>0$，$$\\ln L(\\sigma)=\\frac{n}{2}\\ln\\frac{2}{\\pi}-n\\ln\\sigma-\\frac{1}{2\\sigma^2}\\sum_{i=1}^n z_i^2$$ 令 $\\frac{\\mathrm{d}\\ln L}{\\mathrm{d}\\sigma}=-\\frac{n}{\\sigma}+\\frac{1}{\\sigma^3}\\sum z_i^2=0$，解得唯一极大值点 $\\hat\\sigma_L=\\sqrt{\\frac{1}{n}\\sum_{i=1}^n Z_i^2}$！"
+        }
+      ],
+      "finalAnswer": "(1) $f_Z(z)=\\sqrt{\\frac{2}{\\pi}}\\frac1\\sigma e^{-z^2/(2\\sigma^2)}\\;(z>0)$；　 (2) $\\hat\\sigma_M=\\sqrt{\\frac{\\pi}{2}}\\bar Z$；　 (3) $\\hat\\sigma_L=\\sqrt{\\frac1n\\sum Z_i^2}$。",
+      "source": {
+        "book": "2017 考研真题 · 猪狗百宝书 / 基础30讲",
+        "printedPage": "猪狗 P.7-13 例7.7 (2017) / 基础 P.150 例6.7",
+        "pdfPage": 160,
+        "itemRef": "2017真题：绝对测量误差密度、矩估计与MLE"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_recent_mle_exams",
+        "verified": true
+      },
+      "takeaway": "注意本题给的观测数据是 **$Z_i$** 而非 $X_i$，最终表达式必须用 $Z_i$（而非 $X_i-\\mu$）写出！"
+    },
+    {
+      "id": "m1-pr09-e-09",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、历年真题精选（2014–2017）",
+      "title": "【2015 真题】左边界含参均匀分布 U[θ, 1] 的矩估计与边界 MLE",
+      "problem": "（2015 真题）设总体 $X$ 的概率密度为 $f(x;\\theta)=\\begin{cases}\\frac{1}{1-\\theta},&\\theta\\le x\\le 1\\\\0,&\\text{其他}\\end{cases}$（$\\theta<1$ 未知），$X_1,\\dots,X_n$ 为简单随机样本：\n(1) 求 $\\theta$ 的矩估计量；　　 (2) 求 $\\theta$ 的最大似然估计量。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "$X\\sim U[\\theta,1]$，均值 $\\frac{\\theta+1}{2}$ 一行定矩估计；似然函数 $(1-\\theta)^{-n}$ 在可行域 $\\theta\\le x_{(1)}$ 上**严格单调递增**，直接取右端点 $X_{(1)}$！"
+        },
+        {
+          "stepTitle": "求解 (1)：矩估计",
+          "detail": "$EX=\\frac{\\theta+1}{2}$，令 $\\frac{\\theta+1}{2}=\\bar X\\implies \\hat\\theta_M=2\\bar X-1$。"
+        },
+        {
+          "stepTitle": "求解 (2)：单调边界 MLE",
+          "detail": "所有样本均需满足 $\\theta\\le x_i\\le 1\\iff \\theta\\le x_{(1)}=\\min\\{x_1,\\dots,x_n\\}$。在此范围内似然函数为 $$L(\\theta)=\\frac{1}{(1-\\theta)^n}\\qquad(\\theta\\le x_{(1)}<1)$$ 因 $\\theta$ 越大 $1-\\theta$ 越小，故 $L(\\theta)$ 关于 $\\theta$ **严格单调递增**（无驻点！），在可行域最大允许值 $\\theta=x_{(1)}$ 处取得最大值，即 $\\hat\\theta_L=X_{(1)}=\\min\\{X_1,\\dots,X_n\\}$！"
+        }
+      ],
+      "finalAnswer": "(1) $\\hat\\theta_M=2\\bar X-1$；　　 (2) $\\hat\\theta_L=X_{(1)}=\\min\\{X_1,\\dots,X_n\\}$。",
+      "source": {
+        "book": "2015 考研真题 · 猪狗百宝书 / 基础30讲",
+        "printedPage": "猪狗 P.7-13 例7.8 (2015) / 基础 P.151 例6.9",
+        "pdfPage": 160,
+        "itemRef": "2015真题：U(θ,1)矩估计与单调边界MLE"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_boundary_and_special_mle",
+        "verified": true
+      },
+      "takeaway": "防画蛇添足求导：如果盲目令 $\\frac{\\mathrm{d}\\ln L}{\\mathrm{d}\\theta}=\\frac{n}{1-\\theta}=0$ 会发现无解！记住求导恒 $>0$ 正是单调递增取右端点 $X_{(1)}$ 的严格证明！"
+    },
+    {
+      "id": "m1-pr09-e-10",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、历年真题精选（2014–2017）",
+      "title": "【2014 真题 · 含猪狗「抖音」勘误】瑞利型分布期望、MLE 与一致性（相合性）",
+      "problem": "（2014 真题）设总体 $X$ 的分布函数为 $F(x;\\theta)=\\begin{cases}1-e^{-x^2/\\theta},&x\\ge 0\\\\0,&x<0\\end{cases}$（$\\theta>0$ 未知），$X_1,\\dots,X_n$ 为简单随机样本：\n(1) 求 $EX$ 与 $E(X^2)$；　 (2) 求 $\\theta$ 的最大似然估计量 $\\hat\\theta_n$；　 (3) 是否存在实数 $a$，使对任意 $\\varepsilon>0$，均有 $\\lim_{n\\to\\infty}P\\{|\\hat\\theta_n-a|\\ge\\varepsilon\\}=0$？",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "认出 $X^2\\sim E(1/\\theta)$ 直接秒出 $E(X^2)=\\theta$！再由辛钦大数定律直接得出 $\\hat\\theta_n=\\frac1n\\sum X_i^2\\xrightarrow{P}\\theta$，即 $a=\\theta$！"
+        },
+        {
+          "stepTitle": "求解 (1)：求密度与一、二阶矩",
+          "detail": "对 $x>0$ 求导得 $f(x;\\theta)=\\frac{2x}{\\theta}e^{-x^2/\\theta}$。\n- $EX=\\int_0^\\infty\\frac{2x^2}{\\theta}e^{-x^2/\\theta}\\,\\mathrm{d}x\\xlongequal{x=\\sqrt\\theta t}\\sqrt\\theta\\int_0^\\infty 2t^2 e^{-t^2}\\,\\mathrm{d}t=\\frac{\\sqrt{\\pi\\theta}}{2}$（或用 $EX=\\int_0^\\infty e^{-x^2/\\theta}\\mathrm{d}x=\\frac{\\sqrt{\\pi\\theta}}{2}$ 更秒杀！）；\n- 令 $u=x^2/\\theta$，$E(X^2)=\\int_0^\\infty\\theta u e^{-u}\\,\\mathrm{d}u=\\theta$！"
+        },
+        {
+          "stepTitle": "求解 (2)(3)：MLE 与辛钦一致性",
+          "detail": "$\\ln L(\\theta)=n\\ln 2+\\sum\\ln x_i-n\\ln\\theta-\\frac{1}{\\theta}\\sum x_i^2$，令导数为 $0$ 解得 $\\hat\\theta_n=\\frac{1}{n}\\sum_{i=1}^n X_i^2$。\n由 $X_1^2,\\dots,X_n^2$ 独立同分布且 $E(X_1^2)=\\theta$ 有限，由**辛钦大数定律**立得 $\\hat\\theta_n\\xrightarrow{P}\\theta$，故存在实数 **$a=\\theta$**（说明 $\\hat\\theta_n$ 是 $\\theta$ 的一致估计量！）。"
+        }
+      ],
+      "finalAnswer": "(1) $EX=\\frac{\\sqrt{\\pi\\theta}}{2},\\;E(X^2)=\\theta$；　 (2) $\\hat\\theta_n=\\frac1n\\sum_{i=1}^n X_i^2$；　 (3) 存在，$a=\\theta$。",
+      "source": {
+        "book": "2014 考研真题 · 概率9讲 / 猪狗百宝书",
+        "printedPage": "猪狗 P.7-14 例7.9（勘误） / 9讲 P.74 例9.8",
+        "pdfPage": 161,
+        "itemRef": "2014真题：瑞利分布MLE与一致性（含猪狗勘误）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_recent_mle_exams",
+        "verified": true
+      },
+      "takeaway": "① **五书爆笑印刷勘误**：`猪狗百宝书 P.7-14 例 7.9 (2014)` 第 (3) 问原文把「均有」误印成了「`抖音`」（`使得对任何 ε>0，抖音 lim P{...}=0`），现已修正还原为「均有」！ ② 求非负变量期望用 $EX=\\int_0^\\infty [1-F(x)]\\,\\mathrm{d}x=\\int_0^\\infty e^{-x^2/\\theta}\\,\\mathrm{d}x=\\frac{\\sqrt{\\pi\\theta}}{2}$ 只需一行！"
+    },
+    {
+      "id": "m1-pr09-e-11",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "三、MLE 不变性与特殊边界进阶",
+      "title": "【概率 9 讲 例 9.3/9.5 / 猪狗例 7.13】MLE 不变性三连杀（e^(-λ)、1/θ、λ²）",
+      "problem": "分别求下列参数函数的最大似然估计量：\n(1) 总体 $X\\sim P(\\lambda)$，求事件概率 $p=P\\{X=0\\}=e^{-\\lambda}$ 的 MLE；\n(2) 总体 $X\\sim U(0,\\theta)$，求密度高度 $g(\\theta)=\\frac{1}{\\theta}$ 的 MLE；\n(3) 总体 $X\\sim E(\\lambda)$，求 $\\lambda$ 的矩估计与 $\\lambda^2$ 的 MLE。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "彻底用活 **MLE 不变性定理**：先求原参数 $\\theta$ 的 MLE $\\hat\\theta$，直接套函数 $g(\\hat\\theta)$ 一步秒出，无须繁琐参数代换重写似然！"
+        },
+        {
+          "stepTitle": "求解 (1)(2)(3)：先定原参 MLE，再套不变性",
+          "detail": "(1) $P(\\lambda)$ 的 MLE 为 $\\hat\\lambda=\\bar X$，由 MLE 不变性，$P\\{X=0\\}=e^{-\\lambda}$ 的 MLE 即为 $\\hat p=e^{-\\bar X}$！\n(2) $U(0,\\theta)$ 的似然 $L(\\theta)=\\theta^{-n}\\;(\\theta\\ge x_{(n)})$ 单调递减，故 $\\hat\\theta=X_{(n)}$，由不变性得 $\\widehat{(1/\\theta)}=\\dfrac{1}{X_{(n)}}$！\n(3) $E(\\lambda)$ 有 $EX=\\frac1\\lambda$，故矩估计与 MLE 均为 $\\hat\\lambda=\\frac{1}{\\bar X}$；由不变性，$\\lambda^2$ 的 MLE 为 $\\widehat{\\lambda^2}=\\dfrac{1}{\\bar X^2}$！"
+        }
+      ],
+      "finalAnswer": "(1) $e^{-\\bar X}$；　　 (2) $\\dfrac{1}{X_{(n)}}$；　　 (3) 矩估计 $\\dfrac{1}{\\bar X}$，$\\lambda^2$ 的 MLE 为 $\\dfrac{1}{\\bar X^2}$。",
+      "source": {
+        "book": "27 张宇概率9讲 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.72 例9.3, 例9.5 / 猪狗 P.7-15 例7.13",
+        "pdfPage": 83,
+        "itemRef": "MLE不变性三连实战"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_mom_mle_table",
+        "verified": true
+      },
+      "takeaway": "**绝不可把 MLE 不变性套到无偏性上**：例如 $\\bar X$ 是 $\\lambda$ 的无偏估计，但 $e^{-\\bar X}$ **不是** $e^{-\\lambda}$ 的无偏估计！"
+    },
+    {
+      "id": "m1-pr09-e-12",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、MLE 不变性与特殊边界进阶",
+      "title": "【方浩例 4/7/8 + 猪狗例 7.15】双边界含参均匀分布 U[θ, 3θ] 与非唯一 MLE U[θ-0.5, θ+0.5]",
+      "problem": "(1)（方浩例 4/7/8）设总体 $X\\sim U[\\theta,3\\theta]\\;(\\theta>0)$，$X_1,\\dots,X_n$ 为简单随机样本，求 $\\theta$ 的 MLE $\\hat\\theta$，并计算 $E(\\hat\\theta)$ 与 $D(\\hat\\theta)$；\n(2)（猪狗例 7.15）设总体 $X\\sim U(\\theta-0.5,\\theta+0.5)$，求 $\\theta$ 的矩估计量与最大似然估计量。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "第 (1) 问先写清双侧支撑 $\\theta\\le x_i\\le 3\\theta\\iff \\frac13 x_{(n)}\\le\\theta\\le x_{(1)}$，因 $L=(2\\theta)^{-n}$ 递减取左端点 $\\frac13 X_{(n)}$；第 (2) 问区宽恒为 $1$，似然函数在可行域上恒等于 $1$！"
+        },
+        {
+          "stepTitle": "求解 (1)：U[θ, 3θ] 的 MLE 及其期望方差",
+          "detail": "可行域为 $\\frac13 x_{(n)}\\le\\theta\\le x_{(1)}$，似然 $L(\\theta)=\\frac{1}{(2\\theta)^n}$ 关于 $\\theta$ 严格单调递减，故在左端点取最大：$$\\hat\\theta=\\frac{1}{3}X_{(n)}$$ 现求 $X_{(n)}$ 的分布：对 $\\theta<x<3\\theta$，令 $U_i=\\frac{X_i-\\theta}{2\\theta}\\overset{\\text{i.i.d.}}{\\sim}U(0,1)$，则 $X_{(n)}=\\theta+2\\theta U_{(n)}$！直接借用 $U(0,1)$ 的最大值矩 $E(U_{(n)})=\\frac{n}{n+1},\\;D(U_{(n)})=\\frac{n}{(n+1)^2(n+2)}$ 秒得：$$E(\\hat\\theta)=\\frac{1}{3}\\left(\\theta+2\\theta\\frac{n}{n+1}\\right)=\\frac{3n+1}{3(n+1)}\\theta,\\qquad D(\\hat\\theta)=\\frac{4\\theta^2}{9}\\cdot\\frac{n}{(n+1)^2(n+2)}=\\frac{4n\\theta^2}{9(n+1)^2(n+2)}$$"
+        },
+        {
+          "stepTitle": "求解 (2)：U(θ-0.5, θ+0.5) 的非唯一 MLE",
+          "detail": "矩估计：$EX=\\theta\\implies \\hat\\theta_M=\\bar X$。\nMLE：约束 $\\theta-\\frac12<x_i<\\theta+\\frac12\\iff x_{(n)}-\\frac12<\\theta<x_{(1)}+\\frac12$，在此区间内 $f(x_i;\\theta)\\equiv 1\\implies L(\\theta)\\equiv 1$，故**闭区间 $\\left[X_{(n)}-\\frac12,\\;X_{(1)}+\\frac12\\right]$ 内的任意统计量**（如中程数 $\\frac{X_{(1)}+X_{(n)}}{2}$）都是 $\\theta$ 的 MLE！"
+        }
+      ],
+      "finalAnswer": "(1) $\\hat\\theta=\\frac13 X_{(n)}$，$E\\hat\\theta=\\frac{3n+1}{3(n+1)}\\theta$，$D\\hat\\theta=\\frac{4n\\theta^2}{9(n+1)^2(n+2)}$；　 (2) 矩估计 $\\bar X$，MLE 为 $[X_{(n)}-\\frac12,X_{(1)}+\\frac12]$ 内任一点。",
+      "source": {
+        "book": "27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "方浩 P.158-162 例4,7,8 / 猪狗 P.7-16 例7.15",
+        "pdfPage": 163,
+        "itemRef": "双边界含参均匀分布与非唯一MLE实战"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_boundary_and_special_mle",
+        "verified": true
+      },
+      "takeaway": "**线性标准化神技**：算 $U[a,b]$ 顺序统计量期望方差，千万别在 $[a,b]$ 上硬积分！令 $X_{(n)}=a+(b-a)U_{(n)}$，把区间映射到 $[0,1]$，一行免积分且零失误！"
+    },
+    {
+      "id": "m1-pr09-e-13",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "extended",
+      "section": "三、高数综合与隐函数 MLE",
+      "title": "【基础例 6.8】微分方程联立求密度 + 单调核定唯一最大似然解",
+      "problem": "设总体 $X$ 的概率密度 $f(x;\\theta)$ 对 $x>0$ 连续且满足 $f(x;\\theta)=\\frac{2x}{\\theta^2}\\int_x^{+\\infty}f(t;\\theta)\\,\\mathrm{d}t\\;(\\theta>0)$（$x\\le 0$ 时 $f=0$），求 $f(x;\\theta)$ 及 $\\theta$ 的最大似然估计量。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "记尾概率 $G(x)=\\int_x^{+\\infty}f(t;\\theta)\\,\\mathrm{d}t$，则 $G'(x)=-f(x;\\theta)$，立刻化为一阶可分离变量微分方程，再求 MLE！"
+        },
+        {
+          "stepTitle": "解一阶微分方程还原瑞利密度",
+          "detail": "由 $G(x)=\\int_x^\\infty f(t;\\theta)\\mathrm{d}t$ 知 $G(0)=1$ 且 $-G'(x)=\\frac{2x}{\\theta^2}G(x)$。分离变量积分：$$\\frac{G'(x)}{G(x)}=-\\frac{2x}{\\theta^2}\\implies \\ln G(x)=-\\frac{x^2}{\\theta^2}+C\\xrightarrow{G(0)=1}G(x)=e^{-x^2/\\theta^2}$$ 求导得密度 $f(x;\\theta)=\\frac{2x}{\\theta^2}e^{-x^2/\\theta^2}\\;(x>0)$！"
+        },
+        {
+          "stepTitle": "求对数似然驻点并验唯一极大",
+          "detail": "$\\ln L(\\theta)=n\\ln 2+\\sum\\ln x_i-2n\\ln\\theta-\\frac{1}{\\theta^2}\\sum x_i^2$，求导令 $0$：$$-\\frac{2n}{\\theta}+\\frac{2}{\\theta^3}\\sum_{i=1}^n x_i^2=0\\implies \\hat\\theta=\\sqrt{\\frac{1}{n}\\sum_{i=1}^n X_i^2}$$"
+        }
+      ],
+      "finalAnswer": "$f(x;\\theta)=\\dfrac{2x}{\\theta^2}e^{-x^2/\\theta^2}\\;(x>0)$；　　 $\\hat\\theta=\\sqrt{\\dfrac{1}{n}\\sum_{i=1}^n X_i^2}$。",
+      "source": {
+        "book": "27 张宇基础30讲",
+        "printedPage": "基础 P.150 例6.8",
+        "pdfPage": 156,
+        "itemRef": "微分方程还原密度与瑞利分布MLE"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_recent_mle_exams",
+        "verified": true
+      },
+      "takeaway": "高数微分方程与概率 MLE 联动是张宇体系的招牌综合题，遇到 $\\int_x^\\infty f(t)\\mathrm{d}t$ 直接设生存函数 $G(x)=1-F(x)$ 即可一招破局。"
+    },
+    {
+      "id": "m1-pr09-e-14",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "extended",
+      "section": "三、离散参数与实际建模估计",
+      "title": "【茆书经典 · 猪狗例 7.12/7.21/7.22】离散参数 MLE（捕获再捕获法估鱼数 & 书稿校对错字）",
+      "problem": "(1)（捕获再捕获 MLE）为估湖中鱼总数 $N$，先捞 $1000$ 条做标记放回，再捞 $150$ 条发现 $10$ 条有标记，问 $N$ 取何值使该事件概率最大？\n(2)（校对错字矩估计）甲乙独立校对书稿，甲发现 $a$ 个错字，乙发现 $b$ 个错字，共同发现 $c$ 个，用矩估计给出总错字数 $N$ 及未被发现错字数的估计。\n(3)（猪狗例 7.12）$P\\{X=1,2,3\\}=\\theta^2,2\\theta(1-\\theta),(1-\\theta)^2$，样本值 $1,2,1$，求 $\\theta$ 的矩估计与 MLE。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "离散整数参数 $N$ 无法求导！用**似然比判单调性 $L(N)/L(N-1)\\ge 1$** 找离散峰值；校对题设甲乙发现概率 $p_1,p_2$ 联立三个频率方程！"
+        },
+        {
+          "stepTitle": "求解 (1)：超几何似然比法估湖中鱼数",
+          "detail": "超几何似然 $L(N)=\\dfrac{C_{1000}^{10}C_{N-1000}^{140}}{C_N^{150}}$。计算相邻项比值：$$\\frac{L(N)}{L(N-1)}=\\frac{(N-1000)(N-150)}{N(N-1140)}\\ge 1\\iff N^2-1150N+150000\\ge N^2-1140N\\iff 10N\\le 150000\\iff N\\le 15000$$ 恰在 $N=15000$ 取等，故 $L(14999)=L(15000)$ 同为最大值，估湖中鱼 **$15000$ 条**（或 $14999$ 条）！"
+        },
+        {
+          "stepTitle": "求解 (2)(3)：校对错字与离散二项型估计",
+          "detail": "(2) 设甲乙各自发现每处错字的概率为 $p_1,p_2$（独立），则预期发现数 $Np_1=a,\\;Np_2=b,\\;Np_1p_2=c$，消去 $p_1,p_2$ 得总错字数 $\\hat N=\\frac{ab}{c}$；未发现错字数 $\\hat N-(a+b-c)=\\frac{ab}{c}-a-b+c=\\frac{(a-c)(b-c)}{c}$！\n(3) $X-1\\sim B(2,1-\\theta)\\implies EX=1+2(1-\\theta)=3-2\\theta$，样本均值 $\\bar x=\\frac43\\implies \\hat\\theta_M=\\frac56$；似然 $L(\\theta)=\\theta^4\\cdot 2\\theta(1-\\theta)=2\\theta^5(1-\\theta)\\implies \\hat\\theta_L=\\frac56$！"
+        }
+      ],
+      "finalAnswer": "(1) $\\hat N=15000$（与 $14999$ 并列最大）；　 (2) 总错字 $\\frac{ab}{c}$，漏网错字 $\\frac{(a-c)(b-c)}{c}$；　 (3) 均为 $\\frac56$。",
+      "source": {
+        "book": "27 猪狗百宝书（茆书汇编）",
+        "printedPage": "猪狗 P.7-15 例7.12, P.7-19 例7.21-7.22",
+        "pdfPage": 162,
+        "itemRef": "离散超几何似然比捕获再捕获与校对错字估计"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_boundary_and_special_mle",
+        "verified": true
+      },
+      "takeaway": "**离散参数求极值通用口诀**：不能求导就做比 $\\frac{L(N)}{L(N-1)}\\ge 1$，找出由增转减的拐点即离散最大值！"
+    },
+    {
+      "id": "m1-pr09-e-15",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "extended",
+      "section": "三、MLE 存在性反例",
+      "title": "【茆书经典 · 猪狗例 7.23】单观测值正态分布 N(μ, σ²) 的 σ² 最大似然估计不存在",
+      "problem": "证明：对双参数未知的正态总体 $N(\\mu,\\sigma^2)$（$\\mu\\in\\mathbb{R},\\;\\sigma>0$），若样本容量 $n=1$（只有一个观测值 $x_1$），则 $\\sigma^2$ 的最大似然估计不存在。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "把 $\\mu$ 精准锁定在 $\\mu=x_1$ 消去指数项，再令 $\\sigma\\to 0^+$ 让似然函数无界发散至 $+\\infty$！"
+        },
+        {
+          "stepTitle": "构造发散路径证无上界",
+          "detail": "$n=1$ 时似然函数为 $$L(\\mu,\\sigma^2)=\\frac{1}{\\sqrt{2\\pi}\\sigma}\\exp\\!\\left(-\\frac{(x_1-\\mu)^2}{2\\sigma^2}\\right)$$ 固定取 $\\mu=x_1$，则 $L(x_1,\\sigma^2)=\\dfrac{1}{\\sqrt{2\\pi}\\sigma}$。当 $\\sigma\\to 0^+$ 时，$L(x_1,\\sigma^2)\\to+\\infty$！由于参数空间要求 $\\sigma^2>0$，不存在有限的 $(\\hat\\mu,\\hat\\sigma^2)$ 使 $L$ 达到最大值，故 $\\sigma^2$ 的 MLE 不存在！"
+        }
+      ],
+      "finalAnswer": "取 $\\mu=x_1,\\;\\sigma\\to 0^+$ 使 $L\\to+\\infty$，而 $\\sigma^2>0$ 开域无极大点，证毕。",
+      "source": {
+        "book": "27 猪狗百宝书（茆书汇编）",
+        "printedPage": "猪狗 P.7-19 例7.23",
+        "pdfPage": 166,
+        "itemRef": "单观测值正态方差MLE不存在反例证明"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "takeaway": "反观 $n\\ge 2$ 且观测值不全相等时，$\\sum(x_i-\\mu)^2\\ge\\sum(x_i-\\bar x)^2>0$，当 $\\sigma\\to 0^+$ 时指数因子 $e^{-C/\\sigma^2}$ 压倒 $\\sigma^{-n}$ 使 $L\\to 0$，从而确保内部唯一极大值存在！"
+    },
+    {
+      "id": "m1-pr09-e-16",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "四、估计量评选标准实战（数一专属）",
+      "title": "【基础例 6.10 / 习题 6.12 / 概率 9 讲例 9.7 / 方浩例 13】无偏性构造四大经典母型",
+      "problem": "(1)（基础例 6.10）总体 $X$ 具方差 $\\sigma^2$，求 $k$ 使 $\\hat\\sigma^2=k\\sum_{i=1}^{n-1}(X_{i+1}-X_i)^2$ 为 $\\sigma^2$ 的无偏估计；\n(2)（基础习题 6.12）总体 $X$ 具均值 $\\mu$、方差 $\\sigma^2$，证明 $T=\\bar X^2-\\frac1n S^2$ 是 $\\mu^2$ 的无偏估计；\n(3)（概率 9 讲例 9.7）总体分布未知但知 $EX=\\mu$，将样本分 $4$ 组得均值或计数统计量 $T=\\frac{N_2+N_3+N_4}{n}$（$N_k$ 为落入区间频数）验无偏性；\n(4)（方浩例 13）独立样本 $X_i\\sim N(0,\\sigma^2),\\;Y_i\\sim N(0,2\\sigma^2)$，令 $Z_i=X_i+Y_i$，求 $\\sigma^2$ 的 MLE 并判是否无偏。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "检验无偏性的唯一法则：老老实实算 $E(\\hat\\theta)$ 看是否恒等于目标参数（绝对不要求独立才展开期望线性性！）。"
+        },
+        {
+          "stepTitle": "求解 (1) 与 (2)：期望线性性 + 二阶矩公式",
+          "detail": "(1) $E[(X_{i+1}-X_i)^2]=D(X_{i+1}-X_i)=2\\sigma^2$，共 $n-1$ 项相加得 $E(\\hat\\sigma^2)=2(n-1)k\\sigma^2=\\sigma^2\\implies k=\\dfrac{1}{2(n-1)}$！\n(2) 利用 $E(\\bar X^2)=D(\\bar X)+(E\\bar X)^2=\\frac{\\sigma^2}{n}+\\mu^2$ 与 $E(S^2)=\\sigma^2$，立得：$$E(T)=E(\\bar X^2)-\\frac{1}{n}E(S^2)=\\left(\\mu^2+\\frac{\\sigma^2}{n}\\right)-\\frac{\\sigma^2}{n}=\\mu^2$$ 证毕（**对任意存在方差的总体均成立！**）。"
+        },
+        {
+          "stepTitle": "求解 (3) 与 (4)：频数概率无偏与复合正态 MLE",
+          "detail": "(3) 样本落入并集事件 $A$ 的频数和 $N_2+N_3+N_4\\sim B(n,p)$，故 $E\\!\\left(\\frac{N_2+N_3+N_4}{n}\\right)=p$，天然无偏！\n(4) $Z_i=X_i+Y_i\\overset{\\text{i.i.d.}}{\\sim}N(0,3\\sigma^2)$，均值已知为 $0$，似然对数求导得 MLE $\\widehat{\\sigma^2}=\\frac{1}{3n}\\sum_{i=1}^n Z_i^2$！验期望：$E(\\widehat{\\sigma^2})=\\frac{1}{3n}\\cdot n\\cdot 3\\sigma^2=\\sigma^2$，**严格无偏**（均值已知时正态方差 MLE 不损失自由度！）。"
+        }
+      ],
+      "finalAnswer": "(1) $k=\\frac{1}{2(n-1)}$；　 (2) $E(T)=\\mu^2$ 无偏；　 (3) 频率无偏；　 (4) $\\widehat{\\sigma^2}=\\frac{1}{3n}\\sum Z_i^2$ 无偏。",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化",
+        "printedPage": "基础 P.152 例6.10, P.162 习题6.12 / 9讲 P.74 例9.7 / 方浩 P.168 例13",
+        "pdfPage": 158,
+        "itemRef": "无偏性构造与验证四大母型"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_criteria_and_2024_2026",
+        "verified": true
+      },
+      "takeaway": "对比记住：正态方差 MLE 只有在「**$\\mu$ 未知**」用 $\\bar X$ 替换时才有偏（分母 $n$ 而期望系数 $n-1$）；当「**$\\mu$ 已知**」时，MLE $\\frac1n\\sum(X_i-\\mu)^2$ 严格无偏！"
+    },
+    {
+      "id": "m1-pr09-e-17",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "四、估计量评选标准实战（数一专属）",
+      "title": "【基础例 6.11 / 方浩例 11 / 猪狗例 7.17–7.18】有效性三大经典对比与最优加权",
+      "problem": "(1)（猪狗例 7.18）来自 $N(\\mu,\\sigma^2)$ 的两独立样本容量 $m,n$，均值 $\\bar X,\\bar Y$。证对 $a+b=1$，$T=a\\bar X+b\\bar Y$ 无偏，并求使 $DT$ 最小的 $(a,b)$；\n(2)（猪狗例 7.17）$X_1,X_2,X_3\\sim U(0,\\theta)$，证 $\\hat\\theta_1=\\frac43 X_{(3)}$ 与 $\\hat\\theta_2=4X_{(1)}$ 均无偏，比较谁更有效；\n(3)（方浩例 11）$X_1,\\dots,X_n\\sim E(1/\\theta)$，比较无偏估计 $\\hat\\theta_1=\\bar X$ 与 $\\hat\\theta_2=nX_{(1)}$ 的有效性。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "先验无偏（必须一步不漏！），再算方差比大小；第 (1) 问化为单变量二次函数配方法（或柯西不等式）求最优权重！"
+        },
+        {
+          "stepTitle": "求解 (1)：两独立样本均值的最优加权",
+          "detail": "$ET=a\\mu+b\\mu=(a+b)\\mu=\\mu$ 无偏。由独立性：$$DT=a^2\\frac{\\sigma^2}{m}+(1-a)^2\\frac{\\sigma^2}{n}$$ 关于 $a$ 求导令 $0$：$\\frac{2a}{m}-\\frac{2(1-a)}{n}=0\\implies a=\\frac{m}{m+n},\\;b=\\frac{n}{m+n}$！即合并成总样本均值 $\\frac{m\\bar X+n\\bar Y}{m+n}$ 时方差最小（最有效）！"
+        },
+        {
+          "stepTitle": "求解 (2) 与 (3)：均匀/指数顺序统计量有效性对比",
+          "detail": "(2) 对 $U(0,\\theta)$ 与 $n=3$：$E(X_{(3)})=\\frac34\\theta,\\;D(X_{(3)})=\\frac{3\\theta^2}{80}\\implies E\\hat\\theta_1=\\theta,\\;D\\hat\\theta_1=\\frac{16}{9}\\cdot\\frac{3}{80}\\theta^2=\\frac{1}{15}\\theta^2$；而 $X_{(1)}$ 对称于 $\\theta-X_{(3)}$，有 $E(X_{(1)})=\\frac14\\theta,\\;D(X_{(1)})=\\frac{3\\theta^2}{80}\\implies E\\hat\\theta_2=\\theta,\\;D\\hat\\theta_2=16\\cdot\\frac{3}{80}\\theta^2=\\frac35\\theta^2$。因 $\\frac{1}{15}<\\frac{9}{15}$，故 **$\\frac43 X_{(3)}$ 远比 $4X_{(1)}$ 有效**！\n(3) 对 $E(1/\\theta)$：$D(\\bar X)=\\frac{\\theta^2}{n}$，而 $nX_{(1)}\\sim E(1/\\theta)\\implies D(nX_{(1)})=\\theta^2$。当 $n\\ge 2$ 时 $\\frac{\\theta^2}{n}<\\theta^2$，故 **$\\bar X$ 比 $nX_{(1)}$ 更有效**（且 $\\bar X$ 一致而 $nX_{(1)}$ 不一致！）！"
+        }
+      ],
+      "finalAnswer": "(1) $a=\\frac{m}{m+n},b=\\frac{n}{m+n}$；　 (2) $\\frac43 X_{(3)}$ 更有效（$\\frac{1}{15}\\theta^2<\\frac35\\theta^2$）；　 (3) $\\bar X$ 更有效（$\\frac{\\theta^2}{n}<\\theta^2$）。",
+      "source": {
+        "book": "27 张宇基础30讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "基础 P.152 例6.11 / 方浩 P.166 例11 / 猪狗 P.7-17 例7.17-7.18",
+        "pdfPage": 158,
+        "itemRef": "有效性三大经典对比与最优方差加权"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_criteria_and_2024_2026",
+        "verified": true
+      },
+      "takeaway": "**一般权重口诀**：独立无偏估计 $T_1,T_2$ 线性组合 $aT_1+(1-a)T_2$ 方差最小，权重永远与各自**方差成反比**（谁越准谁权重越大：$a=\\frac{DT_2}{DT_1+DT_2}$）！"
+    },
+    {
+      "id": "m1-pr09-e-18",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、估计量评选标准实战（数一专属）",
+      "title": "【方浩例 12 & 例 6 · 含 P.167 勘误】三类方差估计量（n-1, n, n+1）无偏性、一致性与 MSE 对比",
+      "problem": "设 $X_1,\\dots,X_n\\;(n\\ge 2)$ 来自 $N(\\mu,\\sigma^2)$，考察三个方差估计量：$A=\\frac{1}{n-1}\\sum(X_i-\\bar X)^2$，$B=\\frac{1}{n}\\sum(X_i-\\bar X)^2$，$C=\\frac{1}{n+1}\\sum(X_i-\\bar X)^2$：\n(1) 判断三者的无偏性与一致性；\n(2) 比较三者的均方误差 $\\operatorname{MSE}$，指出谁的 MSE 最小；\n(3) 记 $\\hat\\sigma=\\sqrt{B}$，证明 $E(B)>[E(\\hat\\sigma)]^2$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "把三者统一写成 $T_k=\\frac{\\sigma^2}{k}V$（其中 $V=\\frac{(n-1)S^2}{\\sigma^2}\\sim\\chi^2(n-1)$），用 $EV=n-1,\\;DV=2(n-1)$ 一网打尽期望、方差、一致性与最小 MSE！"
+        },
+        {
+          "stepTitle": "求解 (1)：无偏性与一致性对比",
+          "detail": "利用 $E\\left[\\sum(X_i-\\bar X)^2\\right]=\\sigma^2 E\\left[\\frac{1}{\\sigma^2}\\sum(X_i-\\bar X)^2\\right]=(n-1)\\sigma^2$：\n- **无偏性**：$EA=\\sigma^2$（无偏），$EB=\\frac{n-1}{n}\\sigma^2$（有偏），$EC=\\frac{n-1}{n+1}\\sigma^2$（有偏）；\n- **一致性**：因 $A=S^2\\xrightarrow{P}\\sigma^2$，且 $\\frac{n-1}{n}\\to 1,\\;\\frac{n-1}{n+1}\\to 1$，故 **$A,B,C$ 全部是一致（相合）估计量**！"
+        },
+        {
+          "stepTitle": "求解 (2)(3)：最小 MSE 竟是 C，且 E(B) > [E(√B)]²",
+          "detail": "令 $T_c=c(n-1)S^2=c\\sigma^2 V$，则 $\\operatorname{MSE}(T_c)=D(T_c)+(ET_c-\\sigma^2)^2=\\sigma^4[2(n-1)c^2+((n-1)c-1)^2]$，求导令 $0$ 得最优 $c^*=\\dfrac{1}{n+1}$！即分母为 **$n+1$ 的有偏估计 $C$ 拥有最小均方误差 $\\frac{2\\sigma^4}{n+1}$**（小于 $A$ 的 $\\frac{2\\sigma^4}{n-1}$ 与 $B$ 的 $\\frac{(2n-1)\\sigma^4}{n^2}$）！\n(3) 因 $\\hat\\sigma=\\sqrt B$ 非常数，故 $D(\\hat\\sigma)=E(B)-[E(\\hat\\sigma)]^2>0\\implies E(B)>[E(\\hat\\sigma)]^2$！"
+        }
+      ],
+      "finalAnswer": "(1) 仅 $A$ 无偏，三者均一致；　 (2) $C$（分母 $n+1$）均方误差最小 $\\frac{2\\sigma^4}{n+1}$；　 (3) 由 $D(\\hat\\sigma)>0$ 证毕。",
+      "source": {
+        "book": "27 方浩强化 & 27 张宇基础30讲",
+        "printedPage": "方浩 P.160 例6, P.167 例12（勘误） / 基础 P.152 例6.12",
+        "pdfPage": 172,
+        "itemRef": "三类方差估计量无偏一致MSE对比（含方浩P.167勘误）"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_criteria_and_2024_2026",
+        "verified": true
+      },
+      "takeaway": "**五书原书印刷勘误**：`方浩强化 P.167 例题 12 (1)` 推导中将 `E[Σ(X_i-X̄)²] = σ² E[(1/σ²) Σ(X_i-X̄)²]` 里的系数 **`1/σ²` 误印成了 `1/2`**！实际必须除以 $\\sigma^2$ 才服从 $\\chi^2(n-1)$。"
+    },
+    {
+      "id": "m1-pr09-e-19",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "extended",
+      "section": "四、估计量评选标准实战（数一专属）",
+      "title": "【茆书汇编 · 猪狗例 7.19】平均绝对偏差与吉尼平均差构造 σ 的无偏估计",
+      "problem": "设 $X_1,\\dots,X_n\\;(n\\ge 2)$ 来自 $N(\\mu,\\sigma^2)$，考虑统计量 $y_1=\\frac{1}{n}\\sum_{i=1}^n |X_i-\\bar X|$ 与 $y_2=\\frac{1}{n(n-1)}\\sum_{i=1}^n\\sum_{j=1}^n |X_i-X_j|$，求常数 $C_1,C_2$ 使 $C_1y_1$ 与 $C_2y_2$ 均为 $\\sigma$ 的无偏估计。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "直接借用第 8 讲正态残差方差 $D(X_i-\\bar X)=\\frac{n-1}{n}\\sigma^2$ 及两差方差 $D(X_i-X_j)=2\\sigma^2\\;(i\\ne j)$，套半正态金式秒算！"
+        },
+        {
+          "stepTitle": "求解 C₁ 与 C₂",
+          "detail": "- 对 $y_1$：由 $X_i-\\bar X\\sim N\\!\\left(0,\\frac{n-1}{n}\\sigma^2\\right)$ 得 $E|X_i-\\bar X|=\\sigma\\sqrt{\\frac{n-1}{n}}\\sqrt{\\frac{2}{\\pi}}$，故 $E(y_1)=\\sigma\\sqrt{\\frac{2(n-1)}{n\\pi}}\\implies C_1=\\sqrt{\\dfrac{n\\pi}{2(n-1)}}$！\n- 对 $y_2$：双和中 $i=j$ 的 $n$ 项全为 $0$，剩余 $n(n-1)$ 项 $i\\ne j$ 均有 $X_i-X_j\\sim N(0,2\\sigma^2)\\implies E|X_i-X_j|=\\sqrt 2\\sigma\\sqrt{\\frac{2}{\\pi}}=\\frac{2\\sigma}{\\sqrt\\pi}$！故 $E(y_2)=\\frac{1}{n(n-1)}\\cdot n(n-1)\\cdot\\frac{2\\sigma}{\\sqrt\\pi}=\\frac{2\\sigma}{\\sqrt\\pi}\\implies C_2=\\dfrac{\\sqrt\\pi}{2}$！"
+        }
+      ],
+      "finalAnswer": "$C_1=\\sqrt{\\dfrac{n\\pi}{2(n-1)}}$；　　 $C_2=\\dfrac{\\sqrt\\pi}{2}$（与 2023 真题系数完全相同！）。",
+      "source": {
+        "book": "27 猪狗百宝书（茆书汇编）",
+        "printedPage": "猪狗 P.7-18 例7.19",
+        "pdfPage": 165,
+        "itemRef": "平均绝对偏差与平均差构造σ无偏估计"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_criteria_and_2024_2026",
+        "verified": true
+      },
+      "takeaway": "注意 $y_2$ 中对角项 $|X_i-X_i|=0$ 共有 $n$ 项，非零项正好有 $n(n-1)$ 项，恰好与分母 $n(n-1)$ 完全抵消！"
+    },
+    {
+      "id": "m1-pr09-e-20",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "五、区间估计真题实战（数一专属）",
+      "title": "【2016 & 2005 数一真题】单正态 μ 置信区间对称反推与 t 分布区间计算",
+      "problem": "(1)（2016 数一真题）设 $x_1,\\dots,x_n$ 来自 $N(\\mu,\\sigma^2)$，测得样本均值 $\\bar x=9.5$，$\\mu$ 的置信度 $0.95$ 双侧置信上限为 $10.8$，则该双侧置信区间为 $\\underline{\\qquad}$；\n(2)（2005 数一真题）零件长度服从 $N(\\mu,\\sigma^2)$（$\\mu,\\sigma^2$ 均未知），抽取 $16$ 个测得 $\\bar x=20\\,\\text{cm},\\;s=1\\,\\text{cm}$，则 $\\mu$ 的置信度 $0.90$ 置信区间是（ ）。\nA. $(20-\\frac14 t_{0.05}(16),20+\\frac14 t_{0.05}(16))$　 B. $(20-\\frac14 t_{0.1}(16),20+\\frac14 t_{0.1}(16))$　 C. $(20-\\frac14 t_{0.05}(15),20+\\frac14 t_{0.05}(15))$　 D. $(20-\\frac14 t_{0.1}(15),20+\\frac14 t_{0.1}(15))$",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "第 (1) 问无论 $\\sigma^2$ 已知还是未知，正态 $\\mu$ 的双侧置信区间一定以 $\\bar x$ 为中点严格对称！第 (2) 问盯紧两坑：双侧 $\\alpha/2=0.05$ 与自由度 $n-1=15$！"
+        },
+        {
+          "stepTitle": "求解 (1)：2016 真题 5 秒对称反推",
+          "detail": "半宽 $\\Delta=10.8-9.5=1.3$，故下限为 $\\bar x-\\Delta=9.5-1.3=8.2$，置信区间为 **$[8.2,\\;10.8]$**（或 $(8.2,10.8)$）！"
+        },
+        {
+          "stepTitle": "求解 (2)：2005 真题双坑核对",
+          "detail": "$\\sigma^2$ 未知用 $t$ 区间：$n=16\\implies\\sqrt n=4$，自由度 $n-1=15$；置信度 $1-\\alpha=0.90\\implies \\alpha=0.10\\implies \\alpha/2=0.05$！代入得：$$\\left(20-\\frac{1}{4}t_{0.05}(15),\\;20+\\frac{1}{4}t_{0.05}(15)\\right)$$ 选 **C**！"
+        }
+      ],
+      "finalAnswer": "(1) $[8.2,\\;10.8]$；　　 (2) 选 **C**：$(20-\\frac14 t_{0.05}(15),\\,20+\\frac14 t_{0.05}(15))$。",
+      "source": {
+        "book": "2016 & 2005 数一真题 · 猪狗百宝书 / 方浩强化",
+        "printedPage": "猪狗 P.7-14 例7.10-7.11 / 方浩 P.171 例14-15",
+        "pdfPage": 161,
+        "itemRef": "2016与2005数一真题：正态均值置信区间"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_ci_and_length",
+        "verified": true
+      },
+      "takeaway": "**绝不可对 $\\sigma^2$ 区间套对称性**：正态方差 $\\sigma^2$ 的卡方区间是非对称的，$S^2$ **不是**区间中点！对称反推只适用于 $\\mu$ 与 $\\mu_1-\\mu_2$！"
+    },
+    {
+      "id": "m1-pr09-e-21",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "五、区间估计真题实战（数一专属）",
+      "title": "【概率 9 讲 例 9.9 / 方浩例 16 / 猪狗例 7.26】置信区间长度约束反求最小样本容量 n",
+      "problem": "(1)（猪狗例 7.26）设总体 $N(\\mu,1)$，欲使 $\\mu$ 的 $0.95$ 置信区间长度不超过 $1.2$，样本容量 $n$ 至少多大？（$z_{0.025}=1.96$）\n(2)（方浩例 16 / 概率 9 讲例 9.9）设总体 $N(\\mu,9)$，要求 $\\mu$ 的置信度 $0.95$ 置信区间长度不超过 $2$（若查表取 $z_{0.025}=2$ 或 $1.96$），至少需抽样多少？",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "写出区间长度公式 $L=2z_{\\alpha/2}\\frac{\\sigma}{\\sqrt n}\\le L_0\\implies n\\ge\\left(\\frac{2z_{\\alpha/2}\\sigma}{L_0}\\right)^2$，计算后**向上取整**！"
+        },
+        {
+          "stepTitle": "求解 (1) 与 (2)：代入长度不等式向上取整",
+          "detail": "(1) $\\sigma=1,\\;L_0=1.2$：$$n\\ge\\left(\\frac{2\\times 1.96\\times 1}{1.2}\\right)^2=\\left(\\frac{3.92}{1.2}\\right)^2\\approx 10.67\\implies n\\ge 11$$ 至少抽取 **$11$** 个样本！\n(2) $\\sigma=3,\\;L_0=2$：若取 $z_{0.025}=2$，则 $n\\ge\\left(\\frac{2\\times 2\\times 3}{2}\\right)^2=36$（若精确取 $1.96$ 则 $n\\ge (3\\times 1.96)^2=34.57\\implies n\\ge 35$！）。"
+        }
+      ],
+      "finalAnswer": "(1) 至少 $n=11$；　　 (2) 按 $z_{0.025}=2$ 得 $n=36$（按 $1.96$ 得 $n=35$）。",
+      "source": {
+        "book": "27 张宇概率9讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.77 例9.9 / 方浩 P.172 例16 / 猪狗 P.7-20 例7.26",
+        "pdfPage": 88,
+        "itemRef": "置信区间长度控制反求最小样本量"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_ci_and_length",
+        "verified": true
+      },
+      "takeaway": "**看清「长度」还是「半宽（误差限）」**：区间长度是 **$2z_{\\alpha/2}\\sigma/\\sqrt n$**，误差不超过 $\\delta$（半宽）则是 **$z_{\\alpha/2}\\sigma/\\sqrt n$**，差因子 $2$ 会让样本量差 $4$ 倍！"
+    },
+    {
+      "id": "m1-pr09-e-22",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "五、区间估计经典实战（数一专属）",
+      "title": "【猪狗例 7.27 & 7.28 / 方浩例 17–18, 23–24】方差 σ²、标准差 σ 与单侧置信下限实战",
+      "problem": "(1)（猪狗例 7.27）轮胎寿命服从 $N(\\mu,\\sigma^2)$，抽取 $12$ 只测得 $\\bar x=4.7092,\\;s^2=0.0615$，求 $\\mu$ 的 $0.95$ 双侧置信区间，以及因「寿命越长越好」需求的 $0.95$ **单侧置信下限**；\n(2)（猪狗例 7.28）零件质量服从 $N(\\mu,\\sigma^2)$，抽取 $9$ 个测得 $s^2=0.0325$，求标准差 $\\sigma$ 的 $0.95$ 置信区间。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "第 (1) 问双侧用 $t_{0.025}(11)$，单侧下限**不除以 2**直接用 $t_{0.05}(11)$！第 (2) 问先写 $\\sigma^2$ 的卡方区间（大数 $\\chi^2_{0.025}(8)$ 放左分母！），再整体开根号！"
+        },
+        {
+          "stepTitle": "求解 (1)：双侧区间 vs 单侧置信下限",
+          "detail": "$n=12,\\;n-1=11,\\;s=\\sqrt{0.0615}\\approx 0.2480$：\n- **双侧 0.95 区间**：$\\left[\\bar x-t_{0.025}(11)\\frac{s}{\\sqrt{12}},\\;\\bar x+t_{0.025}(11)\\frac{s}{\\sqrt{12}}\\right]$（查表 $t_{0.025}(11)=2.201\\implies [4.5516,4.8668]$）；\n- **单侧 0.95 置信下限**（要求 $P\\{\\mu\\ge\\theta_L\\}=0.95$）：$$\\theta_L=\\bar x-t_{0.05}(11)\\frac{s}{\\sqrt{12}}\\quad\\big(\\text{即单侧区间 }[\\theta_L,\\,+\\infty),\\;t_{0.05}(11)=1.796\\implies\\theta_L\\approx 4.5806\\big)$$"
+        },
+        {
+          "stepTitle": "求解 (2)：σ 的 0.95 卡方置信区间",
+          "detail": "$n=9\\implies n-1=8$，$(n-1)s^2=8\\times 0.0325=0.26$。先写 $\\sigma^2$ 区间并开根号：$$\\sigma\\in\\left[\\sqrt{\\frac{0.26}{\\chi^2_{0.025}(8)}},\\;\\sqrt{\\frac{0.26}{\\chi^2_{0.975}(8)}}\\right]$$（查表 $\\chi^2_{0.025}(8)=17.535,\\;\\chi^2_{0.975}(8)=2.180\\implies \\sigma\\in[0.1218,\\,0.3454]$）。"
+        }
+      ],
+      "finalAnswer": "(1) 双侧 $\\bar x\\pm t_{0.025}(11)\\frac{s}{\\sqrt{12}}$；单侧下限 $\\bar x-t_{0.05}(11)\\frac{s}{\\sqrt{12}}$；　 (2) $\\left[\\sqrt{\\frac{0.26}{\\chi^2_{0.025}(8)}},\\;\\sqrt{\\frac{0.26}{\\chi^2_{0.975}(8)}}\\right]$。",
+      "source": {
+        "book": "27 猪狗百宝书 & 27 方浩强化",
+        "printedPage": "猪狗 P.7-21 例7.27-7.28 / 方浩 P.173-177 例17-18,23-24",
+        "pdfPage": 168,
+        "itemRef": "标准差卡方置信区间与单侧置信下限"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_ci_and_length",
+        "verified": true
+      },
+      "takeaway": "**单侧置信限尾概率铁律**：要求置信度 $1-\\alpha=0.95$ 时，双侧两边各留 $0.025$（查 $t_{0.025}$），单侧只留一边 $0.05$（查 $t_{0.05}$），千万别顺手除以 $2$！"
+    },
+    {
+      "id": "m1-pr09-e-23",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "extended",
+      "section": "五、双正态总体区间估计（数一专属）",
+      "title": "【猪狗例 7.29 / 方浩例 19–22】两台机床套筒直径方差比 σ₁²/σ₂² 与同方差均值差区间",
+      "problem": "两台自动机床加工套筒，直径均服从正态分布，独立抽检甲班 $5$ 个、乙班 $6$ 个，测得样本方差 $s_1^2=0.00107,\\;s_2^2=0.00092$：\n(1) 写出两班直径方差比 $\\sigma_1^2/\\sigma_2^2$ 的 $0.95$ 置信区间（用 $F$ 分位数表示）；\n(2) 若认为两班方差相等且样本均值分别为 $\\bar x_1,\\bar x_2$，写出 $\\mu_1-\\mu_2$ 的 $0.95$ 置信区间表达式。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "套双正态表 P9-2：方差比用 $F(4,5)$（左除 $F_{0.025}(4,5)$、右乘 $F_{0.025}(5,4)$！）；同方差均值差先算合并方差 $S_w^2$ 再套 $t_{0.025}(9)$！"
+        },
+        {
+          "stepTitle": "求解 (1)：方差比 F 置信区间",
+          "detail": "$n_1-1=4,\\;n_2-1=5$，$s_1^2/s_2^2=107/92\\approx 1.1630$。由 $\\frac{S_1^2/\\sigma_1^2}{S_2^2/\\sigma_2^2}\\sim F(4,5)$：$$\\frac{\\sigma_1^2}{\\sigma_2^2}\\in\\left[\\frac{s_1^2}{s_2^2}\\cdot\\frac{1}{F_{0.025}(4,5)},\\;\\frac{s_1^2}{s_2^2}\\cdot\\frac{1}{F_{0.975}(4,5)}\\right]=\\left[\\frac{107}{92\\,F_{0.025}(4,5)},\\;\\frac{107}{92}F_{0.025}(5,4)\\right]$$"
+        },
+        {
+          "stepTitle": "求解 (2)：合并样本方差与均值差 t(9) 区间",
+          "detail": "自由度 $n_1+n_2-2=5+6-2=9$，合并方差 $s_w^2=\\frac{4s_1^2+5s_2^2}{9}=\\frac{4(0.00107)+5(0.00092)}{9}\\approx 0.000987$。故 $\\mu_1-\\mu_2$ 的 $0.95$ 置信区间为：$$\\left[\\bar x_1-\\bar x_2-t_{0.025}(9)\\,s_w\\sqrt{\\frac15+\\frac16},\\;\\bar x_1-\\bar x_2+t_{0.025}(9)\\,s_w\\sqrt{\\frac15+\\frac16}\\right]$$"
+        }
+      ],
+      "finalAnswer": "(1) $\\left[\\frac{107}{92F_{0.025}(4,5)},\\;\\frac{107}{92}F_{0.025}(5,4)\\right]$；　　 (2) $\\bar x_1-\\bar x_2\\pm t_{0.025}(9)s_w\\sqrt{\\frac{11}{30}}$。",
+      "source": {
+        "book": "27 猪狗百宝书 & 27 方浩强化",
+        "printedPage": "猪狗 P.7-21 例7.29 / 方浩 P.174-176 例19-22",
+        "pdfPage": 168,
+        "itemRef": "双正态总体方差比F区间与均值差合并t区间"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_ci_and_length",
+        "verified": true
+      },
+      "takeaway": "**自由度顺序万勿颠倒**：$F(n_1-1,n_2-1)$ 第一自由度对应分子样本 $s_1^2$，第二自由度对应分母样本 $s_2^2$；化简右端点用三转公式后，分子与分母自由度才翻转为 $(n_2-1,n_1-1)$！"
+    },
+    {
+      "id": "m1-pr09-e-24",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "extended",
+      "section": "五、大样本近似置信区间（数一专属）",
+      "title": "【概率 9 讲 例 9.10 / 基础例 6.14】非正态 0-1 分布比例 p 的 CLT 近似置信区间",
+      "problem": "某批次产品随机抽取 $n=100$ 件，检出次品 $10$ 件（$\\bar x=0.1$），试用中心极限定理求该批产品次品率 $p$ 的近似 $0.95$ 置信区间（已知 $z_{0.025}=1.96$，分别展示直接代入法与二次不等式精解法）。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "总体 $X\\sim B(1,p)$ 非正态，但 $n=100$ 较大，由棣莫弗-拉普拉斯 CLT 得 $\\frac{\\bar X-p}{\\sqrt{p(1-p)/n}}\\dot\\sim N(0,1)$！"
+        },
+        {
+          "stepTitle": "方法一：代入法（快算标准版）",
+          "detail": "用样本频率 $\\bar x=0.1$ 替代方差内的未知 $p$，得半宽 $\\Delta=1.96\\sqrt{\\frac{0.1\\times 0.9}{100}}=1.96\\times 0.03=0.0588$，故近似置信区间为 $[0.1-0.0588,\\;0.1+0.0588]=[0.0412,\\;0.1588]$。"
+        },
+        {
+          "stepTitle": "方法二：二次不等式精解法（Wilson 区间）",
+          "detail": "直接解不等式 $(\\bar x-p)^2\\le\\frac{z^2}{n}p(1-p)$（其中 $z=1.96,\\;z^2/n=0.038416$）：$$(1+0.038416)p^2-(2\\bar x+0.038416)p+\\bar x^2\\le 0\\implies 1.038416p^2-0.238416p+0.01\\le 0$$ 求根公式解得精确近似区间 $[0.0552,\\;0.1744]$（保证区间永不超出 $[0,1]$！）。"
+        }
+      ],
+      "finalAnswer": "代入法 $[0.0412,\\;0.1588]$；二次不等式精解法（Wilson）$[0.0552,\\;0.1744]$。",
+      "source": {
+        "book": "27 张宇基础30讲 & 27 张宇概率9讲",
+        "printedPage": "基础 P.155 例6.14 / 9讲 P.78 例9.10",
+        "pdfPage": 161,
+        "itemRef": "CLT构造0-1比例p的大样本近似置信区间"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_ci_and_length",
+        "verified": true
+      },
+      "takeaway": "张宇《基础 30 讲例 6.14》与《概率 9 讲例 9.10》均演示了二次不等式法（当 $\\bar x$ 接近 $0$ 或 $1$ 时，代入法甚至可能算出负左端点，而二次不等式法永远安全落在 $[0,1]$ 内！）。"
+    },
+    {
+      "id": "m1-pr09-e-25",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "六、假设检验真题全解（数一专属 · 2018/2021/2025）",
+      "title": "【2025 最新数一真题】单侧正态均值假设检验拒绝域（防坑 σ = √2！）",
+      "problem": "（2025 数一真题）设 $X_1,\\dots,X_n$ 为来自正态总体 $N(\\mu,2)$ 的简单随机样本，记 $\\bar X=\\frac1n\\sum_{i=1}^n X_i$，$z_\\alpha$ 表示标准正态上侧 $\\alpha$ 分位数。假设检验问题 $H_0:\\mu\\le 1,\\;H_1:\\mu>1$ 的显著性水平为 $\\alpha$ 的检验的拒绝域为（ ）。\nA. $\\left\\{\\bar X>1+\\frac{2}{n}z_\\alpha\\right\\}$　 B. $\\left\\{\\bar X>1+\\frac{\\sqrt 2}{n}z_\\alpha\\right\\}$　 C. $\\left\\{\\bar X>1+\\frac{2}{\\sqrt n}z_\\alpha\\right\\}$　 D. $\\left\\{\\bar X>1+\\sqrt{\\frac{2}{n}}z_\\alpha\\right\\}$",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "盯住三大要素：① $N(\\mu,2)$ 的方差 $\\sigma^2=2\\implies\\sigma=\\sqrt 2$；② $H_1:\\mu>1$ 取右侧单尾，**不除以 2**；③ $D(\\bar X)=\\frac{2}{n}\\implies$ 标准差 $\\sqrt{\\frac{2}{n}}$！"
+        },
+        {
+          "stepTitle": "按边界 μ₀ = 1 构造检验统计量并写拒绝域",
+          "detail": "在 $H_0$ 边界 $\\mu=1$ 处，$\\bar X\\sim N(1,2/n)$，故 $U=\\dfrac{\\bar X-1}{\\sqrt{2/n}}\\sim N(0,1)$。因备择假设为右侧 $H_1:\\mu>1$，拒绝域为右侧尾：$$W=\\{U>z_\\alpha\\}=\\left\\{\\frac{\\bar X-1}{\\sqrt{2/n}}>z_\\alpha\\right\\}=\\left\\{\\bar X>1+\\sqrt{\\frac{2}{n}}z_\\alpha\\right\\}$$ 选 **D**！"
+        }
+      ],
+      "finalAnswer": "选 **D**：$\\left\\{(X_1,\\dots,X_n)\\;\\middle|\\;\\bar X>1+\\sqrt{\\dfrac{2}{n}}z_\\alpha\\right\\}$。",
+      "source": {
+        "book": "2025 考研数一真题 · 猪狗百宝书",
+        "printedPage": "猪狗 P.8-6 例8.1 (2025)",
+        "pdfPage": 179,
+        "itemRef": "2025数一真题：单侧正态均值假设检验拒绝域"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_hypothesis_and_errors",
+        "verified": true
+      },
+      "takeaway": "① **考场第一大低级错**：把 $N(\\mu,2)$ 错看成标准差 $\\sigma=2$（掉进选项 C），或者漏开 $n$ 的根号（掉进选项 A/B）——永远先写一句「$\\sigma^2=2\\Rightarrow\\sigma=\\sqrt 2$」！ ② 同时验证显著性水平：对任意 $\\mu\\le 1$，$P_\\mu(\\bar X>1+\\sqrt{\\frac2n}z_\\alpha)=1-\\Phi\\!\\left(z_\\alpha+\\frac{1-\\mu}{\\sqrt{2/n}}\\right)\\le 1-\\Phi(z_\\alpha)=\\alpha$，在边界 $\\mu=1$ 精确取等！"
+    },
+    {
+      "id": "m1-pr09-e-26",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "六、假设检验真题全解（数一专属 · 2018/2021/2025）",
+      "title": "【2021 数一真题】第二类错误概率 β（取伪）精准计算",
+      "problem": "（2021 数一真题）设 $X_1,\\dots,X_{16}$ 来自 $N(\\mu,4)$，考虑假设检验 $H_0:\\mu\\le 10,\\;H_1:\\mu>10$。若拒绝域为 $W=\\{\\bar X>11\\}$，则当 $\\mu=11.5$ 时，该检验犯第二类错误的概率为（ ）。\nA. $1-\\Phi(0.5)$　　 B. $1-\\Phi(1)$　　 C. $1-\\Phi(1.5)$　　 D. $1-\\Phi(2)$",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "第二类错误 =「$H_1$ 真（代入 $\\mu=11.5$！）却落入**接受域** $\\bar W=\\{\\bar X\\le 11\\}$」，直接标准化一气呵成！"
+        },
+        {
+          "stepTitle": "确定接受域与 μ = 11.5 下的分布",
+          "detail": "拒绝域 $W=\\{\\bar X>11\\}\\implies$ 接受域 $\\bar W=\\{\\bar X\\le 11\\}$。当真值 $\\mu=11.5$ 时，$\\sigma^2=4,\\;n=16$，故 $$\\bar X\\sim N\\!\\left(11.5,\\;\\frac{4}{16}\\right)=N(11.5,\\;0.5^2)$$"
+        },
+        {
+          "stepTitle": "标准化计算 β",
+          "detail": "$$\\beta=P\\{\\bar X\\le 11\\mid\\mu=11.5\\}=P\\!\\left\\{\\frac{\\bar X-11.5}{0.5}\\le\\frac{11-11.5}{0.5}\\right\\}=\\Phi(-1)=1-\\Phi(1)$$ 选 **B**！"
+        }
+      ],
+      "finalAnswer": "选 **B**：$1-\\Phi(1)$。",
+      "source": {
+        "book": "2021 考研数一真题 · 概率9讲 / 方浩强化 / 猪狗百宝书",
+        "printedPage": "9讲 P.81 例9.12 / 方浩 P.181-182 例1-2 / 猪狗 P.8-6 例8.2 (2021)",
+        "pdfPage": 92,
+        "itemRef": "2021数一真题：第二类错误概率计算"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_hypothesis_and_errors",
+        "verified": true
+      },
+      "takeaway": "**顺带对照第一类错误 $\\alpha$**：在 $H_0$ 边界 $\\mu=10$ 下，$\\alpha=P\\{\\bar X>11\\mid\\mu=10\\}=1-\\Phi\\!\\left(\\frac{11-10}{0.5}\\right)=1-\\Phi(2)\\approx 0.0228$，而 $\\beta=1-\\Phi(1)\\approx 0.1587$，直观再次印证 $\\alpha+\\beta\\approx 0.1815\\ne 1$！"
+    },
+    {
+      "id": "m1-pr09-e-27",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "六、假设检验真题全解（数一专属 · 2018/2021/2025）",
+      "title": "【2018 数一真题】显著性水平 α = 0.05 与 α = 0.01 拒绝域嵌套单调律",
+      "problem": "（2018 数一真题）设 $X_1,\\dots,X_n$ 来自 $N(\\mu,\\sigma^2)$，检验 $H_0:\\mu=\\mu_0,\\;H_1:\\mu\\ne\\mu_0$，则（ ）。\nA. 若 $\\alpha=0.05$ 下拒绝 $H_0$，则 $\\alpha=0.01$ 下必拒绝 $H_0$\nB. 若 $\\alpha=0.05$ 下拒绝 $H_0$，则 $\\alpha=0.01$ 下必接受 $H_0$\nC. 若 $\\alpha=0.05$ 下接受 $H_0$，则 $\\alpha=0.01$ 下必拒绝 $H_0$\nD. 若 $\\alpha=0.05$ 下接受 $H_0$，则 $\\alpha=0.01$ 下必接受 $H_0$",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "画数轴看临界阈值：$t_{0.005}(n-1)>t_{0.025}(n-1)\\implies$ 拒绝域 $W_{0.01}\\subset W_{0.05}$，接受域 $\\bar W_{0.05}\\subset\\bar W_{0.01}$！"
+        },
+        {
+          "stepTitle": "比较两个显著性水平的拒绝域与接受域包含关系",
+          "detail": "记检验统计量 $T=\\frac{\\sqrt n(\\bar X-\\mu_0)}{S}$。因 $0.005<0.025$，上侧分位数满足 $t_{0.005}(n-1)>t_{0.025}(n-1)$。\n- 接受域比较：若在 $\\alpha=0.05$ 下接受 $H_0$，则 $|T|\\le t_{0.025}(n-1)<t_{0.005}(n-1)$，因此样本必落入 $\\alpha=0.01$ 的接受域内，**必接受 $H_0$**！\n- 反之若在 $\\alpha=0.05$ 下拒绝 $H_0$（$|T|>t_{0.025}$），当 $t_{0.025}<|T|\\le t_{0.005}$ 时在 $\\alpha=0.01$ 下转为接受，当 $|T|>t_{0.005}$ 时仍拒绝，故 A、B 均不必然成立！故选 **D**。"
+        }
+      ],
+      "finalAnswer": "选 **D**：$\\alpha=0.05$ 下接受 $H_0\\implies\\alpha=0.01$ 下必接受 $H_0$。",
+      "source": {
+        "book": "2018 考研数一真题 · 方浩强化 / 猪狗百宝书",
+        "printedPage": "猪狗 P.8-7 例8.3 (2018) / 方浩 P.184 例6",
+        "pdfPage": 180,
+        "itemRef": "2018数一真题：显著性水平嵌套单调律"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "takeaway": "**生活化永不忘类比**：「$\\alpha=0.01$ 相当于 $99\\%$ 确凿才定罪（门槛极严），$\\alpha=0.05$ 是 $95\\%$ 即可定罪（门槛较宽）」。连较宽的 $95\\%$ 标准都定不了罪（接受无罪），放到极严的 $99\\%$ 标准下当然更不可能定罪！"
+    },
+    {
+      "id": "m1-pr09-e-28",
+      "kind": "example",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "六、单/双正态完整检验实战（数一专属）",
+      "title": "【1998 数一真题 + 茆书综合】单总体 t / χ² 检验与定制双总体 H₀: μ₁ ≤ 2μ₂ 检验",
+      "problem": "(1)（1998 数一真题）正态总体抽 $36$ 位考生，测得 $\\bar x=66.5, s=15$，在 $\\alpha=0.05$ 下能否认为全体平均分为 $70$ 分？（$t_{0.025}(35)=2.0301,\\;t_{0.05}(35)=1.6896$）\n(2)（猪狗例 8.8）白糖袋重 $N(\\mu,15^2)$，抽 $10$ 袋得 $s=30.23$，在 $\\alpha=0.05$ 下检验方差是否显著增大？（$\\chi^2_{0.05}(9)=16.919$）\n(3)（猪狗例 8.12）两独立正态 $X\\sim N(\\mu_1,\\sigma_1^2)\\;(m)$ 与 $Y\\sim N(\\mu_2,\\sigma_2^2)\\;(n)$（$\\sigma_1,\\sigma_2$ 已知），构造 $H_0:\\mu_1\\le 2\\mu_2,\\;H_1:\\mu_1>2\\mu_2$ 的检验统计量与拒绝域。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "严格遵循「设假设 $\\to$ 选统计量 $\\to$ 定拒绝域 $\\to$ 算值判结」四步规范！第 (3) 问别死套 $\\bar X-\\bar Y$，直接对 $\\bar X-2\\bar Y$ 标准化！"
+        },
+        {
+          "stepTitle": "求解 (1)(2)：1998 真题双侧 t 检验与单侧 χ² 检验",
+          "detail": "(1) 设 $H_0:\\mu=70,\\;H_1:\\mu\\ne 70$（双侧检验！）。$\\sigma^2$ 未知用 $t$ 统计量，自由度 $n-1=35$：$$|t|=\\left|\\frac{\\sqrt{36}(66.5-70)}{15}\\right|=\\left|\\frac{6\\times(-3.5)}{15}\\right|=1.4<t_{0.025}(35)=2.0301$$ 未落入拒绝域，故**接受 $H_0$**，可以认为平均分为 $70$ 分！\n(2) 设 $H_0:\\sigma^2\\le 15^2,\\;H_1:\\sigma^2>15^2$（右侧检验）。算得 $\\chi^2=\\frac{9\\times 30.23^2}{15^2}\\approx 36.55>\\chi^2_{0.05}(9)=16.919$，落入拒绝域，故**拒绝 $H_0$**，生产波动显著异常！"
+        },
+        {
+          "stepTitle": "求解 (3)：定制线性组合 H₀: μ₁ - 2μ₂ ≤ 0 检验",
+          "detail": "在边界 $\\mu_1-2\\mu_2=0$ 下，$\\bar X-2\\bar Y\\sim N\\!\\left(0,\\;\\frac{\\sigma_1^2}{m}+\\frac{4\\sigma_2^2}{n}\\right)$！取检验统计量：$$U=\\frac{\\bar X-2\\bar Y}{\\sqrt{\\dfrac{\\sigma_1^2}{m}+\\dfrac{4\\sigma_2^2}{n}}}\\sim N(0,1)$$ 因 $H_1:\\mu_1-2\\mu_2>0$，显著性水平 $\\alpha$ 的拒绝域为 $W=\\{U>z_\\alpha\\}$！"
+        }
+      ],
+      "finalAnswer": "(1) $|t|=1.4<2.0301$，接受 $H_0$；　 (2) $\\chi^2\\approx 36.55>16.919$，拒绝 $H_0$；　 (3) $W=\\left\\{\\frac{\\bar X-2\\bar Y}{\\sqrt{\\sigma_1^2/m+4\\sigma_2^2/n}}>z_\\alpha\\right\\}$。",
+      "source": {
+        "book": "1998 数一真题 · 基础30讲 / 概率9讲 / 猪狗百宝书",
+        "printedPage": "猪狗 P.8-7 例8.4 (1998), P.8-8 例8.8, P.8-10 例8.12 / 基础 P.157 例6.15 / 9讲 P.80 例9.11",
+        "pdfPage": 180,
+        "itemRef": "1998真题t检验、方差卡方检验与定制双总体检验"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_hypothesis_and_errors",
+        "verified": true
+      },
+      "takeaway": "**1998 真题双坑防雷**：题干同时故意给出 $t_{0.05}(35), t_{0.05}(36), t_{0.025}(35), t_{0.025}(36)$ 四个干扰数据！牢记「双侧除 2 查 $0.025$，自由度减 1 查 $35$」精准锁定 $2.0301$！"
+    },
+    {
+      "id": "m1-pr09-e-29",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、两类错误与样本量规划（数一专属）",
+      "title": "【基础例 6.16 + 猪狗例 8.10】非正态两类错误积分与同时控制 α, β 定最小样本量 n",
+      "problem": "(1)（基础例 6.16）设总体密度 $f(x;\\theta)=\\begin{cases}\\theta x^{\\theta-1},&0<x<1\\\\0,&\\text{其他}\\end{cases}$，抽单样本 $X$ 检验 $H_0:\\theta=1\\;\\text{vs}\\;H_1:\\theta=2$，取拒绝域 $W=\\{X>\\frac34\\}$，求两类错误概率 $\\alpha,\\beta$；\n(2)（猪狗例 8.10）正态总体 $N(\\mu,2.5)$ 检验 $H_0:\\mu\\ge 15,\\;H_1:\\mu<15$，取 $\\alpha=0.05$，要求当 $\\mu\\le 13$ 时第二类错误概率不超过 $0.05$，求所需最小样本容量 $n$（$z_{0.05}=1.645$）。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "第 (1) 问直接用密度积分，直观验证 $\\alpha+\\beta\\ne 1$！第 (2) 问由 $\\alpha=0.05$ 写拒绝域临界值 $c=15-z_{0.05}\\frac{\\sigma}{\\sqrt n}$，再代入 $\\mu=13$ 控制 $\\beta\\le 0.05$ 联立消去 $c$ 解出 $n$！"
+        },
+        {
+          "stepTitle": "求解 (1)：非正态密度直接积分算 α 与 β",
+          "detail": "- $H_0:\\theta=1$ 时 $f(x)=1\\;(0<x<1)$，故第一类错误：$$\\alpha=P\\!\\left\\{X>\\frac34\\;\\middle|\\;\\theta=1\\right\\}=\\int_{3/4}^{1}1\\,\\mathrm{d}x=\\frac{1}{4}$$ \n- $H_1:\\theta=2$ 时 $f(x)=2x\\;(0<x<1)$，接受域 $\\bar W=\\{X\\le\\frac34\\}$，故第二类错误：$$\\beta=P\\!\\left\\{X\\le\\frac34\\;\\middle|\\;\\theta=2\\right\\}=\\int_0^{3/4}2x\\,\\mathrm{d}x=\\left(\\frac34\\right)^2=\\frac{9}{16}$$ 清晰可见 $\\alpha+\\beta=\\frac14+\\frac{9}{16}=\\frac{13}{16}\\ne 1$！"
+        },
+        {
+          "stepTitle": "求解 (2)：同时控制 α 与 β 确定最小样本量 n",
+          "detail": "左侧检验拒绝域 $W=\\{\\bar X<c\\}$，其中 $c=15-z_{0.05}\\frac{\\sigma}{\\sqrt n}$。当 $\\mu=13$（最难区分边界）时要求：$$\\beta=P\\{\\bar X\\ge c\\mid\\mu=13\\}=1-\\Phi\\!\\left(\\frac{c-13}{\\sigma/\\sqrt n}\\right)\\le 0.05\\iff \\frac{c-13}{\\sigma/\\sqrt n}\\ge z_{0.05}$$ 代入 $c=15-z_{0.05}\\frac{\\sigma}{\\sqrt n}$ 得：$$\\frac{15-13}{\\sigma/\\sqrt n}\\ge 2z_{0.05}\\implies n\\ge\\left(\\frac{2z_{0.05}\\sigma}{15-13}\\right)^2=\\left(1.645\\times\\sqrt{2.5}\\right)^2=2.5\\times 1.645^2\\approx 6.765$$ 向上取整得最小样本容量 **$n=7$**！"
+        }
+      ],
+      "finalAnswer": "(1) $\\alpha=\\dfrac{1}{4},\\;\\beta=\\dfrac{9}{16}$；　　 (2) 所需最小样本容量 $n=7$。",
+      "source": {
+        "book": "27 张宇基础30讲 & 27 猪狗百宝书（茆书汇编）",
+        "printedPage": "基础 P.157 例6.16 / 猪狗 P.8-9 例8.10",
+        "pdfPage": 163,
+        "itemRef": "非正态两类错误积分与双控αβ最小样本量"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr09_hypothesis_and_errors",
+        "verified": true
+      },
+      "takeaway": "**通用功效样本量金式**：单侧正态均值检验同时控制 $\\alpha$ 与在 $\\mu_1$ 处的 $\\beta$，最小样本量为 $n\\ge\\left(\\dfrac{(z_\\alpha+z_\\beta)\\sigma}{\\mu_0-\\mu_1}\\right)^2$，记忆后考场 10 秒出解！"
+    },
+    {
+      "id": "m1-pr09-s-01",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "一、点估计与评选标准决策清单",
+      "title": "点估计（矩估计 · MLE · 评选三标准）考场 10 秒决策全链路",
+      "takeaway": "点估计是考研概率压轴解答题的头号常客（2020/2021/2022/2024/2026 高密度命题），吃透驻点/边界双分支与顺序统计量数字特征即可稳拿全分！",
+      "source": {
+        "book": "27 张宇概率9讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.70-75 / 方浩 P.155-169 / 猪狗 P.7-22",
+        "pdfPage": 81,
+        "itemRef": "点估计与三大评选标准考场决策清单"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "patterns": [
+        {
+          "typeName": "矩估计 3 步走",
+          "triggers": "一、点估计与评选标准决策清单",
+          "method": "算总体一阶矩 $EX$（若不含参立即升二阶矩 $EX^2$）；双参数联立 $EX=\\bar X$ 与 $DX=B_2=\\frac1n\\sum(X_i-\\bar X)^2$（切忌除 $n-1$！）；反解未知参数并改写为大写随机变量。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "MLE 4 步走（先标范围再求导！）",
+          "triggers": "一、点估计与评选标准决策清单",
+          "method": "写出 $L(\\theta)$ 及**支撑不等式约束** $\\to$ 取对数 $\\ln L(\\theta)$ $\\to$ 求导判分支（有唯一驻点直接解；单调无驻点立刻取边界 $X_{(1)}$ 或 $X_{(n)}$）$\\to$ 问函数 $g(\\theta)$ 秒用不变性 $g(\\hat\\theta)$！",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "评选三标准核查",
+          "triggers": "一、点估计与评选标准决策清单",
+          "method": "无偏算 $E\\hat\\theta=\\theta$（常用线性性与顺序统计量矩）；有效须**先验同无偏**再比谁方差小；一致优先用辛钦大数定律 + 连续映射，或验 $E\\hat\\theta_n\\to\\theta$ 且 $D\\hat\\theta_n\\to 0$；问最优均方误差把 $\\operatorname{MSE}=D+(\\text{Bias})^2$ 配成二次函数求顶点！",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        }
+      ],
+      "overview": "点估计（矩估计 · MLE · 评选三标准）考场 10 秒决策全链路"
+    },
+    {
+      "id": "m1-pr09-s-02",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、区间估计与假设检验对偶攻略（数一专属）",
+      "title": "数一专属：区间估计与假设检验 5 步规范模版与零记忆推演口诀",
+      "takeaway": "2021 改革后假设检验已在 2021、2025 两度现身选择题，花一小时打通「枢轴量 $\\leftrightarrow$ 置信区间 $\\leftrightarrow$ 拒绝域 $\\leftrightarrow$ 两类错误」闭环，冷门送分题一个不丢！",
+      "source": {
+        "book": "27 张宇概率9讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.76-81 / 方浩 P.170-187 / 猪狗 P.7-22, 8-12",
+        "pdfPage": 87,
+        "itemRef": "区间估计与假设检验零记忆推演口诀"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "patterns": [
+        {
+          "typeName": "拒绝死记 18 个公式，只记 5 个枢轴量",
+          "triggers": "二、区间估计与假设检验对偶攻略（数一专属）",
+          "method": "单正态均值 $Z$ / $t(n-1)$、方差 $\\chi^2(n-1)$；双正态均值差 $Z$ / 合并 $t(n_1+n_2-2)$、方差比 $F(n_1-1,n_2-1)$。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "区间估计 3 句口诀",
+          "triggers": "二、区间估计与假设检验对偶攻略（数一专属）",
+          "method": "对称（$\\mu,\\mu_1-\\mu_2$）用 $\\pm$ 等尾；非对称（$\\sigma^2,\\sigma_1^2/\\sigma_2^2$）取倒数瞬间**大数 $\\chi^2_{\\alpha/2},F_{\\alpha/2}$ 放左分母**；单侧置信限尾概率不除以 $2$！",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "假设检验 4 句口诀",
+          "triggers": "二、区间估计与假设检验对偶攻略（数一专属）",
+          "method": "等号归 $H_0$，拒绝看 $H_1$（$>$ 右尾、$<$ 左尾、$\\ne$ 双尾）；$\\alpha$ 嵌套记住「$0.05$ 接受 $\\Rightarrow 0.01$ 必接受」；算第二类错误 $\\beta$ 一律代入 $H_1$ 真值求落入**接受域**概率！",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "数据坑位最后一眼自检",
+          "triggers": "二、区间估计与假设检验对偶攻略（数一专属）",
+          "method": "核对题干给的是方差 $\\sigma^2$ 还是标准差 $\\sigma$（2025 真题 $N(\\mu,2)\\implies\\sigma=\\sqrt 2$！）、自由度是否减 $1$（$n-1$）、双侧是否除以 $2$（$\\alpha/2$）。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        }
+      ],
+      "overview": "数一专属：区间估计与假设检验 5 步规范模版与零记忆推演口诀"
+    },
+    {
+      "id": "m1-pr09-s-03",
+      "kind": "summary",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、全讲五书实锤勘误总览",
+      "title": "2014–2026 真题全景复盘与第 9 讲（收官讲）五书实锤勘误汇总",
+      "takeaway": "至此，**考研数学一全 39 单元（高数 18 讲 + 证明专项 3 单元 + 线代全 9 讲 + 概率统计全 9 讲）全部圆满收官**！",
+      "source": {
+        "book": "五书交叉审校（基础30讲/概率9讲/方浩强化/猪狗百宝书/27全总结）",
+        "printedPage": "方浩 P.167,173,180,181,185 / 猪狗 P.7-1,7-7,7-8,7-12,7-14,8-4,8-6,8-9",
+        "pdfPage": 172,
+        "itemRef": "概率第9讲真题复盘与五书实锤勘误总览"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "patterns": [
+        {
+          "typeName": "勘误 #1（猪狗百宝书 P.8-4 & P.8-6 双处重大原假设印反）",
+          "triggers": "三、全讲五书实锤勘误总览",
+          "method": "单正态方差 $\\chi^2$ 检验左侧拒绝域 $\\{<\\chi^2_{1-\\alpha}\\}$ 与双正态方差比 $F$ 检验左侧拒绝域 $\\{<F_{1-\\alpha}\\}$ 对应的原假设均被误印为 $\\le$，必须修正为 **$H_0:\\sigma^2\\ge\\sigma_0^2$** 与 **$H_0:\\sigma_1^2\\ge\\sigma_2^2$**！",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "勘误 #2（猪狗百宝书 P.7-7 蓝框第 2 条 & P.7-8~7-9）",
+          "triggers": "三、全讲五书实锤勘误总览",
+          "method": "P.7-7 总结框将 $t$ 分布区间条件误印为「$\\sigma^2$ 已知」（应为 **$\\sigma^2$ 未知**）；P.7-8~7-9 漏印平方写为 `σ_1^2=σ_2^2=σ`；P.7-1 导图「方差」误印为「方程」；P.7-22 总结 ④「置信区间」误印为「检验」。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "勘误 #3（猪狗百宝书 P.7-12 例 7.5 & P.7-14 例 7.9 & P.8-9 例 8.11）",
+          "triggers": "三、全讲五书实锤勘误总览",
+          "method": "2021 离散题误称「概率密度分布」；2014 真题第 (3) 问将「均有」误印为「抖音」；P.8-9 样本均值 `0.269` 误印为 `0/269`。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "勘误 #4（方浩强化 P.167 例 12、P.181 底部【注意】及排版细节）",
+          "triggers": "三、全讲五书实锤勘误总览",
+          "method": "P.167 卡方分母 `1/σ²` 误印为 `1/2`；P.181 复合原假设下第一类错误概率称「等于 $\\alpha$」过强，严谨应为**上界（最大值）为 $\\alpha$**（边界取等）；P.173/180/185 存在 `],[`、`F(n_1-1·n_2-1)` 与 $z_\\alpha/u_\\alpha$ 混用小疵。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        }
+      ],
+      "overview": "2014–2026 真题全景复盘与第 9 讲（收官讲）五书实锤勘误汇总"
+    }
+  ]
+}

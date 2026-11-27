@@ -1,0 +1,1478 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "prob-04",
+  "title": "概率 · 第 4 讲　多维随机变量及其分布",
+  "sourceMeta": "深度融合《27 张宇基础30讲·概率》第3讲前半（P.62–78, 91–100）+《27 张宇概率9讲》第4讲（P.29–35 全 4 例）+《27 方浩概率强化》第3章题型一～四（P.52–72 例1–23）+《27 猪狗概率统计百宝书》第3章（含 2015/2023/2024 真题）+《27 版概率论全总结》P.8–10，100% 逐页核图与 SymPy 验算",
+  "basicRequirements": {
+    "master": "熟练掌握二维联合分布函数四大充要性质（尤其矩形非负性）与右上生存容斥式、二维离散与连续型的联合/边缘/条件分布计算（「三知二求一」）、相互独立的矩阵秩1与矩形可分离判据，以及二维均匀与二维正态五大核心性质。",
+    "understand": "理解零概率点条件（条件密度一维积分）与正概率区间条件（二重积分比值）的本质差异、边缘正态推不出二维正态的反例结构、圆盘均匀分布「边缘不匀却条件匀」的几何特征，以及独立性与变换函数的双向反例。",
+    "familiar": "熟悉二维正态指数二次型五参数速读配方公式、二维正态条件正态回归均值与缩减方差公式、层次泊松-二项稀化独立性证明，以及本讲跨书 2 处实锤勘误（基础30讲 P.69 哑变量误印与猪狗 P.3-19 例3.4 年份及「概率密度」双误）。"
+  },
+  "items": [
+    {
+      "id": "m1-pr04-f-01",
+      "kind": "formula",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、二维联合分布函数、四大充要性质与生存概率",
+      "title": "二维联合分布函数定义、矩形非负性定理与右上生存区容斥公式",
+      "formulaLatex": "$$\\begin{aligned} &F(x,y)=P\\{X\\le x,\\,Y\\le y\\},\\qquad (x,y)\\in\\mathbb{R}^2\\\\ &\\text{四大充要性质：}\\text{① 有界与边界极限：}0\\le F(x,y)\\le 1,\\;F(-\\infty,y)=F(x,-\\infty)=F(-\\infty,-\\infty)=0,\\;F(+\\infty,+\\infty)=1\\\\ &\\quad\\text{② 分别单调不减；③ 分别右连续：}F(x+0,y)=F(x,y),\\;F(x,y+0)=F(x,y)\\\\ &\\quad\\text{④ 矩形非负性（最易漏检！）：}\\forall x_1<x_2,\\;y_1<y_2,\\\\ &\\qquad P\\{x_1<X\\le x_2,\\,y_1<Y\\le y_2\\}=F(x_2,y_2)-F(x_1,y_2)-F(x_2,y_1)+F(x_1,y_1)\\ge 0\\\\ &\\text{右上生存区：}P\\{X>x,\\,Y>y\\}=1-F_X(x)-F_Y(y)+F(x,y)\\end{aligned}$$",
+      "conditions": "矩形公式严格对应左开右闭区域 $(x_1,x_2]\\times(y_1,y_2]$（离散或混合型端点含跳点时切勿随意改写开闭号）；连续型则边界概率为 $0$，开闭号无差异。",
+      "pitfalls": "① 高频误写：$P\\{X>x,Y>y\\}$ **绝不等于** $1-F(x,y)$！后者实为 $P(\\overline{\\{X\\le x,Y\\le y\\}})=P\\{X>x\\text{ 或 }Y>y\\}$（覆盖除左下象限外的三个象限）。 ② 判别候选函数是否为二维分布函数时，**先验第 ④ 条矩形非负性**往往一招致命（如方浩例题 1 的 $F_3$）。",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 250\" width=\"100%\" style=\"max-width:640px;height:auto;display:block;margin:8px auto;\" font-family=\"system-ui,-apple-system,'Segoe UI',sans-serif\"><title>二维分布函数矩形非负性定理与右上生存概率区域几何示意</title><defs><marker id=\"m1_pr04_arr\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#475569\"/></marker></defs><rect x=\"2\" y=\"2\" width=\"636\" height=\"246\" rx=\"12\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/><text x=\"320\" y=\"22\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">二维分布函数 F(x,y) 的核心几何：矩形非负性 vs 右上生存区</text><rect x=\"14\" y=\"32\" width=\"300\" height=\"204\" rx=\"8\" fill=\"#ffffff\" stroke=\"#e2e8f0\"/><text x=\"164\" y=\"50\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1d4ed8\">① 矩形非负性（判合法分布函数必检！）</text><line x1=\"48\" y1=\"168\" x2=\"288\" y2=\"168\" stroke=\"#475569\" stroke-width=\"1.4\" marker-end=\"url(#m1_pr04_arr)\"/><line x1=\"68\" y1=\"184\" x2=\"68\" y2=\"62\" stroke=\"#475569\" stroke-width=\"1.4\" marker-end=\"url(#m1_pr04_arr)\"/><text x=\"292\" y=\"172\" font-size=\"10.5\" fill=\"#475569\">x</text><text x=\"76\" y=\"68\" font-size=\"10.5\" fill=\"#475569\">y</text><text x=\"58\" y=\"181\" font-size=\"10\" fill=\"#64748b\">O</text><line x1=\"126\" y1=\"168\" x2=\"126\" y2=\"132\" stroke=\"#94a3b8\" stroke-dasharray=\"3 2\"/><line x1=\"234\" y1=\"168\" x2=\"234\" y2=\"132\" stroke=\"#94a3b8\" stroke-dasharray=\"3 2\"/><line x1=\"68\" y1=\"132\" x2=\"126\" y2=\"132\" stroke=\"#94a3b8\" stroke-dasharray=\"3 2\"/><line x1=\"68\" y1=\"84\" x2=\"126\" y2=\"84\" stroke=\"#94a3b8\" stroke-dasharray=\"3 2\"/><rect x=\"126\" y=\"84\" width=\"108\" height=\"48\" fill=\"#dbeafe\" fill-opacity=\"0.82\" stroke=\"#2563eb\" stroke-width=\"1.8\"/><text x=\"180\" y=\"112\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1e3a8a\">P(x₁&lt;X≤x₂, y₁&lt;Y≤y₂)</text><circle cx=\"234\" cy=\"84\" r=\"3.5\" fill=\"#059669\"/><text x=\"242\" y=\"80\" font-size=\"10\" font-weight=\"700\" fill=\"#059669\">+F(x₂,y₂)</text><circle cx=\"126\" cy=\"84\" r=\"3.5\" fill=\"#dc2626\"/><text x=\"122\" y=\"76\" text-anchor=\"end\" font-size=\"10\" font-weight=\"700\" fill=\"#dc2626\">-F(x₁,y₂)</text><circle cx=\"234\" cy=\"132\" r=\"3.5\" fill=\"#dc2626\"/><text x=\"242\" y=\"143\" font-size=\"10\" font-weight=\"700\" fill=\"#dc2626\">-F(x₂,y₁)</text><circle cx=\"126\" cy=\"132\" r=\"3.5\" fill=\"#059669\"/><text x=\"122\" y=\"144\" text-anchor=\"end\" font-size=\"10\" font-weight=\"700\" fill=\"#059669\">+F(x₁,y₁)</text><text x=\"126\" y=\"181\" text-anchor=\"middle\" font-size=\"10\" fill=\"#334155\">x₁</text><text x=\"234\" y=\"181\" text-anchor=\"middle\" font-size=\"10\" fill=\"#334155\">x₂</text><text x=\"58\" y=\"136\" text-anchor=\"end\" font-size=\"10\" fill=\"#334155\">y₁</text><text x=\"58\" y=\"88\" text-anchor=\"end\" font-size=\"10\" fill=\"#334155\">y₂</text><rect x=\"26\" y=\"191\" width=\"276\" height=\"36\" rx=\"6\" fill=\"#eff6ff\" stroke=\"#93c5fd\"/><text x=\"164\" y=\"206\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#1e40af\">Δ = F(x₂,y₂)-F(x₁,y₂)-F(x₂,y₁)+F(x₁,y₁) ≥ 0</text><text x=\"164\" y=\"221\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">口诀：「右上加、左下加、左上右下各减一」</text><rect x=\"326\" y=\"32\" width=\"300\" height=\"204\" rx=\"8\" fill=\"#ffffff\" stroke=\"#e2e8f0\"/><text x=\"476\" y=\"50\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#7c3aed\">② 四象限分割与右上生存概率 P(X&gt;x, Y&gt;y)</text><rect x=\"352\" y=\"64\" width=\"248\" height=\"114\" rx=\"4\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1\"/><rect x=\"352\" y=\"118\" width=\"114\" height=\"60\" fill=\"#dbeafe\" fill-opacity=\"0.72\"/><rect x=\"466\" y=\"64\" width=\"134\" height=\"54\" fill=\"#fce7f3\" fill-opacity=\"0.82\"/><line x1=\"466\" y1=\"64\" x2=\"466\" y2=\"178\" stroke=\"#6d28d9\" stroke-width=\"1.5\" stroke-dasharray=\"4 2\"/><line x1=\"352\" y1=\"118\" x2=\"600\" y2=\"118\" stroke=\"#6d28d9\" stroke-width=\"1.5\" stroke-dasharray=\"4 2\"/><circle cx=\"466\" cy=\"118\" r=\"4\" fill=\"#7c3aed\"/><text x=\"474\" y=\"132\" font-size=\"10\" font-weight=\"700\" fill=\"#5b21b6\">(x, y)</text><text x=\"409\" y=\"146\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#1e40af\">X≤x, Y≤y</text><text x=\"409\" y=\"161\" text-anchor=\"middle\" font-size=\"10\" fill=\"#1d4ed8\">概率 = F(x,y)</text><text x=\"533\" y=\"88\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#be185d\">X&gt;x, Y&gt;y（生存区）</text><text x=\"533\" y=\"104\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#9d174d\">容斥：1-F_X-F_Y+F</text><text x=\"409\" y=\"95\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#64748b\">F_X(x)-F(x,y)</text><text x=\"533\" y=\"152\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#64748b\">F_Y(y)-F(x,y)</text><rect x=\"338\" y=\"191\" width=\"276\" height=\"36\" rx=\"6\" fill=\"#faf5ff\" stroke=\"#d8b4fe\"/><text x=\"476\" y=\"206\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#6d28d9\">P(X&gt;x, Y&gt;y) = 1 - F_X(x) - F_Y(y) + F(x,y)</text><text x=\"476\" y=\"221\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">警惕误写成 1 - F(x,y)！那是「X&gt;x 或 Y&gt;y」之并</text></svg>",
+      "source": {
+        "book": "27 张宇基础30讲 & 27 方浩强化 & 27 版概率论全总结",
+        "printedPage": "基础 P.63-64 / 方浩 P.52-54 / 全总结 P.8",
+        "pdfPage": 69,
+        "itemRef": "二维联合分布函数定义与四大性质"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_cdf_rect",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "二维分布函数 $F(x,y)$ 刻画随机点 $(X,Y)$ 落入以 $(x,y)$ 为右上顶点的无限左下角区域 $(-\\infty,x]\\times(-\\infty,y]$ 的概率，对离散型、连续型及混合型二维随机变量**完全通用**。与一维最大区别在于新增第 ④ 条**矩形非负性**（亦称二阶混合差分非负）：仅满足分别单调不减、右连续与规范界值，仍可能不是合法的二维分布函数！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「矩形四顶点：右上加、左下加，左上右下各减一！右上生存别错写 $1-F(x,y)$，容斥记住 $1-F_X-F_Y+F$！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr04-f-02",
+      "kind": "formula",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、边缘分布与二维离散型联合/边缘/条件分布律",
+      "title": "边缘分布函数与二维离散型联合、边缘、条件分布律全套公式（含基础30讲勘误补注）",
+      "formulaLatex": "$$\\begin{aligned} &\\text{边缘分布函数：}F_X(x)=F(x,+\\infty)=\\lim_{y\\to+\\infty}F(x,y),\\qquad F_Y(y)=F(+\\infty,y)=\\lim_{x\\to+\\infty}F(x,y)\\\\ &\\text{二维离散联合分布律：}p_{ij}=P\\{X=x_i,Y=y_j\\}\\ge 0,\\qquad \\sum_{i}\\sum_{j}p_{ij}=1\\\\ &\\text{边缘分布律：}p_{i\\cdot}=P\\{X=x_i\\}=\\sum_{j}p_{ij}\\;(\\text{行和}),\\qquad p_{\\cdot j}=P\\{Y=y_j\\}=\\sum_{i}p_{ij}\\;(\\text{列和})\\\\ &\\text{条件分布律：}p_{i\\mid j}=P\\{X=x_i\\mid Y=y_j\\}=\\frac{p_{ij}}{p_{\\cdot j}}\\;(p_{\\cdot j}>0),\\qquad p_{j\\mid i}=P\\{Y=y_j\\mid X=x_i\\}=\\frac{p_{ij}}{p_{i\\cdot}}\\;(p_{i\\cdot}>0)\\end{aligned}$$",
+      "conditions": "条件分布要求分母边缘概率严格大于 $0$；任何离散随机变量事件概率均归结为落在目标区域 $G$ 内所有格子概率之和 $P\\{(X,Y)\\in G\\}=\\sum_{(x_i,y_j)\\in G}p_{ij}$。",
+      "pitfalls": "① **跨书勘误补注①（基础 30 讲 P.69 注 2 汇总表哑变量误印）**：原书 P.69 底部汇总表将连续条件分布函数误印为 $F_{Y\\mid X}(y\\mid x)=\\int_{-\\infty}^{y}\\frac{f(u,v)}{f_X(u)}\\mathrm{d}v$ 与 $F_{X\\mid Y}(x\\mid y)=\\int_{-\\infty}^{x}\\frac{f(u,v)}{f_Y(v)}\\mathrm{d}u$（把已固定的条件变量错写成积分哑元 $u,v$）！同页上方「注 1」已正确给出应为 $F_{Y\\mid X}(y\\mid x)=\\int_{-\\infty}^{y}\\frac{f(x,v)}{f_X(x)}\\mathrm{d}v$ 与 $F_{X\\mid Y}(x\\mid y)=\\int_{-\\infty}^{x}\\frac{f(u,y)}{f_Y(y)}\\mathrm{d}u$（对比概率 9 讲 P.32 亦完全一致）。 ② 联列表若把 $X,Y$ 行列位置互换（如 $V$ 放行、$U$ 放列），右列行和仍代表行变量的边缘分布，底行列和代表列变量的边缘分布，切勿死背下标 $p_{i\\cdot},p_{\\cdot j}$ 而不看表头！",
+      "tables": [
+        {
+          "caption": "表 P4-1 · 二维离散型 vs 二维连续型核心公式全景对照表（已修正基础 30 讲 P.69 注 2 哑变量）",
+          "headers": [
+            "对比维度",
+            "二维离散型 (X,Y)~p_{ij}",
+            "二维连续型 (X,Y)~f(x,y)",
+            "考场核心注意点"
+          ],
+          "rows": [
+            [
+              "规范性充要条件",
+              "$p_{ij}\\ge 0,\\;\\sum_i\\sum_j p_{ij}=1$",
+              "$f(x,y)\\ge 0,\\;\\iint_{\\mathbb{R}^2}f(x,y)\\mathrm{d}x\\mathrm{d}y=1$",
+              "改有限点/曲线上密度值不改变分布"
+            ],
+            [
+              "联合分布函数",
+              "$F(x,y)=\\sum_{x_i\\le x}\\sum_{y_j\\le y}p_{ij}$",
+              "$F(x,y)=\\int_{-\\infty}^{x}\\mathrm{d}u\\int_{-\\infty}^{y}f(u,v)\\mathrm{d}v$",
+              "连续点处 $\\frac{\\partial^2 F}{\\partial x\\partial y}=f(x,y)$"
+            ],
+            [
+              "落入区域概率",
+              "$P\\{(X,Y)\\in G\\}=\\sum_{(x_i,y_j)\\in G}p_{ij}$",
+              "$P\\{(X,Y)\\in G\\}=\\iint_G f(x,y)\\mathrm{d}x\\mathrm{d}y$",
+              "先画非零区域与 $G$ 的交集再定限"
+            ],
+            [
+              "边缘分布",
+              "$p_{i\\cdot}=\\sum_j p_{ij},\\;p_{\\cdot j}=\\sum_i p_{ij}$",
+              "$f_X(x)=\\int_{-\\infty}^{+\\infty}f(x,y)\\mathrm{d}y,\\;f_Y(y)=\\int_{-\\infty}^{+\\infty}f(x,y)\\mathrm{d}x$",
+              "「求谁不积谁」且务必标清非零区间"
+            ],
+            [
+              "条件分布/密度",
+              "$p_{j\\mid i}=p_{ij}/p_{i\\cdot}\\;(p_{i\\cdot}>0)$",
+              "$f_{Y\\mid X}(y\\mid x)=f(x,y)/f_X(x)\\;(f_X(x)>0)$",
+              "固定条件后是一元分布，积分/求和必为 1"
+            ],
+            [
+              "条件分布函数",
+              "$F_{Y\\mid X}(y\\mid x_i)=\\sum_{y_j\\le y}p_{j\\mid i}$",
+              "$F_{Y\\mid X}(y\\mid x)=\\int_{-\\infty}^{y}\\frac{f(x,v)}{f_X(x)}\\mathrm{d}v$",
+              "已修正基础30讲P.69表内哑元 $u\\to x,v\\to y$"
+            ]
+          ]
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲 & 27 张宇概率9讲",
+        "printedPage": "基础 P.65-69 / 9讲 P.32",
+        "pdfPage": 71,
+        "itemRef": "边缘分布与二维离散连续公式对照"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "二维离散型分布律通常排成二维联列表，横向按行累加得 $X$ 的边缘分布 $p_{i\\cdot}$，纵向按列累加得 $Y$ 的边缘分布 $p_{\\cdot j}$；条件分布律即把固定行（或列）的各元素除以该行（或列）的边缘和，使其重新归一化为一维合法分布律（$\\sum_i p_{i\\mid j}=1$）。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「边缘：固定谁、累加另一维；条件：谁在竖杠后，分母就是谁！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr04-f-03",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "三、二维连续型密度体系与乘法公式（「三知二求一」）",
+      "title": "联合密度、边缘密度、条件密度及密度乘法与贝叶斯联立式",
+      "formulaLatex": "$$\\begin{aligned} &f(x,y)\\ge 0,\\quad \\int_{-\\infty}^{+\\infty}\\!\\int_{-\\infty}^{+\\infty}f(x,y)\\,\\mathrm{d}x\\mathrm{d}y=1,\\qquad \\frac{\\partial^2 F(x,y)}{\\partial x\\partial y}=f(x,y)\\;(\\text{连续点})\\\\ &f_X(x)=\\int_{-\\infty}^{+\\infty}f(x,y)\\,\\mathrm{d}y,\\qquad f_Y(y)=\\int_{-\\infty}^{+\\infty}f(x,y)\\,\\mathrm{d}x\\\\ &f_{Y\\mid X}(y\\mid x)=\\frac{f(x,y)}{f_X(x)}\\;(f_X(x)>0),\\qquad f_{X\\mid Y}(x\\mid y)=\\frac{f(x,y)}{f_Y(y)}\\;(f_Y(y)>0)\\\\ &\\text{乘法公式（三知二求一）：}f(x,y)=f_X(x)f_{Y\\mid X}(y\\mid x)=f_Y(y)f_{X\\mid Y}(x\\mid y)\\\\ &\\text{连续全概率与贝叶斯比：}f_Y(y)=\\int_{-\\infty}^{+\\infty}f_X(x)f_{Y\\mid X}(y\\mid x)\\,\\mathrm{d}x,\\qquad \\frac{f_{X\\mid Y}(x\\mid y)}{f_{Y\\mid X}(y\\mid x)}=\\frac{f_X(x)}{f_Y(y)}\\end{aligned}$$",
+      "conditions": "定义条件密度 $f_{Y\\mid X}(y\\mid x)$ 必须标明前提 $f_X(x)>0$（即 $x$ 的有效范围），并在给定 $x$ 下写清 $y$ 的分段区间；乘出联合密度 $f(x,y)$ 后要把 $x,y$ 的联合非零区域合并写入同一分段条件中（如基础例 3.4：$0<y<x<1$）。",
+      "pitfalls": "① 写 $f_{Y\\mid X}(y\\mid x)$ 时漏写前提「当 $x\\in(a,b)$ 时」或漏写 $y$ 的支集区间，大题必扣步骤分！ ② 把 $f(x,y)$ 仅按公式对 $y$ 积分却忘了看非零区域边界（如 $0<x<y<1$ 中固定 $x$ 后 $y$ 仅从 $x$ 积到 $1$，绝非从 $0$ 到 $1$）！",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 252\" width=\"100%\" style=\"max-width:640px;height:auto;display:block;margin:8px auto;\" font-family=\"system-ui,-apple-system,'Segoe UI',sans-serif\"><title>二维联合、边缘、条件分布「三知二求一」与独立性秩1判据枢纽图</title><defs><marker id=\"m1_pr04_rel_b\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#2563eb\"/></marker><marker id=\"m1_pr04_rel_p\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#7c3aed\"/></marker><marker id=\"m1_pr04_rel_g\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#059669\"/></marker></defs><rect x=\"2\" y=\"2\" width=\"636\" height=\"248\" rx=\"12\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/><text x=\"320\" y=\"22\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">二维分布「联合 · 边缘 · 条件」三角闭环与独立性判别枢纽</text><rect x=\"195\" y=\"34\" width=\"250\" height=\"52\" rx=\"9\" fill=\"#eff6ff\" stroke=\"#2563eb\" stroke-width=\"1.6\"/><text x=\"320\" y=\"53\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#1e40af\">联合分布（完整二维信息）</text><text x=\"320\" y=\"70\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#1d4ed8\">F(x,y)  |  p_ij = P(X=x_i, Y=y_j)  |  f(x,y)</text><rect x=\"18\" y=\"138\" width=\"224\" height=\"66\" rx=\"9\" fill=\"#ecfdf5\" stroke=\"#059669\" stroke-width=\"1.5\"/><text x=\"130\" y=\"157\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#065f46\">边缘分布（降维消去另一变量）</text><text x=\"130\" y=\"174\" text-anchor=\"middle\" font-size=\"10\" fill=\"#047857\">F_X(x)=F(x,+∞)  |  p_i· = Σ_j p_ij</text><text x=\"130\" y=\"191\" text-anchor=\"middle\" font-size=\"10\" fill=\"#047857\">f_X(x) = ∫ f(x,y) dy（「求谁不积谁」）</text><rect x=\"398\" y=\"138\" width=\"224\" height=\"66\" rx=\"9\" fill=\"#f5f3ff\" stroke=\"#7c3aed\" stroke-width=\"1.5\"/><text x=\"510\" y=\"157\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#5b21b6\">条件分布（固定一维做归一化切片）</text><text x=\"510\" y=\"174\" text-anchor=\"middle\" font-size=\"10\" fill=\"#6d28d9\">p_(i|j) = p_ij / p_·j （p_·j &gt; 0）</text><text x=\"510\" y=\"191\" text-anchor=\"middle\" font-size=\"10\" fill=\"#6d28d9\">f_(X|Y)(x|y) = f(x,y) / f_Y(y)（一元函数）</text><line x1=\"255\" y1=\"86\" x2=\"152\" y2=\"136\" stroke=\"#059669\" stroke-width=\"1.8\" marker-end=\"url(#m1_pr04_rel_g)\"/><text x=\"148\" y=\"110\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#047857\">求和 / 积分</text><line x1=\"385\" y1=\"86\" x2=\"488\" y2=\"136\" stroke=\"#7c3aed\" stroke-width=\"1.8\" marker-end=\"url(#m1_pr04_rel_p)\"/><text x=\"492\" y=\"110\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#6d28d9\">联合 ÷ 边缘</text><line x1=\"320\" y1=\"138\" x2=\"320\" y2=\"90\" stroke=\"#2563eb\" stroke-width=\"1.8\" marker-end=\"url(#m1_pr04_rel_b)\"/><rect x=\"256\" y=\"142\" width=\"128\" height=\"58\" rx=\"8\" fill=\"#fef3c7\" stroke=\"#d97706\" stroke-width=\"1.4\"/><text x=\"320\" y=\"160\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#92400e\">乘法公式（三知二求一）</text><text x=\"320\" y=\"176\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#b45309\">f(x,y)=f_X(x)·f_(Y|X)</text><text x=\"320\" y=\"191\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#b45309\">p_ij = p_i· · p_(j|i)</text><line x1=\"242\" y1=\"171\" x2=\"256\" y2=\"171\" stroke=\"#d97706\" stroke-width=\"1.4\" stroke-dasharray=\"3 2\"/><line x1=\"384\" y1=\"171\" x2=\"398\" y2=\"171\" stroke=\"#d97706\" stroke-width=\"1.4\" stroke-dasharray=\"3 2\"/><rect x=\"18\" y=\"213\" width=\"604\" height=\"28\" rx=\"6\" fill=\"#fff1f2\" stroke=\"#fda4af\"/><text x=\"320\" y=\"231\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#be123c\">相互独立 ⇔ F=F_X F_Y ⇔ 离散表矩阵秩 r(P)=1（行行成比例）⇔ 连续非零域为矩形且 f(x,y)=g(x)h(y)</text></svg>",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化",
+        "printedPage": "基础 P.67-69 / 9讲 P.32 / 方浩 P.61-63",
+        "pdfPage": 73,
+        "itemRef": "二维连续型密度体系与乘法公式"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "「联合 = 边缘 × 条件」是二维连续型大题最常考的枢纽（层次分布建模：先给 $X$ 的分布，再给 $X=x$ 下 $Y$ 的条件分布，相乘即得联合密度，再对 $x$ 积分得 $Y$ 的边缘密度）。理解条件密度 $f_{Y\\mid X}(y\\mid x)$ 的关键是：**给定 $X=x$ 时它是关于 $y$ 的一元概率密度**，$x$ 此时视作固定常数参数！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「边缘降维求谁不积谁，条件切片条件作分母，层次相乘三知二求一！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr04-f-04",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "四、随机变量的相互独立性",
+      "title": "二维与 n 维随机变量相互独立的四大等价判据及分组函数保独立定理",
+      "formulaLatex": "$$\\begin{aligned} &X,Y\\text{ 相互独立}\\iff \\forall x,y\\in\\mathbb{R},\\;F(x,y)=F_X(x)F_Y(y)\\\\ &\\quad\\iff\\text{（离散）}\\forall i,j,\\;p_{ij}=p_{i\\cdot}p_{\\cdot j}\\iff\\text{（连续）}f(x,y)=f_X(x)f_Y(y)\\;(\\text{几乎处处})\\\\ &\\quad\\iff\\text{（条件退化）}f_{Y\\mid X}(y\\mid x)=f_Y(y)\\;\\text{或}\\;p_{j\\mid i}=p_{\\cdot j}\\;(\\text{不依赖条件值})\\\\ &\\text{n 维推广：}F(x_1,\\dots,x_n)=\\prod_{k=1}^{n}F_{X_k}(x_k)\\;\\;(\\text{自动蕴含任意子集相互独立！})\\\\ &\\text{分组函数保独立：}X_1,\\dots,X_n\\text{ 独立}\\implies g_1(X_{i_1},\\dots),\\;g_2(X_{j_1},\\dots)\\text{ 独立（下标组互不相交）}\\end{aligned}$$",
+      "conditions": "分组函数定理要求各函数 $g_k$ 为连续（或博雷尔可测）函数，且**所依赖的随机变量下标集合两两互不相交**（例如 $X_1,X_2,X_3,X_4$ 独立，则 $X_1+X_2$ 与 $X_3 X_4$ 必独立，但 $X_1+X_2$ 与 $X_2+X_3$ 共用 $X_2$ 一般不独立）。",
+      "pitfalls": "① 证明 $X,Y$ **不独立**时，切忌空口说「有函数关系所以不独立」（常值函数 $Y=c$ 与任何 $X$ 都独立！），最稳妥的是**找反例点 $(x_0,y_0)$** 使 $F(x_0,y_0)\\ne F_X(x_0)F_Y(y_0)$（如使两事件包含或互斥且概率均在 $(0,1)$ 内），或验证 $\\operatorname{Cov}(X,Y)\\ne 0$，或指出连续非零区域非矩形。 ② 对于二维连续型，「$f(x,y)=f_X(x)f_Y(y)$」允许在面积为零的边界线上相差有限点值（故称几乎处处成立）。",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化",
+        "printedPage": "基础 P.75-77 / 9讲 P.33 / 方浩 P.52,57,62",
+        "pdfPage": 81,
+        "itemRef": "随机变量相互独立的等价判据与性质"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "随机变量独立性本质上是「任意区间事件 $\\{X\\in A\\}$ 与 $\\{Y\\in B\\}$ 皆独立」：给定 $X$ 的任何信息都丝毫不改变 $Y$ 的分布。与事件独立不同，$n$ 维随机变量相互独立**只需验证一个总乘积等式** $F(x_1,\\dots,x_n)=\\prod F_k(x_k)$（因为令部分变元趋于 $+\\infty$ 即可自动推出任意 $k$ 个子集独立，无需像 $n$ 事件那样逐一验证 $2^n-n-1$ 个等式！）。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「独立就是联合拆乘积：一式控全场（多维令变元趋正无穷自动得子集），分组不重号函数仍独立！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr04-f-05",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "五、二维均匀分布",
+      "title": "有界区域 D 上的二维均匀分布定义、面积比法则与矩形独立充要定理",
+      "formulaLatex": "$$\\begin{aligned} &f(x,y)=\\begin{cases}\\dfrac{1}{S_D}, & (x,y)\\in D,\\\\ 0, & \\text{其他,}\\end{cases}\\qquad\\text{其中 }S_D=\\iint_D\\mathrm{d}x\\mathrm{d}y>0\\text{ 为平面有界区域 }D\\text{ 的面积}\\\\ &\\text{几何概率性质：}\\forall G\\subseteq D,\\quad P\\{(X,Y)\\in G\\}=\\frac{S_G}{S_D}\\\\ &\\text{矩形充要定理：}(X,Y)\\sim U([a,b]\\times[c,d])\\iff X\\sim U(a,b),\\;Y\\sim U(c,d)\\text{ 且 }X,Y\\text{ 相互独立}\\end{aligned}$$",
+      "conditions": "应用面积比 $S_G/S_D$ 前务必确认目标子域 $G$ 已与 $D$ 取交集（即 $S_{G\\cap D}/S_D$），切勿把落在 $D$ 外的面积也算进去！",
+      "pitfalls": "① 经典错选（方浩例题 16）：$X,Y$ 独立同服从 $U(0,1)$ 时，$(X,Y)$ 服从单位正方形上的二维均匀分布，但 $X+Y$（三角分布）、$X-Y$（三角分布）与 $X^2$ **都不是均匀分布**！ ② 圆盘均匀分布中，边缘密度 $f_X(x)=\\frac{2}{\\pi r^2}\\sqrt{r^2-x^2}$ 呈半椭圆状（中间厚两边薄），绝非均匀分布！",
+      "tables": [
+        {
+          "caption": "表 P4-2 · 考研四大高频二维均匀分布区域特征速查表",
+          "headers": [
+            "区域 D 形态",
+            "面积 S_D 与联合密度",
+            "边缘密度 f_X(x)（对称项同）",
+            "独立性与条件分布特征"
+          ],
+          "rows": [
+            [
+              "轴平行矩形 [a,b]×[c,d]",
+              "$S_D=(b-a)(d-c),\\;f=\\frac{1}{(b-a)(d-c)}$",
+              "$X\\sim U(a,b),\\;Y\\sim U(c,d)$",
+              "**唯一独立情形**；条件等于边缘"
+            ],
+            [
+              "圆盘 x^2+y^2≤r^2",
+              "$S_D=\\pi r^2,\\;f=\\frac{1}{\\pi r^2}$",
+              "$f_X(x)=\\frac{2\\sqrt{r^2-x^2}}{\\pi r^2}\\;(|x|<r)$（非均匀）",
+              "不独立但不相关（$\\rho=0$）；$Y\\mid x\\sim U(-\\sqrt{r^2-x^2},\\sqrt{r^2-x^2})$"
+            ],
+            [
+              "直角/等腰三角形（如基础例3.3）",
+              "$G:\\,0<y<x<2-y\\;(S_D=1,\\;f=1)$",
+              "$f_X$ 分段折线，$f_Y(y)=2-2y\\;(0<y<1)$",
+              "不独立；固定 $y$ 后 $X\\mid y\\sim U(y,2-y)$"
+            ],
+            [
+              "正菱形 |x|+|y|≤1（猪狗例4.17）",
+              "$S_D=2,\\;f=\\frac{1}{2}$",
+              "$f_X(x)=1-|x|\\;(|x|<1)$（三角分布）",
+              "不独立但不相关；旋转 $45^\\circ$ 后 $U=X+Y,V=X-Y$ 独立同 $U(-1,1)$！"
+            ]
+          ]
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化",
+        "printedPage": "基础 P.70,73 / 9讲 P.30 / 方浩 P.66-68",
+        "pdfPage": 76,
+        "itemRef": "二维均匀分布与典型区域速查"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_uniform_regions",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "二维均匀分布即几何概型的随机向量化：在有界区域 $D$ 内处处等可能，高度恒为 $1/S_D$。**重要辨析**：只有当 $D$ 是边平行于坐标轴的矩形 $[a,b]\\times[c,d]$ 时，$X,Y$ 才相互独立且边缘为均匀分布；若 $D$ 为圆盘、三角形或斜菱形，则 $X,Y$ **必不独立**，边缘密度**一般也不再是均匀分布**，但给定 $X=x$ 后 $Y$ 的**条件分布仍是该竖直截线段上的均匀分布**！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「二维均匀等于面积比；矩形独立边缘匀，圆盘三角必相依，切一刀条件反倒匀！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr04-f-06",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "六、二维正态分布及其五大核心性质",
+      "title": "二维正态分布 N(μ₁,μ₂;σ₁²,σ₂²;ρ) 联合密度、五大性质与二次型五参数速读公式",
+      "formulaLatex": "$$\\begin{aligned} &f(x,y)=\\frac{1}{2\\pi\\sigma_1\\sigma_2\\sqrt{1-\\rho^2}}\\exp\\!\\left\\{-\\frac{1}{2(1-\\rho^2)}\\left[\\frac{(x-\\mu_1)^2}{\\sigma_1^2}-2\\rho\\frac{(x-\\mu_1)(y-\\mu_2)}{\\sigma_1\\sigma_2}+\\frac{(y-\\mu_2)^2}{\\sigma_2^2}\\right]\\right\\}\\\\ &\\text{其中 }\\mu_1,\\mu_2\\in\\mathbb{R},\\;\\sigma_1>0,\\;\\sigma_2>0,\\;-1<\\rho<1\\text{；简记 }(X,Y)\\sim N(\\mu_1,\\mu_2;\\sigma_1^2,\\sigma_2^2;\\rho)\\\\ &\\text{五大性质：}\\text{① 边缘必正态 }X\\sim N(\\mu_1,\\sigma_1^2),\\;Y\\sim N(\\mu_2,\\sigma_2^2)\\quad\\text{② 独立}\\iff\\rho=0\\text{（不相关）}\\\\ &\\quad\\text{③ 非零线性组合必一维正态：}k_1X+k_2Y\\sim N\\!\\left(k_1\\mu_1+k_2\\mu_2,\\;k_1^2\\sigma_1^2+k_2^2\\sigma_2^2+2k_1k_2\\rho\\sigma_1\\sigma_2\\right)\\\\ &\\quad\\text{④ 可逆线性变换 }(a_1X+a_2Y,\\,b_1X+b_2Y)\\;(a_1b_2-a_2b_1\\ne 0)\\text{ 仍为二维正态}\\quad\\text{⑤ 条件分布仍正态}\\\\ &\\text{二次型速读：}f(x,y)=k_0\\exp\\!\\left\\{-\\left[a(x-\\mu_1)^2+b(y-\\mu_2)^2+c(x-\\mu_1)(y-\\mu_2)\\right]\\right\\}\\\\ &\\qquad\\implies \\rho=-\\frac{c}{2\\sqrt{ab}},\\quad \\sigma_1^2=\\frac{1}{2a(1-\\rho^2)},\\quad \\sigma_2^2=\\frac{1}{2b(1-\\rho^2)},\\quad k_0=\\frac{\\sqrt{4ab-c^2}}{2\\pi}\\end{aligned}$$",
+      "conditions": "非退化二维正态要求 $|\\rho|<1$（即二次型 $ax^2+by^2+cxy$ 严格正定：$a>0,b>0,4ab-c^2>0$）。注意：**一维正态的两个分量 $X,Y$ 单独正态推不出 $(X,Y)$ 是二维正态**，必须附加「相互独立」才能拼出 $\\rho=0$ 的二维正态！",
+      "pitfalls": "① 书写参数切勿把标准差 $\\sigma$ 与方差 $\\sigma^2$ 搞混：记号 $N(\\mu_1,\\mu_2;\\sigma_1^2,\\sigma_2^2;\\rho)$ 中第 3、4 位是**方差**（如 $N(4,3;1,2;-\\frac{\\sqrt2}{2})$ 中 $\\sigma_1=1,\\sigma_2=\\sqrt2$）！ ② 系数符号杀手：二次型前已有总负号 $e^{-(ax^2+by^2+cxy)}$ 时，交叉项系数 $+c$ 对应 $\\rho=-\\frac{c}{2\\sqrt{ab}}$；若写成 $e^{-2x^2+2xy-y^2}=e^{-(2x^2-2xy+y^2)}$，则 $a=2,b=1,c=-2\\implies \\rho=+\\frac{1}{\\sqrt2}>0$！",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 254\" width=\"100%\" style=\"max-width:640px;height:auto;display:block;margin:8px auto;\" font-family=\"system-ui,-apple-system,'Segoe UI',sans-serif\"><title>二维均匀分布圆盘vs矩形对比与二维正态分布等高椭圆图谱</title><defs><marker id=\"m1_pr04_n_arr\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"5\" markerHeight=\"5\" orient=\"auto\"><path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#64748b\"/></marker></defs><rect x=\"2\" y=\"2\" width=\"636\" height=\"250\" rx=\"12\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/><text x=\"320\" y=\"22\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">两大核心二维连续分布：二维均匀（圆盘反直觉）&amp; 二维正态等高椭圆</text><rect x=\"14\" y=\"32\" width=\"234\" height=\"208\" rx=\"8\" fill=\"#ffffff\" stroke=\"#e2e8f0\"/><text x=\"131\" y=\"50\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#047857\">二维均匀：圆盘 D: x²+y²≤1</text><line x1=\"48\" y1=\"118\" x2=\"216\" y2=\"118\" stroke=\"#64748b\" stroke-width=\"1.2\" marker-end=\"url(#m1_pr04_n_arr)\"/><line x1=\"131\" y1=\"176\" x2=\"131\" y2=\"62\" stroke=\"#64748b\" stroke-width=\"1.2\" marker-end=\"url(#m1_pr04_n_arr)\"/><circle cx=\"131\" cy=\"118\" r=\"44\" fill=\"#d1fae5\" fill-opacity=\"0.72\" stroke=\"#059669\" stroke-width=\"1.8\"/><line x1=\"154\" y1=\"80\" x2=\"154\" y2=\"156\" stroke=\"#dc2626\" stroke-width=\"2.2\"/><circle cx=\"154\" cy=\"80\" r=\"2.8\" fill=\"#dc2626\"/><circle cx=\"154\" cy=\"156\" r=\"2.8\" fill=\"#dc2626\"/><text x=\"160\" y=\"76\" font-size=\"9.5\" font-weight=\"700\" fill=\"#dc2626\">x=x₀ 切片</text><text x=\"219\" y=\"122\" font-size=\"10\" fill=\"#64748b\">x</text><text x=\"138\" y=\"68\" font-size=\"10\" fill=\"#64748b\">y</text><text x=\"131\" y=\"191\" text-anchor=\"middle\" font-size=\"9.8\" font-weight=\"700\" fill=\"#065f46\">边缘非均匀：f_X(x)=(2/π)√(1-x²)</text><text x=\"131\" y=\"207\" text-anchor=\"middle\" font-size=\"9.8\" font-weight=\"700\" fill=\"#b91c1c\">条件仍均匀：Y|x ~ U(-√(1-x²),√(1-x²))</text><text x=\"131\" y=\"224\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">注：矩形均匀才独立，非矩形必不独立！</text><rect x=\"258\" y=\"32\" width=\"368\" height=\"208\" rx=\"8\" fill=\"#ffffff\" stroke=\"#e2e8f0\"/><text x=\"442\" y=\"50\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1d4ed8\">二维正态 N(μ₁,μ₂; σ₁²,σ₂²; ρ) 密度等高线与配方秒读</text><rect x=\"270\" y=\"60\" width=\"108\" height=\"106\" rx=\"6\" fill=\"#f8fafc\" stroke=\"#e2e8f0\"/><line x1=\"282\" y1=\"112\" x2=\"366\" y2=\"112\" stroke=\"#94a3b8\" stroke-width=\"1\"/><line x1=\"324\" y1=\"154\" x2=\"324\" y2=\"70\" stroke=\"#94a3b8\" stroke-width=\"1\"/><circle cx=\"324\" cy=\"112\" r=\"30\" fill=\"#dbeafe\" fill-opacity=\"0.45\" stroke=\"#2563eb\" stroke-width=\"1.3\"/><circle cx=\"324\" cy=\"112\" r=\"18\" fill=\"#93c5fd\" fill-opacity=\"0.55\" stroke=\"#1d4ed8\" stroke-width=\"1.5\"/><text x=\"324\" y=\"159\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#1e40af\">ρ = 0（独立正圆）</text><rect x=\"388\" y=\"60\" width=\"108\" height=\"106\" rx=\"6\" fill=\"#f8fafc\" stroke=\"#e2e8f0\"/><line x1=\"400\" y1=\"112\" x2=\"484\" y2=\"112\" stroke=\"#94a3b8\" stroke-width=\"1\"/><line x1=\"442\" y1=\"154\" x2=\"442\" y2=\"70\" stroke=\"#94a3b8\" stroke-width=\"1\"/><ellipse cx=\"442\" cy=\"112\" rx=\"34\" ry=\"15\" transform=\"rotate(-38 442 112)\" fill=\"#ede9fe\" fill-opacity=\"0.55\" stroke=\"#7c3aed\" stroke-width=\"1.3\"/><ellipse cx=\"442\" cy=\"112\" rx=\"20\" ry=\"8.5\" transform=\"rotate(-38 442 112)\" fill=\"#c4b5fd\" fill-opacity=\"0.65\" stroke=\"#6d28d9\" stroke-width=\"1.5\"/><text x=\"442\" y=\"159\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#6d28d9\">ρ &gt; 0（正相关右倾）</text><rect x=\"506\" y=\"60\" width=\"108\" height=\"106\" rx=\"6\" fill=\"#f8fafc\" stroke=\"#e2e8f0\"/><line x1=\"518\" y1=\"112\" x2=\"602\" y2=\"112\" stroke=\"#94a3b8\" stroke-width=\"1\"/><line x1=\"560\" y1=\"154\" x2=\"560\" y2=\"70\" stroke=\"#94a3b8\" stroke-width=\"1\"/><ellipse cx=\"560\" cy=\"112\" rx=\"34\" ry=\"15\" transform=\"rotate(38 560 112)\" fill=\"#fce7f3\" fill-opacity=\"0.55\" stroke=\"#db2777\" stroke-width=\"1.3\"/><ellipse cx=\"560\" cy=\"112\" rx=\"20\" ry=\"8.5\" transform=\"rotate(38 560 112)\" fill=\"#f9a8d4\" fill-opacity=\"0.65\" stroke=\"#be185d\" stroke-width=\"1.5\"/><text x=\"560\" y=\"159\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#be185d\">ρ &lt; 0（负相关左倾）</text><rect x=\"270\" y=\"174\" width=\"344\" height=\"56\" rx=\"6\" fill=\"#eff6ff\" stroke=\"#93c5fd\"/><text x=\"442\" y=\"191\" text-anchor=\"middle\" font-size=\"10.2\" font-weight=\"700\" fill=\"#1e3a8a\">指数二次型 Q = a(x-μ₁)² + b(y-μ₂)² + c(x-μ₁)(y-μ₂) 速读公式：</text><text x=\"442\" y=\"207\" text-anchor=\"middle\" font-size=\"10\" fill=\"#1d4ed8\">ρ = -c / (2√(ab))  |  σ₁² = 1/[2a(1-ρ²)]  |  σ₂² = 1/[2b(1-ρ²)]</text><text x=\"442\" y=\"222\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">五大性质：边缘正态 · 独立⇔ρ=0 · 线性组合正态 · 条件分布仍正态</text></svg>",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化 & 27 版概率论全总结",
+        "printedPage": "基础 P.70 / 9讲 P.30-31 / 方浩 P.66,68-71 / 全总结 P.10",
+        "pdfPage": 41,
+        "itemRef": "二维正态分布密度、五大性质与配方速读"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_bivariate_normal",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "二维正态分布是考研概率论的绝对核心，由 5 个参数 $(\\mu_1,\\mu_2;\\sigma_1^2,\\sigma_2^2;\\rho)$ 唯一确定，其密度等高线是以 $(\\mu_1,\\mu_2)$ 为中心的同心椭圆族：$\\rho=0$ 时退化为轴对齐椭圆/正圆且 $f(x,y)=f_X(x)f_Y(y)$；$\\rho>0$ 时主轴向一、三象限倾斜，$\\rho<0$ 时向二、四象限倾斜。面对形如 $k_0 e^{-(ax^2+by^2+cxy+dx+ey+f)}$ 的密度题，用**二次型配方速读公式**可直接秒出 5 个参数与归一化系数 $k_0=\\frac{\\sqrt{4ab-c^2}}{2\\pi}$，完全不必死算二维高斯积分！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「正态五参数顺序记牢：先两均值再两方差最后 $\\rho$！见指数二次型先看交叉项符号：$\\rho=-\\frac{c}{2\\sqrt{ab}}$（带负号！），归一化 $k_0=\\frac{\\sqrt{4ab-c^2}}{2\\pi}$！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr04-f-07",
+      "kind": "formula",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、二维正态条件分布公式（强化拔高必背）",
+      "title": "二维正态的条件正态分布（回归均值与缩减方差）公式",
+      "formulaLatex": "$$\\begin{aligned} &\\text{若 }(X,Y)\\sim N(\\mu_1,\\mu_2;\\sigma_1^2,\\sigma_2^2;\\rho)\\text{，则在 }X=x\\text{ 条件下：}\\\\ &\\qquad Y\\mid(X=x)\\sim N\\!\\left(\\mu_2+\\rho\\frac{\\sigma_2}{\\sigma_1}(x-\\mu_1),\\;\\sigma_2^2(1-\\rho^2)\\right)\\\\ &\\text{对称地，在 }Y=y\\text{ 条件下：}\\\\ &\\qquad X\\mid(Y=y)\\sim N\\!\\left(\\mu_1+\\rho\\frac{\\sigma_1}{\\sigma_2}(y-\\mu_2),\\;\\sigma_1^2(1-\\rho^2)\\right)\\end{aligned}$$",
+      "conditions": "公式要求 $(X,Y)$ 联合服从非退化二维正态分布（$|\\rho|<1$）。逆向拼装同样神速：若已知 $X\\sim N(\\mu_1,\\sigma_1^2)$ 且 $Y\\mid(X=x)\\sim N(ax+b, \\tau^2)$，则必有 $(X,Y)$ 联合正态，且可直接倒推出 $Y\\sim N(a\\mu_1+b,\\,a^2\\sigma_1^2+\\tau^2)$ 与 $\\rho=\\frac{a\\sigma_1}{\\sqrt{a^2\\sigma_1^2+\\tau^2}}$（直接秒杀 2022 真题与方浩例题 19！）。",
+      "pitfalls": "反写斜率最易错：给定 $X=x$ 求 $Y$ 的条件均值时，比例因子是 $\\rho\\frac{\\sigma_2}{\\sigma_1}$（被预测变量标准差在分子，条件变量标准差在分母，量纲才能匹配 $y$！）。",
+      "source": {
+        "book": "27 张宇概率9讲 & 27 猪狗百宝书 & 27 版概率论全总结",
+        "printedPage": "9讲 P.31 / 猪狗 P.3-13 / 全总结 P.10",
+        "pdfPage": 42,
+        "itemRef": "二维正态条件分布公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_biv_cond_normal",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "二维正态分布的条件分布不仅仍是正态，而且有极其优美的统计回归结构：① **条件期望是 $x$ 的线性回归函数** $E(Y\\mid X=x)=\\mu_2+\\rho\\frac{\\sigma_2}{\\sigma_1}(x-\\mu_1)$；② **条件方差 $\\sigma_2^2(1-\\rho^2)$ 是与 $x$ 无关的常数**（同方差性），且总不超过原方差 $\\sigma_2^2$（$|\\rho|$ 越接近 1，已知 $X$ 后对 $Y$ 的不确定性压缩得越彻底）。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「条件正态两要素：均值线性拉回归 $\\mu_2+\\rho\\frac{\\sigma_2}{\\sigma_1}(x-\\mu_1)$，方差恒定缩 $(1-\\rho^2)$ 倍！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr04-c-01",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "一、分布函数合法性判伪结论",
+      "title": "二维分布函数「前三项全过关、第四项矩形非负一刀斩」判伪法",
+      "pitfalls": "反过来，若 $F(x,y)$ 可写成两个合法一维分布函数的乘积 $F_1(x)F_2(y)$，或形如 $1-a^{-x}-a^{-y}+a^{-x-y}=(1-a^{-x})(1-a^{-y})\\;(a>1,x>0,y>0)$，则自动满足全部四条性质（对应独立二维变量）。",
+      "source": {
+        "book": "27 方浩强化",
+        "printedPage": "方浩 P.52-53 例题 1",
+        "pdfPage": 57,
+        "itemRef": "二维分布函数矩形非负性判伪"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_cdf_rect",
+        "verified": true
+      },
+      "summary": "判断给定二元函数 $F(x,y)$ 能否作为二维分布函数，除检查有界规范性、分别单调不减与分别右连续外，**必须检验矩形非负性** $\\Delta=F(x_2,y_2)-F(x_1,y_2)-F(x_2,y_1)+F(x_1,y_1)\\ge 0$。典型反例：沿斜直线分界的阶跃函数 $F(x,y)=\\begin{cases}1,&ax+by\\ge c\\\\0,&ax+by<c\\end{cases}\\;(a,b>0)$ 满足前三条性质，但跨过斜线取矩形必得 $\\Delta=1-1-1+0=-1<0$，绝非分布函数！",
+      "conditions": "跨过斜边界 $ax+by=c$ 任选一对左下顶点在 $0$ 区、其余三顶点均在 $1$ 区的矩形，其概率增量立现 $-1$，直接违背概率非负公理。"
+    },
+    {
+      "id": "m1-pr04-c-02",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、二维离散表独立性秒杀结论",
+      "title": "二维离散独立性的「矩阵秩 1 法则（行行成比例）」与含零排斥律",
+      "pitfalls": "注意「整行或整列全为 $0$」时比例写法分母不可为 $0$，用 $p_{ij}=p_{i\\cdot}p_{\\cdot j}$ 或 $r(P)=1$ 叙述最严谨。",
+      "source": {
+        "book": "27 张宇概率9讲 & 27 方浩强化",
+        "printedPage": "9讲 P.33 / 方浩 P.57,60-61",
+        "pdfPage": 44,
+        "itemRef": "离散分布表独立性的矩阵秩1法则"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_rank1_indep",
+        "verified": true
+      },
+      "summary": "记二维离散联合分布律矩阵为 $P=(p_{ij})_{m\\times n}$，边缘列向量 $\\mathbf{p}_X=(p_{1\\cdot},\\dots,p_{m\\cdot})^{\\mathrm{T}}$、行向量 $\\mathbf{p}_Y^{\\mathrm{T}}=(p_{\\cdot 1},\\dots,p_{\\cdot n})$，则 $X,Y$ 相互独立 $\\iff P=\\mathbf{p}_X\\mathbf{p}_Y^{\\mathrm{T}} \\iff r(P)=1$（即**任意两行元素对应成比例，且任意两列元素对应成比例**）。特别地，若表内某格 $p_{ij}=0$ 而所在行和 $p_{i\\cdot}>0$、列和 $p_{\\cdot j}>0$，立即秒判 $X,Y$ **不独立**！",
+      "conditions": "秩 1 矩阵与线代第 4 讲完美跨科联动！独立填空题（如已知第一行与第二行首元素）只需算出两行比例系数 $k=p_{21}/p_{11}$，其余空格直接整行乘 $k$ 一秒填完。"
+    },
+    {
+      "id": "m1-pr04-c-03",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、二维连续型独立性秒杀结论",
+      "title": "连续型独立的「矩形非零域 + 变量可分离」充要判据",
+      "pitfalls": "解答题中若要写严格证明，不可只写「非矩形故不独立」五个字，应顺手取矩形内一个正密度点 $(x_0,y_0)$ 使得 $f(x_0,y_0)=0$ 而 $f_X(x_0)f_Y(y_0)>0$（或算出 $f_X,f_Y$ 验证 $f\\ne f_Xf_Y$）。",
+      "source": {
+        "book": "27 方浩强化 & 27 张宇概率9讲",
+        "printedPage": "方浩 P.62 / 9讲 P.33-34",
+        "pdfPage": 67,
+        "itemRef": "二维连续型独立性的矩形域与可分离判据"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "summary": "二维连续型随机变量 $(X,Y)$ 相互独立的**充要条件**是：非零概率密度区域 $D=\\{(x,y)\\mid f(x,y)>0\\}$（至多差零测集）必须是边平行于坐标轴的**广义矩形** $I_x\\times I_y$（$I_x,I_y$ 可为有限或无限区间），且在 $D$ 上联合密度可分解为两个一元非负函数之积 $f(x,y)=g(x)h(y)$。凡支集 $D$ 为圆盘、三角形、抛物带、楔形 $0<x<y$ 等**非矩形区域**者，无需算边缘密度即可直接秒判「**不独立**」！",
+      "conditions": "因为 $f_X(x)f_Y(y)>0 \\iff f_X(x)>0$ 且 $f_Y(y)>0$，其支集必然是两个一维集合的笛卡尔积（广义矩形），任何令 $x,y$ 取值范围互相牵制的边界（如 $x+y<1$ 或 $x^2+y^2\\le 1$）都会破坏独立性。"
+    },
+    {
+      "id": "m1-pr04-c-04",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、边缘正态 vs 二维正态与独立性演化辨析",
+      "title": "一维正态与二维正态四项关系链及「独立变相依 / 相依变独立」双向反例",
+      "pitfalls": "注意对称逻辑链：二维正态 $\\implies$ 边缘正态，但两个边缘正态凑在一起除非**独立**否则既推不出二维正态，也推不出 $X+Y$ 服从正态！",
+      "source": {
+        "book": "27 方浩强化 & 27 张宇基础30讲",
+        "printedPage": "方浩 P.55-56 例5-6, P.70-71 例21 / 基础 P.92 习题3.6",
+        "pdfPage": 75,
+        "itemRef": "一维与二维正态关系及独立性双向反例"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_normal_counterexample",
+        "verified": true
+      },
+      "summary": "① **边缘正态 $\\not\\Rightarrow$ 二维正态**（经典反例：`基础习题 3.6` $f(x,y)=\\frac{1+\\sin x\\sin y}{2\\pi}e^{-(x^2+y^2)/2}$，两边缘均为 $N(0,1)$ 却不独立也不服从二维正态）；只有「边缘正态 **且相互独立**」才 $\\implies$ 二维正态（$\\rho=0$）。② **二维正态 $\\implies$ 任意非零线性组合 $aX+bY$ 为一维正态**，无需 $X,Y$ 独立！（方浩例题 21 第 (4) 句「仅当独立才正态」为错）。③ **独立变量的函数可以不独立**（如 $X,Y$ 独立 $E(1)$，$U=X+Y$ 与 $V=2X$ 不独立），**不独立变量的函数反倒可能独立**（如 `方浩例 6` $f=\\frac{2}{(1+x+y)^3}$ 下 $U=X+Y$ 与 $V=Y/X$ 竟相互独立！）。",
+      "conditions": "切勿凭直觉乱推「独立遗传」或「正态遗传」：线性组合保正态靠的是**联合二维正态**，而函数保独立靠的是**变量分组不重叠**（或特定变换恰使雅可比后变量分离）。"
+    },
+    {
+      "id": "m1-pr04-c-05",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "五、零概率条件 vs 正概率条件本质区分",
+      "title": "连续型「点条件 $Y=y$」与「区间条件 $Y\\le y$」的双轨算法对照",
+      "pitfalls": "经典惨案（方浩例题 11）：把 $P\\{-1<X<\\frac13\\mid Y\\le\\frac12\\}$ 误当成 $P\\{-1<X<\\frac13\\mid Y=\\frac12\\}$ 计算，前者答案 $\\frac{43}{54}$，后者答案 $\\frac{35}{54}$，截然不同！",
+      "source": {
+        "book": "27 方浩强化 & 27 张宇概率9讲",
+        "printedPage": "方浩 P.62-63 例题 11 / 9讲 P.40 例 5.3(2)",
+        "pdfPage": 67,
+        "itemRef": "零概率条件与正概率条件算法区分"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_cond_zero_vs_pos",
+        "verified": true
+      },
+      "summary": "对二维连续型随机变量 $(X,Y)$：① 遇到**零概率点条件** $P\\{X\\in A\\mid Y=y_0\\}$（因 $P\\{Y=y_0\\}=0$，古典条件概率公式 $\\frac{P(AB)}{P(B)}$ 失效！），必须先求条件密度 $f_{X\\mid Y}(x\\mid y_0)=\\frac{f(x,y_0)}{f_Y(y_0)}$，再做**一维定积分** $\\int_A f_{X\\mid Y}(x\\mid y_0)\\,\\mathrm{d}x$；② 遇到**正概率区间条件** $P\\{X\\in A\\mid Y\\le y_0\\}$（$P\\{Y\\le y_0\\}>0$），严禁套条件密度，必须回归事件条件概率定义，用**二维二重积分除以一维边缘积分**：$\\dfrac{\\iint_{x\\in A,\\,y\\le y_0}f(x,y)\\,\\mathrm{d}x\\mathrm{d}y}{\\int_{-\\infty}^{y_0}f_Y(y)\\,\\mathrm{d}y}$！",
+      "conditions": "一眼辨清只需看竖杠后面的符号：是等号「$=$」就切一条线算条件密度（一维积分）；是不等号「$\\le, <, >, \\ge$」就框一块面算条件概率（二重积分比值）。"
+    },
+    {
+      "id": "m1-pr04-c-06",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "六、对称线性组合的正态相关系数神式",
+      "title": "独立同正态构造对称线性组合 $(aX_1+bX_2,\\,aX_1-bX_2)$ 的一键参数公式",
+      "pitfalls": "前提必须是 $X_1,X_2$ **方差相等**（若 $\\sigma_1^2\\ne\\sigma_2^2$，则 $\\operatorname{Cov}(X_1+X_2,X_1-X_2)=\\sigma_1^2-\\sigma_2^2\\ne 0$，不再独立！）。",
+      "source": {
+        "book": "27 张宇概率9讲",
+        "printedPage": "9讲 P.31 结论 ⑤",
+        "pdfPage": 42,
+        "itemRef": "独立同正态对称线性组合参数公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_bivariate_normal",
+        "verified": true
+      },
+      "summary": "设 $X_1,X_2$ 独立同分布于 $N(\\mu,\\sigma^2)$，$Y_1=aX_1+bX_2,\\;Y_2=aX_1-bX_2\\;(ab\\ne 0)$，则 $(Y_1,Y_2)$ 服从二维正态分布，且：$$EY_1=(a+b)\\mu,\\quad EY_2=(a-b)\\mu,\\quad DY_1=DY_2=(a^2+b^2)\\sigma^2,\\quad \\operatorname{Cov}(Y_1,Y_2)=(a^2-b^2)\\sigma^2,\\quad \\rho_{Y_1,Y_2}=\\frac{a^2-b^2}{a^2+b^2}$$特别当 $|a|=|b|$（如 $X_1+X_2$ 与 $X_1-X_2$）时，$\\rho=0 \\iff$ 二者**相互独立**！",
+      "conditions": "由于 $(Y_1,Y_2)$ 经可逆线性变换必为二维正态，且 $X_1,X_2$ 同方差，交叉项恰好消为 $(a^2-b^2)\\sigma^2$，一秒看出 $X_1+X_2$ 与 $X_1-X_2$ 独立这一数理统计高频核心性质！"
+    },
+    {
+      "id": "m1-pr04-e-01",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、二维离散型分布律、边缘与条件分布",
+      "title": "基础例 3.1：两封信投入三信箱的二维联合、边缘与条件分布律",
+      "problem": "将两封信随机投入 $3$ 个信箱（每个信箱容纳信数不限），设 $X_1,X_2$ 分别表示第 1 个和第 2 个信箱投进的信的数量，求：(1) $(X_1,X_2)$ 的联合分布律与边缘分布律；(2) 在 $X_2=1$ 条件下 $X_1$ 的条件分布律。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "古典概型样本总数为 $3^2=9$（每封信各有 3 种投法）；注意到约束 $X_1+X_2\\le 2$，凡 $i+j>2$ 的格子概率均为 $0$，余下按组合数逐一填入并校核行和列和为 $1$。"
+        },
+        {
+          "stepTitle": "步骤 1：逐格计算联合分布律 p_{ij}",
+          "detail": "$X_1,X_2\\in\\{0,1,2\\}$ 且 $X_1+X_2\\le 2$：$p_{00}=\\frac{1}{9}$（全入第 3 箱），$p_{01}=\\frac{C_2^1}{9}=\\frac{2}{9}$，$p_{02}=\\frac{1}{9}$，$p_{10}=\\frac{2}{9}$，$p_{11}=\\frac{2}{9}$，$p_{20}=\\frac{1}{9}$，其余 $p_{12}=p_{21}=p_{22}=0$。"
+        },
+        {
+          "stepTitle": "步骤 2：按行/列累加求边缘分布律",
+          "detail": "由行和与列和得 $X_1,X_2$ 同服从 $B(2,\\frac13)$：$p_{0\\cdot}=p_{\\cdot 0}=\\frac49,\\;p_{1\\cdot}=p_{\\cdot 1}=\\frac49,\\;p_{2\\cdot}=p_{\\cdot 2}=\\frac19$（显然 $p_{22}=0\\ne\\frac{1}{81}$，故不独立）。"
+        },
+        {
+          "stepTitle": "步骤 3：归一化第 X_2=1 列得条件分布",
+          "detail": "已知 $p_{\\cdot 1}=\\frac49>0$：$P\\{X_1=0\\mid X_2=1\\}=\\frac{2/9}{4/9}=\\frac12$，$P\\{X_1=1\\mid X_2=1\\}=\\frac{2/9}{4/9}=\\frac12$，$P\\{X_1=2\\mid X_2=1\\}=0$。"
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲",
+        "printedPage": "基础 P.71-72 例 3.1",
+        "pdfPage": 77,
+        "itemRef": "基础例3.1 两信投三箱二维离散分布"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_discrete_cases",
+        "verified": true
+      },
+      "finalAnswer": "(1) 联合分布非零项 $p_{00}=p_{02}=p_{20}=\\frac19,\\;p_{01}=p_{10}=p_{11}=\\frac29$；边缘均为 $P(0)=\\frac49,P(1)=\\frac49,P(2)=\\frac19$。(2) $X_1\\mid(X_2=1)\\sim B(1,\\frac12)$（取 $0,1$ 概率各为 $\\frac12$）。",
+      "takeaway": "注意两封信是**可区分**的，投入 1、2 号信箱各一封有 $A_2^2=2$ 种方式，故 $p_{11}=\\frac29$ 而非 $\\frac19$！"
+    },
+    {
+      "id": "m1-pr04-e-02",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、二维离散型分布律、边缘与条件分布",
+      "title": "基础例 3.2：利用「两事件独立」而非「两变量独立」反求 2×2 表参数",
+      "problem": "二维随机变量 $(X,Y)$ 取值于 $\\{0,1\\}\\times\\{0,1\\}$，联合概率 $p_{00}=0.4,\\;p_{01}=a,\\;p_{10}=b,\\;p_{11}=0.1$。若随机事件 $\\{X=0\\}$ 与 $\\{X+Y=1\\}$ 相互独立，求 $a,b$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "切忌把「两事件独立」错当成「$X$ 与 $Y$ 独立」！老老实实写出三个事件的概率：$P\\{X=0\\}=0.4+a$、$P\\{X+Y=1\\}=a+b$、交事件 $\\{X=0,X+Y=1\\}=\\{X=0,Y=1\\}$ 概率为 $a$，联立规范性 $a+b=0.5$ 秒解。"
+        },
+        {
+          "stepTitle": "步骤 1：用规范性锁定 a+b",
+          "detail": "由 $0.4+a+b+0.1=1$ 得 $a+b=0.5$，恰好就是 $P\\{X+Y=1\\}=p_{01}+p_{10}=0.5$！"
+        },
+        {
+          "stepTitle": "步骤 2：代入事件独立等式解出 a,b",
+          "detail": "$P\\{X=0,X+Y=1\\}=P\\{X=0,Y=1\\}=a$。由独立性得 $a=(0.4+a)(a+b)=0.5(0.4+a)\\implies 0.5a=0.2\\implies a=0.4,\\;b=0.1$。"
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲",
+        "printedPage": "基础 P.72 例 3.2",
+        "pdfPage": 78,
+        "itemRef": "基础例3.2 事件独立反求二维表参数"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_discrete_cases",
+        "verified": true
+      },
+      "finalAnswer": "$a=0.4,\\;b=0.1$（原题选 D）。",
+      "takeaway": "审题第一铁律：看清独立的是「变量 $X,Y$」还是「某两个事件」（本题 $a=0.4,b=0.1$ 时 $p_{00}=0.4\\ne 0.8\\times 0.5$，显然 $X,Y$ 本身独立？恰巧 $0.8\\times 0.5=0.4$，验算本题竟恰好也独立，但绝不能先入为主直接假设 $X,Y$ 独立！）。"
+    },
+    {
+      "id": "m1-pr04-e-03",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、二维连续型边缘、条件与层次分布",
+      "title": "基础例 3.3：三角形区域均匀分布求两边缘密度与条件密度",
+      "problem": "已知二维随机变量 $(X,Y)$ 在由直线 $x-y=0,\\;x+y=2$ 与 $y=0$ 围成的区域 $G$ 上服从均匀分布，求：(1) 边缘概率密度 $f_X(x)$ 与 $f_Y(y)$；(2) 条件概率密度 $f_{X\\mid Y}(x\\mid y)$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "先画图求底为 $2$、高为 $1$ 的等腰直角三角形面积 $S_G=1$，故 $f(x,y)=1\\;((x,y)\\in G)$。求 $f_X(x)$ 时在 $x=1$ 处上边界发生折转（$y=x$ 换为 $y=2-x$），须分 $(0,1)$ 与 $[1,2)$ 两段积分；求 $f_Y(y)$ 则水平穿线一段到位 $x\\in(y,2-y)$！"
+        },
+        {
+          "stepTitle": "步骤 1：写联合密度并分段求 f_X(x)",
+          "detail": "$S_G=\\frac12\\times 2\\times 1=1\\implies f(x,y)=1\\;(0<y<1,\\;y<x<2-y)$。当 $0<x<1$ 时 $f_X(x)=\\int_0^x 1\\,\\mathrm{d}y=x$；当 $1\\le x<2$ 时 $f_X(x)=\\int_0^{2-x} 1\\,\\mathrm{d}y=2-x$；其他为 $0$。"
+        },
+        {
+          "stepTitle": "步骤 2：求 f_Y(y) 与条件密度 f_{X|Y}",
+          "detail": "当 $0<y<1$ 时 $f_Y(y)=\\int_y^{2-y}1\\,\\mathrm{d}x=2-2y$（其他为 $0$）。于是在 $0<y<1$ 下：$f_{X\\mid Y}(x\\mid y)=\\frac{1}{2-2y}\\;(y<x<2-y)$，其他为 $0$——可见 $X\\mid(Y=y)\\sim U(y,2-y)$！"
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲",
+        "printedPage": "基础 P.73 例 3.3",
+        "pdfPage": 79,
+        "itemRef": "基础例3.3 三角形区域均匀分布边缘与条件密度"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_uniform_regions",
+        "verified": true
+      },
+      "finalAnswer": "(1) $f_X(x)=\\begin{cases}x,&0<x<1\\\\2-x,&1\\le x<2\\\\0,&\\text{其他}\\end{cases}$，$f_Y(y)=\\begin{cases}2-2y,&0<y<1\\\\0,&\\text{其他}\\end{cases}$；(2) 当 $0<y<1$ 时，$f_{X\\mid Y}(x\\mid y)=\\frac{1}{2-2y}\\;(y<x<2-y)$，其他为 $0$。",
+      "takeaway": "张宇口诀「求谁不积谁，不积先定限，限内画条线，先交写下限，后交写上限」专克分段边界遗漏。"
+    },
+    {
+      "id": "m1-pr04-e-04",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、二维连续型边缘、条件与层次分布",
+      "title": "基础例 3.4：层次均匀分布 X~U(0,1), Y|X~U(0,x) 拼联合与求 P(X+Y>1)",
+      "problem": "已知 $X\\sim U(0,1)$，在 $X=x\\;(0<x<1)$ 条件下 $Y\\sim U(0,x)$，求：(1) $(X,Y)$ 的联合密度 $f(x,y)$；(2) $Y$ 的边缘密度 $f_Y(y)$；(3) 概率 $P\\{X+Y>1\\}$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "标准「三知二求一」母题：乘法公式得 $f(x,y)=\\frac1x\\;(0<y<x<1)$；求 $f_Y(y)$ 固定 $y\\in(0,1)$ 水平穿线 $x\\in(y,1)$ 得 $-\\ln y$；求 $P\\{X+Y>1\\}$ 画直线 $x+y=1$ 与三角域交点 $(\\frac12,\\frac12)$，选先 $y$ 后 $x$ 一次搞定（无需分两块！）。"
+        },
+        {
+          "stepTitle": "步骤 1：乘法公式求联合与边缘",
+          "detail": "$f_X(x)=1\\;(0<x<1)$，$f_{Y\\mid X}(y\\mid x)=\\frac1x\\;(0<y<x<1)$，故 $f(x,y)=\\frac1x\\;(0<y<x<1)$，其他为 $0$。对 $0<y<1$，$f_Y(y)=\\int_y^1 \\frac1x\\,\\mathrm{d}x=-\\ln y$（其他为 $0$）。"
+        },
+        {
+          "stepTitle": "步骤 2：巧选先 y 后 x 计算 P(X+Y>1)",
+          "detail": "区域 $\\{0<y<x<1\\}\\cap\\{x+y>1\\}$ 为 $x\\in(\\frac12,1)$ 且 $1-x<y<x$，故：$P\\{X+Y>1\\}=\\int_{1/2}^{1}\\mathrm{d}x\\int_{1-x}^{x}\\frac1x\\,\\mathrm{d}y=\\int_{1/2}^{1}\\frac{2x-1}{x}\\,\\mathrm{d}x=\\left[2x-\\ln x\\right]_{1/2}^{1}=1-\\ln 2$。"
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲",
+        "printedPage": "基础 P.74 例 3.4",
+        "pdfPage": 80,
+        "itemRef": "基础例3.4 层次均匀分布与概率计算"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_hier_uniform",
+        "verified": true
+      },
+      "finalAnswer": "(1) $f(x,y)=\\frac1x\\;(0<y<x<1)$，其他 $0$；(2) $f_Y(y)=-\\ln y\\;(0<y<1)$，其他 $0$；(3) $P\\{X+Y>1\\}=1-\\ln 2$。",
+      "takeaway": "注意 $f_{Y\\mid X}(y\\mid x)=\\frac1x$ 与 $f(x,y)=\\frac1x$ 表达式长得一模一样，但前者是 $x$ 固定的一元函数（关于 $y$ 积分为 $1$），后者是二元函数（在三角形上二重积分为 $1$）！"
+    },
+    {
+      "id": "m1-pr04-e-05",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "三、层次正态拼装与不独立严格证明",
+      "title": "基础例 3.5 & 例 3.6：层次正态拼联合密度 + 证明拉普拉斯 X 与 |X| 不独立",
+      "problem": "(1)（例 3.5）设 $X\\sim N(0,1)$，在 $X=x$ 条件下 $Y\\sim N(x,1)$，求 $(X,Y)$ 的联合概率密度 $f(x,y)$；(2)（例 3.6）设 $X$ 具有拉普拉斯密度 $f(x)=\\frac12 e^{-|x|}\\;(x\\in\\mathbb{R})$，证明 $X$ 与 $|X|$ 不独立。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "(1) 直接套密度乘法公式合并指数二次型；(2) 证不独立用「包含事件反例法」：任取 $x_0>0$（如 $x_0=1$），必有 $\\{|X|\\le 1\\}\\subset\\{X\\le 1\\}$，且两事件概率均在 $(0,1)$ 内，交概率不等于乘积！"
+        },
+        {
+          "stepTitle": "步骤 1：例 3.5 乘法公式直出联合密度",
+          "detail": "$f(x,y)=f_X(x)f_{Y\\mid X}(y\\mid x)=\\frac{1}{\\sqrt{2\\pi}}e^{-\\frac{x^2}{2}}\\cdot\\frac{1}{\\sqrt{2\\pi}}e^{-\\frac{(y-x)^2}{2}}=\\frac{1}{2\\pi}\\exp\\!\\left(-\\frac{2x^2+y^2-2xy}{2}\\right)$（全平面）。"
+        },
+        {
+          "stepTitle": "步骤 2：例 3.6 构造包含事件秒证不独立",
+          "detail": "取 $x_0=1$，则 $P\\{X\\le 1\\}=1-\\frac12 e^{-1}\\in(0,1)$，$P\\{|X|\\le 1\\}=1-e^{-1}\\in(0,1)$。因 $\\{|X|\\le 1\\}\\subset\\{X\\le 1\\}$，有 $P\\{X\\le 1,|X|\\le 1\\}=P\\{|X|\\le 1\\}\\ne P\\{X\\le 1\\}P\\{|X|\\le 1\\}$（因后者乘上了严格小于 1 的正数 $P\\{X\\le 1\\}$！），故 $X$ 与 $|X|$ 不独立。"
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲",
+        "printedPage": "基础 P.77-78 例 3.5, 例 3.6",
+        "pdfPage": 83,
+        "itemRef": "基础例3.5与3.6 层次正态与不独立证明"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_hier_normal_and_laplace",
+        "verified": true
+      },
+      "finalAnswer": "(1) $f(x,y)=\\frac{1}{2\\pi}e^{-\\frac{2x^2+y^2-2xy}{2}}$；(2) 由 $P\\{X\\le 1,|X|\\le 1\\}=1-e^{-1}\\ne(1-\\frac12 e^{-1})(1-e^{-1})$ 得证不独立。",
+      "takeaway": "证 $X$ 与 $|X|$ 不独立时，选点 $x_0=1$ 甚至无需算出具体数值——只要确认 $0<P\\{X\\le 1\\}<1$ 且 $P\\{|X|\\le 1\\}>0$，就能凭包含关系一行证毕！"
+    },
+    {
+      "id": "m1-pr04-e-06",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "三、边缘正态反例与独立表填空",
+      "title": "基础习题 3.6 & 3.9：边缘皆 N(0,1) 却不独立的黄金反例 + 独立联合表填空",
+      "problem": "(1)（习题 3.6）设 $f(x,y)=\\frac{1+\\sin x\\sin y}{2\\pi}e^{-\\frac12(x^2+y^2)}\\;((x,y)\\in\\mathbb{R}^2)$，求两边缘密度 $f_X(x),f_Y(y)$ 并判独立性；(2)（习题 3.9）$X,Y$ 相互独立，$2\\times 3$ 联合表中已知 $p_{12}=\\frac18,\\;p_{21}=\\frac18,\\;p_{\\cdot 1}=\\frac16$，补全整张表。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "(1) 利用 $\\sin y\\cdot e^{-y^2/2}$ 是奇函数在 $(-\\infty,+\\infty)$ 上积分为 $0$，立得两边缘皆标准正态，但 $f(x,y)\\ne f_X(x)f_Y(y)$；(2) 先用列和求 $p_{11}=\\frac16-\\frac18=\\frac{1}{24}$，再由「矩阵秩 1 行成比例」比例系数 $k=p_{21}/p_{11}=3$ 一气呵成填完！"
+        },
+        {
+          "stepTitle": "步骤 1：奇偶对称秒求习题 3.6 两边缘",
+          "detail": "$f_X(x)=\\frac{1}{\\sqrt{2\\pi}}e^{-\\frac{x^2}{2}}\\!\\left(\\int_{-\\infty}^{+\\infty}\\frac{1}{\\sqrt{2\\pi}}e^{-\\frac{y^2}{2}}\\mathrm{d}y+\\sin x\\int_{-\\infty}^{+\\infty}\\frac{\\sin y}{\\sqrt{2\\pi}}e^{-\\frac{y^2}{2}}\\mathrm{d}y\\right)=\\frac{1}{\\sqrt{2\\pi}}e^{-\\frac{x^2}{2}}$（奇函数积分为 0）。同理 $Y\\sim N(0,1)$，但 $f(x,y)\\ne f_X(x)f_Y(y)$，故不独立且非二维正态！"
+        },
+        {
+          "stepTitle": "步骤 2：秩 1 比例速填习题 3.9 全表",
+          "detail": "$p_{11}=p_{\\cdot 1}-p_{21}=\\frac16-\\frac18=\\frac{1}{24}$，故两行比例为 $p_{2\\cdot}:p_{1\\cdot}=p_{21}:p_{11}=\\frac18:\\frac{1}{24}=3:1$！由此立得 $p_{1\\cdot}=\\frac14,\\;p_{2\\cdot}=\\frac34$，$p_{22}=3p_{12}=\\frac38\\implies p_{\\cdot 2}=\\frac12$，余下 $p_{\\cdot 3}=1-\\frac16-\\frac12=\\frac13\\implies p_{13}=\\frac{1}{12},\\;p_{23}=\\frac14$。"
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲",
+        "printedPage": "基础 P.92,95-97 习题 3.6, 3.9",
+        "pdfPage": 98,
+        "itemRef": "基础习题3.6与3.9 边缘正态反例与独立填空"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_normal_counterexample",
+        "verified": true
+      },
+      "finalAnswer": "(1) $f_X(x)=\\frac{1}{\\sqrt{2\\pi}}e^{-x^2/2},\\;f_Y(y)=\\frac{1}{\\sqrt{2\\pi}}e^{-y^2/2}$，不独立；(2) 第 1 行 $(\\frac{1}{24},\\frac18,\\frac{1}{12})$（行和 $\\frac14$），第 2 行 $(\\frac18,\\frac38,\\frac14)$（行和 $\\frac34$），列和 $(\\frac16,\\frac12,\\frac13)$。",
+      "takeaway": "记住习题 3.6 这个「$1+\\sin x\\sin y$」核：选择题遇到「$X,Y$ 均服从 $N(0,1)$ 是否必联合正态 / 必有 $X+Y$ 正态」时，它就是最锋利的反例！"
+    },
+    {
+      "id": "m1-pr04-e-07",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、二维连续型区域积分归一化与概率计算",
+      "title": "基础习题 3.13 & 3.14：抛物带 0<x²<y<x<1 与无穷楔形 Ae^{-y} (0<x<y) 精算",
+      "problem": "(1)（习题 3.13）设 $f(x,y)=k\\;(0<x^2<y<x<1)$，求 $k$ 及 $P\\{X>\\frac12\\},\\;P\\{Y<\\frac12\\}$；(2)（习题 3.14）设 $f(x,y)=Ae^{-y}\\;(0<x<y)$，求 $A$ 及 $P\\{X+Y\\ge 1\\},\\;P\\{\\frac{X}{Y}\\le\\frac12\\}$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "两题都是高数二重积分定限与概率论的经典合体：(1) 求 $P\\{Y<\\frac12\\}$ 选水平穿线 $x\\in(y,\\sqrt y)$ 一段直出；(2) 求 $P\\{X+Y\\ge 1\\}$ 务必**取对立事件** $1-P\\{X+Y<1\\}$ 把无穷区域化为有限三角形！"
+        },
+        {
+          "stepTitle": "步骤 1：求解抛物带习题 3.13",
+          "detail": "$1=k\\int_0^1(x-x^2)\\mathrm{d}x=\\frac k6\\implies k=6$。$P\\{X>\\frac12\\}=6\\int_{1/2}^{1}(x-x^2)\\mathrm{d}x=\\frac12$；$P\\{Y<\\frac12\\}=6\\int_0^{1/2}(\\sqrt y-y)\\mathrm{d}y=6\\left[\\frac23 y^{3/2}-\\frac12 y^2\\right]_0^{1/2}=\\sqrt2-\\frac34$。"
+        },
+        {
+          "stepTitle": "步骤 2：求解无穷楔形习题 3.14",
+          "detail": "$1=A\\int_0^{+\\infty}\\mathrm{d}x\\int_x^{+\\infty}e^{-y}\\mathrm{d}y=A\\int_0^{+\\infty}e^{-x}\\mathrm{d}x=A\\implies A=1$。取对立：$P\\{X+Y\\ge 1\\}=1-\\int_0^{1/2}\\mathrm{d}x\\int_x^{1-x}e^{-y}\\mathrm{d}y=1-\\int_0^{1/2}(e^{-x}-e^{x-1})\\mathrm{d}x=2e^{-1/2}-e^{-1}$。射线比值：$P\\{\\frac XY\\le\\frac12\\}=\\int_0^{+\\infty}\\mathrm{d}x\\int_{2x}^{+\\infty}e^{-y}\\mathrm{d}y=\\int_0^{+\\infty}e^{-2x}\\mathrm{d}x=\\frac12$。"
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲",
+        "printedPage": "基础 P.93,100 习题 3.13, 3.14",
+        "pdfPage": 99,
+        "itemRef": "基础习题3.13与3.14 抛物带与无穷楔形概率"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_parabola_wedge",
+        "verified": true
+      },
+      "finalAnswer": "(1) $k=6,\\;P\\{X>\\frac12\\}=\\frac12,\\;P\\{Y<\\frac12\\}=\\sqrt2-\\frac34$；(2) $A=1,\\;P\\{X+Y\\ge 1\\}=2e^{-1/2}-e^{-1},\\;P\\{\\frac XY\\le\\frac12\\}=\\frac12$。",
+      "takeaway": "无穷区域算 $P\\{X+Y\\ge 1\\}$ 若硬算正面需拆成 $[0,\\frac12]$ 与 $[\\frac12,+\\infty)$ 两段且易算错上下限，**取反面有限三角域**省一半计算量！"
+    },
+    {
+      "id": "m1-pr04-e-08",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "一、二维离散最值事件独立综合题",
+      "title": "强化例 4.1：离散联合表 + {max=2} 与 {min=1} 独立反求协方差",
+      "problem": "设二维随机变量 $(X,Y)$ 取值 $X\\in\\{-1,1\\},\\;Y\\in\\{0,1,2\\}$，联合概率 $p_{-1,0}=0.1,\\;p_{-1,1}=0.1,\\;p_{-1,2}=b,\\;p_{1,0}=a,\\;p_{1,1}=0.1,\\;p_{1,2}=0.1$。若事件 $\\{\\max\\{X,Y\\}=2\\}$ 与 $\\{\\min\\{X,Y\\}=1\\}$ 相互独立，求 $\\operatorname{Cov}(X,Y)$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "把两个最值事件精准翻译为格子集合（张宇 $D_{22}$ 转换等价表述）：$\\{\\max=2\\}=\\{Y=2\\}$（因为 $X\\le 1<2$），$\\{\\min=1\\}=\\{X=1,Y\\ge 1\\}$，交事件仅为单格 $(1,2)$！"
+        },
+        {
+          "stepTitle": "步骤 1：翻译最值事件并解出 a,b",
+          "detail": "$P\\{\\max=2\\}=b+0.1$，$P\\{\\min=1\\}=p_{1,1}+p_{1,2}=0.2$，$P\\{\\max=2,\\min=1\\}=p_{1,2}=0.1$。由独立性得 $0.2(b+0.1)=0.1\\implies b=0.4$；由规范性 $a+b=0.6\\implies a=0.2$。"
+        },
+        {
+          "stepTitle": "步骤 2：求边缘数字特征与协方差",
+          "detail": "$P(X=-1)=0.6,P(X=1)=0.4\\implies EX=-0.2$；$P(Y=0)=0.3,P(Y=1)=0.2,P(Y=2)=0.5\\implies EY=1.2$；$E(XY)=(-1)(0.1)+(-2)(0.4)+(1)(0.1)+(2)(0.1)=-0.6$。故 $\\operatorname{Cov}(X,Y)=-0.6-(-0.2)(1.2)=-0.36$。"
+        }
+      ],
+      "source": {
+        "book": "27 张宇概率9讲 & 27 张宇基础30讲",
+        "printedPage": "9讲 P.29 例 4.1 / 基础 P.117 习题 4.3",
+        "pdfPage": 40,
+        "itemRef": "强化例4.1 最值事件独立反求协方差"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_discrete_cases",
+        "verified": true
+      },
+      "finalAnswer": "$\\operatorname{Cov}(X,Y)=-0.36$（原题选 B）。",
+      "takeaway": "最易漏掉的格子：$\\{\\min\\{X,Y\\}=1\\}$ 必须同时满足 $X\\ge 1$ 且 $Y\\ge 1$ 且至少一个为 $1$，涵盖 $(1,1)$ 与 $(1,2)$ 两格而非仅 $(1,1)$！"
+    },
+    {
+      "id": "m1-pr04-e-09",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、二维正态与线性组合（2024 考研真题）",
+      "title": "强化例 4.2（2024 真题）：独立正态线性组合标准化反求参数 a",
+      "problem": "（2024 真题）设随机变量 $X,Y$ 相互独立，且 $X\\sim N(0,2),\\;Y\\sim N(-2,2)$。若 $P\\{2X+Y<a\\}=P\\{X>Y\\}$，求常数 $a$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "独立正态变量的任意线性组合仍为正态：先求 $2X+Y$ 与 $X-Y$ 的均值与方差，各自标准化为 $\\Phi(\\cdot)$ 后比较自变量即可一招秒杀！"
+        },
+        {
+          "stepTitle": "步骤 1：写出两个线性组合的正态参数",
+          "detail": "$E(2X+Y)=0+(-2)=-2,\\;D(2X+Y)=4\\cdot 2+2=10\\implies 2X+Y\\sim N(-2,10)$；$E(X-Y)=0-(-2)=2,\\;D(X-Y)=2+2=4\\implies X-Y\\sim N(2,4)$。"
+        },
+        {
+          "stepTitle": "步骤 2：双边标准化并利用 Φ 单调性解方程",
+          "detail": "$P\\{2X+Y<a\\}=\\Phi\\!\\left(\\frac{a+2}{\\sqrt{10}}\\right)$；$P\\{X>Y\\}=P\\{X-Y>0\\}=1-\\Phi\\!\\left(\\frac{0-2}{2}\\right)=1-\\Phi(-1)=\\Phi(1)$。令 $\\frac{a+2}{\\sqrt{10}}=1\\implies a=-2+\\sqrt{10}$。"
+        }
+      ],
+      "source": {
+        "book": "27 张宇概率9讲",
+        "printedPage": "9讲 P.31-32 例 4.2",
+        "pdfPage": 42,
+        "itemRef": "强化例4.2 2024真题正态线性组合反求参数"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_bivariate_normal",
+        "verified": true
+      },
+      "finalAnswer": "$a=-2+\\sqrt{10}$（原题选 B）。",
+      "takeaway": "计算 $D(X-Y)$ 时负号平方变正号，必为 $DX+DY=4$，切忌错减成 $DX-DY=0$！"
+    },
+    {
+      "id": "m1-pr04-e-10",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、二维连续型综合题（2023 考研真题）",
+      "title": "强化例 4.3（2023 真题）：单位圆盘径向密度 f=(2/π)(x²+y²) 三连问",
+      "problem": "（2023 真题）设二维随机变量 $(X,Y)$ 的联合密度为 $f(x,y)=\\frac{2}{\\pi}(x^2+y^2)\\;(x^2+y^2\\le 1)$，其他为 $0$。求：(1) $\\operatorname{Cov}(X,Y)$；(2) $X$ 与 $Y$ 是否相互独立；(3) $Z=X^2+Y^2$ 的概率密度。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "圆盘对称性三连发：(1) 由关于 $x,y$ 轴对称奇函数积分为 $0$，三步零算秒出 $EX=EY=E(XY)=0\\implies\\operatorname{Cov}=0$；(2) 算边缘密度 $f_X(x)$ 验证 $f\\ne f_Xf_Y$（其实支集为单位圆非矩形早知不独立）；(3) 极坐标求 $F_Z(z)=P\\{X^2+Y^2\\le z\\}$ 一行出 $z^2$！"
+        },
+        {
+          "stepTitle": "步骤 1：对称性秒杀协方差",
+          "detail": "区域 $x^2+y^2\\le 1$ 关于两轴对称，$xf,yf,xyf$ 分别关于 $x$ 或 $y$ 为奇函数，故 $EX=EY=E(XY)=0\\implies\\operatorname{Cov}(X,Y)=0$。"
+        },
+        {
+          "stepTitle": "步骤 2：求边缘密度并判定不独立",
+          "detail": "当 $|x|<1$ 时，$f_X(x)=\\int_{-\\sqrt{1-x^2}}^{\\sqrt{1-x^2}}\\frac{2}{\\pi}(x^2+y^2)\\,\\mathrm{d}y=\\frac{4}{\\pi}\\left(x^2\\sqrt{1-x^2}+\\frac13(1-x^2)^{3/2}\\right)=\\frac{4}{3\\pi}(1+2x^2)\\sqrt{1-x^2}$；同理 $f_Y(y)=\\frac{4}{3\\pi}(1+2y^2)\\sqrt{1-y^2}\\;(|y|<1)$。显然 $f(x,y)\\ne f_X(x)f_Y(y)$，故不独立（虽不相关！）。"
+        },
+        {
+          "stepTitle": "步骤 3：极坐标求 Z=X²+Y² 的密度",
+          "detail": "当 $0<z<1$ 时，$F_Z(z)=\\iint_{x^2+y^2\\le z}\\frac{2}{\\pi}(x^2+y^2)\\,\\mathrm{d}x\\mathrm{d}y=\\int_0^{2\\pi}\\mathrm{d}\\theta\\int_0^{\\sqrt z}\\frac{2}{\\pi}r^3\\,\\mathrm{d}r=4\\cdot\\frac{z^2}{4}=z^2$；求导得 $f_Z(z)=2z\\;(0<z<1)$，其他为 $0$。"
+        }
+      ],
+      "source": {
+        "book": "27 张宇概率9讲/基础30讲 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.33-34 例 4.3 / 基础 P.89-90 例 3.12 / 猪狗 P.4-15 例 4.4",
+        "pdfPage": 44,
+        "itemRef": "强化例4.3 2023真题圆盘密度三连问"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_disk_2023",
+        "verified": true
+      },
+      "finalAnswer": "(1) $\\operatorname{Cov}(X,Y)=0$；(2) 不独立（$f_X(x)=\\frac{4}{3\\pi}(1+2x^2)\\sqrt{1-x^2}$）；(3) $f_Z(z)=2z\\;(0<z<1)$，其他为 $0$。",
+      "takeaway": "极坐标积分上限是 $r=\\sqrt z$ 而非 $r=z$！且面积微元带雅可比因子 $r$，故被积函数是 $r^2\\cdot r=r^3$！"
+    },
+    {
+      "id": "m1-pr04-e-11",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "一、独立离散变量相等概率（2023 考研真题）",
+      "title": "强化例 4.4（2023 真题）：独立二项分布求 P{X=Y}",
+      "problem": "（2023 真题）设随机变量 $X$ 与 $Y$ 相互独立，且 $X\\sim B(1,\\frac13),\\;Y\\sim B(2,\\frac12)$，求 $P\\{X=Y\\}$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "两离散变量相等事件 $\\{X=Y\\}$ 拆为所有公共可能取值 $\\{X=k,Y=k\\}$ 之并（此处仅 $k=0,1$），再用独立性拆成乘积之和。"
+        },
+        {
+          "stepTitle": "步骤 1：列出公共取值并利用独立性相乘求和",
+          "detail": "$X\\in\\{0,1\\}$，$Y\\in\\{0,1,2\\}$，公共值仅 $0,1$：$P\\{X=Y\\}=P\\{X=0\\}P\\{Y=0\\}+P\\{X=1\\}P\\{Y=1\\}=\\frac23\\cdot\\left(\\frac12\\right)^2+\\frac13\\cdot C_2^1\\left(\\frac12\\right)^2=\\frac16+\\frac16=\\frac13$。"
+        }
+      ],
+      "source": {
+        "book": "27 张宇概率9讲 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.34-35 例 4.4 / 猪狗 P.3-19 例 3.6",
+        "pdfPage": 45,
+        "itemRef": "强化例4.4 2023真题独立二项相等概率"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_discrete_cases",
+        "verified": true
+      },
+      "finalAnswer": "$P\\{X=Y\\}=\\frac13$。",
+      "takeaway": "二项分布 $P\\{Y=1\\}=C_2^1(\\frac12)^1(\\frac12)^1=\\frac12$ 切勿漏乘组合数 $C_2^1=2$！"
+    },
+    {
+      "id": "m1-pr04-e-12",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "一、二维分布函数合法性甄别",
+      "title": "方浩例题 1：四大候选二元函数合法性判定（矩形非负性致命反例）",
+      "problem": "以下四个二元函数，不能作为二维随机变量 $(X,Y)$ 的分布函数的是（ ）：(A) $F_1=(1-e^{-x})(1-e^{-y})\\;(x>0,y>0)$，其他 $0$；(B) $F_2=\\frac{1}{\\pi^2}(\\frac{\\pi}{2}+\\arctan\\frac x2)(\\frac{\\pi}{2}+\\arctan\\frac y3)$；(C) $F_3=\\begin{cases}1,&x+2y\\ge 1\\\\0,&x+2y<1\\end{cases}$；(D) $F_4=1-2^{-x}-2^{-y}+2^{-x-y}\\;(x>0,y>0)$，其他 $0$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "A、B、D 均能直接因式分解为合法一维分布函数之积（D 即 $(1-2^{-x})(1-2^{-y})$，对应参数 $\\ln 2$ 的独立指数分布！）；唯有 C 是斜直线阶跃函数，构造矩形一刀检出负增量！"
+        },
+        {
+          "stepTitle": "步骤 1：秒认 (A)(B)(D) 均为合法乘积型分布函数",
+          "detail": "(A) 是两个 $E(1)$ 独立乘积；(B) 是两个柯西分布独立乘积；(D) $1-2^{-x}-2^{-y}+2^{-x-y}=(1-e^{-x\\ln 2})(1-e^{-y\\ln 2})$，是两个 $E(\\ln 2)$ 独立乘积！"
+        },
+        {
+          "stepTitle": "步骤 2：对 (C) 构造矩形验证矩形非负性失效",
+          "detail": "取矩形 $x_1=\\frac13,x_2=2,y_1=\\frac14,y_2=1$：左下点 $\\frac13+\\frac12=\\frac56<1\\implies F_3(\\frac13,\\frac14)=0$，而其余三顶点均满足 $x+2y\\ge 1\\implies F_3=1$。故矩形概率 $=1-1-1+0=-1<0$，违背非负性！"
+        }
+      ],
+      "source": {
+        "book": "27 方浩强化",
+        "printedPage": "方浩 P.52-53 例题 1",
+        "pdfPage": 57,
+        "itemRef": "方浩例题1 二维分布函数合法性判别"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_cdf_rect",
+        "verified": true
+      },
+      "finalAnswer": "选 (C)。",
+      "takeaway": "切勿被 (D) 迷惑！把 $1-2^{-x}-2^{-y}+2^{-x-y}$ 因式分解为 $(1-2^{-x})(1-2^{-y})$ 即可一眼识破它是完全合法的独立指数联合 CDF。"
+    },
+    {
+      "id": "m1-pr04-e-13",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "一、二维退化与同分布不独立分布函数构造",
+      "title": "方浩例题 2 & 例题 3：由 Y=X² 构二维分布函数 + F(x,y)=min{x,y} 同分布不独立",
+      "problem": "(1)（例题 2）设 $X\\sim E(1)$，$Y=X^2$，求二维随机变量 $(X,Y)$ 的分布函数 $F(x,y)$；(2)（例题 3）设 $F(x,y)=\\begin{cases}0,&\\min\\{x,y\\}<0\\\\\\min\\{x,y\\},&0\\le\\min\\{x,y\\}<1\\\\1,&\\min\\{x,y\\}\\ge 1\\end{cases}$，判断 $X,Y$ 是否独立、是否同分布。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "两题都紧扣定义 $F(x,y)=P\\{X\\le x,Y\\le y\\}$：(1) 化为 $P\\{X\\le\\min(x,\\sqrt y)\\}$；(2) 令另一变元趋于 $+\\infty$ 得两边缘均为 $U(0,1)$（其实正是 $X=Y\\sim U(0,1)$ 的退化联合分布！）。"
+        },
+        {
+          "stepTitle": "步骤 1：例题 2 取交集化为一维事件",
+          "detail": "当 $x<0$ 或 $y<0$ 时因 $X>0,Y>0$ 得 $F(x,y)=0$。当 $x\\ge 0,y\\ge 0$ 时，$F(x,y)=P\\{X\\le x,X^2\\le y\\}=P\\{X\\le x,X\\le\\sqrt y\\}=P\\{X\\le\\min(x,\\sqrt y)\\}=1-e^{-\\min(x,\\sqrt y)}$，展开即 $1-e^{-x}\\;(0\\le x\\le\\sqrt y)$ 与 $1-e^{-\\sqrt y}\\;(x>\\sqrt y)$。"
+        },
+        {
+          "stepTitle": "步骤 2：例题 3 取极限求两边缘判独立与同分布",
+          "detail": "$F_X(x)=F(x,+\\infty)=\\begin{cases}0,&x<0\\\\x,&0\\le x<1\\\\1,&x\\ge 1\\end{cases}$，同理 $F_Y(y)=F(+\\infty,y)$ 亦为 $U(0,1)$，故 $X,Y$ 同分布；但在 $0<x=y<1$ 处 $F(x,x)=x\\ne x^2=F_X(x)F_Y(x)$，故不独立！"
+        }
+      ],
+      "source": {
+        "book": "27 方浩强化",
+        "printedPage": "方浩 P.53-54 例题 2, 例题 3",
+        "pdfPage": 58,
+        "itemRef": "方浩例题2与3 退化二维分布函数与同分布不独立"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_cdf_rect",
+        "verified": true
+      },
+      "finalAnswer": "(1) $F(x,y)=\\begin{cases}1-e^{-x},&0\\le x\\le\\sqrt y\\\\1-e^{-\\sqrt y},&x>\\sqrt y\\\\0,&x<0\\text{ 或 }y<0\\end{cases}$；(2) $X,Y$ 不独立，但同分布（均服从 $U(0,1)$，选 B）。",
+      "takeaway": "注意例题 2 与例题 3 均属于「概率全部集中在一条曲线（$y=x^2$ 或 $y=x$）上的二维奇异分布」，不存在二维联合密度 $f(x,y)$，只能用分布函数描述！"
+    },
+    {
+      "id": "m1-pr04-e-14",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、独立性与二维函数变换的双向反例",
+      "title": "方浩例题 5 & 例题 6：独立变不独立 vs 不独立变独立（双向神对照！）",
+      "problem": "(1)（例题 5）$X,Y$ 独立同服从 $E(1)$，$U=X+Y,\\;V=2X$，求 $F(u,v)$ 并判 $U,V$ 是否独立；(2)（例题 6）$(X,Y)$ 联合密度 $f(x,y)=\\frac{2}{(1+x+y)^3}\\;(x>0,y>0)$，$U=X+Y,\\;V=\\frac YX$，求 $F(u,v)$ 并判 $U,V$ 是否独立。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "画积分区域计算 $F(u,v)=P\\{U\\le u,V\\le v\\}$ 并取边缘验证能否因式分解：(1) 共用变量 $X$ 破坏独立性；(2) 尽管 $X,Y$ 本身不独立，但 $(X+Y,Y/X)$ 的联合分布竟完美拆解成乘积——**相依变量的函数完全可能独立**！"
+        },
+        {
+          "stepTitle": "步骤 1：例题 5 分 v<2u 与 v≥2u 两段求 F(u,v)",
+          "detail": "对 $u\\ge 0,v\\ge 0$，$F(u,v)=P\\{X+Y\\le u,X\\le\\frac v2\\}$。当 $v<2u$ 时，积分域为梯形 $0<x<\\frac v2,\\;0<y<u-x$，积出 $1-e^{-v/2}-\\frac v2 e^{-u}$；当 $v\\ge 2u$ 时覆盖整个三角形 $x+y\\le u$，积出 $1-e^{-u}-ue^{-u}$。边缘 $F_U(u)=1-e^{-u}-ue^{-u},\\;F_V(v)=1-e^{-v/2}$，显然 $F(u,v)\\ne F_U(u)F_V(v)$，故 $U,V$ 不独立！"
+        },
+        {
+          "stepTitle": "步骤 2：例题 6 求三角形域积分惊现完美分离",
+          "detail": "对 $u\\ge 0,v\\ge 0$，$P\\{X+Y\\le u,\\frac YX\\le v\\}$ 对应第一象限直线 $x+y=u$ 下方与射线 $y=vx$ 下方交集，交点 $\\left(\\frac{u}{1+v},\\frac{uv}{1+v}\\right)$。积分得 $F(u,v)=\\int_0^{\\frac{uv}{1+v}}\\mathrm{d}y\\int_{y/v}^{u-y}\\frac{2}{(1+x+y)^3}\\mathrm{d}x=\\frac{u^2}{(1+u)^2}\\cdot\\frac{v}{1+v}=F_U(u)F_V(v)$！故 $U$ 与 $V$ 竟相互独立！"
+        }
+      ],
+      "source": {
+        "book": "27 方浩强化",
+        "printedPage": "方浩 P.55-56 例题 5, 例题 6",
+        "pdfPage": 60,
+        "itemRef": "方浩例题5与6 独立性变换双向对照"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_fh5_fh6",
+        "verified": true
+      },
+      "finalAnswer": "(1) $F(u,v)=1-e^{-v/2}-\\frac v2 e^{-u}\\;(0\\le v<2u)$，$1-e^{-u}-ue^{-u}\\;(0\\le 2u\\le v)$，$U,V$ **不独立**；(2) $F(u,v)=\\frac{u^2 v}{(1+u)^2(1+v)}\\;(u\\ge 0,v\\ge 0)$，$U,V$ **相互独立**！",
+      "takeaway": "例题 6 用雅可比换元法更神速：令 $x=\\frac{u}{1+v},y=\\frac{uv}{1+v}$，$|J|=\\frac{u}{(1+v)^2}$，立刻得 $f_{U,V}(u,v)=\\frac{2u}{(1+u)^3}\\cdot\\frac{1}{(1+v)^2}$，变量一秒分离！"
+    },
+    {
+      "id": "m1-pr04-e-15",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "一、二维离散建模与独立表速填",
+      "title": "方浩例题 7 & 例题 10：三色球无放回超几何二维表 + 2×3 独立表秒解",
+      "problem": "(1)（例题 7）袋中有 1 红、2 黑、3 白共 6 球，无放回任取 2 球，$X,Y,Z$ 分别为取到红、黑、白球数，求 $P\\{X=1\\mid Z=0\\}$ 及 $(X,Y)$ 分布律；(2)（例题 10）$(X,Y)$ 独立，联合表第 1 行为 $(\\frac16,\\frac19,\\frac{1}{18})$，第 2 行为 $(\\frac13,\\alpha,\\beta)$，求 $\\alpha,\\beta$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "(1) 注意一次取 2 球无序用 $C_6^2=15$ 统一度量，约束 $X+Y\\le 2$ 直接令 $p_{1,2}=0$；(2) 秩 1 矩阵行成比例法：$p_{21}/p_{11}=\\frac13\\div\\frac16=2$，整行翻倍一秒出答案！"
+        },
+        {
+          "stepTitle": "步骤 1：例题 7 超几何组合求条件概率与联合表",
+          "detail": "$P\\{Z=0\\}=\\frac{C_3^2}{C_6^2}=\\frac15$，$P\\{X=1,Z=0\\}=\\frac{C_1^1 C_2^1}{C_6^2}=\\frac{2}{15}\\implies P\\{X=1\\mid Z=0\\}=\\frac{2/15}{1/5}=\\frac23$。$2\\times 3$ 联合表：$p_{00}=\\frac15,p_{01}=\\frac25,p_{02}=\\frac{1}{15},p_{10}=\\frac15,p_{11}=\\frac{2}{15},p_{12}=0$（总和恰为 $1$）。"
+        },
+        {
+          "stepTitle": "步骤 2：例题 10 秩 1 比例一秒填出 α,β",
+          "detail": "由独立性第 2 行必为第 1 行的 $k=\\frac{1/3}{1/6}=2$ 倍，故 $\\alpha=2\\times\\frac19=\\frac29,\\;\\beta=2\\times\\frac{1}{18}=\\frac19$（校核总和 $\\frac13+\\frac23=1$）。"
+        }
+      ],
+      "source": {
+        "book": "27 方浩强化",
+        "printedPage": "方浩 P.57 例题 7, P.60-61 例题 10",
+        "pdfPage": 62,
+        "itemRef": "方浩例题7与10 超几何二维表与秩1速填"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_rank1_indep",
+        "verified": true
+      },
+      "finalAnswer": "(1) $P\\{X=1\\mid Z=0\\}=\\frac23$，联合表非零项 $(\\frac15,\\frac25,\\frac{1}{15};\\frac15,\\frac{2}{15},0)$；(2) $\\alpha=\\frac29,\\;\\beta=\\frac19$。",
+      "takeaway": "例题 7 也可将条件 $\\{Z=0\\}$ 理解为缩减样本空间「只在 1 红 2 黑共 3 球中取 2 球」，直接得 $P\\{X=1\\mid Z=0\\}=\\frac{C_1^1 C_2^1}{C_3^2}=\\frac23$！"
+    },
+    {
+      "id": "m1-pr04-e-16",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、连续域转二维 0-1 离散表经典母题",
+      "title": "方浩例题 9（半圆均匀转示性变量）：由几何面积构造 (Z₁,Z₂) 分布律并判函数独立",
+      "problem": "设 $(X,Y)$ 在上半单位圆 $D=\\{(x,y)\\mid x^2+y^2\\le 1,\\;y\\ge 0\\}$ 上服从均匀分布，定义 $Z_1=\\mathbb{I}\\{X>Y\\},\\;Z_2=\\mathbb{I}\\{X>-Y\\}$，求：(1) $(Z_1,Z_2)$ 的联合分布律；(2) $Z_1Z_2$ 与 $Z_1+Z_2$ 是否相互独立。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "上半圆面积 $\\frac{\\pi}{2}$，两条角平分线 $y=x$ 与 $y=-x$ 将上半圆精确均分为四个圆心角 $45^\\circ$ 的扇形（每块概率 $\\frac14$）！用面积比一秒填出 $2\\times 2$ 表，再用乘积检验独立性。"
+        },
+        {
+          "stepTitle": "步骤 1：四扇形面积比直写联合分布表",
+          "detail": "$P\\{Z_1=0,Z_2=0\\}=P\\{X\\le Y,X\\le -Y\\}=P\\{0\\le y\\le -x\\}=\\frac14$；$P\\{Z_1=0,Z_2=1\\}=P\\{-Y<X\\le Y\\}=\\frac12$（上方 $90^\\circ$ 扇形）；$P\\{Z_1=1,Z_2=0\\}=P\\{Y<X,X\\le -Y\\}=0$（上半圆 $Y\\ge 0$ 故不可能）；$P\\{Z_1=1,Z_2=1\\}=P\\{X>Y,X>-Y\\}=\\frac14$。"
+        },
+        {
+          "stepTitle": "步骤 2：检验 Z₁Z₂ 与 Z₁+Z₂ 独立性",
+          "detail": "$P\\{Z_1Z_2=0,Z_1+Z_2=0\\}=P\\{Z_1=Z_2=0\\}=\\frac14$；而 $P\\{Z_1Z_2=0\\}=1-P\\{Z_1=Z_2=1\\}=\\frac34$，$P\\{Z_1+Z_2=0\\}=\\frac14$。因 $\\frac14\\ne\\frac34\\times\\frac14$，故两者不独立！"
+        }
+      ],
+      "source": {
+        "book": "27 方浩强化",
+        "printedPage": "方浩 P.59-60 例题 9",
+        "pdfPage": 64,
+        "itemRef": "方浩例题9 上半圆切分示性变量联合表"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_discrete_cases",
+        "verified": true
+      },
+      "finalAnswer": "(1) $p_{00}=\\frac14,\\;p_{01}=\\frac12,\\;p_{10}=0,\\;p_{11}=\\frac14$；(2) $Z_1Z_2$ 与 $Z_1+Z_2$ 不独立。",
+      "takeaway": "此类「连续域用射线切出 0-1 变量」是考研超级常客（对比猪狗例 4.12 与概率 9 讲例 5.9），切忌硬算二重积分，**圆心角比例直接口算**最准最快！"
+    },
+    {
+      "id": "m1-pr04-e-17",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、零概率条件 vs 正概率条件对照大题",
+      "title": "方浩例题 11：f(x,y)=6x² (|x|<y<1) 精准对照「Y=1/2」与「Y≤1/2」",
+      "problem": "设 $(X,Y)$ 联合密度为 $f(x,y)=6x^2\\;(0<y<1,\\;|x|<y)$，其他为 $0$。求：(1) $f_Y(y)$；(2) $f_{X\\mid Y}(x\\mid y)$；(3) $P\\{-1<X<\\frac13\\mid Y=\\frac12\\}$；(4) $P\\{-1<X<\\frac13\\mid Y\\le\\frac12\\}$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "本题是区隔「零概率条件（用条件密度做一维积分）」与「正概率条件（用二维积分除以边缘积分）」的教科书级标杆！注意当 $y\\le\\frac12$ 时 $|x|<y\\le\\frac12$，故 $-1<x<\\frac13$ 自动被截断为 $-\\frac12<x<\\frac13$。"
+        },
+        {
+          "stepTitle": "步骤 1：求边缘 f_Y(y) 与条件密度 f_{X|Y}",
+          "detail": "当 $0<y<1$ 时，$f_Y(y)=\\int_{-y}^{y}6x^2\\,\\mathrm{d}x=4y^3$；由此 $f_{X\\mid Y}(x\\mid y)=\\frac{6x^2}{4y^3}=\\frac{3x^2}{2y^3}\\;(-y<x<y)$，其他为 $0$。"
+        },
+        {
+          "stepTitle": "步骤 2：第 (3) 问用条件密度算零概率条件",
+          "detail": "$y=\\frac12$ 时 $f_{X\\mid Y}(x\\mid\\frac12)=12x^2\\;(-\\frac12<x<\\frac12)$，故 $P\\{-1<X<\\frac13\\mid Y=\\frac12\\}=\\int_{-1/2}^{1/3}12x^2\\,\\mathrm{d}x=\\left[4x^3\\right]_{-1/2}^{1/3}=\\frac{4}{27}+\\frac12=\\frac{35}{54}$。"
+        },
+        {
+          "stepTitle": "步骤 3：第 (4) 问用定义比值算正概率条件",
+          "detail": "分母 $P\\{Y\\le\\frac12\\}=\\int_0^{1/2}4y^3\\,\\mathrm{d}y=\\frac{1}{16}$；分子 $P\\{-1<X<\\frac13,Y\\le\\frac12\\}=\\int_{-1/2}^{0}\\mathrm{d}x\\int_{-x}^{1/2}6x^2\\,\\mathrm{d}y+\\int_0^{1/3}\\mathrm{d}x\\int_x^{1/2}6x^2\\,\\mathrm{d}y=\\frac{43}{864}$。相除得 $\\frac{43/864}{1/16}=\\frac{43}{54}$！"
+        }
+      ],
+      "source": {
+        "book": "27 方浩强化",
+        "printedPage": "方浩 P.62-63 例题 11",
+        "pdfPage": 67,
+        "itemRef": "方浩例题11 零概率与正概率条件精准对照"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_cond_zero_vs_pos",
+        "verified": true
+      },
+      "finalAnswer": "(1) $f_Y(y)=4y^3\\;(0<y<1)$；(2) $f_{X\\mid Y}(x\\mid y)=\\frac{3x^2}{2y^3}\\;(-y<x<y,\\;0<y<1)$；(3) $\\frac{35}{54}$；(4) $\\frac{43}{54}$。",
+      "takeaway": "第 (4) 问分子对 $x$ 积分须在 $x=0$ 拆成两段（左半 $y\\in(-x,\\frac12)$、右半 $y\\in(x,\\frac12)$），或直接按 $y$ 从 $0$ 到 $\\frac12$ 积：$y\\in(0,\\frac13)$ 时 $x\\in(-y,y)$，$y\\in(\\frac13,\\frac12)$ 时 $x\\in(-y,\\frac13)$，同样得 $\\frac{43}{864}$！"
+    },
+    {
+      "id": "m1-pr04-e-18",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、层次分布与射线概率计算",
+      "title": "方浩例题 12：Y~ye^{-y} 与 X|Y~U(0,y) 拼出经典指数楔形及 P(X/Y≤1/2)",
+      "problem": "设随机变量 $Y$ 的概率密度为 $f_Y(y)=ye^{-y}\\;(y>0)$，在 $Y=y\\;(y>0)$ 条件下 $X\\sim U(0,y)$，求：(1) 联合密度 $f(x,y)$；(2) 边缘密度 $f_X(x)$；(3) 概率 $P\\{\\frac XY\\le\\frac12\\}$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "乘法公式相乘时 $y$ 与 $\\frac1y$ 恰好完美抵消，瞬间还原成前面基础习题 3.14 的无穷楔形 $f(x,y)=e^{-y}\\;(0<x<y)$！并且第 (3) 问可直接用条件分布秒杀：在任意 $Y=y$ 下 $X/y\\sim U(0,1)$，故 $P\\{X/Y\\le\\frac12\\}=\\frac12$！"
+        },
+        {
+          "stepTitle": "步骤 1：乘法公式与边缘密度",
+          "detail": "$f_{X\\mid Y}(x\\mid y)=\\frac1y\\;(0<x<y)$，故 $f(x,y)=ye^{-y}\\cdot\\frac1y=e^{-y}\\;(0<x<y)$，其他为 $0$。由此 $f_X(x)=\\int_x^{+\\infty}e^{-y}\\,\\mathrm{d}y=e^{-x}\\;(x>0)$，即 $X\\sim E(1)$！"
+        },
+        {
+          "stepTitle": "步骤 2：双解法秒杀 P(X/Y≤1/2)",
+          "detail": "**法一（条件直觉秒杀）**：对任意给定 $Y=y>0$，$X\\mid(Y=y)\\sim U(0,y)\\implies P\\{\\frac XY\\le\\frac12\\mid Y=y\\}=\\frac12$ 与 $y$ 无关，由全期望立即得 $P\\{\\frac XY\\le\\frac12\\}=\\frac12$！**法二（二重积分）**：$\\int_0^{+\\infty}\\mathrm{d}x\\int_{2x}^{+\\infty}e^{-y}\\mathrm{d}y=\\int_0^{+\\infty}e^{-2x}\\mathrm{d}x=\\frac12$。"
+        }
+      ],
+      "source": {
+        "book": "27 方浩强化",
+        "printedPage": "方浩 P.63-64 例题 12",
+        "pdfPage": 68,
+        "itemRef": "方浩例题12 层次Gamma均匀拼出指数楔形"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_parabola_wedge",
+        "verified": true
+      },
+      "finalAnswer": "(1) $f(x,y)=e^{-y}\\;(0<x<y)$；(2) $f_X(x)=e^{-x}\\;(x>0)$（即 $X\\sim E(1)$）；(3) $\\frac12$。",
+      "takeaway": "注意到 $Y\\sim\\Gamma(2,1)$（两独立 $E(1)$ 之和）与 $X\\mid Y\\sim U(0,Y)$ 结合竟恰好生出 $X\\sim E(1)$，与第 5 讲 Lukacs 定理（猪狗例 4.27）互为镜像！"
+    },
+    {
+      "id": "m1-pr04-e-19",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、二维均匀分布核心辨析",
+      "title": "方浩例题 16 & 例题 17：矩形独立均匀辨伪 + 圆盘均匀「边缘不匀却条件匀」",
+      "problem": "(1)（例题 16）$X,Y$ 独立同服从 $U(0,1)$，下列服从均匀分布的是（ ）：(A) $(X,Y)$；(B) $X+Y$；(C) $X^2$；(D) $X-Y$。(2)（例题 17）$(X,Y)$ 在圆盘 $x^2+y^2\\le r^2\\;(r>1)$ 上服从均匀分布，下列正确的是（ ）：(A) $X$ 均匀；(B) $X+Y$ 均匀；(C) $Y$ 均匀；(D) $Y$ 关于 $X=1$ 的条件分布是均匀分布。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "用「均匀分布概率必与区间长度/面积成正比」的特殊值试探法秒排伪项，同时牢记二维均匀「任意竖直切片仍是均匀」这一几何铁律！"
+        },
+        {
+          "stepTitle": "步骤 1：例题 16 面积比例秒排 B,C,D",
+          "detail": "(A) $f(x,y)=1\\;(0<x<1,0<y<1)$ 为单位正方形二维均匀，正确！(B) $X+Y\\in(0,2)$ 但 $P\\{X+Y<\\frac12\\}=\\frac18\\ne\\frac14$；(C) $P\\{X^2<\\frac12\\}=\\frac{1}{\\sqrt2}\\ne\\frac12$；(D) $P\\{\\frac12<X-Y<1\\}=\\frac18\\ne\\frac14$，故 B,C,D 均非均匀。"
+        },
+        {
+          "stepTitle": "步骤 2：例题 17 圆盘切片验证条件均匀",
+          "detail": "边缘 $f_X(x)=\\frac{2\\sqrt{r^2-x^2}}{\\pi r^2}\\;(|x|<r)$ 显然非恒定常数（排 A、C）；令 $X=r\\cos\\theta,Y=r\\sin\\theta$ 得 $X+Y\\in[-\\sqrt2 r,\\sqrt2 r]$，切弦面积比 $P\\{X+Y\\le r\\}=\\frac34+\\frac{1}{2\\pi}\\ne\\frac12+\\frac{\\sqrt2}{4}$（排 B）。而固定 $X=1$ 时 $f_{Y\\mid X}(y\\mid 1)=\\frac{1/(\\pi r^2)}{2\\sqrt{r^2-1}/(\\pi r^2)}=\\frac{1}{2\\sqrt{r^2-1}}\\;(|y|<\\sqrt{r^2-1})$，正是均匀分布！"
+        }
+      ],
+      "source": {
+        "book": "27 方浩强化",
+        "printedPage": "方浩 P.66-68 例题 16, 例题 17",
+        "pdfPage": 71,
+        "itemRef": "方浩例题16与17 二维均匀矩形与圆盘辨析"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_uniform_regions",
+        "verified": true
+      },
+      "finalAnswer": "(1) 选 (A)；(2) 选 (D)（$Y\\mid(X=1)\\sim U(-\\sqrt{r^2-1},\\sqrt{r^2-1})$）。",
+      "takeaway": "记住圆盘均匀分布的三句真言：**联合匀、边缘不匀、条件又匀**！"
+    },
+    {
+      "id": "m1-pr04-e-20",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、二维正态配方与条件/边缘速解",
+      "title": "方浩例题 18 & 例题 19：指数二次型配方求归一化系数、条件密度与边缘分布",
+      "problem": "(1)（例题 18）设 $(X,Y)$ 联合密度 $f(x,y)=Ae^{-2x^2+2xy-y^2}\\;((x,y)\\in\\mathbb{R}^2)$，求常数 $A$ 与条件密度 $f_{Y\\mid X}(y\\mid x)$；(2)（例题 19）设 $X\\sim N(0,1)$，给定 $X=x$ 时 $Y\\sim N(x,1)$，求 $f(x,y)$ 及 $Y$ 的边缘分布。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "两题均展示「**配方—除方差—添系数**」绝活：把指数配成关于待积变量的完全平方，把含另一变量的因子提到积分号外，括号内凑出标准一维正态积分 $=1$，全程零积分硬算！"
+        },
+        {
+          "stepTitle": "步骤 1：例题 18 一行配方同出 A 与 f_{Y|X}",
+          "detail": "$-2x^2+2xy-y^2=-x^2-(y-x)^2$！立刻得 $f(x,y)=A\\pi\\left(\\frac{1}{\\sqrt{\\pi}}e^{-x^2}\\right)\\left(\\frac{1}{\\sqrt{\\pi}}e^{-(y-x)^2}\\right)$，两括号分别是一维 $N(0,\\frac12)$ 与 $N(x,\\frac12)$ 密度！故归一化必有 $A\\pi=1\\implies A=\\frac{1}{\\pi}$；边缘 $f_X(x)=\\frac{1}{\\sqrt{\\pi}}e^{-x^2}$；条件 $f_{Y\\mid X}(y\\mid x)=\\frac{1}{\\sqrt{\\pi}}e^{-(y-x)^2}\\sim N(x,\\frac12)$！"
+        },
+        {
+          "stepTitle": "步骤 2：例题 19 反向配方秒出 Y~N(0,2)",
+          "detail": "$f(x,y)=\\frac{1}{2\\pi}e^{-(x^2-xy+\\frac{y^2}{2})}=\\frac{1}{2\\pi}e^{-\\frac{y^2}{4}}\\cdot e^{-(x-\\frac y2)^2}$。对 $x$ 积分时 $\\int_{-\\infty}^{+\\infty}e^{-(x-\\frac y2)^2}\\mathrm{d}x=\\sqrt{\\pi}$，故 $f_Y(y)=\\frac{\\sqrt{\\pi}}{2\\pi}e^{-\\frac{y^2}{4}}=\\frac{1}{\\sqrt{2\\pi}\\cdot\\sqrt2}e^{-\\frac{y^2}{2\\cdot 2}}\\implies Y\\sim N(0,2)$！（也可用第 6 讲亚当/夏娃或正态分解 $Y=X+Z,\\;Z\\sim N(0,1)\\perp X$ 一行秒出 $Y\\sim N(0,2)$！）"
+        }
+      ],
+      "source": {
+        "book": "27 方浩强化 & 27 张宇概率9讲",
+        "printedPage": "方浩 P.68-69 例题 18, 例题 19 / 9讲 P.30-31",
+        "pdfPage": 73,
+        "itemRef": "方浩例题18与19 二维正态配方求常数与边缘条件"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_biv_cond_normal",
+        "verified": true
+      },
+      "finalAnswer": "(1) $A=\\frac{1}{\\pi},\\;f_{Y\\mid X}(y\\mid x)=\\frac{1}{\\sqrt{\\pi}}e^{-(y-x)^2}$；(2) $f(x,y)=\\frac{1}{2\\pi}e^{-(x^2-xy+y^2/2)},\\;Y\\sim N(0,2)$。",
+      "takeaway": "对比速读公式验证例题 18：$Q=2x^2+y^2-2xy\\implies a=2,b=1,c=-2$，故 $A=\\frac{\\sqrt{4ab-c^2}}{2\\pi}=\\frac{\\sqrt{8-4}}{2\\pi}=\\frac{1}{\\pi}$，$\\rho=-\\frac{-2}{2\\sqrt2}=\\frac{\\sqrt2}{2}$，完全吻合！"
+    },
+    {
+      "id": "m1-pr04-e-21",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、一维正态 vs 二维正态概念全辨析",
+      "title": "方浩例题 20 & 例题 21：独立正态线性反求 μ + 正态四命题挑错",
+      "problem": "(1)（例题 20）$X,Y$ 独立同服从 $N(\\mu,1)$，若 $P\\{X+2Y\\le 1\\}=1-\\Phi(\\sqrt5)$，求 $\\mu$；(2)（例题 21）判断以下 4 命题错误个数：① $X,Y$ 分别正态 $\\implies X+Y$ 正态；② $X,Y$ 分别正态且独立 $\\implies X+Y$ 正态；③ $(X,Y)$ 二维正态 $\\implies X+Y$ 正态；④ $(X,Y)$ 二维正态，仅当 $X,Y$ 独立时 $X+Y$ 正态。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "(1) 写出 $X+2Y\\sim N(3\\mu,5)$ 后利用 $1-\\Phi(\\sqrt5)=\\Phi(-\\sqrt5)$ 对比标准化分位点；(2) 牢记二维正态核心架构图：**独立一维正态 $\\implies$ 二维正态 $\\implies$ 一切线性组合正态**！"
+        },
+        {
+          "stepTitle": "步骤 1：例题 20 标准化解方程",
+          "detail": "$X+2Y\\sim N(3\\mu,1^2+2^2)=N(3\\mu,5)$，故 $\\Phi\\!\\left(\\frac{1-3\\mu}{\\sqrt5}\\right)=1-\\Phi(\\sqrt5)=\\Phi(-\\sqrt5)\\implies \\frac{1-3\\mu}{\\sqrt5}=-\\sqrt5\\implies 1-3\\mu=-5\\implies\\mu=2$。"
+        },
+        {
+          "stepTitle": "步骤 2：例题 21 逐条判正误",
+          "detail": "① 错（仅知边缘正态推不出联合正态，反例见基础习题 3.6 或构造 $Y=\\pm X$）；② 对（独立正态联合成 $\\rho=0$ 二维正态，线性组合正态）；③ 对（二维正态性质）；④ 错（二维正态无论 $\\rho$ 是否为 $0$，其线性组合 $X+Y$ 均正态！）。共 2 个错误！"
+        }
+      ],
+      "source": {
+        "book": "27 方浩强化",
+        "printedPage": "方浩 P.70-71 例题 20, 例题 21",
+        "pdfPage": 75,
+        "itemRef": "方浩例题20与21 独立正态反求与四命题辨析"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_bivariate_normal",
+        "verified": true
+      },
+      "finalAnswer": "(1) $\\mu=2$（选 C）；(2) 错误个数为 $2$ 个（①④ 错，②③ 对，选 C）。",
+      "takeaway": "命题 ④ 是考场头号文字陷阱：「仅当独立才正态」把充分条件误说成充要条件——只要是**二维正态**，就算 $\\rho\\ne 0$，$aX+bY$ 也照样服从一维正态！"
+    },
+    {
+      "id": "m1-pr04-e-22",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、二维正态概率大小比较与独立降维",
+      "title": "方浩例题 22 & 例题 23：正态差值标准化比大小 + ρ=0 独立因式分解秒算",
+      "problem": "(1)（例题 22）$X\\sim N(1,2),\\;Y\\sim N(2,2),\\;Z\\sim N(3,7)$ 相互独立，记 $a=P\\{X<Y\\},\\;b=P\\{Y<Z\\}$，比较 $a,b$ 大小；(2)（例题 23）设 $(X,Y)\\sim N(1,0;1,1;0)$，求 $P\\{XY-Y<0\\}$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "(1) 把 $X<Y$ 移项成 $X-Y<0$，标准化比较 $\\Phi$ 的自变量（均值差相同都是 $-1$，方差越小标准化后越偏大！）；(2) 看见 $\\rho=0$ 立刻反应「$X,Y$ 相互独立」，把 $XY-Y<0$ 因式分解成 $(X-1)Y<0$，按异号拆分一秒出 $0.5$！"
+        },
+        {
+          "stepTitle": "步骤 1：例题 22 移项标准化秒比 a,b",
+          "detail": "$X-Y\\sim N(-1,4)\\implies a=P\\{X-Y<0\\}=\\Phi\\!\\left(\\frac{0-(-1)}{2}\\right)=\\Phi\\!\\left(\\frac12\\right)$；$Y-Z\\sim N(-1,9)\\implies b=P\\{Y-Z<0\\}=\\Phi\\!\\left(\\frac{0-(-1)}{3}\\right)=\\Phi\\!\\left(\\frac13\\right)$。因 $\\Phi$ 严格单增，故 $a>b$！"
+        },
+        {
+          "stepTitle": "步骤 2：例题 23 因式分解 + 对称性秒杀",
+          "detail": "由 $\\rho=0$ 知 $X\\sim N(1,1)$ 与 $Y\\sim N(0,1)$ 独立。因 $X-1\\sim N(0,1)$ 与 $Y\\sim N(0,1)$ 均关于 $0$ 对称：$P\\{(X-1)Y<0\\}=P\\{X-1>0\\}P\\{Y<0\\}+P\\{X-1<0\\}P\\{Y>0\\}=\\frac12\\cdot\\frac12+\\frac12\\cdot\\frac12=0.5$。"
+        }
+      ],
+      "source": {
+        "book": "27 方浩强化",
+        "printedPage": "方浩 P.71-72 例题 22, 例题 23",
+        "pdfPage": 76,
+        "itemRef": "方浩例题22与23 正态概率比大小与独立因式分解"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_bivariate_normal",
+        "verified": true
+      },
+      "finalAnswer": "(1) $a>b$（选 A）；(2) $0.5$。",
+      "takeaway": "注意例题 23 中 $X$ 的均值恰好是 $1$，所以 $X-1$ 关于 $0$ 对称！若题干改为 $N(2,0;1,1;0)$，则 $P\\{X>1\\}=\\Phi(1)$，但 $P\\{(X-1)Y<0\\}=\\Phi(1)\\cdot\\frac12+[1-\\Phi(1)]\\cdot\\frac12$ 竟仍恒为 $0.5$（只要有一个独立因子关于 0 对称且连续，乘积为负的概率必为 $0.5$！）。"
+    },
+    {
+      "id": "m1-pr04-e-23",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "五、层次离散泊松-二项稀化（2015 考研真题 · 含勘误补注）",
+      "title": "猪狗例 3.4（实为 2015 真题 · 含双处原书勘误）：泊松总数嵌套二项筛选（泊松稀化）",
+      "problem": "（2015 真题）某地区某时段事故总数 $N\\sim P(4)$，每起事故相互独立地以概率 $p=\\frac12$ 属于重特大事故，记重特大事故数为 $M$，一般事故数为 $K=N-M$。求：(1) 给定 $N=n$ 时 $M$ 的条件分布；(2) $M$ 的概率分布（分布律）；(3) 证明 $M$ 与 $K$ 相互独立并求 $E(MK)$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "这就是第 2 讲埋下伏笔的**泊松稀化定理（Poisson Thinning）**的完整二维真题版！利用乘法公式写出 $(M,K)$ 联合分布律 $\\frac{4^{m+k}}{(m+k)!}e^{-4}\\cdot C_{m+k}^m(\\frac12)^{m+k}$，约去 $(m+k)!$ 后立现两独立 $P(2)$ 之积！"
+        },
+        {
+          "stepTitle": "步骤 1：条件二项与联合分布律奇迹分解",
+          "detail": "(1) 给定 $N=n$ 时 $M\\mid(N=n)\\sim B(n,\\frac12)$，即 $P\\{M=m\\mid N=n\\}=C_n^m(\\frac12)^n\\;(m=0,1,\\dots,n)$。(2)-(3) 对任意非负整数 $m,k$，事件 $\\{M=m,K=k\\}=\\{N=m+k,M=m\\}$，故：$P\\{M=m,K=k\\}=P\\{N=m+k\\}P\\{M=m\\mid N=m+k\\}=\\frac{4^{m+k}}{(m+k)!}e^{-4}\\cdot\\frac{(m+k)!}{m!k!}\\left(\\frac12\\right)^{m+k}=\\left(\\frac{2^m}{m!}e^{-2}\\right)\\left(\\frac{2^k}{k!}e^{-2}\\right)$！"
+        },
+        {
+          "stepTitle": "步骤 2：同时导出两边缘分布、独立性与期望",
+          "detail": "对 $k$ 求和得 $P\\{M=m\\}=\\frac{2^m}{m!}e^{-2}\\;(m=0,1,\\dots)$，即 $M\\sim P(2)$；同理 $K\\sim P(2)$，且联合等于边缘乘积，故 **$M$ 与 $K$ 相互独立**！由此 $E(MK)=EM\\cdot EK=2\\times 2=4$。"
+        }
+      ],
+      "source": {
+        "book": "27 猪狗百宝书",
+        "printedPage": "猪狗 P.3-19 例 3.4（原书误标2025）",
+        "pdfPage": 76,
+        "itemRef": "猪狗例3.4 2015真题泊松稀化独立证明与勘误"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr04_poisson_thinning",
+        "verified": true
+      },
+      "finalAnswer": "(1) $M\\mid(N=n)\\sim B(n,\\frac12)$；(2) $M\\sim P(2)$；(3) $M,K$ 独立同服从 $P(2)$，$E(MK)=4$。",
+      "takeaway": "**跨书勘误补注②（猪狗百宝书 P.3-19 例 3.4 双重硬伤）**：① 题目标注年份误印为 `(2025)`，实为 **2015 年考研真题**；② 第 (2) 问误印为「求 $M$ 的**概率密度**」，$M\\sim P(2)$ 是**离散型**随机变量，根本没有概率密度，必须写作「**概率分布（分布律）**」！"
+    },
+    {
+      "id": "m1-pr04-s-01",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "题型总揽一：二维分布合法性、边缘与条件「三知二求一」",
+      "title": "题型一答题流水线：分布函数四检 · 边缘定限穿线 · 条件双轨区分",
+      "overview": "本讲前半部分考的是「读懂二维分布并熟练降维/升维」的硬基本功，四大固定入口全靠结构化流水线稳拿满分：",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化",
+        "printedPage": "基础 P.62-75 / 9讲 P.29-35 / 方浩 P.52-65",
+        "pdfPage": 40,
+        "itemRef": "第4讲题型一 联合边缘条件答题流水线"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "patterns": [
+        {
+          "typeName": "判二维分布函数合法性",
+          "triggers": "题型总揽一：二维分布合法性、边缘与条件「三知二求一」",
+          "method": "先看是否可拆成合法一维 CDF 乘积（是则直接过关）；再查边界极限 $F(-\\infty,y)=F(x,-\\infty)=0,\\;F(+\\infty,+\\infty)=1$、单调、右连续；最后必验**矩形非负性** $\\Delta=F(x_2,y_2)-F(x_1,y_2)-F(x_2,y_1)+F(x_1,y_1)\\ge 0$（斜线阶跃函数必败于此）。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "求边缘分布（降维）",
+          "triggers": "题型总揽一：二维分布合法性、边缘与条件「三知二求一」",
+          "method": "离散型按行求和得 $p_{i\\cdot}$、按列求和得 $p_{\\cdot j}$；连续型用张宇口诀「**求谁不积谁，不积先定限，限内画条线，先交写下限，后交写上限**」，有折点务必分段写出并核对最终积分 $=1$。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "层次建模（升维「三知二求一」）",
+          "triggers": "题型总揽一：二维分布合法性、边缘与条件「三知二求一」",
+          "method": "给边缘 + 条件立刻相乘 $f(x,y)=f_X(x)f_{Y\\mid X}(y\\mid x)$（注意把两个支集条件合并成联合区域！），再对原变量积分求另一边缘。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "求条件概率双轨分流",
+          "triggers": "题型总揽一：二维分布合法性、边缘与条件「三知二求一」",
+          "method": "竖杠后是点等号「$Y=y_0$」（零概率）$\\to$ 先算条件密度 $f_{X\\mid Y}(x\\mid y_0)$ 再一维积分；竖杠后是区间不等号「$Y\\le y_0$」（正概率）$\\to$ 回退事件条件概率做二重积分除以边缘积分！",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        }
+      ],
+      "takeaway": "每次算完边缘密度或条件密度，顺手心算其全区间积分是否等于 $1$——这一步只需 3 秒，却能拦截 90% 的上下限算错或系数漏乘！"
+    },
+    {
+      "id": "m1-pr04-s-02",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "题型总揽二：独立性判别全路由与二维均匀/正态核心套路",
+      "title": "题型二答题流水线：独立性四档路由 + 二维均匀/正态速查表",
+      "overview": "独立性判定与二维正态/二维均匀是历年客观题最高频板块（2023、2024 连续登台），按题型特征直接走对应快车道：",
+      "tables": [
+        {
+          "caption": "表 P4-3 · 二维独立性判别与二维分布高频命题真伪速查表",
+          "headers": [
+            "考场高频命题 / 场景",
+            "真伪结论",
+            "核心理由或一击反例"
+          ],
+          "rows": [
+            [
+              "X,Y 分别服从一维正态 ⇒ (X,Y) 服从二维正态",
+              "假（错）",
+              "反例：$f(x,y)=\\frac{1+\\sin x\\sin y}{2\\pi}e^{-(x^2+y^2)/2}$（基础习题 3.6）"
+            ],
+            [
+              "X,Y 分别正态且独立 ⇒ (X,Y) 服从二维正态",
+              "真（对）",
+              "$f=f_Xf_Y$ 正是 $\\rho=0$ 的二维正态密度"
+            ],
+            [
+              "(X,Y) 二维正态 ⇒ aX+bY 必正态（无论 ρ 是否为 0）",
+              "真（对）",
+              "二维正态核心性质；方浩例题 21 揭露「仅当独立」为错"
+            ],
+            [
+              "(X,Y) 在圆盘上均匀 ⇒ X,Y 边缘均匀",
+              "假（错）",
+              "边缘密度 $\\frac{2}{\\pi r^2}\\sqrt{r^2-x^2}$ 非均匀，但条件分布 $Y\\mid x$ 是均匀的"
+            ],
+            [
+              "X,Y 独立 ⇒ U=g(X,Y), V=h(X,Y) 必独立",
+              "假（错）",
+              "共用变量会破坏独立（如 $U=X+Y,V=2X$）；唯有不重叠分组才保独立"
+            ],
+            [
+              "X,Y 不独立 ⇒ U=g(X,Y), V=h(X,Y) 必不独立",
+              "假（错）",
+              "反例：方浩例 6 $f=\\frac{2}{(1+x+y)^3}$ 下 $X+Y$ 与 $Y/X$ 竟相互独立！"
+            ]
+          ]
+        }
+      ],
+      "source": {
+        "book": "27 张宇概率9讲 & 27 方浩强化 & 27 版概率论全总结",
+        "printedPage": "9讲 P.30-35 / 方浩 P.66-72 / 全总结 P.9-10",
+        "pdfPage": 41,
+        "itemRef": "第4讲题型二 独立性与二维正态均匀速查"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "patterns": [
+        {
+          "typeName": "判独立四档快招",
+          "triggers": "题型总揽二：独立性判别全路由与二维均匀/正态核心套路",
+          "method": "① 离散表 $\\to$ 查矩阵秩 $r(P)=1$（行行成比例，见非零边缘下的零格秒判不独立）；② 连续密度 $\\to$ 查支集是否为轴平行矩形且 $f=g(x)h(y)$（圆盘/三角/抛物带秒判不独立）；③ 已知协方差 $\\to$ $\\operatorname{Cov}\\ne 0$ 直接秒杀「不独立」；④ 抽象变量证不独立 $\\to$ 构造包含/互斥事件反例点 $(x_0,y_0)$。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "二维均匀分布铁律",
+          "triggers": "题型总揽二：独立性判别全路由与二维均匀/正态核心套路",
+          "method": "只求面积比 $S_{G\\cap D}/S_D$；牢记「矩形独立、圆盘/三角边缘不匀但切片条件匀」。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "二维正态分布三板斧",
+          "triggers": "题型总揽二：独立性判别全路由与二维均匀/正态核心套路",
+          "method": "① 给具体二次型密度 $\\to$ 用配方速读 $\\rho=-\\frac{c}{2\\sqrt{ab}},\\;k_0=\\frac{\\sqrt{4ab-c^2}}{2\\pi}$ 或直接配平方凑一维正态积；② 给线性组合比概率 $\\to$ 算均值方差后标准化比 $\\Phi$ 自变量；③ 问一维/二维正态逻辑 $\\to$ 死守「独立一维正态 $\\Rightarrow$ 二维正态 $\\Rightarrow$ 任意线性组合正态（不需独立！）」。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        }
+      ],
+      "takeaway": "结合本讲核心模型与速查表反复对照练习，确保公式选型、定限与边界自检一步到位。"
+    },
+    {
+      "id": "m1-pr04-s-03",
+      "kind": "summary",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "考场防坑清单与本讲跨书勘误汇总",
+      "title": "第 4 讲五大高危失分陷阱与五书实锤勘误复盘",
+      "overview": "汇总本讲跨五书比对中发现的 2 处实锤印刷硬伤与 5 大考场易错暗礁，冲刺前 3 分钟必扫一遍：",
+      "source": {
+        "book": "五书跨校勘误审计",
+        "printedPage": "基础 P.69 / 猪狗 P.3-19",
+        "pdfPage": 75,
+        "itemRef": "第4讲防坑清单与跨书勘误汇总"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "patterns": [
+        {
+          "typeName": "失分点① 混淆生存概率与补事件",
+          "triggers": "考场防坑清单与本讲跨书勘误汇总",
+          "method": "$P\\{X>x,Y>y\\}=1-F_X(x)-F_Y(y)+F(x,y)\\ne 1-F(x,y)$。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "失分点② 混淆「两事件独立」与「两变量独立」",
+          "triggers": "考场防坑清单与本讲跨书勘误汇总",
+          "method": "如基础例 3.2、强化例 4.1 仅给定某两事件独立，必须按事件交集列方程，绝不能直接令 $p_{ij}=p_{i\\cdot}p_{\\cdot j}$！",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "失分点③ 二维正态交叉项负号搞反",
+          "triggers": "考场防坑清单与本讲跨书勘误汇总",
+          "method": "总负号提在括号外 $e^{-(ax^2+by^2+cxy)}$ 时 $\\rho=-\\frac{c}{2\\sqrt{ab}}$；若 $e^{-2x^2+2xy-y^2}$ 则 $c=-2$，故 $\\rho>0$！",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "失分点④ 零概率点条件误用二重积分 / 正概率区间条件误用条件密度",
+          "triggers": "考场防坑清单与本讲跨书勘误汇总",
+          "method": "见等号切线算条件密度，见不等号框面算二重积分比值。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "本讲两处跨书实锤勘误留档",
+          "triggers": "考场防坑清单与本讲跨书勘误汇总",
+          "method": "① **基础 30 讲 P.69 注 2 表格**：条件分布函数误将固定条件写为积分哑元 $\\frac{f(u,v)}{f_X(u)}$（应为 $\\frac{f(x,v)}{f_X(x)}$）；② **猪狗百宝书 P.3-19 例 3.4**：年份误标 `(2025)`（实为 2015 真题），且第 (2) 问将离散泊松 $M$ 误印「求概率密度」（应为概率分布/分布律）。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        }
+      ],
+      "takeaway": "结合本讲核心模型与速查表反复对照练习，确保公式选型、定限与边界自检一步到位。"
+    }
+  ]
+}

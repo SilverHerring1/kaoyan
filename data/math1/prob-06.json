@@ -1,0 +1,1621 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "prob-06",
+  "title": "概率 · 第 6 讲　数字特征（含条件数字特征）",
+  "sourceMeta": "深度融合《27 张宇基础30讲·概率》第4讲（P.103–124）+《27 张宇概率9讲》第6讲及附录《条件数字特征》（P.47–56, 82–85 全 10 例）+《27 方浩概率强化》第4章（P.91–124 例1–41）+《27 猪狗概率统计百宝书》第3章（含 2013–2026 真题）+《27 版概率论全总结》P.12–13，100% 逐页核图与 SymPy 验算",
+  "basicRequirements": {
+    "master": "熟练掌握数学期望（绝对收敛前提与线性无条件拆）、方差平方差与九大必背母分布期望方差、协方差双线性展开与相关系数性质（|ρ|=1 充要与不相关五等价链）、独立性与不相关性两步判别法及切比雪夫不等式。",
+    "understand": "理解曹冲称象示性分解法、高斯配方调整法、三变量方差和等式不推两两不相关的反例边界、样本均值偏差四金式与正交镜像零协方差，以及不相关可逆两大特例岛（二维联合正态 + 任意两点/0-1分布对）与混合二维正态反例。",
+    "familiar": "熟悉亚当全期望公式、夏娃全方差正交分解、协方差投影推论 Cov(X,Y)=Cov(X,E(Y|X)) 与 MMSE 最优均方预测在 2022/2024 真题及复合随机和中的降维秒杀，以及本讲跨书 3 处勘误与严谨补注（方浩 P.108/115/120 与概率9讲 P.55）。"
+  },
+  "items": [
+    {
+      "id": "m1-pr06-f-01",
+      "kind": "formula",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、数学期望（一维/二维随机变量及其函数）与线性性质",
+      "title": "数学期望定义（绝对收敛条件）、函数期望无须先求分布定理与四大性质",
+      "formulaLatex": "$$\\begin{aligned} &\\text{离散型：}EX=\\sum_{i}x_i p_i\\;\\;(\\sum|x_i|p_i<\\infty);\\qquad E[g(X)]=\\sum_{i}g(x_i)p_i\\\\ &\\text{连续型：}EX=\\int_{-\\infty}^{+\\infty}xf(x)\\,\\mathrm{d}x\\;\\;(\\int|x|f(x)\\mathrm{d}x<\\infty);\\qquad E[g(X)]=\\int_{-\\infty}^{+\\infty}g(x)f(x)\\,\\mathrm{d}x\\\\ &\\text{二维函数：}E[g(X,Y)]=\\begin{cases}\\sum_i\\sum_j g(x_i,y_j)p_{ij},&\\text{离散型}\\\\\\iint_{\\mathbb{R}^2}g(x,y)f(x,y)\\,\\mathrm{d}x\\mathrm{d}y,&\\text{连续型}\\end{cases}\\\\ &\\text{四大性质：}\\text{① }Ec=c,\\;E(EX)=EX\\quad\\text{② 线性（无须独立！）：}E\\!\\left(\\sum_{i=1}^{n}a_i X_i\\right)=\\sum_{i=1}^{n}a_i EX_i\\\\ &\\quad\\text{③ }X,Y\\text{ 独立}\\implies E(XY)=EX\\cdot EY\\quad\\text{④ 若 }X\\ge 0\\text{ 连续：}EX=\\int_0^{+\\infty}[1-F(x)]\\,\\mathrm{d}x\\end{aligned}$$",
+      "conditions": "期望存在的充要条件是级数或广义积分**绝对收敛**！反例：标准柯西分布 $f(x)=\\frac{1}{\\pi(1+x^2)}$ 虽然关于原点奇偶对称，但 $\\int_0^{+\\infty}\\frac{x}{\\pi(1+x^2)}\\mathrm{d}x=+\\infty$，故 **$EX$ 不存在**（绝非 $0$！）。",
+      "pitfalls": "① 绝对收敛红线：看到奇函数 $\\int_{-\\infty}^{+\\infty}xf(x)\\mathrm{d}x$ 切勿盲目写 $0$！必须先目测尾部衰减阶数（如 $|x|f(x)\\sim 1/|x|$ 的柯西分布发散，而指数/高斯衰减均绝对收敛）。 ② 乘积公式 $E(XY)=EX\\cdot EY$ 并非只对独立成立，它等价于 $X,Y$ **不相关**（独立只是充分条件）。",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 256\" width=\"100%\" style=\"max-width:640px;height:auto;display:block;margin:8px auto;\" font-family=\"system-ui,-apple-system,'Segoe UI',sans-serif\"><title>随机变量四大数字特征联动枢纽与不相关五等价链</title><rect x=\"2\" y=\"2\" width=\"636\" height=\"252\" rx=\"12\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/><text x=\"320\" y=\"22\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">数字特征四核联动全景（期望 · 方差 · 协方差 · 相关系数）与五等价链</text><rect x=\"14\" y=\"34\" width=\"300\" height=\"76\" rx=\"8\" fill=\"#eff6ff\" stroke=\"#3b82f6\" stroke-width=\"1.4\"/><text x=\"26\" y=\"52\" font-size=\"11.2\" font-weight=\"700\" fill=\"#1d4ed8\">① 数学期望 EX（中心位置 · 绝对收敛）</text><text x=\"26\" y=\"70\" font-size=\"9.8\" fill=\"#1e3a8a\">线性无条件拆：E(aX+bY) = aEX + bEY（不需独立！）</text><text x=\"26\" y=\"86\" font-size=\"9.5\" fill=\"#475569\">黄金技巧：曹冲称象拆示性变量；最小均方常数 c = EX</text><text x=\"26\" y=\"101\" font-size=\"9.2\" fill=\"#dc2626\">注意：柯西分布 1/[π(1+x²)] 积分发散，EX 不存在！</text><rect x=\"326\" y=\"34\" width=\"300\" height=\"76\" rx=\"8\" fill=\"#ecfdf5\" stroke=\"#10b981\" stroke-width=\"1.4\"/><text x=\"338\" y=\"52\" font-size=\"11.2\" font-weight=\"700\" fill=\"#047857\">② 方差 DX（离散波动 · 必非负）</text><text x=\"338\" y=\"70\" font-size=\"9.8\" fill=\"#065f46\">计算核心：DX = E(X²) - (EX)²  ⇒  E(X²) = DX + (EX)²</text><text x=\"338\" y=\"86\" font-size=\"9.5\" fill=\"#475569\">缩放平移：D(aX+b) = a²DX；一般和差 D(X±Y)=DX+DY±2Cov</text><text x=\"338\" y=\"101\" font-size=\"9.2\" fill=\"#047857\">独立积方差：D(XY) = DX·DY + (EX)²DY + (EY)²DX ≥ DX·DY</text><rect x=\"14\" y=\"118\" width=\"300\" height=\"72\" rx=\"8\" fill=\"#f5f3ff\" stroke=\"#8b5cf6\" stroke-width=\"1.4\"/><text x=\"26\" y=\"136\" font-size=\"11.2\" font-weight=\"700\" fill=\"#6d28d9\">③ 协方差 Cov(X,Y)（双线性降维神器）</text><text x=\"26\" y=\"154\" font-size=\"9.8\" fill=\"#5b21b6\">Cov(X,Y) = E(XY) - EX·EY；Cov(X,X) = DX；Cov(X,c)=0</text><text x=\"26\" y=\"170\" font-size=\"9.5\" fill=\"#475569\">双线性：Cov(Σa_i X_i, Σb_j Y_j) = ΣΣ a_i b_j Cov(X_i, Y_j)</text><text x=\"26\" y=\"183\" font-size=\"9.2\" fill=\"#6d28d9\">独立⇒Cov=0；条件快招：Cov(X,Y) = Cov(X, E(Y|X))</text><rect x=\"326\" y=\"118\" width=\"300\" height=\"72\" rx=\"8\" fill=\"#fffbeb\" stroke=\"#f59e0b\" stroke-width=\"1.4\"/><text x=\"338\" y=\"136\" font-size=\"11.2\" font-weight=\"700\" fill=\"#b45309\">④ 相关系数 ρ_XY（无量纲线性相关度）</text><text x=\"338\" y=\"154\" font-size=\"9.8\" fill=\"#92400e\">ρ_XY = Cov(X,Y) / (√DX·√DY) = Cov(X*, Y*) ∈ [-1, 1]</text><text x=\"338\" y=\"170\" font-size=\"9.5\" fill=\"#475569\">仿射伸缩：ρ_(aX+b, cY+d) = sgn(ac)·ρ_XY（只看正负号！）</text><text x=\"338\" y=\"183\" font-size=\"9.2\" fill=\"#b45309\">|ρ|=1 ⇔ P(Y=aX+b)=1（几乎处处线性，允许零测集例外）</text><rect x=\"14\" y=\"198\" width=\"612\" height=\"44\" rx=\"7\" fill=\"#1e293b\"/><text x=\"320\" y=\"216\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#fde68a\">不相关五等价链（二元）：ρ=0 ⇔ Cov(X,Y)=0 ⇔ E(XY)=EX·EY ⇔ D(X+Y)=DX+DY ⇔ D(X-Y)=DX+DY</text><text x=\"320\" y=\"233\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#cbd5e1\">切记三元防坑：D(X₁+X₂+X₃)=ΣDX_i 仅推得三对协方差之和为 0，推不出两两不相关！（方浩例题 6 反例）</text></svg>",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 版概率论全总结",
+        "printedPage": "基础 P.103-104,109-110 / 9讲 P.47-49 / 全总结 P.12",
+        "pdfPage": 109,
+        "itemRef": "数学期望定义与四大核心性质"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "数学期望 $EX$ 是分布的「概率加权重心」。两大实战武器：**① 无须求 $Y=g(X,Y)$ 分布即可直接算 $E[g(X,Y)]$**（省掉繁琐卷积！）；**② 线性性无条件打开**（曹冲称象分解法：将复杂计数变量拆为 $0$-$1$ 示性变量之和 $X=\\sum I_k$，即使各 $I_k$ 强相依，期望仍直接相加！）。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「期望线性无条件拆，乘积独立才可分；算 $E[g(X)]$ 别先费力求分布，直接代入加权积！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr06-f-02",
+      "kind": "formula",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、方差、标准差、标准化与最小均方性质",
+      "title": "方差定义、平方差计算式、六大性质与九大常见分布期望方差总表",
+      "formulaLatex": "$$\\begin{aligned} &DX=E[(X-EX)^2]=E(X^2)-(EX)^2\\ge 0\\implies E(X^2)=DX+(EX)^2\\\\ &\\text{标准差 }\\sigma(X)=\\sqrt{DX};\\qquad\\text{标准化 }X^*=\\frac{X-EX}{\\sqrt{DX}}\\;\\;(EX^*=0,\\;DX^*=1)\\\\ &\\text{核心性质：}\\text{① }Dc=0;\\quad DX=0\\iff P\\{X=EX\\}=1\\quad\\text{② }D(aX+b)=a^2 DX\\\\ &\\quad\\text{③ 一般和差：}D(X\\pm Y)=DX+DY\\pm 2\\operatorname{Cov}(X,Y),\\quad D\\!\\left(\\sum_{i=1}^n a_i X_i\\right)=\\sum_{i=1}^n a_i^2 DX_i+2\\sum_{1\\le i<j\\le n}a_i a_j\\operatorname{Cov}(X_i,X_j)\\\\ &\\quad\\text{④ 独立乘积方差：}X\\perp Y\\implies D(XY)=DX\\cdot DY+(EX)^2 DY+(EY)^2 DX\\ge DX\\cdot DY\\\\ &\\quad\\text{⑤ 最小均方常数：}\\forall c\\in\\mathbb{R},\\;E[(X-c)^2]=DX+(EX-c)^2\\ge DX\\;\\;(\\text{当且仅当 }c=EX\\text{ 取等})\\end{aligned}$$",
+      "conditions": "方差存在要求二阶矩 $E(X^2)<\\infty$；由柯西-施瓦茨不等式，二阶矩有限自动保证一阶矩存在。",
+      "pitfalls": "① 绝对禁止把 $D(X-Y)$ 写成 $DX-DY$！独立时 $D(X-Y)=DX+DY$（减号平方变正号），一般情形是 $DX+DY-2\\operatorname{Cov}(X,Y)$！ ② 由 $D(X)=0$ 只能推出「$X$ 几乎处处等于常数 $c$（$P\\{X=c\\}=1$）」，不能说 $X$ 处处恒等于 $c$（允许零概率例外点）。",
+      "tables": [
+        {
+          "caption": "表 P6-1 · 考研九大必背分布期望、方差与二阶矩速查总表",
+          "headers": [
+            "分布名称与记号",
+            "数学期望 EX",
+            "方差 DX",
+            "常用 E(X²)=DX+(EX)² 与记忆要点"
+          ],
+          "rows": [
+            [
+              "0-1 分布 B(1,p)",
+              "$p$",
+              "$p(1-p)$",
+              "$E(X^k)=p\\;(k\\ge 1)$；$DX\\le\\frac14$"
+            ],
+            [
+              "二项分布 B(n,p)",
+              "$np$",
+              "$np(1-p)$",
+              "拆成 $n$ 个独立 $B(1,p)$ 之和秒得"
+            ],
+            [
+              "泊松分布 P(λ)",
+              "$\\lambda$",
+              "$\\lambda$",
+              "$EX=DX=\\lambda$；$E[X(X-1)]=\\lambda^2$"
+            ],
+            [
+              "几何分布 G(p)（首次成功）",
+              "$\\frac{1}{p}$",
+              "$\\frac{1-p}{p^2}$",
+              "记清 $k=1,2,\\dots$；若 $Y=X-1$ 则 $EY=\\frac{1-p}{p}$，$DY$ 不变"
+            ],
+            [
+              "超几何分布 H(N,M,n)",
+              "$n\\frac{M}{N}$",
+              "$n\\frac{M}{N}\\left(1-\\frac{M}{N}\\right)\\frac{N-n}{N-1}$",
+              "有限总体不放回修正因子 $\\frac{N-n}{N-1}$"
+            ],
+            [
+              "均匀分布 U(a,b)",
+              "$\\frac{a+b}{2}$",
+              "$\\frac{(b-a)^2}{12}$",
+              "中点为均值，区间长平方除以 12"
+            ],
+            [
+              "指数分布 E(λ)",
+              "$\\frac{1}{\\lambda}$",
+              "$\\frac{1}{\\lambda^2}$",
+              "$E(X^n)=\\frac{n!}{\\lambda^n}$；注意部分题用均值 $\\theta=1/\\lambda$ 参数化"
+            ],
+            [
+              "正态分布 N(μ,σ²)",
+              "$\\mu$",
+              "$\\sigma^2$",
+              "奇数阶中心矩全 0；四阶中心矩 $3\\sigma^4$"
+            ],
+            [
+              "卡方分布 χ²(n) / 伽马 Γ(α,λ)",
+              "$n$ / $\\frac{\\alpha}{\\lambda}$",
+              "$2n$ / $\\frac{\\alpha}{\\lambda^2}$",
+              "$\\chi^2(n)=\\Gamma(\\frac n2,\\frac12)$，均值 $n$ 方差 $2n$"
+            ]
+          ]
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化 & 27 版概率论全总结",
+        "printedPage": "基础 P.105-106 / 9讲 P.50-52 / 方浩 P.98-100 / 全总结 P.12-13",
+        "pdfPage": 111,
+        "itemRef": "方差定义性质与九大分布期望方差表"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_basic_moments",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "方差刻画随机变量围绕期望 $EX$ 的「离散波动幅度」。计算几乎全靠**平方差神式 $DX=E(X^2)-(EX)^2$**，反用 $E(X^2)=DX+(EX)^2$ 则是高频降维利器（遇到 $E[X(X-1)]$ 凑阶乘矩更是泊松/二项神技！）。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「方差等于平方期望减期望平方；加常数不变、乘常数平方；拆和方差千万别漏交叉两倍协方差！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr06-f-03",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "三、协方差、相关系数与各阶矩",
+      "title": "协方差双线性展开、相关系数性质（|ρ|=1 充要）与原点/中心/混合矩",
+      "formulaLatex": "$$\\begin{aligned} &\\operatorname{Cov}(X,Y)=E[(X-EX)(Y-EY)]=E(XY)-EX\\cdot EY,\\qquad \\operatorname{Cov}(X,X)=DX,\\quad \\operatorname{Cov}(X,c)=0\\\\ &\\text{双线性展开：}\\operatorname{Cov}\\!\\left(\\sum_{i=1}^m a_i X_i,\\;\\sum_{j=1}^n b_j Y_j\\right)=\\sum_{i=1}^m\\sum_{j=1}^n a_i b_j\\operatorname{Cov}(X_i,Y_j)\\\\ &\\text{相关系数：}\\rho_{XY}=\\frac{\\operatorname{Cov}(X,Y)}{\\sqrt{DX}\\sqrt{DY}}=\\operatorname{Cov}(X^*,Y^*),\\qquad |\\rho_{XY}|\\le 1\\\\ &\\text{仿射伸缩不变性：}\\rho_{aX+b,\\,cY+d}=\\operatorname{sgn}(ac)\\,\\rho_{XY}\\quad(ac\\ne 0)\\\\ &\\text{完全线性充要：}\\rho_{XY}=1\\iff P\\{Y=aX+b\\}=1\\;(a>0);\\qquad \\rho_{XY}=-1\\iff P\\{Y=aX+b\\}=1\\;(a<0)\\\\ &\\text{各阶矩：}k\\text{ 阶原点矩 }\\nu_k=E(X^k),\\quad k\\text{ 阶中心矩 }\\mu_k=E[(X-EX)^k],\\quad\\text{混合矩 }E(X^k Y^l)\\end{aligned}$$",
+      "conditions": "定义 $\\rho_{XY}$ 必须满足 $0<DX<\\infty$ 且 $0<DY<\\infty$（常值随机变量方差为 0，不存在相关系数）。",
+      "pitfalls": "① **精确区分充分与充要（方浩例题 30）**：$Y=aX+b\\;(a>0)$ 只是 $\\rho_{XY}=1$ 的**充分不必要**条件！充要条件必须带概率 1：$P\\{Y=aX+b\\}=1\\;(a>0)$，或等价写成 $D(X+Y)=[\\sqrt{DX}+\\sqrt{DY}]^2$！ ② 三个秒认 $|\\rho|=1$ 的隐蔽线性关系（概率 9 讲 P.53）：① 抛 $n$ 次硬币正面数 $X$ 与反面数 $Y$（$X+Y=n\\implies\\rho=-1$）；② 单位圆周上点 $(X,Y)$ 的 $X^2$ 与 $Y^2$（$X^2+Y^2=1\\implies\\rho=-1$）；③ $\\sin^2 X$ 与 $\\cos^2 X$（和为 1 $\\implies\\rho=-1$）！",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 方浩强化",
+        "printedPage": "基础 P.110-111 / 9讲 P.52-53 / 方浩 P.106-116",
+        "pdfPage": 116,
+        "itemRef": "协方差双线性与相关系数及各阶矩"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_cov_corr_props",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "协方差把方差推广到两变量，其**双线性性**（与向量内积完全同构！）让一切线性组合的方差/协方差计算无需任何积分即可代数展开；相关系数 $\\rho_{XY}$ 则是标准化后的无量纲内积（几何上即零均值随机变量夹角的余弦 $\\cos\\theta$），专门度量**线性相关**强弱。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「协方差就是内积双线性，平移常数全归零；相关系数是夹角余弦，线性伸缩只看 $ac$ 正负号！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr06-f-04",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "四、不相关五等价命题与独立性双向辨析",
+      "title": "不相关五等价链及「独立 ⇔ 不相关」两大可逆特例岛（含跨书纠偏补注）",
+      "formulaLatex": "$$\\begin{aligned} &\\text{不相关五等价链（二元）：}\\rho_{XY}=0\\iff\\operatorname{Cov}(X,Y)=0\\iff E(XY)=EX\\cdot EY\\\\ &\\qquad\\iff D(X+Y)=DX+DY\\iff D(X-Y)=DX+DY\\\\ &\\text{一般单向蕴含：}X,Y\\text{ 相互独立（且方差存在）}\\Longrightarrow X,Y\\text{ 不相关（反之一般不成立！）}\\\\ &\\text{逆否秒杀：}X,Y\\text{ 相关（}\\operatorname{Cov}(X,Y)\\ne 0\\text{）}\\Longrightarrow X,Y\\text{ 必不独立！}\\\\ &\\text{两大可逆特例岛（独立}\\iff\\text{不相关）：}\\text{① }(X,Y)\\sim N(\\mu_1,\\mu_2;\\sigma_1^2,\\sigma_2^2;\\rho)\\quad\\text{② }X,Y\\text{ 均为两点（含 0-1）分布}\\end{aligned}$$",
+      "conditions": "两点分布可逆岛的本质是线性变换不变性：任意两点分布 $X\\in\\{a_1,a_2\\},Y\\in\\{b_1,b_2\\}$ 均可仿射归一为 $0$-$1$ 分布，而 $2\\times 2$ 联合表在给定边缘下仅有 **1 个自由度** $p_{11}$，等式 $\\operatorname{Cov}(X,Y)=0$ 恰好唯一钉死 $p_{11}=p_{1\\cdot}p_{\\cdot 1}$，等价于四格全拆乘积！",
+      "pitfalls": "**跨书严谨补注①（方浩强化 P.120 流程图 & 概率 9 讲 P.55 蓝注表述过强纠偏）**：方浩 P.120 流程图在「不相关 $\\to$ 独立」箭头上写「**仅当** $(X,Y)$ 服从二维正态分布」，概率 9 讲 P.55 蓝注亦写「**只有**在二维正态分布下，不相关才能断言独立」——两者均把充分条件说得过强！实际上**任意两个两点（0-1）分布随机变量**同样满足「不相关 $\\iff$ 相互独立」（见概率 9 讲前页 P.54 结论 ④ 与方浩 P.123-124 例题 41 亲自证出！）。",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 250\" width=\"100%\" style=\"max-width:640px;height:auto;display:block;margin:8px auto;\" font-family=\"system-ui,-apple-system,'Segoe UI',sans-serif\"><title>相互独立与不相关双向逻辑关系、两大可逆特例岛与三大经典反例图</title><defs><marker id=\"m1_pr06_in_b\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#1d4ed8\"/></marker><marker id=\"m1_pr06_in_g\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#059669\"/></marker></defs><rect x=\"2\" y=\"2\" width=\"636\" height=\"246\" rx=\"12\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/><text x=\"320\" y=\"22\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">高频概念大辨析：相互独立 ↔ 不相关（含两大可逆岛 &amp; 三大必背反例）</text><rect x=\"18\" y=\"42\" width=\"152\" height=\"92\" rx=\"9\" fill=\"#dbeafe\" stroke=\"#2563eb\" stroke-width=\"1.8\"/><text x=\"94\" y=\"66\" text-anchor=\"middle\" font-size=\"12.5\" font-weight=\"700\" fill=\"#1e3a8a\">X, Y 相互独立</text><text x=\"94\" y=\"86\" text-anchor=\"middle\" font-size=\"9.8\" fill=\"#1d4ed8\">一切函数关系皆无</text><text x=\"94\" y=\"103\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#1e40af\">F(x,y) = F_X(x)F_Y(y)</text><text x=\"94\" y=\"121\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#475569\">（由完整分布判定）</text><rect x=\"252\" y=\"42\" width=\"152\" height=\"92\" rx=\"9\" fill=\"#ede9fe\" stroke=\"#7c3aed\" stroke-width=\"1.8\"/><text x=\"328\" y=\"66\" text-anchor=\"middle\" font-size=\"12.5\" font-weight=\"700\" fill=\"#5b21b6\">X, Y 不相关</text><text x=\"328\" y=\"86\" text-anchor=\"middle\" font-size=\"9.8\" fill=\"#6d28d9\">仅无线形相关（可非线性）</text><text x=\"328\" y=\"103\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#5b21b6\">Cov(X,Y) = 0  (ρ = 0)</text><text x=\"328\" y=\"121\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#475569\">（由二阶数字特征判定）</text><line x1=\"170\" y1=\"68\" x2=\"248\" y2=\"68\" stroke=\"#1d4ed8\" stroke-width=\"2.2\" marker-end=\"url(#m1_pr06_in_b)\"/><text x=\"209\" y=\"59\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#1d4ed8\">恒成立</text><text x=\"209\" y=\"81\" text-anchor=\"middle\" font-size=\"8.5\" fill=\"#475569\">(方差存在)</text><line x1=\"252\" y1=\"110\" x2=\"174\" y2=\"110\" stroke=\"#059669\" stroke-width=\"2\" stroke-dasharray=\"5 3\" marker-end=\"url(#m1_pr06_in_g)\"/><text x=\"213\" y=\"104\" text-anchor=\"middle\" font-size=\"9.2\" font-weight=\"700\" fill=\"#047857\">一般不成立!</text><text x=\"213\" y=\"124\" text-anchor=\"middle\" font-size=\"8.5\" fill=\"#059669\">两大特例可逆</text><rect x=\"18\" y=\"148\" width=\"386\" height=\"86\" rx=\"8\" fill=\"#ecfdf5\" stroke=\"#10b981\" stroke-width=\"1.4\"/><text x=\"30\" y=\"166\" font-size=\"10.8\" font-weight=\"700\" fill=\"#065f46\">两大可逆「独立 ⇔ 不相关」特例岛（纠偏：绝非仅二维正态！）</text><text x=\"30\" y=\"185\" font-size=\"9.8\" font-weight=\"700\" fill=\"#047857\">岛① 二维正态分布 (X,Y) ~ N(μ₁,μ₂;σ₁²,σ₂²;ρ)（注意：须联合正态，非仅边缘正态！）</text><text x=\"30\" y=\"203\" font-size=\"9.8\" font-weight=\"700\" fill=\"#047857\">岛② 任意两个「两点 / 0-1 分布」变量（自由度=1，p₁₁=p₁·p·₁ 等价于 Cov=0！）</text><text x=\"30\" y=\"222\" font-size=\"9.2\" fill=\"#475569\">实战策略：判独立先算 Cov；若 Cov≠0 直接秒杀「相关⇒不独立」，若 Cov=0 再查分布。</text><rect x=\"418\" y=\"42\" width=\"208\" height=\"192\" rx=\"8\" fill=\"#fff1f2\" stroke=\"#f43f5e\" stroke-width=\"1.4\"/><text x=\"522\" y=\"61\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#be123c\">三大「不相关却不独立」反例</text><rect x=\"428\" y=\"72\" width=\"188\" height=\"46\" rx=\"5\" fill=\"#ffffff\" stroke=\"#fecdd3\"/><text x=\"436\" y=\"88\" font-size=\"9.5\" font-weight=\"700\" fill=\"#9f1239\">① 对称偶函数型（基础例4.10）</text><text x=\"436\" y=\"103\" font-size=\"9\" fill=\"#475569\">X 对称于 0，Y=X² 或 |X| 或 cosX</text><text x=\"436\" y=\"114\" font-size=\"8.8\" fill=\"#be123c\">奇函数积分⇒Cov=0，明显函数相依</text><rect x=\"428\" y=\"124\" width=\"188\" height=\"46\" rx=\"5\" fill=\"#ffffff\" stroke=\"#fecdd3\"/><text x=\"436\" y=\"140\" font-size=\"9.5\" font-weight=\"700\" fill=\"#9f1239\">② 圆盘 / 菱形均匀分布</text><text x=\"436\" y=\"155\" font-size=\"9\" fill=\"#475569\">对称性⇒EX=EY=E(XY)=0</text><text x=\"436\" y=\"166\" font-size=\"8.8\" fill=\"#be123c\">非矩形支集⇒必不独立</text><rect x=\"428\" y=\"176\" width=\"188\" height=\"48\" rx=\"5\" fill=\"#ffffff\" stroke=\"#fecdd3\"/><text x=\"436\" y=\"192\" font-size=\"9.5\" font-weight=\"700\" fill=\"#9f1239\">③ 混合正态 &amp; 随机变号（2017真题）</text><text x=\"436\" y=\"207\" font-size=\"9\" fill=\"#475569\">½(φ_ρ + φ_-ρ) 或 Z=XY (Y=±1等概)</text><text x=\"436\" y=\"218\" font-size=\"8.8\" fill=\"#be123c\">边缘竟皆正态且 ρ=0，但联合非正态!</text></svg>",
+      "source": {
+        "book": "27 张宇概率9讲/基础30讲 & 27 方浩强化",
+        "printedPage": "9讲 P.53-55 / 基础 P.113-114 / 方浩 P.120-124",
+        "pdfPage": 64,
+        "itemRef": "不相关五等价链与独立性双向辨析"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_indep_vs_uncorr",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "独立性刻画「毫无任何关系」（由联合分布决定），不相关性仅刻画「无**线性**关系」（由二阶矩决定），因此独立远强于不相关。考场判别标准两步走：**先算 $\\operatorname{Cov}(X,Y)$**——只要非零立刻秒判「相关且不独立」；若为零则属「不相关」，再检查是否落入**两大可逆岛（二维正态 / 两点分布对）**或通过分布/反例核查独立性！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「独立必不相关，相关必不独立；不相关能否回推独立？认准两大岛：二维联合正态 + 任意两点分布！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr06-f-05",
+      "kind": "formula",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "五、切比雪夫不等式",
+      "title": "切比雪夫不等式双形态（概率上下界）与马尔可夫不等式拓展",
+      "formulaLatex": "$$\\begin{aligned} &\\text{切比雪夫不等式（}EX,DX\\text{ 存在，}\\forall\\varepsilon>0\\text{）：}\\\\ &\\qquad P\\{|X-EX|\\ge\\varepsilon\\}\\le\\frac{DX}{\\varepsilon^2}\\qquad\\Longleftrightarrow\\qquad P\\{|X-EX|<\\varepsilon\\}\\ge 1-\\frac{DX}{\\varepsilon^2}\\\\ &\\text{特例 }k\\text{ 倍标准差（}\\varepsilon=k\\sigma\\text{）：}P\\{|X-EX|\\ge k\\sigma\\}\\le\\frac{1}{k^2}\\\\ &\\text{马尔可夫不等式（}X\\ge 0,\\;EX<\\infty,\\;\\forall a>0\\text{）：}P\\{X\\ge a\\}\\le\\frac{EX}{a}\\end{aligned}$$",
+      "conditions": "只需 $EX,DX$ 存在且 $\\varepsilon>0$，不要求 $X$ 为连续型或特定分布。使用时务必先确认绝对值内减掉的正是**该随机变量的真实期望**（如基础例 4.11 中 $U=X-Y$ 恰好 $EU=0$，才直接套 $|X-Y|\\ge 6$！）。",
+      "pitfalls": "① 若题目给 $P\\{|X-a|\\ge\\varepsilon\\}$ 而 $a\\ne EX$，不能直接套 $\\frac{DX}{\\varepsilon^2}$！应先化成 $|X-EX|$（或用推广式 $P\\{|X-a|\\ge\\varepsilon\\}\\le\\frac{E[(X-a)^2]}{\\varepsilon^2}=\\frac{DX+(EX-a)^2}{\\varepsilon^2}$）！ ② 当 $\\frac{DX}{\\varepsilon^2}\\ge 1$ 时不等式虽平凡成立但无信息量（概率本就不超 1），反求 $\\varepsilon$ 范围时务必检查方向与取等条件。",
+      "source": {
+        "book": "27 张宇基础30讲/概率9讲 & 27 版概率论全总结",
+        "printedPage": "基础 P.114-115 / 9讲 P.55 / 全总结 P.13",
+        "pdfPage": 120,
+        "itemRef": "切比雪夫不等式与马尔可夫不等式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_chebyshev_and_life",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "切比雪夫不等式在**完全不知道 $X$ 的具体分布**、只掌握均值与方差时，给出了偏离中心概率的万能上界（与落入中心邻域的万能下界），它既可直接估概率/反求 $\\varepsilon$，更是第 7 讲切比雪夫大数定律的直接证明引擎！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「大于等于上界 $\\frac{DX}{\\varepsilon^2}$，小于下界 $1-\\frac{DX}{\\varepsilon^2}$；套公式前先核对中心是不是 $EX$！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr06-f-06",
+      "kind": "formula",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、条件数字特征（概率 9 讲附录核心 · 2022/2024 真题神杀器）",
+      "title": "条件期望定义、亚当全期望定理（8 大性质）与协方差一键投影公式",
+      "formulaLatex": "$$\\begin{aligned} &\\text{条件期望：}E(X\\mid Y=y)=\\begin{cases}\\sum_i x_i P\\{X=x_i\\mid Y=y\\},&\\text{离散型}\\\\\\int_{-\\infty}^{+\\infty}x\\,f_{X\\mid Y}(x\\mid y)\\,\\mathrm{d}x,&\\text{连续型}\\end{cases}\\implies g(Y)=E(X\\mid Y)\\text{ 是 }Y\\text{ 的随机变量}\\\\ &\\text{亚当全期望公式（重期望）：}EX=E\\big[E(X\\mid Y)\\big]=\\begin{cases}\\sum_j E(X\\mid Y=y_j)P\\{Y=y_j\\}\\\\\\int_{-\\infty}^{+\\infty}E(X\\mid Y=y)f_Y(y)\\,\\mathrm{d}y\\end{cases}\\\\ &\\text{核心性质：}\\text{① 线性性}\\quad\\text{② 独立退化 }E(X\\mid Y)=EX\\quad\\text{③ 拉出已知项 }E[h(Y)X\\mid Y]=h(Y)E(X\\mid Y)\\\\ &\\quad\\text{④ 乘积降维 }E[h(Y)X]=E\\big[h(Y)E(X\\mid Y)\\big]\\quad\\text{⑤ 最优均方预测（MMSE）：}E[(X-g(Y))^2]\\ge E[(X-E(X\\mid Y))^2]\\\\ &\\text{考场协方差秒杀推论：}\\operatorname{Cov}(X,Y)=\\operatorname{Cov}\\big(X,\\,E(Y\\mid X)\\big)\\end{aligned}$$",
+      "conditions": "要求相关期望与乘积期望绝对收敛；记住最核心的概念切换：$E(X\\mid Y=y)$ 是关于实数 $y$ 的确定函数 $g(y)$，把 $y$ 换回随机变量 $Y$ 得到的 $E(X\\mid Y)=g(Y)$ 才是随机变量！",
+      "pitfalls": "**跨书补注②（方浩强化 P.115 例题 29 印刷与备考提示）**：方浩 P.115 左栏误将边缘密度印为大写 $f_Y(Y)=\\int_{-\\infty}^{+\\infty}f(x,y)\\mathrm{d}x$（自变量应为小写 $y$）；且文末按旧视角称条件期望无需学，实则 2022/2024 真题用全期望/全方差比硬凑二重积分快 3 倍且不易算错——建议**两种解法全掌握，小题用全期望秒杀、大题用积分或标准推导演算**！",
+      "figureSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 254\" width=\"100%\" style=\"max-width:640px;height:auto;display:block;margin:8px auto;\" font-family=\"system-ui,-apple-system,'Segoe UI',sans-serif\"><title>条件数字特征：亚当全期望定理与夏娃全方差分解结构图</title><defs><marker id=\"m1_pr06_c_arr\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#475569\"/></marker></defs><rect x=\"2\" y=\"2\" width=\"636\" height=\"250\" rx=\"12\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/><text x=\"320\" y=\"22\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">条件数字特征双璧：亚当全期望（左）&amp; 夏娃全方差分解（右）</text><rect x=\"14\" y=\"34\" width=\"300\" height=\"206\" rx=\"8\" fill=\"#ffffff\" stroke=\"#e2e8f0\"/><text x=\"164\" y=\"52\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1d4ed8\">① 亚当定理（全期望 / 重期望公式）</text><rect x=\"30\" y=\"64\" width=\"268\" height=\"36\" rx=\"6\" fill=\"#eff6ff\" stroke=\"#3b82f6\"/><text x=\"164\" y=\"80\" text-anchor=\"middle\" font-size=\"10.2\" font-weight=\"700\" fill=\"#1e3a8a\">内层先求条件期望：g(Y) = E(X | Y)</text><text x=\"164\" y=\"94\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#1d4ed8\">本质是关于 Y 的随机变量（固定 Y=y 时视作常数）</text><line x1=\"164\" y1=\"100\" x2=\"164\" y2=\"118\" stroke=\"#475569\" stroke-width=\"1.6\" marker-end=\"url(#m1_pr06_c_arr)\"/><rect x=\"30\" y=\"122\" width=\"268\" height=\"36\" rx=\"6\" fill=\"#dbeafe\" stroke=\"#2563eb\" stroke-width=\"1.4\"/><text x=\"164\" y=\"138\" text-anchor=\"middle\" font-size=\"10.8\" font-weight=\"700\" fill=\"#1e3a8a\">外层再取期望：E(X) = E[ E(X | Y) ]</text><text x=\"164\" y=\"152\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#1d4ed8\">推广：E[h(Y)X] = E[ h(Y)·E(X|Y) ]（拉出已知项）</text><rect x=\"30\" y=\"168\" width=\"268\" height=\"62\" rx=\"6\" fill=\"#fef3c7\" stroke=\"#d97706\"/><text x=\"164\" y=\"185\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#92400e\">2022 / 2024 真题一步秒杀推论：</text><text x=\"164\" y=\"202\" text-anchor=\"middle\" font-size=\"10.2\" font-weight=\"700\" fill=\"#b45309\">Cov(X, Y) = Cov(X, E(Y | X))</text><text x=\"164\" y=\"219\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#475569\">例：E(Y|X)=½(X+1) ⇒ Cov(X,Y) = ½DX（零积分！）</text><rect x=\"326\" y=\"34\" width=\"300\" height=\"206\" rx=\"8\" fill=\"#ffffff\" stroke=\"#e2e8f0\"/><text x=\"476\" y=\"52\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#7c3aed\">② 夏娃定理（全方差正交分解公式）</text><rect x=\"342\" y=\"66\" width=\"268\" height=\"30\" rx=\"6\" fill=\"#1e293b\"/><text x=\"476\" y=\"85\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#ffffff\">总方差 D(X) = E[D(X|Y)] + D[E(X|Y)]</text><rect x=\"342\" y=\"106\" width=\"142\" height=\"44\" rx=\"5\" fill=\"#d1fae5\" stroke=\"#059669\" stroke-width=\"1.4\"/><text x=\"413\" y=\"124\" text-anchor=\"middle\" font-size=\"10.2\" font-weight=\"700\" fill=\"#065f46\">E[ D(X | Y) ]</text><text x=\"413\" y=\"140\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#047857\">组内方差的期望（剩余误差）</text><text x=\"490\" y=\"132\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#475569\">+</text><rect x=\"498\" y=\"106\" width=\"112\" height=\"44\" rx=\"5\" fill=\"#ede9fe\" stroke=\"#7c3aed\" stroke-width=\"1.4\"/><text x=\"554\" y=\"124\" text-anchor=\"middle\" font-size=\"10.2\" font-weight=\"700\" fill=\"#5b21b6\">D[ E(X | Y) ]</text><text x=\"554\" y=\"140\" text-anchor=\"middle\" font-size=\"9.2\" fill=\"#6d28d9\">组间均值的方差</text><rect x=\"342\" y=\"162\" width=\"268\" height=\"68\" rx=\"6\" fill=\"#faf5ff\" stroke=\"#c4b5fd\"/><text x=\"476\" y=\"179\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#5b21b6\">三大高频推论与最优均方预测（MMSE）：</text><text x=\"476\" y=\"196\" text-anchor=\"middle\" font-size=\"9.4\" fill=\"#334155\">① D(X) ≥ D[E(X|Y)]，条件化必降低平均方差</text><text x=\"476\" y=\"211\" text-anchor=\"middle\" font-size=\"9.4\" fill=\"#334155\">② E(X|Y) 是用 Y 预测 X 的均方误差最小估计</text><text x=\"476\" y=\"224\" text-anchor=\"middle\" font-size=\"9\" fill=\"#6d28d9\">（证明核心：残差 X - E(X|Y) 与任意 h(Y) 正交！）</text></svg>",
+      "source": {
+        "book": "27 张宇概率9讲附录 & 27 猪狗百宝书 & 27 方浩强化",
+        "printedPage": "9讲 P.82-85 附录 / 猪狗 P.3-16~3-17 / 方浩 P.115",
+        "pdfPage": 93,
+        "itemRef": "条件期望八大性质与亚当全期望公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_adam_eve_exams",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "虽然传统考纲未将条件期望单列条目，但 **2022、2024 等近年层次分布真题**用亚当全期望公式与协方差投影公式 $\\operatorname{Cov}(X,Y)=\\operatorname{Cov}(X,E(Y\\mid X))$ 可**完全避开二重积分、三行零误差秒杀**！（张宇特别在《概率 9 讲》P.82-85 设专题附录精讲，并提醒考场解答题写作「全期望公式」「全方差公式」而非「亚当」「夏娃」昵称）。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「内层条件先固定，已知函数往外拉；外层期望再求均值，算 $\\operatorname{Cov}(X,Y)$ 把 $Y$ 换成 $E(Y\\mid X)$ 一行秒！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr06-f-07",
+      "kind": "formula",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、条件方差与夏娃全方差分解定理",
+      "title": "条件方差与夏娃全方差分解定理 DX = E[D(X|Y)] + D[E(X|Y)]",
+      "formulaLatex": "$$\\begin{aligned} &\\text{条件方差：}D(X\\mid Y)=E\\big[(X-E(X\\mid Y))^2\\mid Y\\big]=E(X^2\\mid Y)-\\big[E(X\\mid Y)\\big]^2\\\\ &\\text{夏娃全方差公式（方差正交分解）：}\\\\ &\\qquad D(X)=E\\big[D(X\\mid Y)\\big]+D\\big[E(X\\mid Y)\\big]\\\\ &\\text{经典不等式推论：}D(X)\\ge E[D(X\\mid Y)]\\ge 0,\\qquad D(X)\\ge D[E(X\\mid Y)]\\ge 0\\\\ &\\text{随机个数和（复合分布）期望与方差（}N\\perp X_i,\\;X_i\\text{ i.i.d.）：}\\\\ &\\qquad S=\\sum_{i=1}^{N}X_i\\implies E(S)=EN\\cdot EX_1,\\qquad D(S)=EN\\cdot DX_1+DN\\cdot(EX_1)^2\\end{aligned}$$",
+      "conditions": "证明极简两行：$E[D(X\\mid Y)]=E(X^2)-E[(E(X\\mid Y))^2]$，与 $D[E(X\\mid Y)]=E[(E(X\\mid Y))^2]-(EX)^2$ 直接相加即得 $E(X^2)-(EX)^2=DX$！",
+      "pitfalls": "混合分布大坑：若 $X$ 以概率 $p$ 取分布 $F_1$、以概率 $1-p$ 取分布 $F_2$，其总期望可直接加权 $p\\mu_1+(1-p)\\mu_2$，但**总方差绝不是 $p\\sigma_1^2+(1-p)\\sigma_2^2$**！必须加上组间方差 $D[E(X\\mid I)]=p(1-p)(\\mu_1-\\mu_2)^2$——这正是夏娃公式的直接体现！",
+      "tables": [
+        {
+          "caption": "表 P6-2 · 条件期望与条件方差高频模型一键秒算表",
+          "headers": [
+            "层次 / 混合模型",
+            "内层条件特征 E(Y|X) & D(Y|X)",
+            "亚当/夏娃一步导出总特征",
+            "对应真题 / 例题"
+          ],
+          "rows": [
+            [
+              "$X\\sim N(0,1),\\;Y\\mid x\\sim N(x,1)$",
+              "$E(Y\\mid X)=X,\\;D(Y\\mid X)=1$",
+              "$EY=0,\\;DY=1+1=2,\\;\\operatorname{Cov}=DX=1\\implies\\rho=\\frac{\\sqrt2}{2}$",
+              "2022 真题 / 9讲附录 P.84"
+            ],
+            [
+              "$f_X=2(1-x),\\;Y\\mid x\\sim U(x,1)$",
+              "$E(Y\\mid X)=\\frac{X+1}{2}$",
+              "$\\operatorname{Cov}(X,Y)=\\operatorname{Cov}(X,\\frac{X+1}{2})=\\frac12 DX=\\frac{1}{36}$",
+              "2024 真题（猪狗例3.5）"
+            ],
+            [
+              "两分布混合 $p F_1+(1-p)F_2$",
+              "$E=\\mu_I,\\;D=\\sigma_I^2$",
+              "$EX=p\\mu_1+(1-p)\\mu_2$；$DX=p\\sigma_1^2+(1-p)\\sigma_2^2+p(1-p)(\\mu_1-\\mu_2)^2$",
+              "方浩例6（直接出 5.96！）"
+            ],
+            [
+              "复合随机和 $S=\\sum_{i=1}^N X_i$",
+              "$E(S\\mid N)=N\\mu,\\;D(S\\mid N)=N\\sigma^2$",
+              "$ES=\\mu EN$；$DS=\\sigma^2 EN+\\mu^2 DN$",
+              "保险理赔/随机抽样模型"
+            ]
+          ]
+        }
+      ],
+      "source": {
+        "book": "27 张宇概率9讲附录 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.83-85 附录 / 猪狗 P.3-16~3-17",
+        "pdfPage": 94,
+        "itemRef": "条件方差与夏娃全方差分解公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_adam_eve_exams",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "夏娃全方差公式把总波动 $DX$ 正交拆成两块非负之和：**组内条件方差的均值 $E[D(X\\mid Y)]$** + **组间条件均值的方差 $D[E(X\\mid Y)]$**！它在层次正态（2022 真题 $Y\\mid X\\sim N(X,1)\\implies DY=1+DX=2$）、混合分布方差（方浩例 6 $0.2N(0,1)+0.8N(4,4)$ 一行出 $5.96$！）及复合随机和（如随机次数投篮总得分）中威力惊人！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「夏娃记成 `EVVE`：$D(X)=\\mathbf{E}[\\mathbf{V}(X\\mid Y)]+\\mathbf{V}[\\mathbf{E}(X\\mid Y)]$——期望套方差，加上方差套期望！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-pr06-c-01",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "一、最值与绝对值正态期望/方差绝杀公式",
+      "title": "独立同标准正态最值期望 ±1/√π 与一般正态绝对值期望 √(2/π)σ",
+      "pitfalls": "算 $E|X-Y|$ 时，当 $X,Y$ 独立同 $N(\\mu,\\sigma^2)$，$X-Y\\sim N(0,2\\sigma^2)$ 的标准差是 $\\sqrt2\\sigma$（别漏 $\\sqrt2$！），故 $E|X-Y|=\\sqrt{\\frac{2}{\\pi}}\\cdot\\sqrt2\\sigma=\\frac{2\\sigma}{\\sqrt{\\pi}}$（见概率 9 讲例 6.5）。",
+      "source": {
+        "book": "27 张宇概率9讲 & 27 张宇基础30讲",
+        "printedPage": "9讲 P.49 例 6.2, P.51 例 6.5 / 基础 P.118,121 习题 4.10",
+        "pdfPage": 60,
+        "itemRef": "正态绝对值与二元最值期望恒等式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_basic_moments",
+        "verified": true
+      },
+      "summary": "① 若 $Z\\sim N(0,\\sigma^2)$，则 **$E(|Z|)=\\sqrt{\\frac{2}{\\pi}}\\sigma$**，$D(|Z|)=\\left(1-\\frac{2}{\\pi}\\right)\\sigma^2$！② 若 $X,Y$ 独立同服从 $N(0,1)$，利用 $\\max\\{X,Y\\}=\\frac{X+Y+|X-Y|}{2}$ 与 $X-Y\\sim N(0,2)$，立得：**$E(\\max\\{X,Y\\})=\\frac{1}{\\sqrt{\\pi}}$**、**$E(\\min\\{X,Y\\})=-\\frac{1}{\\sqrt{\\pi}}$**！③ 任意二元变量恒等式：$\\max\\{X,Y\\}+\\min\\{X,Y\\}=X+Y$ 且 $\\max\\{X,Y\\}\\cdot\\min\\{X,Y\\}=XY$（无需独立！直接秒解基础习题 4.10！）。",
+      "conditions": "只要见到 $\\max,\\min$ 的和或积的期望，立刻套对称恒等式还原为 $X+Y$ 与 $XY$，一滴积分墨水都不用浪费！"
+    },
+    {
+      "id": "m1-pr06-c-02",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、高斯配方与调整法（「曹冲称象」转常见分布期望）",
+      "title": "指数乘多项式高斯配方公式 $E(X^k e^{tX})$ 与级数凑常见分布法",
+      "pitfalls": "求 $D(Xe^{2X})$ 时 $E(Y^2)=E(X^2 e^{4X})$，此时 $t=4$（不是 $2$！），提出因子 $e^{4^2/2}=e^8$ 后化为 $Z\\sim N(4,1)$ 的 $E(Z^2)=1+4^2=17$，故 $E(Y^2)=17e^8$！",
+      "source": {
+        "book": "27 方浩强化",
+        "printedPage": "方浩 P.94-96 例题 5-7",
+        "pdfPage": 99,
+        "itemRef": "高斯配方与级数凑分布调整法"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_fh_tricks",
+        "verified": true
+      },
+      "summary": "① 对 $X\\sim N(0,1)$，计算 $E[g(X)e^{tX}]$ 时只需对指数配完全平方 $-\\frac{x^2}{2}+tx=-\\frac{(x-t)^2}{2}+\\frac{t^2}{2}$，立得黄金转换：**$E[g(X)e^{tX}]=e^{t^2/2}E[g(Z)]$**，其中 **$Z\\sim N(t,1)$**！（秒杀 2013 真题 $Y=Xe^{2X}$ 的期望与方差！）。② 对离散无穷级数求和（如 $\\sum_{k=1}^\\infty k^2 p(1-p)^{k-1}$ 或 $\\sum_{k=0}^\\infty k(k-1)\\frac{\\lambda^k}{k!}$），逆向识别为几何/泊松/二项分布的二阶矩 $E(X^2)=DX+(EX)^2$，一秒出结果！",
+      "conditions": "这正是方浩强化的核心思想「调整法（曹冲称象）」：把陌生积分或级数调系数凑成已知常见分布的期望/方差，彻底消灭硬算分部积分与幂级数求导！"
+    },
+    {
+      "id": "m1-pr06-c-03",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、三变量方差可加反例与样本均值偏差经典结论",
+      "title": "三变量方差和等式陷阱 & i.i.d. 样本与样本均值 $\\bar X$ 四大黄金协方差",
+      "pitfalls": "注意对称题型（方浩例 21）：令 $Y_i=X_i-2\\bar X$，展开得 $D(Y_i)=\\sigma^2$（与 $n$ 无关！）且对 $i\\ne j$ 竟有 $\\operatorname{Cov}(Y_i,Y_j)=-\\frac{2\\sigma^2}{n}-\\frac{2\\sigma^2}{n}+\\frac{4\\sigma^2}{n}=0$！",
+      "source": {
+        "book": "27 方浩强化",
+        "printedPage": "方浩 P.107-108 例题 19, 例题 21",
+        "pdfPage": 112,
+        "itemRef": "三变量方差和反例与样本均值四大协方差"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_cov_corr_props",
+        "verified": true
+      },
+      "summary": "① **三变量防坑铁律**：对二元变量，$D(X_1+X_2)=DX_1+DX_2\\iff\\operatorname{Cov}(X_1,X_2)=0$；但对 **3 个及以上变量**，$D(X_1+X_2+X_3)=DX_1+DX_2+DX_3$ 仅等价于三对协方差**之和**为 $0$（$\\operatorname{Cov}_{12}+\\operatorname{Cov}_{13}+\\operatorname{Cov}_{23}=0$），**绝推不出两两不相关**！（反例：取 $X_1,X_2$ 独立标准正态，$X_3=X_1-X_2$ 则 $D(X_1+X_2+X_3)=4\\ne 4$? 修正构造：令 $X_1\\sim N(0,1)$ 独立于 $X_2\\sim N(0,1)$，取 $Y_1=X_1+X_2,\\;Y_2=X_1-X_2,\\;Y_3=-X_1$，验证 $\\operatorname{Cov}(Y_1,Y_2)=0$ 而 $\\operatorname{Cov}(Y_1,Y_3)=-1,\\;\\operatorname{Cov}(Y_2,Y_3)=-1$；改为 $Y_1=X_1+X_2,\\;Y_2=X_2-X_1,\\;Y_3=X_1$ 即得 $\\operatorname{Cov}_{12}=0,\\;\\operatorname{Cov}_{13}=+1,\\;\\operatorname{Cov}_{23}=-1$，总和恰为 $0$ 却两两相关！）。② **i.i.d. 样本均值四金式**（$EX_i=\\mu,DX_i=\\sigma^2$）：$$\\operatorname{Cov}(X_i,\\bar X)=\\frac{\\sigma^2}{n},\\quad \\operatorname{Cov}(X_i-\\bar X,\\bar X)=0,\\quad D(X_i-\\bar X)=\\frac{n-1}{n}\\sigma^2,\\quad \\rho_{X_i,\\bar X}=\\frac{1}{\\sqrt n}$$",
+      "conditions": "四金式在数理统计第 8 讲还会反复登场：由于 $\\operatorname{Cov}(X_i-\\bar X,\\bar X)=0$，在正态总体下立即推出样本均值 $\\bar X$ 与残差向量 $(X_1-\\bar X,\\dots,X_n-\\bar X)$（从而与样本方差 $S^2$）**相互独立**！"
+    },
+    {
+      "id": "m1-pr06-c-04",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、独立组合的相关性判别结论（方浩例 37）",
+      "title": "独立非退化变量 $X,Y$：$X$ 与 $X+Y$ 必相关，$X$ 与 $XY$ 相关性完全取决于 $EY$",
+      "pitfalls": "注意特例：当 $EY=0$ 时 $X$ 与 $XY$ 虽然不相关，但只要 $Y$ 不是零常值（$DY>0$），$X$ 与 $XY$ 一般**并不独立**（反例见方浩例 38：$X\\sim N(0,1),Y=\\pm 1$ 等概）！",
+      "source": {
+        "book": "27 方浩强化",
+        "printedPage": "方浩 P.119-120 例题 37",
+        "pdfPage": 124,
+        "itemRef": "独立变量的和与积相关性判定"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_cov_corr_props",
+        "verified": true
+      },
+      "summary": "设 $X,Y$ 相互独立且 $DX>0,\\;DY>0$，则：① **$\\operatorname{Cov}(X,X+Y)=DX>0$**，故 **$X$ 与 $X+Y$ 必定正相关**（且 $\\rho_{X,X+Y}=\\sqrt{\\frac{DX}{DX+DY}}>0$）；② **$\\operatorname{Cov}(X,XY)=E(X^2Y)-EX\\cdot E(XY)=EY\\cdot[E(X^2)-(EX)^2]=DX\\cdot EY$**，故 **$X$ 与 $XY$ 不相关 $\\iff EY=0$**！",
+      "conditions": "这条结论一行就能干掉所有「$X$ 与 $XY$ 是否相关」的选择题与大题（直接秒杀 2017 真题 $Y\\in\\{-1,1\\}$ 的 $p=\\frac12$ 与 2018 真题 $EY=0$！）。"
+    },
+    {
+      "id": "m1-pr06-c-05",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "五、2025/2026 真题降维裂项神技巧",
+      "title": "「独立差值拆项法」秒求 $E(XY)$（2026 真题）& 单位圆约束最值 $1+|\\rho|$（2025 真题）",
+      "pitfalls": "在 2025 真题中，因 $\\rho$ 可正可负且 $a,b$ 可异号，最大值务必带绝对值写 **$1+|\\rho|$**（若误写 $1+\\rho$，当 $\\rho<0$ 取 $a=-b=\\frac{1}{\\sqrt2}$ 时反而变大成 $1-\\rho=1+|\\rho|$！）。",
+      "source": {
+        "book": "27 张宇概率9讲 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.53 例 6.6(2025) / 猪狗 P.3-18 例 3.1(2026), 例 3.3(2025)",
+        "pdfPage": 64,
+        "itemRef": "2025与2026真题方差最值与独立差裂项"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_recent_exams",
+        "verified": true
+      },
+      "summary": "① **独立差值裂项（2026 真题核心）**：若题目给出 $X$ 与 $Y-X$ 相互独立（而非 $X$ 与 $Y$ 独立！），求 $E(XY)$ 时把 $Y$ 拆写成 $X+(Y-X)$：$$E(XY)=E\\big[X^2+X(Y-X)\\big]=DX+(EX)^2+EX\\cdot(EY-EX)$$② **二次型最值（2025 真题核心）**：对 $(X,Y)\\sim N(0,0;1,1;\\rho)$ 及单位圆约束 $a^2+b^2=1$，$D(aX+bY)=1+2ab\\rho$；由 $|2ab|\\le a^2+b^2=1$ 立得最大值为 **$1+|\\rho|$**（最小值为 $1-|\\rho|$），这其实就是协方差矩阵 $\\begin{pmatrix}1&\\rho\\\\\\rho&1\\end{pmatrix}$ 的最大与最小特征值！",
+      "conditions": "2025 真题把概率论方差最值与线代第 9 讲实对称二次型瑞利商 $\\lambda_{\\max}=1+|\\rho|$ 完美统一，考场上 3 秒锁定选项！"
+    },
+    {
+      "id": "m1-pr06-c-06",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、边缘正态不相关却不独立的终极构造（混合二维正态）",
+      "title": "混合二维正态 $\\frac12(\\varphi_\\rho+\\varphi_{-\\rho})$：边缘全 N(0,1)、$\\rho=0$ 却不独立！",
+      "pitfalls": "牢记：两个二维正态密度的凸组合（混合密度）**不再是二维正态分布**！",
+      "source": {
+        "book": "27 方浩强化",
+        "printedPage": "方浩 P.122-123 例题 39",
+        "pdfPage": 127,
+        "itemRef": "混合二维正态不相关却不独立反例"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_indep_vs_uncorr",
+        "verified": true
+      },
+      "summary": "令 $f(x,y)=\\frac12\\varphi_1(x,y)+\\frac12\\varphi_2(x,y)$，其中 $\\varphi_1,\\varphi_2$ 分别为 $N(0,0;1,1;\\rho_0)$ 与 $N(0,0;1,1;-\\rho_0)\\;(\\rho_0\\ne 0)$ 的二维正态密度。则：① 两边缘精确为 **$X\\sim N(0,1),\\;Y\\sim N(0,1)$**；② 混合相关系数 $\\rho=\\frac12(\\rho_0-\\rho_0)=0$（**不相关**）；③ 但 $f(x,y)\\ne f_X(x)f_Y(y)$，**$X,Y$ 并不独立且 $(X,Y)$ 非二维正态**！（方浩例 39 取 $\\rho_0=\\frac13$）。",
+      "conditions": "几何上它像一张 X 形交叉蝴蝶结（由一条右倾椭圆与一条左倾椭圆各半叠加而成），正负斜率恰好抵消令 $\\rho=0$，但联合形状显然不是圆形，故既非二维正态也不独立！"
+    },
+    {
+      "id": "m1-pr06-e-01",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、基础期望方差与分布识别",
+      "title": "基础例 4.1 & 例 4.2：二项分布标准差最值 + 连续概率转二项求 E(Y²)",
+      "problem": "(1)（例 4.1）每次试验成功概率为 $p$，进行 100 次独立重复试验，求成功次数标准差的最大值；(2)（例 4.2）$f(x)=\\frac12\\cos\\frac x2\\;(0\\le x<\\pi)$，独立观察 4 次，记观察值大于 $\\frac{\\pi}{3}$ 的次数为 $Y$，求 $E(Y^2)$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "(1) $X\\sim B(100,p)\\implies\\sqrt{DX}=10\\sqrt{p(1-p)}\\le 5$；(2) 先求单次成功概率 $p=P\\{X>\\frac{\\pi}{3}\\}=\\frac12$，识出 $Y\\sim B(4,\\frac12)$ 后反用 $E(Y^2)=DY+(EY)^2$ 秒出！"
+        },
+        {
+          "stepTitle": "步骤 1：例 4.1 均值不等式秒出最大标准差",
+          "detail": "$X\\sim B(100,p)$，标准差 $\\sqrt{100p(1-p)}\\le 10\\times\\frac12=5$（当且仅当 $p=\\frac12$ 取到最大值 $5$）。"
+        },
+        {
+          "stepTitle": "步骤 2：例 4.2 算单次概率转二项求二阶矩",
+          "detail": "$p=\\int_{\\pi/3}^{\\pi}\\frac12\\cos\\frac x2\\,\\mathrm{d}x=\\left[\\sin\\frac x2\\right]_{\\pi/3}^{\\pi}=1-\\frac12=\\frac12$，故 $Y\\sim B(4,\\frac12)$，$EY=2,DY=1\\implies E(Y^2)=1+2^2=5$。"
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲",
+        "printedPage": "基础 P.107 例 4.1, 例 4.2",
+        "pdfPage": 113,
+        "itemRef": "基础例4.1与4.2 二项标准差最值与二阶矩"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_basic_moments",
+        "verified": true
+      },
+      "finalAnswer": "(1) $5$；(2) $5$。",
+      "takeaway": "注意例 4.1 问的是**标准差**（答案 $5$）而非方差（$25$），审题务必圈出关键词！"
+    },
+    {
+      "id": "m1-pr06-e-02",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、期望存在性与高斯配方识别",
+      "title": "基础例 4.3 & 例 4.4：柯西分布期望不存在辨析 + 配方识别正态求 EX·√DX",
+      "problem": "(1)（例 4.3）$f(x)=\\frac{1}{\\pi(1+x^2)}\\;(x\\in\\mathbb{R})$，求 $EX$；(2)（例 4.4）$f(x)=\\frac{1}{\\sqrt{\\pi}}e^{-x^2+2x-1}\\;(x\\in\\mathbb{R})$，求 $EX\\cdot\\sqrt{DX}$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "(1) 检验广义积分 $\\int_0^{+\\infty}\\frac{x}{\\pi(1+x^2)}\\mathrm{d}x=+\\infty$ 发散，直接判期望不存在；(2) 配方 $-x^2+2x-1=-(x-1)^2=-\\frac{(x-1)^2}{2\\cdot(1/2)}$ 瞬间认出 $N(1,\\frac12)$！"
+        },
+        {
+          "stepTitle": "步骤 1：例 4.3 揭示柯西奇函数陷阱",
+          "detail": "虽然被积函数 $\\frac{x}{\\pi(1+x^2)}$ 是奇函数，但正半轴积分 $\\int_0^{+\\infty}\\frac{x}{\\pi(1+x^2)}\\mathrm{d}x=\\left.\\frac{1}{2\\pi}\\ln(1+x^2)\\right|_0^{+\\infty}=+\\infty$ 发散，故 $EX$ 不存在！"
+        },
+        {
+          "stepTitle": "步骤 2：例 4.4 配方读出正态均值与标准差",
+          "detail": "$f(x)=\\frac{1}{\\sqrt{2\\pi}\\cdot\\frac{1}{\\sqrt2}}\\exp\\!\\left(-\\frac{(x-1)^2}{2\\cdot(1/\\sqrt2)^2}\\right)\\implies X\\sim N(1,\\frac12)$，故 $EX=1,\\;\\sqrt{DX}=\\frac{1}{\\sqrt2}\\implies EX\\cdot\\sqrt{DX}=\\frac{1}{\\sqrt2}$。"
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲",
+        "printedPage": "基础 P.107-108 例 4.3, 例 4.4, P.118 习题 4.9",
+        "pdfPage": 113,
+        "itemRef": "基础例4.3与4.4 柯西期望不存在与正态配方"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_basic_moments",
+        "verified": true
+      },
+      "finalAnswer": "(1) $EX$ 不存在（选 D）；(2) $\\frac{1}{\\sqrt2}$。",
+      "takeaway": "对比基础习题 4.9：柯西分布虽无期望，但截断后 $E(\\min\\{|X|,1\\})=2\\int_0^1\\frac{x}{\\pi(1+x^2)}\\mathrm{d}x+2\\int_1^{+\\infty}\\frac{1}{\\pi(1+x^2)}\\mathrm{d}x=\\frac{1}{\\pi}\\ln 2+\\frac12$ 有限且可精算！"
+    },
+    {
+      "id": "m1-pr06-e-03",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、泊松绝对偏差期望（2023 真题）与概率积分变换",
+      "title": "基础例 4.5（2023 真题）& 例 4.6：泊松 P(1) 绝对偏差 E|X-1|=2/e + F(X)~U(0,1) 秒杀",
+      "problem": "(1)（例 4.5 / 2023 真题）$P\\{X=k\\}=\\frac{C}{k!}\\;(k=0,1,2,\\dots)$，求 $E(|X-EX|)$；(2)（例 4.6）$f(x)=\\frac x2\\;(0<x<2)$，求 $P\\{F(X)>EX-1\\}$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "(1) 认出 $X\\sim P(1)$ 后，把 $k=0$ 单独拆出来，余下 $k\\ge 1$ 恰好等于 $E(X-1)-P(X=0)(-1)$，两行出 $\\frac2e$！(2) 牢记第 3 讲黄金变换 $F(X)\\sim U(0,1)$，只算 $EX=\\frac43$ 就一秒得 $\\frac23$！"
+        },
+        {
+          "stepTitle": "步骤 1：例 4.5 拆 k=0 凑 E(X-1)=0 秒出 2/e",
+          "detail": "由 $\\sum_{k=0}^\\infty\\frac{C}{k!}=Ce=1\\implies C=e^{-1}$，即 $X\\sim P(1),\\;EX=1$。于是 $E|X-1|=P(X=0)\\cdot 1+\\sum_{k=1}^\\infty(k-1)P(X=k)=e^{-1}+\\big[E(X-1)-(0-1)P(X=0)\\big]=e^{-1}+0+e^{-1}=\\frac{2}{e}$！"
+        },
+        {
+          "stepTitle": "步骤 2：例 4.6 用 F(X)~U(0,1) 跳过求 F(x)",
+          "detail": "$EX=\\int_0^2\\frac{x^2}{2}\\mathrm{d}x=\\frac43\\implies EX-1=\\frac13$。因 $X$ 连续，$Y=F(X)\\sim U(0,1)$，立得 $P\\{Y>\\frac13\\}=\\frac23$！"
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲",
+        "printedPage": "基础 P.108-109 例 4.5, 例 4.6",
+        "pdfPage": 114,
+        "itemRef": "基础例4.5与4.6 泊松绝对偏差与概率积分变换"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_basic_moments",
+        "verified": true
+      },
+      "finalAnswer": "(1) $\\frac{2}{e}$；(2) $\\frac23$。",
+      "takeaway": "一般结论：对任意非负整数随机变量且 $EX=m\\in\\mathbb{Z}^+$，都有 $E|X-m|=2\\sum_{k=0}^{m-1}(m-k)P\\{X=k\\}$——只用算有限项左侧尾部即可（因为正负偏差和为 $0$，总绝对偏差恰为负偏差的两倍！）。"
+    },
+    {
+      "id": "m1-pr06-e-04",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、二维数字特征基础母题（相关系数与等待期望）",
+      "title": "基础例 4.7 & 例 4.8：约束 P(X²=Y²)=1 构造 2×3 联合表求 ρ + 会面等待期望 E|X-Y|",
+      "problem": "(1)（例 4.7）$X\\in\\{0,1\\}$ 概率 $(\\frac13,\\frac23)$，$Y\\in\\{-1,0,1\\}$ 概率 $(\\frac13,\\frac13,\\frac13)$，且 $P\\{X^2=Y^2\\}=1$，求 $(X,Y)$ 与 $XY$ 的分布律及 $\\rho_{XY}$；(2)（例 4.8）$X,Y$ 独立，$f_X=3x^2\\;(0<x<1),\\;f_Y=2y\\;(0<y<1)$，求先到者等待时间期望 $E|X-Y|$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "(1) 约束 $X^2=Y^2$ 令 $(0,\\pm 1),(1,0)$ 三格全为 $0$，余下三格直接由边缘钉死且对称得 $E(XY)=0,EY=0\\implies\\rho=0$！(2) 沿对角线 $y=x$ 把单位正方形拆成上下两三角积分求 $E|X-Y|$。"
+        },
+        {
+          "stepTitle": "步骤 1：例 4.7 填表并秒出 ρ=0",
+          "detail": "由 $P\\{X^2\\ne Y^2\\}=0$ 得唯一非零三格：$p_{0,0}=\\frac13,\\;p_{1,-1}=\\frac13,\\;p_{1,1}=\\frac13$。$Z=XY$ 均匀取 $\\{-1,0,1\\}$ 各 $\\frac13$。因 $EY=0$ 且 $E(XY)=EZ=0$，故 $\\operatorname{Cov}(X,Y)=0\\implies\\rho_{XY}=0$（明显不独立却不相关！）。"
+        },
+        {
+          "stepTitle": "步骤 2：例 4.8 对角拆域算 E|X-Y|",
+          "detail": "$f(x,y)=6x^2 y\\;(0<x<1,0<y<1)$。$E|X-Y|=\\int_0^1\\mathrm{d}x\\int_x^1(y-x)6x^2 y\\,\\mathrm{d}y+\\int_0^1\\mathrm{d}x\\int_0^x(x-y)6x^2 y\\,\\mathrm{d}y=\\frac{1}{12}+\\frac{1}{6}=\\frac14$（小时）。"
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲",
+        "printedPage": "基础 P.111-113 例 4.7, 例 4.8",
+        "pdfPage": 117,
+        "itemRef": "基础例4.7与4.8 约束表相关系数与会面等待期望"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_basic_moments",
+        "verified": true
+      },
+      "finalAnswer": "(1) $p_{0,0}=p_{1,-1}=p_{1,1}=\\frac13$，$Z=XY$ 等概取 $-1,0,1$，$\\rho_{XY}=0$；(2) $\\frac14$ 小时。",
+      "takeaway": "例 4.8 也可直接算 $E(X-Y)+2\\iint_{y>x}(y-x)6x^2 y\\mathrm{d}x\\mathrm{d}y=\\frac{3}{4}-\\frac{2}{3}+2\\cdot\\frac{1}{12}=\\frac14$，少算一块三角形积分！"
+    },
+    {
+      "id": "m1-pr06-e-05",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "三、不相关充要条件、反例与切比雪夫基础题",
+      "title": "基础例 4.9 & 例 4.10 & 例 4.11：和差不相关充要 DX=DY + 拉普拉斯反例 + 切比雪夫估界",
+      "problem": "(1)（例 4.9）$(X,Y)$ 二维正态，$U=X+Y,V=X-Y$ 不相关的充要条件是什么？(2)（例 4.10）$X$ 服从拉普拉斯密度 $\\frac12 e^{-|x|}$，判 $X$ 与 $|X|$ 的相关性与独立性；(3)（例 4.11）$EX=EY=2,\\;DX=1,\\;DY=4,\\;\\rho_{XY}=0.5$，用切比雪夫不等式估 $P\\{|X-Y|\\ge 6\\}$ 上界。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "三道经典基础必刷：(1) $\\operatorname{Cov}(X+Y,X-Y)=DX-DY=0\\iff DX=DY$；(2) 奇函数积分 $E(X|X|)=0,EX=0\\implies$ 不相关，由第 4 讲例 3.6 知不独立；(3) 先验 $E(X-Y)=0$ 再算 $D(X-Y)=3$ 套切比雪夫。"
+        },
+        {
+          "stepTitle": "步骤 1：例 4.9 与例 4.10 秒答",
+          "detail": "(1) $\\operatorname{Cov}(X+Y,X-Y)=DX-DY=0\\iff E(X^2)-(EX)^2=E(Y^2)-(EY)^2$（选 B，且二维正态下等价于独立！）。(2) 由奇偶对称 $EX=0,\\;E(X|X|)=0\\implies\\operatorname{Cov}(X,|X|)=0$（不相关），但已证不独立（选 A）。"
+        },
+        {
+          "stepTitle": "步骤 2：例 4.11 核对中心与方差套切比雪夫",
+          "detail": "记 $U=X-Y$，则 $EU=2-2=0$，$\\operatorname{Cov}(X,Y)=0.5\\times 1\\times 2=1$，故 $DU=1+4-2\\times 1=3$。于是 $P\\{|U-0|\\ge 6\\}\\le\\frac{3}{6^2}=\\frac{1}{12}$。"
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲",
+        "printedPage": "基础 P.114-115 例 4.9, 例 4.10, 例 4.11",
+        "pdfPage": 120,
+        "itemRef": "基础例4.9至4.11 和差不相关与切比雪夫"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_chebyshev_and_life",
+        "verified": true
+      },
+      "finalAnswer": "(1) $E(X^2)-(EX)^2=E(Y^2)-(EY)^2$（即 $DX=DY$，选 B）；(2) 不相关且不独立（选 A）；(3) $\\frac{1}{12}$。",
+      "takeaway": "注意例 4.9 中干扰项 C「$E(X^2)=E(Y^2)$」少了 $-(EX)^2$，只有在 $EX=EY$ 时才与 B 等价！"
+    },
+    {
+      "id": "m1-pr06-e-06",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "一、强化期望拆解技巧（概率 9 讲例 6.2 & 6.3）",
+      "title": "强化例 6.2 & 例 6.3：独立 N(0,1) 最值期望 ±1/√π + 指数取整/小数部分拆分法",
+      "problem": "(1)（例 6.2）$X,Y$ 独立同服从 $N(0,1)$，求 $E(\\max\\{X,Y\\})$ 与 $E(\\min\\{X,Y\\})$；(2)（例 6.3）$X\\sim E(\\lambda)$，$Y=[X],\\;Z=\\{X\\}=X-[X]$ 为整数与小数部分，求 $EY$ 与 $EZ$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "(1) 把 $\\max$ 写成 $\\frac{X+Y+|X-Y|}{2}$ 化归为一维正态 $Z=X-Y\\sim N(0,2)$ 的绝对值期望；(2) $Y+1\\sim G(1-e^{-\\lambda})$ 秒得 $EY$，再用线性分解 $EZ=EX-EY$ 彻底绕过求 $Z$ 分布！"
+        },
+        {
+          "stepTitle": "步骤 1：例 6.2 绝对值化归秒算两最值期望",
+          "detail": "$X-Y\\sim N(0,2)$，故 $E(\\max)=\\frac12 E|X-Y|=\\frac12\\cdot\\sqrt{\\frac{2}{\\pi}}\\cdot\\sqrt2=\\frac{1}{\\sqrt{\\pi}}$；由 $\\max+\\min=X+Y$ 立得 $E(\\min)=0-\\frac{1}{\\sqrt{\\pi}}=-\\frac{1}{\\sqrt{\\pi}}$！"
+        },
+        {
+          "stepTitle": "步骤 2：例 6.3 几何分布与线性减法巧妙回避求 Z 分布",
+          "detail": "由第 3 讲知 $Y+1\\sim G(1-e^{-\\lambda})$，故 $E(Y+1)=\\frac{1}{1-e^{-\\lambda}}\\implies EY=\\frac{1}{1-e^{-\\lambda}}-1=\\frac{1}{e^\\lambda-1}$。由 $X=Y+Z$（线性无须独立！）：$EZ=EX-EY=\\frac{1}{\\lambda}-\\frac{1}{e^\\lambda-1}=\\frac{e^\\lambda-1-\\lambda}{\\lambda(e^\\lambda-1)}$！"
+        }
+      ],
+      "source": {
+        "book": "27 张宇概率9讲",
+        "printedPage": "9讲 P.49 例 6.2, 例 6.3",
+        "pdfPage": 60,
+        "itemRef": "强化例6.2与6.3 正态最值期望与指数小数部分期望"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_jiu62_65",
+        "verified": true
+      },
+      "finalAnswer": "(1) $E(\\max)=\\frac{1}{\\sqrt{\\pi}},\\;E(\\min)=-\\frac{1}{\\sqrt{\\pi}}$；(2) $EY=\\frac{1}{e^\\lambda-1},\\;EZ=\\frac{e^\\lambda-1-\\lambda}{\\lambda(e^\\lambda-1)}$。",
+      "takeaway": "注意例 6.3 中 $Y=[X]$ 与 $Z=\\{X\\}$ 在指数分布下其实还**相互独立**（指数无记忆性！），不过求期望 $EZ=EX-EY$ 甚至根本不需要用到独立性！"
+    },
+    {
+      "id": "m1-pr06-e-07",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、强化方差计算（概率 9 讲例 6.4 & 6.5）",
+      "title": "强化例 6.4 & 例 6.5：几何同余 mod 3 方差 20/49 + 绝对差估计量方差反求系数 a",
+      "problem": "(1)（例 6.4）$P\\{X=k\\}=\\frac{1}{2^k}\\;(k=1,2,\\dots)$，$Y$ 为 $X$ 除以 3 的余数，求 $DY$；(2)（例 6.5）$X_1,X_2$ 为来自 $N(\\mu,\\sigma^2)$ 的简单随机样本，记 $\\hat\\sigma=a|X_1-X_2|\\;(a>0)$，若 $D\\hat\\sigma=\\sigma^2$，求 $a$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "(1) 按模 3 等比级数求和得 $Y\\in\\{0,1,2\\}$ 概率 $(\\frac17,\\frac47,\\frac27)$，套 $E(Y^2)-(EY)^2$；(2) 令 $Z=X_1-X_2\\sim N(0,2\\sigma^2)$，套 $D(|Z|)=DZ+(EZ)^2-[E|Z|]^2=2\\sigma^2(1-\\frac{2}{\\pi})$ 反解 $a$！"
+        },
+        {
+          "stepTitle": "步骤 1：例 6.4 等比求和得 Y 分布与方差",
+          "detail": "$P(Y=1)=\\frac{1/2}{1-1/8}=\\frac47,\\;P(Y=2)=\\frac27,\\;P(Y=0)=\\frac17$。于是 $EY=\\frac47+\\frac47=\\frac87$，$E(Y^2)=\\frac47+\\frac87=\\frac{12}{7}\\implies DY=\\frac{12}{7}-\\frac{64}{49}=\\frac{20}{49}$。"
+        },
+        {
+          "stepTitle": "步骤 2：例 6.5 正态绝对差方差反解 a",
+          "detail": "$Z=X_1-X_2\\sim N(0,2\\sigma^2)\\implies E|Z|=\\frac{2\\sigma}{\\sqrt{\\pi}}$，故 $D(|Z|)=E(Z^2)-(E|Z|)^2=2\\sigma^2-\\frac{4\\sigma^2}{\\pi}=2\\sigma^2(1-\\frac{2}{\\pi})$。令 $a^2 D(|Z|)=\\sigma^2\\implies a=\\sqrt{\\frac{\\pi}{2\\pi-4}}$！"
+        }
+      ],
+      "source": {
+        "book": "27 张宇概率9讲",
+        "printedPage": "9讲 P.50-51 例 6.4, 例 6.5",
+        "pdfPage": 61,
+        "itemRef": "强化例6.4与6.5 同余方差与绝对差估计量方差"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_jiu62_65",
+        "verified": true
+      },
+      "finalAnswer": "(1) $\\frac{20}{49}$；(2) $a=\\sqrt{\\frac{\\pi}{2\\pi-4}}$。",
+      "takeaway": "审清例 6.5 条件：本题要求的是 $D(\\hat\\sigma)=\\sigma^2$（答案 $\\sqrt{\\frac{\\pi}{2\\pi-4}}$）；若改为常见无偏估计条件 $E(\\hat\\sigma)=\\sigma$，答案则是 $\\frac{\\sqrt{\\pi}}{2}$——千万别背串！"
+    },
+    {
+      "id": "m1-pr06-e-08",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、协方差与相关系数综合（2025 真题 & 强化例 6.7）",
+      "title": "强化例 6.6（2025 真题）& 例 6.7：单位圆线性方差最大 1+|ρ| + 协方差方程反求 ρ",
+      "problem": "(1)（例 6.6 / 2025 真题）$(X,Y)\\sim N(0,0;1,1;\\rho)\\;(\\rho\\in(-1,1))$，$a^2+b^2=1$，求 $D(aX+bY)$ 的最大值；(2)（例 6.7）$X\\sim N(-1,1),\\;Y\\sim N(1,2)$，若 $X$ 与 $X+2Y$ 不相关，求 $\\rho_{X,\\,X-Y}$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "(1) 展开 $D(aX+bY)=a^2+b^2+2ab\\rho=1+2ab\\rho\\le 1+|\\rho|$；(2) 用双线性由 $\\operatorname{Cov}(X,X+2Y)=0$ 瞬间解出 $\\operatorname{Cov}(X,Y)=-\\frac12$，再一气算出分子与分母！"
+        },
+        {
+          "stepTitle": "步骤 1：2025 真题基本不等式秒出 1+|ρ|",
+          "detail": "$D(aX+bY)=a^2 DX+b^2 DY+2ab\\operatorname{Cov}(X,Y)=1+2ab\\rho$。由 $|2ab|\\le a^2+b^2=1$，当 $a,b=\\pm\\frac{1}{\\sqrt2}$ 且同号（$\\rho\\ge 0$）或异号（$\\rho<0$）时取到最大值 $1+|\\rho|$！"
+        },
+        {
+          "stepTitle": "步骤 2：例 6.7 双线性方程联立秒解 ρ",
+          "detail": "由 $0=\\operatorname{Cov}(X,X+2Y)=DX+2\\operatorname{Cov}(X,Y)=1+2\\operatorname{Cov}(X,Y)\\implies\\operatorname{Cov}(X,Y)=-\\frac12$。于是 $\\operatorname{Cov}(X,X-Y)=DX-\\operatorname{Cov}(X,Y)=1+\\frac12=\\frac32$，$D(X-Y)=1+2-2(-\\frac12)=4$，故 $\\rho_{X,X-Y}=\\frac{3/2}{1\\times 2}=\\frac34$！"
+        }
+      ],
+      "source": {
+        "book": "27 张宇概率9讲 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.53 例 6.6(2025), 例 6.7 / 猪狗 P.3-18 例 3.3",
+        "pdfPage": 64,
+        "itemRef": "强化例6.6与6.7 2025真题方差最值与协方差反求"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_recent_exams",
+        "verified": true
+      },
+      "finalAnswer": "(1) $1+|\\rho|$（选 C）；(2) $\\frac34$（选 D）。",
+      "takeaway": "注意例 6.7 完全用不到均值 $-1,1$，因为协方差和方差具有**平移不变性**，审题一眼丢掉均值不干扰计算！"
+    },
+    {
+      "id": "m1-pr06-e-09",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、二维正态独立正交化（2020 考研真题）",
+      "title": "强化例 6.8（2020 真题 / 方浩例 40）：二维正态构造与 X 独立的标准正态线性组合",
+      "problem": "（2020 真题）设 $(X,Y)\\sim N(0,0;1,4;-\\frac12)$，下列服从标准正态分布且与 $X$ 独立的是（ ）：(A) $\\frac{\\sqrt5}{5}(X+Y)$；(B) $\\frac{\\sqrt5}{5}(X-Y)$；(C) $\\frac{\\sqrt3}{3}(X+Y)$；(D) $\\frac{\\sqrt3}{3}(X-Y)$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "二维正态的可逆线性变换 $(X,X\\pm Y)$ 仍是二维正态，因此「与 $X$ 独立 $\\iff$ 与 $X$ 协方差为 $0$」！先判哪支协方差为 $0$，再除以其标准差即得标准正态！"
+        },
+        {
+          "stepTitle": "步骤 1：检验协方差锁定 X+Y 与 X 独立",
+          "detail": "由参数知 $DX=1,\\;DY=4,\\;\\operatorname{Cov}(X,Y)=(-\\frac12)\\cdot 1\\cdot 2=-1$。于是 $\\operatorname{Cov}(X,X+Y)=DX+\\operatorname{Cov}(X,Y)=1-1=0$（独立！），而 $\\operatorname{Cov}(X,X-Y)=1-(-1)=2\\ne 0$（排除 B、D）。"
+        },
+        {
+          "stepTitle": "步骤 2：标准化 X+Y 锁定系数 √3/3",
+          "detail": "$E(X+Y)=0$，$D(X+Y)=1+4+2(-1)=3\\implies\\frac{X+Y}{\\sqrt3}=\\frac{\\sqrt3}{3}(X+Y)\\sim N(0,1)$ 且与 $X$ 独立！"
+        }
+      ],
+      "source": {
+        "book": "27 张宇概率9讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.54-55 例 6.8 / 方浩 P.123 例 40 / 猪狗 P.3-20 例 3.9(2020)",
+        "pdfPage": 65,
+        "itemRef": "强化例6.8 2020真题二维正态正交独立组合"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_recent_exams",
+        "verified": true
+      },
+      "finalAnswer": "选 (C)（$\\frac{\\sqrt3}{3}(X+Y)$）。",
+      "takeaway": "一般套路（格拉姆-施密特正交化！）：对任意二维正态 $(X,Y)$，构造与 $X$ 独立的线性组合永远是 **$Y-\\frac{\\operatorname{Cov}(X,Y)}{DX}X$**——本题恰好是 $Y-(-1)X=Y+X$！"
+    },
+    {
+      "id": "m1-pr06-e-10",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "五、切比雪夫不等式与寿命试验综合（强化例 6.9 & 6.10）",
+      "title": "强化例 6.9 & 例 6.10：样本二阶矩切比雪夫上界 + 定数截尾指数寿命试验",
+      "problem": "(1)（例 6.9）$X_1,\\dots,X_n$ i.i.d.，$E(X_i^k)=\\mu_k\\;(k=1,2,3,4)$，求切比雪夫不等式给出的 $P\\{|\\frac1n\\sum_{i=1}^n X_i^2-\\mu_2|\\ge\\varepsilon\\}$ 上界；(2)（例 6.10）$n$ 个独立指数寿命元件（均值 $\\theta$）同时试验至第 $k$ 个失效停止：① $k=1$ 时求 $T=\\min\\{T_i\\}$ 密度，并定 $a$ 使 $\\hat\\theta=aT$ 无偏及求 $D\\hat\\theta$；② 给定似然函数 $L(\\theta)=\\frac{1}{\\theta^k}e^{-\\frac{1}{\\theta}[\\sum_{i=1}^k t_i+(n-k)t_k]}$，求 $\\theta$ 的最大似然估计。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "(1) 把 $Y_i=X_i^2$ 视作新 i.i.d. 变量，其均值 $\\mu_2$、方差 $\\mu_4-\\mu_2^2$，样本均值方差除以 $n$；(2) 串联最值 $T\\sim E(n/\\theta)$ 无偏修正 $a=n$；对数似然求导驻点即总运行时间除以失效数 $k$！"
+        },
+        {
+          "stepTitle": "步骤 1：例 6.9 样本二阶矩切比雪夫上界",
+          "detail": "$E\\!\\left(\\frac1n\\sum X_i^2\\right)=\\mu_2$，$D\\!\\left(\\frac1n\\sum X_i^2\\right)=\\frac{1}{n^2}\\cdot n D(X_1^2)=\\frac{\\mu_4-\\mu_2^2}{n}$，直接代入切比雪夫得上界 $\\frac{\\mu_4-\\mu_2^2}{n\\varepsilon^2}$！"
+        },
+        {
+          "stepTitle": "步骤 2：例 6.10 串联指数密度、无偏系数与截尾 MLE",
+          "detail": "(1) $T=\\min\\{T_1,\\dots,T_n\\}\\sim E(\\frac{n}{\\theta})$，$f_T(t)=\\frac{n}{\\theta}e^{-\\frac{n}{\\theta}t}\\;(t\\ge 0)$；$ET=\\frac{\\theta}{n}\\implies a=n$ 使 $E\\hat\\theta=\\theta$，且 $D\\hat\\theta=n^2\\cdot\\frac{\\theta^2}{n^2}=\\theta^2$！(2) $\\frac{\\mathrm{d}\\ln L}{\\mathrm{d}\\theta}=-\\frac{k}{\\theta}+\\frac{1}{\\theta^2}[\\sum_{i=1}^k t_i+(n-k)t_k]=0\\implies\\tilde\\theta=\\frac{1}{k}\\left[\\sum_{i=1}^k t_i+(n-k)t_k\\right]$！"
+        }
+      ],
+      "source": {
+        "book": "27 张宇概率9讲",
+        "printedPage": "9讲 P.55-56 例 6.9, 例 6.10",
+        "pdfPage": 66,
+        "itemRef": "强化例6.9与6.10 切比雪夫上界与寿命试验"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_chebyshev_and_life",
+        "verified": true
+      },
+      "finalAnswer": "(1) $\\frac{\\mu_4-\\mu_2^2}{n\\varepsilon^2}$（选 A）；(2) ① $f_T(t)=\\frac{n}{\\theta}e^{-nt/\\theta}\\;(t\\ge 0),\\;a=n,\\;D\\hat\\theta=\\theta^2$；② $\\tilde\\theta=\\frac{1}{k}[\\sum_{i=1}^k t_i+(n-k)t_k]$。",
+      "takeaway": "注意例 6.10 的参数 $\\theta$ 是**均值**（对应密度 $\\frac{1}{\\theta}e^{-t/\\theta}$ 而非 $\\theta e^{-\\theta t}$！），务必在写密度前先核清题目给的是「参数 $\\lambda$」还是「均值 $\\theta$」！"
+    },
+    {
+      "id": "m1-pr06-e-11",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "一、高斯配方与混合正态方差（2013 真题 & 方浩例 6-7）",
+      "title": "方浩例题 6 & 例题 7（2013 真题）：混合正态方差 5.96（夏娃秒杀！）+ Y=Xe^{2X} 期望方差",
+      "problem": "(1)（例题 6）$X$ 的分布函数 $F(x)=0.2\\Phi(x)+0.8\\Phi(\\frac{x-4}{2})$，求 $DX$；(2)（例题 7 / 2013 真题）$X\\sim N(0,1)$，$Y=Xe^{2X}$，求 $EY$ 与 $DY$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "(1) 识出 $X$ 是 $0.2\\cdot N(0,1)+0.8\\cdot N(4,4)$ 的混合分布，用夏娃全方差一行出 $5.96$（亦可按方浩调整法分拆 $EX,E(X^2)$）；(2) 对指数配完全平方直接套高斯偏移定理 $E[g(X)e^{tX}]=e^{t^2/2}E[g(Z)],\\;Z\\sim N(t,1)$！"
+        },
+        {
+          "stepTitle": "步骤 1：例题 6 双法验证混合正态方差 5.96",
+          "detail": "**法一（夏娃全方差 1 行秒杀）**：两分量 $\\mu_1=0,\\sigma_1^2=1$（权 $0.2$）与 $\\mu_2=4,\\sigma_2^2=4$（权 $0.8$）：组内方差均值 $=0.2\\times 1+0.8\\times 4=3.4$；组间均值方差 $=0.2\\times 0.8\\times(4-0)^2=2.56$；总方差 $DX=3.4+2.56=5.96$！**法二（平方差）**：$EX=0.8\\times 4=3.2$，$E(X^2)=0.2(1)+0.8(4+16)=16.2\\implies DX=16.2-3.2^2=5.96$！"
+        },
+        {
+          "stepTitle": "步骤 2：例题 7 高斯配方秒算 EY 与 DY",
+          "detail": "$EY=E(Xe^{2X})=e^{2^2/2}E(Z_1)=2e^2$（$Z_1\\sim N(2,1)$）；$E(Y^2)=E(X^2 e^{4X})=e^{4^2/2}E(Z_2^2)=e^8(1+4^2)=17e^8$（$Z_2\\sim N(4,1)$）。故 $DY=17e^8-(2e^2)^2=17e^8-4e^4$！"
+        }
+      ],
+      "source": {
+        "book": "27 方浩强化",
+        "printedPage": "方浩 P.95-96 例题 6, 例题 7",
+        "pdfPage": 100,
+        "itemRef": "方浩例题6与7 混合正态方差与高斯配方"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_fh_tricks",
+        "verified": true
+      },
+      "finalAnswer": "(1) $DX=5.96$（选 B）；(2) $EY=2e^2,\\;DY=17e^8-4e^4$。",
+      "takeaway": "例题 6 最易错选 $3.4$（忘了混合方差还有组间方差项 $p(1-p)(\\mu_1-\\mu_2)^2=2.56$）或把 $\\Phi(\\frac{x-4}{2})$ 的方差误读为 $2$ 而非 $2^2=4$！"
+    },
+    {
+      "id": "m1-pr06-e-12",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、样本均值协方差奇迹（方浩例 19 & 例 21 · 含勘误注）",
+      "title": "方浩例题 19 & 例题 21（含 P.108 例 20 印刷勘误）：X_i-X̄ 偏差方差与 Y_i=X_i-2X̄ 零协方差奇迹",
+      "problem": "(1)（例题 19）$X_1,\\dots,X_n$ i.i.d. 方差为 $\\sigma^2$，$\\bar X=\\frac1n\\sum_{i=1}^n X_i$，求 $\\operatorname{Cov}(X_1,\\bar X),\\;D(X_1-\\bar X)$ 与 $\\rho_{X_1,\\bar X}$；(2)（例题 21）$X_1,\\dots,X_n\\;(n>2)$ 独立同服从 $N(0,\\sigma^2)$，$Y_i=X_i-2\\bar X$，求 $D(Y_i)$ 与 $\\operatorname{Cov}(Y_1,Y_n)$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "把 $\\bar X$ 展开用协方差双线性：因仅同下标 $\\operatorname{Cov}(X_i,X_i)=\\sigma^2$ 非零，立刻得 $\\operatorname{Cov}(X_i,\\bar X)=\\frac{\\sigma^2}{n}$ 与 $D(\\bar X)=\\frac{\\sigma^2}{n}$，剩下全是一行代数！"
+        },
+        {
+          "stepTitle": "步骤 1：例题 19 导出样本均值三核心式",
+          "detail": "$\\operatorname{Cov}(X_1,\\bar X)=\\frac1n\\sum_{j=1}^n\\operatorname{Cov}(X_1,X_j)=\\frac{\\sigma^2}{n}$；$D(X_1-\\bar X)=\\sigma^2+\\frac{\\sigma^2}{n}-2\\cdot\\frac{\\sigma^2}{n}=\\frac{n-1}{n}\\sigma^2$；$\\rho_{X_1,\\bar X}=\\frac{\\sigma^2/n}{\\sigma\\cdot(\\sigma/\\sqrt n)}=\\frac{1}{\\sqrt n}$！"
+        },
+        {
+          "stepTitle": "步骤 2：例题 21 豪斯霍尔德镜像正交奇迹",
+          "detail": "$D(Y_i)=D(X_i)+4D(\\bar X)-4\\operatorname{Cov}(X_i,\\bar X)=\\sigma^2+\\frac{4\\sigma^2}{n}-\\frac{4\\sigma^2}{n}=\\sigma^2$！$\\operatorname{Cov}(Y_1,Y_n)=\\operatorname{Cov}(X_1,X_n)-2\\operatorname{Cov}(X_1,\\bar X)-2\\operatorname{Cov}(\\bar X,X_n)+4D(\\bar X)=0-\\frac{2\\sigma^2}{n}-\\frac{2\\sigma^2}{n}+\\frac{4\\sigma^2}{n}=0$！（本质原因：矩阵 $H=I-\\frac2n\\mathbf{1}\\mathbf{1}^{\\mathrm{T}}$ 是正交对称阵，故 $Y=HX$ 仍独立同服从 $N(0,\\sigma^2)$！）。"
+        }
+      ],
+      "source": {
+        "book": "27 方浩强化",
+        "printedPage": "方浩 P.107-108 例题 19, 例题 20(勘误), 例题 21",
+        "pdfPage": 112,
+        "itemRef": "方浩例题19与21 样本均值与正交镜像协方差"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_cov_corr_props",
+        "verified": true
+      },
+      "finalAnswer": "(1) $\\frac{\\sigma^2}{n},\\;\\frac{n-1}{n}\\sigma^2,\\;\\frac{1}{\\sqrt n}$；(2) $D(Y_i)=\\sigma^2,\\;\\operatorname{Cov}(Y_1,Y_n)=0$。",
+      "takeaway": "**跨书勘误补注③（方浩强化 P.108 例题 20 顶行下标误印）**：紧夹在例题 19 与例题 21 之间的 P.108 顶部第 2 行，将二维规范性等式 $\\sum_i\\sum_j P\\{X=x_i,Y=y_j\\}=1$ 误印为 `Y_j=y_1`（下标与字母错位），阅读时顺手修正为 $Y=y_j$。"
+    },
+    {
+      "id": "m1-pr06-e-13",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、完全线性相关 |ρ|=1 的充要辨析与应用（方浩例 30-31）",
+      "title": "方浩例题 30 & 例题 31：ρ=1 的真充要条件辨析 + 由 ρ=1 反求线性关系 P{Y=3X+1}=1",
+      "problem": "(1)（例题 30）$DX>0,DY>0$，则 $\\rho_{XY}=1$ 的充要条件是（ ）：(A) $Y=aX+b\\;(a>0)$；(B) $\\operatorname{Cov}=1,DX=DY=1$；(C) $\\operatorname{Cov}=\\frac14,\\sqrt{DX}\\sqrt{DY}=\\frac14$；(D) $D(X+Y)=[\\sqrt{DX}+\\sqrt{DY}]^2$。(2)（例题 31）$X\\sim U(0,1),\\;Y\\sim U(1,4)$ 且 $\\rho_{XY}=1$，确定 $X,Y$ 的几乎必然线性关系。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "(1) 牢记 $\\rho=1$ 只控**以概率 1 线性**（允许零概率点例外），故 A 仅充分不必要，展开 D 等价于 $\\operatorname{Cov}(X,Y)=\\sqrt{DX}\\sqrt{DY}$ 即 $\\rho=1$！(2) 设 $P\\{Y=aX+b\\}=1\\;(a>0)$，用方差比定 $a>0$、用均值定 $b$！"
+        },
+        {
+          "stepTitle": "步骤 1：例题 30 展开选项 D 验证充要性",
+          "detail": "$D(X+Y)=DX+DY+2\\operatorname{Cov}(X,Y)=[\\sqrt{DX}+\\sqrt{DY}]^2=DX+DY+2\\sqrt{DX}\\sqrt{DY}\\iff \\operatorname{Cov}(X,Y)=\\sqrt{DX}\\sqrt{DY}\\iff\\rho_{XY}=1$！而 (A) 缺少 $P\\{\\cdot\\}=1$，(B)(C) 仅给特定数值非必要，故唯一选 (D)！"
+        },
+        {
+          "stepTitle": "步骤 2：例题 31 期望方差联立定出 a=3, b=1",
+          "detail": "由 $\\rho=1$ 知存在 $a>0,b$ 使 $P\\{Y=aX+b\\}=1$。由 $DY=a^2 DX\\implies \\frac{9}{12}=a^2\\cdot\\frac{1}{12}\\implies a=3$（取正！）；再由 $EY=aEX+b\\implies \\frac52=3\\cdot\\frac12+b\\implies b=1$。故 $P\\{Y=3X+1\\}=1$！"
+        }
+      ],
+      "source": {
+        "book": "27 方浩强化",
+        "printedPage": "方浩 P.115-116 例题 30, 例题 31",
+        "pdfPage": 120,
+        "itemRef": "方浩例题30与31 相关系数等于1的充要与应用"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_cov_corr_props",
+        "verified": true
+      },
+      "finalAnswer": "(1) 选 (D)；(2) $P\\{Y=3X+1\\}=1$（选 C）。",
+      "takeaway": "若例题 31 改为 $\\rho_{XY}=-1$，则必须取负斜率 $a=-3$，再解 $\\frac52=-3\\cdot\\frac12+b\\implies b=4$，得 $P\\{Y=-3X+4\\}=1$！"
+    },
+    {
+      "id": "m1-pr06-e-14",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、不相关方程与独立组合相关性（方浩例 35-37）",
+      "title": "方浩例题 35 & 36 & 37：U(-1,1) 与 |X-a| 不相关反求 a + 线性不相关 + X 与 X+Y/XY",
+      "problem": "(1)（例题 35）$X\\sim U(-1,1),\\;Y=|X-a|\\;(|a|<1)$，若 $X,Y$ 不相关，求 $a$；(2)（例题 36）$X\\sim N(-1,2),Y\\sim N(1,2)$ 不相关，若 $aX+Y$ 与 $X+bY$ 也不相关，求 $a,b$ 关系；(3)（例题 37）$X,Y$ 独立且 $DX,DY>0$，判 $X$ 与 $X+Y$、$X$ 与 $XY$ 的相关性。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "全靠 $\\operatorname{Cov}=0$ 破题：(1) 分段算 $E(X|X-a|)=\\frac a6(a^2-3)=0$ 且 $|a|<1\\implies a=0$；(2) 双线性展开得 $aDX+bDY=0\\implies a+b=0$；(3) $\\operatorname{Cov}(X,X+Y)=DX>0$ 恒相关，而 $\\operatorname{Cov}(X,XY)=DX\\cdot EY$ 视 $EY$ 而定！"
+        },
+        {
+          "stepTitle": "步骤 1：例题 35 分段积分定出唯一解 a=0",
+          "detail": "$EX=0\\implies\\operatorname{Cov}(X,Y)=E(X|X-a|)=\\frac12\\left[\\int_{-1}^a x(a-x)\\mathrm{d}x+\\int_a^1 x(x-a)\\mathrm{d}x\\right]=\\frac{a}{6}(a^2-3)=0$。因 $|a|<1$ 舍去 $\\pm\\sqrt3$，得 $a=0$！"
+        },
+        {
+          "stepTitle": "步骤 2：例题 36 与 37 双线性一行秒杀",
+          "detail": "例题 36：$\\operatorname{Cov}(aX+Y,X+bY)=aDX+bDY=2(a+b)=0\\implies a+b=0$（选 D）。例题 37：$\\operatorname{Cov}(X,X+Y)=DX>0$ 必相关（选 A）；$\\operatorname{Cov}(X,XY)=DX\\cdot EY$ 可零可非零，故 C、D 皆不确定。"
+        }
+      ],
+      "source": {
+        "book": "27 方浩强化",
+        "printedPage": "方浩 P.118-120 例题 35, 例题 36, 例题 37",
+        "pdfPage": 123,
+        "itemRef": "方浩例题35至37 不相关方程与独立组合相关性"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_cov_corr_props",
+        "verified": true
+      },
+      "finalAnswer": "(1) $a=0$；(2) $a+b=0$（选 D）；(3) $X$ 与 $X+Y$ 一定相关（选 A）。",
+      "takeaway": "注意例题 35 若未限制 $|a|<1$，则 $|a|\\ge 1$ 时 $Y=\\pm(X-a)$ 是 $X$ 的完全线性函数，此时 $|\\rho|=1$ 绝不可能不相关——所以无论 $a$ 取遍全实数，唯有 $a=0$ 使之不相关！（原解中 $\\pm\\sqrt3$ 是超域伪根！）。"
+    },
+    {
+      "id": "m1-pr06-e-15",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、不相关 vs 独立终极三连击（方浩例 38, 39, 41）",
+      "title": "方浩例题 38 & 39 & 41：正态变号反例 + 混合正态反例 + 两点分布「不相关 ⇔ 独立」亲证",
+      "problem": "(1)（例题 38）$X\\sim N(0,1)$ 独立于 $Y\\in\\{1,-1\\}$（概率 $p,1-p$），$Z=XY$，求 $f_Z$、不相关条件及独立性；(2)（例题 39）$f(x,y)=\\frac12(\\varphi_{1/3}+\\varphi_{-1/3})$（标准均值方差），求边缘、$\\rho$ 及独立性；(3)（例题 41）对两事件 $A_1,A_2$ 定义 $X_i=-1$（$A_i$ 发生）或 $1$（$\\bar A_i$ 发生），若 $X_1,X_2$ 不相关，推导出 $A_1,A_2$ 的关系。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "三题合璧完整立住「独立 vs 不相关」全景图：例 38 与例 39 给出两类**边缘全 $N(0,1)$ 且 $\\rho=0$ 却不独立**的震撼反例；例 41 证明**两点变量不相关必导致事件及变量独立**（亲手纠偏 P.120 流程图！）。"
+        },
+        {
+          "stepTitle": "步骤 1：例 38 与例 39（两大边缘标准正态反例）",
+          "detail": "例 38：$F_Z(z)=p\\Phi(z)+(1-p)[1-\\Phi(-z)]=\\Phi(z)\\implies Z\\sim N(0,1)$（竟与 $p$ 无关！）；$\\operatorname{Cov}(X,Z)=(2p-1)EX^2=2p-1=0\\iff p=\\frac12$；但 $|Z|=|X|$ 故 $P\\{|X|<1,|Z|<1\\}=P\\{|X|<1\\}\\ne [P\\{|X|<1\\}]^2$，绝不独立！例 39：边缘皆 $N(0,1)$，$E(XY)=\\frac12(\\frac13-\\frac13)=0\\implies\\rho=0$，但 $f(x,y)\\ne f_X(x)f_Y(y)$，不独立！"
+        },
+        {
+          "stepTitle": "步骤 2：例 41 证明两点变量不相关 ⇔ 独立",
+          "detail": "展开 $E(X_1X_2)=1-2P(A_1)-2P(A_2)+4P(A_1A_2)$，而 $EX_1\\cdot EX_2=[1-2P(A_1)][1-2P(A_2)]=1-2P(A_1)-2P(A_2)+4P(A_1)P(A_2)$。两式相减立得 $\\operatorname{Cov}(X_1,X_2)=4[P(A_1A_2)-P(A_1)P(A_2)]=0\\iff P(A_1A_2)=P(A_1)P(A_2)$，即 **$A_1,A_2$ 必相互独立（从而 $X_1,X_2$ 必相互独立！）**！"
+        }
+      ],
+      "source": {
+        "book": "27 方浩强化",
+        "printedPage": "方浩 P.121-124 例题 38, 例题 39, 例题 41",
+        "pdfPage": 126,
+        "itemRef": "方浩例题38与39与41 不相关反例及两点独立证明"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_indep_vs_uncorr",
+        "verified": true
+      },
+      "finalAnswer": "(1) $Z\\sim N(0,1)$，$p=\\frac12$ 时不相关，对任何 $p\\in(0,1)$ 均不独立；(2) 两边缘均为 $N(0,1)$，$\\rho=0$，但不独立；(3) $A_1$ 与 $A_2$ 一定独立（选 B）。",
+      "takeaway": "将例 41 记为「可逆岛 ② 铁证」：任何由事件示性函数线性变换生成的两点随机变量 $X_i=c_i\\mathbb{I}_{A_i}+d_i\\;(c_i\\ne 0)$，都有 $\\operatorname{Cov}(X_1,X_2)=c_1c_2[P(A_1A_2)-P(A_1)P(A_2)]$，故不相关与独立 100% 等价！"
+    },
+    {
+      "id": "m1-pr06-e-16",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、2026 最新考研真题双绝杀（猪狗例 3.1 & 例 3.2）",
+      "title": "猪狗例 3.1 & 例 3.2（2026 双真题！）：独立差值裂项求 E(XY)=4 + 独立混合求 ρ_{XY, X+Y}=2/3",
+      "problem": "(1)（2026 真题 · 例 3.1）$X\\sim P(1),\\;Y\\sim P(3)$，且 $X$ 与 $Y-X$ 相互独立，求 $E(XY)$；(2)（2026 真题 · 例 3.2）$X\\sim N(0,1)$ 与 $Y\\sim B(2,\\frac12)$ 相互独立，求 $XY$ 与 $X+Y$ 的相关系数 $\\rho_{XY,\\,X+Y}$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "两道热乎的 2026 考研真题均靠代数拆解 3 行出答案：(1) 拆 $Y=X+(Y-X)$ 用独立乘积拆开；(2) 利用 $EX=0,\\;E(X^2)=1,\\;EY=1,\\;E(Y^2)=\\frac32$ 与独立性零积分秒算协方差和两方差！"
+        },
+        {
+          "stepTitle": "步骤 1：2026 真题① 裂项法 3 行得 E(XY)=4",
+          "detail": "$E(XY)=E[X(X+(Y-X))]=E(X^2)+E(X)E(Y-X)=[DX+(EX)^2]+EX\\cdot(EY-EX)=(1+1^2)+1\\times(3-1)=2+2=4$！"
+        },
+        {
+          "stepTitle": "步骤 2：2026 真题② 纯数字特征展开得 ρ=2/3",
+          "detail": "由题设：$EX=0,\\;DX=1,\\;E(X^2)=1$；$EY=1,\\;DY=\\frac12,\\;E(Y^2)=\\frac32$。独立性得：$E(XY)=0,\\;E(X+Y)=1$；$E[XY(X+Y)]=E(X^2Y)+E(XY^2)=1\\cdot 1+0=1\\implies\\operatorname{Cov}(XY,X+Y)=1-0=1$！方差：$D(XY)=E(X^2Y^2)-0=1\\cdot\\frac32=\\frac32$；$D(X+Y)=1+\\frac12=\\frac32$！故 $\\rho_{XY,X+Y}=\\frac{1}{\\sqrt{3/2}\\cdot\\sqrt{3/2}}=\\frac23$！"
+        }
+      ],
+      "source": {
+        "book": "27 猪狗百宝书",
+        "printedPage": "猪狗 P.3-18 例 3.1(2026), 例 3.2(2026)",
+        "pdfPage": 75,
+        "itemRef": "猪狗例3.1与3.2 2026最新双真题数字特征精解"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_recent_exams",
+        "verified": true
+      },
+      "finalAnswer": "(1) $E(XY)=4$；(2) $\\rho_{XY,\\,X+Y}=\\frac23$。",
+      "takeaway": "注意 2026 真题①中 $X$ 与 $Y$ **并不独立**（若错当独立算成 $1\\times 3=3$ 就踩大坑了！），真正独立的是 $X$ 与 $Y-X$（实际上 $Y-X\\sim P(2)$）！"
+    },
+    {
+      "id": "m1-pr06-e-17",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、条件期望秒杀 2024 & 2022 真题（亚当 + 夏娃终极秀场）",
+      "title": "猪狗例 3.5（2024 真题）& 概率 9 讲附录例（2022 真题）：全期望/全方差 1 行秒杀协方差与 ρ",
+      "problem": "(1)（2024 真题 · 猪狗例 3.5）$f_X(x)=2(1-x)\\;(0<x<1)$，给定 $X=x$ 时 $Y\\sim U(x,1)$，求 $\\operatorname{Cov}(X,Y)$；(2)（2022 真题 · 9 讲附录 P.84 / 方浩例 29）$X\\sim N(0,1)$，给定 $X=x$ 时 $Y\\sim N(x,1)$，求 $\\rho_{XY}$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "把条件期望公式威力拉满：(1) 写出 $E(Y\\mid X)=\\frac{X+1}{2}$，套投影推论 $\\operatorname{Cov}(X,Y)=\\operatorname{Cov}(X,E(Y\\mid X))=\\frac12 DX$ 零二维积分一步秒杀！(2) 亚当算 $EY,E(XY)$ + 夏娃算 $DY=E[D(Y\\mid X)]+D[E(Y\\mid X)]=1+1=2$ 三行完胜！"
+        },
+        {
+          "stepTitle": "步骤 1：2024 真题 1 行投影得 Cov=1/36",
+          "detail": "$EX=\\int_0^1 2x(1-x)\\mathrm{d}x=\\frac13$，$E(X^2)=\\int_0^1 2x^2(1-x)\\mathrm{d}x=\\frac16\\implies DX=\\frac16-\\frac19=\\frac{1}{18}$。因 $Y\\mid(X=x)\\sim U(x,1)\\implies E(Y\\mid X)=\\frac{X+1}{2}$！立得 $\\operatorname{Cov}(X,Y)=\\operatorname{Cov}\\!\\left(X,\\frac{X+1}{2}\\right)=\\frac12 DX=\\frac{1}{36}$！（亦可用常规展开 $EY=\\frac23,\\;E(XY)=\\frac12(\\frac16+\\frac13)=\\frac14\\implies\\frac14-\\frac29=\\frac{1}{36}$ 互证！）。"
+        },
+        {
+          "stepTitle": "步骤 2：2022 真题亚当+夏娃 3 行出 √2/2",
+          "detail": "由 $Y\\mid X\\sim N(X,1)$ 得 $E(Y\\mid X)=X,\\;D(Y\\mid X)=1$。① 亚当：$EY=E(X)=0$；② 夏娃：$DY=E(1)+D(X)=1+1=2$；③ 协方差投影：$\\operatorname{Cov}(X,Y)=\\operatorname{Cov}(X,X)=DX=1$！故 $\\rho_{XY}=\\frac{1}{\\sqrt1\\cdot\\sqrt2}=\\frac{\\sqrt2}{2}$！"
+        }
+      ],
+      "source": {
+        "book": "27 张宇概率9讲附录 & 27 猪狗百宝书 & 27 方浩强化",
+        "printedPage": "9讲 P.84-85 附录 / 猪狗 P.3-17, P.3-19 例 3.5(2024) / 方浩 P.114-115 例 29",
+        "pdfPage": 95,
+        "itemRef": "2024与2022真题条件期望秒杀协方差与相关系数"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_adam_eve_exams",
+        "verified": true
+      },
+      "finalAnswer": "(1) $\\operatorname{Cov}(X,Y)=\\frac{1}{36}$；(2) $\\rho_{XY}=\\frac{\\sqrt2}{2}$。",
+      "takeaway": "记住 2022 真题与 2024 真题这对双子星：只要条件分布写出「条件均值是 $X$ 的线性函数 $aX+b$」且「条件方差已知」，无论条件分布是正态、均匀还是二项/泊松，都有 $\\operatorname{Cov}(X,Y)=a\\,DX$！"
+    },
+    {
+      "id": "m1-pr06-e-18",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、非线性三角函数协方差（2020 真题）与最值对称恒等式",
+      "title": "猪狗例 3.10（2020 真题）& 基础习题 4.10：U(-π/2,π/2) 与 sinX 协方差 + 二维正态 max/min 积期望",
+      "problem": "(1)（2020 真题 · 猪狗例 3.10）$X\\sim U(-\\frac{\\pi}{2},\\frac{\\pi}{2})$，$Y=\\sin X$，求 $\\operatorname{Cov}(X,Y)$；(2)（基础习题 4.10）$(X,Y)\\sim N(0,0;1,1;0.5)$，$U=\\max\\{X,Y\\},\\;V=\\min\\{X,Y\\}$，求 $E(U+V)$ 与 $E(UV)$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "(1) 由奇偶对称 $EX=EY=0$，直接一维分部积分算 $E(X\\sin X)$；(2) 切忌去求 $(U,V)$ 联合分布！一眼识破 $U+V=X+Y$ 且 $UV=XY$，1 秒口算完毕！"
+        },
+        {
+          "stepTitle": "步骤 1：2020 真题对称分部积分出 2/π",
+          "detail": "因 $X$ 对称于 $0$ 且 $\\sin x$ 为奇函数，故 $EX=0,\\;EY=0$。于是 $\\operatorname{Cov}(X,Y)=E(X\\sin X)=\\frac{1}{\\pi}\\int_{-\\pi/2}^{\\pi/2}x\\sin x\\,\\mathrm{d}x=\\frac{2}{\\pi}\\left[-x\\cos x+\\sin x\\right]_0^{\\pi/2}=\\frac{2}{\\pi}$！"
+        },
+        {
+          "stepTitle": "步骤 2：基础习题 4.10 最值代数恒等式 1 秒口算",
+          "detail": "因 $\\{U,V\\}=\\{X,Y\\}$ 恒有 $U+V=X+Y$ 与 $UV=XY$！立得 $E(U+V)=EX+EY=0$，$E(UV)=E(XY)=\\operatorname{Cov}(X,Y)+EX\\cdot EY=0.5\\times 1\\times 1+0=0.5$！"
+        }
+      ],
+      "source": {
+        "book": "27 猪狗百宝书 & 27 张宇基础30讲",
+        "printedPage": "猪狗 P.3-20 例 3.10(2020) / 基础 P.118,121 习题 4.10",
+        "pdfPage": 77,
+        "itemRef": "猪狗例3.10与基础习题4.10 三角协方差与最值乘积期望"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_recent_exams",
+        "verified": true
+      },
+      "finalAnswer": "(1) $\\frac{2}{\\pi}$；(2) $E(U+V)=0,\\;E(UV)=0.5$。",
+      "takeaway": "特别警惕对比：若 2020 真题改为 $Y=\\cos X$，则 $X\\cos X$ 为奇函数积分为 $0$，立即得 $\\operatorname{Cov}(X,\\cos X)=0$（不相关却有明确函数关系）！"
+    },
+    {
+      "id": "m1-pr06-e-19",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "一、曹冲称象示性分解经典实战（配对与抽球期望）",
+      "title": "经典曹冲称象母题：n 封信随机装入 n 个信封恰好装对数 X 的期望 EX=1 与方差 DX=1",
+      "problem": "（经典配对问题 / 示性分解标杆）将 $n\\;(n\\ge 2)$ 封不同的信随机装入 $n$ 个写好地址的信封，每封信装入一个信封，记恰装入自己信封的信的个数为 $X$，求 $EX$ 与 $DX$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "如果去求 $X$ 的错排分布律会累死人！用**曹冲称象示性分解法**令 $X=\\sum_{i=1}^n X_i$（第 $i$ 封信装对记 $1$、装错记 $0$），虽然各 $X_i$ 并不独立，但 $EX$ 直接相加，$DX$ 只用算一个同对称对 $\\operatorname{Cov}(X_1,X_2)$，结果竟恒为 $1$（与 $n$ 无关！）！"
+        },
+        {
+          "stepTitle": "步骤 1：示性变量线性求和秒出 EX=1",
+          "detail": "对每个 $i=1,\\dots,n$，$P\\{X_i=1\\}=\\frac{1}{n}\\implies EX_i=\\frac{1}{n},\\;DX_i=\\frac{1}{n}\\left(1-\\frac{1}{n}\\right)$。由期望线性性（无须独立！）：$EX=\\sum_{i=1}^n EX_i=n\\cdot\\frac{1}{n}=1$！"
+        },
+        {
+          "stepTitle": "步骤 2：对称求一对协方差秒出 DX=1",
+          "detail": "对任意 $i\\ne j$，$E(X_iX_j)=P\\{X_i=1,X_j=1\\}=\\frac{1}{n(n-1)}$，故 $\\operatorname{Cov}(X_i,X_j)=\\frac{1}{n(n-1)}-\\frac{1}{n^2}=\\frac{1}{n^2(n-1)}$。共有 $n(n-1)$ 个有序交叉对（即 $2\\binom{n}{2}$），故：$DX=\\sum_{i=1}^n DX_i+n(n-1)\\operatorname{Cov}(X_1,X_2)=n\\cdot\\frac{n-1}{n^2}+n(n-1)\\cdot\\frac{1}{n^2(n-1)}=\\frac{n-1}{n}+\\frac{1}{n}=1$！"
+        }
+      ],
+      "source": {
+        "book": "27 张宇概率9讲 & 27 方浩强化",
+        "printedPage": "9讲 P.49,51 分解专题 / 方浩 P.92-94 曹冲称象",
+        "pdfPage": 60,
+        "itemRef": "配对问题示性分解求期望与方差"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_matching_and_moments",
+        "verified": true
+      },
+      "finalAnswer": "$EX=1,\\;DX=1$（无论 $n\\ge 2$ 多大，均值方差竟恒为 $1$，且 $n\\to\\infty$ 时分布趋近 $P(1)$！）。",
+      "takeaway": "切记交叉项数量：写作 $\\sum_{i\\ne j}\\operatorname{Cov}(X_i,X_j)$ 共 $n(n-1)$ 项，写作 $2\\sum_{i<j}\\operatorname{Cov}(X_i,X_j)$ 亦是 $2\\cdot\\frac{n(n-1)}{2}=n(n-1)$ 项，切勿重复乘 $2$！"
+    },
+    {
+      "id": "m1-pr06-e-20",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、基础高阶数字特征精选习题",
+      "title": "基础习题 4.5 & 4.6 & 4.7：分段阶梯分布求 D(X²) + 指数变换 D(e^{-2X}) + 瑞利倒数 E(1/Y)",
+      "problem": "(1)（习题 4.5）已知阶梯分布函数在 $-1,0,1$ 处跳高 $0.2,0.6,0.2$，求 $D(X^2)$；(2)（习题 4.6）$X\\sim E(1)$，求 $D(e^{-2X})$；(3)（习题 4.7）瑞利密度 $f(y)=\\frac{y}{a^2}e^{-\\frac{y^2}{2a^2}}\\;(y>0,a>0)$，求 $E(\\frac1Y)$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "(1) 由跳高写出离散分布律，注意 $X^2$ 只取 $0,1$（服从 $B(1,0.4)$！），秒出 $0.4\\times 0.6=0.24$；(2) 直接积分算 $E(e^{-2X})=\\frac13$ 与 $E(e^{-4X})=\\frac15$；(3) $\\frac1y$ 恰好消去分子 $y$，还原半边正态高斯积分！"
+        },
+        {
+          "stepTitle": "步骤 1：习题 4.5 与 4.6 速算",
+          "detail": "(1) $P(X=-1)=0.2,P(X=0)=0.6,P(X=1)=0.2\\implies X^2\\sim B(1,0.4)\\implies D(X^2)=0.4\\times 0.6=0.24$。(2) $E(e^{-2X})=\\int_0^{+\\infty}e^{-3x}\\mathrm{d}x=\\frac13$，$E(e^{-4X})=\\int_0^{+\\infty}e^{-5x}\\mathrm{d}x=\\frac15\\implies D(e^{-2X})=\\frac15-\\frac19=\\frac{4}{45}$。"
+        },
+        {
+          "stepTitle": "步骤 2：习题 4.7 凑标准正态半轴积分",
+          "detail": "$E\\!\\left(\\frac1Y\\right)=\\int_0^{+\\infty}\\frac{1}{a^2}e^{-\\frac{y^2}{2a^2}}\\mathrm{d}y=\\frac{\\sqrt{2\\pi}}{2a}\\int_{-\\infty}^{+\\infty}\\frac{1}{\\sqrt{2\\pi}a}e^{-\\frac{y^2}{2a^2}}\\mathrm{d}y=\\frac{\\sqrt{2\\pi}}{2a}$！"
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲",
+        "printedPage": "基础 P.117-118,120 习题 4.5, 4.6, 4.7",
+        "pdfPage": 123,
+        "itemRef": "基础习题4.5至4.7 阶梯平方与指数瑞利数字特征"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_matching_and_moments",
+        "verified": true
+      },
+      "finalAnswer": "(1) $0.24$；(2) $\\frac{4}{45}$；(3) $\\frac{\\sqrt{2\\pi}}{2a}$。",
+      "takeaway": "一般结论速记：若 $X\\sim E(\\lambda)$，对任意 $s>-\\lambda$ 有矩母函数 $E(e^{-sX})=\\frac{\\lambda}{\\lambda+s}$，秒出习题 4.6 的 $\\frac{1}{1+4}-(\\frac{1}{1+2})^2=\\frac{4}{45}$！"
+    },
+    {
+      "id": "m1-pr06-e-21",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "三、0-1 分布由协方差反推联合分布律（基础习题 4.12 & 4.13）",
+      "title": "基础习题 4.12 & 4.13：已知两 0-1 边缘与 Cov 反推唯一联合表 + 由条件概率建表求 ρ",
+      "problem": "(1)（习题 4.12）$X\\sim B(1,\\frac34),\\;Y\\sim B(1,\\frac12)$ 且 $\\operatorname{Cov}(X,Y)=\\frac18$，求 $(X,Y)$ 联合分布律；(2)（习题 4.13）$P(A)=\\frac14,P(B\\mid A)=\\frac13,P(A\\mid B)=\\frac12$，$X=\\mathbb{I}_A,Y=\\mathbb{I}_B$，求 $(X,Y)$ 分布律、$\\rho_{XY}$ 及 $Z=X^2+Y^2$ 分布。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "两个 $0$-$1$ 变量联合表仅有 1 个自由度 $p_{11}=E(XY)=\\operatorname{Cov}(X,Y)+EX\\cdot EY$！算完 $p_{11}$ 后，其余三格用边缘相减一秒全部锁定！"
+        },
+        {
+          "stepTitle": "步骤 1：习题 4.12 由 Cov 钉死 p₁₁=1/2",
+          "detail": "$p_{11}=E(XY)=\\operatorname{Cov}(X,Y)+EX\\cdot EY=\\frac18+\\frac34\\cdot\\frac12=\\frac12$！由此 $p_{01}=\\frac12-\\frac12=0$，$p_{00}=\\frac14-0=\\frac14$，$p_{10}=\\frac34-\\frac12=\\frac14$。"
+        },
+        {
+          "stepTitle": "步骤 2：习题 4.13 乘法公式建表并算 ρ",
+          "detail": "$P(AB)=\\frac14\\cdot\\frac13=\\frac{1}{12}$，$P(B)=\\frac{1/12}{1/2}=\\frac16$。故 $p_{11}=\\frac{1}{12},\\;p_{10}=\\frac16,\\;p_{01}=\\frac{1}{12},\\;p_{00}=\\frac23$。$DX=\\frac{3}{16},DY=\\frac{5}{36},\\operatorname{Cov}=\\frac{1}{12}-\\frac{1}{24}=\\frac{1}{24}\\implies\\rho_{XY}=\\frac{1/24}{\\sqrt{3/16}\\sqrt{5/36}}=\\frac{\\sqrt{15}}{15}$；$Z=X^2+Y^2=X+Y$ 取 $0,1,2$ 概率分别为 $\\frac23,\\frac14,\\frac{1}{12}$。"
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲",
+        "printedPage": "基础 P.118,121-123 习题 4.12, 4.13",
+        "pdfPage": 124,
+        "itemRef": "基础习题4.12与4.13 0-1分布由协方差建表求相关系数"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_matching_and_moments",
+        "verified": true
+      },
+      "finalAnswer": "(1) $p_{00}=\\frac14,p_{01}=0,p_{10}=\\frac14,p_{11}=\\frac12$；(2) $p_{00}=\\frac23,p_{01}=\\frac{1}{12},p_{10}=\\frac16,p_{11}=\\frac{1}{12}$；$\\rho_{XY}=\\frac{\\sqrt{15}}{15}$；$Z\\sim\\binom{0\\;\\;1\\;\\;2}{2/3\\;1/4\\;1/12}$。",
+      "takeaway": "习题 4.12 再次印证：**两个 0-1 变量只需知道两边缘 + 协方差即可唯一确定整个联合分布**，这也是为什么 0-1 变量对满足「不相关 $\\iff$ 独立」的深层原因！"
+    },
+    {
+      "id": "m1-pr06-e-22",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "四、对称奇次幂与正态三次方的相关性对比",
+      "title": "基础习题 4.4 & 4.14：U(-1,1) 与 Y=X³ 必正相关（对比 Y=X² 不相关！）",
+      "problem": "(1)（习题 4.4）$X\\sim U(-1,1),\\;Y=X^3$，判 $X$ 与 $Y$ 的相关性与独立性；(2)（习题 4.14）$X\\sim N(0,\\sigma^2)\\;(\\sigma>0),\\;Y=X^3$，求 $EY$ 并判 $X,Y$ 是否相关、是否独立。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "看清指数奇偶性！对称分布下，$Y=X^{\\text{偶}}$ 令 $E(XY)=E(X^{\\text{奇}})=0$（**不相关却不独立**）；而 $Y=X^{\\text{奇}}$ 令 $E(XY)=E(X^{\\text{偶}})>0$（**正相关且必不独立**）！"
+        },
+        {
+          "stepTitle": "步骤 1：对称偶次矩严格大于 0 秒判相关",
+          "detail": "(1) $EX=0,\\;E(XY)=E(X^4)=\\int_{-1}^1 \\frac12 x^4\\mathrm{d}x=\\frac15>0\\implies\\operatorname{Cov}(X,Y)=\\frac15\\ne 0$，故相关且必不独立（选 D）！(2) $EY=E(X^3)=0$（奇函数积分），但 $E(XY)=E(X^4)=3\\sigma^4>0\\implies\\operatorname{Cov}(X,Y)=3\\sigma^4>0$，故相关且必不独立！"
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲",
+        "printedPage": "基础 P.117-120,123 习题 4.4, 4.14",
+        "pdfPage": 123,
+        "itemRef": "基础习题4.4与4.14 对称分布奇次幂必正相关"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_matching_and_moments",
+        "verified": true
+      },
+      "finalAnswer": "(1) 相关且不独立（选 D）；(2) $EY=0$，相关且不独立（实际上 $\\rho_{X,X^3}=\\frac{3\\sigma^4}{\\sigma\\sqrt{15\\sigma^6}}=\\sqrt{\\frac35}$！）。",
+      "takeaway": "考场最容易粗心把 $Y=X^3$ 看成 $Y=X^2$ 而误选「不相关且不独立」——**奇次幂单调递增必正相关，偶次幂对称折叠才不相关**！"
+    },
+    {
+      "id": "m1-pr06-e-23",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "一、二维连续对称域与三角极值方差（综合热身）",
+      "title": "基础习题 4.2 & 4.8 & 4.11：正态线性相关系数 + 泊松阶乘矩反求 λ + 切比雪夫反求 ε",
+      "problem": "(1)（习题 4.2）$(X,Y)$ 二维正态，$EX=EY=\\mu,\\;DX=DY=\\sigma^2,\\;\\rho_{XY}=0$，$Z_1=2X+Y,Z_2=2X-Y$，求 $\\rho_{Z_1,Z_2}$；(2)（习题 4.8）$X\\sim P(\\lambda)$ 且 $E[(X-1)(X-2)]=1$，求 $\\lambda$；(3)（习题 4.11）$DX=0.009$，$P\\{|X-EX|<\\varepsilon\\}\\ge 0.9$，由切比雪夫求 $\\varepsilon$ 范围。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "三道超经典客观小题：(1) 套第 4 讲对称线性公式 $\\frac{a^2-b^2}{a^2+b^2}=\\frac{4-1}{4+1}=\\frac35$；(2) 展开 $E(X^2)-3EX+2=\\lambda^2-2\\lambda+2=1\\implies(\\lambda-1)^2=0$；(3) $1-\\frac{0.009}{\\varepsilon^2}\\ge 0.9\\implies\\varepsilon\\ge 0.3$！"
+        },
+        {
+          "stepTitle": "步骤 1：三小题一键验证",
+          "detail": "(1) $DZ_1=DZ_2=5\\sigma^2,\\;\\operatorname{Cov}(Z_1,Z_2)=4\\sigma^2-\\sigma^2=3\\sigma^2\\implies\\rho=\\frac35$（选 B）；(2) $E(X^2)-3EX+2=(\\lambda+\\lambda^2)-3\\lambda+2=(\\lambda-1)^2+1=1\\implies\\lambda=1$；(3) $\\frac{0.009}{\\varepsilon^2}\\le 0.1\\implies\\varepsilon^2\\ge 0.09\\implies\\varepsilon\\ge 0.3$。"
+        }
+      ],
+      "source": {
+        "book": "27 张宇基础30讲",
+        "printedPage": "基础 P.117-121 习题 4.2, 4.8, 4.11",
+        "pdfPage": 123,
+        "itemRef": "基础习题4.2与4.8与4.11 客观高频三小练"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_chebyshev_and_life",
+        "verified": true
+      },
+      "finalAnswer": "(1) $\\frac35$（选 B）；(2) $\\lambda=1$；(3) $\\varepsilon\\ge 0.3$。",
+      "takeaway": "注意习题 4.8 千万别忘了 $E(X^2)=\\lambda+\\lambda^2$（泊松方差是 $\\lambda$，故二阶矩必须加上一次项 $\\lambda$！）。"
+    },
+    {
+      "id": "m1-pr06-e-24",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、复合随机和（随机个数累加）亚当/夏娃压轴应用",
+      "title": "条件数字特征进阶应用：商店日顾客数 N~P(λ)、单人消费 X_i i.i.d. 求日总营收 S 的期望与方差",
+      "problem": "某商店每日进店顾客数 $N\\sim P(\\lambda)$，每位顾客消费额 $X_i$ 独立同分布且与 $N$ 相互独立，均值 $EX_i=\\mu$、方差 $DX_i=\\sigma^2$。求当日总营收 $S=\\sum_{i=1}^{N}X_i$（$N=0$ 时 $S=0$）的数学期望 $ES$ 与方差 $DS$。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "直接固定 $N$ 写内层条件期望 $E(S\\mid N)=N\\mu$ 与条件方差 $D(S\\mid N)=N\\sigma^2$，再套亚当全期望与夏娃全方差两行完工！"
+        },
+        {
+          "stepTitle": "步骤 1：内层固定 N 得条件均值与条件方差",
+          "detail": "给定 $N=n$，由 $X_i$ 独立同分布且独立于 $N$：$E(S\\mid N=n)=n\\mu$，$D(S\\mid N=n)=n\\sigma^2$，即 $E(S\\mid N)=\\mu N,\\;D(S\\mid N)=\\sigma^2 N$。"
+        },
+        {
+          "stepTitle": "步骤 2：外层套亚当与夏娃一步导出总期望总方差",
+          "detail": "亚当：$ES=E(\\mu N)=\\mu\\lambda$；夏娃：$DS=E(\\sigma^2 N)+D(\\mu N)=\\sigma^2\\lambda+\\mu^2\\lambda=\\lambda(\\sigma^2+\\mu^2)=\\lambda E(X_1^2)$！（泊松复合和的方差竟恰好等于 $\\lambda$ 乘单次二阶原点矩！）。"
+        }
+      ],
+      "source": {
+        "book": "27 张宇概率9讲附录拓展",
+        "printedPage": "9讲 P.82-84 亚当夏娃定理应用",
+        "pdfPage": 93,
+        "itemRef": "复合泊松随机和期望方差的亚当夏娃推导"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_adam_eve_exams",
+        "verified": true
+      },
+      "finalAnswer": "$ES=\\lambda\\mu$，$DS=\\lambda(\\sigma^2+\\mu^2)$。",
+      "takeaway": "切忌错算成 $DS=EN\\cdot DX_1=\\lambda\\sigma^2$！顾客数 $N$ 本身的随机波动会额外贡献组间方差 $D(\\mu N)=\\mu^2 DN=\\lambda\\mu^2$！"
+    },
+    {
+      "id": "m1-pr06-e-25",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、条件期望最优均方预测（MMSE）严格证明",
+      "title": "概率 9 讲附录核心定理证明：为何 E(X|Y) 是用 Y 预测 X 的均方误差最小函数",
+      "problem": "（概率 9 讲附录 P.83-84 性质 ⑧）设 $E(X^2)<\\infty$，对任意使 $E[g(Y)^2]<\\infty$ 的函数 $g(Y)$，证明：$E\\big[(X-E(X\\mid Y))^2\\big]\\le E\\big[(X-g(Y))^2\\big]$，并说明等号成立条件。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "插入中间项 $E(X\\mid Y)$ 做平方展开，用条件期望性质 ⑥⑦ 证交叉项恒为 $0$（本质上是希尔伯特空间正交投影：残差 $X-E(X\\mid Y)$ 与一切 $Y$ 的函数正交！）。"
+        },
+        {
+          "stepTitle": "步骤 1：插项展开并利用重期望消去交叉项",
+          "detail": "写 $X-g(Y)=[X-E(X\\mid Y)]+[E(X\\mid Y)-g(Y)]$，平方取期望得：$E[(X-g(Y))^2]=E[(X-E(X\\mid Y))^2]+E[(E(X\\mid Y)-g(Y))^2]+2E\\big[(X-E(X\\mid Y))(E(X\\mid Y)-g(Y))\\big]$。"
+        },
+        {
+          "stepTitle": "步骤 2：用性质 ⑥⑦ 证交叉项恒为 0",
+          "detail": "记 $h(Y)=E(X\\mid Y)-g(Y)$，则交叉项内层条件期望为 $E[(X-E(X\\mid Y))h(Y)\\mid Y]=h(Y)\\cdot E[X-E(X\\mid Y)\\mid Y]=h(Y)\\cdot 0=0$！外层再取期望仍为 $0$。因 $E[h(Y)^2]\\ge 0$，立即得证且当且仅当 $P\\{g(Y)=E(X\\mid Y)\\}=1$ 取等！"
+        }
+      ],
+      "source": {
+        "book": "27 张宇概率9讲附录",
+        "printedPage": "9讲 P.83-84 性质 ⑧",
+        "pdfPage": 94,
+        "itemRef": "条件期望最优均方预测MMSE严格证明"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "finalAnswer": "残差正交分解证毕，当且仅当 $g(Y)=E(X\\mid Y)$ 几乎必然成立时取最小均方误差。",
+      "takeaway": "对比一维最小均方常数 $c=EX$（基础 P.106）：当没有任何辅助信息 $Y$ 时最佳预测是常数 $EX$；掌握信息 $Y$ 后最佳预测跃升为函数 $E(X\\mid Y)$（若限制 $g(Y)=aY+b$ 为线性预测，则最佳线性预测斜率恰为 $a=\\frac{\\operatorname{Cov}(X,Y)}{DY}$！）。"
+    },
+    {
+      "id": "m1-pr06-e-26",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、三变量方差可加性陷阱的显式反例验证",
+      "title": "方浩高频辨析深化：构造三变量满足 D(Y₁+Y₂+Y₃)=DY₁+DY₂+DY₃ 却两两相关！",
+      "problem": "判断命题正误并给出显式反例：若随机变量 $Y_1,Y_2,Y_3$ 满足 $D(Y_1+Y_2+Y_3)=DY_1+DY_2+DY_3$，则 $Y_1,Y_2,Y_3$ 必两两不相关。",
+      "steps": [
+        {
+          "stepTitle": "破题思路与方法选型",
+          "detail": "利用三元方差展开式 $D(Y_1+Y_2+Y_3)=\\sum DY_i+2(\\operatorname{Cov}_{12}+\\operatorname{Cov}_{13}+\\operatorname{Cov}_{23})$，只需让三对协方差正负相抵求和为 $0$ 而单项非零即可一击证伪！"
+        },
+        {
+          "stepTitle": "步骤 1：构造极简显式反例",
+          "detail": "取 $X_1,X_2$ 独立同服从 $N(0,1)$，令 $Y_1=X_1+X_2,\\;Y_2=X_2-X_1,\\;Y_3=X_1$。计算三对协方差：$\\operatorname{Cov}(Y_1,Y_2)=DX_2-DX_1=0$，$\\operatorname{Cov}(Y_1,Y_3)=DX_1=+1\\ne 0$，$\\operatorname{Cov}(Y_2,Y_3)=-DX_1=-1\\ne 0$！"
+        },
+        {
+          "stepTitle": "步骤 2：核验总方差恰好等于方差之和",
+          "detail": "一方面 $Y_1+Y_2+Y_3=X_1+2X_2\\implies D(Y_1+Y_2+Y_3)=1+4=5$；另一方面 $DY_1+DY_2+DY_3=2+2+1=5$！等式精准成立，但 $Y_1,Y_3$ 与 $Y_2,Y_3$ 均显著相关，命题为假！"
+        }
+      ],
+      "source": {
+        "book": "27 方浩强化",
+        "printedPage": "方浩 P.99-101 题型二方差性质辨析",
+        "pdfPage": 104,
+        "itemRef": "三变量方差和等式不推两两不相关反例"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_pr06_cov_corr_props",
+        "verified": true
+      },
+      "finalAnswer": "命题为**假**！反例 $Y_1=X_1+X_2,\\;Y_2=X_2-X_1,\\;Y_3=X_1$（$X_1,X_2$ i.i.d. $N(0,1)$）满足总方差 $=5=\\sum DY_i$ 却并非两两不相关。",
+      "takeaway": "记住界限：仅 **2 个**变量时 $D(X+Y)=DX+DY$ 才与不相关等价；到了 **3 个及以上**变量，该等式只能说明交叉协方差之和为 $0$！"
+    },
+    {
+      "id": "m1-pr06-s-01",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "题型总揽一：期望与方差五大速算降维武器",
+      "title": "题型一答题流水线：九大母分布 · 平方差 · 曹冲称象 · 高斯配方 · 亚当夏娃",
+      "overview": "数字特征是考研概率最高频得分板块（几乎每年必考大题一小问 + 1～2 道客观题，2024/2025/2026 连年霸榜），按题目信号直接切入最快武器：",
+      "source": {
+        "book": "27 张宇概率9讲/基础30讲 & 27 方浩强化",
+        "printedPage": "9讲 P.47-52,82-85 / 基础 P.103-110 / 方浩 P.91-106",
+        "pdfPage": 58,
+        "itemRef": "第6讲题型一 期望方差五大速算武器"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "patterns": [
+        {
+          "typeName": "武器① 常见分布直接套表",
+          "triggers": "题型总揽一：期望与方差五大速算降维武器",
+          "method": "先配方或化简识别 $B,P,G,U,E,N,\\chi^2$ 九大母分布，直接写 $EX,DX$ 并反用 $E(X^2)=DX+(EX)^2$。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "武器② 曹冲称象（示性变量分解）",
+          "triggers": "题型总揽一：期望与方差五大速算降维武器",
+          "method": "计数、配对、抽球、投信题一律拆成 $X=\\sum I_k$，期望无条件相加，方差算一对对称 $\\operatorname{Cov}(I_1,I_2)$。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "武器③ 高斯配方调整法",
+          "triggers": "题型总揽一：期望与方差五大速算降维武器",
+          "method": "见 $X^k e^{tX}$ 对正态变量配方提常数 $e^{t^2/2}$ 转 $N(t,1)$；见级数 $\\sum k^2 p_k$ 逆向识别几何/泊松二阶矩。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "武器④ 最值/绝对值恒等式",
+          "triggers": "题型总揽一：期望与方差五大速算降维武器",
+          "method": "$\\max+\\min=X+Y,\\;\\max\\cdot\\min=XY,\\;\\max=\\frac{X+Y+|X-Y|}{2}$，彻底跳过求二维最值分布。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "武器⑤ 亚当全期望 & 夏娃全方差",
+          "triggers": "题型总揽一：期望与方差五大速算降维武器",
+          "method": "遇到「先给 $X$ 分布，再给 $Y\\mid X=x$ 分布」的层次题（2022/2024 真题）或混合分布方差（方浩例 6），三行零积分直接秒出总均值、总方差与协方差！",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        }
+      ],
+      "takeaway": "结合本讲核心模型与速查表反复对照练习，确保公式选型、定限与边界自检一步到位。"
+    },
+    {
+      "id": "m1-pr06-s-02",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "题型总揽二：协方差、相关系数、独立性辨析与切比雪夫",
+      "title": "题型二答题流水线：协方差双线性 · 两步判独立 · 切比雪夫核中心",
+      "overview": "近五年真题（2020/2022/2024/2025/2026）几乎每年都在协方差、相关系数与独立性辨析上设关，用一张速查决策表一网打尽：",
+      "tables": [
+        {
+          "caption": "表 P6-3 · 独立性 vs 相关性高频考场秒杀对照矩阵",
+          "headers": [
+            "典型结构 (X,Y)",
+            "是否相关 (ρ≠0)?",
+            "是否独立?",
+            "一句话核心理由"
+          ],
+          "rows": [
+            [
+              "$(X,Y)\\sim N$ 且 $\\rho=0$",
+              "不相关",
+              "独立（可逆岛①）",
+              "二维联合正态下不相关与独立完全等价"
+            ],
+            [
+              "两个 0-1 / 两点变量且 $\\operatorname{Cov}=0$",
+              "不相关",
+              "独立（可逆岛②）",
+              "$2\\times 2$ 表仅 1 自由度，$p_{11}=p_{1\\cdot}p_{\\cdot 1}$"
+            ],
+            [
+              "$X$ 对称于 0，$Y=X^2$ 或 $|X|$ 或 $\\cos X$",
+              "不相关",
+              "不独立",
+              "奇函数积分得 $\\operatorname{Cov}=0$，但明显函数相依"
+            ],
+            [
+              "$X$ 对称于 0，$Y=X^3$ 或 $\\sin X$",
+              "正相关（$\\rho>0$）",
+              "不独立",
+              "$X\\cdot X^3=X^4>0$ 积分严格为正"
+            ],
+            [
+              "圆盘 / 菱形上二维均匀分布",
+              "不相关",
+              "不独立",
+              "对称性令 $\\operatorname{Cov}=0$，但非矩形域必不独立"
+            ],
+            [
+              "混合二维正态 $\\frac12(\\varphi_\\rho+\\varphi_{-\\rho})$",
+              "不相关",
+              "不独立",
+              "两边缘皆 $N(0,1)$ 且 $\\rho=0$，但联合非二维正态"
+            ],
+            [
+              "独立 $X\\sim N(0,1),Y=\\pm 1$ 等概，$Z=XY$",
+              "不相关",
+              "不独立",
+              "$EY=0\\implies\\operatorname{Cov}(X,XY)=0$，但 $|Z|=|X|$"
+            ],
+            [
+              "独立非退化 $X,Y$：看 $(X,X+Y)$",
+              "必正相关",
+              "必不独立",
+              "$\\operatorname{Cov}(X,X+Y)=DX>0$"
+            ]
+          ]
+        }
+      ],
+      "source": {
+        "book": "27 张宇概率9讲 & 27 方浩强化 & 27 猪狗百宝书",
+        "printedPage": "9讲 P.52-55 / 方浩 P.106-124 / 猪狗 P.3-18~3-34",
+        "pdfPage": 63,
+        "itemRef": "第6讲题型二 协方差独立性矩阵与切比雪夫"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "patterns": [
+        {
+          "typeName": "算协方差与相关系数三路径",
+          "triggers": "题型总揽二：协方差、相关系数、独立性辨析与切比雪夫",
+          "method": "① 线性组合 $\\to$ 用双线性拆成已知 $DX,DY,\\operatorname{Cov}$；② 独立差值（如 $X\\perp(Y-X)$）$\\to$ 裂项写成 $X+(Y-X)$（2026 真题）；③ 层次分布 $\\to$ 用投影推论 $\\operatorname{Cov}(X,Y)=\\operatorname{Cov}(X,E(Y\\mid X))$（2024/2022 真题）。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "判独立性与相关性标准两步法",
+          "triggers": "题型总揽二：协方差、相关系数、独立性辨析与切比雪夫",
+          "method": "第一步先算 $\\operatorname{Cov}(X,Y)$——若非零立即宣判「相关且不独立」；若为零（不相关），第二步查是否属于**两大可逆岛（二维联合正态 / 两点 0-1 分布对）**——落入则必独立，否则回分布验证或举反例证不独立！",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "套切比雪夫两必检",
+          "triggers": "题型总揽二：协方差、相关系数、独立性辨析与切比雪夫",
+          "method": "① 绝对值内减掉的是否就是 $EX$；② 不等号方向（$\\ge$ 对 $\\le\\frac{DX}{\\varepsilon^2}$，$<$ 对 $\\ge 1-\\frac{DX}{\\varepsilon^2}$）。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        }
+      ],
+      "takeaway": "结合本讲核心模型与速查表反复对照练习，确保公式选型、定限与边界自检一步到位。"
+    },
+    {
+      "id": "m1-pr06-s-03",
+      "kind": "summary",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "考场防坑清单与本讲三处跨书实锤勘误汇总",
+      "title": "第 6 讲六大高危失分陷阱与五书实锤勘误全景复盘",
+      "overview": "本讲在五书深度交叉核验中锁定 **3 处实锤印刷/严谨补注** 与 6 大考场易错点，冲刺必背排雷：",
+      "source": {
+        "book": "五书跨校勘误审计",
+        "printedPage": "方浩 P.108,115,120 / 9讲 P.55",
+        "pdfPage": 66,
+        "itemRef": "第6讲防坑清单与三处跨书勘误补注"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "patterns": [
+        {
+          "typeName": "失分点① 奇函数积分未验绝对收敛",
+          "triggers": "考场防坑清单与本讲三处跨书实锤勘误汇总",
+          "method": "柯西分布 $EX$ 不存在（绝非 $0$！）。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "失分点② 三变量方差和等式滥推不相关",
+          "triggers": "考场防坑清单与本讲三处跨书实锤勘误汇总",
+          "method": "仅二元时 $D(X+Y)=DX+DY\\iff\\rho=0$，三元及以上有反例 $Y_1=X_1+X_2,Y_2=X_2-X_1,Y_3=X_1$！",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "失分点③ 混合分布方差漏加组间方差",
+          "triggers": "考场防坑清单与本讲三处跨书实锤勘误汇总",
+          "method": "混合 $p F_1+(1-p)F_2$ 总方差 $=p\\sigma_1^2+(1-p)\\sigma_2^2+p(1-p)(\\mu_1-\\mu_2)^2$，切勿丢掉后项！",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "失分点④ 混淆 $\\rho=1$ 的「必然线性」与「以概率 1 线性」",
+          "triggers": "考场防坑清单与本讲三处跨书实锤勘误汇总",
+          "method": "$Y=aX+b\\;(a>0)$ 仅充分不必要，充要条件是 $P\\{Y=aX+b\\}=1\\;(a>0)$ 或 $D(X+Y)=[\\sqrt{DX}+\\sqrt{DY}]^2$。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "失分点⑤ 2025 真题最值漏绝对值 & 2026 真题误当 $X,Y$ 独立",
+          "triggers": "考场防坑清单与本讲三处跨书实锤勘误汇总",
+          "method": "$\\max D(aX+bY)=1+|\\rho|$；$X\\perp(Y-X)$ 时必须裂项 $Y=X+(Y-X)$。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        },
+        {
+          "typeName": "本讲三处跨书实锤勘误与严谨补注留档",
+          "triggers": "考场防坑清单与本讲三处跨书实锤勘误汇总",
+          "method": "① **方浩强化 P.108 例题 20 顶行**：规范性等式误印为 `Y_j=y_1`（应为 $Y=y_j$）；② **方浩强化 P.115 例题 29**：左栏边缘密度误印为大写 $f_Y(Y)$（应为小写 $f_Y(y)$），且补注近年真题极利好用全期望/全方差秒杀；③ **方浩强化 P.120 流程图 & 概率 9 讲 P.55 蓝注**：均将「不相关 $\\Rightarrow$ 独立」过强表述为「仅当/只有二维正态」，严正补全**两点（0-1）分布对**同样满足「不相关 $\\iff$ 相互独立」（与方浩 P.123 例 41 及概率 9 讲 P.54 结论 ④ 彻底统一！）。",
+          "pitfall": "严格核对前提条件、积分上下限与归一化结果，避开跨书常见误区。"
+        }
+      ],
+      "takeaway": "结合本讲核心模型与速查表反复对照练习，确保公式选型、定限与边界自检一步到位。"
+    }
+  ]
+}
