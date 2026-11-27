@@ -1,0 +1,1741 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "la-03",
+  "title": "线代 · 第 3 讲　矩阵运算",
+  "sourceMeta": "深度整合《27 张宇基础30讲·线代》第2讲（P.45-73, 75-81）+《27 张宇线代9讲》第3讲全20例（P.14-40）+《27 没咋了线代强化讲义》1.2/1.4-1.7/1.9节（P.12-27, 32-35），100% 逐页核图与 SymPy 验算",
+  "basicRequirements": {
+    "master": "熟练掌握矩阵线性运算、乘法与穿脱原则、矩阵乘法十大形状、高次幂五大法（秩1/二项/周期旋转/初等/满秩与相似）、伴随11大公式、四大求逆法、三种初等矩阵与分块矩阵求逆及矩阵方程求解。",
+    "understand": "深刻理解可逆的 29 条充要条件、格拉姆矩阵 A^TA 与 tr(BB^T)=0 证零武器、分块乘积 AB=C 行列线性表出本质及广义初等变换保秩法则。",
+    "familiar": "熟悉满秩分解降维求高次幂、凯莱正交变换、摄动法同步摄动严谨边界与幂零指数法。"
+  },
+  "items": [
+    {
+      "id": "m1-la03-f-01",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "一、矩阵基本运算与穿脱原则",
+      "title": "矩阵线性运算、乘法、转置与三大「穿脱原则」",
+      "formulaLatex": "$$(AB)^T=B^TA^T,\\qquad (AB)^{-1}=B^{-1}A^{-1},\\qquad (AB)^*=B^*A^*;\\qquad (ABC)^T=C^TB^TA^T$$",
+      "conditions": "加法要求同型；乘法 $A_{m\\times s}B_{s\\times n}$ 要求左列数 = 右行数；$(AB)^{-1}$ 要求 $A,B$ 均为同阶可逆方阵；$(AB)^*=B^*A^*$ 对任意同阶方阵（含不可逆阵，由摄动法）均成立！",
+      "pitfalls": "① $(A+B)^2=A^2+AB+BA+B^2$，**仅当 $AB=BA$ 时**才等于 $A^2+2AB+B^2$！同理 $(A+B)(A-B)=A^2-AB+BA-B^2\\ne A^2-B^2$，$(AB)^n\\ne A^nB^n$！ ② 注意对称与反对称分解恒等式：任意方阵 $A=\\dfrac{A+A^T}{2}+\\dfrac{A-A^T}{2}$（对称阵 + 反对称阵）。",
+      "source": {
+        "book": "27 张宇基础30讲·线代 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.50-53 / 没咋了 P.14-17",
+        "pdfPage": 56,
+        "itemRef": "矩阵基本运算与穿脱原则"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "矩阵加法与数乘满足交换、结合与分配律；矩阵乘法满足结合律 $(AB)C=A(BC)$ 与左右分配律，但**一般不满足交换律与消去律**！转置、求逆、伴随三者作用于乘积时全部遵守「先穿的最后脱」的**穿脱原则**（顺序整体反转）。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「加减数乘同中学，唯独乘法不交换；转置、求逆、伴随三兄弟，遇到乘积全倒穿！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la03-f-02",
+      "kind": "formula",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "一、矩阵乘法的十大形状大观",
+      "title": "矩阵乘法「十大形状大观」（内积 / 外积秩 1 / 行列求和 / 夹阵 / 对角放缩 / 副单位换列）",
+      "formulaLatex": "$$\\alpha^T\\beta\\in\\mathbb{R},\\quad \\alpha\\beta^T\\;(r\\le 1),\\quad A\\boldsymbol{1}=\\text{行和列},\\quad \\boldsymbol{1}^TA=\\text{列和行},\\quad \\boldsymbol{1}^TA\\boldsymbol{1}=\\sum_{i,j}a_{ij}$$",
+      "conditions": "各矩阵维度相容即可。",
+      "pitfalls": "别搞反 $A\\boldsymbol{1}$ 与 $\\boldsymbol{1}^TA$：$A\\boldsymbol{1}$ 得到的是**列向量**（每行元素之和），$\\boldsymbol{1}^TA$ 得到的是**行向量**（每列元素之和）！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.14-16",
+        "pdfPage": 25,
+        "itemRef": "矩阵乘法十大形状大观"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "强化 9 讲总结的 10 个高频矩阵形状：① **行×列** $\\alpha^T\\beta$ = 1 个数（内积，可转置可提至最前）；② **列×行** $\\alpha\\beta^T$ = 秩 $\\le 1$ 方阵（全 1 列右乘行向量即行复制）；③ **行 1 阵左乘** $\\boldsymbol{1}^TA$ = 各列求和（乘 $\\frac{1}{n}$ 为质心行）；④ **列 1 阵右乘** $A\\boldsymbol{1}$ = 各行求和；⑤ **夹阵** $\\boldsymbol{1}^TA\\boldsymbol{1}$ = 全元素总和（二次型 $x^TAx$ 基石）；⑥ **右乘对角阵** $A\\Lambda$ = 列放缩；⑦ **左乘对角阵** $\\Lambda A$ = 行放缩；⑧ **左右同乘对角阵** $\\Lambda A\\Lambda$ = 行列同步放缩；⑨ **右乘副单位阵** $J$ = 左右反转全部列序；⑩ **相似夹阵** $P\\Lambda P^{-1}$ = 7–9 讲核心结构。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「左行右列永不变：左乘 $\\Lambda$ 乘每行、右乘 $\\Lambda$ 乘每列；右乘 $\\boldsymbol{1}$ 求行和、左乘 $\\boldsymbol{1}^T$ 求列和！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la03-f-03",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、矩阵高次幂 $A^n$ 的五大核心公式",
+      "title": "计算矩阵高次幂 $A^n$ 的五大核心公式（秩 1 / 试算周期 / 二项展开 / 初等阵 / 相似对角）",
+      "formulaLatex": "$$r(A)=1\\Rightarrow A^n=[\\operatorname{tr}(A)]^{n-1}A;\\quad (E+B)^n=\\sum_{k=0}^n\\binom{n}{k}B^k;\\quad P^{-1}AP=\\Lambda\\Rightarrow A^n=P\\Lambda^nP^{-1}$$",
+      "conditions": "秩 1 公式要求 $n\\ge 1$（$r=1$ 且 $\\operatorname{tr}(A)=0$ 时 $A^2=O$）；二项展开 $(B+C)^n$ 严格要求 **$BC=CB$**（拆出 $kE$ 时恒成立）。",
+      "pitfalls": "① 上三角约当块 $A=\\begin{bmatrix}1&1&-1\\\\0&1&1\\\\0&0&1\\end{bmatrix}$（强化例 3.5）只有 1 个线性无关特征向量，**不可相似对角化**，只能用 $A=E+B$ 二项展开！ ② 若 $A$ 为分块副对角矩阵 $\\begin{bmatrix}O&B\\\\C&O\\end{bmatrix}$，无 $\\begin{bmatrix}O&B^n\\\\C^n&O\\end{bmatrix}$ 规律，须先算 $A^2=\\begin{bmatrix}BC&O\\\\O&CB\\end{bmatrix}$ 再分奇偶次幂！",
+      "source": {
+        "book": "27 张宇基础30讲·线代 & 27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.54-56 / 强化 P.17-21 / 没咋了 P.22-23",
+        "pdfPage": 28,
+        "itemRef": "矩阵高次幂五大公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_adv_part1",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "求 $A^n$ 全部五大武器：① **秩 1 阵** $A=\\alpha\\beta^T\\Rightarrow A^n=(\\beta^T\\alpha)^{n-1}A=[\\operatorname{tr}(A)]^{n-1}A$；② **试算找规律 / 周期 / 旋转阵**：算出 $A^2=kA,A^2=kE$ 或旋转阵 $[R(\\theta)]^k=R(k\\theta)$（支持任意整数幂含负幂！）；③ **可交换分解 $A=B+C\\;(BC=CB)$**：最常拆成 $E+B$（其中 $B$ 为幂零上/下三角阵 $B^2=O$ 或 $B^3=O$，二项展开仅剩 2–3 项！）；④ **初等阵幂 $P_1^m A P_2^n$**：左行操作 $m$ 次、右列操作 $n$ 次；⑤ **满秩分解 $A=BC\\Rightarrow A^n=B(CB)^{n-1}C$** 与 **相似对角化 $A^n=P\\Lambda^nP^{-1}$**！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「一看秩 1 迹乘方，二看三角拆 $E+B$，三试 $A^2,A^3$ 找周期，四用初等左行右，五用满秩/相似对角化！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la03-f-04",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "三、伴随矩阵 $A^*$ 全部核心公式",
+      "title": "伴随矩阵 $A^*$ 全部 11 大核心公式与 $r(A^*)$ 三档值",
+      "formulaLatex": "$$AA^*=A^*A=|A|E,\\quad |A^*|=|A|^{n-1},\\quad (kA)^*=k^{n-1}A^*,\\quad (A^*)^*=|A|^{n-2}A,\\quad r(A^*)=\\begin{cases}n,&r(A)=n\\\\1,&r(A)=n-1\\\\0,&r(A)<n-1\\end{cases}$$",
+      "conditions": "公式 ⑤ 需 $|A|\\ne 0$；公式 ⑥ 在 $n=2$ 时 $|A|^{n-2}=|A|^0$ 理解为 $1$（恒得 $A$），在 $n\\ge 3$ 且 $|A|=0$ 时得 $O$。",
+      "pitfalls": "① $(kA)^*=k^{n-1}A^*$ 而非 $k^n A^*$！（记住伴随阵每个元是 $n-1$ 阶子式，自然提出 $k^{n-1}$！） ② $(A+B)^*\\ne A^*+B^*$！",
+      "source": {
+        "book": "27 张宇基础30讲·线代 & 27 张宇线代9讲",
+        "printedPage": "基础 P.59-61 / 强化 P.22-25",
+        "pdfPage": 33,
+        "itemRef": "伴随矩阵11大核心公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_adv_part1",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "设 $A,B$ 为 $n\\;(n\\ge 2)$ 阶方阵：① $AA^*=A^*A=|A|E$（无条件成立）；② $|A^*|=|A|^{n-1}$；③ $(A^T)^*=(A^*)^T$；④ $(kA)^*=k^{n-1}A^*$（特别 $(-A)^*=(-1)^{n-1}A^*$）；⑤ 若 $A$ 可逆：$A^{-1}=\\frac{1}{|A|}A^*$，$A^*=|A|A^{-1}$，$(A^*)^{-1}=\\frac{1}{|A|}A=(A^{-1})^*$；⑥ $(A^*)^*=|A|^{n-2}A$（**注意**：$n=2$ 时恒有 $(A^*)^*=A$；$n>2$ 且 $A$ 不可逆时 $(A^*)^*=O$！）；⑦ $|(A^*)^*|=|A|^{(n-1)^2}$；⑧ $(AB)^*=B^*A^*$（无条件成立）；⑨ 若 $r(A)=n-1$，则 $r(A^*)=1$ 且 $(A^*)^k=[\\operatorname{tr}(A^*)]^{k-1}A^*$。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「数乘提 $k^{n-1}$，行列式是 $n-1$ 次，双星降成 $n-2$ 次乘 $A$；$r(A^*)$ 只有三档：$n$、$1$、$0$！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la03-f-05",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "三、逆矩阵性质与三大求逆法",
+      "title": "逆矩阵五大性质与四大求逆法（二阶口诀 / 伴随 / 初等行变换 / 多项式配因子）",
+      "formulaLatex": "$$(A^{-1})^{-1}=A,\\quad (kA)^{-1}=\\frac{1}{k}A^{-1},\\quad (AB)^{-1}=B^{-1}A^{-1},\\quad (A^T)^{-1}=(A^{-1})^T,\\quad |A^{-1}|=\\frac{1}{|A|}$$",
+      "conditions": "方阵 $A$ 可逆 $\\Longleftrightarrow |A|\\ne 0$；对 $n$ 阶方阵，**只需证单侧 $AB=E$** 即自动推出 $BA=E$ 且 $B=A^{-1}$！（非方阵则不然！）",
+      "pitfalls": "① $(kA)^{-1}=\\frac{1}{k}A^{-1}$ 而非 $\\frac{1}{k^n}A^{-1}$！$(A+B)^{-1}\\ne A^{-1}+B^{-1}$！ ② 非方阵 $A_{2\\times 3}B_{3\\times 2}=E_2$ 不能推出 $BA=E_3$，单侧逆充要仅对**同阶方阵**成立！",
+      "source": {
+        "book": "27 张宇基础30讲·线代 & 27 张宇线代9讲",
+        "printedPage": "基础 P.57-65 / 强化 P.26-28",
+        "pdfPage": 37,
+        "itemRef": "逆矩阵性质与四大求逆法"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_base_examples",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "四大求逆途径：① **2 阶口诀**：$\\begin{bmatrix}a&b\\\\c&d\\end{bmatrix}^{-1}=\\dfrac{1}{ad-bc}\\begin{bmatrix}d&-b\\\\-c&a\\end{bmatrix}$（主对调、副变号、除行列式）；② **伴随法**：$A^{-1}=\\frac{1}{|A|}A^*$（适合 2–3 阶低阶或含参理论）；③ **初等行变换法**：$[A,E]\\xrightarrow{\\text{仅行变换}}[E,A^{-1}]$（3 阶以上数值阵主力！）；④ **抽象定义/配因子法**：已知多项式 $f(A)=O$ 求 $(A-cE)^{-1}$ 时用多项式长除法配出 $(A-cE)g(A)=kE\\;(k\\ne 0)$；或已知 $A=BC$ 用 $(BC)^{-1}=C^{-1}B^{-1}$。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「2 阶主对调副变号；3 阶数字用行变换；抽象多项式用长除法配出 $(A-cE)(\\cdots)=kE$；求完必乘原阵验算 $AA^{-1}=E$！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la03-f-06",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "四、初等矩阵与初等变换",
+      "title": "三种初等矩阵 $E_{ij},E_i(k),E_{ij}(k)$ 的行列式、转置、逆与伴随全景公式",
+      "formulaLatex": "$$E_{ij}^{-1}=E_{ij},\\quad E_i(k)^{-1}=E_i\\!\\left(\\tfrac{1}{k}\\right),\\quad E_{ij}(k)^{-1}=E_{ij}(-k);\\qquad E_{ij}^T=E_{ij},\\quad E_{ij}(k)^T=E_{ji}(k)$$",
+      "conditions": "倍乘阵要求 $k\\ne 0$；倍加阵记号不同教材 $E_{ij}(k)$ 下标顺序可能互反（张宇基础 P.64 记第 $j$ 行 $k$ 倍加第 $i$ 行为 $E_{ij}(k)$，没咋了 P.24 记第 $i$ 行 $k$ 倍加第 $j$ 行为 $E_{ij}(k)$），考场一律**直接写出具体矩阵验证**，绝不靠死记下标顺序！",
+      "pitfalls": "特别小心倍加阵的记号差异！解题时别只写 $E_{12}(k)$，务必对照具体矩阵中 $k$ 在 $(1,2)$ 还是 $(2,1)$，记住「左乘看行、右乘看列」！",
+      "source": {
+        "book": "27 张宇基础30讲·线代 & 27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.63-64 / 强化 P.29 / 没咋了 P.24-25",
+        "pdfPage": 40,
+        "itemRef": "三种初等矩阵性质公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_adv_part2",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "由单位矩阵经**一次**初等变换所得矩阵为初等矩阵：① **互换阵** $E_{ij}$：$|E_{ij}|=-1$，对称，自逆，$E_{ij}^*=-E_{ij}$；② **倍乘阵** $E_i(k)\\;(k\\ne 0)$：$|E_i(k)|=k$，对称，逆 $E_i(\\frac{1}{k})$，伴随 $kE_i(\\frac{1}{k})$；③ **倍加阵** $E_{ij}(k)$（记号约定：第 $j$ 行 $k$ 倍加到第 $i$ 行，或第 $i$ 列 $k$ 倍加到第 $j$ 列，第 $(i,j)$ 元为 $k$）：$|E_{ij}(k)|=1$，转置换下标 $E_{ji}(k)$，逆与伴随均为 $E_{ij}(-k)$！核心定理：**左乘 = 初等行变换，右乘 = 初等列变换**；任意可逆阵均可写成有限个初等阵之积。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「互换反号自逆；倍乘取倒；倍加变号、转置移对角对面；考场认 $E_{ij}(k)$ 永远直接手写 $3\\times 3$ 阵左/右乘一下！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la03-f-07",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "五、分块矩阵运算与四类分块三角求逆",
+      "title": "分块矩阵转置、幂及四大分块三角/副对角求逆公式",
+      "formulaLatex": "$$\\begin{bmatrix}A&B\\\\C&D\\end{bmatrix}^T=\\begin{bmatrix}A^T&C^T\\\\B^T&D^T\\end{bmatrix},\\quad \\begin{bmatrix}B&O\\\\D&C\\end{bmatrix}^{-1}=\\begin{bmatrix}B^{-1}&O\\\\-C^{-1}DB^{-1}&C^{-1}\\end{bmatrix},\\quad \\begin{bmatrix}O&B\\\\C&O\\end{bmatrix}^{-1}=\\begin{bmatrix}O&C^{-1}\\\\B^{-1}&O\\end{bmatrix}$$",
+      "conditions": "分块求逆要求 $B,C$ 为可逆方阵（阶数可不相同）；副对角分块求逆后 $B^{-1},C^{-1}$ **对角互换位置**！",
+      "pitfalls": "① 致命错：把 $\\begin{bmatrix}O&B\\\\C&O\\end{bmatrix}^{-1}$ 错写成 $\\begin{bmatrix}O&B^{-1}\\\\C^{-1}&O\\end{bmatrix}$！（乘回去得 $\\begin{bmatrix}BC^{-1}&O\\\\O&CB^{-1}\\end{bmatrix}\\ne E$，必须把 $B^{-1},C^{-1}$ 上下互换！） ② 分块行倍乘 $\\begin{bmatrix}M&O\\\\O&E\\end{bmatrix}$ 仅当 $M$ **可逆**时才保秩不变！",
+      "source": {
+        "book": "27 张宇基础30讲·线代 & 27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.67-69 / 强化 P.33-35 / 没咋了 P.32",
+        "pdfPage": 44,
+        "itemRef": "分块矩阵运算与求逆公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_base_examples",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "设 $B,C$ 均可逆：① **分块转置**：既要把大块整体转置，也要把每个子块内部转置；② **分块对角幂**：$\\operatorname{diag}(A_1,\\dots,A_s)^k=\\operatorname{diag}(A_1^k,\\dots,A_s^k)$；③ **四类分块三角逆**（记忆规律：先求 $B,C$ 各自归位后的逆，非零块 $D$ 处填 **$-(\\text{同行逆})D(\\text{同列逆})$**！）：$\\begin{bmatrix}B&D\\\\O&C\\end{bmatrix}^{-1}=\\begin{bmatrix}B^{-1}&-B^{-1}DC^{-1}\\\\O&C^{-1}\\end{bmatrix}$，$\\begin{bmatrix}O&B\\\\C&D\\end{bmatrix}^{-1}=\\begin{bmatrix}-C^{-1}DB^{-1}&C^{-1}\\\\B^{-1}&O\\end{bmatrix}$，$\\begin{bmatrix}D&B\\\\C&O\\end{bmatrix}^{-1}=\\begin{bmatrix}O&C^{-1}\\\\B^{-1}&-B^{-1}DC^{-1}\\end{bmatrix}$；④ **广义初等变换**：分块行倍加=左乘 $\\begin{bmatrix}E&M\\\\O&E\\end{bmatrix}$，列倍加=右乘 $\\begin{bmatrix}E&O\\\\M&E\\end{bmatrix}$，均保秩不变！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「分块转置内外全转；副对角逆要换位；三角分块非零块口诀：负号 + 左侧块逆 × $D$ × 右侧块逆（实为同行逆左乘、同列逆右乘）！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la03-f-08",
+      "kind": "formula",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、格拉姆矩阵 $A^TA$ 隐藏武器",
+      "title": "格拉姆（Gram）矩阵 $A^TA$ 的五大核心性质与 $\\operatorname{tr}(A^TA)=0\\Leftrightarrow A=O$",
+      "formulaLatex": "$$A^TA=\\big((\\alpha_i,\\alpha_j)\\big)_{n\\times n};\\qquad \\operatorname{tr}(A^TA)=\\sum_{i,j}a_{ij}^2=0\\Longleftrightarrow A=O;\\qquad r(A^TA)=r(A)$$",
+      "conditions": "所有五大性质（尤其是 ②③④）均严格要求 $A$ 为**实矩阵**！（复矩阵中 $A^TA=O$ 不一定得 $A=O$，如 $A=\\begin{bmatrix}1&\\mathrm{i}\\\\0&0\\end{bmatrix}$ 满足 $AA^T=O$ 但 $A\\ne O$！）",
+      "pitfalls": "注意必须加「实矩阵」前提；在考研中矩阵默认实矩阵，但证 $\\operatorname{tr}(BB^T)=0\\Rightarrow B=O$ 时写明「因 $B$ 为实矩阵，各元素平方和为 0」更显严谨！",
+      "source": {
+        "book": "27 张宇基础30讲·线代 & 27 张宇线代9讲",
+        "printedPage": "基础 P.48-49 / 强化 P.22",
+        "pdfPage": 33,
+        "itemRef": "格拉姆矩阵五大性质"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_adv_part1",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "对任意实矩阵 $A=[\\alpha_1,\\dots,\\alpha_n]$，$A^TA$ 的第 $(i,j)$ 元是列向量内积 $(\\alpha_i,\\alpha_j)$，主对角元为模长平方 $\\|\\alpha_i\\|^2$！五大必背性质：① $A^TA$ 是实对称半正定阵（若 $A^TA=\\operatorname{diag}(d_1,\\dots,d_n)$ 则列两两正交且 $\\|\\alpha_i\\|=\\sqrt{d_i}$）；② **$\\operatorname{tr}(A^TA)=\\operatorname{tr}(AA^T)=0\\Longleftrightarrow A=O$**（证矩阵为零的核武器！）；③ $A^TAx=0$ 与 $Ax=0$ **同解**；④ $r(A)=r(A^T)=r(A^TA)=r(AA^T)$；⑤ 若正定阵 $B=A^TA$，可借配方法 $P^TBP=E$ 取 $A=P^{-1}$ 构造 $A$。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「实阵见 $A^TA$：对角是模方、非对角是内积；迹零阵必零；乘转置永远不变秩、永远保同解！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la03-f-09",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "六、求解矩阵方程",
+      "title": "矩阵方程 $AX=B,\\;XA=B,\\;AXB=C$ 化简通式与初等变换解法",
+      "formulaLatex": "$$[A,B]\\xrightarrow{\\text{仅行变换}}[E,A^{-1}B],\\qquad \\begin{bmatrix}A\\\\B\\end{bmatrix}\\xrightarrow{\\text{仅列变换}}\\begin{bmatrix}E\\\\BA^{-1}\\end{bmatrix},\\qquad AX=B\\text{ 有解}\\Longleftrightarrow r(A)=r([A,B])$$",
+      "conditions": "消去律特例：$CA=CB$ 时仅当 $C$ **列满秩**（含可逆）才可消去 $C$ 得 $A=B$；$AC=BC$ 时仅当 $C$ **行满秩**才可消去 $C$ 得 $A=B$！",
+      "pitfalls": "求 $XA=B$ 时若习惯只做行变换，千万别把 $[A,B]$ 直接行变换！正确做法是先两边取转置变 $A^TX^T=B^T$，对 $[A^T,B^T]$ 做行变换得 $[E,X^T]$ 再转置回去！",
+      "source": {
+        "book": "27 张宇基础30讲·线代 & 27 张宇线代9讲",
+        "printedPage": "基础 P.69-72 / 强化 P.37-39",
+        "pdfPage": 48,
+        "itemRef": "矩阵方程求解通式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_adv_part2",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "解矩阵方程「先化简、后代入」：① $A$ 可逆时 $AX=B\\Rightarrow X=A^{-1}B$（直接列拼 $[A,B]$ 仅作行变换，免单独求逆！），$XA=B\\Rightarrow X=BA^{-1}$（行拼 $\\begin{bmatrix}A\\\\B\\end{bmatrix}$ 仅作列变换，或转置为 $A^TX^T=B^T$ 做行变换！）；② **$A$ 不可逆时**：按列分块 $A[\\xi_1,\\dots,\\xi_s]=[\\beta_1,\\dots,\\beta_s]$，对增广阵 $[A,B]$ 统一做行最简形，逐列解出通解再按 $|X|\\ne 0$ 筛选可逆阵（见例 2.18 & 强化例 3.19）；③ 无法化标准型时设 $X=(x_{ij})$ 待定元素法。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「矩阵方程四步走：移项提公因、能消先消、左逆用列拼行变、右逆转置变左逆！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la03-c-01",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "一、矩阵乘法三大反直觉红线",
+      "title": "矩阵乘法三大反例红线（不交换 / 零因子 / 无消去律）与必交换家族",
+      "pitfalls": "注意循环乘积结论：对同阶方阵 $ABC=E\\Longleftrightarrow BCA=E\\Longleftrightarrow CAB=E$（顺时针轮换成立），但一般不能推出 $ACB=E$ 或 $BAC=E$！",
+      "source": {
+        "book": "27 张宇基础30讲·线代 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.51-52,77 / 没咋了 P.14-15,20",
+        "pdfPage": 57,
+        "itemRef": "矩阵乘法三大反例红线"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "summary": "矩阵代数与中学实数代数最本质的三大鸿沟：① **一般 $AB\\ne BA$**；② **$AB=O$ 不能推出 $A=O$ 或 $B=O$**（经典反例 $A=\\begin{bmatrix}1&1\\\\-1&-1\\end{bmatrix},B=\\begin{bmatrix}1&-1\\\\-1&1\\end{bmatrix}$，有 $AB=O$ 而 $BA=\\begin{bmatrix}2&2\\\\-2&-2\\end{bmatrix}\\ne O$！）；③ **$AB=AC$ 且 $A\\ne O$ 不能推出 $B=C$**（仅当 $A$ 列满秩时才可左消去！）。反过来，下列矩阵与 $A$ **恒可交换**：$E,\\;kE,\\;O,\\;A^m,\\;f(A),\\;A^{-1},\\;A^*$（及满足 $AB=A+B$ 的 $A,B$）。",
+      "conditions": "只要题干出现 $A^2-E$、$(A\\pm E)^2$、$f(A)g(A)$，因为 $E$ 与任意方阵交换，所有多项式因式分解公式（平方差、立方和差、二项展开）统统合法！"
+    },
+    {
+      "id": "m1-la03-c-02",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、证明 $A=O$ 的四大黄金武器",
+      "title": "证明矩阵 $A=O$ 的四大出口（尤其 $\\operatorname{tr}(AA^T)=0\\Rightarrow A=O$）",
+      "pitfalls": "注意仅知道 $\\operatorname{tr}(B)=0$ 甚至 $\\operatorname{tr}(B^2)=0$ 都**不能**推出 $B=O$（例如 $B=\\begin{bmatrix}0&1\\\\0&0\\end{bmatrix}$ 满足 $\\operatorname{tr}(B)=\\operatorname{tr}(B^2)=0$ 但 $B\\ne O$），必须是 **$\\operatorname{tr}(B^TB)=0$**（平方和！）才等价于 $B=O$！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.16-17",
+        "pdfPage": 27,
+        "itemRef": "证A=O四大武器"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "summary": "考研证明某矩阵表达式 $B=O$（如证对称 $A^T-A=O$、证相等 $B-C=O$）的四大出口：① **$r(B)=0\\Longleftrightarrow B=O$**；② **$r(A)<n-1\\Longrightarrow A^*=O$**；③ **实矩阵迹零法**：$\\operatorname{tr}(B^TB)=\\operatorname{tr}(BB^T)=\\sum b_{ij}^2=0\\Longleftrightarrow B=O$（最高频压轴巧法，见强化例 3.1！）；④ **正交乘积法**：$A$ 的行向量与 $B$ 的列向量两两正交 $\\Longleftrightarrow AB=O$（且由秩关系得 $r(A)+r(B)\\le n$）。",
+      "conditions": "看到 $A^TA=A^2$、$A^2=A$ 等纯二次矩阵等式要证 $A=A^T$，立刻构造 $B=A^T-A$ 算 $\\operatorname{tr}(BB^T)$，利用 $\\operatorname{tr}(XY)=\\operatorname{tr}(YX)$ 和 $\\operatorname{tr}(X^T)=\\operatorname{tr}(X)$ 两行秒出 $\\operatorname{tr}(BB^T)=0$！"
+    },
+    {
+      "id": "m1-la03-c-03",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "三、可逆的 29 条充要条件全景大观",
+      "title": "$n$ 阶方阵 $A$ 可逆的 29 条充要条件大观（表 L3-1，贯穿线代全 9 讲总枢纽！）",
+      "tables": [
+        {
+          "caption": "表 L3-1　$n$ 阶方阵 $A$ 可逆的 29 条充要条件分类全景表（强化 9 讲 P.26-27）",
+          "headers": [
+            "关联模块",
+            "充要条件编号与内容"
+          ],
+          "rows": [
+            [
+              "①-③ 定义",
+              "① 存在 $B$ 使 $AB=BA=E$；② 存在 $B$ 使 $BA=E$；③ 存在 $B$ 使 $AB=E$（方阵单侧即充要！）"
+            ],
+            [
+              "④ 行列式",
+              "④ $|A|\\ne 0$"
+            ],
+            [
+              "⑤-⑧ 初等变换",
+              "⑤ $A$ 的等价标准形为 $E$；⑥ $A$ 可经初等行变换化为 $E$；⑦ 可经初等列变换化为 $E$；⑧ 可分解为若干初等阵之积"
+            ],
+            [
+              "⑨-⑬ 矩阵的秩",
+              "⑨ $r(A)=n$；⑩ $\\forall C_{n\\times s},r(AC)=r(C)$；⑪ $\\forall C_{n\\times n},r(AC)=r(C)$；⑫ $\\forall C_{s\\times n},r(CA)=r(C)$；⑬ $\\forall C_{n\\times n},r(CA)=r(C)$"
+            ],
+            [
+              "⑭-⑲ 方程组解",
+              "⑭ $Ax=0$ 仅零解；⑮ $\\forall\\beta,Ax=\\beta$ 唯一解；⑯ $\\forall\\beta,Ax=\\beta$ 有解；⑰ $AX=O$ 仅零解；⑱ $\\forall C,AX=C$ 唯一解；⑲ $\\forall C,AX=C$ 有解"
+            ],
+            [
+              "⑳-㉓ 向量与基",
+              "⑳ $A$ 列向量组线性无关；㉑ $A$ 行向量组线性无关；㉒ 列向量组是 $\\mathbb{R}^n$ 基（数一）；㉓ 行向量组是 $\\mathbb{R}^n$ 基（数一）"
+            ],
+            [
+              "㉔ 特征值",
+              "㉔ $0$ 不是 $A$ 的特征值"
+            ],
+            [
+              "㉕-㉙ 正定性",
+              "㉕ $A^TA$ 正定；㉖ $AA^T$ 正定；㉗ $A^TA$ 特征值全正；㉘ $A^TA\\simeq E$；㉙ $A^TA$ 正惯性指数为 $n$（或各阶顺序主子式全正）"
+            ]
+          ]
+        }
+      ],
+      "pitfalls": "第 ㉕–㉙ 条要求 $A$ 为**实矩阵**；另外切勿把「$A$ 可逆」与「$A$ 可相似对角化」混为一谈（两者毫无必然蕴含关系！）。",
+      "source": {
+        "book": "27 张宇线代9讲 & 线代独家大总结",
+        "printedPage": "强化 P.26-27 / 大总结 P.7",
+        "pdfPage": 37,
+        "itemRef": "表 L3-1 可逆29条充要条件表"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "summary": "线代核心概念全部串在「$A_{n\\times n}$ 可逆」这条主轴上！张宇《线代 9 讲》P.26–27 归纳了全部 **29 条**等价表述，覆盖定义、行列式、初等变换、秩、方程组、向量组、基底（数一）、特征值与正定性八大模块（见表 L3-1）。",
+      "conditions": "把这张表背熟，做抽象选择题时就能在「可逆 $\\leftrightarrow$ 满秩 $\\leftrightarrow$ 仅零解 $\\leftrightarrow$ 无 0 特征值 $\\leftrightarrow$ $A^TA$ 正定」之间瞬间丝滑切换！"
+    },
+    {
+      "id": "m1-la03-c-04",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "五、分块矩阵乘积 $AB=C$ 的列/行表出本质",
+      "title": "分块乘积 $AB=C$ 的列/行线性表出与「横拼左同、竖拼右同多化零」神技",
+      "pitfalls": "注意横拼不能右同化零！$[A,BA]$ 无法化为 $[A,O]$（因 $BA$ 的列由 $B$ 而不是 $A$ 表出！见强化例 3.18 选项 B 反例）。",
+      "figureSvg": "<svg viewBox=\"0 0 640 222\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"矩阵乘法四大核心形状与分块线性组合\">\n  <title>矩阵乘法四大核心形状大观（内积/秩1外积/列组合/行组合）</title>\n  <rect x=\"4\" y=\"4\" width=\"632\" height=\"214\" rx=\"10\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"320\" y=\"25\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">矩阵乘法核心「形状大观」与 AB=C 的行/列线性表出本质</text>\n\n  <!-- Box 1: Inner product -->\n  <g transform=\"translate(18,38)\">\n    <rect x=\"0\" y=\"0\" width=\"144\" height=\"168\" rx=\"8\" fill=\"#ffffff\" stroke=\"#93c5fd\" stroke-width=\"1.3\"/>\n    <text x=\"72\" y=\"18\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1d4ed8\">① 行×列 = 1 个数</text>\n    <rect x=\"14\" y=\"44\" width=\"48\" height=\"14\" rx=\"2\" fill=\"#dbeafe\" stroke=\"#2563eb\"/>\n    <text x=\"38\" y=\"55\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#1e40af\">αᵀ</text>\n    <text x=\"70\" y=\"55\" text-anchor=\"middle\" font-size=\"12\" fill=\"#475569\">·</text>\n    <rect x=\"78\" y=\"28\" width=\"14\" height=\"48\" rx=\"2\" fill=\"#fee2e2\" stroke=\"#dc2626\"/>\n    <text x=\"85\" y=\"55\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#991b1b\">β</text>\n    <text x=\"102\" y=\"55\" text-anchor=\"middle\" font-size=\"11\" fill=\"#475569\">=</text>\n    <rect x=\"112\" y=\"44\" width=\"16\" height=\"16\" rx=\"2\" fill=\"#dcfce7\" stroke=\"#16a34a\"/>\n    <text x=\"72\" y=\"102\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#0f172a\">αᵀβ = βᵀα = 数</text>\n    <text x=\"72\" y=\"122\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">内积，可任意转置、</text>\n    <text x=\"72\" y=\"137\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">提到矩阵乘法最前面！</text>\n    <text x=\"72\" y=\"156\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#047857\">tr(αβᵀ) = βᵀα</text>\n  </g>\n\n  <!-- Box 2: Outer product Rank-1 -->\n  <g transform=\"translate(172,38)\">\n    <rect x=\"0\" y=\"0\" width=\"144\" height=\"168\" rx=\"8\" fill=\"#ffffff\" stroke=\"#fca5a5\" stroke-width=\"1.3\"/>\n    <text x=\"72\" y=\"18\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#b91c1c\">② 列×行 = 秩 1 阵</text>\n    <rect x=\"18\" y=\"28\" width=\"14\" height=\"48\" rx=\"2\" fill=\"#fee2e2\" stroke=\"#dc2626\"/>\n    <text x=\"25\" y=\"55\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#991b1b\">α</text>\n    <text x=\"40\" y=\"55\" text-anchor=\"middle\" font-size=\"12\" fill=\"#475569\">·</text>\n    <rect x=\"48\" y=\"44\" width=\"36\" height=\"14\" rx=\"2\" fill=\"#dbeafe\" stroke=\"#2563eb\"/>\n    <text x=\"66\" y=\"55\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#1e40af\">βᵀ</text>\n    <text x=\"92\" y=\"55\" text-anchor=\"middle\" font-size=\"11\" fill=\"#475569\">=</text>\n    <rect x=\"100\" y=\"34\" width=\"34\" height=\"34\" rx=\"2\" fill=\"#fef3c7\" stroke=\"#d97706\"/>\n    <text x=\"117\" y=\"55\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#92400e\">r=1</text>\n    <text x=\"72\" y=\"102\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#0f172a\">A = αβᵀ (r≤1)</text>\n    <text x=\"72\" y=\"122\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#b91c1c\">高次幂秒杀公式：</text>\n    <text x=\"72\" y=\"138\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#b91c1c\">Aⁿ = [tr(A)]ⁿ⁻¹ A</text>\n    <text x=\"72\" y=\"156\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">特征值：tr(A), 0, …, 0</text>\n  </g>\n\n  <!-- Box 3: Column combination -->\n  <g transform=\"translate(326,38)\">\n    <rect x=\"0\" y=\"0\" width=\"144\" height=\"168\" rx=\"8\" fill=\"#ffffff\" stroke=\"#86efac\" stroke-width=\"1.3\"/>\n    <text x=\"72\" y=\"18\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#15803d\">③ AB=C 列视角</text>\n    <rect x=\"14\" y=\"32\" width=\"44\" height=\"44\" rx=\"3\" fill=\"#dcfce7\" stroke=\"#16a34a\"/>\n    <line x1=\"28\" y1=\"32\" x2=\"28\" y2=\"76\" stroke=\"#16a34a\" stroke-dasharray=\"3 2\"/>\n    <line x1=\"43\" y1=\"32\" x2=\"43\" y2=\"76\" stroke=\"#16a34a\" stroke-dasharray=\"3 2\"/>\n    <text x=\"36\" y=\"58\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#166534\">A 列</text>\n    <rect x=\"64\" y=\"32\" width=\"30\" height=\"44\" rx=\"3\" fill=\"#f1f5f9\" stroke=\"#64748b\"/>\n    <text x=\"79\" y=\"58\" text-anchor=\"middle\" font-size=\"10\" fill=\"#334155\">B</text>\n    <text x=\"102\" y=\"58\" text-anchor=\"middle\" font-size=\"11\" fill=\"#475569\">=</text>\n    <rect x=\"110\" y=\"32\" width=\"24\" height=\"44\" rx=\"3\" fill=\"#fef3c7\" stroke=\"#d97706\"/>\n    <text x=\"122\" y=\"58\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#92400e\">C</text>\n    <text x=\"72\" y=\"100\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#0f172a\">C 的列由 A 的列表出</text>\n    <text x=\"72\" y=\"119\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#15803d\">横拼左同多化零：</text>\n    <text x=\"72\" y=\"136\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#166534\">[A, AB] → [A, O]</text>\n    <text x=\"72\" y=\"156\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">r([A, AB]) = r(A)</text>\n  </g>\n\n  <!-- Box 4: Row combination -->\n  <g transform=\"translate(480,38)\">\n    <rect x=\"0\" y=\"0\" width=\"144\" height=\"168\" rx=\"8\" fill=\"#ffffff\" stroke=\"#c4b5fd\" stroke-width=\"1.3\"/>\n    <text x=\"72\" y=\"18\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#7e22ce\">④ AB=C 行视角</text>\n    <rect x=\"14\" y=\"32\" width=\"30\" height=\"44\" rx=\"3\" fill=\"#f1f5f9\" stroke=\"#64748b\"/>\n    <text x=\"29\" y=\"58\" text-anchor=\"middle\" font-size=\"10\" fill=\"#334155\">A</text>\n    <rect x=\"50\" y=\"32\" width=\"44\" height=\"44\" rx=\"3\" fill=\"#f3e8ff\" stroke=\"#9333ea\"/>\n    <line x1=\"50\" y1=\"46\" x2=\"94\" y2=\"46\" stroke=\"#9333ea\" stroke-dasharray=\"3 2\"/>\n    <line x1=\"50\" y1=\"61\" x2=\"94\" y2=\"61\" stroke=\"#9333ea\" stroke-dasharray=\"3 2\"/>\n    <text x=\"72\" y=\"58\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#6b21a8\">B 行</text>\n    <text x=\"102\" y=\"58\" text-anchor=\"middle\" font-size=\"11\" fill=\"#475569\">=</text>\n    <rect x=\"110\" y=\"32\" width=\"24\" height=\"44\" rx=\"3\" fill=\"#fef3c7\" stroke=\"#d97706\"/>\n    <text x=\"122\" y=\"58\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#92400e\">C</text>\n    <text x=\"72\" y=\"100\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#0f172a\">C 的行由 B 的行表出</text>\n    <text x=\"72\" y=\"119\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#7e22ce\">竖拼右同多化零：</text>\n    <text x=\"72\" y=\"136\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#6b21a8\">[AB; B] → [O; B]</text>\n    <text x=\"72\" y=\"156\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">r([AB; B]) = r(B)</text>\n  </g>\n</svg>",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.35-36 / 没咋了 P.27",
+        "pdfPage": 46,
+        "itemRef": "分块AB=C行列线性表出"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "summary": "设 $A_{m\\times n}B_{n\\times s}=C_{m\\times s}$，分块视角揭示全部矩阵乘法灵魂：① **按列看**：$C$（即 $AB$）的每个列向量都可由 **$A$ 的列向量组**线性表出（系数恰为 $B$ 对应列！），从而横拼时左因子相同可借初等列变换多化零：**$[A,AB]\\to[A,O]\\implies r([A,AB])=r(A)$**；② **按行看**：$C$（即 $AB$）的每个行向量都可由 **$B$ 的行向量组**线性表出（系数恰为 $A$ 对应行！），从而竖拼时右因子相同可借初等行变换多化零：**$\\begin{bmatrix}AB\\\\B\\end{bmatrix}\\to\\begin{bmatrix}O\\\\B\\end{bmatrix}\\implies r\\!\\begin{bmatrix}AB\\\\B\\end{bmatrix}=r(B)$**！",
+      "conditions": "张宇经典口诀「**横拼左同多化零、竖拼右同多化零**」：横着拼（列拼接）看左边是不是同一个因子 $A$（如 $[AB^TA,AB^T]\\to[O,AB^T]$），竖着拼（行拼接）看右边是不是同一个因子 $B$（如 $\\begin{bmatrix}BA\\\\B^TBA\\end{bmatrix}\\to\\begin{bmatrix}BA\\\\O\\end{bmatrix}$）！"
+    },
+    {
+      "id": "m1-la03-c-05",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "四、初等变换「混用 vs 禁用」边界法则",
+      "title": "初等变换「可行列混用（5 种场合）」vs「严禁混用（列拼行变 / 行拼列变）」边界清单",
+      "pitfalls": "求极大无关组或解方程组 $Ax=b$ 时若不小心做了一次列变换，相当于打乱了未知数顺序或破坏了列向量线性关系，答案必错！",
+      "figureSvg": "<svg viewBox=\"0 0 640 202\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"初等变换左行右列与列拼行拼防错规则\">\n  <title>初等变换「左行右列」与「列拼行变换 / 行拼列变换」黄金法则</title>\n  <defs>\n    <marker id=\"m1_la03_arr1\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#2563eb\"/>\n    </marker>\n    <marker id=\"m1_la03_arr2\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#059669\"/>\n    </marker>\n  </defs>\n  <rect x=\"4\" y=\"4\" width=\"632\" height=\"194\" rx=\"10\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"320\" y=\"25\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">初等矩阵与初等变换黄金法则：左乘 = 行变换，右乘 = 列变换</text>\n\n  <!-- Left panel: Left-multiply = Row -->\n  <g transform=\"translate(20,40)\">\n    <rect x=\"0\" y=\"0\" width=\"292\" height=\"146\" rx=\"8\" fill=\"#ffffff\" stroke=\"#3b82f6\" stroke-width=\"1.4\"/>\n    <text x=\"146\" y=\"20\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1d4ed8\">左乘 P（初等行变换）→「列拼」左右摆</text>\n    <rect x=\"18\" y=\"34\" width=\"94\" height=\"36\" rx=\"5\" fill=\"#eff6ff\" stroke=\"#93c5fd\"/>\n    <text x=\"65\" y=\"57\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#1e40af\">[ A  |  B ]</text>\n    <line x1=\"120\" y1=\"52\" x2=\"170\" y2=\"52\" stroke=\"#2563eb\" stroke-width=\"2\" marker-end=\"url(#m1_la03_arr1)\"/>\n    <text x=\"145\" y=\"44\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#2563eb\">仅行变换</text>\n    <rect x=\"176\" y=\"34\" width=\"100\" height=\"36\" rx=\"5\" fill=\"#dcfce7\" stroke=\"#86efac\"/>\n    <text x=\"226\" y=\"57\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#166534\">[ E | A⁻¹B ]</text>\n    <text x=\"146\" y=\"92\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#0f172a\">本质：左乘 P = A⁻¹，得 P[A, B] = [PA, PB]</text>\n    <text x=\"146\" y=\"112\" text-anchor=\"middle\" font-size=\"10\" fill=\"#475569\">• 解 AX=B / 求 A⁻¹（取 B=E）</text>\n    <text x=\"146\" y=\"129\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#b91c1c\">⚠ 严禁混用列变换！（否则破环同解性）</text>\n  </g>\n\n  <!-- Right panel: Right-multiply = Col -->\n  <g transform=\"translate(328,40)\">\n    <rect x=\"0\" y=\"0\" width=\"292\" height=\"146\" rx=\"8\" fill=\"#ffffff\" stroke=\"#10b981\" stroke-width=\"1.4\"/>\n    <text x=\"146\" y=\"20\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#047857\">右乘 Q（初等列变换）→「行拼」上下叠</text>\n    <rect x=\"26\" y=\"30\" width=\"76\" height=\"46\" rx=\"5\" fill=\"#ecfdf5\" stroke=\"#6ee7b7\"/>\n    <text x=\"64\" y=\"49\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#065f46\">A</text>\n    <line x1=\"34\" y1=\"54\" x2=\"94\" y2=\"54\" stroke=\"#10b981\" stroke-dasharray=\"3 2\"/>\n    <text x=\"64\" y=\"70\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#065f46\">B</text>\n    <line x1=\"112\" y1=\"53\" x2=\"162\" y2=\"53\" stroke=\"#059669\" stroke-width=\"2\" marker-end=\"url(#m1_la03_arr2)\"/>\n    <text x=\"137\" y=\"45\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#059669\">仅列变换</text>\n    <rect x=\"168\" y=\"30\" width=\"98\" height=\"46\" rx=\"5\" fill=\"#fef3c7\" stroke=\"#fcd34d\"/>\n    <text x=\"217\" y=\"49\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#92400e\">E</text>\n    <line x1=\"176\" y1=\"54\" x2=\"258\" y2=\"54\" stroke=\"#d97706\" stroke-dasharray=\"3 2\"/>\n    <text x=\"217\" y=\"70\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#92400e\">B A⁻¹</text>\n    <text x=\"146\" y=\"96\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#0f172a\">本质：右乘 Q = A⁻¹，免求逆直算 PB⁹⁹P⁻¹</text>\n    <text x=\"146\" y=\"114\" text-anchor=\"middle\" font-size=\"10\" fill=\"#475569\">• 解 XA=B / 强化例 3.16 [P; PB⁹⁹]→[E; A⁹⁹]</text>\n    <text x=\"146\" y=\"131\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#047857\">✓ 仅算秩/行列式/等价标准形可行列混用</text>\n  </g>\n</svg>",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 张宇基础30讲·线代",
+        "printedPage": "强化 P.29-31 / 基础 P.63-66",
+        "pdfPage": 40,
+        "itemRef": "初等变换混用边界法则"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "summary": "初等变换极其强大但必须守死边界：① **允许行、列变换混用（5 种）**：算行列式（注意换号与提因子）、求矩阵的秩、求向量组的秩、求等价标准形、对称阵合同化对角（必须成对同步行列变换）；② **严禁混用**：求逆 $[A,E]\\to[E,A^{-1}]$、解线性方程组 $[A,b]\\to$ 行阶梯、求极大无关组及线性表出系数、解 $AX=B$ 均**只能作初等行变换**；行拼 $\\begin{bmatrix}A\\\\B\\end{bmatrix}\\to\\begin{bmatrix}E\\\\BA^{-1}\\end{bmatrix}$ **只能作初等列变换**！",
+      "conditions": "一句话记死：**「列拼（左右摆）只行变，行拼（上下叠）只列变」**！因为左右摆对应左乘同一个 $P$，上下叠对应右乘同一个 $Q$！"
+    },
+    {
+      "id": "m1-la03-c-06",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "七、本讲原书勘误与严谨补注台账",
+      "title": "第 3 讲跨书核对实锤勘误与严谨补注（共 3 处，含强化例 3.8 ④ 摄动法漏洞修正！）",
+      "pitfalls": "如果考场用摄动法证明合同命题，一定要写 $B_t=C^T(A+tE)C$ 而非 $B_t=B+tE$，否则遇到严苛阅卷老师会被直接扣掉证明分！",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义（SymPy 严格核验）",
+        "printedPage": "强化 P.24,39 / 没咋了 P.34",
+        "pdfPage": 35,
+        "itemRef": "第3讲勘误补注台账"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_adv_part1",
+        "verified": true
+      },
+      "summary": "经逐页高清核读与 SymPy 实证，第 3 讲发现以下 3 处重要勘误与升级：① **【重磅严谨修正】《27 张宇线代 9 讲》P.24 例 3.8 ④**：原书证不可逆阵「$A\\simeq B\\Rightarrow A^*\\simeq B^*$」时写 `令 A_t=A+tE, B_t=B+tE`，**存在严格逻辑漏洞**！因为 $C^TAC=B$ 推出 $C^T(A+tE)C=B+tC^TC\\ne B+tE$（SymPy 反例：取 $A=\\begin{bmatrix}0&1\\\\-1&0\\end{bmatrix},C=\\operatorname{diag}(2,1),B=C^TAC$，则 $A+tE$ 与 $B+tE$ 根本**不合同**！）。**1 行严谨修正**：取 $A_t=A+tE$、$B_t=C^TA_tC=B+tC^TC$，对充分小 $t\\ne 0$ 两者均可逆且由同一固定实可逆阵 $Q=|C|^{-1}C^{-1}$ 满足 $Q^TA_t^*Q=B_t^*$，令 $t\\to 0$ 即严格证得 $Q^TA^*Q=B^*$（结论 ④ 本身正确！）；② **《强化 9 讲》P.39–40 例 3.20(2)** 补充 2 行幂零指数秒杀法（$B^6=A^3=O\\Rightarrow 3$ 阶幂零必有 $B^3=O\\Rightarrow A^2=B^4=O$ 矛盾）；③ **《27 没咋了》P.34 例 6** 题干漏字排版 `的秩分别为 n` 紧接 `r_1,r_2,r_3`，实为「的秩分别为 $r_1,r_2,r_3$」。",
+      "conditions": "摄动法极其好用，但必须保证摄动后的 $A_t,B_t$ **维持题设结构（相似用 $P^{-1}(A+tE)P=B+tE$ 可以，合同必须同步摄动成 $C^T(A+tE)C$！）**且过渡矩阵固定不依赖 $t$！"
+    },
+    {
+      "id": "m1-la03-e-01",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、矩阵高次幂（基础 30 讲）",
+      "title": "【例 2.1】秩 1 矩阵 $A=\\alpha\\beta^T$ 高次幂母题推导",
+      "problem": "设 $\\alpha=[a_1,a_2,a_3]^T,\\;\\beta=[b_1,b_2,b_3]^T$，$A=\\alpha\\beta^T$，求 $A^n$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：巧用矩阵乘法结合律把标量 $\\beta^T\\alpha$ 提出来",
+          "detail": "$A^n=(\\alpha\\beta^T)(\\alpha\\beta^T)\\cdots(\\alpha\\beta^T)=\\alpha(\\beta^T\\alpha)(\\beta^T\\alpha)\\cdots(\\beta^T\\alpha)\\beta^T$（中间恰有 $n-1$ 个标量内积 $\\beta^T\\alpha=\\sum_{i=1}^3 a_ib_i=\\operatorname{tr}(A)$！）。"
+        },
+        {
+          "stepTitle": "第二步：合并标量得通式",
+          "detail": "$A^n=(\\beta^T\\alpha)^{n-1}\\alpha\\beta^T=\\left(\\sum_{i=1}^3 a_ib_i\\right)^{n-1}A=[\\operatorname{tr}(A)]^{n-1}A$。"
+        }
+      ],
+      "finalAnswer": "$A^n=\\left(\\sum_{i=1}^3 a_ib_i\\right)^{n-1}A=[\\operatorname{tr}(A)]^{n-1}A$",
+      "takeaway": "只要发现方阵各行成比例（$r(A)=1$），立刻把 $A$ 拆成 $\\alpha\\beta^T$（或直接求主对角线之和 $\\operatorname{tr}(A)$），1 秒写出 $A^n=[\\operatorname{tr}(A)]^{n-1}A$！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.54-55",
+        "pdfPage": 60,
+        "itemRef": "例 2.1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-02",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、矩阵高次幂（基础 30 讲）",
+      "title": "【例 2.2 / 没咋了 1.5 例 2】试算 $A^2=4E$ 周期规律秒杀 $A^9$",
+      "problem": "设 $A=\\begin{bmatrix}1&-1&-1&-1\\\\-1&1&-1&-1\\\\-1&-1&1&-1\\\\-1&-1&-1&1\\end{bmatrix}$，求 $A^9$（及通项 $A^n$）。",
+      "steps": [
+        {
+          "stepTitle": "第一步：试算 $A^2$ 发现惊喜对角倍阵",
+          "detail": "注意到 $A$ 每行彼此正交且每行元素平方和均为 $4$，直接相乘得 $A^2=\\begin{bmatrix}4&0&0&0\\\\0&4&0&0\\\\0&0&4&0\\\\0&0&0&4\\end{bmatrix}=4E$！"
+        },
+        {
+          "stepTitle": "第二步：分奇偶一步得 $A^9$ 与 $A^n$",
+          "detail": "$A^9=(A^2)^4 A=4^4 A=256A$！一般地，偶次幂 $A^{2k}=4^k E=2^{2k}E$，奇次幂 $A^{2k+1}=4^k A=2^{2k}A$！"
+        }
+      ],
+      "finalAnswer": "$A^9=256A$（一般 $A^{2k}=2^{2k}E,\\;A^{2k+1}=2^{2k}A$）",
+      "takeaway": "对称且非对角全同的 $\\pm 1$ 阵（Hadamard 阵）永远先试算 $A^2$，一乘出 $kE$ 立刻全盘秒杀！",
+      "source": {
+        "book": "27 张宇基础30讲·线代 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.55-56 / 没咋了 P.22 例 2",
+        "pdfPage": 61,
+        "itemRef": "例 2.2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-03",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、矩阵高次幂（基础 30 讲）",
+      "title": "【例 2.3 / 没咋了 1.5 例 4】上三角约当块拆 $A=E+B$ 二项展开求 $A^n$",
+      "problem": "已知 $A=\\begin{bmatrix}1&1&0\\\\0&1&1\\\\0&0&1\\end{bmatrix}$，求 $A^n$（$n\\ge 2$）。",
+      "steps": [
+        {
+          "stepTitle": "第一步：拆为 $A=E+B$ 并验证 $B$ 幂零",
+          "detail": "令 $B=\\begin{bmatrix}0&1&0\\\\0&0&1\\\\0&0&0\\end{bmatrix}$，算得 $B^2=\\begin{bmatrix}0&0&1\\\\0&0&0\\\\0&0&0\\end{bmatrix}$，$B^3=O$（故 $k\\ge 3$ 时 $B^k=O$）。"
+        },
+        {
+          "stepTitle": "第二步：因 $EB=BE$ 套二项式定理仅留 3 项",
+          "detail": "$A^n=(E+B)^n=E+nB+\\dfrac{n(n-1)}{2}B^2=\\begin{bmatrix}1&n&\\frac{n(n-1)}{2}\\\\0&1&n\\\\0&0&1\\end{bmatrix}$。"
+        }
+      ],
+      "finalAnswer": "$A^n=\\begin{bmatrix}1&n&\\frac{n(n-1)}{2}\\\\0&1&n\\\\0&0&1\\end{bmatrix}$",
+      "takeaway": "主对角线全为常数 $a$ 的上（下）三角阵，第一反应拆 $A=aE+B$（$B$ 严格上/下三角必满足 $B^m=O$），二项展开永远只有前 $m$ 项！",
+      "source": {
+        "book": "27 张宇基础30讲·线代 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.56 / 没咋了 P.23 例 4",
+        "pdfPage": 62,
+        "itemRef": "例 2.3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-04",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "三、定义法证可逆与求逆（基础 30 讲）",
+      "title": "【例 2.4 / 没咋了 1.4 例 2】$AB=A+B$ 配因子得 $(A-E)(B-E)=E$ 证可逆且 $AB=BA$",
+      "problem": "设 $A,B$ 均为 $n$ 阶方阵，且 $AB=A+B$，判断 $A-E,A+E,A-2E,B+E$ 中必可逆者，并证明 $AB=BA$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：凑公因子 $E$ 因式分解（类比 $ab-a-b+1=(a-1)(b-1)$）",
+          "detail": "$AB-A-B=O\\implies AB-A-B+E=E\\implies (A-E)(B-E)=E$！由方阵可逆定义立知 $A-E$ 与 $B-E$ 互逆，即 $A-E$ 必可逆且 $(A-E)^{-1}=B-E$！"
+        },
+        {
+          "stepTitle": "第二步：互逆自动交换推 $AB=BA$，并排他验反例",
+          "detail": "互逆阵必交换：$(B-E)(A-E)=E\\implies BA-A-B+E=E\\implies BA=A+B=AB$！其余三选项反例：取 $A=-E,B=\\frac{1}{2}E$ 排除 $A+E$；取 $A=B=2E$ 排除 $A-2E$；取 $A=\\frac{1}{2}E,B=-E$ 排除 $B+E$。"
+        }
+      ],
+      "finalAnswer": "$A-E$ 必可逆（选 A），且 $AB=BA$",
+      "takeaway": "记住配常数技巧「$AB-aA-bB+abE=(A-bE)(B-aE)$」：先拿实数心算配好，再把 $1$ 换成 $E$，注意左右提公因顺序绝不能换！",
+      "source": {
+        "book": "27 张宇基础30讲·线代 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.57-58 / 没咋了 P.20 例 2",
+        "pdfPage": 63,
+        "itemRef": "例 2.4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-05",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "三、定义法证可逆与求逆（基础 30 讲）",
+      "title": "【例 2.5】化加为乘证 $A+B$ 可逆并求 $(A+B)^{-1}=B^{-1}(A^{-1}+B^{-1})^{-1}A^{-1}$",
+      "problem": "设 $A,B$ 是同阶可逆方阵，且 $A^{-1}+B^{-1}$ 可逆，证明 $A+B$ 可逆并求 $(A+B)^{-1}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：左提 $A$、右提 $B$ 将 $A+B$ 化为三个可逆阵之积",
+          "detail": "$A+B=A(E+A^{-1}B)=A(B^{-1}+A^{-1})B$！（也可写成 $B(A^{-1}+B^{-1})A$！）"
+        },
+        {
+          "stepTitle": "第二步：由可逆阵乘积可逆及穿脱原则出逆矩阵",
+          "detail": "因 $A,\\;B^{-1}+A^{-1},\\;B$ 均可逆，故其乘积 $A+B$ 可逆，且 $(A+B)^{-1}=[A(B^{-1}+A^{-1})B]^{-1}=B^{-1}(A^{-1}+B^{-1})^{-1}A^{-1}$（同时亦等于 $A^{-1}(A^{-1}+B^{-1})^{-1}B^{-1}$）！"
+        }
+      ],
+      "finalAnswer": "$(A+B)^{-1}=B^{-1}(A^{-1}+B^{-1})^{-1}A^{-1}$",
+      "takeaway": "证明「和矩阵可逆」的核心思想就是**硬提已知可逆因子化加为乘**：$A+B=A(B^{-1}+A^{-1})B$ 是线代高频恒等变形！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.58-59",
+        "pdfPage": 64,
+        "itemRef": "例 2.5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-06",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "三、二阶口诀与伴随公式求逆（基础 30 讲）",
+      "title": "【例 2.7 & 例 2.9】2 阶「主对调、副变号」与免算 $A^*$ 直求 $(A^*)^{-1}=\\frac{1}{|A|}A$",
+      "problem": "（1）（例 2.7）求 2 阶阵 $A=\\begin{bmatrix}a&b\\\\c&d\\end{bmatrix}$ 可逆充要条件及 $A^{-1}$；（2）（例 2.9）设 $A=\\begin{bmatrix}1&2&0\\\\2&2&0\\\\3&4&5\\end{bmatrix}$，求 $(A^*)^{-1}$。",
+      "steps": [
+        {
+          "stepTitle": "第（1）题：2 阶逆矩阵口诀",
+          "detail": "$A$ 可逆 $\\Longleftrightarrow |A|=ad-bc\\ne 0$，此时 $A^{-1}=\\dfrac{1}{ad-bc}\\begin{bmatrix}d&-b\\\\-c&a\\end{bmatrix}$。"
+        },
+        {
+          "stepTitle": "第（2）题：巧用 $AA^*=|A|E\\implies (A^*)^{-1}=\\frac{1}{|A|}A$ 免算 $A^*$！",
+          "detail": "先算 $|A|=5\\begin{vmatrix}1&2\\\\2&2\\end{vmatrix}=-10\\ne 0$，直接套公式 $(A^*)^{-1}=\\dfrac{1}{|A|}A=-\\dfrac{1}{10}\\begin{bmatrix}1&2&0\\\\2&2&0\\\\3&4&5\\end{bmatrix}$！"
+        }
+      ],
+      "finalAnswer": "（1）$ad-bc\\ne 0$，$A^{-1}=\\frac{1}{ad-bc}\\begin{bmatrix}d&-b\\\\-c&a\\end{bmatrix}$；（2）$(A^*)^{-1}=-\\frac{1}{10}\\begin{bmatrix}1&2&0\\\\2&2&0\\\\3&4&5\\end{bmatrix}$",
+      "takeaway": "看到求 $(A^*)^{-1}$ 千万别傻傻先算 9 个代数余子式再求逆！直接用 $(A^*)^{-1}=\\frac{1}{|A|}A$，5 秒出答案！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.60-62",
+        "pdfPage": 66,
+        "itemRef": "例 2.7 & 例 2.9"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-07",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "三、伴随与逆行列式计算（基础 30 讲）",
+      "title": "【例 2.11】数乘、伴随、逆复合行列式 $|2B^*A^{-1}|=(-8)^{n-1}$",
+      "problem": "设 $A,B$ 是 $n$ 阶方阵，$|A|=2,\\;|B|=-4$，求 $|2B^*A^{-1}|$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：逐层脱去数乘 $2^n$、伴随 $|B|^{n-1}$ 与逆 $|A|^{-1}$",
+          "detail": "$|2B^*A^{-1}|=2^n|B^*||A^{-1}|=2^n\\cdot|B|^{n-1}\\cdot\\dfrac{1}{|A|}=2^n\\cdot(-4)^{n-1}\\cdot\\dfrac{1}{2}=2^{n-1}(-4)^{n-1}=(-8)^{n-1}$。"
+        }
+      ],
+      "finalAnswer": "$(-8)^{n-1}$",
+      "takeaway": "记住拆分顺序铁律：先提数乘 $k^n$，再拆乘积，最后脱 $^*$（变 $n-1$ 次）与 $^{-1}$（取倒数）！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.62",
+        "pdfPage": 68,
+        "itemRef": "例 2.11"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-08",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "四、初等行变换求逆（基础 30 讲）",
+      "title": "【例 2.12】列拼 $[A:E]\\to[E:A^{-1}]$ 仅用初等行变换求 3 阶逆矩阵",
+      "problem": "设 $A=\\begin{bmatrix}0&2&-1\\\\1&1&2\\\\-1&-1&-1\\end{bmatrix}$，用初等行变换求 $A^{-1}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：拼 $[A:E]$ 并只作初等行变换化左块为单位阵",
+          "detail": "$\\begin{bmatrix}0&2&-1&1&0&0\\\\1&1&2&0&1&0\\\\-1&-1&-1&0&0&1\\end{bmatrix}\\xrightarrow{r_1\\leftrightarrow r_2,\\;r_3+r_1}\\begin{bmatrix}1&1&2&0&1&0\\\\0&2&-1&1&0&0\\\\0&0&1&0&1&1\\end{bmatrix}\\xrightarrow{\\text{自下而上消元}}\\begin{bmatrix}1&0&0&-\\frac{1}{2}&-\\frac{3}{2}&-\\frac{5}{2}\\\\0&1&0&\\frac{1}{2}&\\frac{1}{2}&\\frac{1}{2}\\\\0&0&1&0&1&1\\end{bmatrix}$。"
+        },
+        {
+          "stepTitle": "第二步：读出右块并抽乘一行验算 $AA^{-1}=E$",
+          "detail": "$A^{-1}=\\begin{bmatrix}-\\frac{1}{2}&-\\frac{3}{2}&-\\frac{5}{2}\\\\\\frac{1}{2}&\\frac{1}{2}&\\frac{1}{2}\\\\0&1&1\\end{bmatrix}$。抽验第 1 行：$[0,2,-1]A^{-1}=[1,0,0]$，精准无误！"
+        }
+      ],
+      "finalAnswer": "$A^{-1}=\\begin{bmatrix}-\\frac{1}{2}&-\\frac{3}{2}&-\\frac{5}{2}\\\\\\frac{1}{2}&\\frac{1}{2}&\\frac{1}{2}\\\\0&1&1\\end{bmatrix}$",
+      "takeaway": "3 阶以上数值阵求逆，初等行变换远比算 9 个余子式快且稳；记住「先化上三角，再自下而上化最简，最后必抽验 $AA^{-1}=E$」！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.65",
+        "pdfPage": 71,
+        "itemRef": "例 2.12"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-09",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "四、初等矩阵左行右列实战（基础 30 讲）",
+      "title": "【例 2.13 & 例 2.14】初等变换与逆矩阵方向反转（左行求逆变右列！）及顺序叠加",
+      "problem": "（1）（例 2.13）将 3 阶可逆阵 $A$ 第 1,2 行互换得 $B$，已知 $A^{-1}=(a_{ij})$，求 $B^{-1}$；（2）（例 2.14）将 $A$ 第 1,2 列互换得 $B$，再将 $B$ 第 2 列加至第 3 列得 $C$，求满足 $AQ=C$ 的 $Q$。",
+      "steps": [
+        {
+          "stepTitle": "第（1）题：$B=E_{12}A\\implies B^{-1}=A^{-1}E_{12}^{-1}=A^{-1}E_{12}$（变为互换第 1,2 列！）",
+          "detail": "左乘 $E_{12}$ 取逆后跑到右侧变成**右乘 $E_{12}$**，故 $B^{-1}$ 是将 $A^{-1}$ 的**第 1 列与第 2 列互换**！"
+        },
+        {
+          "stepTitle": "第（2）题：两次列变换均右乘，按先后顺序向右拼接！",
+          "detail": "第 1 步 $B=AE_{12}$，第 2 步 $C=BE_{23}(1)=AE_{12}E_{23}(1)$，故 $Q=\\begin{bmatrix}0&1&0\\\\1&0&0\\\\0&0&1\\end{bmatrix}\\begin{bmatrix}1&0&0\\\\0&1&1\\\\0&0&1\\end{bmatrix}=\\begin{bmatrix}0&1&1\\\\1&0&0\\\\0&0&1\\end{bmatrix}$！"
+        }
+      ],
+      "finalAnswer": "（1）互换 $A^{-1}$ 第 1,2 列；（2）$Q=\\begin{bmatrix}0&1&1\\\\1&0&0\\\\0&0&1\\end{bmatrix}$（选 D）",
+      "takeaway": "牢记两条黄金转换：① 对 $A$ 做行变换，对应对 $A^{-1}$ 和 $A^*$ 都是**右乘**（即**列**变换！）；② 连续列变换向右排，连续行变换向左排！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.66-67",
+        "pdfPage": 72,
+        "itemRef": "例 2.13 & 例 2.14"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-10",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "五、分块矩阵求逆（基础 30 讲）",
+      "title": "【例 2.15 & 例 2.16】5 阶副对角分块求逆与下三角分块 $\\begin{bmatrix}B&O\\\\D&C\\end{bmatrix}^{-1}$ 待定推导",
+      "problem": "（1）（例 2.15）求 5 阶副对角分块阵 $A=\\begin{bmatrix}O&B\\\\C&O\\end{bmatrix}$ 的逆（其中 $B$ 为例 2.12 的 3 阶阵，$C=\\begin{bmatrix}1&3\\\\-1&2\\end{bmatrix}$）；（2）（例 2.16）设 $B_{r\\times r},C_{s\\times s}$ 可逆，证明 $A=\\begin{bmatrix}B&O\\\\D&C\\end{bmatrix}$ 可逆并求 $A^{-1}$。",
+      "steps": [
+        {
+          "stepTitle": "第（1）题：套 $\\begin{bmatrix}O&B\\\\C&O\\end{bmatrix}^{-1}=\\begin{bmatrix}O&C^{-1}\\\\B^{-1}&O\\end{bmatrix}$（切记 $B^{-1},C^{-1}$ 互换位置！）",
+          "detail": "已知 $B^{-1}=\\begin{bmatrix}-\\frac{1}{2}&-\\frac{3}{2}&-\\frac{5}{2}\\\\\\frac{1}{2}&\\frac{1}{2}&\\frac{1}{2}\\\\0&1&1\\end{bmatrix}$，2 阶口诀算得 $C^{-1}=\\frac{1}{5}\\begin{bmatrix}2&-3\\\\1&1\\end{bmatrix}$。拼成 5 阶矩阵时，$C^{-1}$（$2\\times 2$）放右上角、$B^{-1}$（$3\\times 3$）放左下角！"
+        },
+        {
+          "stepTitle": "第（2）题：待定分块阵 $A^{-1}=\\begin{bmatrix}X&Y\\\\Z&W\\end{bmatrix}$ 推导",
+          "detail": "因 $|A|=|B||C|\\ne 0$ 故可逆。由 $\\begin{bmatrix}B&O\\\\D&C\\end{bmatrix}\\begin{bmatrix}X&Y\\\\Z&W\\end{bmatrix}=\\begin{bmatrix}E&O\\\\O&E\\end{bmatrix}$ 得 $BX=E\\Rightarrow X=B^{-1}$，$BY=O\\Rightarrow Y=O$，$CW=E\\Rightarrow W=C^{-1}$，$DX+CZ=O\\Rightarrow Z=-C^{-1}DB^{-1}$！"
+        }
+      ],
+      "finalAnswer": "（1）$A^{-1}=\\begin{bmatrix}O&C^{-1}\\\\B^{-1}&O\\end{bmatrix}$；（2）$A^{-1}=\\begin{bmatrix}B^{-1}&O\\\\-C^{-1}DB^{-1}&C^{-1}\\end{bmatrix}$",
+      "takeaway": "不用死背 4 种分块三角逆公式：万一考场紧张，设 $\\begin{bmatrix}X&Y\\\\Z&W\\end{bmatrix}$ 乘过去 15 秒现场推出且 100% 不会写错左右顺序！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.67-69",
+        "pdfPage": 73,
+        "itemRef": "例 2.15 & 例 2.16"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-11",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "六、矩阵方程先化简后代入（基础 30 讲）",
+      "title": "【例 2.17】含伴随阵 $A^*$ 的 4 阶矩阵方程 $ABA^{-1}=BA^{-1}+3E$ 化简求 $B$",
+      "problem": "设 4 阶矩阵 $A$ 的伴随阵 $A^*=\\begin{bmatrix}1&0&0&0\\\\0&1&0&0\\\\1&0&1&0\\\\0&-3&0&8\\end{bmatrix}$，且满足 $ABA^{-1}=BA^{-1}+3E$，求矩阵 $B$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：千万别先求 $A$！直接化出 $B$ 关于 $A^*$ 的表达式！",
+          "detail": "移项提公因：$(A-E)BA^{-1}=3E\\implies B=3(A-E)^{-1}A=3[A^{-1}(A-E)]^{-1}=3(E-A^{-1})^{-1}$！又 $A^{-1}=\\dfrac{A^*}{|A|}$，故 **$B=3\\left(E-\\dfrac{A^*}{|A|}\\right)^{-1}$**！"
+        },
+        {
+          "stepTitle": "第二步：由 $|A^*|=|A|^3=8$ 定 $|A|=2$ 并对下三角阵求逆",
+          "detail": "$|A^*|=1\\times 1\\times 1\\times 8=8=|A|^3\\implies |A|=2$（4 阶阵奇次幂唯一定号！）。于是 $B=6(2E-A^*)^{-1}$，其中 $2E-A^*=\\begin{bmatrix}1&0&0&0\\\\0&1&0&0\\\\-1&0&1&0\\\\0&3&0&-6\\end{bmatrix}$。迅速求逆乘 $6$ 得 $B=\\begin{bmatrix}6&0&0&0\\\\0&6&0&0\\\\6&0&6&0\\\\0&3&0&-1\\end{bmatrix}$！"
+        }
+      ],
+      "finalAnswer": "$B=\\begin{bmatrix}6&0&0&0\\\\0&6&0&0\\\\6&0&6&0\\\\0&3&0&-1\\end{bmatrix}$",
+      "takeaway": "超级经典化简套路！见到 $(A-E)^{-1}A$ 立刻把 $A$ 塞进逆括号里变 $(E-A^{-1})^{-1}$，直接用题目现成的 $A^*=|A|A^{-1}$，省掉整整两次 4 阶求逆！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.69-70",
+        "pdfPage": 75,
+        "itemRef": "例 2.17"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-12",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "六、矩阵等价与求全部可逆阵 $P$（基础 30 讲）",
+      "title": "【例 2.18】$A,B$ 等价求 $a=-4$ 及求全部可逆阵 $P$ 使 $PA=B$",
+      "problem": "设 $A=\\begin{bmatrix}1&0&1\\\\-1&-1&1\\\\0&2&a\\end{bmatrix},\\;B=\\begin{bmatrix}1&0&1\\\\0&-1&2\\\\0&0&0\\end{bmatrix}$。（1）$a$ 为何值时 $A,B$ 等价？（2）求一个可逆阵 $P$（及全部可逆阵 $P$）使 $PA=B$。",
+      "steps": [
+        {
+          "stepTitle": "第（1）题：同型矩阵等价 $\\Longleftrightarrow r(A)=r(B)$",
+          "detail": "显然 $r(B)=2$。对 $A$ 化行阶梯得 $\\begin{bmatrix}1&0&1\\\\0&-1&2\\\\0&0&a+4\\end{bmatrix}$，欲使 $r(A)=2$ 当且仅当 $a+4=0\\implies a=-4$。"
+        },
+        {
+          "stepTitle": "第（2）题：初等行变换得一个特解 $P$；转置 $A^TP^T=B^T$ 得全部可逆阵 $P$！",
+          "detail": "特解：对 $A$ 先作 $r_2+r_1$ 再作 $r_3+2r_2$ 恰得 $B$，故 $P=E_{32}(2)E_{21}(1)=\\begin{bmatrix}1&0&0\\\\1&1&0\\\\2&2&1\\end{bmatrix}$（显然可逆）。全部可逆阵：取转置 $A^TP^T=B^T$，对 $[A^T:B^T]$ 化行阶梯解出 $P^T$ 三列通解，转置得 $P=\\begin{bmatrix}2k_1+1&2k_1&k_1\\\\2k_2+1&2k_2+1&k_2\\\\2k_3&2k_3&k_3\\end{bmatrix}$，算得 $|P|=k_3\\ne 0$，故 $k_1,k_2$ 任意、$k_3\\ne 0$！"
+        }
+      ],
+      "finalAnswer": "（1）$a=-4$；（2）特解 $P=\\begin{bmatrix}1&0&0\\\\1&1&0\\\\2&2&1\\end{bmatrix}$；全部可逆阵 $P=\\begin{bmatrix}2k_1+1&2k_1&k_1\\\\2k_2+1&2k_2+1&k_2\\\\2k_3&2k_3&k_3\\end{bmatrix}\\;(k_3\\ne 0)$",
+      "takeaway": "如果题干只问「求一个可逆阵 $P$」，直接记录初等行变换乘积最快；若问「求全部可逆阵 $P$」，必须转置解线性方程组 $A^TP^T=B^T$ 再加条件 $|P|\\ne 0$！（对照强化例 3.19）",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.71-73",
+        "pdfPage": 77,
+        "itemRef": "例 2.18"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-13",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "六、经典反射阵与矩阵方程（基础习题精华）",
+      "title": "【基础习题 2.13 & 2.15】Householder 反射阵 $A=E-2\\xi\\xi^T$ 对称正交性与 4 阶方程化简",
+      "problem": "（1）（习题 2.13）设 $\\xi\\in\\mathbb{R}^n$ 为单位列向量（$\\xi^T\\xi=1$），$A=E-2\\xi\\xi^T$，证明 $A$ 对称且 $A^2=E$（即对称正交阵）；（2）（习题 2.15）设 $B=\\begin{bmatrix}0&-1&0&0\\\\0&0&-1&0\\\\0&0&0&-1\\\\0&0&0&0\\end{bmatrix},\\;C=\\begin{bmatrix}2&1&3&4\\\\0&2&1&3\\\\0&0&2&1\\\\0&0&0&2\\end{bmatrix}$，满足 $A(E-C^{-1}B)^TC^T=E+A$，求 $A$。",
+      "steps": [
+        {
+          "stepTitle": "第（1）题：利用 $(\\xi\\xi^T)^T=\\xi\\xi^T$ 与结合律 $(\\xi\\xi^T)^2=\\xi(\\xi^T\\xi)\\xi^T=\\xi\\xi^T$",
+          "detail": "$A^T=E^T-2(\\xi\\xi^T)^T=E-2\\xi\\xi^T=A$（对称）；$A^2=(E-2\\xi\\xi^T)^2=E-4\\xi\\xi^T+4\\xi(\\xi^T\\xi)\\xi^T=E$！从而 $A^TA=A^2=E$，$A$ 既是实对称阵又是正交阵！"
+        },
+        {
+          "stepTitle": "第（2）题：逆用穿脱原则把 $C^T$ 吸进去，瞬间消去 $C^{-1}$！",
+          "detail": "$(E-C^{-1}B)^TC^T=[C(E-C^{-1}B)]^T=(C-B)^T$！方程化为 $A(C-B)^T-A=E\\implies A(C-B-E)^T=E\\implies A=[(C-B-E)^T]^{-1}$！算得 $(C-B-E)^T=\\begin{bmatrix}1&0&0&0\\\\2&1&0&0\\\\3&2&1&0\\\\4&3&2&1\\end{bmatrix}$，下三角求逆得 $A=\\begin{bmatrix}1&0&0&0\\\\-2&1&0&0\\\\1&-2&1&0\\\\0&1&-2&1\\end{bmatrix}$！"
+        }
+      ],
+      "finalAnswer": "（1）证毕（$A^T=A$ 且 $A^2=E$）；（2）$A=\\begin{bmatrix}1&0&0&0\\\\-2&1&0&0\\\\1&-2&1&0\\\\0&1&-2&1\\end{bmatrix}$",
+      "takeaway": "Householder 镜面反射阵 $E-2\\xi\\xi^T$ 在特征值、相似、正交和二次型真题里反复露脸，务必背熟「对称、正交、自逆、特征值 $-1$（1重）与 $1$（$n-1$重）」！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.76-77, 80-81",
+        "pdfPage": 82,
+        "itemRef": "基础习题 2.13 & 2.15"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-14",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、证 $A=O$ 的迹零核武器（强化 9 讲）",
+      "title": "【强化例 3.1】实矩阵 $(A^T-A)A=O\\implies \\operatorname{tr}(BB^T)=0\\implies A=A^T$",
+      "problem": "设 $A$ 为 3 阶实矩阵，满足 $(A^T-A)A=O$，证明 $A=A^T$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：令 $B=A^T-A$，算出 $BB^T$ 并代入 $A^TA=A^2$",
+          "detail": "题设即 $A^TA=A^2$（两端转置亦得 $(A^2)^T=(A^TA)^T=A^TA=A^2$，即 $(A^T)^2=A^2$！）。算 $BB^T=(A^T-A)(A-A^T)=A^TA-(A^T)^2-A^2+AA^T=AA^T-A^TA$！"
+        },
+        {
+          "stepTitle": "第二步：取迹立得 $\\operatorname{tr}(BB^T)=0\\implies B=O$",
+          "detail": "由 $\\operatorname{tr}(AA^T)=\\operatorname{tr}(A^TA)$ 得 $\\operatorname{tr}(BB^T)=\\operatorname{tr}(AA^T)-\\operatorname{tr}(A^TA)=0$！又 $B$ 为实矩阵，主对角元之和即全部元素平方和 $\\sum b_{ij}^2=0\\implies B=O\\implies A=A^T$！"
+        }
+      ],
+      "finalAnswer": "证毕（由 $\\operatorname{tr}((A^T-A)(A-A^T))=0$ 推出 $A=A^T$）",
+      "takeaway": "遇到纯矩阵二次等式要证两矩阵相等（尤其是证实阵对称 $A=A^T$），令差阵 $B=A^T-A$ 算 $\\operatorname{tr}(BB^T)=0$ 是全线代最优雅的核武器！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.17",
+        "pdfPage": 28,
+        "itemRef": "强化例 3.1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_adv_part1",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-15",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、矩阵高次幂五大法（强化 9 讲）",
+      "title": "【强化例 3.2】秩 1 矩阵 $A=\\alpha\\beta^T$ 秒算 $A^{10}=-7^9 A$",
+      "problem": "设 $A=\\begin{bmatrix}2&6&-4\\\\-1&-3&2\\\\3&9&-6\\end{bmatrix}$，求 $A^{10}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：敏锐看出各行成比例，拆为列乘行 $\\alpha\\beta^T$",
+          "detail": "第 1 列为 $[2,-1,3]^T$，其余列依次为其 $3$ 倍与 $-2$ 倍，故 $A=\\begin{bmatrix}2\\\\-1\\\\3\\end{bmatrix}[1,3,-2]=\\alpha\\beta^T$。"
+        },
+        {
+          "stepTitle": "第二步：套 $A^n=[\\operatorname{tr}(A)]^{n-1}A$（3 秒出答案！）",
+          "detail": "$\\operatorname{tr}(A)=\\beta^T\\alpha=2-3-6=-7$，故 $A^{10}=(-7)^9 A=-7^9\\begin{bmatrix}2&6&-4\\\\-1&-3&2\\\\3&9&-6\\end{bmatrix}$！"
+        }
+      ],
+      "finalAnswer": "$-7^9\\begin{bmatrix}2&6&-4\\\\-1&-3&2\\\\3&9&-6\\end{bmatrix}$",
+      "takeaway": "求数值阵高次幂，**第一眼先扫一眼各行/各列是否成比例**（$r(A)=1$），若是则直接算迹的 $n-1$ 次方乘 $A$，3 秒收工！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.17",
+        "pdfPage": 28,
+        "itemRef": "强化例 3.2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_adv_part1",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-16",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、矩阵高次幂五大法（强化 9 讲）",
+      "title": "【强化例 3.3】含双参上三角阵试算 $A^2,A^3,A^4$ 归纳求 $A^n$",
+      "problem": "若 $A=\\begin{bmatrix}1&a&b\\\\0&1&a\\\\0&0&1\\end{bmatrix}$，求 $A^n$（$n\\ge 2$）。",
+      "steps": [
+        {
+          "stepTitle": "第一步：试算 $A^2,A^3$ 或拆 $A=E+C$ 二项展开",
+          "detail": "试算得 $A^2=\\begin{bmatrix}1&2a&a^2+2b\\\\0&1&2a\\\\0&0&1\\end{bmatrix}$，$A^3=\\begin{bmatrix}1&3a&3a^2+3b\\\\0&1&3a\\\\0&0&1\\end{bmatrix}$。或者直接拆 $A=E+C$（$C=\\begin{bmatrix}0&a&b\\\\0&0&a\\\\0&0&0\\end{bmatrix}$，$C^2=\\begin{bmatrix}0&0&a^2\\\\0&0&0\\\\0&0&0\\end{bmatrix}$，$C^3=O$），二项展开 $A^n=E+nC+\\frac{n(n-1)}{2}C^2$！"
+        },
+        {
+          "stepTitle": "第二步：合并得通项并代 $n=2,3$ 复核",
+          "detail": "$A^n=\\begin{bmatrix}1&na&\\frac{n(n-1)}{2}a^2+nb\\\\0&1&na\\\\0&0&1\\end{bmatrix}$。"
+        }
+      ],
+      "finalAnswer": "$\\begin{bmatrix}1&na&\\frac{n(n-1)}{2}a^2+nb\\\\0&1&na\\\\0&0&1\\end{bmatrix}$",
+      "takeaway": "用二项展开 $E+nC+\\frac{n(n-1)}{2}C^2$ 不需要靠猜规律就能 100% 严格推导出右上角 $\\frac{n(n-1)}{2}a^2+nb$！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.18",
+        "pdfPage": 29,
+        "itemRef": "强化例 3.3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_adv_part1",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-17",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、矩阵高次幂五大法（强化 9 讲）",
+      "title": "【强化例 3.4】平面旋转阵 $R(\\pi/3)$ 几何周期性 5 秒秒杀负次幂 $A^{-11}$",
+      "problem": "设 $A=\\begin{bmatrix}\\frac{1}{2}&-\\frac{\\sqrt{3}}{2}\\\\\\frac{\\sqrt{3}}{2}&\\frac{1}{2}\\end{bmatrix}$，求 $A^{-11}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：一眼认出标准平面逆时针旋转矩阵 $R(\\theta)$",
+          "detail": "$A=\\begin{bmatrix}\\cos\\frac{\\pi}{3}&-\\sin\\frac{\\pi}{3}\\\\\\sin\\frac{\\pi}{3}&\\cos\\frac{\\pi}{3}\\end{bmatrix}=R\\!\\left(\\frac{\\pi}{3}\\right)$！几何意义为将向量逆时针旋转 $60^\\circ$，故 $[R(\\theta)]^k=R(k\\theta)$ 对任意整数 $k\\in\\mathbb{Z}$ 均成立！"
+        },
+        {
+          "stepTitle": "第二步：利用周期 $A^6=E$ 秒求 $A^{-11}$",
+          "detail": "$A^3=R(\\pi)=-E$，$A^6=R(2\\pi)=E$！故 $A^{-11}=A^{-12}\\cdot A=(A^6)^{-2}A=A=\\begin{bmatrix}\\frac{1}{2}&-\\frac{\\sqrt{3}}{2}\\\\\\frac{\\sqrt{3}}{2}&\\frac{1}{2}\\end{bmatrix}$！（直接 $R(-11\\pi/3)=R(-4\\pi+\\pi/3)=R(\\pi/3)=A$ 更快！）"
+        }
+      ],
+      "finalAnswer": "$A^{-11}=A=\\begin{bmatrix}\\frac{1}{2}&-\\frac{\\sqrt{3}}{2}\\\\\\frac{\\sqrt{3}}{2}&\\frac{1}{2}\\end{bmatrix}$",
+      "takeaway": "见到 $\\frac{1}{2},\\frac{\\sqrt{3}}{2}$ 或 $\\frac{\\sqrt{2}}{2}$ 组成的 2 阶正交阵，立刻识别旋转角 $\\theta$，无论是正次幂还是负次幂，全用 $[R(\\theta)]^k=R(k\\theta)$ 一步秒杀！",
+      "figureSvg": "<svg viewBox=\"0 0 640 214\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"平面旋转矩阵60度几何周期图解\">\n  <title>强化例 3.4：平面旋转矩阵 R(π/3) 几何周期秒杀 A⁻¹¹=A</title>\n  <defs>\n    <marker id=\"m1_la03_arr3\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#1e293b\"/>\n    </marker>\n    <marker id=\"m1_la03_arr4\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#2563eb\"/>\n    </marker>\n    <marker id=\"m1_la03_arr5\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#dc2626\"/>\n    </marker>\n    <marker id=\"m1_la03_arr6\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#16a34a\"/>\n    </marker>\n  </defs>\n  <rect x=\"4\" y=\"4\" width=\"632\" height=\"206\" rx=\"10\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"320\" y=\"24\" text-anchor=\"middle\" font-size=\"12.5\" font-weight=\"700\" fill=\"#0f172a\">强化例 3.4：正交旋转矩阵 A = R(π/3) 的几何周期性（转 6 次回原位 ⇒ A⁶ = E）</text>\n\n  <!-- Left: unit circle with 60-degree steps -->\n  <g transform=\"translate(155,120)\">\n    <!-- Axes -->\n    <line x1=\"-110\" y1=\"0\" x2=\"115\" y2=\"0\" stroke=\"#475569\" stroke-width=\"1.3\" marker-end=\"url(#m1_la03_arr3)\"/>\n    <line x1=\"0\" y1=\"84\" x2=\"0\" y2=\"-84\" stroke=\"#475569\" stroke-width=\"1.3\" marker-end=\"url(#m1_la03_arr3)\"/>\n    <text x=\"118\" y=\"4\" font-size=\"10.5\" fill=\"#334155\">x</text>\n    <text x=\"6\" y=\"-76\" font-size=\"10.5\" fill=\"#334155\">y</text>\n    <!-- Unit circle r=68 -->\n    <circle cx=\"0\" cy=\"0\" r=\"68\" fill=\"#eff6ff\" fill-opacity=\"0.45\" stroke=\"#93c5fd\" stroke-width=\"1.4\" stroke-dasharray=\"4 3\"/>\n    <!-- 6 vertices at 0,60,120,180,240,300 deg -->\n    <circle cx=\"68\" cy=\"0\" r=\"3.5\" fill=\"#1e293b\"/>\n    <circle cx=\"34\" cy=\"-58.9\" r=\"4\" fill=\"#2563eb\"/>\n    <circle cx=\"-34\" cy=\"-58.9\" r=\"3\" fill=\"#94a3b8\"/>\n    <circle cx=\"-68\" cy=\"0\" r=\"4\" fill=\"#dc2626\"/>\n    <circle cx=\"-34\" cy=\"58.9\" r=\"3\" fill=\"#94a3b8\"/>\n    <circle cx=\"34\" cy=\"58.9\" r=\"4\" fill=\"#16a34a\"/>\n    <!-- Vectors -->\n    <line x1=\"0\" y1=\"0\" x2=\"66\" y2=\"0\" stroke=\"#1e293b\" stroke-width=\"1.8\"/>\n    <line x1=\"0\" y1=\"0\" x2=\"33\" y2=\"-56\" stroke=\"#2563eb\" stroke-width=\"2.2\" marker-end=\"url(#m1_la03_arr4)\"/>\n    <line x1=\"0\" y1=\"0\" x2=\"-64\" y2=\"0\" stroke=\"#dc2626\" stroke-width=\"2\" marker-end=\"url(#m1_la03_arr5)\"/>\n    <line x1=\"0\" y1=\"0\" x2=\"33\" y2=\"56\" stroke=\"#16a34a\" stroke-width=\"2\" marker-end=\"url(#m1_la03_arr6)\"/>\n    <!-- Arc +60 deg -->\n    <path d=\"M 32,0 A 32,32 0 0,0 16,-27.7\" fill=\"none\" stroke=\"#2563eb\" stroke-width=\"1.6\"/>\n    <text x=\"36\" y=\"-14\" font-size=\"10\" font-weight=\"700\" fill=\"#1d4ed8\">+π/3</text>\n    <!-- Labels -->\n    <text x=\"74\" y=\"-6\" font-size=\"10\" font-weight=\"700\" fill=\"#0f172a\">E = A⁶</text>\n    <text x=\"40\" y=\"-60\" font-size=\"10.5\" font-weight=\"700\" fill=\"#1d4ed8\">A = A⁻¹¹</text>\n    <text x=\"-106\" y=\"-8\" font-size=\"10\" font-weight=\"700\" fill=\"#b91c1c\">A³ = -E</text>\n    <text x=\"42\" y=\"64\" font-size=\"10\" font-weight=\"700\" fill=\"#15803d\">A⁻¹ = A⁵</text>\n  </g>\n\n  <!-- Right: formula summary card -->\n  <g transform=\"translate(318,44)\">\n    <rect x=\"0\" y=\"0\" width=\"302\" height=\"150\" rx=\"8\" fill=\"#ffffff\" stroke=\"#e2e8f0\" stroke-width=\"1.3\"/>\n    <text x=\"151\" y=\"22\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1e3a8a\">旋转阵 R(θ) 乘幂铁律（考场 5 秒秒杀）</text>\n    <text x=\"16\" y=\"46\" font-size=\"10.5\" fill=\"#1e293b\">1. R(θ) = [cosθ, -sinθ; sinθ, cosθ]（逆时针转 θ）</text>\n    <text x=\"16\" y=\"68\" font-size=\"10.5\" font-weight=\"700\" fill=\"#2563eb\">2. [R(θ)]ᵏ = R(kθ)（任意整数 k ∈ Z 均成立！）</text>\n    <text x=\"16\" y=\"90\" font-size=\"10.5\" fill=\"#1e293b\">3. 本题 θ = π/3 ⇒ A³ = R(π) = -E，A⁶ = R(2π) = E</text>\n    <rect x=\"14\" y=\"102\" width=\"274\" height=\"36\" rx=\"6\" fill=\"#ecfdf5\" stroke=\"#6ee7b7\"/>\n    <text x=\"151\" y=\"118\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#065f46\">A⁻¹¹ = A⁻¹²·A = (A⁶)⁻²·A = E·A = A</text>\n    <text x=\"151\" y=\"132\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#047857\">（或直接 R(-11π/3) = R(-4π + π/3) = R(π/3) = A！）</text>\n  </g>\n</svg>",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.18-19",
+        "pdfPage": 29,
+        "itemRef": "强化例 3.4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_adv_part1",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-18",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、矩阵高次幂五大法（强化 9 讲）",
+      "title": "【强化例 3.5】不可相似对角化上三角阵拆 $A=E+B$ 二项展开求 $A^{10}$",
+      "problem": "设 $A=\\begin{bmatrix}1&1&-1\\\\0&1&1\\\\0&0&1\\end{bmatrix}$，求 $A^{10}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：拆出幂零严格上三角阵 $B$",
+          "detail": "记 $A=E+B$，其中 $B=\\begin{bmatrix}0&1&-1\\\\0&0&1\\\\0&0&0\\end{bmatrix}$，算得 $B^2=\\begin{bmatrix}0&0&1\\\\0&0&0\\\\0&0&0\\end{bmatrix}$，$B^3=O$。"
+        },
+        {
+          "stepTitle": "第二步：二项式展开仅留 3 项相加",
+          "detail": "$A^{10}=E+10B+\\dfrac{10\\times 9}{2}B^2=\\begin{bmatrix}1&0&0\\\\0&1&0\\\\0&0&1\\end{bmatrix}+\\begin{bmatrix}0&10&-10\\\\0&0&10\\\\0&0&0\\end{bmatrix}+\\begin{bmatrix}0&0&45\\\\0&0&0\\\\0&0&0\\end{bmatrix}=\\begin{bmatrix}1&10&35\\\\0&1&10\\\\0&0&1\\end{bmatrix}$！"
+        }
+      ],
+      "finalAnswer": "$\\begin{bmatrix}1&10&35\\\\0&1&10\\\\0&0&1\\end{bmatrix}$",
+      "takeaway": "注意 $A$ 只有 1 个线性无关特征向量，**无法相似对角化**，拆成 $E+B$ 利用 $B^3=O$ 是唯一高效路线！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.19",
+        "pdfPage": 30,
+        "itemRef": "强化例 3.5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_adv_part1",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-19",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、矩阵高次幂五大法（强化 9 讲）",
+      "title": "【强化例 3.6】初等矩阵高次幂 $P_1^3 A P_2^{-5}$——左行倍加 3 次、右列互换 5 次",
+      "problem": "计算 $\\begin{bmatrix}1&0\\\\-1&1\\end{bmatrix}^3\\begin{bmatrix}1&2\\\\-1&3\\end{bmatrix}\\begin{bmatrix}0&1\\\\1&0\\end{bmatrix}^{-5}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：读懂左右初等阵的几何变换含义与幂次",
+          "detail": "左阵 $B=\\begin{bmatrix}1&0\\\\-1&1\\end{bmatrix}$ 左乘相当于「第 1 行 $(-1)$ 倍加到第 2 行」，$B^3$ 即重复 3 次（第 1 行 $(-3)$ 倍加到第 2 行！）；右阵 $C=\\begin{bmatrix}0&1\\\\1&0\\end{bmatrix}$ 满足 $C^{-1}=C$ 且 $C^2=E$，故 $C^{-5}=C^5=C$（互换第 1,2 列 1 次！）。"
+        },
+        {
+          "stepTitle": "第二步：直接对中间阵 $A$ 施加 1 次行变与 1 次列变",
+          "detail": "$B^3A=\\begin{bmatrix}1&2\\\\-1-3&3-6\\end{bmatrix}=\\begin{bmatrix}1&2\\\\-4&-3\\end{bmatrix}$，再右乘 $C$ 互换第 1,2 列得 $\\begin{bmatrix}2&1\\\\-3&-4\\end{bmatrix}$！"
+        }
+      ],
+      "finalAnswer": "$\\begin{bmatrix}2&1\\\\-3&-4\\end{bmatrix}$",
+      "takeaway": "记住初等阵幂速算：倍加阵 $[E_{ij}(k)]^m=E_{ij}(mk)$，互换阵 $E_{ij}^m$ 奇不变偶为单位阵，倍乘阵 $[E_i(k)]^m=E_i(k^m)$！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.20",
+        "pdfPage": 31,
+        "itemRef": "强化例 3.6"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_adv_part1",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-20",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、矩阵高次幂五大法（强化 9 讲）",
+      "title": "【强化例 3.7】由 $AB=B^2-BC$ 构造相似 $A=B(B-C)B^{-1}$ 秒算 $A^{99}$ + 必背上三角全 1 阵逆",
+      "problem": "设 $A,B,C$ 均为 3 阶矩阵，满足 $AB=B^2-BC$，其中 $B=\\begin{bmatrix}1&1&1\\\\0&1&1\\\\0&0&1\\end{bmatrix},\\;C=\\begin{bmatrix}0&1&1\\\\0&0&1\\\\0&0&1\\end{bmatrix}$，求 $A^{99}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：提取 $B$ 化为相似表达 $A=B(B-C)B^{-1}$",
+          "detail": "因 $|B|=1\\ne 0$，$B$ 可逆。由 $AB=B(B-C)\\implies A=B(B-C)B^{-1}$，故 $A^{99}=B(B-C)^{99}B^{-1}$！"
+        },
+        {
+          "stepTitle": "第二步：惊喜发现 $B-C=\\operatorname{diag}(1,1,0)$ 为幂等对角阵，并熟背 $B^{-1}$！",
+          "detail": "$B-C=\\begin{bmatrix}1&0&0\\\\0&1&0\\\\0&0&0\\end{bmatrix}$，故 $(B-C)^{99}=B-C$！又上三角全 $1$ 阵 $B$ 的逆是超级必背阵 $B^{-1}=\\begin{bmatrix}1&-1&0\\\\0&1&-1\\\\0&0&1\\end{bmatrix}$（主对角全 $1$、上副对角全 $-1$、其余全 $0$！）。"
+        },
+        {
+          "stepTitle": "第三步：相乘得 $A^{99}=A$",
+          "detail": "$A^{99}=\\begin{bmatrix}1&1&1\\\\0&1&1\\\\0&0&1\\end{bmatrix}\\begin{bmatrix}1&0&0\\\\0&1&0\\\\0&0&0\\end{bmatrix}\\begin{bmatrix}1&-1&0\\\\0&1&-1\\\\0&0&1\\end{bmatrix}=\\begin{bmatrix}1&0&-1\\\\0&1&-1\\\\0&0&0\\end{bmatrix}$！"
+        }
+      ],
+      "finalAnswer": "$A^{99}=\\begin{bmatrix}1&0&-1\\\\0&1&-1\\\\0&0&0\\end{bmatrix}$",
+      "takeaway": "必背张宇 P.21 上三角「全 1 阵」与「双对角阵」互逆规律：上三角全 $1$ 阵的逆就是主对角 $1$、紧邻上斜线全 $-1$、其余全 $0$！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.20-21",
+        "pdfPage": 31,
+        "itemRef": "强化例 3.7"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_adv_part1",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-21",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、伴随矩阵性质与摄动法（强化 9 讲 · 严谨修正！）",
+      "title": "【强化例 3.8 · 附 P.24 ④ 摄动法严谨修正】伴随矩阵保交换 / 保等价 / 保相似 / 保合同四命题全证",
+      "problem": "设 $A,B$ 为 $n$ 阶实矩阵，判断以下 4 个结论正确个数：① 若 $AB=BA$，则 $A^*B=BA^*$；② 若 $A$ 与 $B$ 等价，则 $A^*$ 与 $B^*$ 等价；③ 若 $A$ 与 $B$ 相似，则 $A^*$ 与 $B^*$ 相似；④ 若 $A$ 与 $B$ 合同，则 $A^*$ 与 $B^*$ 合同。",
+      "steps": [
+        {
+          "stepTitle": "命题 ①②③ 严格证明（分可逆与摄动法）",
+          "detail": "① 可逆时由 $A^*=|A|A^{-1}$ 在 $AB=BA$ 两侧乘 $A^{-1}$ 得 $BA^{-1}=A^{-1}B\\Rightarrow A^*B=BA^*$；不可逆时取 $A_t=A+tE$，因 $A_tB=BA_t$ 对充分小 $t\\ne 0$ 可逆得 $A_t^*B=BA_t^*$，令 $t\\to 0$ 成立！② $A,B$ 等价 $\\Leftrightarrow r(A)=r(B)\\Rightarrow r(A^*)=r(B^*)$（按 $n,n-1,<n-1$ 三档一一对应）$\\Rightarrow A^*,B^*$ 等价！③ 可逆时 $P^{-1}AP=B\\Rightarrow P^{-1}A^*P=B^*$；不可逆时对 $A_t=A+tE,\\;B_t=B+tE$ 仍有同一个 $P$ 满足 $P^{-1}A_tP=B_t\\Rightarrow P^{-1}A_t^*P=B_t^*$，令 $t\\to 0$ 得 $P^{-1}A^*P=B^*$！"
+        },
+        {
+          "stepTitle": "命题 ④ 证明与【P.24 原书摄动法漏洞严谨修正】！",
+          "detail": "设 $C^TAC=B$（$C$ 实可逆），则 $|B|=|C|^2|A|$。当 $A$ 可逆时，$A^*=|A|A^{-1},\\;B^*=|B|B^{-1}=|C|^2|A|\\,C^{-1}A^{-1}(C^{-1})^T=Q^TA^*Q$，其中实可逆阵 $Q=|C|C^{-T}$！（或写 $Q_1=|C|^{-1}C^{-1}$ 时注意 $(C^{-1})^TA^*C^{-1}$：精确核对 $(C^{-T})^T A^* (C^{-T})=C^{-1}A^*C^{-T}=|A|C^{-1}A^{-1}C^{-T}=|C|^{-2}B^*$，故取固定实可逆阵 $Q=|C|\\,(C^{-1})^T$ 恰满足 **$Q^T A^* Q = B^*$**！）。**【修正原书漏洞】**：当 $A$ 不可逆时，原书 P.24 写 `令 A_t=A+tE, B_t=B+tE` 不对（因为 $C^T(A+tE)C=B+tC^TC\\ne B+tE$！）；正确做法是取 **$A_t=A+tE,\\;B_t=C^TA_tC=B+tC^TC$**！对充分小 $t\\ne 0$ 两者均可逆且仍由同一个固定矩阵 $Q=|C|\\,(C^{-1})^T$ 满足 $Q^TA_t^*Q=B_t^*$，令 $t\\to 0$ 立刻严格证得 **$Q^TA^*Q=B^*$**！故 4 个全对！"
+        }
+      ],
+      "finalAnswer": "4 个全正确（选 D；注：原书 P.24 ④ 不可逆摄动应取 $B_t=C^T(A+tE)C$ 而非 $B+tE$！）",
+      "takeaway": "背下伴随阵四大「保」特性：伴随**保交换、保等价、保相似、保实合同**！且永远记住摄动法只能用「保持固定变换矩阵 $P$ 或 $C$」的同步摄动！",
+      "source": {
+        "book": "27 张宇线代9讲（含 P.24 摄动法严谨修正）",
+        "printedPage": "强化 P.23-24",
+        "pdfPage": 34,
+        "itemRef": "强化例 3.8"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_adv_part1",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-22",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、分块矩阵伴随辨析（强化 9 讲）",
+      "title": "【强化例 3.9】四类分块矩阵伴随公式正误秒辨（用定义 $MM^*=|M|E$ 一步检验！）",
+      "problem": "设 $A,B$ 为 $n\\;(n\\ge 2)$ 阶可逆矩阵，检验以下分块伴随式哪个不正确：(A) $\\begin{bmatrix}A&O\\\\O&B\\end{bmatrix}^*=\\begin{bmatrix}|B|A^*&O\\\\O&|A|B^*\\end{bmatrix}$；(B) $\\begin{bmatrix}O&A\\\\B&O\\end{bmatrix}^*=(-1)^{n^2}\\begin{bmatrix}O&|A|B^*\\\\|B|A^*&O\\end{bmatrix}$；(C) $\\begin{bmatrix}A&C\\\\O&B\\end{bmatrix}^*=\\begin{bmatrix}|B|A^*&-A^*CB^*\\\\O&|A|B^*\\end{bmatrix}$；(D) $\\begin{bmatrix}A&O\\\\C&B\\end{bmatrix}^*=\\begin{bmatrix}|B|A^*&O\\\\-A^*CB^*&|A|B^*\\end{bmatrix}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：用 $M\\cdot M^*=|M|E$ 逐项验算（或直接对照分块逆公式！）",
+          "detail": "前三个均可验：$M\\cdot M^*=|A||B|E_{2n}$！（特别看 C：$A(-A^*CB^*)+C(|A|B^*)=-|A|CB^*+|A|CB^*=O$，完全匹配！）。"
+        },
+        {
+          "stepTitle": "第二步：秒捉选项 D 左右顺序写反！",
+          "detail": "对 $\\begin{bmatrix}A&O\\\\C&B\\end{bmatrix}$，其逆左下角是 **$-B^{-1}CA^{-1}$**！乘以 $|A||B|$ 应为 **$-B^*CA^*$**，而选项 D 写成了 $-A^*CB^*$（乘回去左下角为 $|B|CA^*-BA^*CB^*\\ne O$！）故 D 错！"
+        }
+      ],
+      "finalAnswer": "（D）不正确（正确左下角应为 $-B^*CA^*$）",
+      "takeaway": "分块伴随选择题永远不用硬算代数余子式——直接拿「原阵 × 选项」验证是不是等于 $|M|E$，5 秒揪出左右乘反的错项！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.24-25",
+        "pdfPage": 35,
+        "itemRef": "强化例 3.9"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_adv_part1",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-23",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、伴随矩阵经典小题（强化 9 讲）",
+      "title": "【强化例 3.10 & 例 3.11】$a_{ij}=-A_{ij}$ 证 $|A|=-1$ 与反对称阵 $|A|=1\\Rightarrow x^TA^*x=0$",
+      "problem": "（1）（例 3.10）3 阶实阵 $A=(a_{ij})$ 不全为零，若 $a_{ij}=-A_{ij}$，求 $|A|$；（2）（例 3.11）$n$ 阶矩阵 $A$ 满足 $|A|=1$ 且 $a_{ij}=-a_{ji}$，$x=[1,1,\\dots,1]^T$，求 $x^TA^*x$。",
+      "steps": [
+        {
+          "stepTitle": "第（1）题：翻译为 $A^*=-A^T$，取行列式并用展开式定负号！",
+          "detail": "由 $a_{ij}=-A_{ij}$ 得 $A^*=-A^T$，取行列式：$|A|^2=|-A^T|=(-1)^3|A|=-|A|\\implies |A|(|A|+1)=0$。又 $A\\ne O$，存在某行 $a_{kj}\\ne 0$，按该行展开 $|A|=a_{k1}A_{k1}+a_{k2}A_{k2}+a_{k3}A_{k3}=-(a_{k1}^2+a_{k2}^2+a_{k3}^2)<0$，故必有 **$|A|=-1$**！"
+        },
+        {
+          "stepTitle": "第（2）题：先由 $|A|=1\\ne 0$ 断定 $n$ 必为偶数，再证 $A^*$ 亦反对称！",
+          "detail": "因 $A^T=-A$，$|A|=|A^T|=(-1)^n|A|$；又 $|A|=1\\ne 0$，故 **$n$ 必为偶数**！从而 $(A^*)^T=(A^T)^*=(-A)^*=(-1)^{n-1}A^*=-A^*$（因 $n-1$ 为奇数！），即 $A^*$ 是反对称阵！对任意反对称阵 $M$ 恒有二次型 $x^TMx=(x^TMx)^T=x^TM^Tx=-x^TMx\\implies x^TMx=0$，故 $x^TA^*x=0$！"
+        }
+      ],
+      "finalAnswer": "（1）$|A|=-1$；（2）$x^TA^*x=0$",
+      "takeaway": "牢记两条美妙结论：① 实 3 阶阵 $A^*=\\pm A^T$ 且 $A\\ne O \\implies |A|=\\pm 1$；② 偶数阶可逆反对称阵的伴随阵 $A^*$ 仍为反对称阵，其任意二次型 $x^TA^*x\\equiv 0$！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.25-26",
+        "pdfPage": 36,
+        "itemRef": "强化例 3.10 & 例 3.11"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_adv_part1",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-24",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、抽象矩阵求逆与判可逆（强化 9 讲）",
+      "title": "【强化例 3.12 / 没咋了 1.4 例 6】多项式长除法由 $A^3-2A^2+3A-4E=O$ 求 $(A-E)^{-1}$",
+      "problem": "设 $n$ 阶方阵 $A$ 满足 $A^3-2A^2+3A-4E=O$，求 $A^{-1}$ 与 $(A-E)^{-1}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：求 $A^{-1}$——把常数项移右边直接提 $A$",
+          "detail": "$A(A^2-2A+3E)=4E\\implies A^{-1}=\\dfrac{1}{4}(A^2-2A+3E)$。"
+        },
+        {
+          "stepTitle": "第二步：求 $(A-E)^{-1}$——多项式长除法（用 $\\lambda^3-2\\lambda^2+3\\lambda-4$ 除以 $\\lambda-1$）",
+          "detail": "长除得 $\\lambda^3-2\\lambda^2+3\\lambda-4=(\\lambda-1)(\\lambda^2-\\lambda+2)-2$！把 $\\lambda$ 换回 $A$、常数换为 $E$：$$(A-E)(A^2-A+2E)=2E\\implies (A-E)^{-1}=\\frac{1}{2}(A^2-A+2E)$$"
+        }
+      ],
+      "finalAnswer": "$A^{-1}=\\frac{1}{4}(A^2-2A+3E)$；$(A-E)^{-1}=\\frac{1}{2}(A^2-A+2E)$",
+      "takeaway": "已知 $f(A)=O$ 求 $(A-cE)^{-1}$ 的万能模板：拿多项式 $f(x)$ 除以 $(x-c)$ 得 $f(x)=(x-c)q(x)+r$，只要余数 $r=f(c)\\ne 0$，立刻得 $(A-cE)^{-1}=-\\frac{1}{r}q(A)$！",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.27-28 / 没咋了 P.21 例 6",
+        "pdfPage": 38,
+        "itemRef": "强化例 3.12"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_adv_part2",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-25",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、抽象矩阵求逆与判可逆（强化 9 讲）",
+      "title": "【强化例 3.13 & 例 3.14】秩 1 减单位阵待定求逆与幂零阵 $A^3=O\\Rightarrow E\\pm A$ 均可逆",
+      "problem": "（1）（例 3.13）设 $n$ 阶矩阵 $A=\\begin{bmatrix}0&1&\\cdots&1\\\\1&0&\\cdots&1\\\\\\vdots&\\vdots&&\\vdots\\\\1&1&\\cdots&0\\end{bmatrix}\\;(n\\ge 2)$，求 $A^{-1}$；（2）（例 3.14）设 $A$ 为 $n$ 阶非零矩阵，$A^3=O$，判别 $E-A$ 与 $E+A$ 的可逆性。",
+      "steps": [
+        {
+          "stepTitle": "第（1）题：拆成 $A=\\alpha\\alpha^T-E$，利用 $(\\alpha\\alpha^T)^2=n\\alpha\\alpha^T$ 待定系数求逆！",
+          "detail": "令 $\\alpha=[1,1,\\dots,1]^T$，则 $A=\\alpha\\alpha^T-E$ 且 $\\alpha^T\\alpha=n$。设 $A^{-1}=k\\alpha\\alpha^T-E$，相乘：$(\\alpha\\alpha^T-E)(k\\alpha\\alpha^T-E)=[k(n-1)-1]\\alpha\\alpha^T+E$！令系数为 $0$ 得 $k=\\dfrac{1}{n-1}$，故 $A^{-1}=\\dfrac{1}{n-1}\\alpha\\alpha^T-E=\\dfrac{1}{n-1}\\begin{bmatrix}2-n&1&\\cdots&1\\\\1&2-n&\\cdots&1\\\\\\vdots&\\vdots&&\\vdots\\\\1&1&\\cdots&2-n\\end{bmatrix}$！"
+        },
+        {
+          "stepTitle": "第（2）题：双解法秒杀（立方和差公式 + 特征值法）",
+          "detail": "**法一（配因子）**：$E=E\\pm A^3=(E\\pm A)(E\\mp A+A^2)$，立知 $(E+A)^{-1}=E-A+A^2$、$(E-A)^{-1}=E+A+A^2$，**两者均可逆**！**法二（特征值）**：$A^3=O\\Rightarrow \\lambda^3=0\\Rightarrow A$ 特征值全为 $0\\Rightarrow E\\pm A$ 特征值全为 $1\\ne 0$，故两者均可逆！"
+        }
+      ],
+      "finalAnswer": "（1）$A^{-1}=\\frac{1}{n-1}\\alpha\\alpha^T-E$；（2）$E-A$ 与 $E+A$ 均可逆（选 C）",
+      "takeaway": "记住 **Sherman-Morrison 万能秩 1 求逆公式**：$(E+c\\alpha\\beta^T)^{-1}=E-\\dfrac{c}{1+c\\beta^T\\alpha}\\alpha\\beta^T$（当 $1+c\\beta^T\\alpha\\ne 0$），遇到对角相同非对角相同的矩阵 10 秒出逆！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.28",
+        "pdfPage": 39,
+        "itemRef": "强化例 3.13 & 例 3.14"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_adv_part2",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-26",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、初等矩阵变换与高次幂避逆技巧（强化 9 讲）",
+      "title": "【强化例 3.15 & 例 3.16】换列对伴随阵的作用 $B^*=E_{12}(-A^*)$ 与行拼列变换免求逆算 $A^{99}$",
+      "problem": "（1）（例 3.15）交换 3 阶可逆阵 $A$ 第 1,2 列得 $B$，求 $B^*$ 与 $A^*$ 的关系；（2）（例 3.16）设 $P=\\begin{bmatrix}1&1&3\\\\1&2&2\\\\0&0&2\\end{bmatrix}$ 且 $P^{-1}AP=\\begin{bmatrix}-1&0&0\\\\0&-2&0\\\\0&0&0\\end{bmatrix}$，求 $A^{99}$。",
+      "steps": [
+        {
+          "stepTitle": "第（1）题：$B=AE_{12}\\implies B^*=E_{12}^*A^*=(-E_{12})A^*=E_{12}(-A^*)$",
+          "detail": "因 $|E_{12}|=-1$，故 $E_{12}^*=|E_{12}|E_{12}^{-1}=-E_{12}$！左乘 $E_{12}$ 相当于互换第 1,2 行，所以 $B^*$ 是由 **$-A^*$ 的第 1 行与第 2 行互换**得到（选 D）！"
+        },
+        {
+          "stepTitle": "第（2）题：行拼 $\\begin{bmatrix}P\\\\PB^{99}\\end{bmatrix}\\xrightarrow{\\text{仅列变换}}\\begin{bmatrix}E\\\\A^{99}\\end{bmatrix}$ 免算 $P^{-1}$！",
+          "detail": "由 $A^{99}=PB^{99}P^{-1}$，先直接写出 $B^{99}=\\operatorname{diag}(-1,-2^{99},0)$，算出 $PB^{99}=\\begin{bmatrix}-1&-2^{99}&0\\\\-1&-2^{100}&0\\\\0&0&0\\end{bmatrix}$。将其拼在 $P$ 下方并**仅作初等列变换**把上块 $P$ 化为 $E$，下块直接自动变成 $A^{99}=\\begin{bmatrix}2^{99}-2&1-2^{99}&2-2^{98}\\\\2^{100}-2&1-2^{100}&2-2^{99}\\\\0&0&0\\end{bmatrix}$！"
+        }
+      ],
+      "finalAnswer": "（1）$-A^*$ 第 1,2 行互换（选 D）；（2）$A^{99}=\\begin{bmatrix}2^{99}-2&1-2^{99}&2-2^{98}\\\\2^{100}-2&1-2^{100}&2-2^{99}\\\\0&0&0\\end{bmatrix}$",
+      "takeaway": "算 $P\\Lambda^n P^{-1}$ 时，常规算 $P^{-1}$ 再乘两次容易算错；用「上下行拼 $\\begin{bmatrix}P\\\\P\\Lambda^n\\end{bmatrix}$ 仅做初等列变换」把求逆和右乘一步合一，又快又准！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.29-30",
+        "pdfPage": 40,
+        "itemRef": "强化例 3.15 & 例 3.16"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_adv_part2",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-27",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、满秩分解高次幂压轴神技（强化 9 讲 ★★★）",
+      "title": "【强化例 3.17 ★★★】4 阶降秩阵满秩分解 $A=BC$ 转 2 阶 $(CB)^9$ 降维求 $A^{10}$",
+      "problem": "已知 $A=\\begin{bmatrix}1&1&1&1\\\\1&1&1&1\\\\2&1&0&-1\\\\-1&0&1&2\\end{bmatrix},\\;B=\\begin{bmatrix}1&1\\\\1&1\\\\0&1\\\\1&0\\end{bmatrix}$，满足 $A=BC$。（1）求 $2\\times 4$ 矩阵 $C$；（2）计算 $A^{10}$。",
+      "steps": [
+        {
+          "stepTitle": "第（1）题：将 $B=[\\alpha_3,\\alpha_2]$ 视为 $A$ 列组的极大无关组，行最简形一键读出 $C$！",
+          "detail": "注意 $B$ 的两列恰为 $A$ 的 $\\alpha_3=[1,1,0,1]^T$ 与 $\\alpha_2=[1,1,1,0]^T$！对 $A$ 作行初等变换化行最简形得 $\\begin{bmatrix}1&0&-1&-2\\\\0&1&2&3\\\\0&0&0&0\\\\0&0&0&0\\end{bmatrix}$，对照列关系读出 $\\alpha_1=-\\alpha_3+2\\alpha_2,\\;\\alpha_4=2\\alpha_3-\\alpha_2$，故 $A=[\\alpha_3,\\alpha_2]\\begin{bmatrix}-1&0&1&2\\\\2&1&0&-1\\end{bmatrix}=BC$，即 $C=\\begin{bmatrix}-1&0&1&2\\\\2&1&0&-1\\end{bmatrix}$！"
+        },
+        {
+          "stepTitle": "第（2）题：结合律降维 $A^{10}=B(CB)^9 C$——从 4 阶秒降为 2 阶！",
+          "detail": "算出 2 阶阵 $CB=\\begin{bmatrix}1&0\\\\2&3\\end{bmatrix}$！特征值 $\\lambda_1=1,\\;\\lambda_2=3$，特征向量 $\\xi_1=[1,-1]^T,\\;\\xi_2=[0,1]^T$，令 $P=\\begin{bmatrix}1&0\\\\-1&1\\end{bmatrix}$ 得 $(CB)^9=P\\begin{bmatrix}1&0\\\\0&3^9\\end{bmatrix}P^{-1}=\\begin{bmatrix}1&0\\\\3^9-1&3^9\\end{bmatrix}$！再左右乘 $B,C$ 即得：$$A^{10}=B(CB)^9 C=\\begin{bmatrix}3^9&3^9&3^9&3^9\\\\3^9&3^9&3^9&3^9\\\\3^9+1&3^9&3^9-1&3^9-2\\\\-1&0&1&2\\end{bmatrix}$$"
+        }
+      ],
+      "finalAnswer": "（1）$C=\\begin{bmatrix}-1&0&1&2\\\\2&1&0&-1\\end{bmatrix}$；（2）$A^{10}=\\begin{bmatrix}3^9&3^9&3^9&3^9\\\\3^9&3^9&3^9&3^9\\\\3^9+1&3^9&3^9-1&3^9-2\\\\-1&0&1&2\\end{bmatrix}$",
+      "takeaway": "满秩分解 $A_{4\\times 4}=B_{4\\times 2}C_{2\\times 4}\\implies A^n=B(CB)^{n-1}C$ 是秩 1 阵 $A=\\alpha\\beta^T$ 的高维终极推广！直接把 4 阶矩阵高次幂降成 2 阶对角化，考研压轴最爱！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.31-33",
+        "pdfPage": 42,
+        "itemRef": "强化例 3.17"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_adv_part2",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-28",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "五、分块矩阵秩选择题（强化 9 讲 & 2018 真题）",
+      "title": "【2018 真题 · 强化例 3.18 / 没咋了 1.9 例 2】横拼左同 $r([A,AB])=r(A)$ 与三反例秒排 B/C/D",
+      "problem": "设 $A,B$ 为 $n$ 阶矩阵，判断下列分块矩阵秩的等式哪项恒成立：(A) $r([A,AB])=r(A)$；(B) $r([A,BA])=r(A)$；(C) $r([A,B])=\\max\\{r(A),r(B)\\}$；(D) $r([A,B])=r([A^T,B^T])$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：双方法秒证选项 (A) 恒成立",
+          "detail": "**法一（乘积秩夹逼）**：一方面 $A$ 是 $[A,AB]$ 的子块故 $r([A,AB])\\ge r(A)$；另一方面 $[A,AB]=A[E,B]$ 故 $r([A,AB])\\le r(A)$，两头夹逼得 $r([A,AB])=r(A)$！**法二（列线性表出）**：$AB$ 的列向量全由 $A$ 的列向量线性表出，故添加 $AB$ 不增加列秩！"
+        },
+        {
+          "stepTitle": "第二步：三组极简 2 阶反例秒排 B、C、D",
+          "detail": "① 排 B：取 $A=\\begin{bmatrix}1&0\\\\0&0\\end{bmatrix},B=\\begin{bmatrix}0&1\\\\1&0\\end{bmatrix}\\Rightarrow BA=\\begin{bmatrix}0&0\\\\1&0\\end{bmatrix}$，$r([A,BA])=2\\ne 1=r(A)$；② 排 C：取 $A=\\begin{bmatrix}1&0\\\\0&0\\end{bmatrix},B=\\begin{bmatrix}0&0\\\\1&0\\end{bmatrix}$，$r([A,B])=2\\ne 1$；③ 排 D：取 $A=\\begin{bmatrix}1&0\\\\0&0\\end{bmatrix},B=\\begin{bmatrix}0&1\\\\0&0\\end{bmatrix}$，$r([A,B])=1$ 而 $r([A^T,B^T])=2$（注意：$[A,B]^T=\\begin{bmatrix}A^T\\\\B^T\\end{bmatrix}$ 是竖拼不是横拼！）。"
+        }
+      ],
+      "finalAnswer": "选 (A)：$r([A,AB])=r(A)$",
+      "takeaway": "记住 2018 经典真题三大考点：① 横拼左同化零 $r([A,AB])=r(A)$；② $[A,BA]\\ne[E,B]A$（不满足乘法维数）；③ $[A,B]^T=\\begin{bmatrix}A^T\\\\B^T\\end{bmatrix}\\ne [A^T,B^T]$！",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.36-37 / 没咋了 P.33 例 2",
+        "pdfPage": 47,
+        "itemRef": "强化例 3.18"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_adv_part2",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-29",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、矩阵方程与列等价求全部可逆阵 $P$（强化 9 讲）",
+      "title": "【强化例 3.19】$A$ 经初等列变换化为 $B$ 求 $a=2$ 及全部可逆阵 $P$ 使 $AP=B$",
+      "problem": "已知 $A=\\begin{bmatrix}1&2&a\\\\1&3&0\\\\2&7&-a\\end{bmatrix}$ 可经初等列变换化为 $B=\\begin{bmatrix}1&a&2\\\\0&1&1\\\\-1&1&1\\end{bmatrix}$。（1）求 $a$；（2）求全部满足 $AP=B$ 的可逆矩阵 $P$。",
+      "steps": [
+        {
+          "stepTitle": "第（1）题：「经初等列变换化为 $B$」翻译为 $A,B$ 等价且列空间相同（先用 $r(A)=r(B)$ 定 $a$）",
+          "detail": "分别对 $A,B$ 化行阶梯：$A\\to\\begin{bmatrix}1&0&3a\\\\0&1&-a\\\\0&0&0\\end{bmatrix}$（恒有 $r(A)=2$）；$B\\to\\begin{bmatrix}1&0&2-a\\\\0&1&1\\\\0&0&2-a\\end{bmatrix}$！要使 $r(B)=r(A)=2$，必有 $2-a=0\\implies a=2$！（代入 $a=2$ 复核 $r([A,B])=2=r(A)$，确有解！）"
+        },
+        {
+          "stepTitle": "第（2）题：对 $[A,B]$ 化行最简形一键解三列通解，再用 $|P|\\ne 0$ 筛可逆！",
+          "detail": "对 $[A,B]$ 作行变换得 $\\begin{bmatrix}1&0&6&3&4&4\\\\0&1&-2&-1&-1&-1\\\\0&0&0&0&0&0\\end{bmatrix}$。齐次基础解系 $[-6,2,1]^T$，三列特解依次为 $[3,-1,0]^T,\\;[4,-1,0]^T,\\;[4,-1,0]^T$，故通解：$$P=\\begin{bmatrix}3-6k_1&4-6k_2&4-6k_3\\\\-1+2k_1&-1+2k_2&-1+2k_3\\\\k_1&k_2&k_3\\end{bmatrix}$$ 算行列式（$r_1+6r_3,\\;r_2-2r_3$ 瞬间消去 $k_1,k_2,k_3$ 在前两行的系数！）得 $|P|=\\begin{vmatrix}3&4&4\\\\-1&-1&-1\\\\k_1&k_2&k_3\\end{vmatrix}=k_3-k_2$！故 $P$ 可逆 $\\Longleftrightarrow k_2\\ne k_3$！"
+        }
+      ],
+      "finalAnswer": "（1）$a=2$；（2）$P=\\begin{bmatrix}3-6k_1&4-6k_2&4-6k_3\\\\-1+2k_1&-1+2k_2&-1+2k_3\\\\k_1&k_2&k_3\\end{bmatrix}$（$k_1,k_2,k_3$ 为任意常数且 $k_2\\ne k_3$）",
+      "takeaway": "超级规范大题满分步骤：解 $AP=B$ 全部可逆阵分三步走——① 化 $[A,B]$ 行最简形定 $r(A)=r([A,B])$；② 拼出带 3 个自由常数的通解阵 $P$；③ 算 $|P|\\ne 0$（用齐次行消元一秒化简行列式！）写出参数限制！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.38-39",
+        "pdfPage": 49,
+        "itemRef": "强化例 3.19"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_adv_part2",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-30",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、压轴神题（强化 9 讲 ★★★）",
+      "title": "【强化例 3.20 ★★★】求 $P$ 使 $P^{-1}AP=J$ 并证不存在 $B$ 使 $B^2=A$（附 2 行幂零指数秒杀法！）",
+      "problem": "设 $A=\\begin{bmatrix}0&1&2\\\\0&0&3\\\\0&0&0\\end{bmatrix}$。（1）求可逆矩阵 $P$，使得 $P^{-1}AP=\\begin{bmatrix}0&1&0\\\\0&0&1\\\\0&0&0\\end{bmatrix}$；（2）是否存在 3 阶矩阵 $B$，使得 $B^2=A$？若存在求出 $B$，若不存在说明理由。",
+      "steps": [
+        {
+          "stepTitle": "第（1）题：将 $AP=PJ$ 按列展开递推求 $\\xi_1,\\xi_2,\\xi_3$",
+          "detail": "设 $P=[\\xi_1,\\xi_2,\\xi_3]$，由 $AP=[\\boldsymbol{0},\\xi_1,\\xi_2]$ 得 $A\\xi_1=\\boldsymbol{0},\\;A\\xi_2=\\xi_1,\\;A\\xi_3=\\xi_2$！顺次求解：取 $\\xi_1=[1,0,0]^T$，解 $A\\xi_2=\\xi_1$ 取 $\\xi_2=[0,1,0]^T$，解 $A\\xi_3=\\xi_2$ 取 $\\xi_3=[0,-\\frac{2}{3},\\frac{1}{3}]^T$！故可逆阵 $P=\\begin{bmatrix}1&0&0\\\\0&1&-\\frac{2}{3}\\\\0&0&\\frac{1}{3}\\end{bmatrix}$（上三角 $|P|=\\frac{1}{3}\\ne 0$）！"
+        },
+        {
+          "stepTitle": "第（2）题法一（原书交换法）：由 $B^2=A\\Rightarrow BA=B^3=AB$ 锁定 $B$ 形状导矛盾",
+          "detail": "设 $B=(x_{ij})_{3\\times 3}$，展开 $BA=AB$ 令对应元相等，迫使 $B=\\begin{bmatrix}x_{11}&x_{12}&x_{13}\\\\0&x_{11}&3x_{12}\\\\0&0&x_{11}\\end{bmatrix}$！再代回 $B^2=A$，比较对角与 $(1,2)$ 元：$x_{11}^2=0\\Rightarrow x_{11}=0$，却又要求 $2x_{11}x_{12}=1\\ne 0$，矛盾！故不存在！"
+        },
+        {
+          "stepTitle": "第（2）题法二（2 行幂零指数神级秒杀！）：$B^6=O\\Rightarrow B^3=O\\Rightarrow A^2=O$ 矛盾！",
+          "detail": "算得 $A^2=\\begin{bmatrix}0&0&3\\\\0&0&0\\\\0&0&0\\end{bmatrix}\\ne O$，$A^3=O$。若存在 3 阶阵 $B$ 使 $B^2=A$，则 $B^6=A^3=O$，故 $B$ 的全部特征值均为 $0$！由 3 阶特征多项式 $|\\lambda E-B|=\\lambda^3$ 及哈密顿-凯莱定理必有 **$B^3=O$**！从而 $A^2=B^4=B^3B=O$，与 $A^2\\ne O$ 瞬间矛盾！故绝不存在这样的 $B$！"
+        }
+      ],
+      "finalAnswer": "（1）$P=\\begin{bmatrix}1&0&0\\\\0&1&-\\frac{2}{3}\\\\0&0&\\frac{1}{3}\\end{bmatrix}$；（2）不存在（交换待定法或幂零指数 $B^3=O\\Rightarrow A^2=O$ 矛盾）",
+      "takeaway": "一道题吃透两种大师级思维：① 碰到 $B^k=A$ 立刻利用交换性 $BA=AB$ 压缩未知数；② 碰到 $n$ 阶幂零阵 $B^m=O$ 立刻用特征值全 0 推出 $B^n=O$！",
+      "source": {
+        "book": "27 张宇线代9讲（附幂零指数秒杀补注）",
+        "printedPage": "强化 P.39-40",
+        "pdfPage": 50,
+        "itemRef": "强化例 3.20"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_adv_part2",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-31",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、凯莱变换与真题实战（没咋了 1.2 & 1.4 精选）",
+      "title": "【没咋了 1.2 例 2 & 2022 数一（没咋了 1.4 例 4）】凯莱正交变换 $(E-A)(E+A)^{-1}$ 与 2022 数一矩阵方程",
+      "problem": "（1）（没咋了 1.2 例 2）设 $A$ 为 $n$ 阶方阵，$E+A$ 可逆，证明 $(E-A)(E+A)^{-1}=(E+A)^{-1}(E-A)$，且当 $A=-A^T$ 时 $(E-A)(E+A)^{-1}$ 为正交矩阵；（2）（2022 数一，没咋了 1.4 例 4）已知 $A$ 和 $E-A$ 可逆，若 $(E-(E-A)^{-1})B=A$，求 $B-A$。",
+      "steps": [
+        {
+          "stepTitle": "第（1）题：凯莱（Cayley）变换可交换性与正交性证明",
+          "detail": "因 $(E-A)(E+A)=E-A^2=(E+A)(E-A)$，两端同左、右乘 $(E+A)^{-1}$ 即得 $(E+A)^{-1}(E-A)=(E-A)(E+A)^{-1}$！记 $Q=(E-A)(E+A)^{-1}$，当 $A^T=-A$ 时 $Q^T=(E+A^T)^{-1}(E-A^T)=(E-A)^{-1}(E+A)$，故 $Q^TQ=(E-A)^{-1}(E+A)(E+A)^{-1}(E-A)=E$，确为正交矩阵！"
+        },
+        {
+          "stepTitle": "第（2）题：2022 数一真题——把 $E=(E-A)(E-A)^{-1}$ 通分秒杀！",
+          "detail": "$E-(E-A)^{-1}=[(E-A)-E](E-A)^{-1}=-A(E-A)^{-1}$！代入原方程得 $-A(E-A)^{-1}B=A$！因 $A$ 可逆，两端左乘 $A^{-1}$ 得 $-(E-A)^{-1}B=E\\implies B=-(E-A)=A-E\\implies B-A=-E$！"
+        }
+      ],
+      "finalAnswer": "（1）证毕（$Q^TQ=E$）；（2）$B-A=-E$",
+      "takeaway": "两个高频真题套路：① $E-A$ 与 $(E+A)^{-1}$ 可交换（所有同底矩阵多项式有理分式两两交换！）；② 看到 $E-(E-A)^{-1}$ 立刻右提 $(E-A)^{-1}$ 化为 $-A(E-A)^{-1}$！",
+      "source": {
+        "book": "27 没咋了强化讲义（含 2022 数一真题）",
+        "printedPage": "没咋了 P.18 例 2, P.20 例 4",
+        "pdfPage": 23,
+        "itemRef": "没咋了 1.2 例 2 & 1.4 例 4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-e-32",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "五、近年数一/数二分块与初等阵真题（没咋了 1.6 & 1.9 精选）",
+      "title": "【2024 数二 · 2021/2023 数一（没咋了精选）】$P^TAP^2$ 反解 $A$ 与广义初等变换比三分块矩阵秩",
+      "problem": "（1）（2024 数二，没咋了 1.6 例 3）设 $P=\\begin{bmatrix}1&0&0\\\\0&1&0\\\\1&0&1\\end{bmatrix}$，$P^TAP^2=\\begin{bmatrix}a+2c&0&c\\\\0&b&0\\\\2c&0&c\\end{bmatrix}$，求 $A$；（2）（2023 数一，没咋了 1.9 例 5）$n$ 阶阵 $A,B,C$ 满足 $ABC=O$，记 $\\begin{bmatrix}O&A\\\\BC&E\\end{bmatrix},\\;\\begin{bmatrix}AB&C\\\\O&E\\end{bmatrix},\\;\\begin{bmatrix}E&AB\\\\AB&O\\end{bmatrix}$ 的秩为 $r_1,r_2,r_3$，排大小；（3）（没咋了 1.9 例 6，已修正漏字）记 $\\begin{bmatrix}O&A\\\\B&E\\end{bmatrix},\\;\\begin{bmatrix}A&B\\\\O&E\\end{bmatrix},\\;\\begin{bmatrix}A&AB\\\\E&B\\end{bmatrix}$ 的秩为 $r_1,r_2,r_3$，排大小。",
+      "steps": [
+        {
+          "stepTitle": "第（1）题：初等倍加阵逆秒算 $A=(P^T)^{-1}M P^{-2}$",
+          "detail": "$P=E_{31}(1)$，故 $P^T=E_{13}(1)\\Rightarrow (P^T)^{-1}=E_{13}(-1)$（第 3 行 $(-1)$ 倍加第 1 行），$P^{-2}=E_{31}(-2)$（第 3 列 $(-2)$ 倍加第 1 列）！先做 $r_1-r_3$ 得 $\\begin{bmatrix}a&0&0\\\\0&b&0\\\\2c&0&c\\end{bmatrix}$，再做 $c_1-2c_3$ 立得 **$A=\\operatorname{diag}(a,b,c)$**（选 C）！"
+        },
+        {
+          "stepTitle": "第（2）题：2023 数一真题——广义初等变换清零分块！",
+          "detail": "① 对 $\\begin{bmatrix}O&A\\\\BC&E\\end{bmatrix}$ 作 $R_1-AR_2$ 得 $\\begin{bmatrix}-ABC&O\\\\BC&E\\end{bmatrix}=\\begin{bmatrix}O&O\\\\BC&E\\end{bmatrix}\\Rightarrow r_1=n$（因 $ABC=O$！）；② 对 $\\begin{bmatrix}AB&C\\\\O&E\\end{bmatrix}$ 作 $R_1-CR_2$ 得 $\\begin{bmatrix}AB&O\\\\O&E\\end{bmatrix}\\Rightarrow r_2=n+r(AB)$；③ 对 $\\begin{bmatrix}E&AB\\\\AB&O\\end{bmatrix}$ 作 $R_2-ABR_1$ 得 $\\begin{bmatrix}E&O\\\\O&-(AB)^2\\end{bmatrix}\\Rightarrow r_3=n+r((AB)^2)$！因 $0\\le r((AB)^2)\\le r(AB)$，立得 **$r_1\\le r_3\\le r_2$**（选 C）！"
+        },
+        {
+          "stepTitle": "第（3）题：同理广义初等变换秒算三秩",
+          "detail": "$r_1=r\\begin{bmatrix}-AB&O\\\\B&E\\end{bmatrix}=n+r(AB)$；$r_2=r\\begin{bmatrix}A&O\\\\O&E\\end{bmatrix}=n+r(A)$；$r_3=r\\begin{bmatrix}A-AE&AB-AB\\\\E&B\\end{bmatrix}=r\\begin{bmatrix}O&O\\\\E&B\\end{bmatrix}=n$！因 $r(A)\\ge r(AB)\\ge 0$，立得 **$r_2\\ge r_1\\ge r_3$**（选 B）！"
+        }
+      ],
+      "finalAnswer": "（1）$A=\\operatorname{diag}(a,b,c)$（选 C）；（2）$r_1\\le r_3\\le r_2$（选 C）；（3）$r_2\\ge r_1\\ge r_3$（选 B）",
+      "takeaway": "分块阵里只要出现单位块 **$E$**，立刻用 $E$ 所在行/列作广义初等倍加把同行同列的其它块全部清成 $O$，瞬间秒出精确秩表达式（2023 数一真题 15 秒满分）！",
+      "source": {
+        "book": "27 没咋了强化讲义（2024 数二 / 2023 数一真题）",
+        "printedPage": "没咋了 P.26 例 3, P.34 例 5, 例 6",
+        "pdfPage": 31,
+        "itemRef": "没咋了 1.6 例 3 & 1.9 例 5-6"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la03_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-s-01",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "七、题型总结（一）：矩阵运算 6 大高频考法速查",
+      "title": "矩阵运算 6 大核心题型与破题口速查表（表 L3-2）",
+      "overview": "第 3 讲《矩阵运算》是全线代工具箱的核心，考研全部考题收敛在以下 6 大高频题型：",
+      "patterns": [
+        {
+          "typeName": "矩阵运算 6 大高频题型决策流",
+          "triggers": "求 $A^n$、证 $A=O$、求 $A^{-1}/A^*$、初等阵变换、分块阵运算与解矩阵方程",
+          "method": "① 证 $A=O$→先想 $\\operatorname{tr}(BB^T)=0$；② 求 $A^n$→按「秩 1→二项展开→周期旋转→初等幂→满秩分解/相似」五步排查；③ 抽象求逆→长除法或提因子化加为乘；④ 初等阵→左行右列 + 逆/伴随变向；⑤ 分块阵含 $E$→广义初等变换消块；⑥ 矩阵方程→先化简再代入，不可逆按列解通解再算 $|P|\\ne 0$！",
+          "pitfall": "绝对不要未化简就直接把 3 阶/4 阶具体矩阵代进方程硬算！",
+          "relatedRefs": "表 L3-1, 强化例 3.1, 强化例 3.4, 强化例 3.8, 强化例 3.17, 强化例 3.19, 强化例 3.20"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 L3-2　矩阵运算 6 大核心题型与秒杀工具速查表",
+          "headers": [
+            "题型",
+            "识别标志",
+            "首选秒杀武器",
+            "代表例题"
+          ],
+          "rows": [
+            [
+              "① 证矩阵相等 / $B=O$",
+              "实阵二次等式（如 $(A^T-A)A=O$）",
+              "算 $\\operatorname{tr}(BB^T)=0\\Rightarrow B=O$",
+              "强化例 3.1"
+            ],
+            [
+              "② 矩阵高次幂 $A^n$",
+              "求 $A^{10},A^{99},A^n,A^{-11}$",
+              "秩 1 迹乘方 / $E+B$ 二项 / 旋转 $R(k\\theta)$ / 满秩 $B(CB)^{n-1}C$",
+              "例 2.1–2.3、强化例 3.2–3.7、3.16–3.17"
+            ],
+            [
+              "③ 抽象求逆与判可逆",
+              "给 $f(A)=O$ 或 $AB=A+B$",
+              "多项式长除法 / 配常数提公因 / $A+B=A(B^{-1}+A^{-1})B$",
+              "例 2.4–2.5、强化例 3.12–3.14"
+            ],
+            [
+              "④ 伴随阵与初等阵",
+              "含 $A^*,E_{ij},E_{ij}(k)$ 组合",
+              "穿脱原则 + $AA^*=|A|E$ + 左行右列（求逆/伴随反转方向）",
+              "例 2.13–2.14、强化例 3.8–3.11、3.15"
+            ],
+            [
+              "⑤ 分块矩阵逆/伴随/秩",
+              "含零块 $O$ 或单位块 $E$ 的分块阵",
+              "四类三角分块逆 / 广义初等变换清块 / 横拼左同竖拼右同",
+              "例 2.15–2.16、强化例 3.9、3.18、没咋了 1.9 例 5"
+            ],
+            [
+              "⑥ 求解矩阵方程",
+              "$AX=B,XA=B,AP=B$ 可逆阵",
+              "先化简再代入；可逆用列拼行变；不可逆按列解通解再判 $|P|\\ne 0$",
+              "例 2.17–2.18、强化例 3.19–3.20"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "记住「先观察结构、再化简符号、最后才代数字」，矩阵计算题的耗时能直接砍半！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.14-40",
+        "pdfPage": 25,
+        "itemRef": "表 L3-2 矩阵运算六大题型表"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-s-02",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "七、题型总结（二）：核心公式对照大汇总",
+      "title": "转置 $T$ / 逆 $-1$ / 伴随 $*$ / 行列式 $|\\cdot|$ 四算子运算律横比总表（表 L3-3）",
+      "overview": "考试最容易混淆的就是数乘 $k$ 提出后的幂次（$k$、$\\frac{1}{k}$、$k^{n-1}$、$k^n$）以及双重运算规律，一张对照表彻底清零混淆：",
+      "patterns": [
+        {
+          "typeName": "四算子幂次对比速记法",
+          "triggers": "化简含 $k, T, -1, *, |\\cdot|$ 嵌套的抽象矩阵表达式",
+          "method": "牢记数乘 $k$ 四连击：转置提 $k$、求逆提 $\\frac{1}{k}$、伴随提 $k^{n-1}$、行列式提 $k^n$！加减只有转置可拆，其余三者均不可拆！",
+          "pitfall": "千万不要把 $(kA)^{-1}$ 写成 $k^{-n}A^{-1}$，也不要把 $(kA)^*$ 写成 $k^n A^*$！",
+          "relatedRefs": "例 2.11, 强化例 3.10, 强化例 3.15"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 L3-3　$n\\;(n\\ge 2)$ 阶可逆方阵四大算子运算律横向对比表",
+          "headers": [
+            "运算类型",
+            "转置 $A^T$",
+            "逆矩阵 $A^{-1}$",
+            "伴随矩阵 $A^*$",
+            "行列式 $|A|$"
+          ],
+          "rows": [
+            [
+              "数乘 $kA\\;(k\\ne 0)$",
+              "$kA^T$",
+              "$\\dfrac{1}{k}A^{-1}$",
+              "$k^{n-1}A^*$",
+              "$k^n|A|$"
+            ],
+            [
+              "乘积 $AB$",
+              "$B^TA^T$（穿脱）",
+              "$B^{-1}A^{-1}$（穿脱）",
+              "$B^*A^*$（穿脱）",
+              "$|A||B|$（可交换）"
+            ],
+            [
+              "加法 $A+B$",
+              "$A^T+B^T$（唯一可拆！）",
+              "一般 $\\ne A^{-1}+B^{-1}$",
+              "一般 $\\ne A^*+B^*$",
+              "一般 $\\ne |A|+|B|$"
+            ],
+            [
+              "双重嵌套",
+              "$(A^T)^T=A$",
+              "$(A^{-1})^{-1}=A$",
+              "$(A^*)^*=|A|^{n-2}A$",
+              "$||A||=|A|$（数）"
+            ],
+            [
+              "与转置/逆交换",
+              "—",
+              "$(A^T)^{-1}=(A^{-1})^T$",
+              "$(A^T)^*=(A^*)^T,\\;(A^{-1})^*=(A^*)^{-1}=\\frac{1}{|A|}A$",
+              "$|A^T|=|A|,\\;|A^{-1}|=\\frac{1}{|A|}$"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "把表 L3-3 默写 3 遍，所有嵌套式如 $|(2A^*)^{-1}-3A^T|$ 都能零失误逐层脱壳！",
+      "source": {
+        "book": "27 张宇基础30讲·线代 & 线代独家大总结",
+        "printedPage": "基础 P.60 / 大总结 P.6-7",
+        "pdfPage": 66,
+        "itemRef": "表 L3-3 四算子横向对比表"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la03-s-03",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "七、题型总结（三）：第 3 讲高危陷阱与验算清单",
+      "title": "第 3 讲 6 大高频失分红线与考场验算守则（表 L3-4）",
+      "overview": "矩阵运算步骤多，一个小失误会连锁毁掉整道大题；守住以下 6 条红线并用 $AA^{-1}=E$ 抽检一行，准确率直逼 100%：",
+      "patterns": [
+        {
+          "typeName": "考场 10 秒防错验算习惯",
+          "triggers": "算完逆矩阵 $A^{-1}$、解完矩阵方程 $X$、求完 $A^n$ 之后",
+          "method": "① 算完 $A^{-1}$ 必拿 $A$ 第 1 行点乘 $A^{-1}$ 各列检验是否得 $[1,0,\\dots,0]$；② 算完 $A^n$ 必代 $n=1,2$ 复核；③ 解完 $PA=B$ 必抽算 $PA$ 一行对照 $B$！",
+          "pitfall": "绝对不要因为自信跳掉 5 秒抽检——矩阵计算错一个正负号极易在最后一步前功尽弃！",
+          "relatedRefs": "例 2.12, 强化例 3.8, 强化例 3.9, 强化例 3.18"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 L3-4　矩阵运算 6 大致命易错红线对照表",
+          "headers": [
+            "编号",
+            "常见错觉 / 陷阱",
+            "正确铁律"
+          ],
+          "rows": [
+            [
+              "红线 1",
+              "由 $AB=O$ 推 $A=O$ 或 $B=O$；由 $AB=AC$ 消去 $A$",
+              "必须先证 $A$ 可逆（或列满秩）才可左消去！"
+            ],
+            [
+              "红线 2",
+              "$(A+B)^2=A^2+2AB+B^2$ 或 $(AB)^n=A^nB^n$",
+              "仅当 $AB=BA$ 时才成立；与 $E,A^m,f(A)$ 则恒交换！"
+            ],
+            [
+              "红线 3",
+              "$\\begin{bmatrix}O&B\\\\C&O\\end{bmatrix}^{-1}=\\begin{bmatrix}O&B^{-1}\\\\C^{-1}&O\\end{bmatrix}$",
+              "副对角求逆必须换位：$\\begin{bmatrix}O&C^{-1}\\\\B^{-1}&O\\end{bmatrix}$！"
+            ],
+            [
+              "红线 4",
+              "对 $[A,E]$ 求逆时顺手做了初等列变换",
+              "列拼 $[A,E]$ 严禁列变换！行拼 $\\begin{bmatrix}A\\\\E\\end{bmatrix}$ 严禁行变换！"
+            ],
+            [
+              "红线 5",
+              "对 $A$ 做行变换以为 $A^{-1}$ 或 $A^*$ 也做同方向行变换",
+              "由穿脱原则，对 $A$ 左乘行变 $\\Rightarrow$ 对 $A^{-1},A^*$ 为右乘**列变**！"
+            ],
+            [
+              "红线 6",
+              "用摄动法证合同 $A\\simeq B\\Rightarrow A^*\\simeq B^*$ 写 $B_t=B+tE$",
+              "必须写同步合同摄动 $B_t=C^T(A+tE)C=B+tC^TC$ 才严谨！"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "牢记 6 条红线 + 10 秒抽检，线代批次 1（第 1–3 讲：行列式 + 余子式 + 矩阵运算）基石彻底打牢！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "第3讲全章总结",
+        "pdfPage": 25,
+        "itemRef": "表 L3-4 第3讲避坑清单"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    }
+  ]
+}

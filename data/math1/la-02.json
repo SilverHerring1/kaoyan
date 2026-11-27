@@ -1,0 +1,721 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "la-02",
+  "title": "线代 · 第 2 讲　余子式和代数余子式的计算",
+  "sourceMeta": "深度整合《27 张宇线代9讲》第2讲（P.10-13）+《27 张宇基础30讲·线代》对应核心节（P.20-21, 37, 59-62）+《27 没咋了线代强化讲义》1.3节（P.19），100% 逐页核图与 SymPy 验算",
+  "basicRequirements": {
+    "master": "熟练掌握余子式与代数余子式互化、单行/单列线性组合置换新行列式法、伴随矩阵法 A*=|A|A^(-1) 及特征值法求主对角代数余子式之和。",
+    "understand": "理解伴随矩阵「行放列」转置结构与行和相等矩阵 A*1=(|A|/a)1 的内在机制，清楚 |A|=0 时不可用逆矩阵求伴随。",
+    "familiar": "熟悉 A_ij=±a_ij 型伴随方程与分块副对角阵求全部代数余子式之和的高频真题考法。"
+  },
+  "items": [
+    {
+      "id": "m1-la02-f-01",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "一、余子式与代数余子式定义",
+      "title": "余子式 $M_{ij}$、代数余子式 $A_{ij}=(-1)^{i+j}M_{ij}$ 及「与本行元素无关性」",
+      "formulaLatex": "$$A_{ij}=(-1)^{i+j}M_{ij},\\qquad M_{ij}=(-1)^{i+j}A_{ij}$$",
+      "conditions": "$n\\ge 2$ 阶方阵（$1\\le i,j\\le n$）。",
+      "pitfalls": "求 $M_{ij}$ 与 $A_{ij}$ 的混合线性组合时，必须**第一步就把全部 $M_{ij}$ 按 $(-1)^{i+j}A_{ij}$ 统一化为 $A_{ij}$**，切忌直接拿 $M_{ij}$ 的系数去替换行列式某行！",
+      "source": {
+        "book": "27 张宇基础30讲·线代 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.20-21 / 没咋了 P.2",
+        "pdfPage": 26,
+        "itemRef": "余子式与代数余子式定义"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "划去 $n$ 阶行列式 $|A|$ 的第 $i$ 行和第 $j$ 列，剩余元素按原相对位置组成的 $(n-1)$ 阶行列式称为 $a_{ij}$ 的**余子式** $M_{ij}$；乘上位置符号 $(-1)^{i+j}$ 得**代数余子式** $A_{ij}$。核心性质：$M_{ij}$ 与 $A_{ij}$ 的取值与第 $i$ 行和第 $j$ 列的元素**完全无关**！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「去掉 $i$ 行 $j$ 列得余子式 $M_{ij}$，奇负偶正变代数余子式 $A_{ij}$；改动第 $i$ 行元素，该行所有 $A_{ij}$ 纹丝不动！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la02-f-02",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、用行列式求单行/单列线性组合",
+      "title": "展开定理与「大 $A$ 配小 $k$，$k$ 把小 $a$ 吃」新行列式构造公式",
+      "formulaLatex": "$$k_1A_{i1}+k_2A_{i2}+\\cdots+k_nA_{in}=\\begin{vmatrix}*&*&\\cdots&*\\\\k_1&k_2&\\cdots&k_n\\\\*&*&\\cdots&*\\end{vmatrix}_{\\text{第 }i\\text{ 行}};\\qquad \\sum_{j=1}^n a_{lj}A_{ij}=0\\;(l\\ne i)$$",
+      "conditions": "组合中所有 $A_{ij}$ 必须位于**同一行**（或**同一列**）；无论 $|A|$ 是否为 $0$ 均无条件成立！",
+      "pitfalls": "若组合中缺少某项（如只给了 $A_{41}-A_{42}+A_{43}$，缺 $A_{44}$），置换时该位置必须填 $0$（即 $[1,-1,1,0]$），绝不可乱抄原元素！",
+      "source": {
+        "book": "27 张宇基础30讲·线代 & 27 张宇线代9讲",
+        "printedPage": "基础 P.37 / 强化 P.10",
+        "pdfPage": 43,
+        "itemRef": "置换新行列式公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la02_all",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "因第 $i$ 行代数余子式 $A_{i1},\\dots,A_{in}$ 与第 $i$ 行原元素 $a_{i1},\\dots,a_{in}$ 无关，故把原行列式第 $i$ 行替换为系数向量 $[k_1,k_2,\\dots,k_n]$（其余 $n-1$ 行保持完全不变），所得新行列式的值恰等于线性组合 $\\sum_{j=1}^n k_j A_{ij}$！特别地，若 $[k_1,\\dots,k_n]$ 与其余某一行相等或成比例，结果直接为 $0$！列方向完全对称。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "张宇经典口诀：**「大 $A$ 配小 $a$ 等于 $|A|$，大 $A$ 配小 $k$，$k$ 把小 $a$ 吃」**；若漏项则对应系数补 $0$！"
+        }
+      ]
+    },
+    {
+      "id": "m1-la02-f-03",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "三、用伴随矩阵求任意多个代数余子式",
+      "title": "伴随矩阵法 $A^*=|A|A^{-1}$ 与全元素代数余子式求和公式",
+      "formulaLatex": "$$A^*=(A_{ji})_{n\\times n}=|A|A^{-1}\\;(|A|\\ne 0);\\qquad \\sum_{i=1}^n\\sum_{j=1}^n A_{ij}=\\boldsymbol{1}^T A^*\\boldsymbol{1}=|A|\\,\\boldsymbol{1}^T A^{-1}\\boldsymbol{1}$$",
+      "conditions": "严格前提：必须先验证 **$|A|\\ne 0$**（$A$ 可逆）！若 $|A|=0$ 则 $A^{-1}$ 不存在，严禁使用 $A^*=|A|A^{-1}$！",
+      "pitfalls": "致命陷阱：$A^*$ 的第 $(i,j)$ 元是 $A_{ji}$ 而非 $A_{ij}$！求 $A_{13}+A_{23}+A_{33}$ 对应 $A^*$ 的**第 3 行之和**，而非第 3 列之和！",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 张宇基础30讲·线代",
+        "printedPage": "基础 P.59-61 / 强化 P.11-12",
+        "pdfPage": 22,
+        "itemRef": "伴随矩阵求代数余子式公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la02_all",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "当 $A$ 可逆（$|A|\\ne 0$）时，只需求出 $A^{-1}$ 并乘以 $|A|$，就能一次性得到 $A^*$ 中**全部 $n^2$ 个代数余子式**（特别适合分块可逆阵、求全部代数余子式之和或跨行跨列组合！）。注意 $A^*$ 的第 $(i,j)$ 元是 **$A_{ji}$**（转置位置！），所以 $A^*$ 第 $k$ 行的元素和为 $\\sum_{i=1}^n A_{ik}$（对应原阵第 $k$ 列代数余子式之和）！"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「看到跨行跨列或求所有元素 $A_{ij}$ 之和，立刻想 $A^*=|A|A^{-1}$；切记 $A^*$ 竖着存各行代数余子式！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la02-f-04",
+      "kind": "formula",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、用特征值求主对角代数余子式之和",
+      "title": "特征值迹公式求主对角代数余子式之和 $\\sum A_{ii}=\\operatorname{tr}(A^*)$",
+      "formulaLatex": "$$\\sum_{i=1}^n A_{ii}=\\operatorname{tr}(A^*)=\\sum_{i=1}^n\\lambda_i^*=\\sum_{1\\le i_1<\\cdots<i_{n-1}\\le n}\\lambda_{i_1}\\cdots\\lambda_{i_{n-1}};\\qquad n=3:\\;A_{11}+A_{22}+A_{33}=\\lambda_1\\lambda_2+\\lambda_2\\lambda_3+\\lambda_3\\lambda_1$$",
+      "conditions": "当 $A$ 可逆时 $\\lambda_i^*=|A|/\\lambda_i$ 直接求和；写成初等对称多项式 $\\lambda_1\\lambda_2+\\lambda_2\\lambda_3+\\lambda_3\\lambda_1$ 后对不可逆阵（含零特征值）同样完全成立！",
+      "pitfalls": "若 $A$ 有零特征值（$|A|=0$），不能写 $\\lambda_i^*=|A|/\\lambda_i$（分母为 0），应直接用对称多项式 $\\lambda_1\\lambda_2+\\lambda_2\\lambda_3+\\lambda_3\\lambda_1$（若恰有 1 个 0 特征值，结果就是另两个非零特征值之积；若有 $\\ge 2$ 个 0 特征值，结果为 $0$）！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.12",
+        "pdfPage": 23,
+        "itemRef": "特征值求主对角代数余子式之和"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la02_all",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "主对角线代数余子式之和恰是伴随矩阵 $A^*$ 的迹 $\\operatorname{tr}(A^*)$，它等于 $A^*$ 全部特征值之和。对 3 阶方阵，**无论 $A$ 是否可逆**（可由摄动法或特征多项式一次项系数严格证明！），恒有 $A_{11}+A_{22}+A_{33}=\\lambda_1\\lambda_2+\\lambda_2\\lambda_3+\\lambda_3\\lambda_1$（恰等于 $|\\lambda E-A|=\\lambda^3-c_1\\lambda^2+c_2\\lambda-c_3$ 中的 $c_2$！）。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「3 阶特征值三件套：和 = 迹 $\\sum a_{ii}$，两两乘积和 = $\\sum A_{ii}$，总乘积 = $|A|$！」"
+        }
+      ]
+    },
+    {
+      "id": "m1-la02-c-01",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "一、三大计算路线全景总览",
+      "title": "余子式与代数余子式「三大计算路线图」（置换 / 伴随 / 特征值）",
+      "pitfalls": "不要拿路线 2 硬算单行组合（算逆矩阵太慢且 $|A|=0$ 会失效），也不要拿路线 1 硬算全部 25 个代数余子式（如强化例 2.2）！",
+      "figureSvg": "<svg viewBox=\"0 0 640 212\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"余子式和代数余子式三大计算路线图\">\n  <title>余子式与代数余子式三大秒杀路线图</title>\n  <rect x=\"4\" y=\"4\" width=\"632\" height=\"204\" rx=\"10\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"320\" y=\"25\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">余子式 Mᵢⱼ 与代数余子式 Aᵢⱼ 三大计算武器（先统一转 Aᵢⱼ=(-1)ⁱ⁺ʲMᵢⱼ）</text>\n\n  <!-- Way 1 -->\n  <g transform=\"translate(18,40)\">\n    <rect x=\"0\" y=\"0\" width=\"194\" height=\"156\" rx=\"8\" fill=\"#ffffff\" stroke=\"#3b82f6\" stroke-width=\"1.4\"/>\n    <rect x=\"0\" y=\"0\" width=\"194\" height=\"28\" rx=\"8\" fill=\"#eff6ff\"/>\n    <text x=\"97\" y=\"19\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1d4ed8\">路线 1：置换新行列式</text>\n    <text x=\"97\" y=\"48\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#0f172a\">单行/单列线性组合</text>\n    <text x=\"97\" y=\"68\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#1e40af\">∑ kⱼ Aᵢⱼ = | 第i行换为 k |</text>\n    <rect x=\"12\" y=\"80\" width=\"170\" height=\"36\" rx=\"5\" fill=\"#fefce8\" stroke=\"#fde047\"/>\n    <text x=\"97\" y=\"96\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#854d0e\">口诀：大A配小k，k把小a吃</text>\n    <text x=\"97\" y=\"110\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#a16207\">若 k 与某他行成比例 → 直接为 0！</text>\n    <text x=\"97\" y=\"138\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#64748b\">适用：|A|=0 也照样可用！</text>\n  </g>\n\n  <!-- Way 2 -->\n  <g transform=\"translate(223,40)\">\n    <rect x=\"0\" y=\"0\" width=\"194\" height=\"156\" rx=\"8\" fill=\"#ffffff\" stroke=\"#10b981\" stroke-width=\"1.4\"/>\n    <rect x=\"0\" y=\"0\" width=\"194\" height=\"28\" rx=\"8\" fill=\"#ecfdf5\"/>\n    <text x=\"97\" y=\"19\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#047857\">路线 2：伴随矩阵法</text>\n    <text x=\"97\" y=\"48\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#0f172a\">求全部/任意多个 Aᵢⱼ 之和</text>\n    <text x=\"97\" y=\"68\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#065f46\">A* = |A|·A⁻¹  (|A|≠0)</text>\n    <rect x=\"12\" y=\"80\" width=\"170\" height=\"36\" rx=\"5\" fill=\"#f0fdf4\" stroke=\"#86efac\"/>\n    <text x=\"97\" y=\"96\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#166534\">∑∑ Aᵢⱼ = 1ᵀ A* 1</text>\n    <text x=\"97\" y=\"110\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#15803d\">分块可逆阵直接秒杀（例 2.2）</text>\n    <text x=\"97\" y=\"138\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#dc2626\">⚠ 务必先核对前提：|A| ≠ 0！</text>\n  </g>\n\n  <!-- Way 3 -->\n  <g transform=\"translate(428,40)\">\n    <rect x=\"0\" y=\"0\" width=\"194\" height=\"156\" rx=\"8\" fill=\"#ffffff\" stroke=\"#a855f7\" stroke-width=\"1.4\"/>\n    <rect x=\"0\" y=\"0\" width=\"194\" height=\"28\" rx=\"8\" fill=\"#faf5ff\"/>\n    <text x=\"97\" y=\"19\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#7e22ce\">路线 3：特征值 / 迹法</text>\n    <text x=\"97\" y=\"48\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#0f172a\">主对角之和或行和相等</text>\n    <text x=\"97\" y=\"68\" text-anchor=\"middle\" font-size=\"10.5\" fill=\"#6b21a8\">∑ Aᵢᵢ = tr(A*) = ∑ λᵢ*</text>\n    <rect x=\"12\" y=\"80\" width=\"170\" height=\"36\" rx=\"5\" fill=\"#faf5ff\" stroke=\"#d8b4fe\"/>\n    <text x=\"97\" y=\"96\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#6b21a8\">3阶：λ₁λ₂ + λ₂λ₃ + λ₃λ₁</text>\n    <text x=\"97\" y=\"110\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#7e22ce\">A·1=a·1 ⇒ A*·1=(|A|/a)·1</text>\n    <text x=\"97\" y=\"138\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#64748b\">适用：已知特征值/行和（例 2.3-2.4）</text>\n  </g>\n</svg>",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.10-13 / 没咋了 P.19",
+        "pdfPage": 21,
+        "itemRef": "余子式三大计算路线图"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "summary": "考研中计算余子式与代数余子式只有三条核心路线：① **单行或单列线性组合** → 路线 1「置换新行列式」（无条件适用，$|A|=0$ 也能算）；② **跨行跨列或求全部 $n^2$ 个 $A_{ij}$ 之和** → 路线 2「伴随矩阵 $A^*=|A|A^{-1}$」（要求 $|A|\\ne 0$，尤其分块阵极快）；③ **求主对角之和 $\\sum A_{ii}$ 或已知行和相等求单列/全和** → 路线 3「特征值/特征向量法」（$\\operatorname{tr}(A^*)=\\sum \\lambda_i^*$ 或 $A\\boldsymbol{1}=a\\boldsymbol{1}\\Rightarrow A^*\\boldsymbol{1}=\\frac{|A|}{a}\\boldsymbol{1}$）。",
+      "conditions": "先扫一眼下标：下标全在同一行或同一列→换行列式；下标满屏乱跑或求全和→算伴随 $A^*$；下标全在主对角 $(i,i)$ 或给了特征值/行和→用特征值！"
+    },
+    {
+      "id": "m1-la02-c-02",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、混合组合防错铁律",
+      "title": "「$M_{ij}$ 与 $A_{ij}$ 混合组合」必须先统一转为 $A_{ij}$ 再置换",
+      "pitfalls": "考场最常见的 4 分白丢错：把 $+M_{34}$ 直接当 $+1$ 填进第 3 行第 4 列，忘了 $(-1)^{3+4}=-1$！",
+      "source": {
+        "book": "27 张宇基础30讲·线代 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.37 / 没咋了 P.19",
+        "pdfPage": 43,
+        "itemRef": "混合组合统一转A铁律"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "summary": "若待求式同时出现余子式 $M_{ij}$ 与代数余子式 $A_{ij}$（如 $A_{31}+A_{32}+A_{33}+M_{34}$ 或 $-M_{21}+M_{22}+A_{23}$），必须先逐项套 $M_{ij}=(-1)^{i+j}A_{ij}$ 统一化为纯 $A_{ij}$ 的线性组合，然后才能把系数填进原行列式对应的行（或列）！",
+      "conditions": "口诀「奇变偶不变」：$i+j$ 为偶数时 $M_{ij}=+A_{ij}$，$i+j$ 为奇数时 $M_{ij}=-A_{ij}$。例如 $3+4=7$（奇），故 $+M_{34}=-A_{34}$；$2+1=3$（奇），故 $-M_{21}=+A_{21}$！"
+    },
+    {
+      "id": "m1-la02-c-03",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、不可逆矩阵伴随阵的兜底法则",
+      "title": "$|A|=0$ 禁用 $A^*=|A|A^{-1}$——改用 $r(A^*)$ 判零或 $AA^*=O$ 破局",
+      "pitfalls": "切勿在没检查 $|A|\\ne 0$ 的情况下直接套 $A^*=|A|A^{-1}$！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.11, 25",
+        "pdfPage": 22,
+        "itemRef": "不可逆阵求伴随兜底法"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "summary": "公式 $A^*=|A|A^{-1}$ 仅在 $|A|\\ne 0$ 时有效。若 $|A|=0$，立刻改查秩：① 若 $r(A)<n-1$，则所有 $(n-1)$ 阶子式全为 $0$，立得 **$A^*=O$**（全部代数余子式均为 $0$）；② 若 $r(A)=n-1$，则 $r(A^*)=1$ 且 $AA^*=O$、$A^*A=O$，故 $A^*$ 的各列均是 $Ax=0$ 基础解系 $\\xi$ 的倍数、各行均是 $A^T y=0$ 基础解系 $\\eta^T$ 的倍数，即 $A^*=c\\,\\xi\\eta^T$，只需手算一个非零代数余子式定出常数 $c$ 即可全盘秒杀 $A^*$！",
+      "conditions": "这招把不可逆阵（$r=n-1$）算 $n^2$ 个余子式压缩成「算 1 个余子式 + 找 1 个零解向量」，在方程组和矩阵大题中极其好用！"
+    },
+    {
+      "id": "m1-la02-c-04",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、行和相等矩阵的伴随秒杀结论",
+      "title": "各行和均为 $a\\ne 0$ 的可逆阵：$A^*$ 每行和为 $\\frac{|A|}{a}$，全和为 $\\frac{n|A|}{a}$",
+      "pitfalls": "务必分清「$A$ 的行和相等 $\\Rightarrow$ $A^*$ 的**行和**相等 $\\Rightarrow$ 原阵各**列**的代数余子式之和相等」，不要说成原阵各行之和！",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.13 / 没咋了 P.19 例 3",
+        "pdfPage": 24,
+        "itemRef": "行和相等阵伴随秒杀结论"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la02_all",
+        "verified": true
+      },
+      "summary": "设 $n$ 阶可逆矩阵 $A$ 的每行元素之和均为常数 $a\\ne 0$，即 $A\\boldsymbol{1}=a\\boldsymbol{1}$（$\\boldsymbol{1}=[1,1,\\dots,1]^T$），则 $a$ 是 $A$ 的特征值、$\\boldsymbol{1}$ 是对应特征向量！从而：$$A^{-1}\\boldsymbol{1}=\\frac{1}{a}\\boldsymbol{1},\\qquad A^*\\boldsymbol{1}=|A|A^{-1}\\boldsymbol{1}=\\frac{|A|}{a}\\boldsymbol{1}$$ 由此立得两大秒杀结论：① 原阵**每一列**的代数余子式之和 $\\sum_{i=1}^n A_{ik}$ 都等于 $\\dfrac{|A|}{a}$（因为 $A^*$ 第 $k$ 行和就是原阵第 $k$ 列 $A_{ik}$ 之和！）；② 全部 $n^2$ 个代数余子式之和 $\\sum_{i=1}^n\\sum_{j=1}^n A_{ij}=\\boldsymbol{1}^T A^*\\boldsymbol{1}=\\dfrac{n|A|}{a}$！",
+      "conditions": "同理，若已知 $A^{-1}$ 的每行和均为 $c$，则直接 $A^*\\boldsymbol{1}=|A|A^{-1}\\boldsymbol{1}=c|A|\\boldsymbol{1}$，原阵每一列代数余子式之和瞬间等于 $c|A|$（见强化例 2.4）！"
+    },
+    {
+      "id": "m1-la02-e-01",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、单行/单列混合组合（基础 30 讲）",
+      "title": "【例 1.12】4 阶行列式 $A_{31}+A_{32}+A_{33}+M_{34}$ 混合组合置换求解",
+      "problem": "设 $|A|=\\begin{vmatrix}2&-1&2&3\\\\0&1&-1&0\\\\2&3&4&5\\\\1&1&1&1\\end{vmatrix}$，求 $A_{31}+A_{32}+A_{33}+M_{34}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：先把余子式 $M_{34}$ 统一化为代数余子式",
+          "detail": "因 $3+4=7$ 为奇数，$M_{34}=(-1)^{3+4}A_{34}=-A_{34}$，故原式 $=A_{31}+A_{32}+A_{33}-A_{34}$。"
+        },
+        {
+          "stepTitle": "第二步：将原行列式第 3 行替换为系数 $[1,1,1,-1]$ 并计算",
+          "detail": "$A_{31}+A_{32}+A_{33}-A_{34}=\\begin{vmatrix}2&-1&2&3\\\\0&1&-1&0\\\\1&1&1&-1\\\\1&1&1&1\\end{vmatrix}$。作 $r_1-2r_4$ 与 $r_4-r_3$ 得 $\\begin{vmatrix}0&-3&0&5\\\\0&1&-1&0\\\\1&1&1&-1\\\\0&0&0&2\\end{vmatrix}$，依次按第 4 行与第 1 列展开 $=2\\cdot(-1)^{3+1}\\begin{vmatrix}-3&0\\\\1&-1\\end{vmatrix}=6$。"
+        }
+      ],
+      "finalAnswer": "$6$（选 B）",
+      "takeaway": "遇到含 $M_{ij}$ 的混合组合，第一步永远转成 $A_{ij}$，再把原第 3 行 $[2,3,4,5]$ 干脆扔掉换成 $[1,1,1,-1]$！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.37",
+        "pdfPage": 43,
+        "itemRef": "例 1.12"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la02_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la02-e-02",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、单行缺项线性组合（基础习题）",
+      "title": "【基础习题 1.2】4 阶缺项组合 $A_{11}-A_{12}$ 补零置换法",
+      "problem": "设 $|A|=\\begin{vmatrix}1&-1&0&1\\\\-2&1&-1&1\\\\3&-2&2&-1\\\\0&0&3&4\\end{vmatrix}$，$A_{1j}$ 为 $a_{1j}$ 的代数余子式，求 $A_{11}-A_{12}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：将缺项补零并置换第 1 行",
+          "detail": "$A_{11}-A_{12}=1\\cdot A_{11}+(-1)\\cdot A_{12}+0\\cdot A_{13}+0\\cdot A_{14}=\\begin{vmatrix}1&-1&0&0\\\\-2&1&-1&1\\\\3&-2&2&-1\\\\0&0&3&4\\end{vmatrix}$。"
+        },
+        {
+          "stepTitle": "第二步：列倍加造 3 个零按第 1 行展开",
+          "detail": "作 $c_2+c_1$，第 1 行化为 $[1,0,0,0]$！按第 1 行展开得 $\\begin{vmatrix}-1&-1&1\\\\1&2&-1\\\\0&3&4\\end{vmatrix}\\xlongequal{r_2+r_1}\\begin{vmatrix}-1&-1&1\\\\0&1&0\\\\0&3&4\\end{vmatrix}=-4$。"
+        }
+      ],
+      "finalAnswer": "$-4$（选 B）",
+      "takeaway": "只求 2 个同行代数余子式之差时，补零置换成新行列式后一步列加就只剩 1 个 3 阶行列式，比分别算两个 3 阶行列式省一半计算量！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.40, 42",
+        "pdfPage": 46,
+        "itemRef": "基础习题 1.2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la02_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la02-e-03",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "三、伴随矩阵定义与转置位置防错（基础 30 讲）",
+      "title": "【例 2.6 & 例 2.8】从 $AA^*=|A|E$ 看伴随阵「行放列」位置与 3 阶手算伴随求逆",
+      "problem": "（1）（例 2.6）对 2 阶阵 $A=\\begin{bmatrix}a_{11}&a_{12}\\\\a_{21}&a_{22}\\end{bmatrix}$ 写出 $A^*$ 并验证 $AA^*=|A|E$；（2）（例 2.8）用伴随矩阵公式求 $A=\\begin{bmatrix}1&0&1\\\\2&1&0\\\\-3&2&-5\\end{bmatrix}$ 的逆矩阵 $A^{-1}$。",
+      "steps": [
+        {
+          "stepTitle": "第（1）题：为什么第 $i$ 行代数余子式必须竖排进 $A^*$ 第 $i$ 列？",
+          "detail": "由展开定理与异乘变零，只有把第 1 行代数余子式 $[A_{11},A_{12}]^T$ 放进 $A^*$ 第 1 列，乘积 $AA^*=\\begin{bmatrix}a_{11}A_{11}+a_{12}A_{12}&a_{11}A_{21}+a_{12}A_{22}\\\\a_{21}A_{11}+a_{22}A_{12}&a_{21}A_{21}+a_{22}A_{22}\\end{bmatrix}=\\begin{bmatrix}|A|&0\\\\0&|A|\\end{bmatrix}=|A|E$！对 2 阶阵即「主对调、副变号」。"
+        },
+        {
+          "stepTitle": "第（2）题：手算 3 阶阵的 $|A|$ 与 9 个代数余子式（注意转置排布！）",
+          "detail": "先算 $|A|=1(-5)+1(4+3)=2\\ne 0$。逐行算 $A_{ij}$：第 1 行 $A_{11}=-5,\\;A_{12}=10,\\;A_{13}=7$；第 2 行 $A_{21}=2,\\;A_{22}=-2,\\;A_{23}=-2$；第 3 行 $A_{31}=-1,\\;A_{32}=2,\\;A_{33}=1$。将每行竖放成列得 $A^*=\\begin{bmatrix}-5&2&-1\\\\10&-2&2\\\\7&-2&1\\end{bmatrix}$，再除以 $|A|=2$ 得 $A^{-1}=\\begin{bmatrix}-\\frac{5}{2}&1&-\\frac{1}{2}\\\\5&-1&1\\\\\\frac{7}{2}&-1&\\frac{1}{2}\\end{bmatrix}$。"
+        }
+      ],
+      "finalAnswer": "（1）$A^*=\\begin{bmatrix}a_{22}&-a_{12}\\\\-a_{21}&a_{11}\\end{bmatrix}$；（2）$A^{-1}=\\begin{bmatrix}-\\frac{5}{2}&1&-\\frac{1}{2}\\\\5&-1&1\\\\\\frac{7}{2}&-1&\\frac{1}{2}\\end{bmatrix}$",
+      "takeaway": "手算伴随阵三大铁律：① 别忘 $(-1)^{i+j}$ 棋盘符号；② 第 $i$ 行元素算出的代数余子式必须**转置竖放**在第 $i$ 列；③ 求 $A^{-1}$ 别忘除以 $|A|$！",
+      "figureSvg": "<svg viewBox=\"0 0 640 198\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"伴随矩阵下标转置排布防错图\">\n  <title>伴随矩阵 A* 的「行放列」转置位置防错图解</title>\n  <defs>\n    <marker id=\"m1_la02_arr1\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#dc2626\"/>\n    </marker>\n    <marker id=\"m1_la02_arr2\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#2563eb\"/>\n    </marker>\n  </defs>\n  <rect x=\"4\" y=\"4\" width=\"632\" height=\"190\" rx=\"10\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"320\" y=\"24\" text-anchor=\"middle\" font-size=\"12.5\" font-weight=\"700\" fill=\"#0f172a\">伴随矩阵 A* 高频扣分陷阱：第 i 行的代数余子式必须「竖着放」进第 i 列！</text>\n\n  <!-- Matrix A -->\n  <g transform=\"translate(36,42)\">\n    <text x=\"72\" y=\"14\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1e293b\">原矩阵 A</text>\n    <rect x=\"8\" y=\"22\" width=\"128\" height=\"104\" rx=\"6\" fill=\"#ffffff\" stroke=\"#64748b\" stroke-width=\"1.4\"/>\n    <rect x=\"14\" y=\"28\" width=\"116\" height=\"28\" rx=\"4\" fill=\"#fee2e2\" stroke=\"#fca5a5\"/>\n    <rect x=\"14\" y=\"60\" width=\"116\" height=\"28\" rx=\"4\" fill=\"#dbeafe\" stroke=\"#93c5fd\"/>\n    <text x=\"72\" y=\"46\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#b91c1c\">a₁₁   a₁₂   a₁₃</text>\n    <text x=\"72\" y=\"78\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1d4ed8\">a₂₁   a₂₂   a₂₃</text>\n    <text x=\"72\" y=\"110\" text-anchor=\"middle\" font-size=\"11.5\" fill=\"#475569\">a₃₁   a₃₂   a₃₃</text>\n    <text x=\"72\" y=\"142\" text-anchor=\"middle\" font-size=\"10\" fill=\"#b91c1c\">第 1 行 → 算 A₁₁, A₁₂, A₁₃</text>\n  </g>\n\n  <!-- Arrows -->\n  <path d=\"M 186,84 C 228,60 250,60 292,84\" fill=\"none\" stroke=\"#dc2626\" stroke-width=\"2\" marker-end=\"url(#m1_la02_arr1)\"/>\n  <text x=\"239\" y=\"59\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#dc2626\">转置竖放第 1 列</text>\n  <path d=\"M 186,116 C 228,140 250,140 292,116\" fill=\"none\" stroke=\"#2563eb\" stroke-width=\"2\" marker-end=\"url(#m1_la02_arr2)\"/>\n  <text x=\"239\" y=\"150\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#2563eb\">转置竖放第 2 列</text>\n\n  <!-- Matrix A* -->\n  <g transform=\"translate(296,42)\">\n    <text x=\"74\" y=\"14\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1e293b\">伴随矩阵 A* = (Aⱼᵢ)</text>\n    <rect x=\"8\" y=\"22\" width=\"132\" height=\"104\" rx=\"6\" fill=\"#ffffff\" stroke=\"#64748b\" stroke-width=\"1.4\"/>\n    <rect x=\"14\" y=\"28\" width=\"36\" height=\"92\" rx=\"4\" fill=\"#fee2e2\" stroke=\"#fca5a5\"/>\n    <rect x=\"56\" y=\"28\" width=\"36\" height=\"92\" rx=\"4\" fill=\"#dbeafe\" stroke=\"#93c5fd\"/>\n    <text x=\"32\" y=\"48\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#b91c1c\">A₁₁</text>\n    <text x=\"32\" y=\"78\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#b91c1c\">A₁₂</text>\n    <text x=\"32\" y=\"108\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#b91c1c\">A₁₃</text>\n    <text x=\"74\" y=\"48\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1d4ed8\">A₂₁</text>\n    <text x=\"74\" y=\"78\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1d4ed8\">A₂₂</text>\n    <text x=\"74\" y=\"108\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#1d4ed8\">A₂₃</text>\n    <text x=\"116\" y=\"48\" text-anchor=\"middle\" font-size=\"11\" fill=\"#475569\">A₃₁</text>\n    <text x=\"116\" y=\"78\" text-anchor=\"middle\" font-size=\"11\" fill=\"#475569\">A₃₂</text>\n    <text x=\"116\" y=\"108\" text-anchor=\"middle\" font-size=\"11\" fill=\"#475569\">A₃₃</text>\n    <text x=\"74\" y=\"142\" text-anchor=\"middle\" font-size=\"10\" fill=\"#047857\">恰保证 AA* = |A|E！</text>\n  </g>\n\n  <!-- Right callout box -->\n  <g transform=\"translate(454,50)\">\n    <rect x=\"0\" y=\"0\" width=\"166\" height=\"124\" rx=\"7\" fill=\"#fefce8\" stroke=\"#f59e0b\" stroke-width=\"1.3\"/>\n    <text x=\"83\" y=\"20\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#92400e\">行和 vs 列和对应</text>\n    <text x=\"10\" y=\"42\" font-size=\"10\" fill=\"#1e293b\">• A* 第 k 行的和：</text>\n    <text x=\"16\" y=\"57\" font-size=\"10\" font-weight=\"700\" fill=\"#1d4ed8\">  A₁ₖ + A₂ₖ + A₃ₖ</text>\n    <text x=\"16\" y=\"71\" font-size=\"9.5\" fill=\"#475569\">  (对应原阵第 k 列!)</text>\n    <text x=\"10\" y=\"92\" font-size=\"10\" fill=\"#1e293b\">• 2 阶速记口诀：</text>\n    <text x=\"16\" y=\"108\" font-size=\"10\" font-weight=\"700\" fill=\"#b91c1c\">  主对调，副变号</text>\n  </g>\n</svg>",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.59, 61",
+        "pdfPage": 65,
+        "itemRef": "例 2.6 & 例 2.8"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la02_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la02-e-04",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "三、分块矩阵伴随（基础 30 讲）",
+      "title": "【例 2.10】分块副对角矩阵 $\\begin{bmatrix}O&A\\\\B&O\\end{bmatrix}$ 的伴随矩阵",
+      "problem": "设 $A,B$ 均为 2 阶方阵，$A^*,B^*$ 分别为 $A,B$ 的伴随矩阵，若 $|A|=2,\\;|B|=3$，求分块矩阵 $C=\\begin{bmatrix}O&A\\\\B&O\\end{bmatrix}$ 的伴随矩阵 $C^*$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：用拉普拉斯公式算 $|C|$ 并套 $C^*=|C|C^{-1}$",
+          "detail": "$|C|=(-1)^{2\\times 2}|A||B|=1\\times 2\\times 3=6\\ne 0$，故 $C$ 可逆。由副对角分块求逆公式，$C^{-1}=\\begin{bmatrix}O&B^{-1}\\\\A^{-1}&O\\end{bmatrix}$。"
+        },
+        {
+          "stepTitle": "第二步：把 $|A|A^{-1}=A^*$、$|B|B^{-1}=B^*$ 回代",
+          "detail": "$C^*=6\\begin{bmatrix}O&B^{-1}\\\\A^{-1}&O\\end{bmatrix}=\\begin{bmatrix}O&2\\cdot 3B^{-1}\\\\3\\cdot 2A^{-1}&O\\end{bmatrix}=\\begin{bmatrix}O&2B^*\\\\3A^*&O\\end{bmatrix}$！（注意一般 $m,n$ 阶时符号为 $(-1)^{mn}$！）"
+        }
+      ],
+      "finalAnswer": "$\\begin{bmatrix}O&2B^*\\\\3A^*&O\\end{bmatrix}$（选 B）",
+      "takeaway": "分块矩阵求伴随，核心永远是先算 $|C|$ 和 $C^{-1}$，再把 $|C|= \\pm |A||B|$ 拆分喂给 $A^{-1},B^{-1}$ 凑出 $A^*,B^*$！（对比第 3 讲强化例 3.9）",
+      "source": {
+        "book": "27 张宇基础30讲·线代 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.62 / 没咋了 P.33 例 1",
+        "pdfPage": 68,
+        "itemRef": "例 2.10"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la02_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la02-e-05",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、用行列式求代数余子式（强化 9 讲）",
+      "title": "【强化例 2.1】含参 4 阶行列式等式 $|A|=A_{41}-A_{42}+A_{43}+10$ 移项作差秒定 $a,b$",
+      "problem": "设 $\\begin{vmatrix}2&1&0&-1\\\\-1&2&-5&3\\\\3&0&a&b\\\\1&-3&5&0\\end{vmatrix}=A_{41}-A_{42}+A_{43}+10$，其中 $A_{ij}$ 为元素 $a_{ij}$ 的代数余子式，求 $a,b$ 的值。",
+      "steps": [
+        {
+          "stepTitle": "第一步：将右边组合写为置换第 4 行的新行列式并移项作差",
+          "detail": "因 $A_{41}-A_{42}+A_{43}=1\\cdot A_{41}+(-1)\\cdot A_{42}+1\\cdot A_{43}+0\\cdot A_{44}$，即把原阵第 4 行换为 $[1,-1,1,0]$！移项作差，前 3 行完全相同，仅将**第 4 行对应元素相减**：$$\\begin{vmatrix}2&1&0&-1\\\\-1&2&-5&3\\\\3&0&a&b\\\\0&-2&4&0\\end{vmatrix}=10$$"
+        },
+        {
+          "stepTitle": "第二步：列倍加造 3 个零按第 4 行展开",
+          "detail": "作 $c_3+2c_2$，第 4 行变为 $[0,-2,0,0]$！按第 4 行展开：$(-2)\\cdot(-1)^{4+2}\\begin{vmatrix}2&2&-1\\\\-1&-1&3\\\\3&a&b\\end{vmatrix}=(-2)\\begin{vmatrix}0&0&5\\\\-1&-1&3\\\\0&a-3&b+9\\end{vmatrix}=(-2)\\cdot 5\\cdot(-(a-3))=10(a-3)=10$！"
+        },
+        {
+          "stepTitle": "第三步：解出参数（$b$ 神奇消失！）",
+          "detail": "$10(a-3)=10\\implies a=4$，且展开式不含 $b$，故 **$b$ 为任意常数**！"
+        }
+      ],
+      "finalAnswer": "$a=4$，$b$ 为任意常数（选 C）",
+      "takeaway": "把 $|A|-(A_{41}-A_{42}+A_{43})$ 直接合并成**同一个** 4 阶行列式（第 4 行相减得 $[0,-2,4,0]$），比分别算两个 4 阶行列式爽十倍！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.11",
+        "pdfPage": 22,
+        "itemRef": "强化例 2.1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la02_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la02-e-06",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、用伴随矩阵求全部代数余子式之和（强化 9 讲）",
+      "title": "【强化例 2.2】5 阶副对角分块矩阵求全部 25 个代数余子式之和",
+      "problem": "设 5 阶矩阵 $A=\\begin{bmatrix}0&0&0&5&6\\\\0&0&0&7&8\\\\1&2&3&0&0\\\\0&1&4&0&0\\\\0&0&1&0&0\\end{bmatrix}$，求 $|A|$ 中所有元素的代数余子式之和 $\\sum_{i=1}^5\\sum_{j=1}^5 A_{ij}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：按副对角分块 $A=\\begin{bmatrix}O&B\\\\C&O\\end{bmatrix}$ 算 $|A|$ 与 $B^{-1},C^{-1}$",
+          "detail": "令 $B=\\begin{bmatrix}5&6\\\\7&8\\end{bmatrix}$、$C=\\begin{bmatrix}1&2&3\\\\0&1&4\\\\0&0&1\\end{bmatrix}$。拉普拉斯公式得 $|A|=(-1)^{2\\times 3}|B||C|=+1\\times(40-42)\\times 1=-2\\ne 0$！迅速求逆：$B^{-1}=-\\frac{1}{2}\\begin{bmatrix}8&-6\\\\-7&5\\end{bmatrix}=\\begin{bmatrix}-4&3\\\\\\frac{7}{2}&-\\frac{5}{2}\\end{bmatrix}$；上三角 $C^{-1}=\\begin{bmatrix}1&-2&5\\\\0&1&-4\\\\0&0&1\\end{bmatrix}$。"
+        },
+        {
+          "stepTitle": "第二步：套 $A^*=|A|A^{-1}$ 直接求全部元素之和",
+          "detail": "$A^{-1}=\\begin{bmatrix}O&C^{-1}\\\\B^{-1}&O\\end{bmatrix}$，故 $A^*=(-2)\\begin{bmatrix}O&C^{-1}\\\\B^{-1}&O\\end{bmatrix}$！所有代数余子式之和就是 $A^*$ 中全部元素之和：先分别算 $B^{-1}$ 元素和 $(-4+3+\\frac{7}{2}-\\frac{5}{2}=0)$ 与 $C^{-1}$ 元素和 $(1-2+5+1-4+1=2)$，再乘 $|A|=-2$ 即得 $(-2)\\times(0+2)=-4$！"
+        }
+      ],
+      "finalAnswer": "$-4$",
+      "takeaway": "5 阶阵有 25 个代数余子式，绝不可能逐个硬算！看到副对角分块立刻用 $A^*=|A|A^{-1}$，连 $A^*$ 都不用拼出来，把 $B^{-1},C^{-1}$ 元素和加起来乘 $|A|$ 一步秒杀！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.11-12",
+        "pdfPage": 22,
+        "itemRef": "强化例 2.2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la02_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la02-e-07",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、用特征值求主对角代数余子式之和（强化 9 讲）",
+      "title": "【强化例 2.3】已知 3 阶阵特征值求 $A_{11}+A_{22}+A_{33}$",
+      "problem": "已知 3 阶方阵 $A$ 的特征值为 $-1,2,3$，求 $A_{11}+A_{22}+A_{33}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：转化为伴随矩阵的迹 $\\operatorname{tr}(A^*)$",
+          "detail": "$A_{11}+A_{22}+A_{33}=\\operatorname{tr}(A^*)=\\lambda_1^*+\\lambda_2^*+\\lambda_3^*=\\lambda_2\\lambda_3+\\lambda_1\\lambda_3+\\lambda_1\\lambda_2$。"
+        },
+        {
+          "stepTitle": "第二步：代入特征值 3 秒出答案",
+          "detail": "$2\\times 3+(-1)\\times 3+(-1)\\times 2=6-3-2=1$。"
+        }
+      ],
+      "finalAnswer": "$1$",
+      "takeaway": "看到主对角代数余子式之和 $A_{11}+A_{22}+A_{33}$，条件反射秒连 $\\operatorname{tr}(A^*)=\\lambda_1\\lambda_2+\\lambda_2\\lambda_3+\\lambda_3\\lambda_1$！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.12",
+        "pdfPage": 23,
+        "itemRef": "强化例 2.3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la02_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la02-e-08",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、特征向量法求单列代数余子式之和（强化 9 讲）",
+      "title": "【强化例 2.4】已知 $A^{-1}$ 每行和为 2 且 $|A|=3$ 求第三列代数余子式之和",
+      "problem": "设 $A=(a_{ij})$ 为 3 阶矩阵，$A_{ij}$ 为元素 $a_{ij}$ 的代数余子式，若 $A^{-1}$ 的每行元素之和均为 $2$，且 $|A|=3$，求 $A_{13}+A_{23}+A_{33}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：将「每行和均为 2」翻译为矩阵特征向量方程",
+          "detail": "$A^{-1}$ 每行和均为 $2 \\Longleftrightarrow A^{-1}\\begin{bmatrix}1\\\\1\\\\1\\end{bmatrix}=2\\begin{bmatrix}1\\\\1\\\\1\\end{bmatrix}$！"
+        },
+        {
+          "stepTitle": "第二步：两边同乘 $|A|=3$ 瞬间变为 $A^*\\boldsymbol{1}=6\\boldsymbol{1}$！",
+          "detail": "因 $A^*=|A|A^{-1}$，两边同乘 $|A|=3$ 直接得：$$A^*\\begin{bmatrix}1\\\\1\\\\1\\end{bmatrix}=\\begin{bmatrix}A_{11}&A_{21}&A_{31}\\\\A_{12}&A_{22}&A_{32}\\\\A_{13}&A_{23}&A_{33}\\end{bmatrix}\\begin{bmatrix}1\\\\1\\\\1\\end{bmatrix}=\\begin{bmatrix}A_{11}+A_{21}+A_{31}\\\\A_{12}+A_{22}+A_{32}\\\\A_{13}+A_{23}+A_{33}\\end{bmatrix}=\\begin{bmatrix}6\\\\6\\\\6\\end{bmatrix}$$ 比较第 3 行立得 $A_{13}+A_{23}+A_{33}=6$！"
+        }
+      ],
+      "finalAnswer": "$6$",
+      "takeaway": "看见「每行元素之和为 $c$」立即反射写 $M\\boldsymbol{1}=c\\boldsymbol{1}$，再对照 $A^*$ 的第 3 行恰是原阵第 3 列代数余子式，一步出答案！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.13",
+        "pdfPage": 24,
+        "itemRef": "强化例 2.4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la02_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la02-e-09",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、构造新行列式反求参数（没咋了 1.3 精选）",
+      "title": "【没咋了 1.3 例 1】含余子式零组合 $-M_{21}+M_{22}+A_{23}=0$ 联立 $|A|=-\\frac{1}{2}$ 反求 $a$",
+      "problem": "已知矩阵 $A=\\begin{bmatrix}a+1&b&3\\\\a&\\frac{b}{2}&1\\\\1&1&2\\end{bmatrix}$，$M_{ij}$ 为余子式，$|A|=-\\frac{1}{2}$，且 $-M_{21}+M_{22}+A_{23}=0$，求 $a$（或 $b$）的值。",
+      "steps": [
+        {
+          "stepTitle": "第一步：统一转 $A_{ij}$ 并置换第 2 行得 $a,b$ 线性关系",
+          "detail": "因 $A_{21}=-M_{21},\\;A_{22}=+M_{22}$，题设恰为 $A_{21}+A_{22}+A_{23}=0$！将第 2 行替换为 $[1,1,1]$：$$\\begin{vmatrix}a+1&b&3\\\\1&1&1\\\\1&1&2\\end{vmatrix}\\xlongequal{r_3-r_2}\\begin{vmatrix}a+1&b&3\\\\1&1&1\\\\0&0&1\\end{vmatrix}=a+1-b=0\\implies b=a+1$$"
+        },
+        {
+          "stepTitle": "第二步：展开 $|A|=-\\frac{1}{2}$ 代入 $b=a+1$ 解方程",
+          "detail": "算出 $|A|=-ab+2a+\\frac{b}{2}-1$，代入 $b=a+1$ 得 $-a(a+1)+2a+\\frac{a+1}{2}-1=-a^2+\\frac{3}{2}a-\\frac{1}{2}=-\\frac{1}{2}\\implies -a^2+\\frac{3}{2}a=0\\implies a=0$ 或 $a=\\frac{3}{2}$（对应 $b=1$ 或 $b=\\frac{5}{2}$）！"
+        }
+      ],
+      "finalAnswer": "$a=0$ 或 $a=\\dfrac{3}{2}$（选 B）",
+      "takeaway": "两个符号小陷阱合二为一：$-M_{21}=+A_{21}$ 与 $+M_{22}=+A_{22}$，先转正再置换第 2 行，瞬间化出超简关系 $b=a+1$！",
+      "source": {
+        "book": "27 没咋了强化讲义",
+        "printedPage": "没咋了 P.19 例 1",
+        "pdfPage": 24,
+        "itemRef": "没咋了 1.3 例 1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la02_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la02-e-10",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、伴随与正交性质综合（没咋了 1.3 精选）",
+      "title": "【没咋了 1.3 例 2】实矩阵满足 $A_{ij}=a_{ij}$ 且 $a_{33}=1$ 求 $|A|$ 与解方程组",
+      "problem": "设 $A=(a_{ij})_{3\\times 3}$ 为实矩阵，且 $A_{ij}=a_{ij}\\;(i,j=1,2,3)$，其中 $A_{ij}$ 为 $a_{ij}$ 的代数余子式，$a_{33}=1$。（1）求 $|A|$；（2）求方程组 $A\\begin{bmatrix}x_1\\\\x_2\\\\x_3\\end{bmatrix}=\\begin{bmatrix}0\\\\0\\\\1\\end{bmatrix}$ 的解。",
+      "steps": [
+        {
+          "stepTitle": "第（1）题：翻译为 $A^*=A^T$，取行列式并用展开式定非零",
+          "detail": "由 $A_{ij}=a_{ij}$ 得 $A^*=(A_{ji})=(a_{ji})=A^T$！两边取行列式：$|A^*|=|A^T|\\implies |A|^2=|A|\\implies |A|=0$ 或 $1$。又将 $|A|$ 按第 3 行展开：$|A|=a_{31}A_{31}+a_{32}A_{32}+a_{33}A_{33}=a_{31}^2+a_{32}^2+a_{33}^2\\ge a_{33}^2=1>0$，故必有 **$|A|=1$**！"
+        },
+        {
+          "stepTitle": "第（2）题：由 $A^TA=A^*A=|A|E=E$ 得 $A^{-1}=A^T$，直接写出唯一解！",
+          "detail": "因 $a_{31}^2+a_{32}^2+1=1$（实矩阵），故 $a_{31}=a_{32}=0$！同理按第 3 列展开得 $a_{13}^2+a_{23}^2+1=1\\implies a_{13}=a_{23}=0$！由 $A^{-1}=A^T$ 直接左乘得 $x=A^T\\begin{bmatrix}0\\\\0\\\\1\\end{bmatrix}=\\begin{bmatrix}a_{31}\\\\a_{32}\\\\a_{33}\\end{bmatrix}=\\begin{bmatrix}0\\\\0\\\\1\\end{bmatrix}$！"
+        }
+      ],
+      "finalAnswer": "（1）$|A|=1$；（2）$x=[0,0,1]^T$",
+      "takeaway": "超级经典真题母题！实矩阵满足 $A_{ij}=a_{ij}$（即 $A^*=A^T$）且非零 $\\implies |A|=1$ 且 $A$ 必为正交矩阵（$A^{-1}=A^T$）；若改为 $A_{ij}=-a_{ij}$（见第 3 讲强化例 3.10）则必有 $|A|=-1$！",
+      "source": {
+        "book": "27 没咋了强化讲义",
+        "printedPage": "没咋了 P.19 例 2",
+        "pdfPage": 24,
+        "itemRef": "没咋了 1.3 例 2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la02_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la02-e-11",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "四、行和相等矩阵伴随全和（没咋了 1.3 精选）",
+      "title": "【没咋了 1.3 例 3】$|A|=1$ 且各行和均为 $a$ 求单列代数余子式和与全部代数余子式之和",
+      "problem": "设 $A=(a_{ij})_{n\\times n}$，$|A|=1$，$A$ 的各行元素之和均为 $a$，$A_{ij}$ 为 $a_{ij}$ 的代数余子式，求 $A_{1n}+A_{2n}+\\cdots+A_{nn}$ 及 $\\sum_{i=1}^n\\sum_{j=1}^n A_{ij}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：由 $A\\boldsymbol{1}=a\\boldsymbol{1}$ 与 $|A|=1\\ne 0$ 导出 $A^*\\boldsymbol{1}=\\frac{1}{a}\\boldsymbol{1}$",
+          "detail": "因 $|A|=1\\ne 0$，$A$ 可逆（且必有 $a\\ne 0$，否则 $A\\boldsymbol{1}=0\\Rightarrow |A|=0$ 矛盾！）。两边左乘 $A^*=|A|A^{-1}=A^{-1}$ 得 $A^*\\boldsymbol{1}=\\frac{1}{a}\\boldsymbol{1}$。"
+        },
+        {
+          "stepTitle": "第二步：读出 $A^*$ 第 $n$ 行和与全部元素之和",
+          "detail": "$A^*$ 的第 $n$ 行恰为 $[A_{1n},A_{2n},\\dots,A_{nn}]$，故 $A_{1n}+A_{2n}+\\cdots+A_{nn}=\\dfrac{1}{a}$；全部 $n$ 行相加得 $\\sum_{i=1}^n\\sum_{j=1}^n A_{ij}=\\boldsymbol{1}^T A^*\\boldsymbol{1}=\\dfrac{n}{a}$！"
+        }
+      ],
+      "finalAnswer": "$A_{1n}+A_{2n}+\\cdots+A_{nn}=\\dfrac{1}{a}$；$\\sum_{i=1}^n\\sum_{j=1}^n A_{ij}=\\dfrac{n}{a}$",
+      "takeaway": "记住「$A\\boldsymbol{1}=a\\boldsymbol{1}\\implies A^*\\boldsymbol{1}=\\frac{|A|}{a}\\boldsymbol{1}$」，不仅能秒杀本题，也是特征值与矩阵运算综合题的高频跳板！",
+      "source": {
+        "book": "27 没咋了强化讲义",
+        "printedPage": "没咋了 P.19 例 3",
+        "pdfPage": 24,
+        "itemRef": "没咋了 1.3 例 3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la02_all",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la02-s-01",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "五、题型总结（一）：五大高频母题速查",
+      "title": "余子式与代数余子式 5 大高频母题题型速查表（表 L2-1）",
+      "overview": "本讲篇幅精炼但几乎年年出选填（4–5 分稳拿题！），所有真题均落在以下 5 种母题模板中：",
+      "patterns": [
+        {
+          "typeName": "余子式与代数余子式 5 大母题速查",
+          "triggers": "题干出现 $M_{ij}, A_{ij}, A^*$、代数余子式之和或 $A_{ij}=\\pm a_{ij}$",
+          "method": "① 同行/同列组合→先化纯 $A_{ij}$ 再置换新行列式；② 全和或分块阵→验证 $|A|\\ne 0$ 后套 $A^*=|A|A^{-1}$；③ 主对角和→套 $\\operatorname{tr}(A^*)=\\sum \\lambda_i^*$；④ 行和相等→套 $A^*\\boldsymbol{1}=\\frac{|A|}{a}\\boldsymbol{1}$；⑤ $A_{ij}=\\pm a_{ij}$→写 $A^*=\\pm A^T$ 取行列式并用展开式定非零！",
+          "pitfall": "千万注意 $A^*$ 的第 $k$ 行和对应原阵第 $k$ 列的代数余子式之和，转置关系别搞反！",
+          "relatedRefs": "例 1.12, 强化例 2.1, 强化例 2.2, 强化例 2.3, 强化例 2.4, 没咋了 1.3 例 1, 没咋了 1.3 例 2"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 L2-1　余子式与代数余子式 5 大母题速查总表",
+          "headers": [
+            "母题类型",
+            "识别信号",
+            "秒杀公式 / 手段",
+            "代表例题"
+          ],
+          "rows": [
+            [
+              "① 单行/列线性组合",
+              "出现 $k_1A_{i1}+\\cdots+k_nA_{in}$ 或混含 $M_{ij}$",
+              "先用 $M_{ij}=(-1)^{i+j}A_{ij}$ 统一，再替换第 $i$ 行算新行列式",
+              "例 1.12、基础习题 1.2、强化例 2.1、没咋了 1.3 例 1"
+            ],
+            [
+              "② 跨行跨列 / 全和",
+              "求 $\\sum\\sum A_{ij}$ 或分块可逆阵伴随",
+              "$|A|\\ne 0$ 时算 $A^*=|A|A^{-1}$，全和 $=\\boldsymbol{1}^TA^*\\boldsymbol{1}$",
+              "例 2.10、强化例 2.2"
+            ],
+            [
+              "③ 主对角之和",
+              "已知特征值求 $\\sum A_{ii}$",
+              "$\\sum A_{ii}=\\operatorname{tr}(A^*)=\\lambda_1\\lambda_2+\\lambda_2\\lambda_3+\\lambda_3\\lambda_1$（3 阶）",
+              "强化例 2.3"
+            ],
+            [
+              "④ 行和相等矩阵",
+              "$A$ 或 $A^{-1}$ 每行之和为常数 $a$",
+              "$A\\boldsymbol{1}=a\\boldsymbol{1}\\Rightarrow A^*\\boldsymbol{1}=\\frac{|A|}{a}\\boldsymbol{1}$，各列和 $\\frac{|A|}{a}$、全和 $\\frac{n|A|}{a}$",
+              "强化例 2.4、没咋了 1.3 例 3"
+            ],
+            [
+              "⑤ $A_{ij}=\\pm a_{ij}$ 方程",
+              "实矩阵元素等于其（负）代数余子式",
+              "翻译为 $A^*=\\pm A^T$，取行列式 + 某行展开定 $|A|=\\pm 1$",
+              "没咋了 1.3 例 2（及第 3 讲强化例 3.10）"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "5 个模板全吃透，余子式与代数余子式选填题保证 1 分钟内稳拿满分！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.10-13 / 没咋了 P.19",
+        "pdfPage": 21,
+        "itemRef": "表 L2-1 余子式五大母题表"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la02-s-02",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "五、题型总结（二）：考场防错红线清单",
+      "title": "第 2 讲 4 大高频失分陷阱速查（表 L2-2）",
+      "overview": "本讲计算量普遍不大，几乎所有丢分都来自以下 4 个细节疏忽：",
+      "patterns": [
+        {
+          "typeName": "4 大高频细节防错口诀",
+          "triggers": "作答任何余子式/代数余子式或伴随矩阵题前",
+          "method": "四查清单：一查是 $M$ 还是 $A$；二查组合有没有缺项补 $0$；三查套 $A^*=|A|A^{-1}$ 前 $|A|$ 是否非零；四查 $A^*$ 下标转置（行和对应原阵列和）！",
+          "pitfall": "任何一项没查都可能把正确率直接打成 0！",
+          "relatedRefs": "例 2.6, 强化例 2.4, 没咋了 1.3 例 1"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 L2-2　余子式与代数余子式 4 大失分红线对照",
+          "headers": [
+            "陷阱",
+            "常见错误做法",
+            "正确防错铁律"
+          ],
+          "rows": [
+            [
+              "$M_{ij}$ 与 $A_{ij}$ 混用",
+              "直接把 $M_{ij}$ 前面的系数塞进行列式",
+              "必须先用 $M_{ij}=(-1)^{i+j}A_{ij}$ 统一化为 $A_{ij}$！"
+            ],
+            [
+              "缺项漏补 $0$",
+              "求 $A_{11}-A_{12}$ 时后两列照抄原阵 $a_{13},a_{14}$",
+              "没出现的 $A_{ij}$ 系数是 $0$，对应位置必须填 $0$！"
+            ],
+            [
+              "忽略 $|A|\\ne 0$",
+              "$|A|=0$ 时硬套 $A^*=|A|A^{-1}$",
+              "先算 $|A|$！$|A|=0$ 时按 $r(A)$ 判 $A^*=O$ 或 $r(A^*)=1$！"
+            ],
+            [
+              "伴随转置写反",
+              "误以为 $A^*$ 第 $k$ 行之和是原阵第 $k$ 行 $A_{kj}$ 之和",
+              "$A^*=(A_{ji})$，第 $k$ 行放的是原阵**第 $k$ 列**的 $A_{1k},\\dots,A_{nk}$！"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "四查清单过一遍，第 2 讲彻底零失误！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "第2讲全章总结",
+        "pdfPage": 21,
+        "itemRef": "表 L2-2 第2讲避坑清单"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    }
+  ]
+}

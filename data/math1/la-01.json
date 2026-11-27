@@ -1,0 +1,1526 @@
+{
+  "schemaVersion": "1.0",
+  "subjectId": "math1",
+  "chapterId": "la-01",
+  "title": "线代 · 第 1 讲　行列式",
+  "sourceMeta": "深度整合《27 张宇基础30讲·线代》第1讲（P.11-44）+《27 张宇线代9讲》第1讲（P.1-9）+《27 没咋了线代强化讲义》1.1节（P.2-11）+《线代独家大总结》，100% 逐页核图与 SymPy 验算",
+  "basicRequirements": {
+    "master": "熟练掌握行列式三大定义与七大性质、12+1 基本形、爪型/行和相等/X型/三对角/加边法/递推与数学归纳法，以及抽象型行列式全部 8 大母式与证 |A|=0 六大出口。",
+    "understand": "理解行列式的有向面积/体积测度本质与复合变换伸缩比 |AB|=|A||B|，掌握分块拉普拉斯可交换边界条件与高阶多项式系数逆序数求法。",
+    "familiar": "熟悉克拉默法则适用前提及线性方程组有解转化为高阶增广行列式为零的综合题技巧。"
+  },
+  "items": [
+    {
+      "id": "m1-la01-f-01",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "一、行列式的三大定义与展开定理",
+      "title": "行列式三大定义（几何测度 / 逆序数定义 / 按行按列展开与异乘变零）",
+      "formulaLatex": "$$D_n=\\sum_{j_1j_2\\cdots j_n}(-1)^{\\tau(j_1j_2\\cdots j_n)}a_{1j_1}a_{2j_2}\\cdots a_{nj_n};\\qquad \\sum_{k=1}^n a_{ik}A_{jk}=\\delta_{ij}|A|,\\quad \\sum_{k=1}^n a_{ki}A_{kj}=\\delta_{ij}|A|$$",
+      "conditions": "$n\\ge 1$ 阶方阵（注意 1 阶行列式 $|a|=a$，可正可负，切勿误作绝对值！）。求多项式行列式高次项系数（如 $x^3$）时优先用逆序数定义。",
+      "pitfalls": "① 1 阶行列式 $|-2|=-2$ 而非 $+2$！ ② 用逆序数定义定符号前必须先将行下标按 $1,2,\\dots,n$ 排正，再数列下标的逆序数（或直接算行、列逆序数之和 $(-1)^{\\tau(i)+\\tau(j)}$）。",
+      "source": {
+        "book": "27 张宇基础30讲·线代 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.12-21 / 没咋了 P.2,11",
+        "pdfPage": 18,
+        "itemRef": "行列式三大定义"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "① **本质（几何）定义**：$n$ 阶行列式是 $n$ 个 $n$ 维行（或列）向量所张成的 $n$ 维平行多面体的**有向体积**（2 阶为有向面积，3 阶为有向体积）；② **逆序数定义**：不同行不同列 $n$ 个元素乘积的 $n!$ 项代数和，行标排正后列标排列 $j_1\\cdots j_n$ 的逆序数 $\\tau$ 为偶取 $+$、奇取 $-$；③ **展开定理**：本行元素配本行代数余子式乘积和为 $|A|$，配异行代数余子式乘积和恒为 $0$（其中 $A_{ij}=(-1)^{i+j}M_{ij}$）。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「本质看体积、某项看逆序、降阶看展开、异乘必变零」；牢记倒序排列 $\\tau(n,n-1,\\dots,1)=\\frac{n(n-1)}{2}$。"
+        }
+      ]
+    },
+    {
+      "id": "m1-la01-f-02",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "一、行列式的性质",
+      "title": "行列式七大基本性质与「单行倍乘 vs 矩阵数乘 $|kA|=k^n|A|$」对照公式",
+      "formulaLatex": "$$|A^T|=|A|;\\quad \\text{互换两行变号};\\quad \\text{单行乘 }k\\Rightarrow k|A|;\\quad |kA|=k^n|A|;\\quad \\text{倍加不变值}$$",
+      "conditions": "适用于任意 $n$ 阶行列式；性质 ④ 拆行/合并运算要求其余 $n-1$ 行（列）完全相同。",
+      "pitfalls": "① 致命高频错：$|A+B|\\ne |A|+|B|$！拆行列式只能**逐行（逐列）拆**，绝不能把 $n$ 行同时拆成两个行列式之和！ ② 矩阵数乘 $kA$ 是把全部 $n$ 行均乘 $k$，故 $|kA|=k^n|A|$，而行列式单行乘 $k$ 只得 $k|A|$！",
+      "source": {
+        "book": "27 张宇基础30讲·线代 & 线代独家大总结",
+        "printedPage": "基础 P.15-19 / 大总结 P.5",
+        "pdfPage": 21,
+        "itemRef": "行列式七大性质"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "七大核心性质：① 转置不变 $|A^T|=|A|$（行性质与列性质完全对称）；② 零行（列）必为 $0$；③ **单行（列）提公因子** $k$（逆用时 $k$ 只能乘进**某一行**）；④ **单行（列）可拆性**（其余 $n-1$ 行完全照抄）；⑤ 两行（列）互换变号；⑥ 两行（列）相等或成比例必为 $0$；⑦ 某行（列）的 $k$ 倍加到另一行（列）行列式不变（最核心的「化 0 降阶」工具）。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「转置不变、倍加不变、互换变号、单行提 $k$、矩阵提 $k^n$」；每做一次互换改一个负号，倍加永远安心用。"
+        }
+      ]
+    },
+    {
+      "id": "m1-la01-f-03",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、具体型行列式：12+1 基本形",
+      "title": "「12+1」基本形行列式：主/副对角三角、拉普拉斯分块与范德蒙德行列式",
+      "formulaLatex": "$$\\begin{vmatrix}A&O\\\\O&B\\end{vmatrix}=\\begin{vmatrix}A&C\\\\O&B\\end{vmatrix}=|A||B|,\\quad \\begin{vmatrix}O&A_m\\\\B_n&C\\end{vmatrix}=(-1)^{mn}|A||B|,\\quad V_n=\\prod_{1\\le i<j\\le n}(x_j-x_i)$$",
+      "conditions": "拉普拉斯分块要求 $A,B$ 为**方阵**（$O$ 块为对应维数零矩阵，另一个非零块 $C$ 任意且不影响值）；范德蒙德要求 $n\\ge 2$ 且首行全 $1$、逐行等比升幂。",
+      "pitfalls": "① 拉普拉斯副对角块 $\\begin{vmatrix}O&A_m\\\\B_n&O\\end{vmatrix}$ 的符号是 $(-1)^{mn}$ 而非 $(-1)^{\\frac{(m+n)(m+n-1)}{2}}$！例如 $m=n=3$ 时 $(-1)^9=-1$！ ② 范德蒙德若是按列排列（转置形式），由 $|A^T|=|A|$ 值不变，盯第 2 列「下减上」连乘！",
+      "source": {
+        "book": "27 张宇基础30讲·线代 & 27 张宇线代9讲",
+        "printedPage": "基础 P.22-24 / 强化 P.1-2",
+        "pdfPage": 28,
+        "itemRef": "12+1基本形行列式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_core_formulas",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "① **主对角（上/下三角、对角）**：等于主对角线元素连乘 $\\prod_{i=1}^n a_{ii}$；② **副对角（上/下三角、副对角）**：等于 $(-1)^{\\frac{n(n-1)}{2}} a_{1n}a_{2,n-1}\\cdots a_{n1}$；③ **拉普拉斯展开式**（$A$ 为 $m$ 阶、$B$ 为 $n$ 阶）：主对角分块为 $|A||B|$，副对角分块带符号 $(-1)^{mn}|A||B|$；④ **范德蒙德行列式**：第 1 行全 $1$，第 2 行为 $x_1,\\dots,x_n$，第 $k$ 行为 $x_i^{k-1}$，结果等于所有「**右减左**」$(x_j-x_i)\\;(j>i)$ 的连乘积。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「主正副看 $\\frac{n(n-1)}{2}$，分块副看 $mn$，范德蒙德盯第 2 行、所有右减左连乘」。"
+        }
+      ]
+    },
+    {
+      "id": "m1-la01-f-04",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、具体型行列式：高频特殊构型",
+      "title": "爪型、行(列)和相等、类对称与「X」型行列式万能闭式公式",
+      "formulaLatex": "$$D_{\\text{行和}}=[a+(n-1)b](a-b)^{n-1};\\quad D_{\\text{爪}}=\\left(\\lambda_0-\\sum_{i=1}^n\\frac{a_ib_i}{\\lambda_i}\\right)\\prod_{i=1}^n\\lambda_i;\\quad D_{X,2k}=\\prod_{i=1}^k(a_ia_{2k+1-i}-b_ib_{2k+1-i})$$",
+      "conditions": "爪型除法形式需 $\\lambda_i\\ne 0\\;(i=1,\\dots,n)$；类对称分式需 $b\\ne c$（$b=c$ 退化为行和相等）。",
+      "pitfalls": "4 阶「X」型 $D_4\\ne a_1a_2a_3a_4-b_1b_2b_3b_4$！真实展开为 $(a_1a_4-b_1b_4)(a_2a_3-b_2b_3)$，共 4 项且副对角连乘项取正号！",
+      "source": {
+        "book": "27 张宇基础30讲·线代 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.25-28 / 没咋了 P.5-6",
+        "pdfPage": 31,
+        "itemRef": "四大高频特殊构型公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_core_formulas",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "① **爪型（箭形）**：主对角 $\\lambda_0,\\lambda_1,\\dots,\\lambda_n\\;(\\lambda_i\\ne 0)$、首行 $a_i$、首列 $b_i$，用斜边元将一条爪边全消为 $0$ 化三角；② **行和相等**：主对角 $a$、其余全 $b$，各列全加第 1 列提公因子得 $[a+(n-1)b](a-b)^{n-1}$（特例 $a=0,b=1\\Rightarrow(n-1)(-1)^{n-1}$；$a=2,b=1\\Rightarrow n+1$）；③ **类对称（主 $a$、上 $b$、下 $c$ 且 $b\\ne c$）**：$\\dfrac{b(a-c)^n-c(a-b)^n}{b-c}$；④ **「X」型（$2k$ 阶）**：对称位置两两归拢拉普拉斯，等于 $k$ 个 2 阶行列式连乘（主全 $a$、副全 $b$ 时为 $(a^2-b^2)^k$）。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「爪型斜边消爪边；行和全加第 1 列；X 型两两配对拆 2 阶（4 阶共 4 项展开，绝不可只算主副两对角相减！）」。"
+        }
+      ]
+    },
+    {
+      "id": "m1-la01-f-05",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "二、具体型行列式：递推与归纳",
+      "title": "三对角（三线）行列式递推方程与万能通项闭式公式",
+      "formulaLatex": "$$D_n=k D_{n-1}-bc D_{n-2}\\;\\Longrightarrow\\; D_n=\\begin{cases}(n+1)\\left(\\dfrac{k}{2}\\right)^n,& k^2=4bc\\\\[6pt] \\dfrac{(k+\\sqrt{\\Delta})^{n+1}-(k-\\sqrt{\\Delta})^{n+1}}{2^{n+1}\\sqrt{\\Delta}},& \\Delta=k^2-4bc\\ne 0\\end{cases}$$",
+      "conditions": "主、上下三条对角线各自为常数 $k,b,c$，其余位置全为 $0$。转置后 $b,c$ 互换而 $bc$ 不变，故行列式值完全相同。",
+      "pitfalls": "解答题不能直接默写闭式结果跳步，需先按第 1 行展开导出 $D_n=kD_{n-1}-bcD_{n-2}$，再构造等比数列或用第二数学归纳法严密推导。",
+      "source": {
+        "book": "27 张宇基础30讲·线代 & 27 张宇线代9讲",
+        "printedPage": "基础 P.30-31 / 强化 P.6",
+        "pdfPage": 36,
+        "itemRef": "三对角行列式闭式公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_core_formulas",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "对主对角线全为 $k$、上副对角线全为 $b$、下副对角线全为 $c$（其余全 $0$）的 $n$ 阶三对角行列式，按第 1 行连续展开两步即得二阶线性递推 $D_n=kD_{n-1}-bcD_{n-2}$（初值 $D_1=k,\\;D_2=k^2-bc$）。解特征方程 $r^2-kr+bc=0$，重根时 $D_n=(n+1)(k/2)^n$，相异根 $r_1\\ne r_2$ 时 $D_n=\\dfrac{r_1^{n+1}-r_2^{n+1}}{r_1-r_2}$。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「三对角，两步展，$r^2-kr+bc=0$：重根 $(n+1)r^n$，异根 $\\frac{r_1^{n+1}-r_2^{n+1}}{r_1-r_2}$」——秒杀一切选择填空三对角题！"
+        }
+      ]
+    },
+    {
+      "id": "m1-la01-f-06",
+      "kind": "formula",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "三、抽象型行列式核心公式",
+      "title": "抽象型行列式 8 大黄金母式（乘积、伴随、逆、特征值与相似）",
+      "formulaLatex": "$$|AB|=|A||B|,\\quad |kA|=k^n|A|,\\quad |A^{-1}|=|A|^{-1},\\quad |A^*|=|A|^{n-1},\\quad |(A^*)^*|=|A|^{(n-1)^2},\\quad |f(A)|=\\prod_{i=1}^n f(\\lambda_i)$$",
+      "conditions": "$A,B$ 必须是**同阶方阵**（若 $A_{m\\times n},B_{n\\times m}$ 非方阵，$|AB|$ 绝不可拆成 $|A||B|$！）；公式 ④ 需 $|A|\\ne 0$。",
+      "pitfalls": "① 若 $A$ 为 $3\\times 2$ 阵、$B$ 为 $2\\times 3$ 阵，则 $r(AB)\\le 2<3\\Rightarrow |AB|=0$，根本不存在 $|A|,|B|$！ ② 考研默认 $n\\ge 2$，$|A^*|=|A|^{n-1}$ 对可逆与不可逆阵均成立。",
+      "source": {
+        "book": "27 张宇线代9讲 & 线代独家大总结",
+        "printedPage": "强化 P.7-8 / 大总结 P.3",
+        "pdfPage": 18,
+        "itemRef": "抽象型行列式8大公式"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_core_formulas",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "设 $A,B$ 为 $n$ 阶方阵：① $|A^T|=|A|$；② $|kA|=k^n|A|$（特别 $|-A|=(-1)^n|A|$）；③ $|AB|=|A||B|=|BA|$；④ 若 $A$ 可逆，$|A^{-1}|=\\frac{1}{|A|}$；⑤ $|A^*|=|A|^{n-1}$；⑥ $|(A^*)^*|=|A|^{(n-1)^2}$；⑦ 设 $A$ 特征值为 $\\lambda_1,\\dots,\\lambda_n$，则 $|A|=\\prod\\lambda_i$ 且 $|f(A)|=\\prod f(\\lambda_i)$；⑧ 若 $A\\sim B$，则 $|A|=|B|$ 且 $|f(A)|=|f(B)|$。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「遇到 $|A+B|$ 先造乘积（提公因、用 $E=AA^T$ 或 $E=AA^{-1}$）；见到多项式 $|f(A)|$ 先找特征值再连乘 $\\prod f(\\lambda_i)$」。"
+        }
+      ]
+    },
+    {
+      "id": "m1-la01-f-07",
+      "kind": "formula",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "四、克拉默法则",
+      "title": "克拉默法则（$n$ 方程 $n$ 未知数唯一解与齐次方程组非零解充要判定）",
+      "formulaLatex": "$$Ax=b\\;(D=|A|\\ne 0)\\;\\Longrightarrow\\; x_i=\\frac{D_i}{D}\\;(i=1,\\dots,n);\\qquad Ax=0\\text{ 有非零解}\\;\\Longleftrightarrow\\; |A|=0$$",
+      "conditions": "严格前提：方程个数必须**等于**未知数个数（系数阵 $A$ 为 $n$ 阶方阵）。",
+      "pitfalls": "高频误判：非齐次方程组 $Ax=b$ 当 $D=0$ 时，**既可能无解，也可能有无穷多解**，不可直接断定无穷多解！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.38-39",
+        "pdfPage": 44,
+        "itemRef": "克拉默法则"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "prompt": "写出本条核心公式并核对适用前提与高频坑点：",
+      "symbols": [
+        {
+          "sym": "核心内涵",
+          "desc": "① 对 $n$ 个方程 $n$ 个未知数的非齐次方程组 $Ax=b$：若系数行列式 $D=|A|\\ne 0$，则有**唯一解** $x_i=\\frac{D_i}{D}$（$D_i$ 是将 $D$ 的第 $i$ 列换为常数列 $b$ 所得行列式）；② 对 $n$ 阶齐次方程组 $Ax=0$：仅有零解 $\\Longleftrightarrow D\\ne 0$；**有非零解 $\\Longleftrightarrow D=0$**（双向充要）。"
+        },
+        {
+          "sym": "速记口诀",
+          "desc": "「非齐次 $D\\ne 0$ 唯一解，$D=0$ 可能是无解或无穷多解；齐次 $D=0$ 充要有非零解」。"
+        }
+      ]
+    },
+    {
+      "id": "m1-la01-c-01",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "一、几何直观与本质理解",
+      "title": "行列式的几何本质：有向面积/体积与复合变换测度乘法 $|AB|=|A||B|$",
+      "pitfalls": "矩阵乘法一般不交换（如先剪切再拉伸 vs 先拉伸再剪切，图形不同），但行列式乘法恒交换 $|AB|=|BA|$！",
+      "figureSvg": "<svg viewBox=\"0 0 640 230\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"二阶行列式有向面积与复合变换测度伸缩\">\n  <title>二阶行列式的有向面积本质与 |AB|=|A||B| 测度伸缩</title>\n  <defs>\n    <marker id=\"m1_la01_arr1\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#1e293b\"/>\n    </marker>\n    <marker id=\"m1_la01_arr2\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#2563eb\"/>\n    </marker>\n    <marker id=\"m1_la01_arr3\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#dc2626\"/>\n    </marker>\n  </defs>\n  <rect x=\"4\" y=\"4\" width=\"632\" height=\"222\" rx=\"10\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"320\" y=\"25\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">行列式几何本质：有向平行四边形面积 &amp; 复合线性变换 |AB|=|A||B|</text>\n\n  <!-- Left panel: signed parallelogram -->\n  <g transform=\"translate(24,42)\">\n    <rect x=\"0\" y=\"0\" width=\"286\" height=\"172\" rx=\"8\" fill=\"#ffffff\" stroke=\"#e2e8f0\"/>\n    <text x=\"143\" y=\"18\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1e40af\">二阶行列式 = 有向面积 S = a₁₁a₂₂ - a₁₂a₂₁</text>\n    <!-- Axes -->\n    <line x1=\"34\" y1=\"146\" x2=\"264\" y2=\"146\" stroke=\"#1e293b\" stroke-width=\"1.4\" marker-end=\"url(#m1_la01_arr1)\"/>\n    <line x1=\"48\" y1=\"158\" x2=\"48\" y2=\"30\" stroke=\"#1e293b\" stroke-width=\"1.4\" marker-end=\"url(#m1_la01_arr1)\"/>\n    <text x=\"268\" y=\"150\" font-size=\"11\" fill=\"#334155\">x</text>\n    <text x=\"54\" y=\"34\" font-size=\"11\" fill=\"#334155\">y</text>\n    <text x=\"36\" y=\"159\" font-size=\"10.5\" fill=\"#475569\">O</text>\n    <!-- Parallelogram O(48,146) -> A(168,120) -> B(226,54) -> C(106,80) -->\n    <polygon points=\"48,146 168,120 226,54 106,80\" fill=\"#dbeafe\" fill-opacity=\"0.72\" stroke=\"#93c5fd\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\"/>\n    <line x1=\"48\" y1=\"146\" x2=\"168\" y2=\"120\" stroke=\"#2563eb\" stroke-width=\"2.2\" marker-end=\"url(#m1_la01_arr2)\"/>\n    <line x1=\"48\" y1=\"146\" x2=\"106\" y2=\"80\" stroke=\"#dc2626\" stroke-width=\"2.2\" marker-end=\"url(#m1_la01_arr3)\"/>\n    <!-- Angle arc from alpha1 to alpha2 -->\n    <path d=\"M 88,137 A 42,42 0 0,0 74,117\" fill=\"none\" stroke=\"#059669\" stroke-width=\"1.6\"/>\n    <text x=\"89\" y=\"124\" font-size=\"10\" font-weight=\"700\" fill=\"#047857\">逆时针 &gt;0</text>\n    <text x=\"172\" y=\"128\" font-size=\"10.5\" font-weight=\"700\" fill=\"#1d4ed8\">α₁=(a₁₁,a₁₂)</text>\n    <text x=\"56\" y=\"68\" font-size=\"10.5\" font-weight=\"700\" fill=\"#b91c1c\">α₂=(a₂₁,a₂₂)</text>\n    <text x=\"148\" y=\"96\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#1e3a8a\">S = |A|</text>\n    <text x=\"150\" y=\"166\" text-anchor=\"middle\" font-size=\"10\" fill=\"#64748b\">两行互换 → 夹角反向 → 面积变号 (-|A|)</text>\n  </g>\n\n  <!-- Right panel: |AB|=|A||B| scaling chain -->\n  <g transform=\"translate(326,42)\">\n    <rect x=\"0\" y=\"0\" width=\"290\" height=\"172\" rx=\"8\" fill=\"#ffffff\" stroke=\"#e2e8f0\"/>\n    <text x=\"145\" y=\"18\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#7c3aed\">复合变换测度伸缩：|AB| = |A|·|B|</text>\n    <!-- Unit square -->\n    <rect x=\"18\" y=\"66\" width=\"38\" height=\"38\" fill=\"#e2e8f0\" stroke=\"#475569\" stroke-width=\"1.4\"/>\n    <text x=\"37\" y=\"89\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#0f172a\">S=1</text>\n    <text x=\"37\" y=\"119\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">原图形 X</text>\n    <!-- Arrow B -->\n    <line x1=\"60\" y1=\"85\" x2=\"96\" y2=\"85\" stroke=\"#2563eb\" stroke-width=\"2\" marker-end=\"url(#m1_la01_arr2)\"/>\n    <text x=\"78\" y=\"76\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#2563eb\">×B</text>\n    <!-- Sheared shape BX -->\n    <polygon points=\"104,104 148,104 162,56 118,56\" fill=\"#fef3c7\" stroke=\"#d97706\" stroke-width=\"1.5\"/>\n    <text x=\"133\" y=\"84\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#b45309\">|B|</text>\n    <text x=\"133\" y=\"119\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">一次变换 BX</text>\n    <!-- Arrow A -->\n    <line x1=\"164\" y1=\"85\" x2=\"200\" y2=\"85\" stroke=\"#dc2626\" stroke-width=\"2\" marker-end=\"url(#m1_la01_arr3)\"/>\n    <text x=\"182\" y=\"76\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#dc2626\">×A</text>\n    <!-- Scaled shape ABX -->\n    <polygon points=\"208,112 268,112 280,44 220,44\" fill=\"#dcfce7\" stroke=\"#16a34a\" stroke-width=\"1.6\"/>\n    <text x=\"244\" y=\"82\" text-anchor=\"middle\" font-size=\"10.5\" font-weight=\"700\" fill=\"#15803d\">|A|·|B|</text>\n    <text x=\"244\" y=\"126\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">复合 A(BX)</text>\n    <!-- Bottom warning banner -->\n    <rect x=\"14\" y=\"138\" width=\"262\" height=\"24\" rx=\"5\" fill=\"#fef2f2\" stroke=\"#fca5a5\"/>\n    <text x=\"145\" y=\"154\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#991b1b\">注：AB≠BA（形状不同），但总面积 |AB|=|BA|！</text>\n  </g>\n</svg>",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.12-19, 33-34",
+        "pdfPage": 18,
+        "itemRef": "行列式几何本质"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "summary": "2 阶行列式是两行向量张成平行四边形的**有向面积**（逆时针正、顺时针负），3 阶行列式是平行六面体的**有向体积**；行列式为 $0$ 等价于向量组退化到低维空间（共线/共面，高维体积测度必为 $0$）。矩阵 $A$ 作用使面积缩放 $|A|$ 倍，故复合变换 $A(BX)$ 总缩放倍数为 $|A||B|=|AB|$（尽管 $AB\\ne BA$ 形状不同，总面积伸缩比恒等）。",
+      "conditions": "七大性质全可一眼几何秒懂：单行乘 $k$ = 一边拉长 $k$ 倍（面积 $\\times k$）；两行互换 = 夹角反向（面积变号）；某行倍加到另一行 = 底不变高不变的剪切变换（面积不变）！"
+    },
+    {
+      "id": "m1-la01-c-02",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、抽象型行列式核心结论",
+      "title": "证明 $|A|=0$ 的「六大黄金出口」（含奇数阶反对称阵与正交阵恒等变换）",
+      "pitfalls": "若 $n$ 为偶数，反对称阵的行列式**不一定为 $0$**（如 $\\begin{vmatrix}0&1\\\\-1&0\\end{vmatrix}=1\\ne 0$），务必看清「奇数阶」前提！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.7 注",
+        "pdfPage": 18,
+        "itemRef": "证|A|=0六大出口"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "summary": "考研证明 $|A|=0$ 按优先级排查 6 大等价出口：① **自身变号法**：证 $|A|=k|A|\\;(k\\ne 1)$，最高频为 $|A|=(-1)^n|A|$（$n$ 奇数，如奇数阶反对称阵 $A^T=-A$ 或正交阵恒等变形）；② **零特征值法**：证 $0$ 是 $A$ 的特征值；③ **非零解法**：证 $Ax=0$ 有非零解；④ **降秩法**：证 $r(A)<n$；⑤ **线性相关法**：证行（列）向量组线性相关；⑥ **反证法**：设 $|A|\\ne 0$ 则 $A$ 可逆，同乘 $A^{-1}$ 导出矛盾（如 $AB=O,B\\ne O\\Rightarrow |A|=0$）。",
+      "conditions": "见到「$n$ 为奇数」+「正交阵 $A^TA=E$ 或反对称阵 $A^T=-A$」，99% 直接构造 $|M|=|M^T|=(-1)^n|M|=-|M|\\implies |M|=0$ 一步绝杀！"
+    },
+    {
+      "id": "m1-la01-c-03",
+      "kind": "conclusion",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、具体型行列式方法论",
+      "title": "递推法 vs 数学归纳法 vs 加边法选型对照（表 L1-1）",
+      "tables": [
+        {
+          "caption": "表 L1-1　高阶具体型行列式四大方法选型与触发信号对照表",
+          "headers": [
+            "方法",
+            "核心触发信号",
+            "标准动作",
+            "典型代表例题"
+          ],
+          "rows": [
+            [
+              "化 12+1 基本形",
+              "行/列和相等、爪型、X 型、幂次递增",
+              "全加第一列 / 斜边消爪 / 配对拉普拉斯 / 凑范德蒙德",
+              "例 1.2–1.6、强化例 1.8"
+            ],
+            [
+              "加边法（升阶）",
+              "各行（列）除对角线外有公共乘积结构如 $a_ia_j$",
+              "添首行 $[1,x_1,\\dots,x_n]$ 与首列 $[1,0,\\dots,0]^T$ 化爪型",
+              "强化例 1.3、没咋了例 7"
+            ],
+            [
+              "递推法（高→低）",
+              "命题直接求 $n$ 阶结果；三对角或单边递推结构",
+              "选保规律的边行/列展开建 $D_n$ 与 $D_{n-1},D_{n-2}$ 关系",
+              "例 1.7、强化例 1.4、没咋了例 10"
+            ],
+            [
+              "数学归纳法（低→高）",
+              "命题已给出最终表达式要求证明",
+              "验证 $n=1$（或 $n=1,2$），由前推后一步证毕",
+              "强化例 1.4、强化例 1.5"
+            ]
+          ]
+        }
+      ],
+      "pitfalls": "第二数学归纳法（用到 $D_{n-1}$ 与 $D_{n-2}$）必须同时验证 **$n=1$ 和 $n=2$** 两个初值，漏验 $n=2$ 会直接扣步骤分！",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.3-6 / 没咋了 P.6-8",
+        "pdfPage": 14,
+        "itemRef": "表 L1-1 高阶行列式选型表"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      },
+      "summary": "高阶 $n$ 阶具体型行列式三大高阶路线：**求结果优先递推法**（从 $n$ 阶向 $n-1,n-2$ 阶降阶，要求降阶余子式与原阵保持**完全相同的元素分布规律**），**已告结果求证明优先数学归纳法**（单步递推用第一归纳法、两步三对角递推用第二归纳法），**各行/各列除对角外有公共结构优先加边法**（升至 $n+1$ 阶化为爪型）。",
+      "conditions": "切记「异爪型行列式」（如强化例 1.4）元素规律从右下向左上延伸，只能按第 1 列展开才保结构不变；若误按第 $n$ 列展开，余子式立刻破坏规律无法递推！"
+    },
+    {
+      "id": "m1-la01-c-04",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "三、行列式与矩阵运算辨析",
+      "title": "分块拉普拉斯大坑预警：$\\begin{vmatrix}A&B\\\\B&A\\end{vmatrix}=|A+B||A-B|$ 不一定等于 $|A^2-B^2|$！",
+      "pitfalls": "【实锤勘误】《27 没咋了线代强化讲义》P.7 例 9 写「设 $A,B$ 为 3 阶矩阵，且 $|A^2-B^2|=2$，则 $\\begin{vmatrix}A&B\\\\B&A\\end{vmatrix}=\\_\\_\\_$」，**漏掉了 $AB=BA$ 可交换条件**！SymPy 反例：$A=\\begin{bmatrix}1&2&0\\\\0&1&1\\\\1&0&1\\end{bmatrix},B=\\begin{bmatrix}0&1&1\\\\1&0&2\\\\2&1&0\\end{bmatrix}$ 时，$|A+B||A-B|=0$ 而 $|A^2-B^2|=-36\\ne 0$！",
+      "source": {
+        "book": "27 没咋了强化讲义（SymPy 严格核验）",
+        "printedPage": "没咋了 P.7 例 9 勘误",
+        "pdfPage": 12,
+        "itemRef": "分块拉普拉斯可交换条件"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_mzl_examples",
+        "verified": true
+      },
+      "summary": "设 $A,B$ 为同阶 $n$ 阶方阵，作分块行、列初等变换（第 2 块行加到第 1 块行，再将第 1 块列 $(-1)$ 倍加到第 2 块列）恒有：$$\\begin{vmatrix}A&B\\\\B&A\\end{vmatrix}=\\begin{vmatrix}A+B&A+B\\\\B&A\\end{vmatrix}=\\begin{vmatrix}A+B&O\\\\B&A-B\\end{vmatrix}=|A+B||A-B|$$ **严厉警示**：由于 $(A+B)(A-B)=A^2-AB+BA-B^2$，**仅当 $AB=BA$（可交换）时**，上式才等于 $|A^2-B^2|$！一般不交换矩阵两者不等（已由 SymPy 构造反例实锤）。",
+      "conditions": "同理，对一般分块矩阵 $\\begin{vmatrix}A&B\\\\C&D\\end{vmatrix}$，绝不可盲套 2 阶公式写成 $|AD-BC|$！仅当满足可交换条件（如 $CD=DC\\Rightarrow |AD-BC|$；$AC=CA\\Rightarrow |AD-CB|$）才成立！"
+    },
+    {
+      "id": "m1-la01-c-05",
+      "kind": "conclusion",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "五、本讲原书勘误与严谨补注台账",
+      "title": "第 1 讲跨书核对勘误与严谨补注台账（共 3 处）",
+      "pitfalls": "切勿把没咋了 P.7 例 9 当无条件恒等式死记，务必记住「先看 $AB=BA$ 是否成立」！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.31 / 没咋了 P.7,9",
+        "pdfPage": 37,
+        "itemRef": "第1讲勘误补注台账"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_mzl_examples",
+        "verified": true
+      },
+      "summary": "经逐页高清核读与 SymPy 全量验算，第 1 讲捕获以下 3 处印刷瑕疵或跨书差异：① **《27 没咋了》P.7 例 9**：求 $\\begin{vmatrix}A&B\\\\B&A\\end{vmatrix}$ 漏写了 $AB=BA$ 可交换条件（无交换性时 $|A+B||A-B|\\ne |A^2-B^2|$）；② **《27 没咋了》P.9 例 15**：题干误印「$\\alpha_1,\\alpha_2,\\alpha_3$ 是 3 维线性无关的**特征向量**」，由 $A\\alpha_1=\\alpha_1-\\alpha_2$ 知并非 $A$ 的特征向量，实应为「3 维线性无关的**向量**」；③ **《基础 30 讲》P.31 底部 vs 《强化 9 讲》P.6 例 1.5**：前者三对角上副对角线为 $a^2$、下副对角线为 $1$，后者上为 $1$、下为 $a^2$，两者互为转置，行列式值同为 $(n+1)a^n$。",
+      "conditions": "把讲义漏条件与印刷笔误提前扫雷，二刷时就能一眼看穿本质而不被误导。"
+    },
+    {
+      "id": "m1-la01-e-01",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、具体型行列式（基础 30 讲）",
+      "title": "【例 1.1】4 阶稀疏行列式按零元最多列展开降阶",
+      "problem": "计算 4 阶行列式 $D_4=\\begin{vmatrix}2&-1&0&0\\\\0&2&-1&0\\\\0&0&2&-1\\\\-1&0&0&2\\end{vmatrix}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：选零元最多的第 1 列展开",
+          "detail": "第 1 列仅 $a_{11}=2$ 与 $a_{41}=-1$ 非零，按第 1 列展开得 $D_4=2\\begin{vmatrix}2&-1&0\\\\0&2&-1\\\\0&0&2\\end{vmatrix}+(-1)\\cdot(-1)^{4+1}\\begin{vmatrix}-1&0&0\\\\2&-1&0\\\\0&2&-1\\end{vmatrix}$。"
+        },
+        {
+          "stepTitle": "第二步：套上下三角基本形出值",
+          "detail": "前者为上三角 $2^3=8$，后者为下三角 $(-1)^3=-1$，故 $D_4=2\\times 8+1\\times(-1)=16-1=15$。"
+        }
+      ],
+      "finalAnswer": "$D_4=15$（选 B）",
+      "takeaway": "3 阶以上稀疏行列式，永远先挑「0 最多的行/列」展开，一旦降为 12+1 基本形立刻停手出数！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.22",
+        "pdfPage": 28,
+        "itemRef": "例 1.1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-e-02",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、具体型行列式（基础 30 讲）",
+      "title": "【例 1.2】经典 4 阶爪型（箭形）行列式——斜边消爪边",
+      "problem": "计算行列式 $D_4=\\begin{vmatrix}1&1&1&1\\\\1&2&0&0\\\\1&0&3&0\\\\1&0&0&4\\end{vmatrix}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：用主对角斜边元消去第 1 行爪边",
+          "detail": "将第 2 行乘 $-\\frac{1}{2}$、第 3 行乘 $-\\frac{1}{3}$、第 4 行乘 $-\\frac{1}{4}$ 依次加到第 1 行，第 1 行化为 $\\left[1-\\frac{1}{2}-\\frac{1}{3}-\\frac{1}{4},\\;0,\\;0,\\;0\\right]$，变为下三角行列式。"
+        },
+        {
+          "stepTitle": "第二步：主对角连乘出答案",
+          "detail": "$D_4=\\left(1-\\frac{1}{2}-\\frac{1}{3}-\\frac{1}{4}\\right)\\times 2\\times 3\\times 4=24-12-8-6=-2$。"
+        }
+      ],
+      "finalAnswer": "$D_4=-2$",
+      "takeaway": "四种朝向的爪型行列式本质完全一致：用对角斜边元将一条爪边全消成 0，瞬间化为上下三角！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.25",
+        "pdfPage": 31,
+        "itemRef": "例 1.2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-e-03",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、具体型行列式（基础 30 讲）",
+      "title": "【例 1.3】元素几乎相同的含参 4 阶行列式化爪型与副对角",
+      "problem": "计算行列式 $D_4=\\begin{vmatrix}1&-1&1&x-1\\\\1&-1&x+1&-1\\\\1&x-1&1&-1\\\\x+1&-1&1&-1\\end{vmatrix}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：第 1 行 $(-1)$ 倍加至其余各行",
+          "detail": "作 $r_i-r_1\\;(i=2,3,4)$ 得 $\\begin{vmatrix}1&-1&1&x-1\\\\0&0&x&-x\\\\0&x&0&-x\\\\x&0&0&-x\\end{vmatrix}$。"
+        },
+        {
+          "stepTitle": "第二步：前三列加至第 4 列化副对角上三角",
+          "detail": "作 $c_4+c_1+c_2+c_3$，第 4 列变为 $[x,0,0,0]^T$！于是化为副对角上三角，$D_4=(-1)^{\\frac{4\\times 3}{2}}\\cdot x^4=x^4$。"
+        }
+      ],
+      "finalAnswer": "$x^4$",
+      "takeaway": "各行元素差别极小时，先拿第 1 行 $(-1)$ 倍加到其余各行，立刻暴露稀疏爪型或副对角基本形！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.25",
+        "pdfPage": 31,
+        "itemRef": "例 1.3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-e-04",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、具体型行列式（基础 30 讲）",
+      "title": "【例 1.4】行和相等 $n$ 阶对称行列式 $D_n=[a+(n-1)b](a-b)^{n-1}$ 及副对角变体",
+      "problem": "计算主对角线元素为 $a$、其余元素均为 $b$ 的 $n$ 阶行列式 $D_n$；并写出 $a$ 在副对角线上的 $G_n$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：各列全加第 1 列并提公因子",
+          "detail": "每行元素之和均为 $a+(n-1)b$，将第 $2,\\dots,n$ 列加至第 1 列并提出 $[a+(n-1)b]$，第 1 列全化为 $1$。"
+        },
+        {
+          "stepTitle": "第二步：第 1 行 $(-b)$ 倍加至其余各行化上三角",
+          "detail": "化为上三角，主对角线为 $1,a-b,\\dots,a-b$，故 $D_n=[a+(n-1)b](a-b)^{n-1}$。"
+        },
+        {
+          "stepTitle": "第三步：副对角变体 $G_n$ 与必背特例",
+          "detail": "$a$ 在副对角线时将列完全逆序需换 $\\frac{n(n-1)}{2}$ 次，得 $G_n=(-1)^{\\frac{n(n-1)}{2}}[a+(n-1)b](a-b)^{n-1}$。必背特例：$a=0,b=1\\Rightarrow(n-1)(-1)^{n-1}$；$a=2,b=1\\Rightarrow n+1$；主对角 $\\lambda-a$ 其余 $b\\Rightarrow[\\lambda-a+(n-1)b](\\lambda-a-b)^{n-1}$。"
+        }
+      ],
+      "finalAnswer": "$D_n=[a+(n-1)b](a-b)^{n-1}$；$G_n=(-1)^{\\frac{n(n-1)}{2}}[a+(n-1)b](a-b)^{n-1}$",
+      "takeaway": "全线代使用频率最高的 $n$ 阶母式！遇到特征值题（如强化例 1.8）一眼直接读出单重根与 $n-1$ 重根！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.26-27",
+        "pdfPage": 32,
+        "itemRef": "例 1.4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-e-05",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、具体型行列式（基础 30 讲）",
+      "title": "【例 1.5】「X」型 4 阶行列式配对归拢拉普拉斯展开（附四大构型图鉴）",
+      "problem": "计算「X」型 4 阶行列式 $D_4=\\begin{vmatrix}a_1&0&0&b_1\\\\0&a_2&b_2&0\\\\0&b_3&a_3&0\\\\b_4&0&0&a_4\\end{vmatrix}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：同步互换行与列将非零块归拢到主对角",
+          "detail": "第 4 行依次上移至第 2 行（换 2 次），再将第 4 列依次左移至第 2 列（换 2 次），总符号 $(-1)^4=+1$，化为 $\\begin{vmatrix}a_1&b_1&0&0\\\\b_4&a_4&0&0\\\\0&0&a_2&b_2\\\\0&0&b_3&a_3\\end{vmatrix}$。"
+        },
+        {
+          "stepTitle": "第二步：套拉普拉斯分块公式",
+          "detail": "$D_4=\\begin{vmatrix}a_1&b_1\\\\b_4&a_4\\end{vmatrix}\\begin{vmatrix}a_2&b_2\\\\b_3&a_3\\end{vmatrix}=(a_1a_4-b_1b_4)(a_2a_3-b_2b_3)$。"
+        }
+      ],
+      "finalAnswer": "$D_4=(a_1a_4-b_1b_4)(a_2a_3-b_2b_3)$",
+      "takeaway": "切勿把 4 阶「X」型误算成 $a_1a_2a_3a_4-b_1b_2b_3b_4$！外圈 $(1,4)$ 与内圈 $(2,3)$ 各自构成一个 2 阶行列式相乘！",
+      "figureSvg": "<svg viewBox=\"0 0 640 220\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"四大经典n阶行列式构型速览\">\n  <title>四大高频 n 阶具体型行列式构型与破题动作</title>\n  <rect x=\"4\" y=\"4\" width=\"632\" height=\"212\" rx=\"10\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <text x=\"320\" y=\"25\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0f172a\">高频 n 阶行列式四大构型识别图鉴（一眼定位破题手法）</text>\n\n  <!-- Card 1: 爪型 -->\n  <g transform=\"translate(18,40)\">\n    <rect x=\"0\" y=\"0\" width=\"144\" height=\"164\" rx=\"8\" fill=\"#ffffff\" stroke=\"#93c5fd\" stroke-width=\"1.3\"/>\n    <text x=\"72\" y=\"19\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1d4ed8\">① 爪型（箭形）</text>\n    <rect x=\"24\" y=\"28\" width=\"96\" height=\"86\" fill=\"#f8fafc\" stroke=\"#cbd5e1\"/>\n    <!-- Highlight top row, left col, main diag -->\n    <line x1=\"34\" y1=\"38\" x2=\"110\" y2=\"38\" stroke=\"#2563eb\" stroke-width=\"4\" stroke-linecap=\"round\"/>\n    <line x1=\"34\" y1=\"38\" x2=\"34\" y2=\"104\" stroke=\"#2563eb\" stroke-width=\"4\" stroke-linecap=\"round\"/>\n    <line x1=\"34\" y1=\"38\" x2=\"110\" y2=\"104\" stroke=\"#dc2626\" stroke-width=\"4\" stroke-linecap=\"round\"/>\n    <text x=\"92\" y=\"64\" font-size=\"10\" fill=\"#94a3b8\">0</text>\n    <text x=\"52\" y=\"96\" font-size=\"10\" fill=\"#94a3b8\">0</text>\n    <text x=\"72\" y=\"132\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#0f172a\">用斜边消爪边</text>\n    <text x=\"72\" y=\"148\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">化上下三角（例 1.2）</text>\n  </g>\n\n  <!-- Card 2: X型 -->\n  <g transform=\"translate(172,40)\">\n    <rect x=\"0\" y=\"0\" width=\"144\" height=\"164\" rx=\"8\" fill=\"#ffffff\" stroke=\"#c4b5fd\" stroke-width=\"1.3\"/>\n    <text x=\"72\" y=\"19\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#6d28d9\">②「X」型（2k阶）</text>\n    <rect x=\"24\" y=\"28\" width=\"96\" height=\"86\" fill=\"#f8fafc\" stroke=\"#cbd5e1\"/>\n    <line x1=\"34\" y1=\"38\" x2=\"110\" y2=\"104\" stroke=\"#7c3aed\" stroke-width=\"4\" stroke-linecap=\"round\"/>\n    <line x1=\"110\" y1=\"38\" x2=\"34\" y2=\"104\" stroke=\"#db2777\" stroke-width=\"4\" stroke-linecap=\"round\"/>\n    <text x=\"72\" y=\"50\" text-anchor=\"middle\" font-size=\"10\" fill=\"#94a3b8\">0</text>\n    <text x=\"72\" y=\"102\" text-anchor=\"middle\" font-size=\"10\" fill=\"#94a3b8\">0</text>\n    <text x=\"72\" y=\"132\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#0f172a\">成对归拢拉普拉斯</text>\n    <text x=\"72\" y=\"148\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">∏(aᵢaₙ₊₁₋ᵢ-bᵢbₙ₊₁₋ᵢ)</text>\n  </g>\n\n  <!-- Card 3: 三对角 -->\n  <g transform=\"translate(326,40)\">\n    <rect x=\"0\" y=\"0\" width=\"144\" height=\"164\" rx=\"8\" fill=\"#ffffff\" stroke=\"#86efac\" stroke-width=\"1.3\"/>\n    <text x=\"72\" y=\"19\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#15803d\">③ 三对角（三线）</text>\n    <rect x=\"24\" y=\"28\" width=\"96\" height=\"86\" fill=\"#f8fafc\" stroke=\"#cbd5e1\"/>\n    <line x1=\"34\" y1=\"38\" x2=\"110\" y2=\"104\" stroke=\"#16a34a\" stroke-width=\"3.6\" stroke-linecap=\"round\"/>\n    <line x1=\"50\" y1=\"38\" x2=\"110\" y2=\"90\" stroke=\"#0d9488\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n    <line x1=\"34\" y1=\"52\" x2=\"94\" y2=\"104\" stroke=\"#0d9488\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n    <text x=\"98\" y=\"52\" font-size=\"10\" fill=\"#94a3b8\">0</text>\n    <text x=\"42\" y=\"98\" font-size=\"10\" fill=\"#94a3b8\">0</text>\n    <text x=\"72\" y=\"132\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#0f172a\">展开两步建递推</text>\n    <text x=\"72\" y=\"148\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">Dₙ = kDₙ₋₁ - bcDₙ₋₂</text>\n  </g>\n\n  <!-- Card 4: 加边升阶 -->\n  <g transform=\"translate(480,40)\">\n    <rect x=\"0\" y=\"0\" width=\"144\" height=\"164\" rx=\"8\" fill=\"#ffffff\" stroke=\"#fcd34d\" stroke-width=\"1.3\"/>\n    <text x=\"72\" y=\"19\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#b45309\">④ 加边法（n→n+1）</text>\n    <rect x=\"24\" y=\"28\" width=\"96\" height=\"86\" fill=\"#f8fafc\" stroke=\"#cbd5e1\"/>\n    <!-- Highlight added border -->\n    <rect x=\"24\" y=\"28\" width=\"96\" height=\"18\" fill=\"#fef3c7\"/>\n    <rect x=\"24\" y=\"28\" width=\"22\" height=\"86\" fill=\"#fef3c7\"/>\n    <text x=\"35\" y=\"41\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#b45309\">1</text>\n    <text x=\"78\" y=\"41\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#b45309\">x₁ … xₙ</text>\n    <text x=\"35\" y=\"65\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#92400e\">0</text>\n    <text x=\"35\" y=\"84\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#92400e\">⋮</text>\n    <text x=\"35\" y=\"104\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#92400e\">0</text>\n    <rect x=\"48\" y=\"48\" width=\"70\" height=\"64\" fill=\"#eff6ff\" stroke=\"#93c5fd\"/>\n    <text x=\"83\" y=\"84\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#1e40af\">原阵 Dₙ</text>\n    <text x=\"72\" y=\"132\" text-anchor=\"middle\" font-size=\"10\" font-weight=\"700\" fill=\"#0f172a\">各行同数加边化爪</text>\n    <text x=\"72\" y=\"148\" text-anchor=\"middle\" font-size=\"9.5\" fill=\"#475569\">|ααᵀ+E| = 1+∑xᵢ²</text>\n  </g>\n</svg>",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.27-28",
+        "pdfPage": 33,
+        "itemRef": "例 1.5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-e-06",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、具体型行列式（基础 30 讲）",
+      "title": "【例 1.6】首行加至末行提公因子凑 3 阶范德蒙德行列式",
+      "problem": "计算行列式 $D=\\begin{vmatrix}a&b&c\\\\a^2&b^2&c^2\\\\b+c&a+c&a+b\\end{vmatrix}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：第 1 行加至第 3 行并提取公因子 $(a+b+c)$",
+          "detail": "第 3 行变为 $[a+b+c,\\;a+b+c,\\;a+b+c]$，提公因子得 $(a+b+c)\\begin{vmatrix}a&b&c\\\\a^2&b^2&c^2\\\\1&1&1\\end{vmatrix}$。"
+        },
+        {
+          "stepTitle": "第二步：两次行互换归位标准范德蒙德",
+          "detail": "第 3 行依次与第 2 行、第 1 行互换（符号 $(-1)^2=+1$），得 $(a+b+c)\\begin{vmatrix}1&1&1\\\\a&b&c\\\\a^2&b^2&c^2\\end{vmatrix}=(a+b+c)(b-a)(c-b)(c-a)$。"
+        }
+      ],
+      "finalAnswer": "$(a+b+c)(b-a)(c-b)(c-a)$",
+      "takeaway": "看到各列呈 $x,x^2$ 且缺全 $1$ 行时，立刻找两行相加凑全 $1$ 公因子，秒变范德蒙德！（4 阶同理见没咋了例 8）",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.29",
+        "pdfPage": 35,
+        "itemRef": "例 1.6"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-e-07",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、具体型行列式（基础 30 讲）",
+      "title": "【例 1.7】4 阶宽对角（三对角）行列式拆末行递推法",
+      "problem": "计算 $D_4=\\begin{vmatrix}1-a&a&0&0\\\\-1&1-a&a&0\\\\0&-1&1-a&a\\\\0&0&-1&1-a\\end{vmatrix}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：将前三行全加到第 4 行化简递推",
+          "detail": "作 $r_4+r_1+r_2+r_3$，第 4 行变为 $[-a,\\;0,\\;0,\\;1]$！按第 4 行展开得 $D_4=(-1)^{4+1}(-a)\\cdot a^3+1\\cdot D_3=a^4+D_3$。"
+        },
+        {
+          "stepTitle": "第二步：注意递推符号 $(-1)^{n+1}(-a)a^{n-1}=(-a)^n$",
+          "detail": "同理 $D_3=(-a)^3+D_2=-a^3+D_2$，$D_2=a^2+D_1$，$D_1=1-a$，逐层累加得 $D_4=a^4-a^3+a^2-a+1$（切勿漏奇偶负号误得全加号！）。"
+        },
+        {
+          "stepTitle": "第三步：用三对角闭式公式验算",
+          "detail": "$k=1-a,b=a,c=-1$，特征根 $r_1=1,r_2=-a$，故 $D_4=\\dfrac{1^5-(-a)^5}{1-(-a)}=\\dfrac{1+a^5}{1+a}=a^4-a^3+a^2-a+1$，完全吻合！"
+        }
+      ],
+      "finalAnswer": "$a^4-a^3+a^2-a+1$（选 D）",
+      "takeaway": "用递推法时务必小心 $(-1)^{n+1}$ 的奇偶变号；对 4 阶小阶三对角，也可从 $D_1,D_2,D_3,D_4$ 正推复核！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.30-31",
+        "pdfPage": 36,
+        "itemRef": "例 1.7"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-e-08",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、具体型行列式（基础 30 讲）",
+      "title": "【例 1.8】函数行列式作差 $f(x+1)-f(x)$——逆用单列可拆性",
+      "problem": "设 $f(x)=\\begin{vmatrix}1&0&x\\\\1&2&x^2\\\\1&3&x^3\\end{vmatrix}$，求 $f(x+1)-f(x)$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：逆用单列可拆性直接合并第 3 列相减",
+          "detail": "前两列完全相同，直接把第 3 列对应相减：$f(x+1)-f(x)=\\begin{vmatrix}1&0&1\\\\1&2&2x+1\\\\1&3&3x^2+3x+1\\end{vmatrix}$。"
+        },
+        {
+          "stepTitle": "第二步：列倍加消元化下三角",
+          "detail": "作 $c_3-c_1$ 再作 $c_3-x c_2$，得 $\\begin{vmatrix}1&0&0\\\\1&2&0\\\\1&3&3x^2\\end{vmatrix}=6x^2$。"
+        }
+      ],
+      "finalAnswer": "$f(x+1)-f(x)=6x^2$",
+      "takeaway": "两个同阶行列式若仅有一行（列）不同，千万别各自算完再减，直接合并该行（列）相减一步化简！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.31",
+        "pdfPage": 37,
+        "itemRef": "例 1.8"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-e-09",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、具体型行列式（基础 30 讲）",
+      "title": "【例 1.9】特征多项式型行列式方程有二重根求参数 $a$（防漏分类！）",
+      "problem": "设关于 $\\lambda$ 的方程 $\\begin{vmatrix}\\lambda-1&-2&3\\\\1&\\lambda-4&3\\\\-1&a&\\lambda-5\\end{vmatrix}=0$ 有二重根，求参数 $a$ 的值。",
+      "steps": [
+        {
+          "stepTitle": "第一步：行倍加造零完成因式分解",
+          "detail": "因 $a_{13}=a_{23}=3$，作 $r_1-r_2$ 再作 $c_2+c_1$ 得 $\\begin{vmatrix}\\lambda-2&0&0\\\\1&\\lambda-3&3\\\\-1&a-1&\\lambda-5\\end{vmatrix}=(\\lambda-2)(\\lambda^2-8\\lambda+18-3a)=0$。"
+        },
+        {
+          "stepTitle": "第二步：严密分两类讨论二重根",
+          "detail": "① 若 $\\lambda=2$ 为二重根：将 $\\lambda=2$ 代入二次因子得 $4-16+18-3a=0\\implies a=2$（三根 $2,2,6$，确为二重根）；② 若 $\\lambda=2$ 非重根：令判别式 $\\Delta=64-4(18-3a)=0\\implies a=\\frac{2}{3}$（三根 $2,4,4$，确为二重根）。"
+        }
+      ],
+      "finalAnswer": "$a=2$ 或 $a=\\dfrac{2}{3}$",
+      "takeaway": "三次方程 $(\\lambda-\\lambda_0)q(\\lambda)=0$ 有二重根必分两类：$q(\\lambda_0)=0$（且须验非三重根）或 $\\Delta_q=0$（且重根 $\\ne \\lambda_0$）。",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.32",
+        "pdfPage": 38,
+        "itemRef": "例 1.9"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-e-10",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "三、抽象型行列式（基础 30 讲）",
+      "title": "【例 1.10】4 阶列向量拆列与两次互换求抽象行列式",
+      "problem": "已知 4 阶行列式 $|\\alpha_1,\\alpha_2,\\alpha_3,\\beta|=a,\\;|\\beta+\\gamma,\\alpha_2,\\alpha_3,\\alpha_1|=b$，求 $|\\alpha_2+\\alpha_3,\\alpha_1,\\alpha_3,\\gamma|$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：拆开所求行列式并消去重列",
+          "detail": "$|\\alpha_2+\\alpha_3,\\alpha_1,\\alpha_3,\\gamma|=|\\alpha_2,\\alpha_1,\\alpha_3,\\gamma|+|\\alpha_3,\\alpha_1,\\alpha_3,\\gamma|=|\\alpha_2,\\alpha_1,\\alpha_3,\\gamma|$（后项第 1,3 列相等为 $0$）。"
+        },
+        {
+          "stepTitle": "第二步：拆开已知第 2 式求 $|\\gamma,\\alpha_2,\\alpha_3,\\alpha_1|$",
+          "detail": "$b=|\\beta,\\alpha_2,\\alpha_3,\\alpha_1|+|\\gamma,\\alpha_2,\\alpha_3,\\alpha_1|$。将前项第 1,4 列互换得 $|\\beta,\\alpha_2,\\alpha_3,\\alpha_1|=-|\\alpha_1,\\alpha_2,\\alpha_3,\\beta|=-a$，故 $|\\gamma,\\alpha_2,\\alpha_3,\\alpha_1|=a+b$。"
+        },
+        {
+          "stepTitle": "第三步：两次列互换对齐目标顺序",
+          "detail": "$|\\alpha_2,\\alpha_1,\\alpha_3,\\gamma|\\xrightarrow{\\text{换1,4}}-|\\gamma,\\alpha_1,\\alpha_3,\\alpha_2|\\xrightarrow{\\text{换2,4}}+|\\gamma,\\alpha_2,\\alpha_3,\\alpha_1|=a+b$。"
+        }
+      ],
+      "finalAnswer": "$a+b$",
+      "takeaway": "抽象列向量行列式互换时，每次只换两列并记一个负号（或直接数排列逆序数奇偶），千万别看错下标顺序！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.34-35",
+        "pdfPage": 40,
+        "itemRef": "例 1.10"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-e-11",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "三、抽象型行列式（基础 30 讲）",
+      "title": "【例 1.11】列线性组合提取系数矩阵套 $|AB|=|A||B|$",
+      "problem": "设 $\\alpha_1,\\alpha_2,\\alpha_3$ 均为 3 维列向量，已知 $A=[\\alpha_1,\\alpha_2,\\alpha_3]$，$B=[\\alpha_1-\\alpha_2+2\\alpha_3,\\;2\\alpha_1+3\\alpha_2-5\\alpha_3,\\;\\alpha_1+2\\alpha_2-\\alpha_3]$，且 $|A|=2$，求 $|B-A|$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：对应列相减并右提系数矩阵",
+          "detail": "$B-A=[-\\alpha_2+2\\alpha_3,\\;2\\alpha_1+2\\alpha_2-5\\alpha_3,\\;\\alpha_1+2\\alpha_2-2\\alpha_3]=[\\alpha_1,\\alpha_2,\\alpha_3]\\begin{bmatrix}0&2&1\\\\-1&2&2\\\\2&-5&-2\\end{bmatrix}=AC$。"
+        },
+        {
+          "stepTitle": "第二步：套 $|AC|=|A||C|$ 一步出值",
+          "detail": "算得 $|C|=\\begin{vmatrix}0&2&1\\\\-1&2&2\\\\2&-5&-2\\end{vmatrix}\\xlongequal{r_3+2r_2}\\begin{vmatrix}0&2&1\\\\-1&2&2\\\\0&-1&2\\end{vmatrix}=(-1)\\cdot(-1)^{2+1}\\begin{vmatrix}2&1\\\\-1&2\\end{vmatrix}=5$，故 $|B-A|=|A||C|=2\\times 5=10$。"
+        }
+      ],
+      "finalAnswer": "$|B-A|=10$",
+      "takeaway": "列向量的线性组合就是「左放基底 $[\\alpha_1,\\alpha_2,\\alpha_3]$，右放按**列**竖写的系数矩阵」——这是贯穿线代全书的核心翻译能力！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.35-36",
+        "pdfPage": 41,
+        "itemRef": "例 1.11"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-e-12",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "四、克拉默法则（基础 30 讲）",
+      "title": "【例 1.13】非零矩阵 $B$ 的列均为 $Ax=0$ 的解 $\\implies |A|=0$ 且反证 $|B|=0$",
+      "problem": "已知 3 阶矩阵 $B\\ne O$，且 $B$ 的每一个列向量都是齐次方程组 $\\begin{cases}x_1+2x_2-2x_3=0\\\\2x_1-x_2+\\lambda x_3=0\\\\3x_1+x_2-x_3=0\\end{cases}$ 的解。（1）求 $\\lambda$ 的值；（2）证明 $|B|=0$。",
+      "steps": [
+        {
+          "stepTitle": "第（1）题：由 $B\\ne O$ 知 $Ax=0$ 有非零解 $\\implies |A|=0$",
+          "detail": "将 $B=[\\beta_1,\\beta_2,\\beta_3]$ 写为 $AB=O$。因 $B\\ne O$，必存在非零列向量 $\\beta_i$ 满足 $A\\beta_i=0$，故齐次方程组 $Ax=0$ 有非零解 $\\Longleftrightarrow |A|=\\begin{vmatrix}1&2&-2\\\\2&-1&\\lambda\\\\3&1&-1\\end{vmatrix}=5(\\lambda-1)=0\\implies \\lambda=1$。"
+        },
+        {
+          "stepTitle": "第（2）题：反证法证 $|B|=0$",
+          "detail": "若 $|B|\\ne 0$，则 $B$ 可逆；在 $AB=O$ 两端右乘 $B^{-1}$ 得 $A=OB^{-1}=O$，与 $A\\ne O$ 矛盾！故必有 $|B|=0$。"
+        }
+      ],
+      "finalAnswer": "（1）$\\lambda=1$；（2）反证若 $|B|\\ne 0$ 则 $A=OB^{-1}=O$ 矛盾，故 $|B|=0$",
+      "takeaway": "牢记两条黄金推论：① $AB=O$ 等价于 $B$ 的每一列都是 $Ax=0$ 的解；② 若 $AB=O$ 且 $A\\ne O$，则必有 $|B|=0$（同理 $B\\ne O\\Rightarrow |A|=0$）！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.39",
+        "pdfPage": 45,
+        "itemRef": "例 1.13"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-e-13",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "一、逆序数定义实战（基础习题 & 没咋了补充专题）",
+      "title": "【2021 数二/三 · 基础习题 1.3 / 没咋了例 17】逆序数定义 10 秒秒杀多项式 $x^3$ 系数",
+      "problem": "多项式 $f(x)=\\begin{vmatrix}x&x&1&2x\\\\1&x&2&-1\\\\2&1&x&1\\\\2&-1&1&x\\end{vmatrix}$ 中 $x^3$ 项的系数为多少？",
+      "steps": [
+        {
+          "stepTitle": "法一（逆序数定义 10 秒秒杀）：找全部含 3 个 $x$ 的取法",
+          "detail": "欲凑 $x^3$，须从 4 行选 3 个含 $x$ 的元素、1 个常数元（不同行不同列）：① 若取主对角线 4 个 $x$ 得 $x^4$（不含 $x^3$）；② 选 $a_{12}=x$、$a_{21}=1$、$a_{33}=x$、$a_{44}=x$：列标排列 $(2,1,3,4)$，逆序数 $\\tau=1$（奇），贡献 $(-1)^1\\cdot x\\cdot 1\\cdot x\\cdot x=-x^3$；③ 选 $a_{14}=2x$、$a_{22}=x$、$a_{33}=x$、$a_{41}=2$：列标排列 $(4,2,3,1)$，逆序数 $\\tau=3+1+1=5$（奇），贡献 $(-1)^5\\cdot(2x)\\cdot x\\cdot x\\cdot 2=-4x^3$！其余选法最多只含 $x^2$。"
+        },
+        {
+          "stepTitle": "第二步：合并同类项得答案",
+          "detail": "$x^3$ 项总系数为 $-1+(-4)=-5$。（法二按第 1 行展开亦可验证，仅第 2 项与第 4 项产生 $-x^3$ 与 $-4x^3$，和为 $-5$。）"
+        }
+      ],
+      "finalAnswer": "$-5$",
+      "takeaway": "求 $n$ 阶多项式行列式的高次项（$x^n$ 或 $x^{n-1}$）系数，用逆序数定义只抓含 $x$ 的组合，比硬展开快 5 倍且不易漏项！",
+      "source": {
+        "book": "27 张宇基础30讲·线代 & 27 没咋了强化讲义",
+        "printedPage": "基础 P.40,42 / 没咋了 P.10-11",
+        "pdfPage": 46,
+        "itemRef": "基础习题 1.3 / 没咋了例 17"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-e-14",
+      "kind": "example",
+      "stage": "foundation",
+      "examWeight": "core",
+      "section": "二、具体型行列式（基础习题精华）",
+      "title": "【基础习题 1.5 & 1.6】4 阶循环行和相等行列式与逐行相消三对角",
+      "problem": "计算：（1）$D_4^{(1)}=\\begin{vmatrix}4&1&2&3\\\\3&4&1&2\\\\2&3&4&1\\\\1&2&3&4\\end{vmatrix}$；（2）$D_4^{(2)}=\\begin{vmatrix}1&a&0&0\\\\-1&2-a&b&0\\\\0&-2&3-b&c\\\\0&0&-3&4-c\\end{vmatrix}$。",
+      "steps": [
+        {
+          "stepTitle": "第（1）题：每行和均为 10，全加第 1 列提 10 后消元",
+          "detail": "各列全加第 1 列提 $10$ 得 $10\\begin{vmatrix}1&1&2&3\\\\1&4&1&2\\\\1&3&4&1\\\\1&2&3&4\\end{vmatrix}$，第 1 行 $(-1)$ 倍加至其余各行，化简得 $10\\begin{vmatrix}3&-1&-1\\\\2&2&-2\\\\1&1&1\\end{vmatrix}=10\\times 16=160$。"
+        },
+        {
+          "stepTitle": "第（2）题：自上而下逐行累加，参数 $a,b,c$ 神奇全消！",
+          "detail": "第 1 行加到第 2 行，新的第 2 行变为 $[0,2,b,0]$（消去 $a$）；再把新第 2 行加到第 3 行，变为 $[0,0,3,c]$（消去 $b$）；再加到第 4 行变为 $[0,0,0,4]$（消去 $c$）！立得上三角 $1\\times 2\\times 3\\times 4=24$！"
+        }
+      ],
+      "finalAnswer": "（1）$160$；（2）$24$（与参数 $a,b,c$ 无关！）",
+      "takeaway": "第(2)题是经典的「参数障眼法」——看到主对角出现 $2-a,3-b,4-c$ 而旁侧恰好是 $a,b,c$，顺手逐行累加立刻全部抵消化为上三角！",
+      "source": {
+        "book": "27 张宇基础30讲·线代",
+        "printedPage": "基础 P.41-43",
+        "pdfPage": 47,
+        "itemRef": "基础习题 1.5 & 1.6"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_base_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-e-15",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、具体型行列式（强化 9 讲 & 没咋了）",
+      "title": "【2025 数三 · 强化例 1.1 / 没咋了例 16】两 4 阶函数行列式方程 $f(x)=g(x)$ 不同实根个数",
+      "problem": "已知 $f(x)=\\begin{vmatrix}2x+1&3&2x+1&1\\\\2x&-3&4x&-2\\\\2x+1&2&2x+1&1\\\\2x&-4&4x&-2\\end{vmatrix}$，$g(x)=\\begin{vmatrix}2x+1&1&2x+1&3\\\\5x+1&-2&4x&-3\\\\0&1&2x+1&2\\\\2x&-2&4x&-4\\end{vmatrix}$，求方程 $f(x)=g(x)$ 不同实根的个数。",
+      "steps": [
+        {
+          "stepTitle": "第一步：化简 $f(x)$——两列成比例直接恒为 0！",
+          "detail": "对 $f(x)$ 作 $r_3-r_1$ 和 $r_4-r_2$，第 3、4 行同时化为 $[0,-1,0,0]$！两行完全相同，故 **$f(x)\\equiv 0$**！（甚至直接看 $c_1-c_3$ 或第 1、3 列及第 2、4 行差即可一眼看出 $f(x)\\equiv 0$。）"
+        },
+        {
+          "stepTitle": "第二步：化简 $g(x)$——利用第 2 列多个 $-2,1$ 猛造零元",
+          "detail": "对 $g(x)$ 作 $r_2+2r_1$、$r_3-r_1$、$r_4+2r_1$，第 2 列化为 $[1,0,0,0]^T$！按第 2 列展开得 $g(x)=(-1)^{1+2}\\begin{vmatrix}9x+3&8x+2&3\\\\-2x-1&0&-1\\\\6x+2&8x+2&2\\end{vmatrix}$。再作 $r_1-r_3$，第 1 行变为 $[3x+1,0,1]$，最后按第 2 列展开（仅 $(3,2)$ 元 $8x+2$ 非零）：$g(x)=-(-1)^{3+2}(8x+2)\\begin{vmatrix}3x+1&1\\\\-2x-1&-1\\end{vmatrix}=(8x+2)(-3x-1+2x+1)=-x(8x+2)$！"
+        },
+        {
+          "stepTitle": "第三步：解方程定根个数",
+          "detail": "$f(x)=g(x)\\Longleftrightarrow -x(8x+2)=0\\implies x_1=0,\\;x_2=-\\frac{1}{4}$，共有 **2 个**不同实根！"
+        }
+      ],
+      "finalAnswer": "$2$ 个（$x=0$ 与 $x=-\\frac{1}{4}$）",
+      "takeaway": "2025 最新真题实战示范「观察对应位置元素」：别盲算 4 阶展开，先做简单行差立刻发现 $f(x)\\equiv 0$，工作量瞬间减半！",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.2 / 没咋了 P.10",
+        "pdfPage": 13,
+        "itemRef": "强化例 1.1"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_adv_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-e-16",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、具体型行列式（强化 9 讲 & 没咋了）",
+      "title": "【2023 数二 · 强化例 1.2 / 没咋了例 14】方程组有解隐含 4 阶增广行列式为 0 秒杀 3 阶行列式",
+      "problem": "已知线性方程组 $\\begin{cases}ax_1+x_3=1\\\\x_1+ax_2+x_3=0\\\\x_1+2x_2+ax_3=0\\\\ax_1+bx_2=2\\end{cases}$ 有解，其中 $a,b$ 为常数。若 $\\begin{vmatrix}a&0&1\\\\1&a&1\\\\1&2&a\\end{vmatrix}=4$，求 $\\begin{vmatrix}1&a&1\\\\1&2&a\\\\a&b&0\\end{vmatrix}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：将「方程组有解」翻译成 4 阶增广行列式等于 0",
+          "detail": "因前 3 行组成的 3 阶子式为 $4\\ne 0$，故 $r(A)=3$。又方程组 $Ax=b$ 有解 $\\Longleftrightarrow r([A,b])=r(A)=3<4$，而 $[A,b]$ 恰为 **4 阶方阵**，故必有 $|[A,b]|=\\begin{vmatrix}a&0&1&1\\\\1&a&1&0\\\\1&2&a&0\\\\a&b&0&2\\end{vmatrix}=0$！"
+        },
+        {
+          "stepTitle": "第二步：按第 4 列展开直接关联已知与所求！",
+          "detail": "第 4 列只有 $a_{14}=1$ 和 $a_{44}=2$ 非零！按第 4 列展开：$(-1)^{1+4}\\cdot 1\\cdot\\begin{vmatrix}1&a&1\\\\1&2&a\\\\a&b&0\\end{vmatrix}+(-1)^{4+4}\\cdot 2\\cdot\\begin{vmatrix}a&0&1\\\\1&a&1\\\\1&2&a\\end{vmatrix}=0\\implies -\\begin{vmatrix}1&a&1\\\\1&2&a\\\\a&b&0\\end{vmatrix}+2\\times 4=0\\implies$ 所求行列式 $=8$！"
+        }
+      ],
+      "finalAnswer": "$8$",
+      "takeaway": "2023 真题超级巧题！若按常规含参方程组硬求 $a,b$ 会算到天荒地老；盯着目标行列式一看，它和已知行列式恰是 4 阶增广阵按第 4 列展开的两个 3 阶余子式！",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.3 / 没咋了 P.9",
+        "pdfPage": 14,
+        "itemRef": "强化例 1.2"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_adv_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-e-17",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、加边法与秩 1 特征值（强化 9 讲）",
+      "title": "【强化例 1.3】加边法 + 秩 1 特征值双解法计算 $|\\alpha\\alpha^T+E|=1+\\sum_{i=1}^n x_i^2$",
+      "problem": "设 $\\alpha=[x_1,x_2,\\dots,x_n]^T\\ne 0$，计算 $n$ 阶行列式 $|\\alpha\\alpha^T+E|$。",
+      "steps": [
+        {
+          "stepTitle": "法一（加边法升阶化爪型）",
+          "detail": "添第 1 列 $[1,0,\\dots,0]^T$ 与第 1 行 $[1,x_1,x_2,\\dots,x_n]$ 升至 $n+1$ 阶：$|\\alpha\\alpha^T+E|=\\begin{vmatrix}1&x_1&\\cdots&x_n\\\\0&1+x_1^2&\\cdots&x_1x_n\\\\\\vdots&\\vdots&&\\vdots\\\\0&x_nx_1&\\cdots&1+x_n^2\\end{vmatrix}$。用第 1 行 $(-x_i)$ 倍加至第 $i+1$ 行，立刻消掉所有交叉项 $x_ix_j$ 化为标准爪型（首列 $[1,-x_1,\\dots,-x_n]^T$、主对角全 $1$）！再用第 $i+1$ 行 $x_i$ 倍加回第 1 行消成上三角，得 $1+\\sum_{i=1}^n x_i^2$！"
+        },
+        {
+          "stepTitle": "法二（秩 1 矩阵特征值 3 秒秒杀）",
+          "detail": "因 $r(\\alpha\\alpha^T)=1$，其 $n$ 个特征值为 $\\operatorname{tr}(\\alpha\\alpha^T)=\\sum_{i=1}^n x_i^2,\\;0,\\;\\dots,\\;0$（$n-1$ 个 $0$）。故 $\\alpha\\alpha^T+E$ 的特征值为 $1+\\sum_{i=1}^n x_i^2,\\;1,\\;\\dots,\\;1$，行列式等于特征值乘积 $=1+\\sum_{i=1}^n x_i^2$！"
+        }
+      ],
+      "finalAnswer": "$1+\\sum_{i=1}^n x_i^2$",
+      "takeaway": "超级母式 $|\\alpha\\beta^T+\\lambda E|=\\lambda^{n-1}(\\lambda+\\beta^T\\alpha)$（矩阵行列式引理），选择填空 3 秒出数，解答题用加边法干净满分！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.4",
+        "pdfPage": 15,
+        "itemRef": "强化例 1.3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_adv_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-e-18",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、递推法与数学归纳法（强化 9 讲）",
+      "title": "【强化例 1.4】异爪型 $n$ 阶行列式——递推法与第一数学归纳法（必按第 1 列展开！）",
+      "problem": "计算 $n$ 阶异爪型行列式 $D_n=\\begin{vmatrix}b&-1&0&\\cdots&0&0\\\\0&b&-1&\\cdots&0&0\\\\\\vdots&\\vdots&\\vdots&&\\vdots&\\vdots\\\\0&0&0&\\cdots&b&-1\\\\a_n&a_{n-1}&a_{n-2}&\\cdots&a_2&b+a_1\\end{vmatrix}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：审视元素分布方向——锁定按第 1 列展开！",
+          "detail": "$D_n$ 的下标 $a_1,a_2,\\dots,a_n$ 是**从右向左**递增的！因此 $D_{n-1}$ 位于原阵的**右下角**！必须按**第 1 列**展开（若误按第 $n$ 列展开，余子式破坏规律无法递推！）。"
+        },
+        {
+          "stepTitle": "第二步：建立一阶递推式 $D_n=b D_{n-1}+a_n$",
+          "detail": "按第 1 列展开：$D_n=b D_{n-1}+(-1)^{n+1}a_n\\begin{vmatrix}-1&0&\\cdots&0\\\\b&-1&\\cdots&0\\\\\\vdots&\\vdots&&\\vdots\\\\0&0&\\cdots&-1\\end{vmatrix}_{n-1}=b D_{n-1}+(-1)^{n+1}a_n(-1)^{n-1}=b D_{n-1}+a_n$！"
+        },
+        {
+          "stepTitle": "第三步：逐层代回（或第一数学归纳法）出闭式",
+          "detail": "由 $D_1=b+a_1$ 反复递推：$D_n=b^{n-1}D_1+a_2 b^{n-2}+\\cdots+a_{n-1}b+a_n=b^n+a_1b^{n-1}+a_2b^{n-2}+\\cdots+a_{n-1}b+a_n$！"
+        }
+      ],
+      "finalAnswer": "$b^n+a_1b^{n-1}+a_2b^{n-2}+\\cdots+a_{n-1}b+a_n$",
+      "takeaway": "建立递推关系的核心前提是「展开后的 $(n-1)$ 阶子式必须和原 $D_n$ 有完全相同的下标分布规律」，先定 $D_1,D_2$ 落在哪一角再决定按哪边展开！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.5-6",
+        "pdfPage": 16,
+        "itemRef": "强化例 1.4"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_adv_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-e-19",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、递推法与数学归纳法（强化 9 讲 & 没咋了）",
+      "title": "【强化例 1.5 / 没咋了例 11】三对角重根型 $D_n=(n+1)a^n$ 第二数学归纳法标准证明",
+      "problem": "证明 $n$ 阶三对角行列式 $D_n=\\begin{vmatrix}2a&1&0&\\cdots&0&0\\\\a^2&2a&1&\\cdots&0&0\\\\0&a^2&2a&\\cdots&0&0\\\\\\vdots&\\vdots&\\vdots&&\\vdots&\\vdots\\\\0&0&0&\\cdots&2a&1\\\\0&0&0&\\cdots&a^2&2a\\end{vmatrix}=(n+1)a^n$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：验证 $n=1$ 和 $n=2$ 两个归纳基础",
+          "detail": "当 $n=1$ 时 $D_1=2a=(1+1)a^1$ 成立；当 $n=2$ 时 $D_2=\\begin{vmatrix}2a&1\\\\a^2&2a\\end{vmatrix}=4a^2-a^2=3a^2=(2+1)a^2$ 成立。"
+        },
+        {
+          "stepTitle": "第二步：按第 1 列展开导出两步递推 $D_k=2aD_{k-1}-a^2D_{k-2}$",
+          "detail": "假设对一切 $n<k\\;(k\\ge 3)$ 命题成立。将 $D_k$ 按第 1 列展开，第 2 项再按第 1 行展开得 $D_k=2aD_{k-1}-a^2D_{k-2}$。"
+        },
+        {
+          "stepTitle": "第三步：代入归纳假设一步证毕",
+          "detail": "$D_k=2a\\cdot k a^{k-1}-a^2\\cdot(k-1)a^{k-2}=(2k-k+1)a^k=(k+1)a^k$，由第二数学归纳法知对一切正整数 $n$ 成立！"
+        }
+      ],
+      "finalAnswer": "证毕（$D_n=(n+1)a^n$；《基础 30 讲》P.31 底部为其转置阵，值完全相同）",
+      "takeaway": "记住张宇口诀：题目直接求结果优先用**递推法**（如强化例 1.4），题目已告知答案要求证明优先用**数学归纳法**（如本题），卷面干净利落！",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.6 / 没咋了 P.8",
+        "pdfPage": 17,
+        "itemRef": "强化例 1.5"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_adv_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-e-20",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、抽象型行列式（强化 9 讲）",
+      "title": "【强化例 1.6】奇数阶正交阵利用 $A^TA=B^TB=E$ 恒等变形证 $|(A-B)(A+B)|=0$",
+      "problem": "设 $A,B$ 为 $n$ 阶正交矩阵，且 $n$ 为奇数，求 $|(A-B)(A+B)|$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：将正交条件 $AA^T=E,BB^T=E$ 与 $A^T=A^{-1}$ 转化为对称结构",
+          "detail": "因 $A,B$ 正交，$|A|=\\pm 1,\\;|B|=\\pm 1$，且 $A^T=A^{-1},\\;B^T=B^{-1}$。利用 $|A^T|=|A|$ 和 $|M|=|M^T|$：$$|(A-B)(A+B)|=|(A-B)^T(A+B)|=|A^TA-B^TA+A^TB-B^TB|=|A^TB-B^TA|$$"
+        },
+        {
+          "stepTitle": "第二步：一眼认出反对称阵 + 奇数阶 $\\implies$ 恒为 0！",
+          "detail": "记 $M=A^TB-B^TA$，显然 $M^T=B^TA-A^TB=-M$（反对称矩阵！）。由 $n$ 为奇数得 $|M|=|M^T|=|-M|=(-1)^n|M|=-|M|\\implies |M|=0$！"
+        }
+      ],
+      "finalAnswer": "$0$",
+      "takeaway": "看到正交阵 + 乘积/加减行列式，把其中一个因子取转置（行列式不变！）就能立刻利用 $A^TA=B^TB=E$ 消掉平方项，露出反对称真身！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.7",
+        "pdfPage": 18,
+        "itemRef": "强化例 1.6"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_adv_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-e-21",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、抽象型行列式（强化 9 讲）",
+      "title": "【强化例 1.7】由伴随矩阵 $A^*$ 特征值反求 $|A^3+2A^2-A-3E|$",
+      "problem": "设 $A$ 为 4 阶矩阵，其伴随矩阵 $A^*$ 的特征值为 $1,-1,-2,4$，求 $|A^3+2A^2-A-3E|$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：由 $|A^*|=|A|^{n-1}$ 反求 $|A|$（注意 $n=4$ 时奇次方唯一定号！）",
+          "detail": "$|A^*|=1\\times(-1)\\times(-2)\\times 4=8\\ne 0\\implies A$ 可逆。因 $n=4$，$|A^*|=|A|^3=8\\implies |A|=2$（实数域唯一定号！）。"
+        },
+        {
+          "stepTitle": "第二步：由 $\\lambda_i=\\frac{|A|}{\\lambda_i^*}$ 求 $A$ 的全部特征值",
+          "detail": "$A$ 的特征值为 $\\frac{2}{1}=2,\\;\\frac{2}{-1}=-2,\\;\\frac{2}{-2}=-1,\\;\\frac{2}{4}=\\frac{1}{2}$。"
+        },
+        {
+          "stepTitle": "第三步：代入多项式 $f(\\lambda)=\\lambda^3+2\\lambda^2-\\lambda-3$ 连乘",
+          "detail": "$f(2)=8+8-2-3=11$；$f(-2)=-8+8+2-3=-1$；$f(-1)=-1+2+1-3=-1$；$f(\\frac{1}{2})=\\frac{1}{8}+\\frac{1}{2}-\\frac{1}{2}-3=-\\frac{23}{8}$。故 $|f(A)|=11\\times(-1)\\times(-1)\\times(-\\frac{23}{8})=-\\dfrac{253}{8}$。"
+        }
+      ],
+      "finalAnswer": "$-\\dfrac{253}{8}$",
+      "takeaway": "牢记 $A \\to A^* \\to f(A)$ 特征值映射表：$\\lambda \\to \\frac{|A|}{\\lambda} \\to f(\\lambda)$；特别留意 $n$ 为偶数时 $|A|^{n-1}$ 为奇次幂定号唯一，$n$ 为奇数时 $|A|^{n-1}$ 为偶次幂需额外判 $|A|$ 正负！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.8",
+        "pdfPage": 19,
+        "itemRef": "强化例 1.7"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_adv_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-e-22",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、相似理论与特征值（强化 9 讲）",
+      "title": "【强化例 1.8】行和相等特征行列式求对称参数阵最大特征值",
+      "problem": "设 $n$ 阶矩阵 $A=k\\begin{bmatrix}1&a&\\cdots&a\\\\a&1&\\cdots&a\\\\\\vdots&\\vdots&&\\vdots\\\\a&a&\\cdots&1\\end{bmatrix}$，其中 $0<a<1,\\;k>0$，求 $A$ 的最大特征值。",
+      "steps": [
+        {
+          "stepTitle": "第一步：套行和相等母式直接写出特征多项式",
+          "detail": "$|\\lambda E-A|=\\begin{vmatrix}\\lambda-k&-ka&\\cdots&-ka\\\\-ka&\\lambda-k&\\cdots&-ka\\\\\\vdots&\\vdots&&\\vdots\\\\-ka&-ka&\\cdots&\\lambda-k\\end{vmatrix}=[\\lambda-k-(n-1)ka](\\lambda-k+ka)^{n-1}=0$！"
+        },
+        {
+          "stepTitle": "第二步：比大小锁定最大特征值",
+          "detail": "解得特征值 $\\lambda_1=k[1+(n-1)a]$（单重），$\\lambda_2=\\cdots=\\lambda_n=k(1-a)$（$n-1$ 重）。因 $a>0,k>0,n\\ge 2$，显然 $1+(n-1)a>1-a$，故最大特征值为 $k[1+(n-1)a]$。（也可用 $A=k(1-a)E+ka\\boldsymbol{1}\\boldsymbol{1}^T$，秩 1 阵特征值 $n,0,\\dots,0$ 3 秒心算！）"
+        }
+      ],
+      "finalAnswer": "$k[1+(n-1)a]$",
+      "takeaway": "任何「对角相同、非对角相同」的阵都可写成 $cE+d\\boldsymbol{1}\\boldsymbol{1}^T$，特征值秒出：$c+nd$（单重）与 $c$（$n-1$ 重）！",
+      "source": {
+        "book": "27 张宇线代9讲",
+        "printedPage": "强化 P.8-9",
+        "pdfPage": 19,
+        "itemRef": "强化例 1.8"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_adv_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-e-23",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、具体型行列式（没咋了强化讲义精选）",
+      "title": "【2020 数二 · 没咋了例 3】4 阶稀疏对称阵化零降阶求 $(a^2-1)^2$",
+      "problem": "计算 4 阶行列式 $D_4=\\begin{vmatrix}a&0&-1&1\\\\0&a&1&-1\\\\-1&1&a&0\\\\1&-1&0&a\\end{vmatrix}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：敏锐发现前两行、后两行互补的 $\\pm 1$，先相加造大批量零！",
+          "detail": "作 $r_1+r_2$ 且 $r_3+r_4$：$D_4=\\begin{vmatrix}a&a&0&0\\\\0&a&1&-1\\\\0&0&a&a\\\\1&-1&0&a\\end{vmatrix}$。再作 $c_2-c_1$ 与 $c_4-c_3$：第 1 行变为 $[a,0,0,0]$、第 3 行变为 $[0,0,a,0]$！"
+        },
+        {
+          "stepTitle": "第二步：连按两行展开瞬间出结果",
+          "detail": "$D_4=\\begin{vmatrix}a&0&0&0\\\\0&a&1&-2\\\\0&0&a&0\\\\1&-2&0&a\\end{vmatrix}\\xlongequal{\\text{按第1行、第3行展开}}a\\cdot a\\cdot\\begin{vmatrix}a&-2\\\\-2&a\\end{vmatrix}$？注意检查 $r_1+r_2$ 后 $c_2-c_1$ 的 $(4,2)$ 元：$(-1)-1=-2$；$(2,4)$ 元：$(-1)-1=-2$？等等，$r_3+r_4$ 第 3 行是 $[0,0,a,a]$，作 $c_4-c_3$ 后 $(2,4)$ 元为 $(-1)-1=-2$，$(4,4)$ 元为 $a-0=a$，$(2,2)$ 元为 $a-0=a$，$(4,2)$ 元为 $-1-1=-2$！展开时注意 $(4,2)$ 符号：去掉第 1 行 1 列和第 3 行 3 列后余下第 2,4 行与第 2,4 列：$\\begin{vmatrix}a&-2\\\\-2&a\\end{vmatrix}=a^2-4$？**立即警惕并检查符号！** 原 $(3,1)=-1,(4,1)=1 \\Rightarrow r_3+r_4=[0,0,a,a]$；原 $(1,3)=-1,(2,3)=1 \\Rightarrow r_1+r_2=[a,a,0,0]$！按第 1 行第 1 列展开（剩 2,3,4 行与 2,3,4 列）：$a\\begin{vmatrix}a&1&-2\\\\0&a&0\\\\-2&0&a\\end{vmatrix}=a\\cdot a\\cdot(a^2-4)$？不对！检查 $(2,4)$ 在 $c_4-c_3$ 后是 $-1-1=-2$，而 $(4,2)$ 在 $c_2-c_1$ 后是 $-1-1=-2$，那么 $a=1$ 时原矩阵是 $\\begin{vmatrix}1&0&-1&1\\\\0&1&1&-1\\\\-1&1&1&0\\\\1&-1&0&1\\end{vmatrix}$，第 1 行 + 第 2 行 = $[1,1,0,0]$，第 3 行 + 第 4 行 = $[0,0,1,1]$，原阵 $a=2$ 时 $r_1+r_2+r_3-r_4$ 才线性相关！果然 $D_4 = a^2(a^2-4)$！"
+        }
+      ],
+      "finalAnswer": "$a^2(a^2-4)=a^4-4a^2$",
+      "takeaway": "超级防错示范！遇到对称分布的 $\\pm 1$，先 $r_1+r_2,r_3+r_4$ 造零再 $c_2-c_1,c_4-c_3$ 立刻降成 2 阶阵 $a^2\\begin{vmatrix}a&-2\\\\-2&a\\end{vmatrix}=a^2(a^2-4)$，并随手代 $a=0$（得 $0$）和 $a=2$（第 1,2,3,4 行做 $[1,-1,1,-1]$ 组合全为 $0$！）3 秒验算，100% 避坑！",
+      "source": {
+        "book": "27 没咋了强化讲义（2020 数二真题）",
+        "printedPage": "没咋了 P.4 例 3",
+        "pdfPage": 9,
+        "itemRef": "没咋了例 3"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-e-24",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、爪型与加边进阶（没咋了强化讲义精选）",
+      "title": "【没咋了例 6 & 例 7】$aE+\\alpha\\beta^T$ 行和阶梯阵与加边法算 $|\\lambda E-\\alpha\\alpha^T|$",
+      "problem": "计算：（1）$n$ 阶行列式 $D_n^{(1)}=\\begin{vmatrix}1+a&1&\\cdots&1\\\\2&2+a&\\cdots&2\\\\\\vdots&\\vdots&&\\vdots\\\\n&n&\\cdots&n+a\\end{vmatrix}$；（2）$D_n^{(2)}=\\begin{vmatrix}\\lambda-a_1^2&-a_1a_2&\\cdots&-a_1a_n\\\\-a_2a_1&\\lambda-a_2^2&\\cdots&-a_2a_n\\\\\\vdots&\\vdots&&\\vdots\\\\-a_na_1&-a_na_2&\\cdots&\\lambda-a_n^2\\end{vmatrix}$。",
+      "steps": [
+        {
+          "stepTitle": "第（1）题：认出「$aE+\\alpha\\beta^T$」或列全加第 1 列化上三角",
+          "detail": "将第 $2,\\dots,n$ 列加至第 1 列，但各行和不同（第 $i$ 行为 $ni+a$），转用**矩阵分解法（没咋了注 2 大招！）**：记 $\\alpha=[1,2,\\dots,n]^T,\\;\\beta=[1,1,\\dots,1]^T$，原阵正是 $aE+\\alpha\\beta^T$！秩 1 阵 $\\alpha\\beta^T$ 的特征值为 $\\beta^T\\alpha=\\frac{n(n+1)}{2},\\;0,\\dots,0$，故 $D_n^{(1)}=a^{n-1}\\left(a+\\frac{n(n+1)}{2}\\right)$！（亦可用列差法：$c_i-c_1\\;(i\\ge 2)$ 化为爪型即得同解！）"
+        },
+        {
+          "stepTitle": "第（2）题：加边法或直接套秩 1 特征值母式",
+          "detail": "原阵正是 $\\lambda E-\\alpha\\alpha^T$（$\\alpha=[a_1,\\dots,a_n]^T$），特征值为 $\\lambda-\\sum_{i=1}^n a_i^2$（单重）与 $\\lambda$（$n-1$ 重），立得 $D_n^{(2)}=\\lambda^{n-1}\\left(\\lambda-\\sum_{i=1}^n a_i^2\\right)$！（解答题用加边法添首行 $[1,a_1,\\dots,a_n]$ 与首列 $[1,0,\\dots,0]^T$ 化爪型，与强化例 1.3 完全同构。）"
+        }
+      ],
+      "finalAnswer": "（1）$a^{n-1}\\left(a+\\dfrac{n(n+1)}{2}\\right)$；（2）$\\lambda^{n-1}\\left(\\lambda-\\sum_{i=1}^n a_i^2\\right)$",
+      "takeaway": "凡是「对角加常数 $a$、其余位置呈现 $x_i y_j$ 乘积结构」的 $n$ 阶行列式，统统都是 $|aE+\\alpha\\beta^T|=a^{n-1}(a+\\beta^T\\alpha)$ 的马甲！",
+      "source": {
+        "book": "27 没咋了强化讲义",
+        "printedPage": "没咋了 P.6 例 6, 例 7",
+        "pdfPage": 11,
+        "itemRef": "没咋了例 6 & 例 7"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-e-25",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、分块行列式陷阱（没咋了勘误精讲）",
+      "title": "【没咋了例 9 · 勘误警示】$\\begin{vmatrix}A&B\\\\B&A\\end{vmatrix}$ 与 $|A^2-B^2|$ 的隐藏可交换前提 $AB=BA$",
+      "problem": "设 $A,B$ 为 3 阶矩阵，且 $|A^2-B^2|=2$（补充原讲义遗漏前提：**$AB=BA$**），求分块行列式 $\\begin{vmatrix}A&B\\\\B&A\\end{vmatrix}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：分块初等变换化为下三角分块行列式",
+          "detail": "第 2 块行加到第 1 块行，再把第 1 块列的 $(-1)$ 倍加到第 2 块列：$$\\begin{vmatrix}A&B\\\\B&A\\end{vmatrix}=\\begin{vmatrix}A+B&A+B\\\\B&A\\end{vmatrix}=\\begin{vmatrix}A+B&O\\\\B&A-B\\end{vmatrix}=|A+B||A-B|=|(A+B)(A-B)|$$"
+        },
+        {
+          "stepTitle": "第二步：【勘误核查】何时等于 $|A^2-B^2|$？",
+          "detail": "展开 $(A+B)(A-B)=A^2-AB+BA-B^2$！**当且仅当补充前提 $AB=BA$ 时**，才有 $|(A+B)(A-B)|=|A^2-B^2|=2$！若无 $AB=BA$，命题条件不足以唯一确定答案（SymPy 已验证非交换反例得出 $|A+B||A-B|=0\\ne -36=|A^2-B^2|$）。"
+        }
+      ],
+      "finalAnswer": "在补足 $AB=BA$ 前提下等于 $2$（无 $AB=BA$ 时一般不等于 $|A^2-B^2|$！）",
+      "takeaway": "遇到分块行列式 $\\begin{vmatrix}A&B\\\\B&A\\end{vmatrix}$ 永远先写成 $|A+B||A-B|$，只有在确认 $AB=BA$ 后才能进一步合并为 $|A^2-B^2|$！",
+      "source": {
+        "book": "27 没咋了强化讲义（含 SymPy 勘误补注）",
+        "printedPage": "没咋了 P.7 例 9",
+        "pdfPage": 12,
+        "itemRef": "没咋了例 9"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-e-26",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "二、递推型行列式（2015 数一真题）",
+      "title": "【2015 数一 · 没咋了例 10】$n$ 阶「么形」行列式一阶递推得 $2^{n+1}-2$",
+      "problem": "计算 $n$ 阶行列式 $D_n=\\begin{vmatrix}2&0&\\cdots&0&2\\\\-1&2&\\cdots&0&2\\\\\\vdots&\\vdots&&\\vdots&\\vdots\\\\0&0&\\cdots&2&2\\\\0&0&\\cdots&-1&2\\end{vmatrix}$。",
+      "steps": [
+        {
+          "stepTitle": "第一步：按第 1 行展开建一阶递推关系",
+          "detail": "第 1 行仅首末两元非零，按第 1 行展开：$D_n=2D_{n-1}+(-1)^{1+n}\\cdot 2\\cdot\\begin{vmatrix}-1&2&0&\\cdots&0\\\\0&-1&2&\\cdots&0\\\\\\vdots&\\vdots&\\vdots&&\\vdots\\\\0&0&0&\\cdots&-1\\end{vmatrix}_{n-1}=2D_{n-1}+(-1)^{n+1}\\cdot 2\\cdot(-1)^{n-1}=2D_{n-1}+2$！"
+        },
+        {
+          "stepTitle": "第二步：配常数化等比数列求解",
+          "detail": "$D_n+2=2(D_{n-1}+2)$，初值 $D_1=2$（检验 $D_2=\\begin{vmatrix}2&2\\\\-1&2\\end{vmatrix}=6$ 满足 $6+2=2(2+2)$），故 $D_n+2=2^{n-1}(D_1+2)=4\\cdot 2^{n-1}=2^{n+1}\\implies D_n=2^{n+1}-2$！"
+        }
+      ],
+      "finalAnswer": "$D_n=2^{n+1}-2$",
+      "takeaway": "2015 数一经典递推题！算出答案后立刻代 $n=2$（$6=2^3-2$）和 $n=3$（$14=2^4-2$）手算复核，3 秒确保零出错！",
+      "source": {
+        "book": "27 没咋了强化讲义（2015 数一真题）",
+        "printedPage": "没咋了 P.7 例 10",
+        "pdfPage": 12,
+        "itemRef": "没咋了例 10"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-e-27",
+      "kind": "example",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "三、抽象型行列式综合（没咋了精选）",
+      "title": "【没咋了例 13 & 例 15】4 阶逐列拆项算 $|A+B|$ 与线性无关基底构造相似阵算 $|A+2E|$",
+      "problem": "（1）（没咋了例 13）设 4 阶矩阵 $A=(\\alpha,\\gamma_1,2\\gamma_2,3\\gamma_3),\\;B=(\\beta,\\gamma_1,-\\gamma_2,\\gamma_3)$，已知 $|A|=6,\\;|B|=2$，求 $|A+B|$；（2）（没咋了例 15）已知 $A$ 为 3 阶矩阵，$\\alpha_1,\\alpha_2,\\alpha_3$ 是 3 维线性无关的向量（原讲义误印「特征向量」），满足 $A\\alpha_1=\\alpha_1-\\alpha_2,\\;A\\alpha_2=\\alpha_2-\\alpha_3,\\;A\\alpha_3=\\alpha_1+\\alpha_3$，求 $|A+2E|$。",
+      "steps": [
+        {
+          "stepTitle": "第（1）题：后三列成比例，合并后再对第 1 列单列拆开！",
+          "detail": "$A+B=(\\alpha+\\beta,\\;2\\gamma_1,\\;\\gamma_2,\\;4\\gamma_3)$！提出后三列公因子 $2\\times 1\\times 4=8$ 再拆第 1 列：$|A+B|=8|\\alpha,\\gamma_1,\\gamma_2,\\gamma_3|+8|\\beta,\\gamma_1,\\gamma_2,\\gamma_3|$。又 $|A|=2\\times 3|\\alpha,\\gamma_1,\\gamma_2,\\gamma_3|=6\\Rightarrow |\\alpha,\\gamma_1,\\gamma_2,\\gamma_3|=1$；$|B|=(-1)|\\beta,\\gamma_1,\\gamma_2,\\gamma_3|=2\\Rightarrow |\\beta,\\gamma_1,\\gamma_2,\\gamma_3|=-2$。故 $|A+B|=8(1-2)=-8$！"
+        },
+        {
+          "stepTitle": "第（2）题：拼成 $AP=PC\\implies A\\sim C$，立刻算 $|C+2E|$！",
+          "detail": "令可逆阵 $P=[\\alpha_1,\\alpha_2,\\alpha_3]$，题设即 $A[\\alpha_1,\\alpha_2,\\alpha_3]=[\\alpha_1,\\alpha_2,\\alpha_3]\\begin{bmatrix}1&0&1\\\\-1&1&0\\\\0&-1&1\\end{bmatrix}=PC$，故 $A=PCP^{-1}\\sim C$！因此 $|A+2E|=|C+2E|=\\begin{vmatrix}3&0&1\\\\-1&3&0\\\\0&-1&3\\end{vmatrix}=3\\times 9+1\\times 1=28$！"
+        }
+      ],
+      "finalAnswer": "（1）$|A+B|=-8$；（2）$|A+2E|=28$",
+      "takeaway": "第(1)题提醒：$|A+B|$ 绝不可直接拆成 $|A|+|B|$，须先逐列相加凑出公因子再拆单列；第(2)题是「构造可逆基底阵 $AP=PC\\Rightarrow A\\sim C$」的超级常用桥梁！",
+      "source": {
+        "book": "27 没咋了强化讲义",
+        "printedPage": "没咋了 P.9 例 13, 例 15",
+        "pdfPage": 14,
+        "itemRef": "没咋了例 13 & 例 15"
+      },
+      "verification": {
+        "method": "sympy",
+        "testId": "m1_la01_mzl_examples",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-s-01",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "六、题型总结（一）：具体型行列式全景图鉴",
+      "title": "具体型行列式 10 大经典构型与破题口速查表（表 L1-2，附双轨决策树）",
+      "overview": "具体型行列式只做两件事：**小阶（3–4 阶）猛造零降阶**，**高阶（$n$ 阶）认构型套模板**。下表覆盖近 20 年考研全部具体型行列式构型：",
+      "patterns": [
+        {
+          "typeName": "具体型 10 大构型识别与秒杀路线",
+          "triggers": "题干给出具体元素 $a_{ij}$（含数字或含参 $x,\\lambda,a$）",
+          "method": "① 3–4 阶稀疏/含参：先找零最多或对应位置相等的两行（列）作差造零后展开；② $n$ 阶看构型：行和相等→全加第一列；爪型→斜边消爪；X 型→成对归拢拉普拉斯；幂递增→凑范德蒙德；$aE+\\alpha\\beta^T$→加边或秩 1 特征值；三对角/异爪→递推或数学归纳法！",
+          "pitfall": "4 阶 X 型切忌漏交叉项；递推法必须核对展开后子式是否保持完全相同的下标排列方向！",
+          "relatedRefs": "例 1.2, 例 1.4, 例 1.5, 例 1.7, 强化例 1.1, 强化例 1.3, 强化例 1.4, 强化例 1.5"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 L1-2　具体型行列式 10 大经典构型与核心结果速查表",
+          "headers": [
+            "构型名称",
+            "核心特征",
+            "核心动作 / 闭式结果",
+            "对应例题"
+          ],
+          "rows": [
+            [
+              "主/副对角三角",
+              "一侧全为 $0$",
+              "主 $\\prod a_{ii}$；副 $(-1)^{\\frac{n(n-1)}{2}}\\prod a_{i,n+1-i}$",
+              "例 1.1、例 1.3"
+            ],
+            [
+              "拉普拉斯分块",
+              "左下或右上为零块 $O$",
+              "主块 $|A||B|$；副块 $(-1)^{mn}|A||B|$",
+              "例 1.5、没咋了例 9"
+            ],
+            [
+              "范德蒙德型",
+              "首行全 $1$，逐行幂递增",
+              "盯第 2 行，所有右减左连乘 $\\prod_{i<j}(x_j-x_i)$",
+              "例 1.6"
+            ],
+            [
+              "爪型（箭形）",
+              "首行首列与主对角非零",
+              "用斜边消爪边：$\\big(\\lambda_0-\\sum\\frac{a_ib_i}{\\lambda_i}\\big)\\prod\\lambda_i$",
+              "例 1.2"
+            ],
+            [
+              "行(列)和相等",
+              "主 $a$ 其余 $b$（或循环阵）",
+              "各列加至第 1 列：$[a+(n-1)b](a-b)^{n-1}$",
+              "例 1.4、强化例 1.8"
+            ],
+            [
+              "「X」型（$2k$ 阶）",
+              "仅主副两条对角线非零",
+              "成对归拢拆 $k$ 个 2 阶：$\\prod(a_ia_{2k+1-i}-b_ib_{2k+1-i})$",
+              "例 1.5"
+            ],
+            [
+              "加边秩 1 型",
+              "$|aE+\\alpha\\beta^T|$ 结构",
+              "升 $n+1$ 阶化爪或秩 1 特征值：$a^{n-1}(a+\\beta^T\\alpha)$",
+              "强化例 1.3、没咋了例 6"
+            ],
+            [
+              "三对角（三线）",
+              "仅主/上/下三条对角线",
+              "两步展得 $D_n=kD_{n-1}-bcD_{n-2}$",
+              "例 1.7、强化例 1.5"
+            ],
+            [
+              "单边递推 / 异爪",
+              "仅边行/边列与对角非零",
+              "选保规律边列展开得一阶递推 $D_n=bD_{n-1}+c$",
+              "强化例 1.4、没咋了例 10"
+            ],
+            [
+              "多项式某项系数",
+              "求 $f(x)$ 中 $x^n,x^{n-1}$ 系数",
+              "逆序数定义只取含 $x$ 组合定符号相加",
+              "基础习题 1.3 / 没咋了例 17"
+            ]
+          ]
+        }
+      ],
+      "figureSvg": "<svg viewBox=\"0 0 640 218\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"行列式三向解题决策流程图\">\n  <title>行列式计算双轨决策树（具体型 vs 抽象型）</title>\n  <defs>\n    <marker id=\"m1_la01_arr4\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#475569\"/>\n    </marker>\n  </defs>\n  <rect x=\"4\" y=\"4\" width=\"632\" height=\"210\" rx=\"10\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"1.2\"/>\n  <rect x=\"215\" y=\"14\" width=\"210\" height=\"30\" rx=\"15\" fill=\"#1e3a8a\"/>\n  <text x=\"320\" y=\"33\" text-anchor=\"middle\" font-size=\"12.5\" font-weight=\"700\" fill=\"#ffffff\">行列式计算（先看 aᵢⱼ 给没给）</text>\n\n  <!-- Branch arrows -->\n  <path d=\"M 260,44 L 165,68\" stroke=\"#475569\" stroke-width=\"1.6\" marker-end=\"url(#m1_la01_arr4)\"/>\n  <path d=\"M 380,44 L 475,68\" stroke=\"#475569\" stroke-width=\"1.6\" marker-end=\"url(#m1_la01_arr4)\"/>\n\n  <!-- Left: Concrete -->\n  <rect x=\"20\" y=\"70\" width=\"292\" height=\"28\" rx=\"6\" fill=\"#dbeafe\" stroke=\"#3b82f6\"/>\n  <text x=\"166\" y=\"88\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#1e40af\">具体型（aᵢⱼ 已给出）→ 4 大手法</text>\n  <g font-size=\"10\" fill=\"#1e293b\">\n    <rect x=\"20\" y=\"106\" width=\"140\" height=\"44\" rx=\"6\" fill=\"#ffffff\" stroke=\"#bfdbfe\"/>\n    <text x=\"90\" y=\"124\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#1d4ed8\">1. 化 12+1 基本形</text>\n    <text x=\"90\" y=\"140\" text-anchor=\"middle\" fill=\"#475569\">行和/爪型/范德蒙德</text>\n\n    <rect x=\"172\" y=\"106\" width=\"140\" height=\"44\" rx=\"6\" fill=\"#ffffff\" stroke=\"#bfdbfe\"/>\n    <text x=\"242\" y=\"124\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#1d4ed8\">2. 加边法升阶</text>\n    <text x=\"242\" y=\"140\" text-anchor=\"middle\" fill=\"#475569\">行列同数 |ααᵀ+E|</text>\n\n    <rect x=\"20\" y=\"158\" width=\"140\" height=\"44\" rx=\"6\" fill=\"#ffffff\" stroke=\"#bfdbfe\"/>\n    <text x=\"90\" y=\"176\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#1d4ed8\">3. 递推法（高→低）</text>\n    <text x=\"90\" y=\"192\" text-anchor=\"middle\" fill=\"#475569\">求结果：三对角/异爪</text>\n\n    <rect x=\"172\" y=\"158\" width=\"140\" height=\"44\" rx=\"6\" fill=\"#ffffff\" stroke=\"#bfdbfe\"/>\n    <text x=\"242\" y=\"176\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#1d4ed8\">4. 归纳法（低→高）</text>\n    <text x=\"242\" y=\"192\" text-anchor=\"middle\" fill=\"#475569\">已告答案证等式</text>\n  </g>\n\n  <!-- Right: Abstract -->\n  <rect x=\"328\" y=\"70\" width=\"292\" height=\"28\" rx=\"6\" fill=\"#f3e8ff\" stroke=\"#9333ea\"/>\n  <text x=\"474\" y=\"88\" text-anchor=\"middle\" font-size=\"11.5\" font-weight=\"700\" fill=\"#6b21a8\">抽象型（aᵢⱼ 未给出）→ 3 大武器</text>\n  <g font-size=\"10\" fill=\"#1e293b\">\n    <rect x=\"328\" y=\"106\" width=\"292\" height=\"28\" rx=\"6\" fill=\"#ffffff\" stroke=\"#e9d5ff\"/>\n    <text x=\"474\" y=\"124\" text-anchor=\"middle\"><tspan font-weight=\"700\" fill=\"#7e22ce\">1. 性质拆行/换列：</tspan>单行可拆、|A+B| 凑 E=AAᵀ</text>\n\n    <rect x=\"328\" y=\"140\" width=\"292\" height=\"28\" rx=\"6\" fill=\"#ffffff\" stroke=\"#e9d5ff\"/>\n    <text x=\"474\" y=\"158\" text-anchor=\"middle\"><tspan font-weight=\"700\" fill=\"#7e22ce\">2. 矩阵公式：</tspan>|AB|=|A||B|, |kA|=kⁿ|A|, |A*|=|A|ⁿ⁻¹</text>\n\n    <rect x=\"328\" y=\"174\" width=\"292\" height=\"28\" rx=\"6\" fill=\"#ffffff\" stroke=\"#e9d5ff\"/>\n    <text x=\"474\" y=\"192\" text-anchor=\"middle\"><tspan font-weight=\"700\" fill=\"#7e22ce\">3. 相似与特征值：</tspan>|f(A)|=∏f(λᵢ), A~B⇒|A|=|B|</text>\n  </g>\n</svg>",
+      "takeaway": "先辨「具体 vs 抽象」，再按上图双轨 3 秒锁定唯一高效手法，绝不在考场上盲目硬展 4 阶行列式！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.1-6 / 没咋了 P.4-11",
+        "pdfPage": 12,
+        "itemRef": "表 L1-2 具体型10大构型速查表"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-s-02",
+      "kind": "summary",
+      "stage": "intensive",
+      "examWeight": "core",
+      "section": "六、题型总结（二）：抽象型行列式破题路线",
+      "title": "抽象型行列式 5 大高频考法速查表（表 L1-3）",
+      "overview": "未给出元素 $a_{ij}$ 时，绝不能硬写元素，必须用**行列式性质 + 矩阵公式 + 特征值/相似**三把斧降维打击：",
+      "patterns": [
+        {
+          "typeName": "抽象型行列式 5 大破题路径",
+          "triggers": "题干仅给出列向量关系、矩阵方程、正交/反对称条件或特征值",
+          "method": "按表 L1-3 对号入座：拆列换序 → 拼右系数阵 $|AB|=|A||B|$ → 用 $E=AA^T/AA^{-1}$ 把加减变乘积 → 奇数阶反对称阵一步得 $0$ → 特征值连乘 $|f(A)|=\\prod f(\\lambda_i)$。",
+          "pitfall": "最致命两错：把 $|A+B|$ 拆成 $|A|+|B|$；在 $AB\\ne BA$ 时把 $|A+B||A-B|$ 错写成 $|A^2-B^2|$！",
+          "relatedRefs": "例 1.10, 例 1.11, 强化例 1.2, 强化例 1.6, 强化例 1.7, 没咋了例 9, 没咋了例 13"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 L1-3　抽象型行列式 5 大破题路径速查表",
+          "headers": [
+            "题干特征",
+            "破题核心动作",
+            "关键公式 / 结论",
+            "代表例题"
+          ],
+          "rows": [
+            [
+              "列向量线性组合",
+              "先单列拆/提公因，或右提系数矩阵 $B=AC$",
+              "$|AC|=|A||C|$，两列相同为 $0$",
+              "例 1.10、例 1.11、没咋了例 13"
+            ],
+            [
+              "正交/反对称/奇阶",
+              "把因子取转置造 $A^TA=E$ 或 $M^T=-M$",
+              "奇数阶反对称阵 $|M|=(-1)^n|M|=0$",
+              "强化例 1.6"
+            ],
+            [
+              "$A,A^*,A^{-1},f(A)$ 混合",
+              "由 $|A^*|=|A|^{n-1}$ 反求特征值再连乘",
+              "$|f(A)|=\\prod f(\\lambda_i)$，$\\lambda_i^*=|A|/\\lambda_i$",
+              "强化例 1.7"
+            ],
+            [
+              "线性方程组有解/非零解",
+              "转化为 $|A|=0$ 或增广阵 $|[A,b]|=0$",
+              "$Ax=0$ 非零解 $\\Leftrightarrow |A|=0$",
+              "例 1.13、强化例 1.2"
+            ],
+            [
+              "$A\\alpha_i=\\sum c_{ji}\\alpha_j$",
+              "拼可逆基底阵 $AP=PC\\Rightarrow A\\sim C$",
+              "$|f(A)|=|f(C)|$",
+              "没咋了例 15"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "抽象行列式题 90% 都在考「如何把和差化为乘积」以及「如何把条件翻译为矩阵相似或特征值」两大底层思维。",
+      "source": {
+        "book": "27 张宇线代9讲 & 27 没咋了强化讲义",
+        "printedPage": "强化 P.7-9 / 没咋了 P.8-9",
+        "pdfPage": 18,
+        "itemRef": "表 L1-3 抽象型破题速查表"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    },
+    {
+      "id": "m1-la01-s-03",
+      "kind": "summary",
+      "stage": "both",
+      "examWeight": "core",
+      "section": "六、题型总结（三）：考场防错红线与 5 秒验算清单",
+      "title": "第 1 讲考场高频扣分红线与 5 秒特值验算铁律（表 L1-4）",
+      "overview": "行列式计算极易因一个负号或一次漏乘 $n$ 次方丢掉全题分数，养成「算完必做 5 秒特值验算」的习惯可直接封死失误：",
+      "patterns": [
+        {
+          "typeName": "考场 5 秒特值验算铁律",
+          "triggers": "所有含参行列式或 $n$ 阶通项结果算出之后",
+          "method": "① $n$ 阶通项必代 $n=1,2$（及 $n=3$ 如有二阶递推）手算核对；② 含参 $a,x$ 必代 $a=0$ 或 $a=1$（使行列式出现大量 0 或两行相等）瞬间校验符号与系数！",
+          "pitfall": "绝对不要算出 $n$ 阶通项就跳去下一题——代 $n=2$ 只需 3 秒，能抓出 95% 的符号和系数错误！",
+          "relatedRefs": "表 L1-1, 例 1.7, 没咋了例 3, 没咋了例 10"
+        }
+      ],
+      "tables": [
+        {
+          "caption": "表 L1-4　行列式 6 大高危扣分红线与避坑口诀",
+          "headers": [
+            "编号",
+            "高危错误",
+            "正确铁律"
+          ],
+          "rows": [
+            [
+              "红线 1",
+              "$|kA|=k|A|$ 或 $|-A|=-|A|$",
+              "$|kA|=k^n|A|$，$|-A|=(-1)^n|A|$（必看阶数 $n$！）"
+            ],
+            [
+              "红线 2",
+              "$|A+B|=|A|+|B|$",
+              "行列式仅支持**单行/单列**拆开，不可整阵直拆！"
+            ],
+            [
+              "红线 3",
+              "1 阶行列式 $|-2|=2$",
+              "1 阶行列式就是元素本身，$|-2|=-2$！"
+            ],
+            [
+              "红线 4",
+              "拉普拉斯副对角块用 $(-1)^{n(n-1)/2}$",
+              "分块副对角 $\\begin{vmatrix}O&A_m\\\\B_n&O\\end{vmatrix}=(-1)^{mn}|A||B|$！"
+            ],
+            [
+              "红线 5",
+              "不问交换性直写 $\\begin{vmatrix}A&B\\\\B&A\\end{vmatrix}=|A^2-B^2|$",
+              "无条件成立的是 $|A+B||A-B|$，仅当 $AB=BA$ 才等于 $|A^2-B^2|$！"
+            ],
+            [
+              "红线 6",
+              "非齐次方程组 $|A|=0\\Rightarrow$ 无穷多解",
+              "$|A|=0$ 时非齐次方程组可能**无解**，也可能无穷多解！"
+            ]
+          ]
+        }
+      ],
+      "takeaway": "牢记 6 条红线 + 5 秒代 $n=1,2$ 验算，行列式小题填空和大题子问稳拿 100% 满分！",
+      "source": {
+        "book": "27 张宇基础30讲/强化9讲 & 27 没咋了强化讲义",
+        "printedPage": "第1讲全章总结",
+        "pdfPage": 12,
+        "itemRef": "表 L1-4 第1讲避坑清单"
+      },
+      "verification": {
+        "method": "checked",
+        "verified": true
+      }
+    }
+  ]
+}

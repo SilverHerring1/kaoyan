@@ -2037,6 +2037,218 @@ def run_all_checks() -> list[tuple[str, bool, str]]:
     )
     check("m1_c18_gauss_stokes_all", c18_gs_ok, "zy30 Ex18.22-18.30 + zy18 Ex18.24-18.36 (Gauss/Stokes/div=0/ODE/14pi/3) exact")
 
+    # ==================== Linear Algebra Batch 1 (la-01 ~ la-03) ====================
+    a_l, b_l, c_l, d_l, k_l, lam_l = sp.symbols("a_l b_l c_l d_l k_l lam_l")
+
+    # 98. la-01 core formulas: Laplace sign (-1)^(mn), Vandermonde, row-sum, X-shape, tridiagonal
+    A_22 = sp.Matrix([[1, 2], [3, 5]])
+    B_33 = sp.Matrix([[2, 1, 0], [0, 3, 1], [1, 0, 2]])
+    M_lap = sp.BlockMatrix([[sp.ZeroMatrix(2, 3), A_22], [B_33, sp.ZeroMatrix(3, 2)]]).as_explicit()
+    V4 = sp.Matrix([[1, 1, 1, 1], [a_l, b_l, c_l, d_l], [a_l**2, b_l**2, c_l**2, d_l**2], [a_l**3, b_l**3, c_l**3, d_l**3]])
+    RS4 = sp.Matrix([[a_l if i == j else b_l for j in range(4)] for i in range(4)])
+    T4_rep = sp.Matrix([[2 * a_l if i == j else (1 if j == i + 1 else (a_l**2 if i == j + 1 else 0)) for j in range(4)] for i in range(4)])
+    la01_f_ok = (
+        M_lap.det() == (-1)**(2 * 3) * A_22.det() * B_33.det()
+        and sp.expand(V4.det() - (b_l - a_l) * (c_l - a_l) * (d_l - a_l) * (c_l - b_l) * (d_l - b_l) * (d_l - c_l)) == 0
+        and sp.expand(RS4.det() - (a_l + 3 * b_l) * (a_l - b_l)**3) == 0
+        and sp.expand(T4_rep.det() - 5 * a_l**4) == 0
+    )
+    check("m1_la01_core_formulas", la01_f_ok, "la01 Laplace (-1)^(mn), Vandermonde, row-sum, tridiagonal (n+1)a^n exact")
+
+    # 99. la-01 Base 30 Lectures examples (Ex 1.1-1.11, 1.13, Hw 1.3/1.5/1.6)
+    D11 = sp.Matrix([[2, -1, 0, 0], [0, 2, -1, 0], [0, 0, 2, -1], [-1, 0, 0, 2]]).det()
+    D12 = sp.Matrix([[1, 1, 1, 1], [1, 2, 0, 0], [1, 0, 3, 0], [1, 0, 0, 4]]).det()
+    D13 = sp.Matrix([[1, -1, 1, x - 1], [1, -1, x + 1, -1], [1, x - 1, 1, -1], [x + 1, -1, 1, -1]]).det()
+    a1, a2, a3, a4, b1, b2, b3, b4 = sp.symbols("a1 a2 a3 a4 b1 b2 b3 b4")
+    D15 = sp.Matrix([[a1, 0, 0, b1], [0, a2, b2, 0], [0, b3, a3, 0], [b4, 0, 0, a4]]).det()
+    D16 = sp.Matrix([[a_l, b_l, c_l], [a_l**2, b_l**2, c_l**2], [b_l + c_l, a_l + c_l, a_l + b_l]]).det()
+    D17 = sp.Matrix([[1 - a_l, a_l, 0, 0], [-1, 1 - a_l, a_l, 0], [0, -1, 1 - a_l, a_l], [0, 0, -1, 1 - a_l]]).det()
+    f18 = sp.Matrix([[1, 0, x], [1, 2, x**2], [1, 3, x**3]]).det()
+    D19 = sp.Matrix([[lam_l - 1, -2, 3], [1, lam_l - 4, 3], [-1, a_l, lam_l - 5]]).det()
+    C111 = sp.Matrix([[0, 2, 1], [-1, 2, 2], [2, -5, -2]]).det()
+    D113 = sp.Matrix([[1, 2, -2], [2, -1, lam_l], [3, 1, -1]]).det()
+    P_hw13 = sp.Poly(sp.Matrix([[x, x, 1, 2 * x], [1, x, 2, -1], [2, 1, x, 1], [2, -1, 1, x]]).det(), x)
+    D_hw15 = sp.Matrix([[4, 1, 2, 3], [3, 4, 1, 2], [2, 3, 4, 1], [1, 2, 3, 4]]).det()
+    D_hw16 = sp.Matrix([[1, a_l, 0, 0], [-1, 2 - a_l, b_l, 0], [0, -2, 3 - b_l, c_l], [0, 0, -3, 4 - c_l]]).det()
+    la01_base_ok = (
+        D11 == 15 and D12 == -2 and sp.expand(D13 - x**4) == 0
+        and sp.expand(D15 - (a1 * a4 - b1 * b4) * (a2 * a3 - b2 * b3)) == 0
+        and sp.expand(D16 - (a_l + b_l + c_l) * (b_l - a_l) * (c_l - b_l) * (c_l - a_l)) == 0
+        and sp.expand(D17 - (a_l**4 - a_l**3 + a_l**2 - a_l + 1)) == 0
+        and sp.expand(f18.subs(x, x + 1) - f18 - 6 * x**2) == 0
+        and sp.expand(D19 - (lam_l - 2) * (lam_l**2 - 8 * lam_l + 18 - 3 * a_l)) == 0
+        and 2 * C111 == 10 and sp.expand(D113 - 5 * (lam_l - 1)) == 0
+        and P_hw13.nth(3) == -5 and D_hw15 == 160 and sp.simplify(D_hw16) == 24
+    )
+    check("m1_la01_base_examples", la01_base_ok, "la01 Base30 Ex1.1-1.11, 1.13, Hw1.3(-5)/1.5(160)/1.6(24) all exact")
+
+    # 100. la-01 Intensive 9 Lectures examples (Ex 1.1-1.8)
+    f_i11 = sp.Matrix([[2 * x + 1, 3, 2 * x + 1, 1], [2 * x, -3, 4 * x, -2], [2 * x + 1, 2, 2 * x + 1, 1], [2 * x, -4, 4 * x, -2]]).det()
+    g_i11 = sp.Matrix([[2 * x + 1, 1, 2 * x + 1, 3], [5 * x + 1, -2, 4 * x, -3], [0, 1, 2 * x + 1, 2], [2 * x, -2, 4 * x, -4]]).det()
+    x1, x2, x3 = sp.symbols("x1 x2 x3")
+    al_3 = sp.Matrix([x1, x2, x3])
+    D_i13 = (al_3 * al_3.T + sp.eye(3)).det()
+    D_i14 = sp.Matrix([[b_l, -1, 0, 0], [0, b_l, -1, 0], [0, 0, b_l, -1], [a4, a3, a2, b_l + a1]]).det()
+    f_i17 = lambda lam: lam**3 + 2 * lam**2 - lam - 3
+    prod_i17 = f_i17(2) * f_i17(-2) * f_i17(-1) * f_i17(sp.Rational(1, 2))
+    la01_adv_ok = (
+        sp.simplify(f_i11) == 0 and sp.expand(g_i11 + x * (8 * x + 2)) == 0
+        and sp.expand(D_i13 - (1 + x1**2 + x2**2 + x3**2)) == 0
+        and sp.expand(D_i14 - (b_l**4 + a1 * b_l**3 + a2 * b_l**2 + a3 * b_l + a4)) == 0
+        and prod_i17 == sp.Rational(-253, 8)
+    )
+    check("m1_la01_adv_examples", la01_adv_ok, "la01 Adv9 Ex1.1(2 roots), 1.3(1+sum x_i^2), 1.4, 1.7(-253/8) all exact")
+
+    # 101. la-01 MZL examples + Ex9 non-commuting erratum proof
+    D_mzl3 = sp.Matrix([[a_l, 0, -1, 1], [0, a_l, 1, -1], [-1, 1, a_l, 0], [1, -1, 0, a_l]]).det()
+    D_mzl6_4 = sp.Matrix([[i + 1 + (a_l if i == j else 0) for j in range(4)] for i in range(4)]).det()
+    D_mzl7_3 = (lam_l * sp.eye(3) - al_3 * al_3.T).det()
+    A_nc = sp.Matrix([[1, 2, 0], [0, 1, 1], [1, 0, 1]])
+    B_nc = sp.Matrix([[0, 1, 1], [1, 0, 2], [2, 1, 0]])
+    M_nc = sp.BlockMatrix([[A_nc, B_nc], [B_nc, A_nc]]).as_explicit()
+    D_mzl10_5 = sp.Matrix([[2 if i == j or j == 4 else (-1 if i == j + 1 else 0) for j in range(5)] for i in range(5)]).det()
+    C_mzl15 = sp.Matrix([[1, 0, 1], [-1, 1, 0], [0, -1, 1]])
+    la01_mzl_ok = (
+        sp.expand(D_mzl3 - a_l**2 * (a_l**2 - 4)) == 0
+        and sp.expand(D_mzl6_4 - a_l**3 * (a_l + 10)) == 0
+        and sp.expand(D_mzl7_3 - lam_l**2 * (lam_l - x1**2 - x2**2 - x3**2)) == 0
+        and M_nc.det() == (A_nc + B_nc).det() * (A_nc - B_nc).det()
+        and M_nc.det() != (A_nc**2 - B_nc**2).det()
+        and D_mzl10_5 == 2**6 - 2
+        and (C_mzl15 + 2 * sp.eye(3)).det() == 28
+    )
+    check("m1_la01_mzl_examples", la01_mzl_ok, "la01 MZL Ex3(a^4-4a^2), Ex6/7, Ex9 non-commuting erratum, Ex10(2^(n+1)-2), Ex15(28) exact")
+
+    # 102. la-02 all examples (Base 1.12, Hw 1.2, Base 2.8/2.10, Adv 2.1-2.4, MZL 1.3 Ex 1-3)
+    A_112 = sp.Matrix([[2, -1, 2, 3], [0, 1, -1, 0], [2, 3, 4, 5], [1, 1, 1, 1]])
+    v_112 = A_112.cofactor(2, 0) + A_112.cofactor(2, 1) + A_112.cofactor(2, 2) + A_112.minor(2, 3)
+    A_hw12 = sp.Matrix([[1, -1, 0, 1], [-2, 1, -1, 1], [3, -2, 2, -1], [0, 0, 3, 4]])
+    v_hw12 = A_hw12.cofactor(0, 0) - A_hw12.cofactor(0, 1)
+    A_28 = sp.Matrix([[1, 0, 1], [2, 1, 0], [-3, 2, -5]])
+    A_i21 = sp.Matrix([[2, 1, 0, -1], [-1, 2, -5, 3], [3, 0, a_l, b_l], [1, -3, 5, 0]])
+    eq_i21 = sp.expand(A_i21.det() - (A_i21.cofactor(3, 0) - A_i21.cofactor(3, 1) + A_i21.cofactor(3, 2) + 10))
+    A_i22 = sp.Matrix([[0, 0, 0, 5, 6], [0, 0, 0, 7, 8], [1, 2, 3, 0, 0], [0, 1, 4, 0, 0], [0, 0, 1, 0, 0]])
+    sum_i22 = sum(A_i22.adjugate())
+    A_mzl131 = sp.Matrix([[a_l + 1, b_l, 3], [a_l, b_l / 2, 1], [1, 1, 2]])
+    sol_mzl131 = sp.solve([A_mzl131.det() + sp.Rational(1, 2), -A_mzl131.minor(1, 0) + A_mzl131.minor(1, 1) + A_mzl131.cofactor(1, 2)], [a_l, b_l])
+    la02_ok = (
+        v_112 == 6 and v_hw12 == -4
+        and A_28.inv() == sp.Matrix([[sp.Rational(-5, 2), 1, sp.Rational(-1, 2)], [5, -1, 1], [sp.Rational(7, 2), -1, sp.Rational(1, 2)]])
+        and eq_i21 == 10 * (a_l - 4)
+        and sum_i22 == -4
+        and (-1) * 2 + 2 * 3 + (-1) * 3 == 1
+        and set(sol_mzl131) == {(0, 1), (sp.Rational(3, 2), sp.Rational(5, 2))}
+    )
+    check("m1_la02_all", la02_ok, "la02 Base1.12(6)/Hw1.2(-4)/2.8, Adv2.1(a=4)/2.2(-4)/2.3(1)/2.4(6), MZL1.3 Ex1-3 all exact")
+
+    # 103. la-03 Base 30 Lectures examples (Ex 2.2, 2.3, 2.9, 2.12, 2.14, 2.17, 2.18, Hw 2.15)
+    A_22b = sp.Matrix([[1, -1, -1, -1], [-1, 1, -1, -1], [-1, -1, 1, -1], [-1, -1, -1, 1]])
+    A_23b = sp.Matrix([[1, 1, 0], [0, 1, 1], [0, 0, 1]])
+    A_212 = sp.Matrix([[0, 2, -1], [1, 1, 2], [-1, -1, -1]])
+    E12_3 = sp.Matrix([[0, 1, 0], [1, 0, 0], [0, 0, 1]])
+    E23_3 = sp.Matrix([[1, 0, 0], [0, 1, 1], [0, 0, 1]])
+    Astar_217 = sp.Matrix([[1, 0, 0, 0], [0, 1, 0, 0], [1, 0, 1, 0], [0, -3, 0, 8]])
+    B_217 = 6 * (2 * sp.eye(4) - Astar_217).inv()
+    k1_l, k2_l, k3_l = sp.symbols("k1_l k2_l k3_l")
+    A_218 = sp.Matrix([[1, 0, 1], [-1, -1, 1], [0, 2, -4]])
+    B_218 = sp.Matrix([[1, 0, 1], [0, -1, 2], [0, 0, 0]])
+    P_218 = sp.Matrix([[2 * k1_l + 1, 2 * k1_l, k1_l], [2 * k2_l + 1, 2 * k2_l + 1, k2_l], [2 * k3_l, 2 * k3_l, k3_l]])
+    B_hw215 = sp.Matrix([[0, -1, 0, 0], [0, 0, -1, 0], [0, 0, 0, -1], [0, 0, 0, 0]])
+    C_hw215 = sp.Matrix([[2, 1, 3, 4], [0, 2, 1, 3], [0, 0, 2, 1], [0, 0, 0, 2]])
+    A_hw215 = ((C_hw215 - B_hw215 - sp.eye(4)).T).inv()
+    la03_base_ok = (
+        A_22b**9 == 256 * A_22b
+        and A_23b**5 == sp.Matrix([[1, 5, 10], [0, 1, 5], [0, 0, 1]])
+        and A_212.inv() == sp.Matrix([[sp.Rational(-1, 2), sp.Rational(-3, 2), sp.Rational(-5, 2)], [sp.Rational(1, 2), sp.Rational(1, 2), sp.Rational(1, 2)], [0, 1, 1]])
+        and E12_3 * E23_3 == sp.Matrix([[0, 1, 1], [1, 0, 0], [0, 0, 1]])
+        and B_217 == sp.Matrix([[6, 0, 0, 0], [0, 6, 0, 0], [6, 0, 6, 0], [0, 3, 0, -1]])
+        and P_218 * A_218 == B_218 and sp.simplify(P_218.det() - k3_l) == 0
+        and A_hw215 == sp.Matrix([[1, 0, 0, 0], [-2, 1, 0, 0], [1, -2, 1, 0], [0, 1, -2, 1]])
+    )
+    check("m1_la03_base_examples", la03_base_ok, "la03 Base30 Ex2.2/2.3/2.12/2.14/2.17/2.18/Hw2.15 all exact")
+
+    # 104. la-03 Intensive 9 Lectures Part 1 (Ex 3.2-3.11 + Ex 3.8(4) perturbation fix check)
+    A_32 = sp.Matrix([[2, 6, -4], [-1, -3, 2], [3, 9, -6]])
+    A_33 = sp.Matrix([[1, a_l, b_l], [0, 1, a_l], [0, 0, 1]])
+    A_34 = sp.Matrix([[sp.Rational(1, 2), -sp.sqrt(3) / 2], [sp.sqrt(3) / 2, sp.Rational(1, 2)]])
+    A_35 = sp.Matrix([[1, 1, -1], [0, 1, 1], [0, 0, 1]])
+    M_36 = sp.Matrix([[1, 0], [-1, 1]])**3 * sp.Matrix([[1, 2], [-1, 3]]) * sp.Matrix([[0, 1], [1, 0]])**(-5)
+    B_37 = sp.Matrix([[1, 1, 1], [0, 1, 1], [0, 0, 1]])
+    C_37 = sp.Matrix([[0, 1, 1], [0, 0, 1], [0, 0, 1]])
+    A_37 = B_37 * (B_37 - C_37) * B_37.inv()
+    # Ex 3.8(4) exact congruence identity Q^T A* Q = B* with Q = |C| * (C^-1)^T
+    A_38 = sp.Matrix([[1, 2], [0, 0]])  # singular!
+    C_38 = sp.Matrix([[2, 1], [1, 3]])
+    B_38 = C_38.T * A_38 * C_38
+    Q_38 = C_38.det() * (C_38.inv()).T
+    # Counterexample proving A+tE and B+tE are NOT congruent for skew-symmetric A
+    A_skew = sp.Matrix([[0, 1], [-1, 0]])
+    C_diag = sp.Matrix([[2, 0], [0, 1]])
+    B_skew = C_diag.T * A_skew * C_diag
+    la03_adv1_ok = (
+        A_32**10 == (-7)**9 * A_32
+        and A_33**4 == sp.Matrix([[1, 4 * a_l, 6 * a_l**2 + 4 * b_l], [0, 1, 4 * a_l], [0, 0, 1]])
+        and sp.simplify(A_34**(-11) - A_34) == sp.zeros(2, 2)
+        and A_35**10 == sp.Matrix([[1, 10, 35], [0, 1, 10], [0, 0, 1]])
+        and M_36 == sp.Matrix([[2, 1], [-3, -4]])
+        and A_37**99 == sp.Matrix([[1, 0, -1], [0, 1, -1], [0, 0, 0]])
+        and Q_38.T * A_38.adjugate() * Q_38 == B_38.adjugate()
+        and (A_skew + sp.eye(2)).det() != (B_skew + sp.eye(2)).det()
+    )
+    check("m1_la03_adv_part1", la03_adv1_ok, "la03 Adv9 Ex3.2-3.7, Ex3.8(4) exact Q^TA*Q=B* & P.24 B+tE flaw confirmed")
+
+    # 105. la-03 Intensive 9 Lectures Part 2 (Ex 3.12-3.20)
+    # Ex 3.13: n=4 all-1 minus E
+    A_313 = sp.ones(4, 4) - sp.eye(4)
+    A_313_inv = sp.Rational(1, 3) * sp.ones(4, 4) - sp.eye(4)
+    # Ex 3.16
+    P_316 = sp.Matrix([[1, 1, 3], [1, 2, 2], [0, 0, 2]])
+    B_316 = sp.diag(-1, -2, 0)
+    A_316 = P_316 * B_316 * P_316.inv()
+    A_316_99 = P_316 * (B_316**99) * P_316.inv()
+    # Ex 3.17
+    A_317 = sp.Matrix([[1, 1, 1, 1], [1, 1, 1, 1], [2, 1, 0, -1], [-1, 0, 1, 2]])
+    B_317 = sp.Matrix([[1, 1], [1, 1], [0, 1], [1, 0]])
+    C_317 = sp.Matrix([[-1, 0, 1, 2], [2, 1, 0, -1]])
+    # Ex 3.19
+    A_319 = sp.Matrix([[1, 2, 2], [1, 3, 0], [2, 7, -2]])
+    B_319 = sp.Matrix([[1, 2, 2], [0, 1, 1], [-1, 1, 1]])
+    P_319 = sp.Matrix([[3 - 6 * k1_l, 4 - 6 * k2_l, 4 - 6 * k3_l], [-1 + 2 * k1_l, -1 + 2 * k2_l, -1 + 2 * k3_l], [k1_l, k2_l, k3_l]])
+    # Ex 3.20
+    A_320 = sp.Matrix([[0, 1, 2], [0, 0, 3], [0, 0, 0]])
+    P_320 = sp.Matrix([[1, 0, 0], [0, 1, sp.Rational(-2, 3)], [0, 0, sp.Rational(1, 3)]])
+    J_320 = sp.Matrix([[0, 1, 0], [0, 0, 1], [0, 0, 0]])
+    la03_adv2_ok = (
+        A_313 * A_313_inv == sp.eye(4)
+        and A_316_99 == sp.Matrix([[2**99 - 2, 1 - 2**99, 2 - 2**98], [2**100 - 2, 1 - 2**100, 2 - 2**99], [0, 0, 0]])
+        and B_317 * C_317 == A_317
+        and A_317**10 == sp.Matrix([[3**9, 3**9, 3**9, 3**9], [3**9, 3**9, 3**9, 3**9], [3**9 + 1, 3**9, 3**9 - 1, 3**9 - 2], [-1, 0, 1, 2]])
+        and A_319 * P_319 == B_319 and sp.simplify(P_319.det() - (k3_l - k2_l)) == 0
+        and P_320.inv() * A_320 * P_320 == J_320 and A_320**2 != sp.zeros(3, 3) and A_320**3 == sp.zeros(3, 3)
+    )
+    check("m1_la03_adv_part2", la03_adv2_ok, "la03 Adv9 Ex3.13/3.16/3.17(full-rank A^10)/3.19/3.20(nilpotent) all exact")
+
+    # 106. la-03 MZL exclusive real-exam gems (Cayley, 2022 M1, 2024 M2, 2023 M1 block ranks)
+    S_cay = sp.Matrix([[0, 2, -1], [-2, 0, 3], [1, -3, 0]])
+    Q_cay = (sp.eye(3) - S_cay) * (sp.eye(3) + S_cay).inv()
+    P_m24 = sp.Matrix([[1, 0, 0], [0, 1, 0], [1, 0, 1]])
+    RHS_m24 = sp.Matrix([[a_l + 2 * c_l, 0, c_l], [0, b_l, 0], [2 * c_l, 0, c_l]])
+    A_m24 = (P_m24.T).inv() * RHS_m24 * (P_m24**2).inv()
+    # 2023 M1 test on concrete ABC=O
+    A_23 = sp.Matrix([[1, 0], [0, 0]])
+    B_23 = sp.Matrix([[0, 1], [0, 0]])
+    C_23 = sp.Matrix([[1, 0], [0, 0]])  # AB=[[0,1],[0,0]], ABC=O, (AB)^2=O -> r1=2, r3=2, r2=3 -> r1<=r3<=r2
+    r1_23 = sp.BlockMatrix([[sp.ZeroMatrix(2, 2), A_23], [B_23 * C_23, sp.eye(2)]]).as_explicit().rank()
+    r2_23 = sp.BlockMatrix([[A_23 * B_23, C_23], [sp.ZeroMatrix(2, 2), sp.eye(2)]]).as_explicit().rank()
+    r3_23 = sp.BlockMatrix([[sp.eye(2), A_23 * B_23], [A_23 * B_23, sp.ZeroMatrix(2, 2)]]).as_explicit().rank()
+    la03_mzl_ok = (
+        Q_cay.T * Q_cay == sp.eye(3)
+        and A_m24 == sp.diag(a_l, b_l, c_l)
+        and A_23 * B_23 * C_23 == sp.zeros(2, 2)
+        and r1_23 == 2 and r3_23 == 2 and r2_23 == 3 and r1_23 <= r3_23 <= r2_23
+    )
+    check("m1_la03_mzl_examples", la03_mzl_ok, "la03 MZL Cayley orthogonal, 2024 M2 diag(a,b,c), 2023 M1 r1<=r3<=r2 exact")
+
     return results
 
 

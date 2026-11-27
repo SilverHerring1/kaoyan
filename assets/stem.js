@@ -58,6 +58,8 @@ function renderMathSafe(rootEl, retries = 25) {
 function buildChapterRefIndex(items) {
   const byId = new Map();
   const mathEx = new Map();
+  const mzlEx = new Map();
+  const baseHw = new Map();
   const proofReal = new Map();
   const examReal = new Map();
   const motherEx = new Map();
@@ -113,6 +115,22 @@ function buildChapterRefIndex(items) {
       let mrp;
       while ((mrp = reReal.exec(combined)) !== null) {
         setIfEmpty(proofReal, mrp[1], item);
+      }
+    }
+
+    // 1a. Math I MZL & Base-30 homework refs: 没咋了例 9 / 没咋了 1.3 例 1 / 基础习题 1.3
+    if (item.kind === 'example') {
+      const reMzl = /没咋了\s*(?:(\d+\.\d+)\s*)?例\s*(\d+)/g;
+      let mmz;
+      while ((mmz = reMzl.exec(combined)) !== null) {
+        const key = mmz[1] ? `${mmz[1]}:${mmz[2]}` : mmz[2];
+        setIfEmpty(mzlEx, key, item);
+        if (mmz[1]) setIfEmpty(mzlEx, `sec:${mmz[1]}:${mmz[2]}`, item);
+      }
+      const reBaseHw = /基础习题\s*(\d+\.\d+)/g;
+      let mbh;
+      while ((mbh = reBaseHw.exec(combined)) !== null) {
+        setIfEmpty(baseHw, mbh[1], item);
       }
     }
 
@@ -228,7 +246,7 @@ function buildChapterRefIndex(items) {
     }
   }
 
-  return { byId, mathEx, proofReal, examReal, motherEx, ctrlEx, exercises, tables, equations };
+  return { byId, mathEx, mzlEx, baseHw, proofReal, examReal, motherEx, ctrlEx, exercises, tables, equations };
 }
 
 function resolveRefToken(token, refIndex, currentItem) {
@@ -239,6 +257,19 @@ function resolveRefToken(token, refIndex, currentItem) {
   // Direct card ID (e.g. ctrl-ch02-e-34)
   if (refIndex.byId.has(clean)) {
     target = refIndex.byId.get(clean);
+  }
+  // Math I MZL ref: 没咋了例 9 / 没咋了 1.3 例 1
+  else if (/^没咋了\s*(?:\d+\.\d+\s*)?例\s*\d+$/.test(clean)) {
+    const m = clean.match(/^没咋了\s*(?:(\d+\.\d+)\s*)?例\s*(\d+)$/);
+    if (m) {
+      const key = m[1] ? `${m[1]}:${m[2]}` : m[2];
+      target = refIndex.mzlEx?.get(key) || refIndex.mzlEx?.get(m[2]);
+    }
+  }
+  // Math I Base-30 homework ref: 基础习题 1.3
+  else if (/^基础习题\s*\d+\.\d+$/.test(clean)) {
+    const m = clean.match(/^基础习题\s*(\d+\.\d+)$/);
+    if (m) target = refIndex.baseHw?.get(m[1]);
   }
   // Control 845 real exam: 2026-T1
   else if (/^20\d{2}-T\d+$/i.test(clean)) {
@@ -321,7 +352,7 @@ function resolveRefToken(token, refIndex, currentItem) {
 }
 
 const MATH_SPLIT_RE = /(\$\$[\s\S]*?\$\$|\$(?!\s)[^$\n]+?\$|\\\([\s\S]*?\\\)|\\\[[\s\S]*?\\\])/g;
-const REF_TOKEN_RE = /`((?:ctrl|m1)-[a-z0-9-]+)`|\b20\d{2}-T\d+\b|母题\s*\d+|真题\s*\d{4}(?:-[123])?|(?:主教材\s*|学习辅导\s*|辅导\s*|主|辅|基础\s*|强化\s*)?例\s*\d+(?:\.\d+|-\d+[a-z]?)(?!\d)|(?:课后)?习题\s*\d+-\d+|\b[AB]\d+-\d+\b|(?:主教材\s*|辅导\s*)?表\s*[A-Z]?\d+-\d+|式\s*[（(]?\s*\d+-\d+'?\s*[）)]?/gi;
+const REF_TOKEN_RE = /`((?:ctrl|m1)-[a-z0-9-]+)`|\b20\d{2}-T\d+\b|母题\s*\d+|真题\s*\d{4}(?:-[123])?|没咋了\s*(?:\d+\.\d+\s*)?例\s*\d+|基础习题\s*\d+\.\d+|(?:主教材\s*|学习辅导\s*|辅导\s*|主|辅|基础\s*|强化\s*)?例\s*\d+(?:\.\d+|-\d+[a-z]?)(?!\d)|(?:课后)?习题\s*\d+-\d+|\b[AB]\d+-\d+\b|(?:主教材\s*|辅导\s*)?表\s*[A-Z]?\d+-\d+|式\s*[（(]?\s*\d+-\d+'?\s*[）)]?/gi;
 
 function linkRefsInProseHtml(html, refCtx) {
   if (!refCtx?.refIndex) return html;
@@ -761,6 +792,23 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
     return `<span class="stem-badge stem-badge-checked">✓ 教材原文核对</span>`;
   }
 
+  function getActiveGroupMeta() {
+    const ch = (state.manifest?.chapters || []).find(c => c.id === state.activeChapterId);
+    const gid = ch?.group || state.activeGroupId;
+    return (state.manifest?.groups || []).find(g => g.id === gid) || null;
+  }
+
+  function getStageDisplayLabel(stageKey, spaced = false) {
+    const grp = getActiveGroupMeta();
+    if (stageKey === 'intensive') {
+      return spaced
+        ? (grp?.intensiveLabel || '强化 18 讲')
+        : (grp?.intensiveBadge || '强化18讲');
+    }
+    if (stageKey === 'foundation') return spaced ? '基础 30 讲' : '基础30讲';
+    return STAGE_META[stageKey]?.label || '';
+  }
+
   function renderCardHeader(item) {
     const meta = KIND_META[item.kind] || { label: item.kind, badgeClass: '' };
     const isStarred = store.stemStarred.has(item.id);
@@ -771,7 +819,7 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
       : `<span class="stem-badge stem-badge-core">★ 考纲重点</span>`;
     const stageMeta = item.stage ? STAGE_META[item.stage] : null;
     const stageBadge = stageMeta
-      ? `<span class="stem-badge ${stageMeta.badgeClass}">${stageMeta.label}</span>`
+      ? `<span class="stem-badge ${stageMeta.badgeClass}">${escapeHtml(getStageDisplayLabel(item.stage, false))}</span>`
       : '';
     const plainTitle = String(item.title || '').replace(/\$/g, '');
 
@@ -1248,8 +1296,8 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
         ${showStageBar ? `
           <div class="module-filter-bar stem-stage-filter-bar" role="group" aria-label="按复习阶段切换">
             ${[
-              { key: 'foundation', label: '基础 30 讲', count: stageCounts.foundation },
-              { key: 'intensive', label: '强化 18 讲', count: stageCounts.intensive },
+              { key: 'foundation', label: getStageDisplayLabel('foundation', true), count: stageCounts.foundation },
+              { key: 'intensive', label: getStageDisplayLabel('intensive', true), count: stageCounts.intensive },
             ].map(s => `
               <button type="button" class="module-pill stem-stage-pill" data-stage-filter="${s.key}" aria-pressed="${state.stageFilter === s.key}">
                 <span>${s.label}</span>
