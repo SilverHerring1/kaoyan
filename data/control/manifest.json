@@ -163,7 +163,7 @@
       "syllabusReq": "完整覆盖 2023–2026 最新 4 套浙大 845 真题全部大题（含 2023/2025 无独立答案册年份的 SymPy 独立严谨全解与 2024/2026 答案核对），深度锁定非线性、离散设计与现代控制新风向。",
       "kinds": ["formula", "conclusion", "example", "summary"],
       "file": "exam-03.json",
-      "ready": false
+      "ready": true
     }
   ]
 }

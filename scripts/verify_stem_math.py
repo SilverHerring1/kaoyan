@@ -2462,6 +2462,145 @@ def run_all_checks() -> list[tuple[str, bool, str]]:
           and ok_22_10_cont,
           "Verified 2022 T1-T10 (caught T2 S&H LTV erratum, T6 no-K exact & s-b sign error, T10 true continuous piecewise-exp y(t)!)")
 
+    # =====================================================================
+    # Control Exam-03: 2023-2026 Latest 40 Real-Exam Problems + 10 Errata Audits
+    # =====================================================================
+    s23, z23, t23, K23, a23, b23, T23, w23 = sp.symbols("s23 z23 t23 K23 a23 b23 T23 w23", real=True)
+    # 1. 2023 (T1-T11 independent SymPy derivations)
+    phi1_23, phi2_23 = (1 + sp.sqrt(5)) / 2, (1 - sp.sqrt(5)) / 2
+    fib_23 = [sp.simplify((phi1_23**(k + 1) - phi2_23**(k + 1)) / sp.sqrt(5)) for k in range(6)]
+    # T3: D(s) = s^3 + (1+a)s^2 + a*s + 1 -> stable iff a > (sqrt(5)-1)/2 ~ 0.618, disjoint from |1-2a|<0.05 (0.475,0.525)
+    D_23_3 = sp.expand(s23**3 + (1 + a23) * s23**2 + (a23 - 2) * s23 + (1 - 2 * a23) + 2 * (s23 + a23))
+    a_gold = (sp.sqrt(5) - 1) / 2
+    # T4: G(s) = s*Phi/(0.5 - 2*Phi) = 2*wn^2*s / (s^2 + 2*zeta*wn*s - 3*wn^2) -> unstable RHP pole
+    r_23_4 = [complex(r.evalf()) for r in sp.nroots(s23**2 + 0.5086 * s23 - 3 * 2.0854)]
+    # T6(3): d(eB)/d(zeta) = (a*t*cosh(a*t) - sinh(a*t)) * exp(-zeta*t) / a^3 > 0
+    ze23, tt23 = sp.symbols("ze23 tt23", positive=True)
+    al23 = sp.sqrt(ze23**2 - 1)
+    eB_23 = sp.exp(-ze23 * tt23) * (sp.cosh(al23 * tt23) + (ze23 / al23) * sp.sinh(al23 * tt23))
+    deB_23 = sp.simplify(sp.diff(eB_23, ze23) - (tt23 * al23 * sp.cosh(al23 * tt23) - sp.sinh(al23 * tt23)) * sp.exp(-ze23 * tt23) / al23**3)
+    # T7: exact Fig 3 closed-loop monic denom s^2 + (5.5+0.2K)s + (K+22.5)
+    R23, Y23, W23 = sp.symbols("R23 Y23 W23")
+    sol_23_7 = sp.solve([
+        sp.Eq(W23, sp.Rational(-2, 5) / (2 * s23 + sp.Rational(2, 5) * K23) * (30 * Y23 + sp.Rational(5, 2) * W23)),
+        sp.Eq((sp.Rational(3, 10) * s23 + 1) * Y23, sp.Rational(1, 2) * (R23 - Y23) + W23),
+    ], [Y23, W23])
+    Phi_23_7 = sp.simplify(sol_23_7[Y23] / R23)
+    Phi_23_7_exp = sp.Rational(1, 3) * (5 * s23 + K23 + sp.Rational(5, 2)) / (s23**2 + (sp.Rational(11, 2) + sp.Rational(1, 5) * K23) * s23 + (K23 + sp.Rational(45, 2)))
+    # T8: Phi=0.5(s+10)/(s^2+2s+5) -> G=0.5(s+10)/(s(s+1.5)), R^2=85
+    Phi_23_8 = sp.Rational(1, 2) * (s23 + 10) / (s23**2 + 2 * s23 + 5)
+    G_23_8 = sp.simplify(Phi_23_8 / (1 - Phi_23_8))
+    # T9: discrete SS -> (0.368z+0.264)/(z^2-z+0.632)
+    A_23_9 = sp.Matrix([[0, -1], [sp.Rational(632, 1000), 1]])
+    B_23_9 = sp.Matrix([1, sp.Rational(-632, 1000)])
+    C_23_9 = sp.Matrix([[1, 1]])
+    Phi_23_9 = sp.simplify((C_23_9 * (z23 * sp.eye(2) - A_23_9).inv() * B_23_9)[0, 0])
+    check("ctrl_exam03_2023_all",
+          fib_23 == [1, 1, 2, 3, 5, 8]
+          and sp.expand(D_23_3 - (s23**3 + (1 + a23) * s23**2 + a23 * s23 + 1)) == 0 and float(a_gold.evalf()) > 0.618
+          and any(r.real > 2.0 for r in r_23_4)
+          and deB_23 == 0
+          and sp.simplify(Phi_23_7 - Phi_23_7_exp) == 0
+          and sp.simplify(G_23_8 - sp.Rational(1, 2) * (s23 + 10) / (s23 * (s23 + sp.Rational(3, 2)))) == 0
+          and sp.simplify(Phi_23_9 - (sp.Rational(368, 1000) * z23 + sp.Rational(264, 1000)) / (z23**2 - z23 + sp.Rational(632, 1000))) == 0,
+          "Verified 2023 T1-T11 independent derivations (T3 golden ratio conflict, T4 unstable G(s), T6(3) exact PDE proof, T7-T9)")
+
+    # 2. 2024 (T1-T10 + 6 answer-book errata checks)
+    k1_24, k2_24 = sp.symbols("k1_24 k2_24", positive=True)
+    # T2: ess_r = 5/(5+k1*k2), ess_n = -k2/(5+k1*k2); both |ess_r| and |ess_n| strictly decrease as k1 increases!
+    essr_24 = 5 / (5 + k1_24 * k2_24)
+    essn_24 = k2_24 / (5 + k1_24 * k2_24)
+    # T3: u*(1+e^-u) = 4 -> u_max ~ 3.9224 (a=1 -> T<3.92; a=1.1 -> T<3.566)
+    u24 = sp.Symbol("u24", positive=True)
+    u24_max = float(sp.nsolve(u24 * (1 + sp.exp(-u24)) - 4, u24, 3.9))
+    # T4: det(sI-A) = s*((s+0.2)(s+0.5) + k*(s+0.3))
+    A_24_4 = sp.Matrix([[-K23, -K23, 0], [-sp.Rational(2, 5), -sp.Rational(1, 5), -sp.Rational(1, 5)], [-sp.Rational(1, 2), 0, -sp.Rational(1, 2)]])
+    D_24_4 = sp.expand((s23 * sp.eye(3) - A_24_4).det())
+    # T8: K=[28,46,10] cancels s+3 -> (s+1)/((s+2)(s+6))
+    A_24_8 = sp.Matrix([[0, 1, 0], [0, 0, 1], [-8, 10, -1]])
+    B_24_8 = sp.Matrix([0, 0, 1])
+    C_24_8 = sp.Matrix([[3, 4, 1]])
+    K_24_8 = sp.Matrix([[28, 46, 10]])
+    Phi_24_8 = sp.simplify((C_24_8 * (s23 * sp.eye(3) - (A_24_8 - B_24_8 * K_24_8)).inv() * B_24_8)[0, 0])
+    check("ctrl_exam03_2024_all",
+          sp.simplify(sp.diff(essr_24, k1_24)).subs({k1_24: 10, k2_24: 1}) < 0
+          and sp.simplify(sp.diff(essn_24, k1_24)).subs({k1_24: 10, k2_24: 1}) < 0
+          and abs(u24_max - 3.9224) < 0.001 and abs(u24_max / 1.1 - 3.5658) < 0.001
+          and sp.expand(D_24_4 - s23 * ((s23 + sp.Rational(1, 5)) * (s23 + sp.Rational(1, 2)) + K23 * (s23 + sp.Rational(3, 10)))) == 0
+          and sp.simplify(Phi_24_8 - (s23 + 1) / ((s23 + 2) * (s23 + 6))) == 0,
+          "Verified 2024 T1-T10 (caught T2 k1=1/k2=0 fallacy, T3 u_max=3.922, T4 hidden pole s=0, T8 K=[28,46,10])")
+
+    # 3. 2025 (T1-T10 independent SymPy derivations)
+    # T2: 1 + G1*(K1+K2*G2) -> s^3+14s^2+(40+5K1)s+(50K1-20K2)=0 -> 5K1>2K2
+    D_25_2 = sp.expand(s23 * (s23 + 4) * (s23 + 10) + 5 * k1_24 * (s23 + 10) - 20 * k2_24)
+    # T3: observable canonical -> K=12, w=sqrt(2)
+    A_25_3 = sp.Matrix([[0, 0, 0, -20 - K23], [1, 0, 0, -4], [0, 1, 0, -18], [0, 0, 1, -2]])
+    G_25_3 = sp.simplify((sp.Matrix([[0, 0, 0, 1]]) * (s23 * sp.eye(4) - A_25_3).inv() * sp.Matrix([4, 1, 4, 0]))[0, 0])
+    D_25_3_12 = sp.expand((s23 * sp.eye(4) - A_25_3.subs(K23, 12)).det())
+    # T4: Y(z) = z^2 / (2z^2 - (1+2a)z + a), y(0)=1/2, y(T)=(1+2a)/4, y(inf)=0
+    a25 = sp.exp(-T23)
+    Yz_25_4 = z23**2 / (2 * z23**2 - (1 + 2 * a25) * z23 + a25)
+    u25 = sp.Symbol("u25")
+    ser_25_4 = sp.Poly(sp.series(Yz_25_4.subs(z23, 1 / u25), u25, 0, 3).removeO(), u25)
+    # T5: lam2=-2 -> A=[[0,1],[-2,-3]], G(ln2)=[[3/4,1/4],[-1/2,0]], H(ln2)=[1/2,-1/2]^T
+    A_25_5 = sp.Matrix([[0, 1], [-2, -3]])
+    G_25_5 = sp.simplify(sp.exp(A_25_5 * sp.log(2)))
+    H_25_5 = sp.simplify(A_25_5.inv() * (G_25_5 - sp.eye(2)) * sp.Matrix([1, -1]))
+    # T8: symmetric A*B = p*B -> b = 2*sqrt(3), a = 5*sqrt(3)/4, p = 2, G(s) = 1/(s-2)
+    A_25_8 = sp.Matrix([[sp.Rational(3, 4), 5 * sp.sqrt(3) / 4, -2], [5 * sp.sqrt(3) / 4, sp.Rational(-7, 4), 2 * sp.sqrt(3)], [-2, 2 * sp.sqrt(3), 1]])
+    B_25_8 = sp.Matrix([sp.sqrt(3) / 2, sp.Rational(1, 2), 0])
+    G_25_8 = sp.simplify((B_25_8.T * (s23 * sp.eye(3) - A_25_8).inv() * B_25_8)[0, 0])
+    # T10: equilibria (-2,1) stable, (0,-1) unstable
+    J1_25_10 = sp.Matrix([[0, 2], [-1, -1]])
+    J2_25_10 = sp.Matrix([[0, -2], [-1, -1]])
+    check("ctrl_exam03_2025_all",
+          sp.expand(D_25_2 - (s23**3 + 14 * s23**2 + (40 + 5 * k1_24) * s23 + (50 * k1_24 - 20 * k2_24))) == 0
+          and sp.simplify(G_25_3 - (4 * s23**2 + s23 + 4) / (s23**4 + 2 * s23**3 + 18 * s23**2 + 4 * s23 + 20 + K23)) == 0
+          and sp.expand(D_25_3_12 - (s23**2 + 2) * (s23**2 + 2 * s23 + 16)) == 0
+          and ser_25_4.nth(0) == sp.Rational(1, 2) and sp.simplify(ser_25_4.nth(1) - (1 + 2 * a25) / 4) == 0
+          and sp.limit((z23 - 1) * Yz_25_4, z23, 1) == 0
+          and G_25_5 == sp.Matrix([[sp.Rational(3, 4), sp.Rational(1, 4)], [sp.Rational(-1, 2), 0]])
+          and H_25_5 == sp.Matrix([sp.Rational(1, 2), sp.Rational(-1, 2)])
+          and sp.simplify(G_25_8 - 1 / (s23 - 2)) == 0
+          and all(complex(r.evalf()).real < 0 for r in J1_25_10.eigenvals().keys())
+          and set(J2_25_10.eigenvals().keys()) == {1, -2},
+          "Verified 2025 T1-T10 independent derivations (T2 5K1>2K2, T3 K=12, T4 y(inf)=0, T5 companion A, T8 b=2*sqrt(3), T10)")
+
+    # 4. 2026 (T1-T9 + 3 answer-book errata checks)
+    # T2: envelope 0.5*ln(20*sqrt(10)) ~ 2.073s < 4.744s
+    ts1_26 = float(sp.nsolve((1 + tt23) * sp.exp(-tt23) - 0.05, tt23, 4.7))
+    ts2_26_env = 0.5 * math.log(20 * math.sqrt(10))
+    # T4: 2K oscillation w=20 -> b=10, K=10000
+    eq_26_4 = sp.expand((20 * sp.I)**3 + (40 + b23) * (20 * sp.I)**2 + 40 * b23 * (20 * sp.I) + 2 * K23)
+    sol_26_4 = sp.solve([sp.re(eq_26_4), sp.im(eq_26_4)], [b23, K23])
+    # T5: G(s)=1000/(s(s+5)(s+20)) -> w_x=10, h=2.5
+    G_26_5_10 = sp.simplify(1000 / (10 * sp.I * (10 * sp.I + 5) * (10 * sp.I + 20)))
+    # T6: a=-0.368, K~1.535, b~0.182
+    sol_26_6 = sp.solve([b23 - 1 + 0.368 * K23 + 2 * 0.472 * 0.2675, 0.264 * K23 - b23 - 0.472**2], [K23, b23])
+    # T7: TRUE char poly s^2 + (K1+K2)s + 2*K1*K2 (catches answer book P.14 missing -L3!)
+    A_26_7 = sp.Matrix([[-k1_24, k2_24], [-k1_24, -k2_24]])
+    D_26_7 = sp.expand((s23 * sp.eye(2) - A_26_7).det())
+    Phi_26_7 = sp.simplify(sp.exp(A_26_7.subs({k1_24: 2, k2_24: 2}) * t23))
+    # T8: cascade S1->S2 det(Qc)=-3, det(Qo)=8
+    A_26_8 = sp.Matrix([[-2, 1, -1], [0, 0, 1], [0, -3, -4]])
+    B_26_8 = sp.Matrix([0, 0, 1])
+    C_26_8 = sp.Matrix([[1, 0, 0]])
+    # T9: complex DF -1/N(A) = 0.5 - j*A == G(2j) = 0.5 - 1.5j -> w=2, A=1.5
+    A26_s = sp.Symbol("A26_s", positive=True)
+    neg_inv_26_9 = sp.simplify(-1 / (-(2 + 4 * sp.I * A26_s) / (1 + 4 * A26_s**2)))
+    G_26_9 = sp.simplify(20 / ((2 + 2 * sp.I) * (4 + 2 * sp.I)))
+    check("ctrl_exam03_2026_all",
+          ts2_26_env < ts1_26 and abs(ts1_26 - 4.744) < 0.01 and abs(ts2_26_env - 2.073) < 0.01
+          and sol_26_4 == {b23: 10, K23: 10000}
+          and G_26_5_10 == sp.Rational(-2, 5)
+          and abs(float(sol_26_6[K23]) - 1.535) < 0.002 and abs(float(sol_26_6[b23]) - 0.1825) < 0.002
+          and sp.expand(D_26_7 - (s23**2 + (k1_24 + k2_24) * s23 + 2 * k1_24 * k2_24)) == 0
+          and sp.simplify(Phi_26_7 - sp.exp(-2 * t23) * sp.Matrix([[sp.cos(2 * t23), sp.sin(2 * t23)], [-sp.sin(2 * t23), sp.cos(2 * t23)]])) == sp.zeros(2, 2)
+          and sp.Matrix.hstack(B_26_8, A_26_8 * B_26_8, A_26_8**2 * B_26_8).det() == -3
+          and sp.Matrix.vstack(C_26_8, C_26_8 * A_26_8, C_26_8 * A_26_8**2).det() == 8
+          and sp.simplify(neg_inv_26_9 - (sp.Rational(1, 2) - sp.I * A26_s)) == 0 and G_26_9 == sp.Rational(1, 2) - sp.Rational(3, 2) * sp.I,
+          "Verified 2026 T1-T9 (caught T3(2) a<0 sign flip, T7(1) TRUE +2*K1*K2 vs P.14 missing -L3, T9 complex DF w=2 & A=1.5)")
+
     return results
 
 
