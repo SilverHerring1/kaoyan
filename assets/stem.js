@@ -1563,7 +1563,7 @@ export function initStemSubjectView(store, { subjectId, containerId }) {
     if (store.activeSubject !== subjectId || !state.manifest) return;
     const chMeta = getActiveChapterMeta();
     const prefix = chMeta ? `${chMeta.num} ${chMeta.title} · ` : '';
-    document.title = `${prefix}${state.manifest.subjectName} | 考研三科冲刺工作台`;
+    document.title = `${prefix}${state.manifest.subjectName} | 研习台 · Kaoyan Studio`;
   }
 
   async function activate() {

@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 440" role="img" aria-label="研习台 · Kaoyan Studio — 考研三科一体化纯静态学习工作台">
+  <title>研习台 · Kaoyan Studio</title>
+  <defs>
+    <linearGradient id="bgCanvas" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f6f5f1"/>
+      <stop offset="52%" stop-color="#f2f4fa"/>
+      <stop offset="100%" stop-color="#f6f2fa"/>
+    </linearGradient>
+    <radialGradient id="glowBlue" cx="22%" cy="18%" r="48%">
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowIndigo" cx="82%" cy="22%" r="45%">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#6366f1" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowEmerald" cx="52%" cy="88%" r="42%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="brandSquircle" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="55%" stop-color="#3b5bdb"/>
+      <stop offset="100%" stop-color="#6366f1"/>
+    </linearGradient>
+    <linearGradient id="glassBar" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.92"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.76"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-8%" y="-10%" width="116%" height="130%">
+      <feDropShadow dx="0" dy="8" stdDeviation="14" flood-color="#0f172a" flood-opacity="0.08"/>
+    </filter>
+    <filter id="pillShadow" x="-15%" y="-25%" width="130%" height="160%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#1e3a8a" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <!-- Soft academic glass backdrop -->
+  <rect width="1200" height="440" rx="22" fill="url(#bgCanvas)"/>
+  <rect width="1200" height="440" rx="22" fill="url(#glowBlue)"/>
+  <rect width="1200" height="440" rx="22" fill="url(#glowIndigo)"/>
+  <rect width="1200" height="440" rx="22" fill="url(#glowEmerald)"/>
+  <rect x="0.75" y="0.75" width="1198.5" height="438.5" rx="21.5" fill="none" stroke="#cbd5e1" stroke-opacity="0.6" stroke-width="1.5"/>
+
+  <!-- Mockup window frame -->
+  <g filter="url(#cardShadow)">
+    <rect x="34" y="28" width="1132" height="384" rx="20" fill="#fafaf8" stroke="#e2e8f0" stroke-width="1.2"/>
+  </g>
+
+  <!-- Liquid Glass Header Bar -->
+  <path d="M 35 48 Q 35 29 54 29 L 1146 29 Q 1165 29 1165 48 L 1165 98 L 35 98 Z" fill="url(#glassBar)"/>
+  <line x1="35" y1="98" x2="1165" y2="98" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- Brand Mark + Title -->
+  <g transform="translate(60, 46)">
+    <rect width="34" height="34" rx="10" fill="url(#brandSquircle)"/>
+    <path d="M 10 23 L 10 11 M 10 17 L 19 11 M 14 15 L 22 23" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <circle cx="24" cy="11.5" r="2.2" fill="#93c5fd"/>
+    <text x="45" y="21" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif" font-size="18" font-weight="700" fill="#0f172a" letter-spacing="-0.3">研习台</text>
+    <line x1="112" y1="9" x2="112" y2="25" stroke="#cbd5e1" stroke-width="1.2"/>
+    <text x="122" y="20" font-family="Inter, system-ui, sans-serif" font-size="12.5" font-weight="600" fill="#64748b" letter-spacing="0.2">Kaoyan Studio</text>
+  </g>
+
+  <!-- Centered Liquid Glass Segmented Pill Control -->
+  <g transform="translate(414, 44)">
+    <rect width="372" height="38" rx="19" fill="#0f172a" fill-opacity="0.055" stroke="#0f172a" stroke-opacity="0.06" stroke-width="1"/>
+    <text x="58" y="23.5" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" font-weight="600" fill="#475569">英语一</text>
+    <g filter="url(#pillShadow)">
+      <rect x="108" y="4" width="152" height="30" rx="15" fill="#ffffff" stroke="#cbd5e1" stroke-opacity="0.55" stroke-width="0.9"/>
+    </g>
+    <text x="184" y="23.5" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" font-weight="700" fill="#1d4ed8">845 自动控制原理</text>
+    <text x="314" y="23.5" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" font-weight="600" fill="#475569">考研数学一</text>
+  </g>
+
+  <!-- Right Action Pills -->
+  <g transform="translate(966, 47)">
+    <rect width="84" height="32" rx="16" fill="#ffffff" fill-opacity="0.82" stroke="#cbd5e1" stroke-width="1"/>
+    <text x="42" y="20.5" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" font-weight="600" fill="#334155">备份 / 恢复</text>
+    <rect x="94" width="84" height="32" rx="16" fill="#1e293b"/>
+    <text x="136" y="20.5" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" font-weight="600" fill="#ffffff">导出 PDF</text>
+  </g>
+
+  <!-- 3 Bento Subject Showcase Cards -->
+  <!-- Card 1: English I -->
+  <g transform="translate(60, 122)">
+    <rect width="344" height="264" rx="16" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2"/>
+    <rect x="20" y="20" width="66" height="24" rx="12" fill="#e0f2fe"/>
+    <text x="53" y="36" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11.5" font-weight="700" fill="#0369a1">英语一</text>
+    <text x="98" y="36" font-family="Inter, system-ui, sans-serif" font-size="11.5" font-weight="600" fill="#64748b">625 词目 · 27 外刊真句</text>
+    <text x="20" y="72" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" font-weight="700" fill="#0f172a">词库遮罩 + 外刊长难句精析</text>
+    <text x="20" y="95" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#64748b">7 大刷题词库 · 4 大速背区 · 语音点读与错题本</text>
+
+    <!-- Syntax highlight chips demo -->
+    <rect x="20" y="114" width="304" height="86" rx="12" fill="#f8fafc" stroke="#e2e8f0"/>
+    <rect x="32" y="128" width="68" height="22" rx="6" fill="#dbeafe"/>
+    <text x="66" y="143" text-anchor="middle" font-family="Inter, 'PingFang SC', sans-serif" font-size="11" font-weight="700" fill="#1e3a8a">主语 Subject</text>
+    <rect x="108" y="128" width="62" height="22" rx="6" fill="#fee2e2"/>
+    <text x="139" y="143" text-anchor="middle" font-family="Inter, 'PingFang SC', sans-serif" font-size="11" font-weight="700" fill="#991b1b">谓语 Verb</text>
+    <rect x="178" y="128" width="76" height="22" rx="6" fill="#d1fae5"/>
+    <text x="216" y="143" text-anchor="middle" font-family="Inter, 'PingFang SC', sans-serif" font-size="11" font-weight="700" fill="#065f46">宾语 Object</text>
+    <rect x="262" y="128" width="50" height="22" rx="6" fill="#ede9fe"/>
+    <text x="287" y="143" text-anchor="middle" font-family="Inter, 'PingFang SC', sans-serif" font-size="11" font-weight="700" fill="#5b21b6">状语</text>
+    <text x="34" y="171" font-family="Georgia, serif" font-size="12.5" font-style="italic" fill="#334155">The Guardian · The Conversation · Aeon</text>
+    <text x="34" y="189" font-family="Inter, 'PingFang SC', sans-serif" font-size="11" fill="#64748b">三档成分切分 · 结构直译与考场意译对照</text>
+
+    <text x="20" y="238" font-family="Inter, 'PingFang SC', sans-serif" font-size="12" font-weight="600" fill="#0369a1">直达 #english →</text>
+  </g>
+
+  <!-- Card 2: 845 Control -->
+  <g transform="translate(428, 122)">
+    <rect width="344" height="264" rx="16" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.5"/>
+    <rect x="20" y="20" width="96" height="24" rx="12" fill="#e0e7ff"/>
+    <text x="68" y="36" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11.5" font-weight="700" fill="#1d4ed8">845 自控 · 12/12</text>
+    <text x="128" y="36" font-family="Inter, system-ui, sans-serif" font-size="11.5" font-weight="600" fill="#059669">✓ SymPy 182/182</text>
+    <text x="20" y="72" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" font-weight="700" fill="#0f172a">教材 9 章 + 近 17 年真题专题</text>
+    <text x="20" y="95" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#64748b">757 条全量精编 · 150+ 处原书与答案册勘误</text>
+
+    <!-- Mini vector plot preview -->
+    <rect x="20" y="114" width="304" height="86" rx="12" fill="#f8fafc" stroke="#e2e8f0"/>
+    <g transform="translate(-16, 0)">
+      <line x1="44" y1="158" x2="184" y2="158" stroke="#94a3b8" stroke-width="1.1"/>
+      <line x1="118" y1="124" x2="118" y2="190" stroke="#94a3b8" stroke-width="1.1"/>
+      <path d="M 176 158 C 176 184, 134 190, 96 174 C 66 162, 68 144, 118 158" fill="none" stroke="#2563eb" stroke-width="2.2"/>
+      <line x1="138" y1="130" x2="138" y2="188" stroke="#dc2626" stroke-width="1.8" stroke-dasharray="4 2"/>
+      <circle cx="138" cy="178" r="3.5" fill="#7c3aed"/>
+    </g>
+    <text x="182" y="142" font-family="Inter, 'PingFang SC', sans-serif" font-size="11.2" font-weight="700" fill="#1e3a8a">原创矢量图 + 抽屉</text>
+    <text x="182" y="161" font-family="Inter, 'PingFang SC', sans-serif" font-size="10.2" fill="#475569">根轨迹 · Nyquist · Bode</text>
+    <text x="182" y="179" font-family="Inter, 'PingFang SC', sans-serif" font-size="10.2" fill="#475569">点击 2026-T9 侧边预览</text>
+
+    <text x="20" y="238" font-family="Inter, 'PingFang SC', sans-serif" font-size="12" font-weight="600" fill="#1d4ed8">直达 #control →</text>
+  </g>
+
+  <!-- Card 3: Math I -->
+  <g transform="translate(796, 122)">
+    <rect width="344" height="264" rx="16" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2"/>
+    <rect x="20" y="20" width="84" height="24" rx="12" fill="#f3e8ff"/>
+    <text x="62" y="36" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11.5" font-weight="700" fill="#6b21a8">考研数学一</text>
+    <text x="116" y="36" font-family="Inter, system-ui, sans-serif" font-size="11.5" font-weight="600" fill="#059669">✓ SymPy 106/106</text>
+    <text x="20" y="72" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" font-weight="700" fill="#0f172a">高数 18 讲 · 证明 · 线代 9 讲</text>
+    <text x="20" y="95" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#64748b">1,168 条基础+强化双阶段切换 · 72 处勘误补注</text>
+
+    <!-- Formula & mask demo -->
+    <rect x="20" y="114" width="304" height="86" rx="12" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="172" y="146" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="14" font-style="italic" fill="#1e293b">A* = |A| A⁻¹  ·  ∬ (∂Q/∂x − ∂P/∂y) dσ</text>
+    <rect x="34" y="162" width="82" height="24" rx="12" fill="#ede9fe"/>
+    <text x="75" y="178" text-anchor="middle" font-family="Inter, 'PingFang SC', sans-serif" font-size="11" font-weight="700" fill="#6b21a8">默写遮罩</text>
+    <rect x="124" y="162" width="90" height="24" rx="12" fill="#dcfce7"/>
+    <text x="169" y="178" text-anchor="middle" font-family="Inter, 'PingFang SC', sans-serif" font-size="11" font-weight="700" fill="#15803d">基础 / 强化</text>
+    <rect x="222" y="162" width="88" height="24" rx="12" fill="#fef3c7"/>
+    <text x="266" y="178" text-anchor="middle" font-family="Inter, 'PingFang SC', sans-serif" font-size="11" font-weight="700" fill="#92400e">侧边浮窗</text>
+
+    <text x="20" y="238" font-family="Inter, 'PingFang SC', sans-serif" font-size="12" font-weight="600" fill="#6b21a8">直达 #math1 →</text>
+  </g>
+</svg>

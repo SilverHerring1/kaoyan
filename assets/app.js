@@ -191,10 +191,10 @@ function initTabs(store, onTabChange) {
   const panels = new Map(tabs.map(t => [t.dataset.panel, document.getElementById(t.dataset.panel)]));
 
   const titleMap = {
-    'panel-vocab': '核心刷题词库 · 英语一 | 考研三科冲刺工作台',
-    'panel-memorize': '纯记忆速背区 · 英语一 | 考研三科冲刺工作台',
-    'panel-quiz': '外刊刷题与长难句翻译 · 英语一 | 考研三科冲刺工作台',
-    'panel-mistakes': '错题本 · 英语一 | 考研三科冲刺工作台',
+    'panel-vocab': '核心刷题词库 · 英语一 | 研习台 · Kaoyan Studio',
+    'panel-memorize': '纯记忆速背区 · 英语一 | 研习台 · Kaoyan Studio',
+    'panel-quiz': '外刊刷题与长难句翻译 · 英语一 | 研习台 · Kaoyan Studio',
+    'panel-mistakes': '错题本 · 英语一 | 研习台 · Kaoyan Studio',
   };
 
   function activate(panelId, moveFocus = false) {
@@ -210,7 +210,7 @@ function initTabs(store, onTabChange) {
       }
     }
     if (store.activeSubject === 'english') {
-      document.title = titleMap[panelId] || '英语一 | 考研三科冲刺工作台';
+      document.title = titleMap[panelId] || '英语一 | 研习台 · Kaoyan Studio';
     }
     if (onTabChange) onTabChange(panelId);
   }

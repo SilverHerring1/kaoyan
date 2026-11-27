@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>考研三科冲刺工作台 | 英语一 · 845 自动控制原理 · 考研数学一</title>
-  <meta name="description" content="考研三科一体化冲刺学习工作台：英语一核心词库/速背/外刊刷题、浙江大学 845 自动控制原理（全公式/结论/例题/精确页码溯源/SymPy 验算）、考研数学一张宇六书体系。">
+  <title>研习台 · Kaoyan Studio | 英语一 · 845 自动控制原理 · 考研数学一</title>
+  <meta name="description" content="研习台（Kaoyan Studio）：零后端纯静态考研三科冲刺学习工作台——英语一词库/速背/外刊精析、浙江大学 845 自动控制原理（全 12 单元 · SymPy 验算）、考研数学一张宇六书体系。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
@@ -16,99 +16,111 @@
 <body>
   <a href="#main-content" class="skip-link visually-hidden">跳到正文内容</a>
 
-  <!-- 顶部栏 -->
+  <!-- 顶部栏（Liquid Glass 单行毛玻璃导航） -->
   <header class="site-header">
-    <div class="container header-inner">
-      <div class="brand-block">
-        <div class="brand-title-row">
-          <svg class="icon-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-          </svg>
-          <h1>考研三科冲刺工作台</h1>
+    <div class="site-header-surface">
+      <div class="container header-inner">
+        <div class="brand-block">
+          <div class="brand-title-row">
+            <span class="brand-mark" aria-hidden="true">
+              <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="brandMarkGrad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#2563eb"/>
+                    <stop offset="55%" stop-color="#3b5bdb"/>
+                    <stop offset="100%" stop-color="#6366f1"/>
+                  </linearGradient>
+                </defs>
+                <rect width="32" height="32" rx="9" fill="url(#brandMarkGrad)"/>
+                <path d="M9.5 22V10M9.5 16L18 10M13.2 14L21 22" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="22.5" cy="10.8" r="2.1" fill="#93c5fd"/>
+              </svg>
+            </span>
+            <h1 class="brand-title">研习台</h1>
+            <span class="brand-divider" aria-hidden="true"></span>
+            <span class="brand-en">Kaoyan Studio</span>
+          </div>
         </div>
-        <p class="brand-subtitle" id="headerSubtitle">英语一（11 模块词库/速背/外刊刷题）｜ 845 自动控制原理（原书页码溯源 · SymPy 验算）｜ 考研数学一（张宇六书分单元）</p>
+
+        <!-- 顶层三科分段胶囊切换（语义 nav + a，非 tablist） -->
+        <nav class="subject-nav-wrap no-print" aria-label="科目切换">
+          <ul class="subject-nav-list">
+            <li>
+              <a href="#english" class="subject-link" data-subject="english" aria-current="page">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+                </svg>
+                <span>英语一</span>
+              </a>
+            </li>
+            <li>
+              <a href="#control" class="subject-link" data-subject="control">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+                <span>845 自动控制原理</span>
+              </a>
+            </li>
+            <li>
+              <a href="#math1" class="subject-link" data-subject="math1">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 17h16M7 4l10 16"/>
+                </svg>
+                <span>考研数学一</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="header-actions no-print">
+          <button id="openBackupBtn" type="button" class="btn btn-ghost">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+            </svg>
+            <span>备份/恢复</span>
+          </button>
+          <button id="printBtn" type="button" class="btn btn-solid">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+            </svg>
+            <span>导出 PDF</span>
+          </button>
+        </div>
       </div>
 
-      <div class="header-actions no-print">
-        <button id="openBackupBtn" type="button" class="btn btn-ghost">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
-          </svg>
-          <span>备份/恢复</span>
-        </button>
-        <button id="printBtn" type="button" class="btn btn-solid">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
-          </svg>
-          <span>导出 PDF</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- 顶层三科切换（语义 nav + a，非 tablist） -->
-    <nav class="subject-nav-wrap no-print" aria-label="科目切换">
-      <div class="container">
-        <ul class="subject-nav-list">
-          <li>
-            <a href="#english" class="subject-link" data-subject="english" aria-current="page">
+      <!-- 英语一子视图切换 Tablist -->
+      <div id="englishTabBarWrap" class="tab-bar-wrap no-print">
+        <div class="container">
+          <div class="primary-tablist" role="tablist" aria-label="学习模式切换">
+            <button type="button" role="tab" id="tab-vocab" class="primary-tab" aria-selected="true" tabindex="0" data-panel="panel-vocab">
               <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h10"/>
               </svg>
-              <span>英语一</span>
-            </a>
-          </li>
-          <li>
-            <a href="#control" class="subject-link" data-subject="control">
+              <span>核心刷题词库</span>
+              <span class="tab-count" id="tabVocabCount">470</span>
+            </button>
+            <button type="button" role="tab" id="tab-memorize" class="primary-tab" aria-selected="false" tabindex="-1" data-panel="panel-memorize">
               <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
               </svg>
-              <span>845 自动控制原理</span>
-            </a>
-          </li>
-          <li>
-            <a href="#math1" class="subject-link" data-subject="math1">
+              <span>纯记忆速背区</span>
+              <span class="tab-count" id="tabMemorizeCount">155</span>
+            </button>
+            <button type="button" role="tab" id="tab-quiz" class="primary-tab" aria-selected="false" tabindex="-1" data-panel="panel-quiz">
               <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 17h16M7 4l10 16"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
-              <span>考研数学一</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-
-    <!-- 英语一子视图切换 Tablist -->
-    <div id="englishTabBarWrap" class="tab-bar-wrap no-print">
-      <div class="container">
-        <div class="primary-tablist" role="tablist" aria-label="学习模式切换">
-          <button type="button" role="tab" id="tab-vocab" class="primary-tab" aria-selected="true" tabindex="0" data-panel="panel-vocab">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h10"/>
-            </svg>
-            <span>核心刷题词库</span>
-            <span class="tab-count" id="tabVocabCount">470</span>
-          </button>
-          <button type="button" role="tab" id="tab-memorize" class="primary-tab" aria-selected="false" tabindex="-1" data-panel="panel-memorize">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-            </svg>
-            <span>纯记忆速背区</span>
-            <span class="tab-count" id="tabMemorizeCount">155</span>
-          </button>
-          <button type="button" role="tab" id="tab-quiz" class="primary-tab" aria-selected="false" tabindex="-1" data-panel="panel-quiz">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            <span>外刊刷题 &amp; 长难句翻译</span>
-            <span class="tab-count" id="tabQuizCount">0</span>
-          </button>
-          <button type="button" role="tab" id="tab-mistakes" class="primary-tab" aria-selected="false" tabindex="-1" data-panel="panel-mistakes">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-            </svg>
-            <span>错题本</span>
-            <span class="tab-count" id="tabMistakeCount">0</span>
-          </button>
+              <span>外刊刷题 &amp; 长难句翻译</span>
+              <span class="tab-count" id="tabQuizCount">0</span>
+            </button>
+            <button type="button" role="tab" id="tab-mistakes" class="primary-tab" aria-selected="false" tabindex="-1" data-panel="panel-mistakes">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+              </svg>
+              <span>错题本</span>
+              <span class="tab-count" id="tabMistakeCount">0</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
